@@ -1,0 +1,8 @@
+# Local ignores, also see ~/.gitignore
+
+# Derived files other than docs/
+/libs/
+
+node_modules/
+npm-debug.log
+**/.DS_Store
