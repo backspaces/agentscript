@@ -1,0 +1,42 @@
+{
+  "name": "coreas",
+  "version": "0.1.0",
+  "description": "Core AgentScript Model  modules; no View.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/backspaces/CoreAS.git"
+  },
+  "keywords": [
+    "NetLogo",
+    "ABM",
+    "AgentScript"
+  ],
+  "author": "Owen Densmore",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/backspaces/CoreAS/issues"
+  },
+  "homepage": "https://github.com/backspaces/CoreAS",
+  "docsfiles": [
+    "dist",
+    "README.md"
+  ],
+  "mkdirs": [
+    "dist",
+    "dist/AS",
+    "docs/dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf `bin/pkgkey.js mkdirs` && mkdir `bin/pkgkey.js mkdirs`",
+    "build": "npm run clean && npm run build-dist && npm run minify && npm run build-docs",
+    "minify": "squash dist/AS.js > dist/AS.min.js && squash dist/AS.module.js > dist/AS.module.min.js",
+    "build-docs": "cp -Rp `bin/pkgkey.js docsfiles` docs",
+    "build-dist": "rollup -c && cp src/* dist/AS",
+    "foo": "squash --help"
+  },
+  "devDependencies": {
+    "butternut": "^0.4.6",
+    "rollup": "^0.50.0"
+  }
+}
