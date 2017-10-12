@@ -41,7 +41,8 @@ class Turtle {
     if (this.hasOwnProperty('links')) // don't promote links
       while (this.links.length > 0) this.links[0].die()
     if (this.patch.turtles != null)
-      util.removeItem(this.patch.turtles, this)
+      util.removeArrayItem(this.patch.turtles, this)
+      // util.removeItem(this.patch.turtles, this)
   }
   // // Breed get/set mathods.
   // setBreed (breed) { breed.setBreed(this) }
@@ -74,7 +75,10 @@ class Turtle {
   // Uses lazy evaluation to promote links to instance variables.
   // REMIND: Let links create the array as needed, less "tricky"
   get links () { // lazy promote links from getter to instance prop.
-    Object.defineProperty(this, 'links', {value: [], enumerable: true})
+    Object.defineProperty(this, 'links', {
+      value: [],
+      enumerable: true
+    })
     return this.links
   }
   // Getter for the patchs and the patch I'm on. Return null if off-world.
@@ -179,7 +183,8 @@ class Turtle {
     }
     const p = this.patch
     if (p.turtles != null && p !== p0) {
-      util.removeItem(p0.turtles, this)
+      // util.removeItem(p0.turtles, this)
+      util.removeArrayItem(p0.turtles, this)
       p.turtles.push(this)
     }
   }

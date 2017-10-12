@@ -56,7 +56,9 @@ class Turtles extends AgentSet {
     // meToo: true for patches, could have several turtles on patch
     const patches = this.model.patches.inRect(turtle.patch, dx, dy, true)
     const agents = this.inPatches(patches)
-    if (!meToo) util.removeItem(agents, turtle) // don't use agents.removeAgent: breeds
+    // don't use agents.removeAgent: breeds
+    if (!meToo) util.removeArrayItem(agents, turtle)
+    // if (!meToo) util.removeItem(agents, turtle)
     return agents // this.inPatches(patches)
   }
   // Return the members of this agentset that are within radius distance

@@ -50,8 +50,10 @@ class Link {
   // Remove this link from its agentset
   die () {
     this.agentSet.removeAgent(this)
-    util.removeItem(this.end0.links, this)
-    util.removeItem(this.end1.links, this)
+    // util.removeItem(this.end0.links, this)
+    // util.removeItem(this.end1.links, this)
+    util.removeArrayItem(this.end0.links, this)
+    util.removeArrayItem(this.end1.links, this)
   }
 
   bothEnds () { return [this.end0, this.end1] }

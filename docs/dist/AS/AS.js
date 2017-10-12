@@ -7,6 +7,7 @@ import Links           from './Links.js'
 import Model           from './Model.js'
 import Patch           from './Patch.js'
 import Patches         from './Patches.js'
+import RGBDataSet      from './RGBDataSet.js'
 import Turtle          from './Turtle.js'
 import Turtles         from './Turtles.js'
 import World           from './World.js'
@@ -23,6 +24,7 @@ export {
   Model,
   Patch,
   Patches,
+  RGBDataSet,
   Turtle,
   Turtles,
   World,

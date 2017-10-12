@@ -8,13 +8,13 @@ const util = {
 
   // Fixing the javascript [typeof operator](https://goo.gl/Efdzk5)
   typeOf: (obj) => ({}).toString.call(obj).match(/\s(\w+)/)[1].toLowerCase(),
-  isOneOf: (obj, array) => array.includes(util.typeOf(obj)),
+  isOneOfTypes: (obj, array) => array.includes(util.typeOf(obj)),
   // isUintArray: (obj) => util.typeOf(obj).match(/uint.*array/),
   isUintArray: (obj) => /^uint.*array$/.test(util.typeOf(obj)),
   isIntArray: (obj) => /^int.*array$/.test(util.typeOf(obj)),
   isFloatArray: (obj) => /^float.*array$/.test(util.typeOf(obj)),
   isImage: (obj) => util.typeOf(obj) === 'image',
-  isImageable: (obj) => util.isOneOf(obj,
+  isImageable: (obj) => util.isOneOfTypes(obj,
     ['image', 'htmlimageelement', 'htmlcanvaselement']),
   // Is obj TypedArray? If obj.buffer not present, works, type is 'undefined'
   isTypedArray: (obj) => util.typeOf(obj.buffer) === 'arraybuffer',
@@ -22,6 +22,9 @@ const util = {
   isInteger: Number.isInteger || ((num) => Math.floor(num) === num),
   // Is obj a string?
   isString: (obj) => typeof obj === 'string',
+  // Return array's type (Array or TypedArray variant)
+  arrayType (array) { return array.constructor },
+
   // Check [big/little endian](https://en.wikipedia.org/wiki/Endianness)
   isLittleEndian () {
     const d32 = new Uint32Array([0x01020304])
@@ -117,28 +120,28 @@ const util = {
     }
   },
 
-  // addToDom: add an element to the doeument body.
-  addToDom (src, type, parent = document.body) {
-    if (type) {
-      type = document.createElement(type)
-      src = type.textContent = src
-    }
-    parent.appendChild(src)
-  },
-
   // Return a string representation of an array of arrays
   arraysToString: (arrays) => arrays.map((a) => `[${a}]`).join(','),
-
-  // Return array of strings of fixed floats to given precision
-  fixedStrings (array, digits = 4) {
-    array = this.convertArray(array, Array) // Only Array stores strings.
-    return array.map((n) => n.toFixed(digits))
-  },
 
   // Merge from's key/val pairs into to the global window namespace
   toWindow (obj) {
     Object.assign(window, obj)
     console.log('toWindow:', Object.keys(obj).join(', '))
+  },
+
+  // Use JSON to return pretty, printable string of an object, array, other
+  // Remove ""s around keys.
+  objectToString (obj) {
+    return JSON.stringify(obj, null, '  ')
+      .replace(/ {2}"/g, '  ')
+      .replace(/": /g, ': ')
+  },
+  // Like above, but a single line for small objects.
+  objectToString1 (obj) {
+    return JSON.stringify(obj)
+      .replace(/{"/g, '{')
+      .replace(/,"/g, ',')
+      .replace(/":/g, ':')
   },
 
 // ### HTML, CSS, DOM
@@ -171,16 +174,6 @@ const util = {
     return [ evt.clientX - rect.left, evt.clientY - rect.top ]
   },
 
-  // Set the text font, align and baseline drawing parameters.
-  // Obj can be either a canvas context or a DOM element
-  // See [reference](http://goo.gl/AvEAq) for details.
-  // * font is a HTML/CSS string like: "9px sans-serif"
-  // * align is left right center start end
-  // * baseline is top hanging middle alphabetic ideographic bottom
-  setTextParams (obj, font, align = 'center', baseline = 'middle') {
-    obj.font = font; obj.textAlign = align; obj.textBaseline = baseline
-  },
-
 // ### Math
 
   // Return random int/float in [0,max) or [min,max) or [-r/2,r/2)
@@ -204,12 +197,6 @@ const util = {
   // Return next greater power of two. There are faster, see:
   // [Stack Overflow](https://goo.gl/zvD78e)
   nextPowerOf2: (num) => Math.pow(2, Math.ceil(Math.log2(num))),
-
-  // Trims decimal digits of float to reduce size.
-  fixed (n, digits = 4) {
-    const p = Math.pow(10, digits)
-    return Math.round(n * p) / p
-  },
 
   // A [modulus](http://mathjs.org/docs/reference/functions/mod.html)
   // function rather than %, the remainder function.
@@ -277,8 +264,6 @@ const util = {
 
   // Return distance between (x, y), (x1, y1)
   distance: (x, y, x1, y1) => Math.sqrt(util.sqDistance(x, y, x1, y1)),
-  // Return distance between (x, y), (x1, y1)
-  hypot: (x, y, x1, y1) => Math.hypot(x - x1, y - y1),
   // Return squared distance .. i.e. avoid Math.sqrt. Faster comparisons
   sqDistance: (x, y, x1, y1) => (x - x1) * (x - x1) + (y - y1) * (y - y1),
   // Return true if x,y is within cone.
@@ -300,12 +285,22 @@ const util = {
   range (length) { return this.repeat(length, (i, a) => { a[i] = i }) },
   // range (length) { return this.repeat(length, (i, a) => { a[i] = i }, []) },
 
-  // Return key for (first) given value in object, null if not found.
-  keyForValue (obj, value) {
-    for (const key in obj)
-      if (obj[key] === value) //  gl problems: && obj.hasOwnProperty(key)
-        return key
-    return null
+  arrayMax: (array) => array.reduce((a, b) => Math.max(a, b)),
+  arrayMin: (array) => array.reduce((a, b) => Math.min(a, b)),
+  arraySum: (array) => array.reduce((a, b) => a + b),
+  arraysEqual (a1, a2) {
+    if (a1.length !== a2.length) return false
+    for (let i = 0; i < a1.length; i++) {
+      if (a1[i] !== a2[i]) return false
+    }
+    return true
+  },
+  removeArrayItem (array, item) {
+    const ix = array.indexOf(item)
+    if (ix !== -1)
+      array.splice(ix, 1)
+    else
+      this.warn(`removeArrayItem: ${item} not in array`)
   },
 
   // Execute fcn for all own member of an obj or array (typed OK).
@@ -323,7 +318,7 @@ const util = {
   },
 
   // Return a new shallow of array, either Array or TypedArray
-  copyArray (array) { return array.slice(0) },
+  clone (array) { return array.slice(0) },
 
   // Return a new array that is the concatination two arrays.
   // The resulting Type is that of the first array.
@@ -337,59 +332,8 @@ const util = {
     return array
   },
 
-  // Return an array with no sub-array elements
-  flatten (array) {
-    if (!Array.isArray(array[0])) return array
-    const result = []
-    array.forEach((a) => result.push(...a))
-    return this.flatten(result)
-  },
-
-  // Return array's type (Array or TypedArray variant)
-  arrayType (array) { return array.constructor },
-
-  // Return a new JavaScript Array of floats/strings to a given precision.
-  // Fails for Float32Array due to float64->32 artifiacts, thus Array conversion
-  fixedArray (array, digits = 4) {
-    array = this.convertArray(array, Array) // 64 bit rounding
-    return array.map((n) => this.fixed(n, digits))
-  },
-
-  // Shallow clone of obj or array
-  clone (obj) {
-    if (obj.slice) return obj.slice(0) // ok for TypedArrays
-    const result = {}
-    Object.keys(obj).forEach((k) => { result[k] = obj[k] })
-    return result
-  },
-
-  // [Deep clone](http://goo.gl/MIaTxU) an obj or array. Clever!
-  deepClone: (obj) => JSON.parse(JSON.stringify(obj)),
   // Compare Objects or Arrays via JSON string. Note: TypedArrays !== Arrays
   objectsEqual: (a, b) => JSON.stringify(a) === JSON.stringify(b),
-  // Use JSON to return pretty, printable string of an object, array, other
-  // Remove ""s around keys.
-  objectToString (obj) {
-    return JSON.stringify(obj, null, '  ')
-      .replace(/ {2}"/g, '  ')
-      .replace(/": /g, ': ')
-  },
-  // Like above, but a single line for small objects.
-  objectToString1 (obj) {
-    return JSON.stringify(obj)
-      .replace(/{"/g, '{')
-      .replace(/,"/g, ',')
-      .replace(/":/g, ':')
-  },
-
-  // Create random array of floats between min/max.
-  // Array Type allows conversion to Float32Array or integers (Int32Array etc)
-  randomArray (length, min = 0, max = 1, Type = Array) {
-    const a = new Type(length)
-    for (let i = 0; i < length; i++)
-      a[i] = this.randomFloat2(min, max)
-    return a
-  },
 
   // Create a histogram, given an array, a bin size, and a
   // min bin defaulting to min of of the array.
@@ -416,19 +360,13 @@ const util = {
     return { bins, minBin, maxBin, minVal, maxVal, hist }
   },
 
-  // Return scalar max/min/sum/avg of numeric Array or TypedArray.
-  arrayMax: (array) => array.reduce((a, b) => Math.max(a, b)),
-  arrayMin: (array) => array.reduce((a, b) => Math.min(a, b)),
-  arraySum: (array) => array.reduce((a, b) => a + b),
-  arrayAvg: (array) => util.arraySum(array) / array.length,
   // Return random one of array items. No array.length tests
   oneOf: (array) => array[util.randomInt(array.length)],
   otherOneOf (array, item) {
     do { var other = this.oneOf(array) } while (item === other) // note var use
     return other
   },
-  // Create an array of properties from an array of objects
-  arrayProps: (array, propName) => array.map((a) => a[propName]),
+
   // Random key/val of object
   oneKeyOf: (obj) => util.oneOf(Object.keys(obj)),
   oneValOf: (obj) => obj[util.oneKeyOf(obj)],
@@ -464,58 +402,6 @@ const util = {
     return array.filter((ai, i, a) => (i === 0) || (f(ai) !== f(a[i - 1])))
   },
   // unique = (array) => [...new Set(array)],
-
-  // Binary search:
-  // Return array index of item, where array is sorted.
-  // If item not found, return index for item for array to remain sorted.
-  // f is used to return an integer for sorting, defaults to identity.
-  // If f is a string, it is the object property to sort by.
-  // Adapted from underscore's _.sortedIndex.
-  sortedIndex (array, item, f = this.identity) {
-    if (this.isString(f)) f = this.propFcn(f)
-    const value = f(item)
-    // Why not array.length - 1? Because we can insert 1 after end of array.
-    // let [low, high] = [0, array.length]
-    let low = 0
-    let high = array.length
-    while (low < high) {
-      const mid = (low + high) >>> 1 // floor (low+high)/2
-      if (f(array[mid]) < value) { low = mid + 1 } else { high = mid }
-    }
-    return low
-  },
-  // Return index of value in array with given property or -1 if not found.
-  // Binary search if property isnt null
-  // Property can be string or function.
-  // Use property = identity to compare objs directly.
-  indexOf (array, item, property) {
-    if (!property) return array.indexOf(item)
-    const i = this.sortedIndex(array, item, property)
-    return array[i] === item ? i : -1
-  },
-  // True if item is in array. Binary search if f given
-  contains (array, item, f) { return this.indexOf(array, item, f) >= 0 },
-  // Remove an item from an array. Binary search if f given
-  // Array unchanged if item not found.
-  removeItem (array, item, f) {
-    const i = this.indexOf(array, item, f)
-    if (i !== -1) array.splice(i, 1)
-    else this.warn(`util.removeItem: ${item} not in array ${array.constructor.name}`)
-    // else throw Error(`util.removeItem: item ${item} not in array ${array}`)
-  },
-  // Insert an item in a sorted array
-  insertItem (array, item, f) {
-    const i = this.sortedIndex(array, item, f)
-    if (array[i] === item) this.error('insertItem: item already in array')
-    array.splice(i, 0, item) // copyWithin?
-  },
-
-  // Return array composed of f(a1i, a2i) called pairwise on both arrays
-  aPairwise: (a1, a2, f) => a1.map((val, i) => f(val, a2[i])),
-  arraysAdd: (a1, a2) => util.aPairwise(a1, a2, (a, b) => a + b),
-  arraysSub: (a1, a2) => util.aPairwise(a1, a2, (a, b) => a - b),
-  arraysMul: (a1, a2) => util.aPairwise(a1, a2, (a, b) => a * b),
-  arraysEqual: (a1, a2) => util.arraysSub(a1, a2).every((a) => a === 0),
 
   // Return a "ramp" (array of uniformly ascending/descending floats)
   // in [start,stop] with numItems (positive integer > 1).
@@ -607,82 +493,21 @@ const util = {
       setTimeout(() => { this.waitOn(done, f, ms) }, ms)
   },
 
-  // An [async/await](https://davidwalsh.name/async-generators)
-  // implementation using generators returning promises.
-  //
-  // runGenerator runs a generator which yields promises,
-  // returning the promise results when they complete.
-  // Amazingly enough, the returned promise result replaces the
-  // promise initially yielded by the generator function.
-  // The `it` argument can be either a generator function or it's iterator.
-  runGenerator (it, callback = (lastVal) => {}) {
-    it = this.typeOf(it) === 'generator' ? it : it()
-    ;(function iterate (val) { // asynchronously iterate over generator
-      const ret = it.next(val)
-      if (!ret.done) // wait on promise, `then` calls iterate w/ a value
-        if (ret.value.then)
-          ret.value.then(iterate) // iterate takes the promise's value
-        else // avoid synchronous recursion
-          setTimeout(() => iterate(ret.value), 0)
-      else
-        callback(ret.value)
-    }())
-  },
-  // Promise version of runGenerator.
-  // The `it` argument can be either a generator function or it's iterator.
-  runGeneratorPromise (it) {
-    return new Promise((resolve, reject) => {
-      this.runGenerator(it, resolve)
-    })
-  },
-  // Used like this, main() is entirely sync:
-  // ```
-  // function* main() {
-  //   var path = 'http://s3.amazonaws.com/backspaces/'
-  //   var val1 = yield util.xhrPromise(path + 'lorem1.txt')
-  //   console.log( 'val1', val1 )
-  //   var val2 = yield util.xhrPromise(path + 'lorem2.txt')
-  //   console.log( 'val2', val2 )
-  // }
-  // util.runGenerator( main )
-  // ```
+// ### Canvas utilities
 
-  // Run a possibly async fcn, calling thenFcn when async fcn is done.
-  // The fcn can return a generator or a promise.
-  // If neither, run fcn & thenFcn synchronously
-  runAsyncFcn (fcn, thenFcn) {
-    const startup = fcn()
-    if (this.typeOf(startup) === 'generator')
-      this.runGenerator(startup, thenFcn)
-    else if (this.typeOf(startup) === 'promise')
-      startup.then(thenFcn)
-    else
-      thenFcn()
-  },
-
-// ### Canvas/Image
-
-  // Get an image in this page by its ID
-  getCanvasByID: (id) => document.getElementById(id),
-  // Create a blank canvas of a given width/height
+  // Create a blank 2D canvas of a given width/height
   createCanvas (width, height) {
     const can = document.createElement('canvas')
     Object.assign(can, {width, height})
     return can
   },
-  // As above, but returing the context object.
+  // As above, but returing the 2D context object.
   // NOTE: ctx.canvas is the canvas for the ctx, and can be use as an image.
-  createCtx (width, height, type = '2d', glAttributes = {}) {
+  createCtx (width, height) {
     const can = this.createCanvas(width, height)
-    return this.getContext(can, type, glAttributes)
+    return can.getContext('2d')
   },
-  getContext (canvas, type = '2d', glAttributes = {}) {
-    if (typeof canvas === 'string') canvas = this.getCanvasByID(canvas)
-    if (type[0] !== '2') type = 'webgl'
-    const ctx = canvas.getContext(type, glAttributes)
-    if (!ctx) this.error('getContext error')
-    return ctx
-  },
+
   // Duplicate a ctx's image. Returns the new ctx (who's canvas is ctx.caanvas)
   cloneCtx (ctx0) {
     const ctx = this.createCtx(ctx0.canvas.width, ctx0.canvas.height)
@@ -696,6 +521,33 @@ const util = {
     ctx.canvas.height = height
     ctx.drawImage(copy.canvas, 0, 0)
   },
+
+  // Install identity transform for this context.
+  // Call ctx.restore() to revert to previous transform.
+  setIdentity (ctx) {
+    ctx.save() // NOTE: Does not change state, only saves current state.
+    ctx.setTransform(1, 0, 0, 1, 0, 0) // or ctx.resetTransform()
+  },
+  // Set ctx.canvas size, ctx scale, origin to the model's world.
+  setWorldTransform (ctx, world) {
+    ctx.canvas.width = world.width
+    ctx.canvas.height = world.height
+    ctx.save()
+    // ctx.scale(world.patchSize, -world.patchSize)
+    ctx.scale(1, -1)
+    ctx.translate(-world.minXcor, -world.maxYcor)
+  },
+  // Set the text font, align and baseline drawing parameters.
+  // Ctx can be either a canvas context or a DOM element
+  // See [reference](http://goo.gl/AvEAq) for details.
+  // * font is a HTML/CSS string like: "9px sans-serif"
+  // * align is left right center start end
+  // * baseline is top hanging middle alphabetic ideographic bottom
+  setTextParams (ctx, font, textAlign = 'center', textBaseline = 'middle') {
+    // ctx.font = font; ctx.textAlign = align; ctx.textBaseline = baseline
+    Object.assign(ctx, {font, textAlign, textBaseline})
+  },
+
   // Return the (complete) ImageData object for this context object
   ctxImageData (ctx) {
     return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -705,139 +557,8 @@ const util = {
     this.setIdentity(ctx) // set/restore identity
     ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.restore()
-  },
-  // Return an image/png base64 [dataUrl](https://goo.gl/fyBPnL)
-  // string for this ctx object.
-  ctxToDataUrl: (ctx) => ctx.canvas.toDataURL('image/png'),
-
-  // Convert a dataUrl back into am image.
-  dataUrlToImage (dataUrl) { // async in some browsers?? http://goo.gl/kIk2U
-    const img = new Image()
-    img.src = dataUrl
-    return img
-  },
-  // Return a ctx object for this base64 data url
-  dataUrlToCtx (dataUrl) { // async in some browsers?? http://goo.gl/kIk2U
-    const img = this.dataUrlToImage(dataUrl)
-    const ctx = this.createCtx(img.width, img.height)
-    ctx.drawImage(img, 0, 0)
-    return ctx
-  },
-
-  setCtxSmoothing (ctx, smoothing) {
-    // Don'cha love  standards!
-    const aliases = ['imageSmoothingEnabled', 'mozImageSmoothingEnabled', 'oImageSmoothingEnabled', 'webkitImageSmoothingEnabled', 'msImageSmoothingEnabled']
-    for (const name of aliases)
-      if (ctx[name])
-        return (ctx[name] = smoothing) // lets hope the first one works. Sheesh!
-  },
-
-  // Install identity transform for this context.
-  // Call ctx.restore() to revert to previous transform.
-  setIdentity (ctx) {
-    ctx.save() // NOTE: Does not change state, only saves current state.
-    ctx.setTransform(1, 0, 0, 1, 0, 0) // or ctx.resetTransform()
-  },
-  // Set ctx.canvas size, ctx scale, origin to the model's world.
-  // setWorldTransform (ctx, world) {
-  //   ctx.canvas.width = world.width
-  //   ctx.canvas.height = world.height
-  //   ctx.save()
-  //   ctx.scale(world.patchSize, -world.patchSize)
-  //   ctx.translate(-world.minXcor, -world.maxYcor)
-  // },
-
-// ### Canvas 2D Context Text Drawing
-
-  // Draw string of the given color at the xy location, in ctx pixel coords.
-  // Push/pop identity transform.
-  ctxDrawText (ctx, string, x, y, cssColor) {
-    this.setIdentity(ctx)
-    ctx.fillStyle = cssColor
-    ctx.fillText(string, x, y)
-    ctx.restore()
-  },
-
-  // Convert an image, or part of an image, to a context.
-  // img may be another canvas.
-  // * x, y are top/left in image, default to 0, 0.
-  // * width, height are size of context, default to image's width, height
-  // * thus default is entire image
-  //
-  // NOTE: to convert a ctx to an "image" (drawImage) use ctx.canvas.
-  // [See MDN drawImage, third form](https://goo.gl/a5b87N)
-  // NOTE: this will distort the origional image, due to browser assumptions.
-  // Use imageToBytes for undistorted image content.
-  //
-  // REMIND: Remove?
-  imageToCtx (img, x = 0, y = 0, width = img.width, height = img.height) {
-    if ((x + width > img.width) || (y + height > img.height))
-      this.error('imageToCtx: parameters outside of image')
-    const ctx = this.createCtx(width, height)
-    ctx.drawImage(img, x, y, width, height, 0, 0, width, height)
-    return ctx
-  },
-
-// ### WebGL/Three.js
-
-  // Use webgl texture to convert img to Uint8Array w/o alpha premultiply
-  // or color profile modification.
-  // Img can be Image, ImageData, Canvas: [See MDN](https://goo.gl/a3oyRA).
-  // `flipY` is used to invert image to upright.
-  imageToBytesCtx: null,
-  imageToBytes (img, flipY = false, imgFormat = 'RGBA') {
-    // Create the gl context using the image width and height
-    if (!this.imageToBytesCtx) {
-      this.imageToBytesCtx = this.createCtx(0, 0, 'webgl', {
-        premultipliedAlpha: false
-      })
-    }
-
-    const {width, height} = img
-    const gl = this.imageToBytesCtx
-    Object.assign(gl.canvas, {width, height})
-    // const gl = this.createCtx(width, height, 'webgl', {
-    //   premultipliedAlpha: false
-    // })
-    const fmt = gl[imgFormat]
-
-    // Create and initialize the texture.
-    const texture = gl.createTexture()
-    gl.bindTexture(gl.TEXTURE_2D, texture)
-    if (flipY) // Mainly used for pictures rather than data
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
-    // Insure [no color profile applied](https://goo.gl/BzBVJ9):
-    gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE)
-    // Insure no [alpha premultiply](http://goo.gl/mejNCK).
-    // False is the default, but lets make sure!
-    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false)
-
-    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
-    gl.texImage2D(gl.TEXTURE_2D, 0, fmt, fmt, gl.UNSIGNED_BYTE, img)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
-
-    // Create the framebuffer used for the texture
-    const framebuffer = gl.createFramebuffer()
-    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer)
-    gl.framebufferTexture2D(
-      gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0)
-
-    // See if it all worked. Apparently not async.
-    const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER)
-    if (status !== gl.FRAMEBUFFER_COMPLETE)
-      this.error(`imageToBytes: status not FRAMEBUFFER_COMPLETE: ${status}`)
-
-    // If all OK, create the pixels buffer and read data.
-    const pixSize = imgFormat === 'RGB' ? 3 : 4
-    const pixels = new Uint8Array(pixSize * width * height)
-    // gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels)
-    gl.readPixels(0, 0, width, height, fmt, gl.UNSIGNED_BYTE, pixels)
-
-    // Unbind the framebuffer and return pixels
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
-    return pixels
   }
+
 }
 
 export default util

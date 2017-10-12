@@ -18,18 +18,6 @@ class AgentArray extends Array {
   // Convert between AgentArrays and Arrays
   toArray () { Object.setPrototypeOf(this, Array.prototype); return this }
 
-  // Remove/Insert object "o" from this array. If prop given, assume
-  // array sorted by prop and use binary search. Return this for chaining.
-  // REMIND: Move util functions here, hopefully simplifying.
-  remove (o, prop) {
-    util.removeItem(this, o, prop)
-    return this
-  }
-  insert (o, prop) {
-    util.insertItem(this, o, prop)
-    return this
-  }
-
   // Return true if there are no items in this set, false if not empty.
   empty () { return this.length === 0 }
   // Return !empty()
@@ -73,11 +61,68 @@ class AgentArray extends Array {
     return this
   }
 
+  // Remove/Insert object "o" from this array. If prop given, assume
+  // array sorted by prop and use binary search. Return this for chaining.
+  // REMIND: Move util functions here, hopefully simplifying.
+  // remove (o, prop) {
+  //   this.removeItem(o, prop)
+  //   return this
+  // }
+  // insert (o, prop) {
+  //   this.insertItem(o, prop)
+  //   return this
+  // }
+  // Remove an item from an array. Binary search if f given
+  // Array unchanged if item not found.
+  remove (o, f) {
+    const i = this.indexOf(o, f)
+    if (i !== -1)
+      this.splice(i, 1)
+    else
+      this.warn(`remove: ${o} not in agentSet ${this.name}`)
+  }
+  insert (o, f) {
+    const i = this.sortedIndex(o, f)
+    if (this[i] === o) this.error('insert: item already in array')
+    this.splice(i, 0, o) // copyWithin?
+  }
+
+  // Binary search:
+  // Return array index of item, where array is sorted.
+  // If item not found, return index for item for array to remain sorted.
+  // f is used to return an integer for sorting, defaults to identity.
+  // If f is a string, it is the object property to sort by.
+  // Adapted from underscore's _.sortedIndex.
+  sortedIndex (item, f = util.identity) {
+    if (util.isString(f)) f = util.propFcn(f)
+    const value = f(item)
+    // Why not array.length - 1? Because we can insert 1 after end of array.
+    // let [low, high] = [0, array.length]
+    let low = 0
+    let high = this.length
+    while (low < high) {
+      const mid = (low + high) >>> 1 // floor (low+high)/2
+      if (f(this[mid]) < value) { low = mid + 1 } else { high = mid }
+    }
+    return low
+  }
+  // Return index of value in array with given property or -1 if not found.
+  // Binary search if property isnt null
+  // Property can be string or function.
+  // Use property = identity to compare objs directly.
+  indexOf (item, property) {
+    if (!property) return this.indexOf(item)
+    const i = this.sortedIndex(item, property)
+    return this[i] === item ? i : -1
+  }
+  // True if item is in array. Binary search if f given
+  contains (item, f) { return this.indexOf(item, f) >= 0 }
+
   // Return a random agent. Return undefined if empty.
   oneOf () { return util.oneOf(this) }
   // Return a random agent, not equal to agent
   otherOneOf (agent) { return util.otherOneOf(this, agent) }
-  // otherOneOf: nOf good enough?
+
   // Return the first agent having the min/max of given value of f(agent).
   // If reporter is a string, convert to a fcn returning that property
   minOrMaxOf (min, reporter) {

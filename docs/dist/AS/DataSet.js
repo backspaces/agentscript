@@ -114,7 +114,7 @@ class DataSet {
 
   // Return a copy of this, with new data array
   copy () {
-    return new DataSet(this.width, this.height, util.copyArray(this.data))
+    return new DataSet(this.width, this.height, util.clone(this.data))
   }
 
   // Return new (empty) dataset, defaulting to this type
@@ -350,52 +350,54 @@ class DataSet {
   //
   // Our preferred transport is in the works, likely in the
   // tile datasets via blobs or arraybuffers. Sigh.
-  toContext (normalize = false, gray = false, alpha = 255) {
-    const [w, h, data] = [this.width, this.height, this.data]
-    let idata
-    if (normalize) {
-      idata = gray
-        ? util.normalize8(data) : util.normalizeInt(data, 0, Math.pow(2, 24) - 1)
-    } else {
-      idata = data.map((a) => Math.round(a))
-    }
-    const ctx = util.createCtx(w, h)
-    const id = ctx.getImageData(0, 0, w, h)
-    const ta = id.data // ta short for typed array
-    for (let i = 0; i < idata.length; i++) {
-      const [num, j] = [idata[i], 4 * i] // j = byte index into ta
-      if (gray) {
-        ta[j] = ta[j + 1] = ta[j + 2] = Math.floor(num); ta[j + 3] = alpha
-      } else {
-        ta[j] = (num >> 16) & 0xff
-        ta[j + 1] = (num >> 8) & 0xff
-        ta[j + 2] = num & 0xff
-        ta[j + 3] = alpha // if not 255, image will be premultiplied.
-      }
-    }
-    ctx.putImageData(id, 0, 0)
-    return ctx
-  }
-
-  // Convert dataset to a canvas, which can be used as an image
-  toCanvas (normalize = false, gray = false, alpha = 255) {
-    return this.toContext(gray, normalize, alpha).canvas
-  }
-  // Convert dataset to a base64 string
-  toDataUrl (normalize = false, gray = false, alpha = 255) {
-    return util.ctxToDataUrl(this.toContext(gray, normalize, alpha))
-  }
+  // toContext (normalize = false, gray = false, alpha = 255) {
+  //   const [w, h, data] = [this.width, this.height, this.data]
+  //   let idata
+  //   if (normalize) {
+  //     idata = gray
+  //       ? util.normalize8(data) : util.normalizeInt(data, 0, Math.pow(2, 24) - 1)
+  //   } else {
+  //     idata = data.map((a) => Math.round(a))
+  //   }
+  //   const ctx = util.createCtx(w, h)
+  //   const id = ctx.getImageData(0, 0, w, h)
+  //   const ta = id.data // ta short for typed array
+  //   for (let i = 0; i < idata.length; i++) {
+  //     const [num, j] = [idata[i], 4 * i] // j = byte index into ta
+  //     if (gray) {
+  //       ta[j] = ta[j + 1] = ta[j + 2] = Math.floor(num); ta[j + 3] = alpha
+  //     } else {
+  //       ta[j] = (num >> 16) & 0xff
+  //       ta[j + 1] = (num >> 8) & 0xff
+  //       ta[j + 2] = num & 0xff
+  //       ta[j + 3] = alpha // if not 255, image will be premultiplied.
+  //     }
+  //   }
+  //   ctx.putImageData(id, 0, 0)
+  //   return ctx
+  // }
+  //
+  // // Convert dataset to a canvas, which can be used as an image
+  // toCanvas (normalize = false, gray = false, alpha = 255) {
+  //   return this.toContext(gray, normalize, alpha).canvas
+  // }
+  // // Convert dataset to a base64 string
+  // toDataUrl (normalize = false, gray = false, alpha = 255) {
+  //   return util.ctxToDataUrl(this.toContext(gray, normalize, alpha))
+  // }
 
   // Return max/min of data
   max () {
-    return this.data.reduce(function (a, b) {
-      return Math.max(a, b)
-    })
+    // return this.data.reduce(function (a, b) {
+    //   return Math.max(a, b)
+    // })
+    return util.arrayMax(this.data)
   }
   min () {
-    return this.data.reduce(function (a, b) {
-      return Math.min(a, b)
-    })
+    // return this.data.reduce(function (a, b) {
+    //   return Math.min(a, b)
+    // })
+    return util.arrayMin(this.data)
   }
   // Test that this has same width, height, data as dataset.
   // Note: does not require equal array type (Array or TypedArray)
