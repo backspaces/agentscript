@@ -4,10 +4,17 @@ import util from '../src/util.js'
 
 util.toWindow({ Model, util })
 
-class TestModel extends Model {
+class LinksModel extends Model {
   setup () {
+    this.turtles.setDefault('atEdge', 'bounce')
+
+    this.patches.ask(p => {
+      p.data = util.randomFloat(100)
+    })
+
     this.turtles.create(1000, (t) => {
-      t.data = util.randomFloat2(0.2, 0.5) // + Math.random()
+      t.size = util.randomFloat2(0.2, 0.5) // + Math.random()
+      t.speed = util.randomFloat2(0.01, 0.05) // 0.5 + Math.random()
     })
 
     this.turtles.ask(turtle => {
@@ -20,12 +27,13 @@ class TestModel extends Model {
   }
   step () {
     this.turtles.ask((t) => {
-      t.forward(0.01)
+      t.theta += util.randomCentered(0.1)
+      t.forward(t.speed)
     })
   }
 }
 
-const model = new TestModel(document.body)
+const model = new LinksModel() // default world.
 model.setup()
 
 // Debugging
@@ -35,4 +43,4 @@ console.log('links:', model.links.length)
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 
-util.repeat(50, () => model.step())
+util.repeat(500, () => model.step())

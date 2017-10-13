@@ -333,13 +333,18 @@ class Patches extends AgentSet {
   // of each patch's value of `v` to its neighbors.
   // If a color map is given, scale the patch color via variable's value
   // If the patch has less than 4/8 neighbors, return the extra to the patch.
-  diffuse (v, rate, colorMap = null, min = 0, max = 1) {
-    this.diffuseN(8, v, rate, colorMap, min, max)
+  // diffuse (v, rate, colorMap = null, min = 0, max = 1) {
+  diffuse (v, rate) {
+    // this.diffuseN(8, v, rate, colorMap, min, max)
+    this.diffuseN(8, v, rate)
   }
-  diffuse4 (v, rate, colorMap = null, min = 0, max = 1) {
-    this.diffuseN(4, v, rate, colorMap, min, max)
+  // diffuse4 (v, rate, colorMap = null, min = 0, max = 1) {
+  diffuse4 (v, rate) {
+    // this.diffuseN(4, v, rate, colorMap, min, max)
+    this.diffuseN(4, v, rate)
   }
-  diffuseN (n, v, rate, colorMap = null, min = 0, max = 1) {
+  // diffuseN (n, v, rate, colorMap = null, min = 0, max = 1) {
+  diffuseN (n, v, rate) {
     // Note: for-of loops removed: chrome can't optimize them
     // test/apps/patches.js 22fps -> 60fps
     // zero temp variable if not yet set
@@ -366,8 +371,8 @@ class Patches extends AgentSet {
       const p = this[i]
       p[v] = p._diffuseNext
       p._diffuseNext = 0
-      if (colorMap)
-        p.setColor(colorMap.scaleColor(p[v], min, max))
+      // if (colorMap)
+      //   p.setColor(colorMap.scaleColor(p[v], min, max))
     }
   }
 }

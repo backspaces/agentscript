@@ -20,8 +20,8 @@ class Model {
   // static defaultWorld (size = 13, max = 16) {
   //   return World.defaultOptions(size, max)
   // }
-  static defaultWorld (max = 16) {
-    return World.defaultOptions(max)
+  static defaultWorld (maxX = 16, maxY = maxX) {
+    return World.defaultOptions(maxX, maxY)
   }
   // // Default renderer is ThreeView.js
   // static defaultRenderer () {

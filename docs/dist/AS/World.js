@@ -4,13 +4,13 @@
 
 class World {
   // static defaultOptions (size = 13, max = 16) {
-  static defaultOptions (max = 16) {
+  static defaultOptions (maxX = 16, maxY = maxX) {
     return {
       // patchSize: size,
-      minX: -max,
-      maxX: max,
-      minY: -max,
-      maxY: max
+      minX: -maxX,
+      maxX: maxX,
+      minY: -maxY,
+      maxY: maxY
     }
   }
   // Initialize the world w/ defaults overridden w/ options.
