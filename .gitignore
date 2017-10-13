@@ -3,6 +3,9 @@
 # Derived files other than docs/
 /dist/
 
+# Tests
+# /test/
+
 node_modules/
 npm-debug.log
 **/.DS_Store

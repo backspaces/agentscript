@@ -21,7 +21,7 @@ class Links extends AgentSet {
       const link = this.addAgent()
       link.init(from, t)
       initFcn(link)
-      if (!link.color) link.color = this.randomColor()
+      // if (!link.color) link.color = this.randomColor()
       return link
     }) // REMIND: return single link if to not an array?
   }

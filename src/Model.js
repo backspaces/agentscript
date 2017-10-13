@@ -115,10 +115,10 @@ class Model {
     // mesh.init(agentset)
   }
   reset (restart = false) {
-    this.anim.reset()
+    // this.anim.reset()
     this.world.setWorld() // allow world to change?
 
-    this.refreshLinks = this.refreshTurtles = this.refreshPatches = true
+    // this.refreshLinks = this.refreshTurtles = this.refreshPatches = true
 
     // Breeds handled by setup
     this.initAgentSet('patches', Patches, Patch)
@@ -145,7 +145,7 @@ class Model {
 
 // ### User Model Creation
   // A user's model is made by subclassing Model and over-riding these
-  // 3 abstract methods. `super` need not be called.
+  // 2 abstract methods. `super` need not be called.
 
   setup () {} // Your initialization code goes here
   // Update/step your model here

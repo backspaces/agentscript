@@ -281,7 +281,7 @@ const util = {
   // Repeat function f(i, a) n times, i in 0, n-1, a is optional array
   repeat (n, f, a = []) { for (let i = 0; i < n; i++) f(i, a); return a },
   // Repeat function n/step times, incrementing i by step each step.
-  step (n, step, f) { for (let i = 0; i < n; i += step) f(i); },
+  // step (n, step, f) { for (let i = 0; i < n; i += step) f(i) },
   // Return range [0, length-1]. Note: 6x faster than Array.from!
   range (length) { return this.repeat(length, (i, a) => { a[i] = i; }) },
   // range (length) { return this.repeat(length, (i, a) => { a[i] = i }, []) },
@@ -298,10 +298,11 @@ const util = {
   },
   removeArrayItem (array, item) {
     const ix = array.indexOf(item);
-    if (ix !== -1)
+    if (ix !== -1) {
       array.splice(ix, 1);
-    else
+    } else {
       this.warn(`removeArrayItem: ${item} not in array`);
+    }
   },
 
   // Execute fcn for all own member of an obj or array (typed OK).
@@ -1454,7 +1455,7 @@ class Links extends AgentSet {
       const link = this.addAgent();
       link.init(from, t);
       initFcn(link);
-      if (!link.color) link.color = this.randomColor();
+      // if (!link.color) link.color = this.randomColor()
       return link
     }) // REMIND: return single link if to not an array?
   }
@@ -2515,10 +2516,10 @@ class Model {
     // mesh.init(agentset)
   }
   reset (restart = false) {
-    this.anim.reset();
+    // this.anim.reset()
     this.world.setWorld(); // allow world to change?
 
-    this.refreshLinks = this.refreshTurtles = this.refreshPatches = true;
+    // this.refreshLinks = this.refreshTurtles = this.refreshPatches = true
 
     // Breeds handled by setup
     this.initAgentSet('patches', Patches, Patch);
@@ -2545,7 +2546,7 @@ class Model {
 
 // ### User Model Creation
   // A user's model is made by subclassing Model and over-riding these
-  // 3 abstract methods. `super` need not be called.
+  // 2 abstract methods. `super` need not be called.
 
   setup () {} // Your initialization code goes here
   // Update/step your model here
