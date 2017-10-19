@@ -38,7 +38,8 @@ class FireModel extends Model {
     if (this.fires.length + this.embers.length === 0) {
       // console.log('Done:', this.anim.toString())
       const percentBurned = this.burnedTrees / this.initialTrees * 100
-      console.log('Percent burned', percentBurned.toFixed(2))
+      console.log('Percent burned:', percentBurned.toFixed(2))
+      util.log('Percent burned: ' + percentBurned.toFixed(2))
       this.done = true
       return // keep three control running
     }
@@ -83,6 +84,9 @@ model.setup()
 console.log('patches:', model.patches.length)
 console.log('fires:', model.fires.length)
 console.log('embers:', model.embers.length)
+util.log('patches: ' + model.patches.length)
+util.log('fires: ' + model.fires.length)
+util.log('embers: ' + model.embers.length)
 const {world, patches, fires, embers} = model
 util.toWindow({ world, patches, fires, embers, model })
 
@@ -90,3 +94,5 @@ util.repeat(500, () => model.step())
 
 console.log('fires:', model.fires.length)
 console.log('embers:', model.embers.length)
+util.log('fires: ' + model.fires.length)
+util.log('embers: ' + model.embers.length)

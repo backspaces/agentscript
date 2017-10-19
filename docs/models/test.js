@@ -32,6 +32,10 @@ model.setup()
 console.log('patches:', model.patches.length)
 console.log('turtles:', model.turtles.length)
 console.log('links:', model.links.length)
+util.log('patches: ' + model.patches.length)
+util.log('turtles: ' + model.turtles.length)
+util.log('links: ' + model.links.length)
+
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 

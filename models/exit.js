@@ -87,8 +87,11 @@ model.setup()
 // Debugging:
 console.log('patches:', model.patches.length)
 console.log('turtles:', model.turtles.length)
+util.log('patches: ' + model.patches.length)
+util.log('turtles: ' + model.turtles.length)
 const {world, patches, turtles, links, exits, inside, wall} = model
 util.toWindow({ world, patches, turtles, links, exits, inside, wall, model })
 
 util.repeat(500, () => model.step())
 console.log('turtles:', model.turtles.length)
+util.log('turtles: ' + model.turtles.length)

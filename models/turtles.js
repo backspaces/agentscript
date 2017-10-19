@@ -46,6 +46,8 @@ model.setup()
 // Debugging
 console.log('patches:', model.patches.length)
 console.log('turtles:', model.turtles.length)
+util.log('patches: ' + model.patches.length)
+util.log('turtles: ' + model.turtles.length)
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 // util.toWindow({ world, patches, turtles, links, model, renderOptions })

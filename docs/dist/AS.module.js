@@ -22,7 +22,8 @@ const util = {
   // Is a number an integer (rather than a float w/ non-zero fractional part)
   isInteger: Number.isInteger || ((num) => Math.floor(num) === num),
   // Is obj a string?
-  isString: (obj) => typeof obj === 'string',
+  isString: (obj) => util.typeOf(obj) === 'string',
+  isObject: (obj) => util.typeOf(obj) === 'object',
   // Return array's type (Array or TypedArray variant)
   arrayType (array) { return array.constructor },
 
@@ -91,6 +92,13 @@ const util = {
   },
   warn (msg) {
     this.logOnce('Warning: ' + msg);
+  },
+  // Print a message to an html element
+  log (msg, element = document.body) {
+    element.style.fontFamily = 'monospace';
+    element.innerHTML += this.isObject(msg)
+      ? JSON.stringify(msg) + '<br />'
+      : msg + '<br />';
   },
 
   // Use chrome/ffox/ie console.time()/timeEnd() performance functions
@@ -294,11 +302,10 @@ const util = {
   },
   removeArrayItem (array, item) {
     const ix = array.indexOf(item);
-    if (ix !== -1) {
+    if (ix !== -1)
       array.splice(ix, 1);
-    } else {
+    else
       this.warn(`removeArrayItem: ${item} not in array`);
-    }
   },
 
   // Execute fcn for all own member of an obj or array (typed OK).
