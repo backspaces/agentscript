@@ -86,8 +86,6 @@ class DataSet {
     const y0 = Math.floor(y)
     const i = this.toIndex(x0, y0)
     const w = this.width
-    // const [dx, dy] = [(x - x0), (y - y0)] // dx, dy = 0 if x, y on boundary. commented out for speed
-    // const [dx1, dy1] = [1 - dx, 1 - dy] // dx1, dy1 = 1 if x, y on boundary
     const dx = x - x0
     const dy = y - y0
     const dx1 = 1 - dx
@@ -388,15 +386,9 @@ class DataSet {
 
   // Return max/min of data
   max () {
-    // return this.data.reduce(function (a, b) {
-    //   return Math.max(a, b)
-    // })
     return util.arrayMax(this.data)
   }
   min () {
-    // return this.data.reduce(function (a, b) {
-    //   return Math.min(a, b)
-    // })
     return util.arrayMin(this.data)
   }
   // Test that this has same width, height, data as dataset.

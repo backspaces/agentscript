@@ -35,10 +35,6 @@ const util = {
     return (new Uint8ClampedArray(d32.buffer))[0] === 4
   },
 
-  // Throw an error with string.
-  // Use instead of `throw message` for better debugging
-  // error: (message) => { throw new Error(message) },
-
   // Identity fcn, returning its argument unchanged. Used in callbacks
   identity: (o) => o,
   // No-op function, does nothing. Used for default callback.
@@ -533,15 +529,6 @@ const util = {
     ctx.save(); // NOTE: Does not change state, only saves current state.
     ctx.setTransform(1, 0, 0, 1, 0, 0); // or ctx.resetTransform()
   },
-  // Set ctx.canvas size, ctx scale, origin to the model's world.
-  setWorldTransform (ctx, world) {
-    ctx.canvas.width = world.width;
-    ctx.canvas.height = world.height;
-    ctx.save();
-    // ctx.scale(world.patchSize, -world.patchSize)
-    ctx.scale(1, -1);
-    ctx.translate(-world.minXcor, -world.maxYcor);
-  },
   // Set the text font, align and baseline drawing parameters.
   // Ctx can be either a canvas context or a DOM element
   // See [reference](http://goo.gl/AvEAq) for details.
@@ -608,8 +595,6 @@ class AgentArray extends Array {
     return this.reduce((prev, o) => prev + (reporter(o) ? 1 : 0), 0)
   }
 
-  // Replacements for array methods to avoid calling AgentArray ctor
-
   // Return shallow copy of a portion of this AgentArray
   // [See Array.slice](https://goo.gl/Ilgsok)
   // Default is to clone entire AgentArray
@@ -627,17 +612,6 @@ class AgentArray extends Array {
     return this
   }
 
-  // Remove/Insert object "o" from this array. If prop given, assume
-  // array sorted by prop and use binary search. Return this for chaining.
-  // REMIND: Move util functions here, hopefully simplifying.
-  // remove (o, prop) {
-  //   this.removeItem(o, prop)
-  //   return this
-  // }
-  // insert (o, prop) {
-  //   this.insertItem(o, prop)
-  //   return this
-  // }
   // Remove an item from an array. Binary search if f given
   // Array unchanged if item not found.
   remove (o, f) {
@@ -784,9 +758,6 @@ class AgentArray extends Array {
   }
 }
 
-// import Color from './Color.js'
-// import ColorMap from './ColorMap.js'
-
 // AgentSets are arrays that are factories for their own agents/objects.
 // They are the base for Patches, Turtles and Links.
 
@@ -860,9 +831,6 @@ class AgentSet extends AgentArray {
   isBreedSet () { return this.baseSet !== this }
   isBaseSet () { return this.baseSet === this }
 
-  // with (reporter) { return this.filter(reporter) }
-  // if (this.isBreedSet()) array = array.filter((a) => a.agentSet === this)
-
   // Return breeds in a subset of an AgentSet.
   // Ex: patches.inRect(5).withBreed(houses)
   withBreed (breed) {
@@ -900,17 +868,14 @@ class AgentSet extends AgentArray {
   // randomColor () { return ColorMap.Basic16.randomColor() }
 
   // Get/Set default values for this agentset's agents.
-  // If name ends with "color", use value = toColor(value)
   setDefault (name, value) {
-    // if (name.match(/color$/i))
-    //   value = Color.toColor(value)
     this.agentProto[name] = value;
   }
   getDefault (name) { return this.agentProto[name] }
   // Used when getter/setter's need to know if get/set default
   settingDefault (agent) { return agent.id == null }
 
-  // Declare variables of an agent class.
+  // Declare variables of an agent class. May deprecate if not needed.
   // `varnames` is a string of space separated names
   own (varnames) {
     // if (this.isBreedSet())
@@ -1032,8 +997,6 @@ class DataSet {
     const y0 = Math.floor(y);
     const i = this.toIndex(x0, y0);
     const w = this.width;
-    // const [dx, dy] = [(x - x0), (y - y0)] // dx, dy = 0 if x, y on boundary. commented out for speed
-    // const [dx1, dy1] = [1 - dx, 1 - dy] // dx1, dy1 = 1 if x, y on boundary
     const dx = x - x0;
     const dy = y - y0;
     const dx1 = 1 - dx;
@@ -1334,15 +1297,9 @@ class DataSet {
 
   // Return max/min of data
   max () {
-    // return this.data.reduce(function (a, b) {
-    //   return Math.max(a, b)
-    // })
     return util.arrayMax(this.data)
   }
   min () {
-    // return this.data.reduce(function (a, b) {
-    //   return Math.min(a, b)
-    // })
     return util.arrayMin(this.data)
   }
   // Test that this has same width, height, data as dataset.
@@ -1356,44 +1313,23 @@ class DataSet {
 
 // import Color from './Color.js'
 
-// Flyweight object creation, see Patch/Patches.
-
 // Class Link instances form a link between two turtles, forming a graph.
+// Flyweight object creation, see Patch/Patches.
+// https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
 
 // The core default variables needed by a Link.
 // Use links.setDefault(name, val) to change
 // Modelers add additional "own variables" as needed.
-// const linkVariables = { // Core variables for patches. Not 'own' variables.
-//   // id: null,             // unique id, promoted by agentset's add() method
-//   // defaults: null,       // pointer to defaults/proto object
-//   // agentSet: null,       // my agentset/breed
-//   // model: null,      // my model
-//   // world: null,          // my agent/agentset's world
-//   // links: null,          // my baseSet
-//
-//   end0: 0,              // Turtles: end0 & 1 are turtle ends of the link
-//   end1: 0,
-//   color: Color.toColor('yellow'), // Note: links must have A = 255, opaque.
-//   // z: 1, // possibly a z offset from the turtles?
-//
-//   // Line width. In Three.js/webgl this is always 1. See
-//   // [Drawing Lines is Hard!](https://mattdesl.svbtle.com/drawing-lines-is-hard)
-//   width: 1
-// }
 class Link {
   static defaultVariables () { // Core variables for patches. Not 'own' variables.
     return {
       end0: null,       // Turtles: end0 & 1 are turtle ends of the link
       end1: null,
-      // typedColor: null, // A Color.color, converted by getter/setters below
       width: 1          // THREE: must be 1. Canvas2D (unsupported) has widths.
     }
   }
   // Initialize a Link
   constructor () {
-    // const vars = Link.defaultVariables()
-    // Object.assign(this, vars)
-    // this.color = null // avoid getter/setter used by assign
     Object.assign(this, Link.defaultVariables());
   }
   init (from, to) {
@@ -1405,8 +1341,6 @@ class Link {
   // Remove this link from its agentset
   die () {
     this.agentSet.removeAgent(this);
-    // util.removeItem(this.end0.links, this)
-    // util.removeItem(this.end1.links, this)
     util.removeArrayItem(this.end0.links, this);
     util.removeArrayItem(this.end1.links, this);
   }
@@ -1418,36 +1352,11 @@ class Link {
     if (turtle === this.end1) return this.end0
     throw Error(`Link.otherEnd: turtle not a link turtle: ${turtle}`)
   }
-
-  // Use typedColor as the real color. Amazingly enough, setdefaults
-  // of 'color' ends up calling setter, thus making typedColor the default name.
-  // Whew!
-  // setColor (color) {
-  //   const typedColor = Color.toColor(color) // Convert to Color.color
-  //   const fixedColor = this.links.renderer.fixedColor // Model set to Color.color
-  //   if (fixedColor && !typedColor.equals(fixedColor)) {
-  //     util.warn(`links.setColor: fixedColor != color ${fixedColor.toString()}`)
-  //   } else {
-  //     this.typedColor = typedColor
-  //   }
-  // }
-  // getColor () { return this.typedColor }
-  // set color (color) { this.setColor(color) }
-  // get color () { return this.getColor() }
-  // color prop can be used by *must* be Color.colors
 }
 
 // Links are a collection of all the Link objects between turtles.
 class Links extends AgentSet {
-  // constructor (model, AgentClass, name) {
-  //   // AgentSet sets these variables:
-  //   // model, name, baseSet, world: model.world & agentProto: new AgentClass
-  //   super(model, AgentClass, name)
-  //   // Skip if an basic Array ctor or a breedSet. See AgentSet comments.
-  //   // if (typeof model === 'number' || this.isBreedSet()) return
-  //
-  //   // this.labels = [] // sparse array for labels
-  // }
+  // Use AgentSeet ctor: constructor (model, AgentClass, name)
 
   // Factory: Add 1 or more links from the from turtle to the to turtle(s) which
   // can be a single turtle or an array of turtles. The optional init
@@ -1458,7 +1367,6 @@ class Links extends AgentSet {
       const link = this.addAgent();
       link.init(from, t);
       initFcn(link);
-      // if (!link.color) link.color = this.randomColor()
       return link
     }) // REMIND: return single link if to not an array?
   }
@@ -1469,10 +1377,8 @@ class Links extends AgentSet {
 // transforms like GIS and DataSets.
 
 class World {
-  // static defaultOptions (size = 13, max = 16) {
   static defaultOptions (maxX = 16, maxY = maxX) {
     return {
-      // patchSize: size,
       minX: -maxX,
       maxX: maxX,
       minY: -maxY,
@@ -1485,11 +1391,11 @@ class World {
     Object.assign(this, options); // override defaults with options
     this.setWorld();
   }
-  // Complete properties derived from patchSize, minX/Y, maxX/Y
+  // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
   setWorld () {
     this.numX = this.maxX - this.minX + 1;
     this.numY = this.maxY - this.minY + 1;
-    this.width = this.numX;
+    this.width = this.numX; // REMIND: remove?
     this.height = this.numY;
     this.minXcor = this.minX - 0.5;
     this.maxXcor = this.maxX + 0.5;
@@ -1498,21 +1404,24 @@ class World {
     this.centerX = (this.minX + this.maxX) / 2;
     this.centerY = (this.minY + this.maxY) / 2;
   }
+  // Test x,y for being on-world.
   isOnWorld (x, y) {
     return (this.minXcor <= x) && (x <= this.maxXcor) &&
            (this.minYcor <= y) && (y <= this.maxYcor)
   }
-  // setCtxTransform (ctx) {
-  //   ctx.canvas.width = this.width
-  //   ctx.canvas.height = this.height
-  //   ctx.save()
-  //   ctx.scale(this.patchSize, -this.patchSize)
-  //   ctx.translate(-(this.minXcor), -(this.maxYcor))
-  // }
+  // Convert a canvas to world coordinates.
+  // The size is determined by patchSize.
+  setCtxTransform (ctx, patchSize) {
+    ctx.canvas.width = this.width * patchSize;
+    ctx.canvas.height = this.height * patchSize;
+    ctx.save();
+    ctx.scale(patchSize, -patchSize);
+    ctx.translate(-(this.minXcor * patchSize), -(this.maxYcor * patchSize));
+  }
 }
 
 // Patches are the world other agentsets live on. They create a coord system
-// from Model's world values: size, minX, maxX, minY, maxY
+// from Model's world values: minX, maxX, minY, maxY
 class Patches extends AgentSet {
   constructor (model, AgentClass, name) {
     // AgentSet sets these variables:
@@ -1524,7 +1433,7 @@ class Patches extends AgentSet {
     if (this.isBreedSet()) return
 
     this.populate();
-    this.setPixels();
+    // this.setPixels()
     this.labels = []; // sparse array for labels
   }
   // Set up all the patches.
@@ -1534,23 +1443,20 @@ class Patches extends AgentSet {
     });
   }
   // Setup pixels ctx used for patch.color: `draw` and `importColors`
-  setPixels () {
-    const {numX, numY} = this.model.world;
-    // const ctx = this.model.contexts.patches
-    // const pixels = this.pixels = {are1x1: patchSize === 1}
-    // pixels.ctx = pixels.are1x1 ? ctx : util.createCtx(numX, numY)
-    this.pixels = {
-      ctx: util.createCtx(numX, numY)
-    };
-    this.setImageData();
-  }
+  // setPixels () {
+  //   const {numX, numY} = this.model.world
+  //   this.pixels = {
+  //     ctx: util.createCtx(numX, numY)
+  //   }
+  //   this.setImageData()
+  // }
   // Create the pixels object used by `setPixels` and `installColors`
-  setImageData () {
-    const pixels = this.pixels;
-    pixels.imageData = util.ctxImageData(pixels.ctx);
-    pixels.data8 = pixels.imageData.data;
-    pixels.data = new Uint32Array(pixels.data8.buffer);
-  }
+  // setImageData () {
+  //   const pixels = this.pixels
+  //   pixels.imageData = util.ctxImageData(pixels.ctx)
+  //   pixels.data8 = pixels.imageData.data
+  //   pixels.data = new Uint32Array(pixels.data8.buffer)
+  // }
 
   setDefault (name, value) {
     if (name === 'color') {
@@ -1606,8 +1512,6 @@ class Patches extends AgentSet {
     const as = new AgentArray(offsets.length);
     offsets.forEach((o, i) => { as[i] = this[o + id]; });
     return as
-    // offsets.forEach((o, i, a) => { a[i] = this[o + id] })
-    // return this.asAgentSet(offsets)
   }
   // Return my 4 patch neighbors
   neighbors4 (patch) {
@@ -1620,32 +1524,15 @@ class Patches extends AgentSet {
 
   // Return a random valid int x,y point in patch space
   randomPt () {
-    // const {minXcor, maxXcor, minYcor, maxYcor} = this.model.world
-    // return [util.randomFloat2(minXcor, maxXcor), util.randomFloat2(minYcor, maxYcor)]
     const {minX, maxX, minY, maxY} = this.model.world;
     return [util.randomInt2(minX, maxX), util.randomInt2(minY, maxY)]
   }
 
-  installPixels () {
-    const pixels = this.pixels;
-    pixels.ctx.putImageData(pixels.imageData, 0, 0);
-    return pixels
-  }
-  // REMIND: Three .. need pixels -> texture
-  // Draw the patches onto the ctx using the pixel image data colors.
-  // draw (ctx = this.model.contexts.patches) {
-  //   const {pixels} = this
+  // installPixels () {
+  //   const pixels = this.pixels
   //   pixels.ctx.putImageData(pixels.imageData, 0, 0)
-  //   if (!pixels.are1x1)
-  //     util.fillCtxWithImage(ctx, pixels.ctx.canvas)
-  //   for (const i in this.labels) { // `for .. in`: skips sparse array gaps.
-  //     const label = this.labels[i]
-  //     const {labelOffset: offset, labelColor: color} = this[i]
-  //     const [x, y] = this.patchXYToPixelXY(...this.patchIndexToXY(i))
-  //     util.ctxDrawText(ctx, label, x + offset[0], y + offset[1], color.getCss())
-  //   }
+  //   return pixels
   // }
-  // REMIND: No drawing layer yet
   // // Draws, or "imports" an image URL into the drawing layer.
   // // The image is scaled to fit the drawing layer.
   // // This is an async function, using es6 Promises.
@@ -1657,15 +1544,15 @@ class Patches extends AgentSet {
   // installDrawing (img, ctx = this.model.contexts.drawing) {
   //   util.fillCtxWithImage(ctx, img)
   // }
-  importColors (imageSrc) {
-    util.imagePromise(imageSrc)
-    .then((img) => this.installColors(img));
-  }
-  // Direct install image into the patch colors, not async.
-  installColors (img) {
-    util.fillCtxWithImage(this.pixels.ctx, img);
-    this.setImageData();
-  }
+  // importColors (imageSrc) {
+  //   util.imagePromise(imageSrc)
+  //   .then((img) => this.installColors(img))
+  // }
+  // // Direct install image into the patch colors, not async.
+  // installColors (img) {
+  //   util.fillCtxWithImage(this.pixels.ctx, img)
+  //   this.setImageData()
+  // }
 
   // Import/export DataSet to/from patch variable `patchVar`.
   // `useNearest`: true for fast rounding to nearest; false for bi-linear.
@@ -1692,41 +1579,13 @@ class Patches extends AgentSet {
     return new DataSet(numX, numY, data)
   }
 
-  // Return true if x,y floats are within patch world.
-  // isOnWorld (x, y) {
-  //   const {minXcor, maxXcor, minYcor, maxYcor} = this.model.world
-  //   return (minXcor <= x) && (x <= maxXcor) && (minYcor <= y) && (y <= maxYcor)
-  // }
-  // Return the patch id/index given valid integer x,y in patch coords
+  // Return id/index given valid x,y integers
   patchIndex (x, y) {
     const {minX, maxY, numX} = this.model.world;
     return (x - minX) + (numX * (maxY - y))
   }
-  // patchXYToIndex (x, y) {
-  //   const {minX, maxY, numX} = this.model.world
-  //   return (x - minX) + (numX * (maxY - y))
-  // }
-  // // Return the patch x,y patch coords given a valid patches id/index
-  // patchIndexToXY (ix) {
-  //   const {minX, maxY, numX} = this.model.world
-  //   return [(ix % numX) + minX, maxY - Math.floor(ix / numX)]
-  // }
-  // // Convert to/from pixel coords & patch coords
-  // pixelXYToPatchXY (x, y) {
-  //   const {patchSize, minXcor, maxYcor} = this.model.world
-  //   return [minXcor + (x / patchSize), maxYcor - (y / patchSize)]
-  // }
-  // patchXYToPixelXY (x, y) {
-  //   const {patchSize, minXcor, maxYcor} = this.model.world
-  //   return [(x - minXcor) * patchSize, (maxYcor - y) * patchSize]
-  // }
 
-  // Utils for NetLogo patch location methods.
-  // All return `undefined` if not onworld.
-  // Note that foo == null checks for both undefined and null (== vs ===)
-  // and is considered an OK practice.
-
-  // Return patch at x,y float values according to topology.
+  // Return patch at x,y float values
   // Return undefined if off-world
   patch (x, y) {
     if (!this.model.world.isOnWorld(x, y)) return undefined
@@ -1743,11 +1602,9 @@ class Patches extends AgentSet {
   // Both dx & dy are half width/height of rect
   patchRect (p, dx, dy = dx, meToo = true) {
     // Return cached rect if one exists.
-    // if (p.pRect && p.pRect.length === dx * dy) return p.pRect
     if (p.rectCache) {
       const index = this.cacheIndex(dx, dy, meToo);
       const rect = p.rectCache[index];
-      // const rect = p.rectCache[this.cacheIndex(dx, dy, meToo)]
       if (rect) return rect
     }
     const rect = new AgentArray();
@@ -1781,27 +1638,13 @@ class Patches extends AgentSet {
     });
   }
 
-// Return patches within the patch rect, default is square & meToo
-  // inRect (patch, dx, dy = dx, meToo = true) {
-  //   return this.inRect(patch, dx, dy, meToo)
-  // }
-  // Patches in circle radius (integer) from patch
-  // inRadius (patch, radius, meToo = true) {
-  //   const rSq = radius * radius
-  //   const result = new AgentArray()
-  //   const sqDistance = util.sqDistance // 10% faster
-  //   const pRect = this.inRect(patch, radius, radius, meToo)
-  //   for (let i = 0; i < pRect.length; i++) {
-  //     const p = pRect[i]
-  //     if (sqDistance(patch.x, patch.y, p.x, p.y) <= rSq) result.push(p)
-  //   }
-  //   return result
-  // }
+  // Return patches within the patch rect, default is square & meToo
   inRect (patch, dx, dy = dx, meToo = true) {
     const pRect = this.patchRect(patch, dx, dy, meToo);
     if (this.isBaseSet()) return pRect
     return pRect.withBreed(this)
   }
+  // Return patches within radius distance of patch
   inRadius (patch, radius, meToo = true) {
     const pRect = this.inRect(patch, radius, radius, meToo);
     return pRect.inRadius(patch, radius, meToo)
@@ -1810,14 +1653,6 @@ class Patches extends AgentSet {
   inCone (patch, radius, coneAngle, direction, meToo = true) {
     const pRect = this.inRect(patch, radius, radius, meToo);
     return pRect.inCone(patch, radius, coneAngle, direction, meToo)
-
-    // const result = new AgentArray()
-    // for (let i = 0; i < pRect.length; i++) {
-    //   const p = pRect[i]
-    //   const isIn = util.inCone(p.x, p.y, radius, coneAngle, direction, patch.x, patch.y)
-    //   if (isIn && (patch !== p || meToo)) result.push(p)
-    // }
-    // return result
   }
 
   // Return patch at distance and angle from obj's (patch or turtle)
@@ -1839,26 +1674,21 @@ class Patches extends AgentSet {
 
   // Diffuse the value of patch variable `p.v` by distributing `rate` percent
   // of each patch's value of `v` to its neighbors.
-  // If a color map is given, scale the patch color via variable's value
   // If the patch has less than 4/8 neighbors, return the extra to the patch.
-  // diffuse (v, rate, colorMap = null, min = 0, max = 1) {
   diffuse (v, rate) {
-    // this.diffuseN(8, v, rate, colorMap, min, max)
     this.diffuseN(8, v, rate);
   }
-  // diffuse4 (v, rate, colorMap = null, min = 0, max = 1) {
   diffuse4 (v, rate) {
-    // this.diffuseN(4, v, rate, colorMap, min, max)
     this.diffuseN(4, v, rate);
   }
-  // diffuseN (n, v, rate, colorMap = null, min = 0, max = 1) {
   diffuseN (n, v, rate) {
     // Note: for-of loops removed: chrome can't optimize them
     // test/apps/patches.js 22fps -> 60fps
     // zero temp variable if not yet set
     if (this[0]._diffuseNext === undefined)
       // for (const p of this) p._diffuseNext = 0
-      for (let i = 0; i < this.length; i++) this[i]._diffuseNext = 0;
+      for (let i = 0; i < this.length; i++)
+        this[i]._diffuseNext = 0;
 
     // pass 1: calculate contribution of all patches to themselves and neighbors
     // for (const p of this) {
@@ -1873,14 +1703,11 @@ class Patches extends AgentSet {
       for (let i = 0; i < neighbors.length; i++) neighbors[i]._diffuseNext += dvn;
     }
     // pass 2: set new value for all patches, zero temp,
-    // modify color if colorMap given
     // for (const p of this) {
     for (let i = 0; i < this.length; i++) {
       const p = this[i];
       p[v] = p._diffuseNext;
       p._diffuseNext = 0;
-      // if (colorMap)
-      //   p.setColor(colorMap.scaleColor(p[v], min, max))
     }
   }
 }
@@ -1896,20 +1723,12 @@ class Patches extends AgentSet {
 // Here, the Patch class is given to Patches for use creating Proto objects
 // (new Patch(agentSet)), but only once per model/breed.
 // The flyweight Patch objects are created via Object.create(protoObject),
-// This lets the new Patch(agentset) obhect be "defaults".
+// This lets the new Patch(agentset) object be "defaults".
+// https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
 class Patch {
-  static defaultVariables () { // Core variables for patches. Not 'own' variables.
+  static defaultVariables () { // Core variables for patches.
     return {
-      // id: null,             // unique id, promoted by agentset's add() method
-      // agentSet: null,       // my agentset/breed
-      // model: null,          // my model
-      // patches: null,        // my patches/baseSet, set by ctor
-
-      // labelOffset: [0, 0],  // text pixel offset from the patch center
-      // labelColor: Color.color(0, 0, 0) // the label color
-      // Getter variables: label, color, x, y, neighbors, neighbors4
-
-      turtles: undefined      // the turtles on me. Laxy evalued, see turtlesHere below
+      turtles: undefined // the turtles on me. Lazy evalued, see turtlesHere
     }
   }
   // Initialize a Patch given its Patches AgentSet.
@@ -1944,54 +1763,12 @@ class Patch {
     Object.defineProperty(this, 'neighbors4', {value: n, enumerable: true});
     return n
   }
-  // Similar for caching turtles here
-  // get turtles () {
-  //   Object.defineProperty(this, 'turtles', {value: [], enumerable: true})
-  //   return this.turtles
-  // }
-
-  // // Manage colors by directly setting pixels in Patches pixels object.
-  // // With getter/setters, slight performance hit but worth it!
-  // setColor (color) {
-  //   this.patches.pixels.data[this.id] = Color.toColor(color).getPixel()
-  // }
-  // // Optimization: If shared color provided, sharedColor is modified and
-  // // returned. Otherwise new color returned.
-  // getColor (sharedColor = null) {
-  //   const pixel = this.patches.pixels.data[this.id]
-  //   if (sharedColor) {
-  //     sharedColor.pixel = pixel
-  //     return sharedColor
-  //   }
-  //   return Color.toColor(pixel)
-  // }
-  // get color () { return this.getColor() }
-  // set color (color) { this.setColor(color) }
-
-  // // Set label. Erase label via setting to undefined.
-  // setLabel (label) {
-  //   this.patches.setLabel(this, label)
-  // }
-  // getLabel () {
-  //   this.patches.getLabel(this)
-  // }
-  // get label () { return this.getLabel() }
-  // set label (label) { return this.setLabel(label) }
 
   // Promote this.turtles on first call to turtlesHere.
   turtlesHere () {
     if (this.turtles == null) {
-      // this.patches.forEach((patch) => { patch.turtles = [] })
-      // this.model.turtles.forEach((turtle) => {
-      //   turtle.patch.turtles.push(this)
-      // })
       this.patches.ask(p => { p.turtles = []; });
       this.model.turtles.ask(t => { t.patch.turtles.push(t); });
-
-      // for (const patch of this.patches)
-      //   patch.turtles = []
-      // for (const turtle of this.model.turtles)
-      //   turtle.patch.turtles.push(turtle)
     }
     return this.turtles
   }
@@ -1999,7 +1776,6 @@ class Patch {
   breedsHere (breed) {
     const turtles = this.turtlesHere();
     return turtles.withBreed(breed)
-    // return turtles.filter((turtle) => turtle.agentSet === breed)
   }
 
   // 6 methods in both Patch & Turtle modules
@@ -2018,7 +1794,7 @@ class Patch {
     return this.patches.patchAtDirectionAndDistance(this, direction, distance)
   }
 
-  // Use the agentset versions so that breeds can considered.
+  // Use the agentset versions so that breeds can be considered.
   // Otherwise we'd have to use the patch breed just to be consistant.
   // inRect (patch, dx, dy = dx, meToo = true) {
   //   return this.patches.inRect(this, dx, dy, meToo)
@@ -2029,11 +1805,6 @@ class Patch {
   // inCone (radius, coneAngle, direction, meToo = true) {
   //   return this.patches.inRadius(this, radius, coneAngle, direction, meToo)
   // }
-
-  // Breed get/set mathods and getter/setter versions.
-  // setBreed (breed) { breed.setBreed(this) }
-  // get breed () { return this.agentSet }
-  // isBreed (name) { return this.agentSet.name === name }
 
   sprout (num = 1, breed = this.model.turtles, initFcn = (turtle) => {}) {
     const turtles = this.model.turtles;
@@ -2052,47 +1823,27 @@ class Patch {
 // Turtles are the world other agentsets live on. They create a coord system
 // from Model's world values: size, minX, maxX, minY, maxY
 class Turtles extends AgentSet {
-  // constructor (model, AgentClass, name) {
-  //   // // AgentSet sets these variables:
-  //   // // model, name, baseSet, world: model.world & agentProto: new AgentClass
-  //   super(model, AgentClass, name)
-  //   // // Skip if an basic Array ctor or a breedSet. See AgentSet comments.
-  //   //
-  //   // // if (typeof model === 'number' || this.isBreedSet()) return
-  //   //
-  //   // // this.model.world = model.world
-  //   // // this.labels = [] // sparse array for labels
-  //   // // this.spriteSheet = new SpriteSheet()
-  //   // // this.colorMap = ColorMap.Basic16
-  // }
+  // Use AgentSet ctr: constructor (model, AgentClass, name)
   create (num = 1, initFcn = (turtle) => {}) {
     return util.repeat(num, (i, a) => {
       const turtle = this.addAgent();
       turtle.theta = util.randomFloat(Math.PI * 2);
-      // if (this.renderer.useSprites) // fake sprite for initialization
-      //   turtle.sprite =
-      //     {shape: turtle.shapeFcn, color: this.randomColor(), needsUpdate: true}
       initFcn(turtle);
       a.push(turtle); // Return array of new agents. REMIND: should be agentarray?
     })
   }
-  // clear () {
-  //   while (this.any()) this.last.die() // die a turtle method
-  // }
 
   // Return a random valid float x,y point in turtle coord space.
   randomPt () {
     const {minXcor, maxXcor, minYcor, maxYcor} = this.model.world;
     return [util.randomFloat2(minXcor, maxXcor), util.randomFloat2(minYcor, maxYcor)]
-    // const {minX, maxX, minY, maxY} = this.model.world
-    // return [util.randomInt2(minX, maxX), util.randomInt2(minY, maxY)]
   }
 
   // Return an array of this breed within the array of patchs
   inPatches (patches) {
     let array = new AgentArray(); // []
     for (const p of patches) array.push(...p.turtlesHere());
-    // REMIND: can't use withBreed .. its not an AgentSet. Move to AgentArray
+    // REMIND: can't use withBreed .. its not an AgentSet. Move to AgentArray?
     if (this.isBreedSet()) array = array.filter((a) => a.agentSet === this);
     return array
   }
@@ -2144,27 +1895,13 @@ class Turtles extends AgentSet {
 
 class Turtle {
   static defaultVariables () {
-    return { // Core variables for turtles. Not 'own' variables.
+    return { // Core variables for turtles.
       x: 0,             // x, y, z in patchSize units.
       y: 0,             // Use turtles.setDefault('z', num) to change default height
       z: 0,
       theta: 0,         // my euclidean direction, radians from x axis, counter-clockwise
-      // size: 1,          // size in patches, default to one patch
-
-      // patch: null,   // the patch I'm on .. uses getter below
-      // links: null,   // the links having me as an end point .. lazy promoted below
       atEdge: 'clamp'  // What to do if I wander off world. Can be 'clamp', 'wrap'
                         // 'bounce', or a function, see handleEdge() method
-      // sprite: null,
-      // typedColor: null,
-      // typedStrokeColor: null,
-      // shapeFcn: `default`
-
-      // spriteFcn: 'default',
-      // spriteColor: Color.color(255, 0, 0),
-
-      // labelOffset: [0, 0],  // text pixel offset from the turtle center
-      // labelColor: Color.color(0, 0, 0) // the label color
     }
   }
   // Initialize a Turtle given its Turtles AgentSet.
@@ -2179,9 +1916,6 @@ class Turtle {
       util.removeArrayItem(this.patch.turtles, this);
       // util.removeItem(this.patch.turtles, this)
   }
-  // // Breed get/set mathods.
-  // setBreed (breed) { breed.setBreed(this) }
-  // get breed () { return this.agentSet }
 
   // Factory: create num new turtles at this turtle's location. The optional init
   // proc is called on the new turtle after inserting in its agentSet.
@@ -2196,15 +1930,6 @@ class Turtle {
       if (breed !== this.turtles) turtle.setBreed(breed);
       init(turtle);
     })
-    // return agentSet.create(num, (turtle) => {
-    //   turtle.setxy(this.x, this.y)
-    //   // turtle.color = this.color // REMIND: sprite vs color
-    //   // hatched turtle inherits parents' ownVariables
-    //   for (const key of agentSet.ownVariables) {
-    //     if (turtle[key] == null) turtle[key] = this[key]
-    //   }
-    //   init(turtle)
-    // })
   }
   // Getter for links for this turtle. REMIND: use new AgentSet(0)?
   // Uses lazy evaluation to promote links to instance variables.
@@ -2216,86 +1941,14 @@ class Turtle {
     });
     return this.links
   }
-  // Getter for the patchs and the patch I'm on. Return null if off-world.
+  // Getter for the patch I'm on. Return null if off-world.
   get patch () { return this.model.patches.patch(this.x, this.y) }
-  // get patches () { return this.model.patches }
 
   // Heading vs Euclidean Angles. Direction for clarity when ambiguity.
   get heading () { return util.heading(this.theta) }
   set heading (heading) { this.theta = util.angle(heading); }
   get direction () { return this.theta }
   set direction (theta) { this.theta = theta; }
-
-  // setColor (anyColor) { this.color = Color.toColor(anyColor) }
-  // getColor () {
-  //   if (this.color) return
-  //   return this.color || this.sprite
-  // }
-
-  // // Create my sprite via shape: sprite, fcn, string, or image/canvas
-  // setSprite (shape = this.shape, color = this.color, strokeColor = this.strokeColor) {
-  //   if (shape.sheet) { this.sprite = shape; return } // src is a sprite
-  //   const ss = this.model.spriteSheet
-  //   color = color || this.turtles.randomColor()
-  //   this.sprite = ss.newSprite(shape, color, strokeColor)
-  // }
-  // setSize (size) { this.size = size } // * this.model.world.patchSize }
-  //
-  // setColor (color) {
-  //   // if (this.turtles.settingDefault(this)) console.log(`setting default color ${color}`)
-  //   // if (!this.id) console.log(`setting default color ${color}`)
-  //   const typedColor = Color.toColor(color) // Convert to Color.color
-  //   const fixedColor = this.turtles.renderer.fixedColor // Model set to Color.color
-  //   if (fixedColor && !typedColor.equals(fixedColor)) {
-  //     util.warn(`turtle.setColor: fixedColor != color ${fixedColor.toString()}`)
-  //   // } else if (this.sprite && !settingDefault) {
-  //   } else if (this.sprite) { // default sprite should always be null
-  //     this.sprite.color = typedColor
-  //     this.sprite.needsUpdate = true
-  //   } else { // will set default color or instance color (if not fixed etc)
-  //     this.typedColor = typedColor
-  //   }
-  // }
-  // getColor () { return this.sprite ? this.sprite.color : this.typedColor }
-  // set color (color) { this.setColor(color) }
-  // get color () { return this.getColor() }
-  //
-  // setStrokeColor (color) {
-  //   const typedColor = Color.toColor(color) // Convert to Color.color
-  //   const fixedColor = this.turtles.renderer.fixedColor // Model set to Color.color
-  //   if (fixedColor) {
-  //     util.warn(`turtle.setStrokeColor: fixedColor ${fixedColor.toString()}`)
-  //   } else if (this.sprite) { // default sprite should always be null
-  //     this.sprite.strokeColor = typedColor
-  //     this.sprite.needsUpdate = true
-  //   } else { // will set default color or instance color
-  //     this.typedStrokeColor = typedColor
-  //   }
-  // }
-  // getStrokeColor () {
-  //   return this.sprite ? this.sprite.strokeColor : this.typedStrokeColor
-  // }
-  // set strokdColor (color) { this.setStrokeColor(color) }
-  // get strokdColor () { return this.getStrokeColor() }
-  //
-  // setShape (shape) {
-  //   const fixedShape = this.turtles.renderer.fixedShape
-  //   if (fixedShape && fixedShape !== shape) {
-  //     util.warn(`turtle.setShape: fixedShape ${fixedShape}`)
-  //   } else if (this.sprite) {
-  //     this.sprite.shape = shape
-  //     this.sprite.needsUpdate = true
-  //   } else {
-  //     this.shapeFcn = shape
-  //   }
-  // }
-  // getShape () { return this.sprite ? this.sprite.shape : this.shapeFcn }
-  // set shape (shape) { this.setShape(shape) }
-  // get shape () { return this.getShape() }
-
-  // setDrawSprite (fcn, color, color2) {
-  //   this.sprite = this.model.spriteSheet.addDrawing(fcn, color)
-  // }
 
   // Set x, y position. If z given, override default z.
   // Call handleEdge(x, y) if x, y off-world.
@@ -2307,14 +1960,6 @@ class Turtle {
       this.y = y;
     } else {
       this.handleEdge(x, y);
-      // const {minXcor, maxXcor, minYcor, maxYcor} = this.model.world
-      // if (this.wrap) {
-      //   this.x = util.wrap(x, minXcor, maxXcor)
-      //   this.y = util.wrap(y, minYcor, maxYcor)
-      // } else {
-      //   this.x = util.clamp(x, minXcor, maxXcor)
-      //   this.y = util.clamp(y, minYcor, maxYcor)
-      // }
     }
     const p = this.patch;
     if (p.turtles != null && p !== p0) {
@@ -2414,142 +2059,32 @@ class Turtle {
   linkNeighbors () { return this.links.map((l) => this.otherEnd(l)) }
 }
 
-// import Color from './Color.js'
-// import Animator from './Animator.js'
-// import SpriteSheet from './SpriteSheet.js'
-// import ThreeView from './ThreeView.js'
-// import ThreeMeshes from './ThreeMeshes.js'
-// import util from './util.js'
-
 // Class Model is the primary interface for modelers, integrating
 // all the parts of a model. It also contains NetLogo's `observer` methods.
 class Model {
-  // Static class methods for default settings.
-  // Default world is centered, patchSize = 13, min/max = 16
-  // static defaultWorld (size = 13, max = 16) {
-  //   return World.defaultOptions(size, max)
-  // }
+  // Static class method for default setting.
+  // Default world is centered, min/max = 16
   static defaultWorld (maxX = 16, maxY = maxX) {
     return World.defaultOptions(maxX, maxY)
   }
-  // // Default renderer is ThreeView.js
-  // static defaultRenderer () {
-  //   return ThreeView.defaultOptions()
-  // }
-  // static printDefaultViewOptions () {
-  //   ThreeView.printMeshOptions()
-  // }
 
-  // The Model constructor takes a DOM div and model and renderer options.
-  // Default values are given for all constructor arguments.
+  // The Model constructor takes a World object.
   constructor (worldOptions = Model.defaultWorld()) {
-    // Store and initialize the model's div and contexts.
-    // this.div = util.isString(div) ? document.getElementById(div) : div
-    // Create this model's `world` object
     this.world = new World(worldOptions);
-    // Create animator to handle draw/step.
-    // this.anim = new Animator(this)
-
-    // View setup.
-    // this.spriteSheet = new SpriteSheet()
-    // Initialize view
-    // this.view = new rendererOptions.Renderer(this, rendererOptions)
-    // Initialize meshes.
-    // this.meshes = {}
-    // util.forEach(rendererOptions, (val, key) => {
-    //   if (val.meshClass) {
-    //     const Mesh = ThreeMeshes[val.meshClass]
-    //     const options = Mesh.options() // default options
-    //     Object.assign(options, val.options) // override by user's
-    //     if (options.color) // convert options.color rgb array to Color.
-    //       options.color = Color.toColor(new Float32Array(options.color))
-    //     this.meshes[key] = new ThreeMeshes[val.meshClass](this.view, options)
-    //   }
-    // })
-
-    // Initialize model calling `startup`, `reset` .. which calls `setup`.
-    // this.modelReady = false
-    // this.startup().then(() => {
-    //   // this.reset(); this.setup(); this.modelReady = true
-    //   this.reset(); this.modelReady = true
-    // })
-    this.reset(); // REMIND: Temporary
+    this.reset(); // REMIND: Temporary. Inline?
   }
-  // Call fcn(this) when any async
-  // whenReady (fcn) {
-  //   // util.waitPromise(() => this.modelReady).then(fcn())
-  //   util.waitOn(() => this.modelReady, () => fcn(this))
-  // }
-  // Add additional world variables derived from constructor's `modelOptions`.
-  // setWorld () {
-  //   const world = this.world
-  //   // REMIND: change to xPatches, yPatches?
-  //   world.numX = world.maxX - world.minX + 1
-  //   world.numY = world.maxY - world.minY + 1
-  //   world.width = world.numX * world.patchSize
-  //   world.height = world.numY * world.patchSize
-  //   world.minXcor = world.minX - 0.5
-  //   world.maxXcor = world.maxX + 0.5
-  //   world.minYcor = world.minY - 0.5
-  //   world.maxYcor = world.maxY + 0.5
-  //   world.isOnWorld = (x, y) => // No braces, is lambda expression
-  //     (world.minXcor <= x) && (x <= world.maxXcor) &&
-  //     (world.minYcor <= y) && (y <= world.maxYcor)
-  // }
-  // createQuad (r, z = 0) { // r is radius of xy quad: [-r,+r], z is quad z
-  //   const vertices = [-r, -r, z, r, -r, z, r, r, z, -r, r, z]
-  //   const indices = [0, 1, 2, 0, 2, 3]
-  //   return {vertices, indices}
-  // }
-  // (Re)initialize the model. REMIND: not quite right
-  // setAgentSetViewProps (agentSet, mesh) {
-  //   agentSet.isMonochrome = mesh.isMonochrome()
-  //   agentSet.useSprites = mesh.useSprites()
-  // }
   initAgentSet (name, AgentsetClass, AgentClass) {
     const agentset = new AgentsetClass(this, AgentClass, name);
-    // const mesh = this.meshes[name]
-    // const meshName = mesh.constructor.name
     this[name] = agentset;
-    // // agentset.setDefault('renderer', mesh)
-    // agentset.renderer = mesh
-    // if (mesh.fixedColor) agentset.setDefault('color', mesh.fixedColor)
-    // // REMIND: Turtles only?
-    // if (mesh.fixedShape) agentset.setDefault('shape', mesh.fixedShape)
-    // // this.agentset.fixedColor = agentset.renderer.options.color
-    // // agentset.useSprites = meshName in ['PointSpritesMesh', 'QuadSpritesMesh']
-    // // agentset.fixedColor = agentset.renderer.options.color
-    // // agentset.useSprites = meshName in ['PointSpritesMesh', 'QuadSpritesMesh']
-    // // agentset.fixedShape =
-    // mesh.init(agentset)
   }
   reset (restart = false) {
-    // this.anim.reset()
     this.world.setWorld(); // allow world to change?
-
-    // this.refreshLinks = this.refreshTurtles = this.refreshPatches = true
-
-    // Breeds handled by setup
+    // Base AgentSets setup here. Breeds handled by setup
     this.initAgentSet('patches', Patches, Patch);
     this.initAgentSet('turtles', Turtles, Turtle);
     this.initAgentSet('links', Links, Link);
-    // this.patches = new Patches(this, Patch, 'patches')
-    // this.patches.renderer = this.meshes.patches
-    // this.meshes.patches.init(this.patches)
-    // this.setAgentSetViewProps(this.patches, this.meshes.patches)
-    //
-    // this.turtles = new Turtles(this, Turtle, 'turtles')
-    // this.turtles.renderer = this.meshes.turtles
-    // this.meshes.turtles.init(this.turtles)
-    // this.setAgentSetViewProps(this.turtles, this.meshes.turtles)
-    //
-    // this.links = new Links(this, Link, 'links')
-    // this.turtles.links = this.meshes.links
-    // this.meshes.links.init(this.links)
-    // this.setAgentSetViewProps(this.links, this.meshes.links)
-
-    // this.setup()
-    if (restart) this.start();
+    // this.setup() // ctor no longer calls setup. REMIND: flag to call setup?
+    // if (restart) this.start()
   }
 
 // ### User Model Creation
@@ -2559,49 +2094,6 @@ class Model {
   setup () {} // Your initialization code goes here
   // Update/step your model here
   step () {} // called each step of the animation
-
-  // Start/stop the animation. Return model for chaining.
-  // start () {
-  //   // util.waitOn(() => this.modelReady, () => {
-  //   //   this.anim.start()
-  //   // })
-  //   this.anim.start()
-  //   return this
-  // }
-  // stop () { this.anim.stop() }
-  // // Animate once by `step(); draw()`.
-  // once () { this.stop(); this.anim.once() } // stop is no-op if already stopped
-
-  // Change the world parameters. Requires a reset.
-  // Resets Patches, Turtles, Links & reinitializes canvases.
-  // If restart argument is true (default), will restart after resetting.
-  // resizeWorld (modelOptions, restart = true) {
-  //   Object.assign(this.world, modelOptions)
-  //   this.setWorld(this.world)
-  //   this.reset(restart)
-  // }
-
-  // draw () {
-  //   // // const {scene, camera} = this.view
-  //   // if (this.div) {
-  //   //   if (force || this.refreshPatches) {
-  //   //     if (this.patches.length > 0)
-  //   //       this.patches.renderer.update(this.patches)
-  //   //   }
-  //   //   if (force || this.refreshTurtles) {
-  //   //     if (this.turtles.length > 0)
-  //   //       this.turtles.renderer.update(this.turtles)
-  //   //   }
-  //   //   if (force || this.refreshLinks) {
-  //   //     if (this.links.length > 0)
-  //   //       this.links.renderer.update(this.links)
-  //   //   }
-  //   //
-  //   //   // REMIND: generalize.
-  //   //   this.view.renderer.render(this.view.scene, this.view.camera)
-  //   // }
-  //   // if (this.view.stats) this.view.stats.update()
-  // }
 
   // Breeds: create breeds/subarrays of Patches, Agents, Links
   patchBreeds (breedNames) {
@@ -2642,17 +2134,10 @@ class RGBDataSet extends DataSet {
     }
     // this.src = img.src // Might be useful? Flags as image data set.
   }
-
-  // Convert RGB to a number.
-  // https://blog.mapbox.com/global-elevation-data-6689f1d0ba65
-  // height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
-  // by default this assumes the values are in decimeters,
-  // but it can be overwritten.
-  // This funnction gets called in a tight loop for every pixel.
-  // rgb2Number (r, g, b, floor = -10000, scale = 0.1) {
-  //   return floor + ((r * 256 * 256 + g * 256 + b) * scale)
-  // }
 }
+
+// This is the importer/exporter of all our modules.
+// It is only used by Rollup for bundling.
 
 /* eslint-disable */
 

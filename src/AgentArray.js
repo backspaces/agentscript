@@ -42,8 +42,6 @@ class AgentArray extends Array {
     return this.reduce((prev, o) => prev + (reporter(o) ? 1 : 0), 0)
   }
 
-  // Replacements for array methods to avoid calling AgentArray ctor
-
   // Return shallow copy of a portion of this AgentArray
   // [See Array.slice](https://goo.gl/Ilgsok)
   // Default is to clone entire AgentArray
@@ -61,17 +59,6 @@ class AgentArray extends Array {
     return this
   }
 
-  // Remove/Insert object "o" from this array. If prop given, assume
-  // array sorted by prop and use binary search. Return this for chaining.
-  // REMIND: Move util functions here, hopefully simplifying.
-  // remove (o, prop) {
-  //   this.removeItem(o, prop)
-  //   return this
-  // }
-  // insert (o, prop) {
-  //   this.insertItem(o, prop)
-  //   return this
-  // }
   // Remove an item from an array. Binary search if f given
   // Array unchanged if item not found.
   remove (o, f) {

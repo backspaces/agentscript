@@ -1,6 +1,4 @@
 import AgentArray from './AgentArray.js'
-// import Color from './Color.js'
-// import ColorMap from './ColorMap.js'
 
 // AgentSets are arrays that are factories for their own agents/objects.
 // They are the base for Patches, Turtles and Links.
@@ -75,9 +73,6 @@ class AgentSet extends AgentArray {
   isBreedSet () { return this.baseSet !== this }
   isBaseSet () { return this.baseSet === this }
 
-  // with (reporter) { return this.filter(reporter) }
-  // if (this.isBreedSet()) array = array.filter((a) => a.agentSet === this)
-
   // Return breeds in a subset of an AgentSet.
   // Ex: patches.inRect(5).withBreed(houses)
   withBreed (breed) {
@@ -115,17 +110,14 @@ class AgentSet extends AgentArray {
   // randomColor () { return ColorMap.Basic16.randomColor() }
 
   // Get/Set default values for this agentset's agents.
-  // If name ends with "color", use value = toColor(value)
   setDefault (name, value) {
-    // if (name.match(/color$/i))
-    //   value = Color.toColor(value)
     this.agentProto[name] = value
   }
   getDefault (name) { return this.agentProto[name] }
   // Used when getter/setter's need to know if get/set default
   settingDefault (agent) { return agent.id == null }
 
-  // Declare variables of an agent class.
+  // Declare variables of an agent class. May deprecate if not needed.
   // `varnames` is a string of space separated names
   own (varnames) {
     // if (this.isBreedSet())

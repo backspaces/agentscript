@@ -3,10 +3,8 @@
 // transforms like GIS and DataSets.
 
 class World {
-  // static defaultOptions (size = 13, max = 16) {
   static defaultOptions (maxX = 16, maxY = maxX) {
     return {
-      // patchSize: size,
       minX: -maxX,
       maxX: maxX,
       minY: -maxY,
@@ -19,11 +17,11 @@ class World {
     Object.assign(this, options) // override defaults with options
     this.setWorld()
   }
-  // Complete properties derived from patchSize, minX/Y, maxX/Y
+  // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
   setWorld () {
     this.numX = this.maxX - this.minX + 1
     this.numY = this.maxY - this.minY + 1
-    this.width = this.numX
+    this.width = this.numX // REMIND: remove?
     this.height = this.numY
     this.minXcor = this.minX - 0.5
     this.maxXcor = this.maxX + 0.5
@@ -32,17 +30,20 @@ class World {
     this.centerX = (this.minX + this.maxX) / 2
     this.centerY = (this.minY + this.maxY) / 2
   }
+  // Test x,y for being on-world.
   isOnWorld (x, y) {
     return (this.minXcor <= x) && (x <= this.maxXcor) &&
            (this.minYcor <= y) && (y <= this.maxYcor)
   }
-  // setCtxTransform (ctx) {
-  //   ctx.canvas.width = this.width
-  //   ctx.canvas.height = this.height
-  //   ctx.save()
-  //   ctx.scale(this.patchSize, -this.patchSize)
-  //   ctx.translate(-(this.minXcor), -(this.maxYcor))
-  // }
+  // Convert a canvas to world coordinates.
+  // The size is determined by patchSize.
+  setCtxTransform (ctx, patchSize) {
+    ctx.canvas.width = this.width * patchSize
+    ctx.canvas.height = this.height * patchSize
+    ctx.save()
+    ctx.scale(patchSize, -patchSize)
+    ctx.translate(-(this.minXcor * patchSize), -(this.maxYcor * patchSize))
+  }
 }
 
 export default World

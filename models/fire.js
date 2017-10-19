@@ -1,6 +1,6 @@
 import Model from '../src/Model.js'
 import util from '../src/util.js'
-// import {Color, ColorMap, Model, util} from '../../dist/AS.module.js'
+// import {Model, util} from '../dist/AS.module.js'
 // util.toWindow({ Model, util })
 
 class FireModel extends Model {

@@ -10,20 +10,12 @@ import util from './util.js'
 // Here, the Patch class is given to Patches for use creating Proto objects
 // (new Patch(agentSet)), but only once per model/breed.
 // The flyweight Patch objects are created via Object.create(protoObject),
-// This lets the new Patch(agentset) obhect be "defaults".
+// This lets the new Patch(agentset) object be "defaults".
+// https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
 class Patch {
-  static defaultVariables () { // Core variables for patches. Not 'own' variables.
+  static defaultVariables () { // Core variables for patches.
     return {
-      // id: null,             // unique id, promoted by agentset's add() method
-      // agentSet: null,       // my agentset/breed
-      // model: null,          // my model
-      // patches: null,        // my patches/baseSet, set by ctor
-
-      // labelOffset: [0, 0],  // text pixel offset from the patch center
-      // labelColor: Color.color(0, 0, 0) // the label color
-      // Getter variables: label, color, x, y, neighbors, neighbors4
-
-      turtles: undefined      // the turtles on me. Laxy evalued, see turtlesHere below
+      turtles: undefined // the turtles on me. Lazy evalued, see turtlesHere
     }
   }
   // Initialize a Patch given its Patches AgentSet.
@@ -58,54 +50,12 @@ class Patch {
     Object.defineProperty(this, 'neighbors4', {value: n, enumerable: true})
     return n
   }
-  // Similar for caching turtles here
-  // get turtles () {
-  //   Object.defineProperty(this, 'turtles', {value: [], enumerable: true})
-  //   return this.turtles
-  // }
-
-  // // Manage colors by directly setting pixels in Patches pixels object.
-  // // With getter/setters, slight performance hit but worth it!
-  // setColor (color) {
-  //   this.patches.pixels.data[this.id] = Color.toColor(color).getPixel()
-  // }
-  // // Optimization: If shared color provided, sharedColor is modified and
-  // // returned. Otherwise new color returned.
-  // getColor (sharedColor = null) {
-  //   const pixel = this.patches.pixels.data[this.id]
-  //   if (sharedColor) {
-  //     sharedColor.pixel = pixel
-  //     return sharedColor
-  //   }
-  //   return Color.toColor(pixel)
-  // }
-  // get color () { return this.getColor() }
-  // set color (color) { this.setColor(color) }
-
-  // // Set label. Erase label via setting to undefined.
-  // setLabel (label) {
-  //   this.patches.setLabel(this, label)
-  // }
-  // getLabel () {
-  //   this.patches.getLabel(this)
-  // }
-  // get label () { return this.getLabel() }
-  // set label (label) { return this.setLabel(label) }
 
   // Promote this.turtles on first call to turtlesHere.
   turtlesHere () {
     if (this.turtles == null) {
-      // this.patches.forEach((patch) => { patch.turtles = [] })
-      // this.model.turtles.forEach((turtle) => {
-      //   turtle.patch.turtles.push(this)
-      // })
       this.patches.ask(p => { p.turtles = [] })
       this.model.turtles.ask(t => { t.patch.turtles.push(t) })
-
-      // for (const patch of this.patches)
-      //   patch.turtles = []
-      // for (const turtle of this.model.turtles)
-      //   turtle.patch.turtles.push(turtle)
     }
     return this.turtles
   }
@@ -113,7 +63,6 @@ class Patch {
   breedsHere (breed) {
     const turtles = this.turtlesHere()
     return turtles.withBreed(breed)
-    // return turtles.filter((turtle) => turtle.agentSet === breed)
   }
 
   // 6 methods in both Patch & Turtle modules
@@ -132,7 +81,7 @@ class Patch {
     return this.patches.patchAtDirectionAndDistance(this, direction, distance)
   }
 
-  // Use the agentset versions so that breeds can considered.
+  // Use the agentset versions so that breeds can be considered.
   // Otherwise we'd have to use the patch breed just to be consistant.
   // inRect (patch, dx, dy = dx, meToo = true) {
   //   return this.patches.inRect(this, dx, dy, meToo)
@@ -143,11 +92,6 @@ class Patch {
   // inCone (radius, coneAngle, direction, meToo = true) {
   //   return this.patches.inRadius(this, radius, coneAngle, direction, meToo)
   // }
-
-  // Breed get/set mathods and getter/setter versions.
-  // setBreed (breed) { breed.setBreed(this) }
-  // get breed () { return this.agentSet }
-  // isBreed (name) { return this.agentSet.name === name }
 
   sprout (num = 1, breed = this.model.turtles, initFcn = (turtle) => {}) {
     const turtles = this.model.turtles

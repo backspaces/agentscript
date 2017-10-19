@@ -1,3 +1,6 @@
+// This is the importer/exporter of all our modules.
+// It is only used by Rollup for bundling.
+
 /* eslint-disable */
 import AgentArray      from './AgentArray.js'
 import AgentSet        from './AgentSet.js'

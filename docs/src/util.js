@@ -31,10 +31,6 @@ const util = {
     return (new Uint8ClampedArray(d32.buffer))[0] === 4
   },
 
-  // Throw an error with string.
-  // Use instead of `throw message` for better debugging
-  // error: (message) => { throw new Error(message) },
-
   // Identity fcn, returning its argument unchanged. Used in callbacks
   identity: (o) => o,
   // No-op function, does nothing. Used for default callback.
@@ -528,15 +524,6 @@ const util = {
   setIdentity (ctx) {
     ctx.save() // NOTE: Does not change state, only saves current state.
     ctx.setTransform(1, 0, 0, 1, 0, 0) // or ctx.resetTransform()
-  },
-  // Set ctx.canvas size, ctx scale, origin to the model's world.
-  setWorldTransform (ctx, world) {
-    ctx.canvas.width = world.width
-    ctx.canvas.height = world.height
-    ctx.save()
-    // ctx.scale(world.patchSize, -world.patchSize)
-    ctx.scale(1, -1)
-    ctx.translate(-world.minXcor, -world.maxYcor)
   },
   // Set the text font, align and baseline drawing parameters.
   // Ctx can be either a canvas context or a DOM element

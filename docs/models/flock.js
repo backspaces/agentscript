@@ -1,7 +1,6 @@
-// import ColorMap from '../src/ColorMap.js'
 import Model from '../src/Model.js'
 import util from '../src/util.js'
-// import {ColorMap, Model, util} from '../../dist/AS.module.js'
+// import {Model, util} from '../dist/AS.module.js'
 
 util.toWindow({ Model, util })
 
@@ -99,7 +98,7 @@ class FlockModel extends Model {
   }
 
   // headingsOf (boids) { return boids.map((t) => t.theta) }
-  reportFlockVectorSize () {
+  flockVectorSize () {
     const headings = this.turtles.map((t) => t.theta)
     const dx = headings.map((theta) => Math.cos(theta)).reduce((x, y) => x + y)
     const dy = headings.map((theta) => Math.sin(theta)).reduce((x, y) => x + y)
@@ -107,24 +106,7 @@ class FlockModel extends Model {
   }
 }
 
-// const options = { minX: -110, maxX: -105, minY: 40, maxY: 45, patchSize: 4 }
-// const options = { minX: -110, maxX: -105, minY: 40, maxY: 45, patchSize: 1 }
-// const options = { minX: 0, maxX: 10, minY: 0, maxY: 10, patchSize: 1 }
-// const options = { minX: -5, maxX: 5, minY: -5, maxY: 5, patchSize: 1 }
-
-// const options = { minX: -10, maxX: 10, minY: 10, maxY: 30, patchSize: 1 }
-// const options = { minX: 10, maxX: 10, minY: 30, maxY: 30, patchSize: 1 }
-// const options = { minX: 10, maxX: 11, minY: 30, maxY: 31, patchSize: 1 }
-// const options = Model.defaultWorld(); options.patchSize = 1
-// function shift (size, dx, dy) {
-//   options.patchSize = size
-//   options.minX += dx; options.maxX += dx
-//   options.minY += dy; options.maxY += dy
-// }
-// shift(1, 16, 32)
-
 const model = new FlockModel() // default world.
-// const model = new FlockModel(document.body)
 model.setup()
 
 // Debugging
@@ -133,4 +115,6 @@ console.log('turtles:', model.turtles.length)
 const {world, patches, turtles} = model
 util.toWindow({ world, patches, turtles, model })
 
+console.log('initial flockVectorSize:', model.flockVectorSize())
 util.repeat(500, () => model.step())
+console.log('final flockVectorSize:', model.flockVectorSize())

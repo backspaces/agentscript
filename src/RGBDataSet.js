@@ -22,16 +22,6 @@ class RGBDataSet extends DataSet {
     }
     // this.src = img.src // Might be useful? Flags as image data set.
   }
-
-  // Convert RGB to a number.
-  // https://blog.mapbox.com/global-elevation-data-6689f1d0ba65
-  // height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
-  // by default this assumes the values are in decimeters,
-  // but it can be overwritten.
-  // This funnction gets called in a tight loop for every pixel.
-  // rgb2Number (r, g, b, floor = -10000, scale = 0.1) {
-  //   return floor + ((r * 256 * 256 + g * 256 + b) * scale)
-  // }
 }
 
 export default RGBDataSet

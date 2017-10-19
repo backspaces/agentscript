@@ -1,8 +1,7 @@
 // import ColorMap from '../../dist/AS/ColorMap.js'
 import Model from '../src/Model.js'
 import util from '../src/util.js'
-// import {ColorMap, Model, util} from '../../dist/AS.module.js'
-// import {Model, util} from '../../dist/AS.module.js'
+// import {Model, util} from '../dist/AS.module.js'
 
 util.toWindow({ Model, util })
 
