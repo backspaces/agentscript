@@ -2077,21 +2077,22 @@ class Model {
 
   // The Model constructor takes a World object.
   constructor (worldOptions = Model.defaultWorld()) {
-    this.world = new World(worldOptions);
-    this.reset(); // REMIND: Temporary. Inline?
+    this.worldOptions = worldOptions;
+    this.resetModel(); // REMIND: Temporary. Inline?
   }
   initAgentSet (name, AgentsetClass, AgentClass) {
     const agentset = new AgentsetClass(this, AgentClass, name);
     this[name] = agentset;
   }
-  reset (restart = false) {
-    this.world.setWorld(); // allow world to change?
+  resetModel () {
+    this.world = new World(this.worldOptions);
     // Base AgentSets setup here. Breeds handled by setup
     this.initAgentSet('patches', Patches, Patch);
     this.initAgentSet('turtles', Turtles, Turtle);
     this.initAgentSet('links', Links, Link);
-    // this.setup() // ctor no longer calls setup. REMIND: flag to call setup?
-    // if (restart) this.start()
+  }
+  reset () {
+    this.resetModel();
   }
 
 // ### User Model Creation
@@ -2100,7 +2101,7 @@ class Model {
 
   setup () {} // Your initialization code goes here
   // Update/step your model here
-  step () {} // called each step of the animation
+  step () {} // called each step of the model
 
   // Breeds: create breeds/subarrays of Patches, Agents, Links
   patchBreeds (breedNames) {

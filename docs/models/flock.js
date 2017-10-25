@@ -23,7 +23,6 @@ class FlockModel extends Model {
     // const cmap = ColorMap.grayColorMap(0, 100)
     // this.patches.ask(p => { p.setColor(cmap.randomColor()) })
 
-    this.refreshPatches = false
     this.setMaxTurn(3.0)
     this.setVision(3)
     this.minSeparation = 0.75
