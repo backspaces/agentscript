@@ -34,14 +34,15 @@ class Turtle {
   // Factory: create num new turtles at this turtle's location. The optional init
   // proc is called on the new turtle after inserting in its agentSet.
   hatch (num = 1, breed = this.agentSet, init = (turtle) => {}) {
-    return this.turtles.create(num, (turtle) => {
+    // return this.turtles.create(num, (turtle) => {
+    return breed.create(num, (turtle) => {
       turtle.setxy(this.x, this.y)
       // turtle.color = this.color // REMIND: sprite vs color
       // hatched turtle inherits parents' ownVariables
       for (const key of breed.ownVariables) {
         if (turtle[key] == null) turtle[key] = this[key]
       }
-      if (breed !== this.turtles) turtle.setBreed(breed)
+      // if (breed !== this.turtles) turtle.setBreed(breed)
       init(turtle)
     })
   }

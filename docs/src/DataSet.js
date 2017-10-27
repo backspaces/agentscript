@@ -58,8 +58,8 @@ class DataSet {
   getXY (x, y) { return this.data[this.toIndex(x, y)] }
 
   // Set the data value at x,y to num. assume x,y valid
-  // setxy (x, y, num) { this.data[this.toIndex(Math.floor(x), Math.floor(y))] = num }
-  setxy (x, y, num) { this.data[this.toIndex(x, y)] = num }
+  // setXY (x, y, num) { this.data[this.toIndex(Math.floor(x), Math.floor(y))] = num }
+  setXY (x, y, num) { this.data[this.toIndex(x, y)] = num }
 
   // Wrapper for sampling, defaults to "nearest". Checks x,y valid as well.
   // Use this for individual sampling.
@@ -136,7 +136,7 @@ class DataSet {
     const yScale = (this.height - 1) / (height - 1)
     for (let y = 0; y < height; y++)
       for (let x = 0; x < width; x++)
-        ds.setxy(x, y, this.sample(x * xScale, y * yScale, useNearest))
+        ds.setXY(x, y, this.sample(x * xScale, y * yScale, useNearest))
     return ds
   }
 
@@ -148,7 +148,7 @@ class DataSet {
     const ds = this.emptyDataSet(width, height)
     for (let i = 0; i < width; i++)
       for (let j = 0; j < height; j++)
-        ds.setxy(i, j, this.getXY(i + x, j + y))
+        ds.setXY(i, j, this.getXY(i + x, j + y))
     return ds
   }
 
@@ -194,10 +194,10 @@ class DataSet {
     const ds1 = this.emptyDataSet((w + w1), h)
     for (let x = 0; x < h; x++) // copy this into new dataset
       for (let y = 0; y < w; y++)
-        ds1.setxy(x, y, this.getXY(x, y))
+        ds1.setXY(x, y, this.getXY(x, y))
     for (let x = 0; x < h1; x++) // copy ds to the left side
       for (let y = 0; y < w1; y++)
-        ds1.setxy(x + w, y, ds.getXY(x, y))
+        ds1.setXY(x + w, y, ds.getXY(x, y))
     return ds1
   }
 

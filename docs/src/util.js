@@ -305,6 +305,7 @@ const util = {
       array.splice(ix, 1)
     else
       this.warn(`removeArrayItem: ${item} not in array`)
+    return array // for chaining
   },
 
   // Execute fcn for all own member of an obj or array (typed OK).
@@ -364,9 +365,10 @@ const util = {
     return { bins, minBin, maxBin, minVal, maxVal, hist }
   },
 
-  // Return random one of array items. No array.length tests
+  // Return random one of array items.
   oneOf: (array) => array[util.randomInt(array.length)],
   otherOneOf (array, item) {
+    if (array.length < 2) throw Error('util.otherOneOf: array.length < 2')
     do { var other = this.oneOf(array) } while (item === other) // note var use
     return other
   },
@@ -413,7 +415,7 @@ const util = {
   aRamp (start, stop, numItems) {
     // NOTE: start + step*i, where step is (stop-start)/(numItems-1),
     // has float accuracy problems, must recalc step each iteration.
-    if (numItems <= 1) this.error('aRamp: numItems must be > 1')
+    if (numItems <= 1) throw Error('aRamp: numItems must be > 1')
     const a = []
     for (let i = 0; i < numItems; i++)
       a.push(start + (stop - start) * (i / (numItems - 1)))

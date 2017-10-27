@@ -306,6 +306,7 @@ const util = {
       array.splice(ix, 1);
     else
       this.warn(`removeArrayItem: ${item} not in array`);
+    return array // for chaining
   },
 
   // Execute fcn for all own member of an obj or array (typed OK).
@@ -365,9 +366,10 @@ const util = {
     return { bins, minBin, maxBin, minVal, maxVal, hist }
   },
 
-  // Return random one of array items. No array.length tests
+  // Return random one of array items.
   oneOf: (array) => array[util.randomInt(array.length)],
   otherOneOf (array, item) {
+    if (array.length < 2) throw Error('util.otherOneOf: array.length < 2')
     do { var other = this.oneOf(array); } while (item === other) // note var use
     return other
   },
@@ -414,7 +416,7 @@ const util = {
   aRamp (start, stop, numItems) {
     // NOTE: start + step*i, where step is (stop-start)/(numItems-1),
     // has float accuracy problems, must recalc step each iteration.
-    if (numItems <= 1) this.error('aRamp: numItems must be > 1');
+    if (numItems <= 1) throw Error('aRamp: numItems must be > 1')
     const a = [];
     for (let i = 0; i < numItems; i++)
       a.push(start + (stop - start) * (i / (numItems - 1)));
@@ -619,15 +621,16 @@ class AgentArray extends Array {
   // Remove an item from an array. Binary search if f given
   // Array unchanged if item not found.
   remove (o, f) {
-    const i = this.indexOf(o, f);
+    const i = this.agentIndex(o, f);
     if (i !== -1)
       this.splice(i, 1);
     else
-      this.warn(`remove: ${o} not in agentSet ${this.name}`);
+      util.warn(`remove: ${o} not in AgentArray`);
+    return this // chaining
   }
   insert (o, f) {
     const i = this.sortedIndex(o, f);
-    if (this[i] === o) this.error('insert: item already in array');
+    if (this[i] === o) throw Error('insert: item already in AgentArray')
     this.splice(i, 0, o); // copyWithin?
   }
 
@@ -654,18 +657,24 @@ class AgentArray extends Array {
   // Binary search if property isnt null
   // Property can be string or function.
   // Use property = identity to compare objs directly.
-  indexOf (item, property) {
+  agentIndex (item, property) {
     if (!property) return this.indexOf(item)
     const i = this.sortedIndex(item, property);
     return this[i] === item ? i : -1
   }
   // True if item is in array. Binary search if f given
-  contains (item, f) { return this.indexOf(item, f) >= 0 }
+  contains (item, f) { return this.agentIndex(item, f) >= 0 }
 
   // Return a random agent. Return undefined if empty.
   oneOf () { return util.oneOf(this) }
   // Return a random agent, not equal to agent
   otherOneOf (agent) { return util.otherOneOf(this, agent) }
+  // Return n other random agents from this array
+  // otherNOf (n, agent) { return util.otherNOf(n, this, agent) }
+  otherNOf (n, item) {
+    if (this.length < n) throw Error('AgentArray: otherNOf: length < N')
+    return this.clone().remove(item).shuffle().slice(0, n)
+  }
 
   // Return the first agent having the min/max of given value of f(agent).
   // If reporter is a string, convert to a fcn returning that property
@@ -779,15 +788,14 @@ class AgentSet extends AgentArray {
   constructor (model, AgentClass, name, baseSet = null) {
     super(); // create empty AgentArray
     baseSet = baseSet || this; // if not a breed, set baseSet to this
-    // AgentSets know their model, name, baseSet, world.
-    // Object.assign(this, {model, name, baseSet, AgentClass, world: model.world})
     Object.assign(this, {model, name, baseSet, AgentClass});
     // BaseSets know their breeds and keep the ID global
     if (this.isBaseSet()) {
       this.breeds = {}; // will contain breedname: breed entries
       this.ID = 0;
-    // Breeds add themselves to baseSet.
+    // Breeds inherit frm their baseSet and add themselves to baseSet
     } else {
+      Object.setPrototypeOf(this, Object.getPrototypeOf(baseSet));
       this.baseSet.breeds[name] = this;
     }
     // Keep a list of this set's variables; see `own` below
@@ -973,8 +981,8 @@ class DataSet {
   getXY (x, y) { return this.data[this.toIndex(x, y)] }
 
   // Set the data value at x,y to num. assume x,y valid
-  // setxy (x, y, num) { this.data[this.toIndex(Math.floor(x), Math.floor(y))] = num }
-  setxy (x, y, num) { this.data[this.toIndex(x, y)] = num; }
+  // setXY (x, y, num) { this.data[this.toIndex(Math.floor(x), Math.floor(y))] = num }
+  setXY (x, y, num) { this.data[this.toIndex(x, y)] = num; }
 
   // Wrapper for sampling, defaults to "nearest". Checks x,y valid as well.
   // Use this for individual sampling.
@@ -1051,7 +1059,7 @@ class DataSet {
     const yScale = (this.height - 1) / (height - 1);
     for (let y = 0; y < height; y++)
       for (let x = 0; x < width; x++)
-        ds.setxy(x, y, this.sample(x * xScale, y * yScale, useNearest));
+        ds.setXY(x, y, this.sample(x * xScale, y * yScale, useNearest));
     return ds
   }
 
@@ -1063,7 +1071,7 @@ class DataSet {
     const ds = this.emptyDataSet(width, height);
     for (let i = 0; i < width; i++)
       for (let j = 0; j < height; j++)
-        ds.setxy(i, j, this.getXY(i + x, j + y));
+        ds.setXY(i, j, this.getXY(i + x, j + y));
     return ds
   }
 
@@ -1109,10 +1117,10 @@ class DataSet {
     const ds1 = this.emptyDataSet((w + w1), h);
     for (let x = 0; x < h; x++) // copy this into new dataset
       for (let y = 0; y < w; y++)
-        ds1.setxy(x, y, this.getXY(x, y));
+        ds1.setXY(x, y, this.getXY(x, y));
     for (let x = 0; x < h1; x++) // copy ds to the left side
       for (let y = 0; y < w1; y++)
-        ds1.setxy(x + w, y, ds.getXY(x, y));
+        ds1.setXY(x + w, y, ds.getXY(x, y));
     return ds1
   }
 
@@ -1811,16 +1819,16 @@ class Patch {
   // }
 
   sprout (num = 1, breed = this.model.turtles, initFcn = (turtle) => {}) {
-    const turtles = this.model.turtles;
-    return turtles.create(num, (turtle) => {
-      turtle.setxy(this.x, this.y);
-      if (breed !== turtles) turtle.setBreed(breed);
-      initFcn(turtle);
-    })
-    // return breed.create(num, (turtle) => {
+    // const turtles = this.model.turtles
+    // return turtles.create(num, (turtle) => {
     //   turtle.setxy(this.x, this.y)
+    //   if (breed !== turtles) turtle.setBreed(breed)
     //   initFcn(turtle)
     // })
+    return breed.create(num, (turtle) => {
+      turtle.setxy(this.x, this.y);
+      initFcn(turtle);
+    })
   }
 }
 
@@ -1924,14 +1932,15 @@ class Turtle {
   // Factory: create num new turtles at this turtle's location. The optional init
   // proc is called on the new turtle after inserting in its agentSet.
   hatch (num = 1, breed = this.agentSet, init = (turtle) => {}) {
-    return this.turtles.create(num, (turtle) => {
+    // return this.turtles.create(num, (turtle) => {
+    return breed.create(num, (turtle) => {
       turtle.setxy(this.x, this.y);
       // turtle.color = this.color // REMIND: sprite vs color
       // hatched turtle inherits parents' ownVariables
       for (const key of breed.ownVariables) {
         if (turtle[key] == null) turtle[key] = this[key];
       }
-      if (breed !== this.turtles) turtle.setBreed(breed);
+      // if (breed !== this.turtles) turtle.setBreed(breed)
       init(turtle);
     })
   }

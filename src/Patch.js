@@ -94,16 +94,16 @@ class Patch {
   // }
 
   sprout (num = 1, breed = this.model.turtles, initFcn = (turtle) => {}) {
-    const turtles = this.model.turtles
-    return turtles.create(num, (turtle) => {
-      turtle.setxy(this.x, this.y)
-      if (breed !== turtles) turtle.setBreed(breed)
-      initFcn(turtle)
-    })
-    // return breed.create(num, (turtle) => {
+    // const turtles = this.model.turtles
+    // return turtles.create(num, (turtle) => {
     //   turtle.setxy(this.x, this.y)
+    //   if (breed !== turtles) turtle.setBreed(breed)
     //   initFcn(turtle)
     // })
+    return breed.create(num, (turtle) => {
+      turtle.setxy(this.x, this.y)
+      initFcn(turtle)
+    })
   }
 }
 

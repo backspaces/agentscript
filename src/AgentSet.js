@@ -17,15 +17,14 @@ class AgentSet extends AgentArray {
   constructor (model, AgentClass, name, baseSet = null) {
     super() // create empty AgentArray
     baseSet = baseSet || this // if not a breed, set baseSet to this
-    // AgentSets know their model, name, baseSet, world.
-    // Object.assign(this, {model, name, baseSet, AgentClass, world: model.world})
     Object.assign(this, {model, name, baseSet, AgentClass})
     // BaseSets know their breeds and keep the ID global
     if (this.isBaseSet()) {
       this.breeds = {} // will contain breedname: breed entries
       this.ID = 0
-    // Breeds add themselves to baseSet.
+    // Breeds inherit frm their baseSet and add themselves to baseSet
     } else {
+      Object.setPrototypeOf(this, Object.getPrototypeOf(baseSet))
       this.baseSet.breeds[name] = this
     }
     // Keep a list of this set's variables; see `own` below

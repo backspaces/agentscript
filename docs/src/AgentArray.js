@@ -62,15 +62,16 @@ class AgentArray extends Array {
   // Remove an item from an array. Binary search if f given
   // Array unchanged if item not found.
   remove (o, f) {
-    const i = this.indexOf(o, f)
+    const i = this.agentIndex(o, f)
     if (i !== -1)
       this.splice(i, 1)
     else
-      this.warn(`remove: ${o} not in agentSet ${this.name}`)
+      util.warn(`remove: ${o} not in AgentArray`)
+    return this // chaining
   }
   insert (o, f) {
     const i = this.sortedIndex(o, f)
-    if (this[i] === o) this.error('insert: item already in array')
+    if (this[i] === o) throw Error('insert: item already in AgentArray')
     this.splice(i, 0, o) // copyWithin?
   }
 
@@ -97,18 +98,24 @@ class AgentArray extends Array {
   // Binary search if property isnt null
   // Property can be string or function.
   // Use property = identity to compare objs directly.
-  indexOf (item, property) {
+  agentIndex (item, property) {
     if (!property) return this.indexOf(item)
     const i = this.sortedIndex(item, property)
     return this[i] === item ? i : -1
   }
   // True if item is in array. Binary search if f given
-  contains (item, f) { return this.indexOf(item, f) >= 0 }
+  contains (item, f) { return this.agentIndex(item, f) >= 0 }
 
   // Return a random agent. Return undefined if empty.
   oneOf () { return util.oneOf(this) }
   // Return a random agent, not equal to agent
   otherOneOf (agent) { return util.otherOneOf(this, agent) }
+  // Return n other random agents from this array
+  // otherNOf (n, agent) { return util.otherNOf(n, this, agent) }
+  otherNOf (n, item) {
+    if (this.length < n) throw Error('AgentArray: otherNOf: length < N')
+    return this.clone().remove(item).shuffle().slice(0, n)
+  }
 
   // Return the first agent having the min/max of given value of f(agent).
   // If reporter is a string, convert to a fcn returning that property
