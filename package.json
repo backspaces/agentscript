@@ -1,11 +1,11 @@
 {
-  "name": "coreas",
+  "name": "as-core",
   "version": "0.1.0",
-  "description": "Core AgentScript Model modules; no View.",
+  "description": "AgentScript Core Model modules without Views",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/backspaces/CoreAS.git"
+    "url": "git+https://github.com/backspaces/as-core.git"
   },
   "keywords": [
     "NetLogo",
@@ -15,9 +15,9 @@
   "author": "Owen Densmore",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/backspaces/CoreAS/issues"
+    "url": "https://github.com/backspaces/as-core/issues"
   },
-  "homepage": "https://github.com/backspaces/CoreAS",
+  "homepage": "https://github.com/backspaces/as-core",
   "docsfiles": [
     "README.md",
     "src",
