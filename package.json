@@ -18,25 +18,18 @@
     "url": "https://github.com/backspaces/as-core/issues"
   },
   "homepage": "https://github.com/backspaces/as-core",
-  "docsfiles": [
-    "README.md",
-    "src",
-    "models",
-    "dist"
-  ],
   "mkdirs": [
-    "docs/src",
-    "docs/models",
     "dist",
-    "docs/dist"
+    "docs/dist",
+    "docs/models"
   ],
   "scripts": {
     "clean": "rm -rf `bin/pkgkey.js mkdirs` && mkdir `bin/pkgkey.js mkdirs`",
-    "build": "npm run clean && npm run build-dist && npm run minify && npm run build-docs",
+    "build": "yarn run clean && yarn run build-dist && yarn run minify && yarn run build-docs",
     "minify": "squash dist/AS.js > dist/AS.min.js && squash dist/AS.module.js > dist/AS.module.min.js",
-    "build-docs": "cp -Rp `bin/pkgkey.js docsfiles` docs",
+    "build-docs": "cp -Rp README.md dist docs && bin/docsmodels.sh",
     "build-dist": "rollup -c",
-    "help": "npm run && rollup && squash"
+    "help": "yarn run && rollup && squash"
   },
   "devDependencies": {
     "butternut": "^0.4.6",

@@ -1,7 +1,6 @@
 import DataSet from '../src/DataSet.js'
 import Model from '../src/Model.js'
 import util from '../src/util.js'
-// import {DataSet, Model, util} from '../dist/AS.module.js'
 
 util.toWindow({ DataSet, Model, util })
 
