@@ -33,6 +33,6 @@
   },
   "devDependencies": {
     "butternut": "^0.4.6",
-    "rollup": "^0.50.0"
+    "rollup": "^0.53.2"
   }
 }
