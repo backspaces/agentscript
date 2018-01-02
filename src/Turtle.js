@@ -10,12 +10,17 @@ import util from './util.js'
 class Turtle {
   static defaultVariables () {
     return { // Core variables for turtles.
-      x: 0,             // x, y, z in patchSize units.
-      y: 0,             // Use turtles.setDefault('z', num) to change default height
+      // turtle's position: x, y, z.
+      // Generally z set to constant via turtles.setDefault('z', num)
+      x: 0,
+      y: 0,
       z: 0,
-      theta: 0,         // my euclidean direction, radians from x axis, counter-clockwise
-      atEdge: 'clamp'  // What to do if I wander off world. Can be 'clamp', 'wrap'
-                        // 'bounce', or a function, see handleEdge() method
+      // my euclidean direction, radians from x axis, counter-clockwise
+      theta: 0,
+      // What to do if I wander off world. Can be 'clamp', 'wrap'
+      // 'bounce', or a function, see handleEdge() method
+      atEdge: 'clamp'
+
     }
   }
   // Initialize a Turtle given its Turtles AgentSet.
@@ -34,15 +39,12 @@ class Turtle {
   // Factory: create num new turtles at this turtle's location. The optional init
   // proc is called on the new turtle after inserting in its agentSet.
   hatch (num = 1, breed = this.agentSet, init = (turtle) => {}) {
-    // return this.turtles.create(num, (turtle) => {
-    return breed.create(num, (turtle) => {
+    return breed.create(num, turtle => {
       turtle.setxy(this.x, this.y)
-      // turtle.color = this.color // REMIND: sprite vs color
       // hatched turtle inherits parents' ownVariables
       for (const key of breed.ownVariables) {
         if (turtle[key] == null) turtle[key] = this[key]
       }
-      // if (breed !== this.turtles) turtle.setBreed(breed)
       init(turtle)
     })
   }
@@ -154,16 +156,6 @@ class Turtle {
   patchAtDirectionAndDistance (direction, distance) {
     return this.model.patches.patchAtDirectionAndDistance(this, direction, distance)
   }
-
-  // // Return turtles/breeds within radius from me
-  // inRadius (radius, meToo = false) {
-  //   return this.agentSet.inRadius(this, radius, meToo)
-  // }
-  // // Return turtles/breeds within cone from me
-  // // Note: agentSet rather than turtles to allow for breeds
-  // inCone (radius, coneAngle, meToo = false) {
-  //   return this.agentSet.inCone(this, radius, coneAngle, this.theta, meToo)
-  // }
 
   // Link methods. Note: this.links returns all links linked to me.
   // See links getter above.

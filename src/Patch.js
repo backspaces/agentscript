@@ -1,5 +1,4 @@
 import util from './util.js'
-// import Color from './Color.js'
 
 // Class Patch instances represent a rectangle on a grid.  They hold variables
 // that are in the patches the turtles live on.  The set of all patches
@@ -81,25 +80,7 @@ class Patch {
     return this.patches.patchAtDirectionAndDistance(this, direction, distance)
   }
 
-  // Use the agentset versions so that breeds can be considered.
-  // Otherwise we'd have to use the patch breed just to be consistant.
-  // inRect (patch, dx, dy = dx, meToo = true) {
-  //   return this.patches.inRect(this, dx, dy, meToo)
-  // }
-  // inRadius (radius, meToo = true) { // radius is integer
-  //   return this.patches.inRadius(this, radius, meToo)
-  // }
-  // inCone (radius, coneAngle, direction, meToo = true) {
-  //   return this.patches.inRadius(this, radius, coneAngle, direction, meToo)
-  // }
-
   sprout (num = 1, breed = this.model.turtles, initFcn = (turtle) => {}) {
-    // const turtles = this.model.turtles
-    // return turtles.create(num, (turtle) => {
-    //   turtle.setxy(this.x, this.y)
-    //   if (breed !== turtles) turtle.setBreed(breed)
-    //   initFcn(turtle)
-    // })
     return breed.create(num, (turtle) => {
       turtle.setxy(this.x, this.y)
       initFcn(turtle)

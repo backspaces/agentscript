@@ -11,9 +11,9 @@ import util from './util.js'
 class Link {
   static defaultVariables () { // Core variables for patches. Not 'own' variables.
     return {
-      end0: null,       // Turtles: end0 & 1 are turtle ends of the link
+      end0: null, // Turtles: end0 & 1 are turtle ends of the link
       end1: null,
-      width: 1          // THREE: must be 1. Canvas2D (unsupported) has widths.
+      width: 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
     }
   }
   // Initialize a Link

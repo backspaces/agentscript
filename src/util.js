@@ -43,7 +43,7 @@ const util = {
   // Result same length as array, precision may be lost.
   convertArray (array, Type) {
     const Type0 = array.constructor
-    if (Type0 === Type) return array  // return array if already same Type
+    if (Type0 === Type) return array // return array if already same Type
     return Type.from(array) // Use .from (both TypedArrays and Arrays)
   },
   // Convert to/from new Uint8Array view onto an Array or TypedArray.
@@ -79,7 +79,7 @@ const util = {
     return uint8Array
   },
 
-// ### Debug
+  // ### Debug
 
   // Print a message just once.
   logOnce (msg) {
@@ -148,7 +148,7 @@ const util = {
       .replace(/":/g, ':')
   },
 
-// ### HTML, CSS, DOM
+  // ### HTML, CSS, DOM
 
   // REST: Parse the query, returning an object of key/val pairs.
   parseQueryString () {
@@ -178,7 +178,7 @@ const util = {
     return [ evt.clientX - rect.left, evt.clientY - rect.top ]
   },
 
-// ### Math
+  // ### Math
 
   // Return random int/float in [0,max) or [min,max) or [-r/2,r/2)
   randomInt: (max) => Math.floor(Math.random() * max),
@@ -227,7 +227,7 @@ const util = {
   // Calculate the lerp scale given lo/hi pair and a number between them.
   lerpScale: (number, lo, hi) => (number - lo) / (hi - lo),
 
-// ### Geometry
+  // ### Geometry
 
   // Degrees & Radians
   // radians: (degrees) => util.mod(degrees * Math.PI / 180, Math.PI * 2),
@@ -279,7 +279,7 @@ const util = {
     return coneAngle / 2 >= Math.abs(this.subtractRadians(direction, angle12))
   },
 
-// ### Arrays, Objects and Iteration
+  // ### Arrays, Objects and Iteration
 
   // Repeat function f(i, a) n times, i in 0, n-1, a is optional array
   repeat (n, f, a = []) { for (let i = 0; i < n; i++) f(i, a); return a },
@@ -442,7 +442,7 @@ const util = {
     return this.normalize(array, lo, hi).map((n) => Math.round(n))
   },
 
-// ### Async
+  // ### Async
 
   // Return Promise for getting an image.
   // - use: imagePromise('./path/to/img').then(img => imageFcn(img))
@@ -499,7 +499,7 @@ const util = {
       setTimeout(() => { this.waitOn(done, f, ms) }, ms)
   },
 
-// ### Canvas utilities
+  // ### Canvas utilities
 
   // Create a blank 2D canvas of a given width/height
   createCanvas (width, height) {

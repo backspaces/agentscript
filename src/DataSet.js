@@ -231,7 +231,7 @@ class DataSet {
   // Return Array 3x3 neighbor values of the given x,y of the dataset.
   // Off-edge neighbors revert to nearest edge value.
   neighborhood (x, y, array = []) {
-    array.length = 0  // in case user supplied an array to reduce GC
+    array.length = 0 // in case user supplied an array to reduce GC
     const clampNeeded = (x === 0) || (x === this.width - 1) ||
                         (y === 0) || (y === this.height - 1)
     for (let dy = -1; dy <= +1; dy++) {
@@ -256,8 +256,8 @@ class DataSet {
   // dataset of same size.
   convolve (kernel, factor = 1, crop = false) {
     const [x0, y0, h, w] = crop // optimization not needed, only called once
-     ? [1, 1, this.height - 1, this.width - 1]
-     : [0, 0, this.height, this.width]
+      ? [1, 1, this.height - 1, this.width - 1]
+      : [0, 0, this.height, this.width]
     const newDS = this.emptyDataSet(w, h)
     const newData = newDS.data
     let i = 0

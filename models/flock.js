@@ -70,28 +70,22 @@ class FlockModel extends Model {
   }
   averageHeading (flockmates) {
     const thetas = flockmates.map(f => f.theta)
-    const dx = thetas.map(t => Math.cos(t)).reduce((x, y) => x + y)
-    const dy = thetas.map(t => Math.sin(t)).reduce((x, y) => x + y)
-    // const dx = flockmates
-    //   .map((f) => Math.cos(f.theta))
-    //   .reduce((x, y) => x + y)
-    // const dy = flockmates
-    //   .map((f) => Math.sin(f.theta))
-    //   .reduce((x, y) => x + y)
+    const dx = thetas
+      .map(t => Math.cos(t))
+      .reduce((x, y) => x + y)
+    const dy = thetas
+      .map(t => Math.sin(t))
+      .reduce((x, y) => x + y)
     return Math.atan2(dy, dx)
   }
   averageHeadingTowards (a, flockmates) {
     const towards = flockmates.map(f => f.towards(a))
-    const dx = towards.map(t => Math.cos(t)).reduce((x, y) => x + y)
-    const dy = towards.map(t => Math.sin(t)).reduce((x, y) => x + y)
-    // const dx = flockmates // remind: share f.towards in an initial array
-    //   .map((f) => Math.sin(f.towards(a)))
-    //   .reduce((x, y) => x + y)
-    // const dy = flockmates
-    //   .map((f) => Math.cos(f.towards(a)))
-    //   .reduce((x, y) => x + y)
-    // dx = (Math.sin f.towards a for f in flockmates).reduce (x,y) -> x+y
-    // dy = (Math.cos f.towards a for f in flockmates).reduce (x,y) -> x+y
+    const dx = towards
+      .map(t => Math.cos(t))
+      .reduce((x, y) => x + y)
+    const dy = towards
+      .map(t => Math.sin(t))
+      .reduce((x, y) => x + y)
     return Math.atan2(dy, dx)
   }
 

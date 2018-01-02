@@ -35,7 +35,8 @@ class Model {
     this.resetModel()
   }
 
-// ### User Model Creation
+  // ### User Model Creation
+
   // A user's model is made by subclassing Model and over-riding these
   // 2 abstract methods. `super` need not be called.
 

@@ -1,6 +1,9 @@
 import util from './util.js'
 import DataSet from './DataSet.js'
 
+// Based on the mapbox elevation formula:
+// https://blog.mapbox.com/global-elevation-data-6689f1d0ba65
+
 class RGBDataSet extends DataSet {
   static scaleFromMinMax (min, max) {
     // 255*256*256 + 255*256 + 255 === 2 ** 24 - 1 i.e. 16777215

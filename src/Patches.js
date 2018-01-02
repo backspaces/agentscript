@@ -25,21 +25,6 @@ class Patches extends AgentSet {
       this.addAgent() // Object.create(this.agentProto))
     })
   }
-  // Setup pixels ctx used for patch.color: `draw` and `importColors`
-  // setPixels () {
-  //   const {numX, numY} = this.model.world
-  //   this.pixels = {
-  //     ctx: util.createCtx(numX, numY)
-  //   }
-  //   this.setImageData()
-  // }
-  // Create the pixels object used by `setPixels` and `installColors`
-  // setImageData () {
-  //   const pixels = this.pixels
-  //   pixels.imageData = util.ctxImageData(pixels.ctx)
-  //   pixels.data8 = pixels.imageData.data
-  //   pixels.data = new Uint32Array(pixels.data8.buffer)
-  // }
 
   setDefault (name, value) {
     if (name === 'color') {
@@ -111,32 +96,6 @@ class Patches extends AgentSet {
     return [util.randomInt2(minX, maxX), util.randomInt2(minY, maxY)]
   }
 
-  // installPixels () {
-  //   const pixels = this.pixels
-  //   pixels.ctx.putImageData(pixels.imageData, 0, 0)
-  //   return pixels
-  // }
-  // // Draws, or "imports" an image URL into the drawing layer.
-  // // The image is scaled to fit the drawing layer.
-  // // This is an async function, using es6 Promises.
-  // importDrawing (imageSrc) {
-  //   util.imagePromise(imageSrc)
-  //   .then((img) => this.installDrawing(img))
-  // }
-  // // Direct install image into the given context, not async.
-  // installDrawing (img, ctx = this.model.contexts.drawing) {
-  //   util.fillCtxWithImage(ctx, img)
-  // }
-  // importColors (imageSrc) {
-  //   util.imagePromise(imageSrc)
-  //   .then((img) => this.installColors(img))
-  // }
-  // // Direct install image into the patch colors, not async.
-  // installColors (img) {
-  //   util.fillCtxWithImage(this.pixels.ctx, img)
-  //   this.setImageData()
-  // }
-
   // Import/export DataSet to/from patch variable `patchVar`.
   // `useNearest`: true for fast rounding to nearest; false for bi-linear.
   importDataSet (dataSet, patchVar, useNearest = false) {
@@ -147,8 +106,6 @@ class Patches extends AgentSet {
     const {numX, numY} = this.model.world
     const dataset = dataSet.resample(numX, numY, useNearest)
     this.ask(p => { p[patchVar] = dataset.data[p.id] })
-    // for (const patch of this)
-    //   patch[patchVar] = dataset.data[patch.id]
   }
   exportDataSet (patchVar, Type = Array) {
     if (this.isBreedSet()) {
