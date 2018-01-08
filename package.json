@@ -29,10 +29,13 @@
     "minify": "squash dist/AS.js > dist/AS.min.js && squash dist/AS.module.js > dist/AS.module.min.js",
     "build-docs": "cp -Rp README.md dist docs && bin/docsmodels.sh",
     "build-dist": "rollup -c",
-    "help": "yarn run && rollup && squash"
+    "test": "ava"
   },
   "devDependencies": {
+    "ava": "^0.24.0",
     "butternut": "^0.4.6",
-    "rollup": "^0.53.2"
+    "rollup": "^0.53.3",
+    "shelljs": "^0.7.8",
+    "tap-xunit": "^2.2.0"
   }
 }

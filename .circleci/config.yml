@@ -21,10 +21,25 @@ jobs:
 
       - run: yarn build
 
+      - run:
+          command: mkdir -p ~/reports
+
+      - run:
+          command: |
+            ./node_modules/ava/cli.js --tap | ./node_modules/tap-xunit/bin/tap-xunit > ~/reports/ava.xml
+          when: always
+
+      - store_test_results:
+          path: ~/reports
+
+      - store_artifacts:
+          path: ~/reports
+
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+
 
     #   - run:
     #       command: mkdir -p ~/reports

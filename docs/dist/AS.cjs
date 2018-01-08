@@ -37,6 +37,10 @@ const util = {
     return (new Uint8ClampedArray(d32.buffer))[0] === 4
   },
 
+  inNode: () => typeof window === 'undefined' && typeof global !== 'undefined',
+  inBrowser: () => !util.inNode(),
+  globalObject: () => util.inNode ? global : window,
+
   // Identity fcn, returning its argument unchanged. Used in callbacks
   identity: (o) => o,
   // No-op function, does nothing. Used for default callback.
@@ -97,12 +101,20 @@ const util = {
   warn (msg) {
     this.logOnce('Warning: ' + msg);
   },
-  // Print a message to an html element
-  log (msg, element = document.body) {
-    element.style.fontFamily = 'monospace';
-    element.innerHTML += this.isObject(msg)
-      ? JSON.stringify(msg) + '<br />'
-      : msg + '<br />';
+  // Print a message to an html element or to console.
+  // Default to document.body if in browser.
+  // Default to console.log if in node.
+  // If msg is an object, convert to JSON
+  print (msg, element = null) {
+    if (this.isObject(msg)) msg = JSON.stringify(msg);
+    if (!element && this.inBrowser()) element = document.body;
+
+    if (element) {
+      element.style.fontFamily = 'monospace';
+      element.innerHTML += msg + '<br />';
+    } else {
+      console.log(msg);
+    }
   },
 
   // Use chrome/ffox/ie console.time()/timeEnd() performance functions
@@ -134,7 +146,7 @@ const util = {
 
   // Merge from's key/val pairs into to the global window namespace
   toWindow (obj) {
-    Object.assign(window, obj);
+    Object.assign(this.globalObject(), obj);
     console.log('toWindow:', Object.keys(obj).join(', '));
   },
 

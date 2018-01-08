@@ -36,12 +36,9 @@ const model = new LinksModel() // default world.
 model.setup()
 
 // Debugging
-console.log('patches:', model.patches.length)
-console.log('turtles:', model.turtles.length)
-console.log('links:', model.links.length)
-util.log('patches: ' + model.patches.length)
-util.log('turtles: ' + model.turtles.length)
-util.log('links: ' + model.links.length)
+util.print('patches: ' + model.patches.length)
+util.print('turtles: ' + model.turtles.length)
+util.print('links: ' + model.links.length)
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 

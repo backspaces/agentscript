@@ -102,15 +102,12 @@ const model = new FlockModel() // default world.
 model.setup()
 
 // Debugging
-console.log('patches:', model.patches.length)
-console.log('turtles:', model.turtles.length)
-util.log('patches: ' + model.patches.length)
-util.log('turtles: ' + model.turtles.length)
+util.print('patches: ' + model.patches.length)
+util.print('turtles: ' + model.turtles.length)
+util.print('links: ' + model.links.length)
 const {world, patches, turtles} = model
 util.toWindow({ world, patches, turtles, model })
 
-console.log('initial flockVectorSize:', model.flockVectorSize())
-util.log('initial flockVectorSize: ' + model.flockVectorSize())
+util.print('initial flockVectorSize: ' + model.flockVectorSize())
 util.repeat(100, () => model.step())
-console.log('final flockVectorSize:', model.flockVectorSize())
-util.log('final flockVectorSize: ' + model.flockVectorSize())
+util.print('final flockVectorSize: ' + model.flockVectorSize())

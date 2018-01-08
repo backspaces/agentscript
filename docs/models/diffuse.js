@@ -11,18 +11,13 @@ class DiffuseModel extends Model {
     this.population = 2
     this.radius = 6
 
-    // this.cmap = ColorMap.Jet
-    // this.cmap = ColorMap.Rgb256
-    // REMIND: Three mouse picking: this.mouse = new Mouse(this, true).start()
     this.patches.ask(p => {
       p.ran = util.randomFloat(1.0)
       p.ds = 0
     })
 
     this.patches.nOf(this.population).ask(p => {
-      p.sprout(1, this.turtles, t => {
-        // t.setSize(5)
-      })
+      p.sprout(1, this.turtles)
     })
   }
   step () {
@@ -43,10 +38,9 @@ const model = new DiffuseModel(options)
 model.setup()
 
 //  Debugging
-console.log('patches:', model.patches.length)
-console.log('turtles:', model.turtles.length)
-util.log('patches: ' + model.patches.length)
-util.log('turtles: ' + model.turtles.length)
+util.print('patches: ' + model.patches.length)
+util.print('turtles: ' + model.turtles.length)
+util.print('links: ' + model.links.length)
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 

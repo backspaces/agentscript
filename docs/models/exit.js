@@ -82,13 +82,11 @@ const model = new ExitModel(options)
 model.setup()
 
 // Debugging:
-console.log('patches:', model.patches.length)
-console.log('turtles:', model.turtles.length)
-util.log('patches: ' + model.patches.length)
-util.log('turtles: ' + model.turtles.length)
+util.print('patches: ' + model.patches.length)
+util.print('turtles: ' + model.turtles.length)
+util.print('links: ' + model.links.length)
 const {world, patches, turtles, links, exits, inside, wall} = model
 util.toWindow({ world, patches, turtles, links, exits, inside, wall, model })
 
 util.repeat(500, () => model.step())
-console.log('turtles:', model.turtles.length)
-util.log('turtles: ' + model.turtles.length)
+util.print('turtles: ' + model.turtles.length)
