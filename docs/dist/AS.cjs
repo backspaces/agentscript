@@ -29,7 +29,7 @@ const util = {
   isString: (obj) => util.typeOf(obj) === 'string',
   isObject: (obj) => util.typeOf(obj) === 'object',
   // Return array's type (Array or TypedArray variant)
-  arrayType (array) { return array.constructor },
+  typeName: (obj) => obj.constructor.name,
 
   // Check [big/little endian](https://en.wikipedia.org/wiki/Endianness)
   isLittleEndian () {
@@ -39,7 +39,7 @@ const util = {
 
   inNode: () => typeof window === 'undefined' && typeof global !== 'undefined',
   inBrowser: () => !util.inNode(),
-  globalObject: () => util.inNode ? global : window,
+  globalObject: () => util.inNode() ? global : window,
 
   // Identity fcn, returning its argument unchanged. Used in callbacks
   identity: (o) => o,
