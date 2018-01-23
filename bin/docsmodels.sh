@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 files=`ls models/*.js` # list of models/foo.js names
 # echo $files
 for file in $files; do # file = "models/foo.js"

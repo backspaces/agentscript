@@ -23,3 +23,29 @@ test('fromArray', t => {
 test('AS', t => {
   t.is(util.typeOf({}), 'object')
 })
+
+test('randomSeedParkMiller 1% diff', t => {
+  const a = new AgentArray()
+  const random = util.randomSeedParkMiller()
+  util.repeat(1e6, () => a.push(random()))
+  const hist = a.histogram()
+  const max = hist.max()
+  const min = hist.min()
+  const mean = (max + min) / 2
+  const percentDifference = (max - min) / mean
+  // console.log('percentDifference', percentDifference)
+  t.true(percentDifference < .01) // 1 percent difference
+})
+
+test('randomSeedSin 3% diff', t => {
+  const a = new AgentArray()
+  const random = util.randomSeedSin()
+  util.repeat(1e6, () => a.push(random()))
+  const hist = a.histogram()
+  const max = hist.max()
+  const min = hist.min()
+  const mean = (max + min) / 2
+  const percentDifference = (max - min) / mean
+  // console.log('percentDifference', percentDifference)
+  t.true(percentDifference < .03) // 3 percent difference
+})

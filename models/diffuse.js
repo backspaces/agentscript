@@ -15,7 +15,7 @@ class DiffuseModel extends Model {
 
     this.patches.ask(p => {
       p.ran = util.randomFloat(1.0)
-      p.ds = 0
+      // p.ds = 0
     })
 
     this.patches.nOf(this.population).ask(p => {

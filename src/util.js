@@ -4,9 +4,9 @@
 
 const util = {
 
-// ### Types
+  // ### Types
 
-  // Fixing the javascript [typeof operator](https://goo.gl/Efdzk5)
+  // Fix the javascript typeof operator https://goo.gl/Efdzk5
   typeOf: (obj) => ({}).toString.call(obj).match(/\s(\w+)/)[1].toLowerCase(),
   isOneOfTypes: (obj, array) => array.includes(util.typeOf(obj)),
   // isUintArray: (obj) => util.typeOf(obj).match(/uint.*array/),
@@ -84,6 +84,29 @@ const util = {
   },
 
   // ### Debug
+
+  // Two PRNGs.
+  randomSeedSin (seed = Math.PI / 4) { // ~3.4 million b4 repeat.
+    // https://stackoverflow.com/a/19303725/1791917
+    return () => {
+      const x = Math.sin(seed++) * 10000
+      return x - Math.floor(x)
+    }
+  },
+  randomSeedParkMiller (seed = 123456) { // doesn't repeat b4 JS dies.
+    // https://gist.github.com/blixt/f17b47c62508be59987b
+    seed = seed % 2147483647
+    return () => {
+      seed = seed * 16807 % 2147483647
+      return (seed - 1) / 2147483646
+    }
+  },
+  // Replace Math.random with one of these
+  randomSeed (seed, useParkMiller = true) {
+    Math.random = useParkMiller
+      ? this.randomSeedParkMiller(seed)
+      : this.randomSeedSin(seed)
+  },
 
   // Print a message just once.
   logOnce (msg) {

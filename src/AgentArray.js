@@ -36,10 +36,48 @@ class AgentArray extends Array {
   // Call fcn(agent) for each agent in AgentArray.
   // Return the AgentArray for chaining.
   // Note: 5x+ faster than this.forEach(fcn) !!
-  ask (fcn) { for (let i = 0; i < this.length; i++) fcn(this[i], i); return this }
+  ask (fcn) {
+    for (let i = 0; i < this.length; i++) fcn(this[i], i)
+    return this
+  }
   // Return count of agents with reporter(agent) true
   count (reporter) {
     return this.reduce((prev, o) => prev + (reporter(o) ? 1 : 0), 0)
+  }
+  // sum (key) {
+  //   if (key == null) // sum items
+  //     return this.reduce((prev, o) => prev + o)
+  //   else // sum prop values
+  //     return this.reduce((prev, o) => prev + o[key])
+  // }
+  sum (key) {
+    return this.reduce((prev, o) => prev + (key ? o[key] : o), 0)
+  }
+  avg (key) { return this.sum(key) / this.length }
+  min (key) {
+    return this.reduce((prev, o) => Math.min(prev, key ? o[key] : o), Infinity)
+  }
+  max (key) {
+    return this.reduce((prev, o) => Math.max(prev, key ? o[key] : o), -Infinity)
+  }
+  histogram (key, bins = 10, min = this.min(key), max = this.max(key)) {
+    const binSize = (max - min) / bins
+    const aa = new AgentArray(bins)
+    aa.fill(0)
+    this.ask(a => {
+      const val = key ? a[key] : a
+      if (val < min || val > max) {
+        util.warn(`histogram bounds error: ${val}: ${min}-${max}`)
+      } else {
+        let bin = Math.floor((val - min) / binSize)
+        if (bin === bins) bin-- // val is max, round down
+        aa[bin]++
+      }
+    })
+    // Object.assign(aa, {bins, min, max, binSize, key})
+    aa.parameters = {key, bins, min, max, binSize, arraySize: this.length}
+    // console.log(key, bins, min, max, binSize, aa)
+    return aa
   }
 
   // Return shallow copy of a portion of this AgentArray

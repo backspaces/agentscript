@@ -36,3 +36,5 @@ const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 
 util.repeat(500, () => model.step())
+
+// const data = turtles.props
