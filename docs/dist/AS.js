@@ -1,6 +1,9 @@
 /* eslint-disable */
-var AS = (function (exports) {
-'use strict';
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.AS = {})));
+}(this, (function (exports) { 'use strict';
 
 // A set of useful misc utils which will eventually move to individual files.
 // Note we use arrow functions one-liners, more likely to be optimized.
@@ -2178,6 +2181,6 @@ exports.Turtles = Turtles;
 exports.World = World;
 exports.util = util;
 
-return exports;
+Object.defineProperty(exports, '__esModule', { value: true });
 
-}({}));
+})));

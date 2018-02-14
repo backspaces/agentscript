@@ -90,3 +90,5 @@ util.toWindow({ world, patches, turtles, links, exits, inside, wall, model })
 
 util.repeat(500, () => model.step())
 util.print('turtles: ' + model.turtles.length)
+
+

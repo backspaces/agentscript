@@ -5,9 +5,9 @@ import test from 'ava'
 // 1 - Use bin/execfile to import vanilla JS: https://goo.gl/sQp7jn
 // 2 - Use the AS.cjs CommonJS rollup
 
-const execFile = require('../bin/execfile')
-const AS = execFile('./dist/AS.js').AS
-// const AS = require('../dist/AS.cjs')
+// const execFile = require('../bin/execfile')
+// const AS = execFile('./dist/AS.js').AS
+const AS = require('../dist/AS.js')
 
 // Place all modules in global space.
 //    Object.assign(this, AS)

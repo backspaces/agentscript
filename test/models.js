@@ -3,7 +3,9 @@ import test from 'ava'
 
 const vm = require('vm')
 const fs = require('fs')
-const AS = require('../dist/AS.cjs')
+// const AS = require('../dist/AS.cjs')
+const AS = require('../dist/AS.js')
+
 const shell = require('shelljs')
 
 // Global used for all the models source and their resulting model.

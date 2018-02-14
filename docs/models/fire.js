@@ -93,3 +93,5 @@ util.print('fires: ' + model.fires.length)
 util.print('embers: ' + model.embers.length)
 util.print('initialTrees: ' + model.initialTrees)
 util.print('burnedTrees: ' + model.burnedTrees)
+
+

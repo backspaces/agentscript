@@ -3,8 +3,9 @@ import test from 'ava'
 
 // Two ways to import AS:
 // 1 - Use bin/execfile to import vanilla JS: https://goo.gl/sQp7jn
-const execFile = require('../bin/execfile')
-const AS = execFile('./dist/AS.js').AS
+// const execFile = require('../bin/execfile')
+// const AS = execFile('./dist/AS.js').AS
+const AS = require('../dist/AS.js')
 // 2 - Use the AS.cjs CommonJS rollup
 // const AS = require('../dist/AS.cjs')
 
