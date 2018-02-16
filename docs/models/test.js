@@ -1,4 +1,4 @@
-import {Model, util} from '../dist/AS.module.js'
+import {Model, util} from '../dist/agentscript.esm.js'
 
 util.toWindow({ Model, util })
 

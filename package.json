@@ -1,8 +1,9 @@
 {
-  "name": "as-core",
+  "name": "@redfish/agentscript",
   "version": "0.1.0",
   "description": "AgentScript Core Model modules without Views",
-  "main": "index.js",
+  "main": "dist/agentscript.umd.js",
+  "module": "dist/agentscript.esm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/backspaces/as-core.git"
@@ -22,11 +23,10 @@
   "scripts": {
     "clean": "cross-env-shell \"shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs\"",
     "build": "npm-run-all clean build-dist minify build-docs",
-    "minify": "squash dist/AS.js > dist/AS.min.js && squash dist/AS.module.js > dist/AS.module.min.js",
+    "minify": "squash dist/agentscript.umd.js > dist/agentscript.umd.min.js && squash dist/agentscript.esm.js > dist/agentscript.esm.min.js",
     "build-docs": "shx cp -R README.md dist docs && node bin/docsmodels.js",
     "build-dist": "rollup -c",
-    "test": "ava --verbose",
-    "foo": "ava test/test.js"
+    "test": "ava --verbose"
   },
   "devDependencies": {
     "ava": "^0.25.0",

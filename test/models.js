@@ -4,7 +4,7 @@ import test from 'ava'
 const vm = require('vm')
 const fs = require('fs')
 // const AS = require('../dist/AS.cjs')
-const AS = require('../dist/AS.js')
+const AS = require('../dist/agentscript.umd.js')
 
 const shell = require('shelljs')
 

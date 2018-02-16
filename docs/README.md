@@ -1,23 +1,27 @@
-# Core AgentScript Repository
+# AgentScript
 
-This is a repository for the modeling core for [AgentScript](https://github.com/backspaces/asx).
+AgentScript is a minimalist Agent Based modeling system based on [NetLogo](https://ccl.northwestern.edu/netlogo/) semantics.
+
+It has a Model/View architecture for which this is the Model. A set of Views will be provided in the future.
+
+One such Three.js View is provided by [ASX](https://github.com/backspaces/asx). Here is [fire model](http://backspaces.github.io/asx/models/?fire), and a [flocking model](http://backspaces.github.io/asx/models/?flock).
+
+[Obserable](https://beta.observablehq.com/) is also useful for Views, see: [this example](https://beta.observablehq.com/@sdwfrost/agentscript-core)
 
 ## Developer Information
 
 To clone a fresh repo, for PRs or your own local version:
-* cd to where you want the CoreAS/ dir to appear.
-* git clone https://github.com/backspaces/CoreAS
-* cd CoreAS # go to new repo
-* npm install # install all dev dependencies
-* npm run build # complete the install
+* cd to where you want the agentscript/ dir to appear.
+* git clone https://github.com/backspaces/agentscript
+* cd agentscript # go to new repo
+* yarn install # install all dev dependencies
+* yarn build # complete the install
 
-All workflow is npm run scripts.  See package.json's scripts, or simply run `npm run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/CoreAS/blob/master/.eslintrc.json).
-
-The repo has no "derived" files, other than the gh-page, see below, i.e. won't run by just cloning. To complete the install, use `npm install` and `npm run build` which refreshes npm dependencies and does a clean build of the repo.
+All workflow is npm run scripts.  See package.json's scripts, or simply run `yarn run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.eslintrc.json).
 
 ## Github Pages
 
-A [gh-page](http://backspaces.github.io/CoreAS/) is used for the site. It contains the master repo, including the derived files.
+A [gh-page](http://backspaces.github.io/agentscript/) is used for the site. It contains the master repo, including the derived files.
 
 It uses [the docs/ simplification](https://help.github.com/articles/user-organization-and-project-pages/#project-pages) for gh-page creation.
 
@@ -25,19 +29,16 @@ The gh-page can be used as a CDN for our distribution, see [**Modules and Bundle
 
 ## Modules and Bundles
 
-CoreAS is an entirely es6 Modules based, dual deploy. By "dual" we mean that we support es6 Modules, along with legacy `<script>` tags.
+agentscript is an entirely es6 Modules based, dual deploy. By "dual" we mean that we support es6 Modules, along with UMD Modules for `<script>` tags and node require().
 
-The dist/ dir includes both a [Rollup](https://rollupjs.org/) generated legacy [IIFE](http://adripofjavascript.com/blog/drips/an-introduction-to-iffes-immediately-invoked-function-expressions.html) global, window.AS, for script users, and the AS/ dir of the modules for direct es6 native module implementations.
+The dist/ dir includes both a [Rollup](https://rollupjs.org/) generated [IIFE](http://adripofjavascript.com/blog/drips/an-introduction-to-iffes-immediately-invoked-function-expressions.html) global, window.AS, for script users.
 
 It can also be used as a CDN for all the es6 Modules:
 
-* `import Model from` '[http://backspaces.github.io/CoreAS/dist/AS/Model.js](http://backspaces.github.io/CoreAS/dist/AS/Model.js)'
-
-The es6 modules are also available as a single Rollup es6 Module bundle
-* `import {ColorMap, Model, util} from` '[http://backspaces.github.io/CoreAS/dist/AS.module.js](http://backspaces.github.io/CoreAS/dist/AS.module.js)'
+* `import {ColorMap, Model, util} from` '[http://backspaces.github.io/agentscript/dist/agentscript.esm.js](http://backspaces.github.io/agentscript/dist/agentscript.esm.js)'
 
 Finally, they are also available as a traditional legacy IIFE Rollup bundle:
-* `<script src="`[http://backspaces.github.io/CoreAS/dist/AS.js](http://backspaces.github.io/CoreAS/dist/AS.js)`"></script>`
+* `<script src="`[http://backspaces.github.io/agentscript/dist/agentscript.umd.js](http://backspaces.github.io/agentscript/dist/agentscript.umd.js)`"></script>`
 
 
 ## Files
@@ -45,9 +46,11 @@ Finally, they are also available as a traditional legacy IIFE Rollup bundle:
 Our directory layout is:
 ```
 bin: workflow scripts
-dist: AS.js & AS.module.js bundles & AS/ es6 source.
+dist: agentscript.umd.js & agentscript.esm.js bundles & AS/ es6 source.
 docs: gh-page
+models: test/demo models
 src: es6 modules for AS
+test: AvA test files
 ```
 
 ## License

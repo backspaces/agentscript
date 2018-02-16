@@ -1,12 +1,12 @@
 export default {
   input: 'src/AS.js',
   output: [
-    { file: 'dist/AS.js',
+    { file: 'dist/agentscript.umd.js',
       format: 'umd',
       name: 'AS',
       banner: '/* eslint-disable */'
     },
-    { file: 'dist/AS.module.js',
+    { file: 'dist/agentscript.esm.js',
       format: 'es',
       banner: '/* eslint-disable */'
     }

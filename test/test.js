@@ -6,8 +6,8 @@ import test from 'ava'
 // 2 - Use the AS.cjs CommonJS rollup
 
 // const execFile = require('../bin/execfile')
-// const AS = execFile('./dist/AS.js').AS
-const AS = require('../dist/AS.js')
+// const AS = execFile('./dist/agentscript.umd.js').AS
+const AS = require('../dist/agentscript.umd.js')
 
 // Place all modules in global space.
 //    Object.assign(this, AS)
