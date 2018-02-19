@@ -8,37 +8,51 @@ One such Three.js View is provided by [ASX](https://github.com/backspaces/asx). 
 
 [Obserable](https://beta.observablehq.com/) is also useful for Views, see: [this example](https://beta.observablehq.com/@sdwfrost/agentscript-core)
 
+## Dual Build
+
+AgentScript is based on es6 Modules (ESM) which are delivered as two [Rollup](https://rollupjs.org/) bundles:
+
+```
+* UMD: agentscript.umd.js
+* ESM: agentscript.esm.js
+```
+
+The UMD can be used in the browser as a `<script>` tag, and in Node using `require()`
+
+The ESM is used in es6 import statements.
+
+Both are available in minified form. All are in the project's `dist/` directory.
+
+The UMD's global name is `AS`
+
+## NPM Package
+AgentScript is available as a npm *scoped* package: @redfish/agentscript.
+
+To install the package, `yarn add @redfish/agentscript`. This places the bundles in `node_modules/@redfish/agentscript/dist`
+
+To use the package as a CDN, use [unpkg.com](https://unpkg.com/).
+* UMD: [https://unpkg.com/@redfish/agentscript](https://unpkg.com/@redfish/agentscript)
+* ESM: [https://unpkg.com/@redfish/agentscript?module](https://unpkg.com/@redfish/agentscript?module)
+
 ## Developer Information
 
-To clone a fresh repo, for PRs or your own local version:
+To clone the github repo:
 * cd to where you want the agentscript/ dir to appear.
 * git clone https://github.com/backspaces/agentscript
 * cd agentscript # go to new repo
 * yarn install # install all dev dependencies
 * yarn build # complete the install
 
-All workflow is npm run scripts.  See package.json's scripts, or simply run `yarn run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.eslintrc.json).
+All workflow is npm run scripts.  See package.json's scripts, or use `yarn run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.eslintrc.json).
 
 ## Github Pages
 
-A [gh-page](http://backspaces.github.io/agentscript/) is used for the site. It contains the master repo, including the derived files.
+A [gh-page](http://backspaces.github.io/agentscript/) is used for the site. It contains the dist/ dir as a models/ dir with sample models also used for testing.
 
 It uses [the docs/ simplification](https://help.github.com/articles/user-organization-and-project-pages/#project-pages) for gh-page creation.
 
-The gh-page can be used as a CDN for our distribution, see [**Modules and Bundles**](#modules-and-bundles) below.
-
-## Modules and Bundles
-
-agentscript is an entirely es6 Modules based, dual deploy. By "dual" we mean that we support es6 Modules, along with UMD Modules for `<script>` tags and node require().
-
-The dist/ dir includes both a [Rollup](https://rollupjs.org/) generated [IIFE](http://adripofjavascript.com/blog/drips/an-introduction-to-iffes-immediately-invoked-function-expressions.html) global, window.AS, for script users.
-
-It can also be used as a CDN for all the es6 Modules:
-
-* `import {ColorMap, Model, util} from` '[http://backspaces.github.io/agentscript/dist/agentscript.esm.js](http://backspaces.github.io/agentscript/dist/agentscript.esm.js)'
-
-Finally, they are also available as a traditional legacy IIFE Rollup bundle:
-* `<script src="`[http://backspaces.github.io/agentscript/dist/agentscript.umd.js](http://backspaces.github.io/agentscript/dist/agentscript.umd.js)`"></script>`
+The gh-page can be used as a CDN our sample models. The fire model can be run with:
+> http://backspaces.github.io/agentscript/models?fire
 
 
 ## Files
@@ -46,11 +60,11 @@ Finally, they are also available as a traditional legacy IIFE Rollup bundle:
 Our directory layout is:
 ```
 bin: workflow scripts
-dist: agentscript.umd.js & agentscript.esm.js bundles & AS/ es6 source.
+dist: the umd and esm bundles with their min.js versions.
 docs: gh-page
-models: test/demo models
-src: es6 modules for AS
-test: AvA test files
+models: sample models used for tests and demos
+src: individual agentscript es6 modules
+test: test files
 ```
 
 ## License
