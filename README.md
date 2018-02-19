@@ -4,7 +4,7 @@ AgentScript is a minimalist Agent Based modeling system based on [NetLogo](https
 
 It has a Model/View architecture for which this is the Model. A set of Views will be provided in the future.
 
-One such Three.js View is provided by [ASX](https://github.com/backspaces/asx). Here is [fire model](http://backspaces.github.io/asx/models/?fire), and a [flocking model](http://backspaces.github.io/asx/models/?flock).
+One such Three.js View is provided by [as-app3d](https://github.com/backspaces/as-app3d). Here is [fire model](http://backspaces.github.io/as-app3d/models/?fire), and a [flocking model](http://backspaces.github.io/as-app3d/models/?flock).
 
 [Obserable](https://beta.observablehq.com/) is also useful for Views, see: [this example](https://beta.observablehq.com/@sdwfrost/agentscript-core)
 
