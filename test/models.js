@@ -1,8 +1,10 @@
 /* eslint-disable */
 import test from 'ava'
+console.log('ava', typeof setTimeout, typeof window, typeof global)
+
 
 const vm = require('vm')
-const fs = require('fs')
+// const fs = require('fs')
 // const AS = require('../dist/AS.cjs')
 const AS = require('../dist/agentscript.umd.js')
 
@@ -32,9 +34,16 @@ shell.ls('models/*.js').forEach(file => {
 AS.util.forEach(models, (val, key) => {
   console.log('====', key)
   const ctx = vm.createContext({})
+  Object.assign(ctx, global)
   ctx.models = models
   Object.assign(ctx, AS)
   vm.runInNewContext(val, ctx)
+
+  // console.log('====', key)
+  // const script = new vm.Script(val)
+  // global.models = models
+  // Object.assign(global, AS)
+  // script.runInThisContext()
 })
 
 // Run tests on the model objects
@@ -45,14 +54,20 @@ AS.util.forEach(models, (val, key) => {
     // if (testFcn) console.log(key, testFcn, testFcn(model))
     if (testFcn)
       t.true(testFcn(model))
+      // t.truthy(model.patches)
     else
       t.truthy(model.patches)
   })
 })
 
 const tests = {
+  exit: (model) => model.turtles.length === 9,
   fire: (model) => model.initialTrees === 37685 && model.burnedTrees === 24986,
   flock: (model) => model.flockVectorSize() === 0.9161073651430817,
-  exit: (model) => model.turtles.length === 9,
-  links: (model) => model.links.length === 715,
+  // hello: (model) => model.turtles[0].x === -6.5155131960118275 && model.turtles[0].y === 9.679021938061352,
+  hello: (model) => {
+    const {x, y} = model.turtles[0];
+    return x === -6.5155131960118275 && y === 9.679021938061352
+  },
+  links: (model) => model.links.length === 709,
 }

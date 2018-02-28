@@ -47,11 +47,11 @@ All workflow is npm run scripts.  See package.json's scripts, or use `yarn run` 
 
 ## Github Pages
 
-A [gh-page](http://backspaces.github.io/agentscript/) is used for the site. It contains the dist/ dir as a models/ dir with sample models also used for testing.
+A [gh-page](http://backspaces.github.io/agentscript/) is used for the site. It contains the dist/ dir and a models/ dir with sample models also used for testing.
 
 It uses [the docs/ simplification](https://help.github.com/articles/user-organization-and-project-pages/#project-pages) for gh-page creation.
 
-The gh-page can be used as a CDN our sample models. The fire model can be run with:
+The gh-page hosts our sample models. The fire model can be run with:
 > http://backspaces.github.io/agentscript/models?fire
 
 
@@ -69,7 +69,7 @@ test: test files
 
 ## License
 
-Copyright Owen Densmore, RedfishGroup LLC, 2012-2017<br>
+Copyright Owen Densmore, RedfishGroup LLC, 2012-2018<br>
 AgentScript may be freely distributed under the GPLv3 license:
 
 AgentScript is free software: you can redistribute it and/or modify

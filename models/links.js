@@ -12,7 +12,7 @@ class LinksModel extends Model {
     })
 
     this.turtles.create(1000, (t) => {
-      t.size = util.randomFloat2(0.2, 0.5) // + Math.random()
+      // t.size = util.randomFloat2(0.2, 0.5) // + Math.random()
       t.speed = util.randomFloat2(0.01, 0.05) // 0.5 + Math.random()
     })
 

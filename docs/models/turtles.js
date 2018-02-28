@@ -11,7 +11,7 @@ class TurtlesModel extends Model {
     this.turtles.setDefault('z', 0.1)
 
     this.turtles.create(numTurtles, (t) => {
-      t.size = util.randomFloat2(0.2, 0.5) // + Math.random()
+      // t.size = util.randomFloat2(0.2, 0.5) // + Math.random()
       t.speed = util.randomFloat2(0.01, 0.05) // 0.5 + Math.random()
     })
   }

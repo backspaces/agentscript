@@ -504,35 +504,64 @@ const util = {
       xhr.send()
     })
   },
+
   // Return promise for pause of ms. Use:
   // timeoutPromise(2000).then(()=>console.log('foo'))
   timeoutPromise (ms = 1000) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(), ms)
+    return new Promise(resolve => { setTimeout(resolve, ms) })
+  },
+  // Use above for an animation loop.
+  // steps < 0: forever (default), steps === 0 is no-op
+  // Returns a promise for when done. If forever, no need to use it.
+  async timeoutLoop (fcn, steps = -1, ms = 0) {
+    while (steps-- !== 0) { // Note decr occurs *after* comparison
+      fcn()
+      await this.timeoutPromise(ms)
+    }
+  },
+
+  // Similar pair for requestAnimationFrame
+  rafPromise () {
+    return new Promise(resolve => requestAnimationFrame(resolve))
+  },
+  async rafLoop (fcn, steps = -1) {
+    while (steps-- !== 0) { // Note decr occurs *after* comparison
+      fcn()
+      await this.rafPromise()
+    }
+  },
+
+  // // Imports a script, waits 'till loaded, then resolves. Use:
+  // // scriptPromise('../lib/pako.js', 'pako')
+  // //   .then((script) => console.log(script))
+  // scriptPromise (path, name, f = () => window[name], props = {}) {
+  //   if (window[name] == null) this.setScript(path, props)
+  //   return this.waitPromise(() => window[name] != null, f)
+  // },
+  // // Promise: Wait until done(), then resolve with f()'s value, default to noop
+  // // Ex: This waits until window.foo is defined, then reports:
+  // // waitPromise(()=>window.foo).then(()=>console.log('foo defined'))
+  // waitPromise (done, f = this.noop, ms = 10) {
+  //   return new Promise((resolve, reject) => {
+  //     this.waitOn(done, () => resolve(f()), ms)
+  //   })
+  // },
+  waitPromise (done, ms = 10) {
+    return new Promise((resolve) => {
+      function waitOn () {
+        if (done()) return resolve()
+        else setTimeout(waitOn, ms)
+      }
+      waitOn()
     })
   },
-  // Imports a script, waits 'till loaded, then resolves. Use:
-  // scriptPromise('../lib/pako.js', 'pako')
-  //   .then((script) => console.log(script))
-  scriptPromise (path, name, f = () => window[name], props = {}) {
-    if (window[name] == null) this.setScript(path, props)
-    return this.waitPromise(() => window[name] != null, f)
-  },
-  // Promise: Wait until done(), then resolve with f()'s value, default to noop
-  // Ex: This waits until window.foo is defined, then reports:
-  // waitPromise(()=>window.foo).then(()=>console.log('foo defined'))
-  waitPromise (done, f = this.noop, ms = 10) {
-    return new Promise((resolve, reject) => {
-      this.waitOn(done, () => resolve(f()), ms)
-    })
-  },
-  // Callback: Wait (setTimeout) until done() true, then call f()
-  waitOn (done, f, ms = 10) {
-    if (done())
-      f()
-    else
-      setTimeout(() => { this.waitOn(done, f, ms) }, ms)
-  },
+  // // Callback: Wait (setTimeout) until done() true, then call f()
+  // waitOn (done, f, ms = 10) {
+  //   if (done())
+  //     f()
+  //   else
+  //     setTimeout(() => { this.waitOn(done, f, ms) }, ms)
+  // },
 
   // ### Canvas utilities
 
