@@ -7,42 +7,30 @@ class FireModel extends Model {
   setup () {
     this.patchBreeds('fires embers')
 
-    // this.fireColorMap = ColorMap.gradientColorMap(6, ['red', [128, 0, 0]])
-    this.fireColorMap = [
-      'color0', 'color1', 'color2', 'color3', 'color4', 'color5'
+    this.patchTypes = [
+      'dirt', 'tree', // fire types need to be in this order:
+      'fire', 'ember4', 'ember3', 'ember2', 'ember1', 'ember0'
     ]
-    this.treeColor = 'green' // Color.color(0, 255, 0)
-    this.dirtColor = 'yellow' // Color.toColor('yellow')
-    this.fireColor = this.fireColorMap[0]
-    this.done = false
+    this.dirtType = this.patchTypes[0]
+    this.treeType = this.patchTypes[1]
+    this.fireType = this.patchTypes[2]
 
     this.density = 60 // percent
     this.patches.ask(p => {
       if (p.x === this.world.minX)
         this.ignight(p)
       else if (util.randomInt(100) < this.density)
-        p.color = this.treeColor
+        p.type = this.treeType
       else
-        p.color = this.dirtColor
+        p.type = this.dirtType
     })
 
     this.burnedTrees = 0
     this.initialTrees =
       this.patches.filter(p => this.isTree(p)).length
-      // this.patches.filter(p => p.color.equals(this.treeColor)).length
   }
 
   step () {
-    if (this.done) return
-
-    if (this.fires.length + this.embers.length === 0) {
-      // console.log('Done:', this.anim.toString())
-      const percentBurned = this.burnedTrees / this.initialTrees * 100
-      util.print('Percent burned: ' + percentBurned.toFixed(2))
-      this.done = true
-      return // keep three control running
-    }
-
     this.fires.ask(p => {
       p.neighbors4.ask((n) => {
         if (this.isTree(n)) this.ignight(n)
@@ -52,24 +40,25 @@ class FireModel extends Model {
     this.fadeEmbers()
   }
 
-  // isTree (p) { return p.color.equals(this.treeColor) }
-  isTree (p) { return p.color === this.treeColor }
+  isTree (p) { return p.type === this.treeType }
+  percentBurned () { return this.burnedTrees / this.initialTrees * 100 }
+  isDone () { return this.fires.length + this.embers.length === 0 }
 
   ignight (p) {
-    p.color = this.fireColor
-    // this.fires.setBreed(p)
+    p.type = this.fireType
     p.setBreed(this.fires)
     this.burnedTrees++
   }
 
   fadeEmbers () {
     this.embers.ask(p => {
-      const c = p.color
-      const ix = this.fireColorMap.indexOf(c)
-      if (ix === this.fireColorMap.length - 1)
+      const type = p.type
+      const ix = this.patchTypes.indexOf(type)
+      // if (ix === this.patchTypes.length - 1)
+      if (type === 'ember0')
         p.setBreed(this.patches) // sorta like die, removes from breed.
       else
-        p.color = this.fireColorMap[ix + 1]
+        p.type = this.patchTypes[ix + 1]
     })
   }
 }
@@ -81,16 +70,19 @@ model.setup()
 
 // Debugging
 util.print('patches: ' + model.patches.length)
-util.print('fires: ' + model.fires.length)
-util.print('embers: ' + model.embers.length)
 util.print('turtles: ' + model.turtles.length)
 util.print('links: ' + model.links.length)
+util.print('fires: ' + model.fires.length)
+util.print('embers: ' + model.embers.length)
 const {world, patches, fires, embers} = model
 util.toWindow({ world, patches, fires, embers, model })
 
 util.repeat(500, () => model.step())
 
+util.print('')
+util.print('isDone: ' + model.isDone())
 util.print('fires: ' + model.fires.length)
 util.print('embers: ' + model.embers.length)
 util.print('initialTrees: ' + model.initialTrees)
 util.print('burnedTrees: ' + model.burnedTrees)
+util.print('percentBurned: ' + model.percentBurned().toFixed(2))

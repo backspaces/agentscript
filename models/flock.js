@@ -16,7 +16,7 @@ class FlockModel extends Model {
 
     this.turtles.setDefault('atEdge', 'wrap')
     this.turtles.setDefault('z', 0.1)
-    this.turtles.setDefault('size', 1)
+    // this.turtles.setDefault('size', 1)
     this.turtles.setDefault('speed', 0.25)
 
     // const cmap = ColorMap.grayColorMap(0, 100)

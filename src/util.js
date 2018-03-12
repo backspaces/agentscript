@@ -520,6 +520,16 @@ const util = {
     }
   },
 
+  yieldLoop (fcn, steps = -1) {
+    function * gen () {
+      while (steps-- !== 0) { // Note decr occurs *after* comparison
+        yield fcn()
+      }
+    }
+    const iterator = gen()
+    while (!iterator.next().done) {}
+  },
+
   // Similar pair for requestAnimationFrame
   rafPromise () {
     return new Promise(resolve => requestAnimationFrame(resolve))

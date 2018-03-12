@@ -29,7 +29,7 @@
     "minify": "squash dist/agentscript.umd.js > dist/agentscript.umd.min.js && squash dist/agentscript.esm.js > dist/agentscript.esm.min.js",
     "build-docs": "shx cp -R README.md dist docs && node bin/docsmodels.js",
     "build-dist": "rollup -c",
-    "test": "ava --verbose"
+    "test": "ava"
   },
   "devDependencies": {
     "ava": "^0.25.0",

@@ -10,13 +10,12 @@ class RGBDataSet extends DataSet {
     return (max - min) / (2 ** 24 - 1)
   }
 
-  constructor (img, min = 0, scale = 1) { // options = {}) {
-    super(img.width, img.height, new Float32Array(img.width * img.height))
-    // Object.assign(this, options)
+  constructor (img, min = 0, scale = 1, ArrayType = Float32Array) {
+    super(img.width, img.height, new ArrayType(img.width * img.height))
     const ctx = util.createCtx(img.width, img.height)
     util.fillCtxWithImage(ctx, img)
     const imgData = util.ctxImageData(ctx)
-    const convertedData = this.data // new Float32Array(img.width * img.height)
+    const convertedData = this.data
     for (var i = 0; i < convertedData.length; i++) {
       const r = imgData.data[4 * i]
       const g = imgData.data[4 * i + 1]

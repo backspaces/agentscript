@@ -9,7 +9,7 @@ class DiffuseModel extends Model {
     // this.patches.own('ran ds')
     this.turtles.setDefault('speed', 0.5)
     this.turtles.setDefault('atEdge', 'wrap')
-    this.turtles.setDefault('size', 5)
+    // this.turtles.setDefault('size', 5)
     this.population = 2
     this.radius = 6
 
