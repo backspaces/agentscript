@@ -36,9 +36,11 @@ util.print('links: ' + model.links.length)
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 
-util.repeat(500, () => model.step())
+// util.repeat(500, () => model.step())
+util.yieldLoop(() => model.step(), 500)
 
 const xys = turtles.map(t => [t.x, t.y])
+util.print('')
 util.print('xys: ' + util.objectToString1(xys))
 
 // const {x, y} = turtles[0]

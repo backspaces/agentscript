@@ -35,6 +35,7 @@ util.print('links: ' + model.links.length)
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 
-util.repeat(500, () => model.step())
+// util.repeat(500, () => model.step())
+util.yieldLoop(() => model.step(), 500)
 
 // const data = turtles.props

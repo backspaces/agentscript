@@ -108,7 +108,10 @@ const {world, patches, turtles} = model
 util.toWindow({ world, patches, turtles, model })
 
 util.print('initial flockVectorSize: ' + model.flockVectorSize())
-util.repeat(500, () => model.step())
+// util.repeat(500, () => model.step())
+util.yieldLoop(() => model.step(), 500)
+
+util.print('')
 util.print('final flockVectorSize: ' + model.flockVectorSize())
 
 

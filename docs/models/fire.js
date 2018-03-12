@@ -76,7 +76,8 @@ util.print('embers: ' + model.embers.length)
 const {world, patches, fires, embers} = model
 util.toWindow({ world, patches, fires, embers, model })
 
-util.repeat(500, () => model.step())
+// util.repeat(500, () => model.step())
+util.yieldLoop(() => model.step(), 500)
 
 util.print('')
 util.print('isDone: ' + model.isDone())
