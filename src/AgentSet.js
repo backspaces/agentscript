@@ -75,7 +75,7 @@ class AgentSet extends AgentArray {
   // Return breeds in a subset of an AgentSet.
   // Ex: patches.inRect(5).withBreed(houses)
   withBreed (breed) {
-    return this.with(a => a.agentSet === breed)
+    return this.filter(a => a.agentSet === breed)
   }
 
   // Abstract method used by subclasses to create and add their instances.
@@ -93,7 +93,7 @@ class AgentSet extends AgentArray {
     this.push(o)
     return o
   }
-  clear () { while (this.any()) this.last().die() } // die() is an agent method
+  clear () { while (!this.isEmpty()) this.last().die() } // die() is an agent method
   // Remove an agent from the agentset, returning the agentset for chaining.
   // Note removeAgent(agent) different than remove(agent) which simply removes
   // the agent from it's array

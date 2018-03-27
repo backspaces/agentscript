@@ -102,6 +102,7 @@ class Patches extends AgentSet {
     if (this.isBreedSet()) { // REMIND: error
       util.warn('Patches: exportDataSet called with breed, using patches')
       this.baseSet.importDataSet(dataSet, patchVar, useNearest)
+      return
     }
     const {numX, numY} = this.model.world
     const dataset = dataSet.resample(numX, numY, useNearest)
@@ -110,11 +111,11 @@ class Patches extends AgentSet {
   exportDataSet (patchVar, Type = Array) {
     if (this.isBreedSet()) {
       util.warn('Patches: exportDataSet called with breed, using patches')
-      this.baseSet.exportDataSet(patchVar, Type)
+      return this.baseSet.exportDataSet(patchVar, Type)
     }
     const {numX, numY} = this.model.world
     // let data = util.arrayProps(this, patchVar)
-    let data = this.props(this, patchVar)
+    let data = this.props(patchVar)
     data = util.convertArray(data, Type)
     return new DataSet(numX, numY, data)
   }

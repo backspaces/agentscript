@@ -140,6 +140,23 @@ class DataSet {
     return ds
   }
 
+  // Scale each data element to be between min/max
+  // This is a linear scale from this dataset's min/max
+  // y = mx + b
+  // scale (ds, min, max) {
+  scale (min, max) {
+    // const data = ds.data
+    const dsMin = this.min()
+    const dsMax = this.max()
+    const dsDelta = dsMax - dsMin
+    const delta = max - min
+    const m = delta / dsDelta
+    const b = min - (m * dsMin)
+    // const scaledData = data.map((x) => m * x + b)
+    // return new DataSet(ds.width, ds.height, scaledData)
+    return this.map(x => m * x + b)
+  }
+
   // Return a rectangular subset of the dataset.
   // Returned dataset is of same array type as this.
   subset (x, y, width, height) {
@@ -249,7 +266,8 @@ class DataSet {
   }
 
   // Return a new dataset of this array type convolved with the
-  // given kernel 3x3 matrix. See [Convolution article](https://goo.gl/gCfXmU)
+  // given kernel 3x3 matrix.
+  // See [Convolution](https://en.wikipedia.org/wiki/Kernel_(image_processing))
   //
   // If cropped, do not convolve the edges, returning a smaller dataset.
   // If not, convolve the edges by extending edge values, returning
@@ -264,6 +282,7 @@ class DataSet {
     for (let y = y0; y < h; y++) {
       for (let x = x0; x < w; x++) {
         const nei = this.neighborhood(x, y)
+        // remind: use reduce if performant
         let sum2 = 0
         for (let i2 = 0; i2 < kernel.length; i2++) {
           // sum2 += kernel[i2] * nei[i2] // Chrome can't optimize compound let
@@ -303,22 +322,24 @@ class DataSet {
   // those wanting to use the results of the two convolutions.
   //
   // Use this.convertType to convert to typed array
-  slopeAndAspect (cellSize = 1, noNaNs = true, posAngle = true) {
+  slopeAndAspect (cellSize = 1, posAngle = true) {
     const dzdx = this.dzdx() // sub left z from right
     const dzdy = this.dzdy() // sub bottom z from top
     let [aspect, slope] = [[], []]
     const [h, w] = [dzdx.height, dzdx.width]
     for (let y = 0; y < h; y++) {
       for (let x = 0; x < w; x++) {
-        let [gx, gy] = [dzdx.getXY(x, y), dzdy.getXY(x, y)]
-        slope.push(Math.atan(util.distance(gx, gy)) / cellSize) // radians
-        if (noNaNs)
-          while (gx === gy) {
-            gx += util.randomNormal(0, 0.0001)
-            gy += util.randomNormal(0, 0.0001)
-          }
+        const [gx, gy] = [dzdx.getXY(x, y), dzdy.getXY(x, y)]
+        // slope.push(Math.atan(util.distance(gx, gy)) / cellSize) // radians
+        slope.push(Math.atan(util.distance(0, 0, gx, gy)) / cellSize)
+        // if (noNaNs)
+        //   while (gx === gy) {
+        //     gx += util.randomNormal(0, 0.0001)
+        //     gy += util.randomNormal(0, 0.0001)
+        //   }
         // radians in [-PI,PI], downhill
-        let rad = (gx === gy && gy === 0) ? NaN : Math.atan2(-gy, -gx)
+        // let rad = (gx === gy && gy === 0) ? NaN : Math.atan2(-gy, -gx)
+        let rad = Math.atan2(-gy, -gx)
         // positive radians in [0,2PI] if desired
         if (posAngle && rad < 0) rad += 2 * Math.PI
         aspect.push(rad)

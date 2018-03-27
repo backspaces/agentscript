@@ -18,21 +18,32 @@ class AgentArray extends Array {
   // Convert between AgentArrays and Arrays
   toArray () { Object.setPrototypeOf(this, Array.prototype); return this }
 
+  // NL: Return true if reporter true for all of this set's objects
+  // Use Array.every(). Also Array.some()
+  // all (reporter) { return this.every(reporter) }
+  // // Return !isEmpty()
+  // any () { return this.length !== 0 }
+  // NL: Return AgentArray with reporter(agent) true. Use Array.filter()
+  // with (reporter) { return this.filter(reporter) }
+
   // Return true if there are no items in this set, false if not empty.
-  empty () { return this.length === 0 }
-  // Return !empty()
-  any () { return this.length !== 0 }
+  // NL: uses "empty", confusing. Also uses any() .. use !isEmpty()
+  isEmpty () { return this.length === 0 }
   // Return first item in this array. Returns undefined if empty.
   first () { return this[ 0 ] }
   // Return last item in this array. Returns undefined if empty.
   last () { return this[ this.length - 1 ] }
-  // Return true if reporter true for all of this set's objects
-  all (reporter) { return this.every(reporter) }
   // Return AgentArray of property values for key from this array's objects
   // props (key) { return this.map((a) => a[key]).toArray() }
-  props (key) { return this.map((a) => a[key]) }
-  // Return AgentArray with reporter(agent) true
-  with (reporter) { return this.filter(reporter) }
+  props (key) { return this.map(a => a[key]) }
+  // Return AgentArray of values of the function fcn
+  values (fcn) { return this.map(a => fcn(a)) }
+  // Returns AgentArray of unique elements in this *sorted* AgentArray.
+  // Use sortBy or clone & sortBy if needed.
+  uniq (f = util.identity) {
+    if (util.isString(f)) f = o => o[f]
+    return this.filter((ai, i, a) => (i === 0) || (f(ai) !== f(a[i - 1])))
+  }
   // Call fcn(agent) for each agent in AgentArray.
   // Return the AgentArray for chaining.
   // Note: 5x+ faster than this.forEach(fcn) !!
@@ -44,12 +55,7 @@ class AgentArray extends Array {
   count (reporter) {
     return this.reduce((prev, o) => prev + (reporter(o) ? 1 : 0), 0)
   }
-  // sum (key) {
-  //   if (key == null) // sum items
-  //     return this.reduce((prev, o) => prev + o)
-  //   else // sum prop values
-  //     return this.reduce((prev, o) => prev + o[key])
-  // }
+
   sum (key) {
     return this.reduce((prev, o) => prev + (key ? o[key] : o), 0)
   }
@@ -158,7 +164,7 @@ class AgentArray extends Array {
   // Return the first agent having the min/max of given value of f(agent).
   // If reporter is a string, convert to a fcn returning that property
   minOrMaxOf (min, reporter) {
-    if (this.empty()) throw Error('min/max OneOf: empty array')
+    if (this.isEmpty()) throw Error('min/max OneOf: empty array')
     if (typeof reporter === 'string') reporter = util.propFcn(reporter)
     let o = null
     let val = min ? Infinity : -Infinity

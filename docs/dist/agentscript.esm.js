@@ -651,21 +651,32 @@ class AgentArray extends Array {
   // Convert between AgentArrays and Arrays
   toArray () { Object.setPrototypeOf(this, Array.prototype); return this }
 
+  // NL: Return true if reporter true for all of this set's objects
+  // Use Array.every(). Also Array.some()
+  // all (reporter) { return this.every(reporter) }
+  // // Return !isEmpty()
+  // any () { return this.length !== 0 }
+  // NL: Return AgentArray with reporter(agent) true. Use Array.filter()
+  // with (reporter) { return this.filter(reporter) }
+
   // Return true if there are no items in this set, false if not empty.
-  empty () { return this.length === 0 }
-  // Return !empty()
-  any () { return this.length !== 0 }
+  // NL: uses "empty", confusing. Also uses any() .. use !isEmpty()
+  isEmpty () { return this.length === 0 }
   // Return first item in this array. Returns undefined if empty.
   first () { return this[ 0 ] }
   // Return last item in this array. Returns undefined if empty.
   last () { return this[ this.length - 1 ] }
-  // Return true if reporter true for all of this set's objects
-  all (reporter) { return this.every(reporter) }
   // Return AgentArray of property values for key from this array's objects
   // props (key) { return this.map((a) => a[key]).toArray() }
-  props (key) { return this.map((a) => a[key]) }
-  // Return AgentArray with reporter(agent) true
-  with (reporter) { return this.filter(reporter) }
+  props (key) { return this.map(a => a[key]) }
+  // Return AgentArray of values of the function fcn
+  values (fcn) { return this.map(a => fcn(a)) }
+  // Returns AgentArray of unique elements in this *sorted* AgentArray.
+  // Use sortBy or clone & sortBy if needed.
+  uniq (f = util.identity) {
+    if (util.isString(f)) f = o => o[f];
+    return this.filter((ai, i, a) => (i === 0) || (f(ai) !== f(a[i - 1])))
+  }
   // Call fcn(agent) for each agent in AgentArray.
   // Return the AgentArray for chaining.
   // Note: 5x+ faster than this.forEach(fcn) !!
@@ -677,12 +688,7 @@ class AgentArray extends Array {
   count (reporter) {
     return this.reduce((prev, o) => prev + (reporter(o) ? 1 : 0), 0)
   }
-  // sum (key) {
-  //   if (key == null) // sum items
-  //     return this.reduce((prev, o) => prev + o)
-  //   else // sum prop values
-  //     return this.reduce((prev, o) => prev + o[key])
-  // }
+
   sum (key) {
     return this.reduce((prev, o) => prev + (key ? o[key] : o), 0)
   }
@@ -791,7 +797,7 @@ class AgentArray extends Array {
   // Return the first agent having the min/max of given value of f(agent).
   // If reporter is a string, convert to a fcn returning that property
   minOrMaxOf (min, reporter) {
-    if (this.empty()) throw Error('min/max OneOf: empty array')
+    if (this.isEmpty()) throw Error('min/max OneOf: empty array')
     if (typeof reporter === 'string') reporter = util.propFcn(reporter);
     let o = null;
     let val = min ? Infinity : -Infinity;
@@ -958,7 +964,7 @@ class AgentSet extends AgentArray {
   // Return breeds in a subset of an AgentSet.
   // Ex: patches.inRect(5).withBreed(houses)
   withBreed (breed) {
-    return this.with(a => a.agentSet === breed)
+    return this.filter(a => a.agentSet === breed)
   }
 
   // Abstract method used by subclasses to create and add their instances.
@@ -976,7 +982,7 @@ class AgentSet extends AgentArray {
     this.push(o);
     return o
   }
-  clear () { while (this.any()) this.last().die(); } // die() is an agent method
+  clear () { while (!this.isEmpty()) this.last().die(); } // die() is an agent method
   // Remove an agent from the agentset, returning the agentset for chaining.
   // Note removeAgent(agent) different than remove(agent) which simply removes
   // the agent from it's array
@@ -1175,6 +1181,23 @@ class DataSet {
     return ds
   }
 
+  // Scale each data element to be between min/max
+  // This is a linear scale from this dataset's min/max
+  // y = mx + b
+  // scale (ds, min, max) {
+  scale (min, max) {
+    // const data = ds.data
+    const dsMin = this.min();
+    const dsMax = this.max();
+    const dsDelta = dsMax - dsMin;
+    const delta = max - min;
+    const m = delta / dsDelta;
+    const b = min - (m * dsMin);
+    // const scaledData = data.map((x) => m * x + b)
+    // return new DataSet(ds.width, ds.height, scaledData)
+    return this.map(x => m * x + b)
+  }
+
   // Return a rectangular subset of the dataset.
   // Returned dataset is of same array type as this.
   subset (x, y, width, height) {
@@ -1284,7 +1307,8 @@ class DataSet {
   }
 
   // Return a new dataset of this array type convolved with the
-  // given kernel 3x3 matrix. See [Convolution article](https://goo.gl/gCfXmU)
+  // given kernel 3x3 matrix.
+  // See [Convolution](https://en.wikipedia.org/wiki/Kernel_(image_processing))
   //
   // If cropped, do not convolve the edges, returning a smaller dataset.
   // If not, convolve the edges by extending edge values, returning
@@ -1299,6 +1323,7 @@ class DataSet {
     for (let y = y0; y < h; y++) {
       for (let x = x0; x < w; x++) {
         const nei = this.neighborhood(x, y);
+        // remind: use reduce if performant
         let sum2 = 0;
         for (let i2 = 0; i2 < kernel.length; i2++) {
           // sum2 += kernel[i2] * nei[i2] // Chrome can't optimize compound let
@@ -1338,22 +1363,24 @@ class DataSet {
   // those wanting to use the results of the two convolutions.
   //
   // Use this.convertType to convert to typed array
-  slopeAndAspect (cellSize = 1, noNaNs = true, posAngle = true) {
+  slopeAndAspect (cellSize = 1, posAngle = true) {
     const dzdx = this.dzdx(); // sub left z from right
     const dzdy = this.dzdy(); // sub bottom z from top
     let [aspect, slope] = [[], []];
     const [h, w] = [dzdx.height, dzdx.width];
     for (let y = 0; y < h; y++) {
       for (let x = 0; x < w; x++) {
-        let [gx, gy] = [dzdx.getXY(x, y), dzdy.getXY(x, y)];
-        slope.push(Math.atan(util.distance(gx, gy)) / cellSize); // radians
-        if (noNaNs)
-          while (gx === gy) {
-            gx += util.randomNormal(0, 0.0001);
-            gy += util.randomNormal(0, 0.0001);
-          }
+        const [gx, gy] = [dzdx.getXY(x, y), dzdy.getXY(x, y)];
+        // slope.push(Math.atan(util.distance(gx, gy)) / cellSize) // radians
+        slope.push(Math.atan(util.distance(0, 0, gx, gy)) / cellSize);
+        // if (noNaNs)
+        //   while (gx === gy) {
+        //     gx += util.randomNormal(0, 0.0001)
+        //     gy += util.randomNormal(0, 0.0001)
+        //   }
         // radians in [-PI,PI], downhill
-        let rad = (gx === gy && gy === 0) ? NaN : Math.atan2(-gy, -gx);
+        // let rad = (gx === gy && gy === 0) ? NaN : Math.atan2(-gy, -gx)
+        let rad = Math.atan2(-gy, -gx);
         // positive radians in [0,2PI] if desired
         if (posAngle && rad < 0) rad += 2 * Math.PI;
         aspect.push(rad);
@@ -1643,6 +1670,7 @@ class Patches extends AgentSet {
     if (this.isBreedSet()) { // REMIND: error
       util.warn('Patches: exportDataSet called with breed, using patches');
       this.baseSet.importDataSet(dataSet, patchVar, useNearest);
+      return
     }
     const {numX, numY} = this.model.world;
     const dataset = dataSet.resample(numX, numY, useNearest);
@@ -1651,11 +1679,11 @@ class Patches extends AgentSet {
   exportDataSet (patchVar, Type = Array) {
     if (this.isBreedSet()) {
       util.warn('Patches: exportDataSet called with breed, using patches');
-      this.baseSet.exportDataSet(patchVar, Type);
+      return this.baseSet.exportDataSet(patchVar, Type)
     }
     const {numX, numY} = this.model.world;
     // let data = util.arrayProps(this, patchVar)
-    let data = this.props(this, patchVar);
+    let data = this.props(patchVar);
     data = util.convertArray(data, Type);
     return new DataSet(numX, numY, data)
   }
@@ -2000,7 +2028,7 @@ class Turtle {
   // REMIND: Let links create the array as needed, less "tricky"
   get links () { // lazy promote links from getter to instance prop.
     Object.defineProperty(this, 'links', {
-      value: [],
+      value: new AgentArray(0),
       enumerable: true
     });
     return this.links

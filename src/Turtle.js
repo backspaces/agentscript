@@ -1,4 +1,5 @@
 // import Color from './Color.js'
+import AgentArray from './AgentArray.js'
 import util from './util.js'
 
 // Flyweight object creation, see Patch/Patches.
@@ -53,7 +54,7 @@ class Turtle {
   // REMIND: Let links create the array as needed, less "tricky"
   get links () { // lazy promote links from getter to instance prop.
     Object.defineProperty(this, 'links', {
-      value: [],
+      value: new AgentArray(0),
       enumerable: true
     })
     return this.links
