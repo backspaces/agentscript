@@ -162,6 +162,10 @@ class Patches extends AgentSet {
     }
     return rect
   }
+  // Return patchRect given legal x, y values
+  patchRectXY (x, y, dx, dy = dx, meToo = true) {
+    return this.patchRect(this.patch(x, y), dx, dy, meToo)
+  }
 
   // Performance: create a cached rect of this size in sparse array.
   // Index of cached rect is dx * dy + meToo ? 0 : -1.

@@ -802,7 +802,7 @@ class AgentArray extends Array {
 
   // Return the first agent having the min/max of given value of f(agent).
   // If reporter is a string, convert to a fcn returning that property
-  minOrMaxOf (min, reporter) {
+  minOrMaxOf (min, reporter, valueToo = false) {
     if (this.isEmpty()) throw Error('min/max OneOf: empty array')
     if (typeof reporter === 'string') reporter = util.propFcn(reporter);
     let o = null;
@@ -813,12 +813,16 @@ class AgentArray extends Array {
       if ((min && (aval < val)) || (!min && (aval > val)))
         [o, val] = [a, aval];
     }
-    return o
+    return valueToo ? [o, val] : o
   }
   // The min version of the above
   minOneOf (reporter) { return this.minOrMaxOf(true, reporter) }
   // The max version of the above
   maxOneOf (reporter) { return this.minOrMaxOf(false, reporter) }
+  // Like the pair above, but return both the object and its value in an array.
+  // const [obj, value] = minValOf(...)
+  minValOf (reporter) { return this.minOrMaxOf(true, reporter, true) }
+  maxValOf (reporter) { return this.minOrMaxOf(false, reporter, true) }
 
   // Return n random agents as AgentArray.
   // See [Fisher-Yates-Knuth shuffle](https://goo.gl/fWNFf)
@@ -1735,6 +1739,10 @@ class Patches extends AgentSet {
       }
     }
     return rect
+  }
+  // Return patchRect given legal x, y values
+  patchRectXY (x, y, dx, dy = dx, meToo = true) {
+    return this.patchRect(this.patch(x, y), dx, dy, meToo)
   }
 
   // Performance: create a cached rect of this size in sparse array.
