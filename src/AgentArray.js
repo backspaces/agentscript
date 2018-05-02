@@ -44,11 +44,18 @@ class AgentArray extends Array {
     if (util.isString(f)) f = o => o[f]
     return this.filter((ai, i, a) => (i === 0) || (f(ai) !== f(a[i - 1])))
   }
-  // Call fcn(agent) for each agent in AgentArray.
+  // Call fcn(agent, index, array) for each agent in AgentArray.
   // Return the AgentArray for chaining.
   // Note: 5x+ faster than this.forEach(fcn) !!
+  for (fcn) {
+    for (let i = 0, len = this.length; i < len; i++)
+      fcn(this[i], i, this)
+    return this
+  }
+  // As above with very simple allowance for array mutation
+  // A safer immutable version: array.clone().for/ask()
   ask (fcn) {
-    for (let i = 0; i < this.length; i++) fcn(this[i], i)
+    for (let i = 0; i < this.length; i++) fcn(this[i], i, this)
     return this
   }
   // Return count of agents with reporter(agent) true

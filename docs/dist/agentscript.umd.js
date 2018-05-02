@@ -683,11 +683,18 @@ class AgentArray extends Array {
     if (util.isString(f)) f = o => o[f];
     return this.filter((ai, i, a) => (i === 0) || (f(ai) !== f(a[i - 1])))
   }
-  // Call fcn(agent) for each agent in AgentArray.
+  // Call fcn(agent, index, array) for each agent in AgentArray.
   // Return the AgentArray for chaining.
   // Note: 5x+ faster than this.forEach(fcn) !!
+  for (fcn) {
+    for (let i = 0, len = this.length; i < len; i++)
+      fcn(this[i], i, this);
+    return this
+  }
+  // As above with very simple allowance for array mutation
+  // A safer immutable version: array.clone().for/ask()
   ask (fcn) {
-    for (let i = 0; i < this.length; i++) fcn(this[i], i);
+    for (let i = 0; i < this.length; i++) fcn(this[i], i, this);
     return this
   }
   // Return count of agents with reporter(agent) true
@@ -1008,8 +1015,10 @@ class AgentSet extends AgentArray {
   // randomColor () { return ColorMap.Basic16.randomColor() }
 
   // Get/Set default values for this agentset's agents.
+  // Return this for chaining
   setDefault (name, value) {
     this.agentProto[name] = value;
+    return this
   }
   getDefault (name) { return this.agentProto[name] }
   // Used when getter/setter's need to know if get/set default
@@ -1761,39 +1770,55 @@ class Patches extends AgentSet {
     });
   }
 
-  // Return patches within the patch rect, default is square & meToo
+  // Return patches within the patch rect, dx, dy integers
+  // default is square & meToo
   inRect (patch, dx, dy = dx, meToo = true) {
     const pRect = this.patchRect(patch, dx, dy, meToo);
     if (this.isBaseSet()) return pRect
     return pRect.withBreed(this)
   }
-  // Return patches within radius distance of patch
+  // Return patches within float radius distance of patch
   inRadius (patch, radius, meToo = true) {
-    const pRect = this.inRect(patch, radius, radius, meToo);
+    const dxy = Math.ceil(radius);
+    const pRect = this.inRect(patch, dxy, dxy, meToo);
     return pRect.inRadius(patch, radius, meToo)
   }
-  // Patches in cone from p in direction `angle`, with `coneAngle` and `radius`
+  // Patches in cone from p in direction `angle`,
+  // with `coneAngle` and float `radius`
   inCone (patch, radius, coneAngle, direction, meToo = true) {
-    const pRect = this.inRect(patch, radius, radius, meToo);
+    const dxy = Math.ceil(radius);
+    const pRect = this.inRect(patch, dxy, dxy, meToo);
     return pRect.inCone(patch, radius, coneAngle, direction, meToo)
   }
 
   // Return patch at distance and angle from obj's (patch or turtle)
   // x, y (floats). If off world, return undefined.
-  // To use heading: patchAtDirectionAndDistance(obj, util.angle(heading), distance)
+  // To use heading: patchAtAngleAndDistance(obj, util.angle(heading), distance)
   // Does not take into account the angle of the obj .. turtle.theta for example.
-  patchAtDirectionAndDistance (obj, angle, distance) {
+  patchAtAngleAndDistance (obj, angle, distance) {
     let {x, y} = obj;
     x = x + distance * Math.cos(angle);
     y = y + distance * Math.sin(angle);
     return this.patch(x, y)
   }
   // patchLeftAndAhead (dTheta, distance) {
-  //   return this.patchAtDirectionAndDistance(dTheta, distance)
+  //   return this.patchAtAngleAndDistance(dTheta, distance)
   // }
   // patchRightAndAhead (dTheta, distance) {
-  //   return this.patchAtDirectionAndDistance(-dTheta, distance)
+  //   return this.patchAtAngleAndDistance(-dTheta, distance)
   // }
+
+  // Return true if patch on edge of world
+  isOnEdge (patch) {
+    const {x, y} = patch;
+    const {minX, maxX, minY, maxY} = this.model.world;
+    return x === minX || x === maxX || y === minY || y === maxY
+  }
+  // returns the edge patches for this breed.
+  // generally called with patches.baseSet/model.patches.
+  edgePatches () {
+    return this.filter(p => this.isOnEdge(p))
+  }
 
   // Diffuse the value of patch variable `p.v` by distributing `rate` percent
   // of each patch's value of `v` to its neighbors.
@@ -1864,9 +1889,7 @@ class Patch {
     return this.model.world.maxY - Math.floor(this.id / this.model.world.numX)
   }
   isOnEdge () {
-    const {x, y, model} = this;
-    const {minX, maxX, minY, maxY} = model.world;
-    return x === minX || x === maxX || y === minY || y === maxY
+    return this.patches.isOnEdge(this)
   }
 
   // Getter for neighbors of this patch.
@@ -1911,8 +1934,8 @@ class Patch {
   // Return patch w/ given parameters. Return undefined if off-world.
   // Return patch dx, dy from my position.
   patchAt (dx, dy) { return this.patches.patch(this.x + dx, this.y + dy) }
-  patchAtDirectionAndDistance (direction, distance) {
-    return this.patches.patchAtDirectionAndDistance(this, direction, distance)
+  patchAtAngleAndDistance (direction, distance) {
+    return this.patches.patchAtAngleAndDistance(this, direction, distance)
   }
 
   sprout (num = 1, breed = this.model.turtles, initFcn = (turtle) => {}) {
@@ -2116,15 +2139,15 @@ class Turtle {
   // Return the patch ahead of this turtle by distance (patchSize units).
   // Return undefined if off-world.
   patchAhead (distance) {
-    return this.patchAtDirectionAndDistance(this.theta, distance)
+    return this.patchAtAngleAndDistance(this.theta, distance)
   }
   // Use patchAhead to determine if this turtle can move forward by distance.
   canMove (distance) { return this.patchAhead(distance) != null } // null / undefined
   patchLeftAndAhead (angle, distance) {
-    return this.patchAtDirectionAndDistance(angle + this.theta, distance)
+    return this.patchAtAngleAndDistance(angle + this.theta, distance)
   }
   patchRightAndAhead (angle, distance) {
-    return this.patchAtDirectionAndDistance(angle - this.theta, distance)
+    return this.patchAtAngleAndDistance(angle - this.theta, distance)
   }
 
   // 6 methods in both Patch & Turtle modules
@@ -2139,11 +2162,15 @@ class Turtle {
   towardsXY (x, y) { return util.radiansToward(this.x, this.y, x, y) }
   // Return patch w/ given parameters. Return undefined if off-world.
   // Return patch dx, dy from my position.
-  patchAt (dx, dy) { return this.model.patches.patch(this.x + dx, this.y + dy) }
+  patchAt (dx, dy) {
+    return this.model.patches.patch(this.x + dx, this.y + dy)
+  }
   // Note: angle is absolute, w/o regard to existing angle of turtle.
-  // Use Left/Right versions below
-  patchAtDirectionAndDistance (direction, distance) {
-    return this.model.patches.patchAtDirectionAndDistance(this, direction, distance)
+  // Use Left/Right versions for angle-relative.
+  patchAtAngleAndDistance (direction, distance) {
+    return this.model.patches.patchAtAngleAndDistance(
+      this, direction, distance
+    )
   }
 
   // Link methods. Note: this.links returns all links linked to me.

@@ -29,9 +29,7 @@ class Patch {
     return this.model.world.maxY - Math.floor(this.id / this.model.world.numX)
   }
   isOnEdge () {
-    const {x, y, model} = this
-    const {minX, maxX, minY, maxY} = model.world
-    return x === minX || x === maxX || y === minY || y === maxY
+    return this.patches.isOnEdge(this)
   }
 
   // Getter for neighbors of this patch.
@@ -76,8 +74,8 @@ class Patch {
   // Return patch w/ given parameters. Return undefined if off-world.
   // Return patch dx, dy from my position.
   patchAt (dx, dy) { return this.patches.patch(this.x + dx, this.y + dy) }
-  patchAtDirectionAndDistance (direction, distance) {
-    return this.patches.patchAtDirectionAndDistance(this, direction, distance)
+  patchAtAngleAndDistance (direction, distance) {
+    return this.patches.patchAtAngleAndDistance(this, direction, distance)
   }
 
   sprout (num = 1, breed = this.model.turtles, initFcn = (turtle) => {}) {

@@ -109,8 +109,10 @@ class AgentSet extends AgentArray {
   // randomColor () { return ColorMap.Basic16.randomColor() }
 
   // Get/Set default values for this agentset's agents.
+  // Return this for chaining
   setDefault (name, value) {
     this.agentProto[name] = value
+    return this
   }
   getDefault (name) { return this.agentProto[name] }
   // Used when getter/setter's need to know if get/set default

@@ -128,15 +128,15 @@ class Turtle {
   // Return the patch ahead of this turtle by distance (patchSize units).
   // Return undefined if off-world.
   patchAhead (distance) {
-    return this.patchAtDirectionAndDistance(this.theta, distance)
+    return this.patchAtAngleAndDistance(this.theta, distance)
   }
   // Use patchAhead to determine if this turtle can move forward by distance.
   canMove (distance) { return this.patchAhead(distance) != null } // null / undefined
   patchLeftAndAhead (angle, distance) {
-    return this.patchAtDirectionAndDistance(angle + this.theta, distance)
+    return this.patchAtAngleAndDistance(angle + this.theta, distance)
   }
   patchRightAndAhead (angle, distance) {
-    return this.patchAtDirectionAndDistance(angle - this.theta, distance)
+    return this.patchAtAngleAndDistance(angle - this.theta, distance)
   }
 
   // 6 methods in both Patch & Turtle modules
@@ -151,11 +151,15 @@ class Turtle {
   towardsXY (x, y) { return util.radiansToward(this.x, this.y, x, y) }
   // Return patch w/ given parameters. Return undefined if off-world.
   // Return patch dx, dy from my position.
-  patchAt (dx, dy) { return this.model.patches.patch(this.x + dx, this.y + dy) }
+  patchAt (dx, dy) {
+    return this.model.patches.patch(this.x + dx, this.y + dy)
+  }
   // Note: angle is absolute, w/o regard to existing angle of turtle.
-  // Use Left/Right versions below
-  patchAtDirectionAndDistance (direction, distance) {
-    return this.model.patches.patchAtDirectionAndDistance(this, direction, distance)
+  // Use Left/Right versions for angle-relative.
+  patchAtAngleAndDistance (direction, distance) {
+    return this.model.patches.patchAtAngleAndDistance(
+      this, direction, distance
+    )
   }
 
   // Link methods. Note: this.links returns all links linked to me.

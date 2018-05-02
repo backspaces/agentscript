@@ -183,39 +183,55 @@ class Patches extends AgentSet {
     })
   }
 
-  // Return patches within the patch rect, default is square & meToo
+  // Return patches within the patch rect, dx, dy integers
+  // default is square & meToo
   inRect (patch, dx, dy = dx, meToo = true) {
     const pRect = this.patchRect(patch, dx, dy, meToo)
     if (this.isBaseSet()) return pRect
     return pRect.withBreed(this)
   }
-  // Return patches within radius distance of patch
+  // Return patches within float radius distance of patch
   inRadius (patch, radius, meToo = true) {
-    const pRect = this.inRect(patch, radius, radius, meToo)
+    const dxy = Math.ceil(radius)
+    const pRect = this.inRect(patch, dxy, dxy, meToo)
     return pRect.inRadius(patch, radius, meToo)
   }
-  // Patches in cone from p in direction `angle`, with `coneAngle` and `radius`
+  // Patches in cone from p in direction `angle`,
+  // with `coneAngle` and float `radius`
   inCone (patch, radius, coneAngle, direction, meToo = true) {
-    const pRect = this.inRect(patch, radius, radius, meToo)
+    const dxy = Math.ceil(radius)
+    const pRect = this.inRect(patch, dxy, dxy, meToo)
     return pRect.inCone(patch, radius, coneAngle, direction, meToo)
   }
 
   // Return patch at distance and angle from obj's (patch or turtle)
   // x, y (floats). If off world, return undefined.
-  // To use heading: patchAtDirectionAndDistance(obj, util.angle(heading), distance)
+  // To use heading: patchAtAngleAndDistance(obj, util.angle(heading), distance)
   // Does not take into account the angle of the obj .. turtle.theta for example.
-  patchAtDirectionAndDistance (obj, angle, distance) {
+  patchAtAngleAndDistance (obj, angle, distance) {
     let {x, y} = obj
     x = x + distance * Math.cos(angle)
     y = y + distance * Math.sin(angle)
     return this.patch(x, y)
   }
   // patchLeftAndAhead (dTheta, distance) {
-  //   return this.patchAtDirectionAndDistance(dTheta, distance)
+  //   return this.patchAtAngleAndDistance(dTheta, distance)
   // }
   // patchRightAndAhead (dTheta, distance) {
-  //   return this.patchAtDirectionAndDistance(-dTheta, distance)
+  //   return this.patchAtAngleAndDistance(-dTheta, distance)
   // }
+
+  // Return true if patch on edge of world
+  isOnEdge (patch) {
+    const {x, y} = patch
+    const {minX, maxX, minY, maxY} = this.model.world
+    return x === minX || x === maxX || y === minY || y === maxY
+  }
+  // returns the edge patches for this breed.
+  // generally called with patches.baseSet/model.patches.
+  edgePatches () {
+    return this.filter(p => this.isOnEdge(p))
+  }
 
   // Diffuse the value of patch variable `p.v` by distributing `rate` percent
   // of each patch's value of `v` to its neighbors.
