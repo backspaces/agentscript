@@ -28,6 +28,21 @@ shell.ls('models/*.js').forEach(file => {
   models[name] = code
 })
 
+// Inject elevation dataset into droplets
+if (models.droplets) {
+  const elevation = shell.cat('test/elevation.json')
+  // const elevation = JSON.parse(shell.cat('test/elevation.json'))
+  models.droplets = `
+    elevationJson = ${elevation}
+    ${models.droplets}
+  `; null
+}
+
+test('foo', t => {
+  t.is(2, 2)
+})
+
+
 // Run the modified code in isolated contexts.
 // Add AS & our models object to the context.
 // Store the result (model variable) in the models global.
@@ -64,11 +79,15 @@ function xyIs (t, x, y) {
   return t.x === x && t.y === y
 }
 const tests = {
-  diffuse: (model) => xyIs(model.turtles[0], -55.12883742162845, 26.653802018711236),
-  exit: (model) => model.turtles.length === 9,
-  fire: (model) => model.initialTrees === 37685 && model.burnedTrees === 24986,
-  flock: (model) => model.flockVectorSize() === 0.9161073651430817,
-  hello: (model) => xyIs(model.turtles[0], -6.5155131960118275, 9.679021938061352),
-  links: (model) => model.links.length === 709,
-  turtles: (model) => xyIs(model.turtles[0], 7.468670117052284, 0.40421859847959674),
+  diffuse: model =>
+    xyIs(model.turtles[0], -55.12883742162845, 26.653802018711236),
+  droplets: model => model.turtlesOnLocalMins() === 4767,
+  exit: model => model.turtles.length === 9,
+  fire: model => model.initialTrees === 37685 && model.burnedTrees === 24986,
+  flock: model => model.flockVectorSize() === 0.9161073651430817,
+  hello: model =>
+    xyIs(model.turtles[0], -6.5155131960118275, 9.679021938061352),
+  links: model => model.links.length === 709,
+  turtles: model =>
+    xyIs(model.turtles[0], 7.468670117052284, 0.40421859847959674),
 }
