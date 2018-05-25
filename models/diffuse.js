@@ -1,8 +1,9 @@
 import DataSet from '../src/DataSet.js'
 import Model from '../src/Model.js'
+import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
 
-util.toWindow({ DataSet, Model, util })
+util.toWindow({ DataSet, Model, modelIO, util })
 
 class DiffuseModel extends Model {
   setup () {
@@ -35,19 +36,27 @@ class DiffuseModel extends Model {
   }
 }
 
+const usingPuppeteer = navigator.userAgent === 'Puppeteer'
+if (usingPuppeteer) util.randomSeed()
+
 const options = Model.defaultWorld(200, 100)
 const model = new DiffuseModel(options)
 model.setup()
 
 //  Debugging
-util.print('patches: ' + model.patches.length)
-util.print('turtles: ' + model.turtles.length)
-util.print('links: ' + model.links.length)
+modelIO.printToPage('patches: ' + model.patches.length)
+modelIO.printToPage('turtles: ' + model.turtles.length)
+modelIO.printToPage('links: ' + model.links.length)
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
 
 // util.repeat(500, () => model.step())
 util.yieldLoop(() => model.step(), 500)
 
-util.print('')
-util.print('turtle0: x,y ' + model.turtles[0].x + ', ' + model.turtles[0].y)
+modelIO.printToPage('')
+modelIO.printToPage(modelIO.sampleObj(model))
+
+if (usingPuppeteer) {
+  window.modelDone = model.modelDone = true
+  window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+}

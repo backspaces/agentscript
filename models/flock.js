@@ -1,7 +1,8 @@
 import Model from '../src/Model.js'
+import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
 
-util.toWindow({ Model, util })
+util.toWindow({ Model, modelIO, util })
 
 class FlockModel extends Model {
   setVision (vision) {
@@ -98,19 +99,30 @@ class FlockModel extends Model {
   }
 }
 
+const usingPuppeteer = navigator.userAgent === 'Puppeteer'
+if (usingPuppeteer) util.randomSeed()
+
 const model = new FlockModel() // default world.
 model.setup()
 
 // Debugging
-util.print('patches: ' + model.patches.length)
-util.print('turtles: ' + model.turtles.length)
-util.print('links: ' + model.links.length)
+modelIO.printToPage('patches: ' + model.patches.length)
+modelIO.printToPage('turtles: ' + model.turtles.length)
+modelIO.printToPage('links: ' + model.links.length)
 const {world, patches, turtles} = model
 util.toWindow({ world, patches, turtles, model })
 
-util.print('initial flockVectorSize: ' + model.flockVectorSize())
+modelIO.printToPage('initial flockVectorSize: ' + model.flockVectorSize())
 // util.repeat(500, () => model.step())
 util.yieldLoop(() => model.step(), 500)
 
-util.print('')
-util.print('final flockVectorSize: ' + model.flockVectorSize())
+modelIO.printToPage('')
+modelIO.printToPage('final flockVectorSize: ' + model.flockVectorSize())
+
+modelIO.printToPage('')
+modelIO.printToPage(modelIO.sampleObj(model))
+
+if (usingPuppeteer) {
+  window.modelDone = model.modelDone = true
+  window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+}

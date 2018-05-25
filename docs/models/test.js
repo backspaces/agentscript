@@ -1,6 +1,6 @@
-import {Model, util} from '../dist/agentscript.esm.js'
+import {Model, *, util} from '../dist/agentscript.esm.js'
 
-util.toWindow({ Model, util })
+util.toWindow({ Model, modelIO, util })
 
 class TestModel extends Model {
   setup () {
@@ -23,13 +23,16 @@ class TestModel extends Model {
   }
 }
 
+const usingPuppeteer = navigator.userAgent === 'Puppeteer'
+if (usingPuppeteer) util.randomSeed()
+
 const model = new TestModel() // default world.
 model.setup()
 
 // Debugging
-util.print('patches: ' + model.patches.length)
-util.print('turtles: ' + model.turtles.length)
-util.print('links: ' + model.links.length)
+modelIO.printToPage('patches: ' + model.patches.length)
+modelIO.printToPage('turtles: ' + model.turtles.length)
+modelIO.printToPage('links: ' + model.links.length)
 
 const {world, patches, turtles, links} = model
 util.toWindow({ world, patches, turtles, links, model })
@@ -37,6 +40,12 @@ util.toWindow({ world, patches, turtles, links, model })
 // util.repeat(500, () => model.step())
 util.yieldLoop(() => model.step(), 500)
 
-// const data = turtles.props
+modelIO.printToPage('')
+modelIO.printToPage(modelIO.sampleObj(model))
+
+if (usingPuppeteer) {
+  window.modelDone = model.modelDone = true
+  window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+}
 
 

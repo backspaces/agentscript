@@ -1,9 +1,10 @@
 import AgentArray from '../src/AgentArray.js'
 import RGBDataSet from '../src/RGBDataSet.js'
 import Model from '../src/Model.js'
+import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
 
-util.toWindow({ AgentArray, Model, RGBDataSet, util })
+util.toWindow({ AgentArray, Model, RGBDataSet, modelIO, util })
 
 class DropletsModel extends Model {
   static stepTypes () {
@@ -20,24 +21,25 @@ class DropletsModel extends Model {
     this.killOffworld = false // Kill or clamp turtles when offworld.
     console.log('StepType:', this.stepType, 'killOffworld:', this.killOffworld)
 
-    let elevation
-    if (typeof elevationJson === 'undefined') {
-      const url =
-        'http://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png'
-      const png = await util.imagePromise(url)
-      // const elevation = new RGBDataSet(png, -32768, 1 / 256, AgentArray)
-      elevation = new RGBDataSet(png, -32768, 1 / 256, AgentArray)
-    } else {
-      // for some reason, the injected json is turned into an obj!
-      // no need for JSON.parse. weird.
-      /* eslint-disable */ // injected var not declared
-      elevation = new DataSet(
-        elevationJson.width,
-        elevationJson.height,
-        elevationJson.data
-      )
-      /* eslint-enable */
-    }
+    // let elevation
+    // if (typeof elevationJson === 'undefined') {
+    const url =
+      'http://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png'
+    const png = await util.imagePromise(url)
+    util.toWindow({png})
+    // const elevation = new RGBDataSet(png, -32768, 1 / 256, AgentArray)
+    const elevation = new RGBDataSet(png, -32768, 1 / 256, AgentArray)
+    // } else {
+    //   // for some reason, the injected json is turned into an obj!
+    //   // no need for JSON.parse. weird.
+    //   /* eslint-disable */ // injected var not declared
+    //   elevation = new DataSet(
+    //     elevationJson.width,
+    //     elevationJson.height,
+    //     elevationJson.data
+    //   )
+    //   /* eslint-enable */
+    // }
 
     const slopeAndAspect = elevation.slopeAndAspect()
     const {dzdx, dzdy, slope, aspect} = slopeAndAspect
@@ -116,6 +118,9 @@ class DropletsModel extends Model {
   }
 }
 
+const usingPuppeteer = navigator.userAgent === 'Puppeteer'
+if (usingPuppeteer) util.randomSeed()
+
 const options = Model.defaultWorld(50)
 const model = new DropletsModel(options)
 const {world, patches, turtles, links} = model
@@ -123,16 +128,24 @@ util.toWindow({ world, patches, turtles, links, model })
 
 model.startup().then(() => {
   model.setup()
-  util.print('patches: ' + model.patches.length)
-  util.print('turtles: ' + model.turtles.length)
-  util.print('localMins: ' + model.localMins.length)
-  util.print('turtlesOnMin: ' + model.turtlesOnLocalMins())
+  modelIO.printToPage('patches: ' + model.patches.length)
+  modelIO.printToPage('turtles: ' + model.turtles.length)
+  modelIO.printToPage('localMins: ' + model.localMins.length)
+  modelIO.printToPage('turtlesOnMin: ' + model.turtlesOnLocalMins())
 
   util.yieldLoop(() => model.step(), 500)
 
-  util.print('')
-  util.print('Done:')
+  modelIO.printToPage('')
+  modelIO.printToPage('Done:')
   if (model.killOffworld)
-    util.print('turtles: ' + model.turtles.length)
-  util.print('turtlesOnMin: ' + model.turtlesOnLocalMins())
+    modelIO.printToPage('turtles: ' + model.turtles.length)
+  modelIO.printToPage('turtlesOnMin: ' + model.turtlesOnLocalMins())
+
+  modelIO.printToPage('')
+  modelIO.printToPage(modelIO.sampleObj(model))
+
+  if (usingPuppeteer) {
+    window.modelDone = model.modelDone = true
+    window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+  }
 })

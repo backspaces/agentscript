@@ -1,6 +1,6 @@
-import {Model, util} from '../dist/agentscript.esm.js'
+import {Model, *, util} from '../dist/agentscript.esm.js'
 
-util.toWindow({ Model, util })
+util.toWindow({ Model, modelIO, util })
 
 class FireModel extends Model {
   setup () {
@@ -62,29 +62,40 @@ class FireModel extends Model {
   }
 }
 
+const usingPuppeteer = navigator.userAgent === 'Puppeteer'
+if (usingPuppeteer) util.randomSeed()
+
 // const div = document.body
 const options = Model.defaultWorld(125)
 const model = new FireModel(options)
 model.setup()
 
 // Debugging
-util.print('patches: ' + model.patches.length)
-util.print('turtles: ' + model.turtles.length)
-util.print('links: ' + model.links.length)
-util.print('fires: ' + model.fires.length)
-util.print('embers: ' + model.embers.length)
+modelIO.printToPage('patches: ' + model.patches.length)
+modelIO.printToPage('turtles: ' + model.turtles.length)
+modelIO.printToPage('links: ' + model.links.length)
+modelIO.printToPage('fires: ' + model.fires.length)
+modelIO.printToPage('embers: ' + model.embers.length)
 const {world, patches, fires, embers} = model
 util.toWindow({ world, patches, fires, embers, model })
 
 // util.repeat(500, () => model.step())
 util.yieldLoop(() => model.step(), 500)
 
-util.print('')
-util.print('isDone: ' + model.isDone())
-util.print('fires: ' + model.fires.length)
-util.print('embers: ' + model.embers.length)
-util.print('initialTrees: ' + model.initialTrees)
-util.print('burnedTrees: ' + model.burnedTrees)
-util.print('percentBurned: ' + model.percentBurned().toFixed(2))
+modelIO.printToPage('')
+modelIO.printToPage('isDone: ' + model.isDone())
+modelIO.printToPage('fires: ' + model.fires.length)
+modelIO.printToPage('embers: ' + model.embers.length)
+modelIO.printToPage('initialTrees: ' + model.initialTrees)
+modelIO.printToPage('burnedTrees: ' + model.burnedTrees)
+modelIO.printToPage('percentBurned: ' + model.percentBurned().toFixed(2))
+
+modelIO.printToPage('')
+modelIO.printToPage(modelIO.sampleObj(model))
+
+if (usingPuppeteer) {
+  window.modelDone = model.modelDone = true
+  window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+}
 
 

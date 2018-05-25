@@ -29,16 +29,18 @@
     "minify": "squash dist/agentscript.umd.js > dist/agentscript.umd.min.js && squash dist/agentscript.esm.js > dist/agentscript.esm.min.js",
     "build-docs": "shx cp -R README.md dist docs && node bin/docsmodels.js",
     "build-dist": "rollup -c",
-    "test": "ava"
+    "test": "ava",
+    "pup": "ava test/models.js"
   },
+  "deps note": "shx includes shelljs, don't need devDep for it",
   "devDependencies": {
     "ava": "^0.25.0",
     "butternut": "^0.4.6",
     "cross-env": "^5.1.3",
+    "live-server": "^1.2.0",
     "npm-run-all": "^4.1.2",
+    "puppeteer": "^1.4.0",
     "rollup": "^0.55.5",
-    "shelljs": "^0.8.1",
-    "shx": "^0.2.2",
-    "tap-xunit": "^2.2.0"
+    "shx": "^0.2.2"
   }
 }
