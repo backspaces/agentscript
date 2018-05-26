@@ -30,7 +30,7 @@ models.forEach(async model => {
         '--user-agent=Puppeteer',
         '--window-size=500,500'
       ],
-      headless: false,
+      headless: true,
     })
     const page = await browser.newPage()
     await page.goto(url)
