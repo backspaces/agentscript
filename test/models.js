@@ -21,6 +21,7 @@ const delay = (seconds = 1) => new Promise(
   (resolve) => setTimeout(resolve, seconds * 1000)
 )
 
+const puppeteerHeadless = true
 models.forEach(async model => {
   await test.serial(model, async t => {
     const url = `http://127.0.0.1:8080/models/?${model}`
@@ -30,7 +31,7 @@ models.forEach(async model => {
         '--user-agent=Puppeteer',
         '--window-size=500,500'
       ],
-      headless: true,
+      headless: puppeteerHeadless,
     })
     const page = await browser.newPage()
     await page.goto(url)
@@ -48,7 +49,8 @@ models.forEach(async model => {
     } else {
       t.pass()
     }
-    await delay(2)
+    if (!puppeteerHeadless) await delay(2)
+
     await page.close()
     await browser.close()
   })
