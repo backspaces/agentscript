@@ -32,7 +32,7 @@
     "test": "ava",
     "pup": "ava test/models.js"
   },
-  "deps note": "shx includes shelljs, don't need devDep for it",
+  "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
   "devDependencies": {
     "ava": "^0.25.0",
     "butternut": "^0.4.6",
@@ -41,6 +41,7 @@
     "npm-run-all": "^4.1.2",
     "puppeteer": "^1.4.0",
     "rollup": "^0.55.5",
-    "shx": "^0.2.2"
+    "shx": "^0.2.2",
+    "tap-xunit": "^2.2.0"
   }
 }
