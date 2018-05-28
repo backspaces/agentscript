@@ -30,7 +30,8 @@
     "build-docs": "shx cp -R README.md dist docs && node bin/docsmodels.js",
     "build-dist": "rollup -c",
     "test": "ava",
-    "pup": "ava test/models.js"
+    "pup": "ava test/models.js",
+    "foo": "rollup src/AS.js"
   },
   "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
   "devDependencies": {

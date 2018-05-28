@@ -9,37 +9,42 @@ import util from './util.js'
 // Use links.setDefault(name, val) to change
 // Modelers add additional "own variables" as needed.
 class Link {
-  static defaultVariables () { // Core variables for patches. Not 'own' variables.
-    return {
-      end0: null, // Turtles: end0 & 1 are turtle ends of the link
-      end1: null,
-      width: 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
+    static defaultVariables() {
+        // Core variables for patches. Not 'own' variables.
+        return {
+            end0: null, // Turtles: end0 & 1 are turtle ends of the link
+            end1: null,
+            width: 1, // THREE: must be 1. Canvas2D (unsupported) has widths.
+        }
     }
-  }
-  // Initialize a Link
-  constructor () {
-    Object.assign(this, Link.defaultVariables())
-  }
-  init (from, to) {
-    this.end0 = from
-    this.end1 = to
-    from.links.push(this)
-    to.links.push(this)
-  }
-  // Remove this link from its agentset
-  die () {
-    this.agentSet.removeAgent(this)
-    util.removeArrayItem(this.end0.links, this)
-    util.removeArrayItem(this.end1.links, this)
-  }
+    // Initialize a Link
+    constructor() {
+        Object.assign(this, Link.defaultVariables())
+    }
+    init(from, to) {
+        this.end0 = from
+        this.end1 = to
+        from.links.push(this)
+        to.links.push(this)
+    }
+    // Remove this link from its agentset
+    die() {
+        this.agentSet.removeAgent(this)
+        util.removeArrayItem(this.end0.links, this)
+        util.removeArrayItem(this.end1.links, this)
+    }
 
-  bothEnds () { return [this.end0, this.end1] }
-  length () { return this.end0.distance(this.end1) }
-  otherEnd (turtle) {
-    if (turtle === this.end0) return this.end1
-    if (turtle === this.end1) return this.end0
-    throw Error(`Link.otherEnd: turtle not a link turtle: ${turtle}`)
-  }
+    bothEnds() {
+        return [this.end0, this.end1]
+    }
+    length() {
+        return this.end0.distance(this.end1)
+    }
+    otherEnd(turtle) {
+        if (turtle === this.end0) return this.end1
+        if (turtle === this.end1) return this.end0
+        throw Error(`Link.otherEnd: turtle not a link turtle: ${turtle}`)
+    }
 }
 
 export default Link

@@ -1,29 +1,30 @@
-import {Model, *, util} from '../dist/agentscript.esm.js'
+
+import {Model, modelIO, util} from '../dist/agentscript.esm.js'
 
 util.toWindow({ Model, modelIO, util })
 
 class Hello extends Model {
-  // Inherit default constructor.
+    // Inherit default constructor.
 
-  setup () {
-    this.turtles.setDefault('atEdge', 'bounce')
+    setup() {
+        this.turtles.setDefault('atEdge', 'bounce')
 
-    this.turtles.create(10, t => {
-      const patch = this.patches.oneOf()
-      t.setxy(patch.x, patch.y)
-    })
+        this.turtles.create(10, t => {
+            const patch = this.patches.oneOf()
+            t.setxy(patch.x, patch.y)
+        })
 
-    this.turtles.ask(t => {
-      this.links.create(t, this.turtles.otherOneOf(t))
-    })
-  }
+        this.turtles.ask(t => {
+            this.links.create(t, this.turtles.otherOneOf(t))
+        })
+    }
 
-  step () {
-    this.turtles.ask(t => {
-      t.direction += util.randomCentered(0.1)
-      t.forward(0.1)
-    })
-  }
+    step() {
+        this.turtles.ask(t => {
+            t.direction += util.randomCentered(0.1)
+            t.forward(0.1)
+        })
+    }
 }
 
 const usingPuppeteer = navigator.userAgent === 'Puppeteer'
@@ -36,7 +37,7 @@ model.setup()
 modelIO.printToPage('patches: ' + model.patches.length)
 modelIO.printToPage('turtles: ' + model.turtles.length)
 modelIO.printToPage('links: ' + model.links.length)
-const {world, patches, turtles, links} = model
+const { world, patches, turtles, links } = model
 util.toWindow({ world, patches, turtles, links, model })
 
 // util.repeat(500, () => model.step())
@@ -46,8 +47,8 @@ modelIO.printToPage('')
 modelIO.printToPage(modelIO.sampleObj(model))
 
 if (usingPuppeteer) {
-  window.modelDone = model.modelDone = true
-  window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+    window.modelDone = model.modelDone = true
+    window.modelSample = model.modelSample = modelIO.sampleJSON(model)
 }
 
 // if (!usingPuppeteer) runModel()
