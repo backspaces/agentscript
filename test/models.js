@@ -21,15 +21,24 @@ const delay = (seconds = 1) =>
     new Promise(resolve => setTimeout(resolve, seconds * 1000))
 
 const puppeteerHeadless = true
+const [width, height] = [500, 500]
+
 models.forEach(async model => {
     await test.serial(model, async t => {
+        // const url = `http://127.0.0.1:8080/docs/models/?${model}`
         const url = `http://127.0.0.1:8080/models/?${model}`
         // Let model know it is being run by Puppeteer:
         const browser = await puppeteer.launch({
-            args: ['--user-agent=Puppeteer', '--window-size=500,500'],
+            args: [
+                '--user-agent=Puppeteer',
+                `--window-size=${width},${height}`,
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+            ],
             headless: puppeteerHeadless,
         })
         const page = await browser.newPage()
+        // await page.setViewport({ width, height })
         await page.goto(url)
         // Typically modelDone returns true immediately!
         while (!(await page.evaluate(() => window.modelDone))) {
