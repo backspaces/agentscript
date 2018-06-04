@@ -36,6 +36,8 @@ To use the package as a CDN, use [unpkg.com](https://unpkg.com/).
 *   UMD: [https://unpkg.com/@redfish/agentscript](https://unpkg.com/@redfish/agentscript)
 *   ESM: [https://unpkg.com/@redfish/agentscript?module](https://unpkg.com/@redfish/agentscript?module)
 
+View the unpkg.dashboard: [https://unpkg.com/@redfish/agentscript/](https://unpkg.com/@redfish/agentscript/)
+
 ## Developer Information
 
 To clone the github repo:
