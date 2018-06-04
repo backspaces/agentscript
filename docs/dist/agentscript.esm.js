@@ -742,15 +742,33 @@ class AgentArray extends Array {
     // Return the AgentArray for chaining.
     // Note: 5x+ faster than this.forEach(fcn) !!
     for(fcn) {
-        for (let i = 0, len = this.length; i < len; i++) fcn(this[i], i, this);
+        for (let i = 0, len = this.length; i < len; i++) {
+            fcn(this[i], i, this);
+        }
         return this
     }
     // As above with very simple allowance for array mutation
     // A safer immutable version: array.clone().for/ask()
     ask(fcn) {
-        for (let i = 0; i < this.length; i++) fcn(this[i], i, this);
+        for (let i = 0; i < this.length; i++) {
+            fcn(this[i], i, this);
+        }
         return this
     }
+    // ask(fcn) {
+    //     if (this.length === 0) return
+    //     const lastID = this.last().id
+    //     let obj = this[0]
+    //     for (let i = 0; obj && obj.id <= lastID; i++) {
+    //         // const lastObj = obj
+    //         fcn(obj, i, this)
+    //         obj = this[i++]
+    //         // if (!obj || obj === lastObj) continue
+    //         // if (!obj || obj === lastObj) continue
+    //     }
+    //     return this
+    // }
+
     // Return count of agents with reporter(agent) true
     count(reporter) {
         return this.reduce((prev, o) => prev + (reporter(o) ? 1 : 0), 0)
@@ -1659,6 +1677,7 @@ class Link {
         this.agentSet.removeAgent(this);
         util.removeArrayItem(this.end0.links, this);
         util.removeArrayItem(this.end1.links, this);
+        this.id = -this.id;
     }
 
     bothEnds() {
@@ -2256,6 +2275,7 @@ class Turtle {
             util.removeArrayItem(this.patch.turtles, this);
         }
         // util.removeItem(this.patch.turtles, this)
+        this.id = -this.id;
     }
 
     // Factory: create num new turtles at this turtle's location. The optional init

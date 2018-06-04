@@ -38,6 +38,7 @@ class Turtle {
             util.removeArrayItem(this.patch.turtles, this)
         }
         // util.removeItem(this.patch.turtles, this)
+        this.id = -this.id
     }
 
     // Factory: create num new turtles at this turtle's location. The optional init

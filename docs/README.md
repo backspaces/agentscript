@@ -26,24 +26,27 @@ Both are available in minified form. All are in the project's `dist/` directory.
 The UMD's global name is `AS`
 
 ## NPM Package
-AgentScript is available as a npm *scoped* package: @redfish/agentscript.
+
+AgentScript is available as a npm _scoped_ package: @redfish/agentscript.
 
 To install the package, `yarn add @redfish/agentscript`. This places the bundles in `node_modules/@redfish/agentscript/dist`
 
 To use the package as a CDN, use [unpkg.com](https://unpkg.com/).
-* UMD: [https://unpkg.com/@redfish/agentscript](https://unpkg.com/@redfish/agentscript)
-* ESM: [https://unpkg.com/@redfish/agentscript?module](https://unpkg.com/@redfish/agentscript?module)
+
+*   UMD: [https://unpkg.com/@redfish/agentscript](https://unpkg.com/@redfish/agentscript)
+*   ESM: [https://unpkg.com/@redfish/agentscript?module](https://unpkg.com/@redfish/agentscript?module)
 
 ## Developer Information
 
 To clone the github repo:
-* cd to where you want the agentscript/ dir to appear.
-* git clone https://github.com/backspaces/agentscript
-* cd agentscript # go to new repo
-* yarn install # install all dev dependencies
-* yarn build # complete the install
 
-All workflow is npm run scripts.  See package.json's scripts, or use `yarn run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.eslintrc.json).
+*   cd to where you want the agentscript/ dir to appear.
+*   git clone https://github.com/backspaces/agentscript
+*   cd agentscript # go to new repo
+*   yarn install # install all dev dependencies
+*   yarn build # complete the install
+
+All workflow is npm run scripts. See package.json's scripts, or use `yarn run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.eslintrc.json).
 
 ## Github Pages
 
@@ -52,12 +55,18 @@ A [gh-page](http://backspaces.github.io/agentscript/) is used for the site. It c
 It uses [the docs/ simplification](https://help.github.com/articles/user-organization-and-project-pages/#project-pages) for gh-page creation.
 
 The gh-page hosts our sample models. The fire model can be run with:
+
 > http://backspaces.github.io/agentscript/models?fire
 
+The Github page can be used as a CDN for experimental use:
+
+*   UMD: [https://backspaces.github.io/agentscript/dist/agentscript.umd.js](https://backspaces.github.io/agentscript/dist/agentscript.umd.js)
+*   ESM: [https://backspaces.github.io/agentscript/dist/agentscript.esm.js](https://backspaces.github.io/agentscript/dist/agentscript.esm.js)
 
 ## Files
 
 Our directory layout is:
+
 ```
 bin: workflow scripts
 dist: the umd and esm bundles with their min.js versions.
@@ -79,7 +88,7 @@ the Free Software Foundation, either version 3 of the License, or
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License

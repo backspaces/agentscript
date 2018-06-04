@@ -32,6 +32,7 @@ class Link {
         this.agentSet.removeAgent(this)
         util.removeArrayItem(this.end0.links, this)
         util.removeArrayItem(this.end1.links, this)
+        this.id = -this.id
     }
 
     bothEnds() {
