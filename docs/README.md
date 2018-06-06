@@ -33,8 +33,8 @@ To install the package, `yarn add @redfish/agentscript`. This places the bundles
 
 To use the package as a CDN, use [unpkg.com](https://unpkg.com/).
 
-*   UMD: [https://unpkg.com/@redfish/agentscript](https://unpkg.com/@redfish/agentscript)
-*   ESM: [https://unpkg.com/@redfish/agentscript?module](https://unpkg.com/@redfish/agentscript?module)
+-   UMD: [https://unpkg.com/@redfish/agentscript](https://unpkg.com/@redfish/agentscript)
+-   ESM: [https://unpkg.com/@redfish/agentscript?module](https://unpkg.com/@redfish/agentscript?module)
 
 View the unpkg.dashboard: [https://unpkg.com/@redfish/agentscript/](https://unpkg.com/@redfish/agentscript/)
 
@@ -42,11 +42,11 @@ View the unpkg.dashboard: [https://unpkg.com/@redfish/agentscript/](https://unpk
 
 To clone the github repo:
 
-*   cd to where you want the agentscript/ dir to appear.
-*   git clone https://github.com/backspaces/agentscript
-*   cd agentscript # go to new repo
-*   yarn install # install all dev dependencies
-*   yarn build # complete the install
+-   cd to where you want the agentscript/ dir to appear.
+-   git clone https://github.com/backspaces/agentscript
+-   cd agentscript # go to new repo
+-   yarn install # install all dev dependencies
+-   yarn build # complete the install
 
 All workflow is npm run scripts. See package.json's scripts, or use `yarn run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.eslintrc.json).
 
@@ -62,8 +62,8 @@ The gh-page hosts our sample models. The fire model can be run with:
 
 The Github page can be used as a CDN for experimental use:
 
-*   UMD: [https://backspaces.github.io/agentscript/dist/agentscript.umd.js](https://backspaces.github.io/agentscript/dist/agentscript.umd.js)
-*   ESM: [https://backspaces.github.io/agentscript/dist/agentscript.esm.js](https://backspaces.github.io/agentscript/dist/agentscript.esm.js)
+-   UMD: [https://backspaces.github.io/agentscript/dist/agentscript.umd.js](https://backspaces.github.io/agentscript/dist/agentscript.umd.js)
+-   ESM: [https://backspaces.github.io/agentscript/dist/agentscript.esm.js](https://backspaces.github.io/agentscript/dist/agentscript.esm.js)
 
 ## Files
 
