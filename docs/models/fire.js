@@ -22,6 +22,7 @@ class FireModel extends Model {
         this.fireType = this.patchTypes[2]
 
         this.density = 60 // percent
+        // this.patches.askSet(p => { // patches static, askSet === ask
         this.patches.ask(p => {
             if (p.x === this.world.minX) this.ignight(p)
             else if (util.randomInt(100) < this.density) p.type = this.treeType
@@ -33,7 +34,9 @@ class FireModel extends Model {
     }
 
     step() {
+        // this.fires.askSet(p => {
         this.fires.ask(p => {
+            // AgentArray, vanilla ask
             p.neighbors4.ask(n => {
                 if (this.isTree(n)) this.ignight(n)
             })
@@ -59,6 +62,7 @@ class FireModel extends Model {
     }
 
     fadeEmbers() {
+        // this.embers.askSet(p => { // same stats, done faster! 500 mutations
         this.embers.ask(p => {
             const type = p.type
             const ix = this.patchTypes.indexOf(type)

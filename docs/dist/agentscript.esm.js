@@ -741,17 +741,29 @@ class AgentArray extends Array {
     // Call fcn(agent, index, array) for each agent in AgentArray.
     // Return the AgentArray for chaining.
     // Note: 5x+ faster than this.forEach(fcn) !!
-    for(fcn) {
-        for (let i = 0, len = this.length; i < len; i++) {
-            fcn(this[i], i, this);
-        }
-        return this
-    }
-    // As above with very simple allowance for array mutation
-    // A safer immutable version: array.clone().for/ask()
+    // each(fcn) {
+    //     for (let i = 0, len = this.length; i < len; i++) {
+    //         fcn(this[i], i, this)
+    //     }
+    //     return this
+    // }
+
+    // Call fcn(agent, index, array) for each item in AgentArray.
+    // Return the AgentArray for chaining.
+    // Note: 5x+ faster than this.forEach(fcn) !!
+    // Warns on array mutation (length change)
     ask(fcn) {
+        const length = this.length;
         for (let i = 0; i < this.length; i++) {
             fcn(this[i], i, this);
+            if (length != this.length) {
+                const name = this.name || this.constructor.name;
+                const direction =
+                    this.length < length ? 'decreasing' : 'increasing';
+                util.warn(
+                    `AgentArray.ask array mutation: ${name}: ${direction}`
+                );
+            }
         }
         return this
     }
@@ -1186,6 +1198,57 @@ class AgentSet extends AgentArray {
 
         // Give `a` my defaults/statics
         return Object.setPrototypeOf(a, this.agentProto)
+    }
+
+    // Call fcn(agent, index, array) for each item in AgentArray.
+    // Return the AgentArray for chaining.
+    // Note: 5x+ faster than this.forEach(fcn) !!
+    // Manages immutability reasonably well.
+    askSet(fcn) {
+        if (this.name === 'patches') super.ask(fcn); // Patches are static
+        if (this.isBaseSet()) this.baseSetAsk(fcn);
+        if (this.isBreedSet()) this.cloneAsk(fcn);
+    }
+
+    // An ask function for mutable baseSets.
+    // BaseSets can only add past the end of the array.
+    // This allows us to manage mutations by allowing length change,
+    // and managing deletions only within the original length.
+    baseSetAsk(fcn) {
+        if (this.length === 0) return this
+        // const length = this.length
+        const lastID = this.last().id;
+
+        // Added obj's have id > lastID. Just check for deletions.
+        // There Be Dragons:
+        // - AgentSet can become length 0 if all deleted
+        // - While loop tricky:
+        //   - i can beocme negative w/in while loop:
+        //   - i can beocme bigger than current AgentSet:
+        //   - Guard w/ i<len & i>=0
+        for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
+            const id = this[i].id;
+            fcn(this[i], i, this);
+            while (i < this.length && i >= 0 && this[i].id > id) {
+                i--;
+            }
+        }
+    }
+
+    // For breeds, mutations can occur in many ways.
+    // This solves this by cloning the initial array and
+    // managing agents that have died or changed breed.
+    // In other words, we can be concerned only with mutations
+    // of the agents themselves.
+    cloneAsk(fcn) {
+        const clone = this.clone();
+        for (let i = 0; i < clone.length; i++) {
+            const obj = clone[i];
+            if (obj.breed == this && obj.id > 0) {
+                fcn(obj, i, clone);
+            }
+        }
+        return this
     }
 }
 
@@ -1650,10 +1713,10 @@ class DataSet {
 // Flyweight object creation, see Patch/Patches.
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
 
-// The core default variables needed by a Link.
-// Use links.setDefault(name, val) to change
-// Modelers add additional "own variables" as needed.
 class Link {
+    // The core default variables needed by a Link.
+    // Use links.setDefault(name, val) to change
+    // Modelers add additional "own variables" as needed.
     static defaultVariables() {
         // Core variables for patches. Not 'own' variables.
         return {
@@ -1677,7 +1740,8 @@ class Link {
         this.agentSet.removeAgent(this);
         util.removeArrayItem(this.end0.links, this);
         util.removeArrayItem(this.end1.links, this);
-        this.id = -this.id;
+        // Set id to -1, indicates that I've died.
+        this.id = -1;
     }
 
     bothEnds() {
@@ -2267,15 +2331,17 @@ class Turtle {
     }
     die() {
         this.agentSet.removeAgent(this); // remove me from my baseSet and breed
+        // Remove my links if any exist.
+        // Careful: don't promote links
         if (this.hasOwnProperty('links')) {
-            // don't promote links
             while (this.links.length > 0) this.links[0].die();
         }
+        // Remove me from patch.turtles cache if patch.turtles array exists
         if (this.patch.turtles != null) {
             util.removeArrayItem(this.patch.turtles, this);
         }
-        // util.removeItem(this.patch.turtles, this)
-        this.id = -this.id;
+        // Set id to -1, indicates that I've died.
+        this.id = -1;
     }
 
     // Factory: create num new turtles at this turtle's location. The optional init

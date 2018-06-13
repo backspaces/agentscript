@@ -5,10 +5,10 @@ import util from './util.js'
 // Flyweight object creation, see Patch/Patches.
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
 
-// The core default variables needed by a Link.
-// Use links.setDefault(name, val) to change
-// Modelers add additional "own variables" as needed.
 class Link {
+    // The core default variables needed by a Link.
+    // Use links.setDefault(name, val) to change
+    // Modelers add additional "own variables" as needed.
     static defaultVariables() {
         // Core variables for patches. Not 'own' variables.
         return {
@@ -32,7 +32,8 @@ class Link {
         this.agentSet.removeAgent(this)
         util.removeArrayItem(this.end0.links, this)
         util.removeArrayItem(this.end1.links, this)
-        this.id = -this.id
+        // Set id to -1, indicates that I've died.
+        this.id = -1
     }
 
     bothEnds() {

@@ -1,4 +1,5 @@
 import AgentArray from './AgentArray.js'
+import util from './util.js'
 
 // AgentSets are arrays that are factories for their own agents/objects.
 // They are the base for Patches, Turtles and Links.
@@ -173,6 +174,57 @@ class AgentSet extends AgentArray {
 
         // Give `a` my defaults/statics
         return Object.setPrototypeOf(a, this.agentProto)
+    }
+
+    // Call fcn(agent, index, array) for each item in AgentArray.
+    // Return the AgentArray for chaining.
+    // Note: 5x+ faster than this.forEach(fcn) !!
+    // Manages immutability reasonably well.
+    askSet(fcn) {
+        if (this.name === 'patches') super.ask(fcn) // Patches are static
+        if (this.isBaseSet()) this.baseSetAsk(fcn)
+        if (this.isBreedSet()) this.cloneAsk(fcn)
+    }
+
+    // An ask function for mutable baseSets.
+    // BaseSets can only add past the end of the array.
+    // This allows us to manage mutations by allowing length change,
+    // and managing deletions only within the original length.
+    baseSetAsk(fcn) {
+        if (this.length === 0) return this
+        // const length = this.length
+        const lastID = this.last().id
+
+        // Added obj's have id > lastID. Just check for deletions.
+        // There Be Dragons:
+        // - AgentSet can become length 0 if all deleted
+        // - While loop tricky:
+        //   - i can beocme negative w/in while loop:
+        //   - i can beocme bigger than current AgentSet:
+        //   - Guard w/ i<len & i>=0
+        for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
+            const id = this[i].id
+            fcn(this[i], i, this)
+            while (i < this.length && i >= 0 && this[i].id > id) {
+                i--
+            }
+        }
+    }
+
+    // For breeds, mutations can occur in many ways.
+    // This solves this by cloning the initial array and
+    // managing agents that have died or changed breed.
+    // In other words, we can be concerned only with mutations
+    // of the agents themselves.
+    cloneAsk(fcn) {
+        const clone = this.clone()
+        for (let i = 0; i < clone.length; i++) {
+            const obj = clone[i]
+            if (obj.breed == this && obj.id > 0) {
+                fcn(obj, i, clone)
+            }
+        }
+        return this
     }
 }
 

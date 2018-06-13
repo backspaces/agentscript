@@ -60,17 +60,29 @@ class AgentArray extends Array {
     // Call fcn(agent, index, array) for each agent in AgentArray.
     // Return the AgentArray for chaining.
     // Note: 5x+ faster than this.forEach(fcn) !!
-    for(fcn) {
-        for (let i = 0, len = this.length; i < len; i++) {
-            fcn(this[i], i, this)
-        }
-        return this
-    }
-    // As above with very simple allowance for array mutation
-    // A safer immutable version: array.clone().for/ask()
+    // each(fcn) {
+    //     for (let i = 0, len = this.length; i < len; i++) {
+    //         fcn(this[i], i, this)
+    //     }
+    //     return this
+    // }
+
+    // Call fcn(agent, index, array) for each item in AgentArray.
+    // Return the AgentArray for chaining.
+    // Note: 5x+ faster than this.forEach(fcn) !!
+    // Warns on array mutation (length change)
     ask(fcn) {
+        const length = this.length
         for (let i = 0; i < this.length; i++) {
             fcn(this[i], i, this)
+            if (length != this.length) {
+                const name = this.name || this.constructor.name
+                const direction =
+                    this.length < length ? 'decreasing' : 'increasing'
+                util.warn(
+                    `AgentArray.ask array mutation: ${name}: ${direction}`
+                )
+            }
         }
         return this
     }

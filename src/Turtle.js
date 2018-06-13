@@ -30,15 +30,17 @@ class Turtle {
     }
     die() {
         this.agentSet.removeAgent(this) // remove me from my baseSet and breed
+        // Remove my links if any exist.
+        // Careful: don't promote links
         if (this.hasOwnProperty('links')) {
-            // don't promote links
             while (this.links.length > 0) this.links[0].die()
         }
+        // Remove me from patch.turtles cache if patch.turtles array exists
         if (this.patch.turtles != null) {
             util.removeArrayItem(this.patch.turtles, this)
         }
-        // util.removeItem(this.patch.turtles, this)
-        this.id = -this.id
+        // Set id to -1, indicates that I've died.
+        this.id = -1
     }
 
     // Factory: create num new turtles at this turtle's location. The optional init
