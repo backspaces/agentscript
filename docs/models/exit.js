@@ -1,4 +1,3 @@
-
 import {Model, modelIO, util} from '../dist/agentscript.esm.js'
 
 util.toWindow({ Model, modelIO, util })
@@ -109,5 +108,4 @@ if (usingPuppeteer) {
     window.modelDone = model.modelDone = true
     window.modelSample = model.modelSample = modelIO.sampleJSON(model)
 }
-
 

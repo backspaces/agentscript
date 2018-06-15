@@ -1,36 +1,12 @@
+import {modelIO, util} from '../dist/agentscript.esm.js'
+import HelloModel from './HelloModel.js'
 
-import {Model, modelIO, util} from '../dist/agentscript.esm.js'
-
-util.toWindow({ Model, modelIO, util })
-
-class Hello extends Model {
-    // Inherit default constructor.
-
-    setup() {
-        this.turtles.setDefault('atEdge', 'bounce')
-
-        this.turtles.create(10, t => {
-            const patch = this.patches.oneOf()
-            t.setxy(patch.x, patch.y)
-        })
-
-        this.turtles.ask(t => {
-            this.links.create(t, this.turtles.otherOneOf(t))
-        })
-    }
-
-    step() {
-        this.turtles.ask(t => {
-            t.direction += util.randomCentered(0.1)
-            t.forward(0.1)
-        })
-    }
-}
+util.toWindow({ HelloModel, modelIO, util })
 
 const usingPuppeteer = navigator.userAgent === 'Puppeteer'
 if (usingPuppeteer) util.randomSeed()
 
-const model = new Hello()
+const model = new HelloModel()
 model.setup()
 
 // Debugging
@@ -56,5 +32,4 @@ if (usingPuppeteer) {
 
 // const {x, y} = turtles[0]
 // modelIO.printToPage('turtle[0](x,y): ' + x + ' ' + y)
-
 

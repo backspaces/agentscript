@@ -10,7 +10,7 @@ liveServer.start({
 })
 
 const models = shell
-    .ls('models/*.js')
+    .ls('models/[a-z]*.js') // Avoid FooModel.js, just foo.js
     .sed(/^models./, '')
     .sed(/.js$/, '')
     .replace(/\n$/, '')

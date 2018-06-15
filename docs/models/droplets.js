@@ -1,4 +1,3 @@
-
 import {AgentArray, RGBDataSet, Model, modelIO, util} from '../dist/agentscript.esm.js'
 
 util.toWindow({ AgentArray, Model, RGBDataSet, modelIO, util })
@@ -169,5 +168,4 @@ model.startup().then(() => {
         window.modelSample = model.modelSample = modelIO.sampleJSON(model)
     }
 })
-
 
