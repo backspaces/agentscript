@@ -1,7 +1,7 @@
 import Model from '../src/Model.js'
 import util from '../src/util.js'
 
-export default class Hello1 extends Model {
+export default class HelloModel extends Model {
     // Inherit default constructor.
 
     setup() {

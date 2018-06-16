@@ -1,6 +1,6 @@
 import {Model, util} from '../dist/agentscript.esm.js'
 
-export default class Hello1 extends Model {
+export default class HelloModel extends Model {
     // Inherit default constructor.
 
     setup() {
