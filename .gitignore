@@ -2,7 +2,6 @@
 
 # Derived files other than docs/
 /dist/
-/ignore/
 
 node_modules/
 npm-debug.log
