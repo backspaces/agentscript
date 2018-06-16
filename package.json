@@ -1,28 +1,33 @@
 {
     "name": "@redfish/agentscript",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "AgentScript Model in Model/View architecture",
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
     "main": "dist/agentscript.umd.js",
     "module": "dist/agentscript.esm.js",
-    "files": ["/dist/", "/docs/"],
+    "files": [
+        "/dist/",
+        "/docs/"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/backspaces/agentscript.git"
     },
-    "keywords": ["netlogo", "abm", "agentscript"],
+    "keywords": [
+        "netlogo",
+        "abm",
+        "agentscript"
+    ],
     "license": "GPL-3.0",
     "bugs": {
         "url": "https://github.com/backspaces/agentscript/issues"
     },
     "mkdirs": "dist docs/dist docs/models",
     "scripts": {
-        "clean":
-            "cross-env-shell \"shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs\"",
+        "clean": "cross-env-shell \"shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs\"",
         "build": "npm-run-all clean build-dist minify build-docs",
-        "minify":
-            "squash dist/agentscript.umd.js > dist/agentscript.umd.min.js && squash dist/agentscript.esm.js > dist/agentscript.esm.min.js",
+        "minify": "squash dist/agentscript.umd.js > dist/agentscript.umd.min.js && squash dist/agentscript.esm.js > dist/agentscript.esm.min.js",
         "build-docs": "shx cp -R README.md dist docs && node bin/docsmodels.js",
         "build-dist": "rollup -c",
         "test": "ava",
