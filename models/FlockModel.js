@@ -2,29 +2,45 @@ import Model from '../src/Model.js'
 import util from '../src/util.js'
 
 export default class FlockModel extends Model {
+    constructor(world) {
+        super(world)
+        this.UI = {
+            vision: 3,
+            speed: 0.25,
+            maxTurn: util.radians(3.0),
+            minSeparation: 0.75,
+            population: 1000,
+        }
+        // this.vision = 3
+        // this.speed = 0.25
+        // this.maxTurnDegrees = 3.0
+        // this.minSeparation = 0.75
+        // this.population = 1000
+    }
     setVision(vision) {
         this.vision = vision
         this.patches.cacheRect(vision)
     }
-    setMaxTurn(maxTurnDegrees) {
-        this.maxTurn = util.radians(maxTurnDegrees)
-    }
+    // setMaxTurn(maxTurnDegrees) {
+    //     this.maxTurn = util.radians(maxTurnDegrees)
+    // }
     setup() {
-        // this.turtles.own('vision')
+        Object.assign(this, this.UI)
 
         this.turtles.setDefault('atEdge', 'wrap')
-        this.turtles.setDefault('z', 0.1)
+        // this.turtles.setDefault('z', 0.1)
         // this.turtles.setDefault('size', 1)
-        this.turtles.setDefault('speed', 0.25)
+        this.turtles.setDefault('speed', this.speed)
 
         // const cmap = ColorMap.grayColorMap(0, 100)
         // this.patches.ask(p => { p.setColor(cmap.randomColor()) })
 
-        this.setMaxTurn(3.0)
-        this.setVision(3)
-        this.minSeparation = 0.75
-        // this.anim.setRate(30)
-        this.population = 1000 // 300 // 1e4 this.patches.length
+        // this.setMaxTurn(this.maxTurnDegrees)
+        // this.setVision(3)
+        this.patches.cacheRect(this.vision)
+        // this.minSeparation = 0.75
+        // // this.anim.setRate(30)
+        // this.population = 1000 // 300 // 1e4 this.patches.length
 
         util.repeat(this.population, () => {
             this.patches.oneOf().sprout()
@@ -36,38 +52,34 @@ export default class FlockModel extends Model {
             this.flock(t)
         })
     }
-    flock(a) {
-        // a is turtle
-        // flockmates = this.turtles.inRadius(a, this.vision).other(a)
-        const flockmates = this.turtles.inRadius(a, this.vision, false)
-        // flockmates = a.inRadius(this.turtles, this.vision, false)
+    flock(t) {
+        const flockmates = this.turtles.inRadius(t, this.vision, false)
         if (flockmates.length !== 0) {
-            // REMIND: distanceSq or manhattan distance
-            const nearest = flockmates.minOneOf(f => f.distance(a))
-            if (a.distance(nearest) < this.minSeparation) {
-                this.separate(a, nearest)
+            const nearest = flockmates.minOneOf(f => f.distance(t))
+            if (t.distance(nearest) < this.minSeparation) {
+                this.separate(t, nearest)
             } else {
-                this.align(a, flockmates)
-                this.cohere(a, flockmates)
+                this.align(t, flockmates)
+                this.cohere(t, flockmates)
             }
         }
-        a.forward(a.speed)
+        t.forward(t.speed)
     }
-    separate(a, nearest) {
-        const theta = nearest.towards(a)
-        this.turnTowards(a, theta)
+    separate(t, nearest) {
+        const theta = nearest.towards(t)
+        this.turnTowards(t, theta)
     }
-    align(a, flockmates) {
-        this.turnTowards(a, this.averageHeading(flockmates))
+    align(t, flockmates) {
+        this.turnTowards(t, this.averageHeading(flockmates))
     }
-    cohere(a, flockmates) {
-        this.turnTowards(a, this.averageHeadingTowards(a, flockmates))
+    cohere(t, flockmates) {
+        this.turnTowards(t, this.averageHeadingTowards(t, flockmates))
     }
 
-    turnTowards(a, theta) {
-        let turn = util.subtractRadians(theta, a.theta) // angle from h to a
+    turnTowards(t, theta) {
+        let turn = util.subtractRadians(theta, t.theta) // angle from h to t
         turn = util.clamp(turn, -this.maxTurn, this.maxTurn) // limit the turn
-        a.rotate(turn)
+        t.rotate(turn)
     }
     averageHeading(flockmates) {
         const thetas = flockmates.map(f => f.theta)
@@ -75,14 +87,13 @@ export default class FlockModel extends Model {
         const dy = thetas.map(t => Math.sin(t)).reduce((x, y) => x + y)
         return Math.atan2(dy, dx)
     }
-    averageHeadingTowards(a, flockmates) {
-        const towards = flockmates.map(f => f.towards(a))
+    averageHeadingTowards(t, flockmates) {
+        const towards = flockmates.map(f => f.towards(t))
         const dx = towards.map(t => Math.cos(t)).reduce((x, y) => x + y)
         const dy = towards.map(t => Math.sin(t)).reduce((x, y) => x + y)
         return Math.atan2(dy, dx)
     }
 
-    // headingsOf (boids) { return boids.map((t) => t.theta) }
     flockVectorSize() {
         const headings = this.turtles.map(t => t.theta)
         const dx = headings
