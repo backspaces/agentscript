@@ -28,11 +28,11 @@
         "clean": "cross-env-shell \"shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs\"",
         "build": "npm-run-all clean build-dist minify build-docs",
         "minify": "squash dist/agentscript.umd.js > dist/agentscript.umd.min.js && squash dist/agentscript.esm.js > dist/agentscript.esm.min.js",
-        "build-docs": "shx cp -R README.md dist docs && node bin/docsmodels.js",
+        "build-docs": "shx cp -R README.md dist docs && node bin/docsmodels.js && node bin/docsscripts.js",
         "build-dist": "rollup -c",
         "test": "ava",
         "pup": "ava test/models.js",
-        "foo": "rollup src/AS.js"
+        "foo": "node bin/docsscripts.js"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "devDependencies": {
