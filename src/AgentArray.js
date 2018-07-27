@@ -43,13 +43,25 @@ class AgentArray extends Array {
         return this[this.length - 1]
     }
     // Return AgentArray of property values for key from this array's objects
-    // props (key) { return this.map((a) => a[key]).toArray() }
+    // props(key) { // WAY slower than for loop
+    //     return this.map(a => a[key])
+    // }
     props(key) {
-        return this.map(a => a[key])
+        const result = new AgentArray(this.length)
+        for (let i = 0; i < this.length; i++) {
+            result[i] = this[i][key]
+        }
+        return result
     }
     // Return AgentArray of values of the function fcn
+    // Similar to "props" but can return computation over all keys
+    // Odd: as.props('type') twice as fast as as.values(p => p.type)?
     values(fcn) {
-        return this.map(a => fcn(a))
+        const result = new AgentArray(this.length)
+        for (let i = 0; i < this.length; i++) {
+            result[i] = fcn(this[i])
+        }
+        return result
     }
     // Returns AgentArray of unique elements in this *sorted* AgentArray.
     // Use sortBy or clone & sortBy if needed.

@@ -152,6 +152,18 @@ const util = {
         console.timeEnd(name)
     },
 
+    fps() {
+        const start = performance.now()
+        let steps = 0
+        return function step() {
+            steps++
+            const ms = performance.now() - start
+            const fps = parseFloat((steps / (ms / 1000)).toFixed(2))
+            Object.assign(step, { fps, ms, steps })
+        }
+    },
+
+    // Print Prototype Stack: see your vars all the way down!
     pps(obj, title = '') {
         if (title) console.log(title) // eslint-disable-line
         let count = 1
@@ -255,7 +267,7 @@ const util = {
     // A [modulus](http://mathjs.org/docs/reference/functions/mod.html)
     // function rather than %, the remainder function.
     // [`((v % n) + n) % n`](http://goo.gl/spr24) also works.
-    mod: (v, n) => (v % n + n) % n, // v - n * Math.floor(v / n),
+    mod: (v, n) => ((v % n) + n) % n, // v - n * Math.floor(v / n),
     // Wrap v around min, max values if v outside min, max
     wrap: (v, min, max) => min + util.mod(v - min, max - min),
     // Clamp a number to be between min/max.
@@ -282,8 +294,8 @@ const util = {
     // Degrees & Radians
     // radians: (degrees) => util.mod(degrees * Math.PI / 180, Math.PI * 2),
     // degrees: (radians) => util.mod(radians * 180 / Math.PI, 360),
-    radians: degrees => degrees * Math.PI / 180,
-    degrees: radians => radians * 180 / Math.PI,
+    radians: degrees => (degrees * Math.PI) / 180,
+    degrees: radians => (radians * 180) / Math.PI,
     // Heading & Angles:
     // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
     // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
