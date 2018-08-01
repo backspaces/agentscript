@@ -176,11 +176,20 @@ class AgentSet extends AgentArray {
         return Object.setPrototypeOf(a, this.agentProto)
     }
 
+    ask(fcn) {
+        if (this.length === 0) return
+        const lastID = this.last().id
+        for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
+        // for (let i = 0; this[i].id <= lastID; i++) { // nope.
+            fcn(this[i], i, this)
+        }
+    }
     // Call fcn(agent, index, array) for each item in AgentArray.
     // Return the AgentArray for chaining.
     // Note: 5x+ faster than this.forEach(fcn) !!
     // Manages immutability reasonably well.
     askSet(fcn) {
+        if (this.length === 0) return
         if (this.name === 'patches') super.ask(fcn) // Patches are static
         if (this.isBaseSet()) this.baseSetAsk(fcn)
         if (this.isBreedSet()) this.cloneAsk(fcn)
@@ -191,7 +200,7 @@ class AgentSet extends AgentArray {
     // This allows us to manage mutations by allowing length change,
     // and managing deletions only within the original length.
     baseSetAsk(fcn) {
-        if (this.length === 0) return this
+        if (this.length === 0) return
         // const length = this.length
         const lastID = this.last().id
 
@@ -224,7 +233,7 @@ class AgentSet extends AgentArray {
                 fcn(obj, i, clone)
             }
         }
-        return this
+        // return this
     }
 }
 

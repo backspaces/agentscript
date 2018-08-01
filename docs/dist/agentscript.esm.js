@@ -763,22 +763,31 @@ class AgentArray extends Array {
         return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
     }
     // Call fcn(agent, index, array) for each agent in AgentArray.
-    // Return the AgentArray for chaining.
+    // Array assumed not mutable
     // Note: 5x+ faster than this.forEach(fcn) !!
-    // each(fcn) {
-    //     for (let i = 0, len = this.length; i < len; i++) {
-    //         fcn(this[i], i, this)
-    //     }
-    //     return this
-    // }
+    each(fcn) {
+        for (let i = 0, len = this.length; i < len; i++) {
+            fcn(this[i], i, this);
+        }
+        // return this
+    }
 
     // Call fcn(agent, index, array) for each item in AgentArray.
-    // Return the AgentArray for chaining.
-    // Note: 5x+ faster than this.forEach(fcn) !!
-    // Warns on array mutation (length change)
+    // Array can shrink. If it grows, will not visit beyond original length
+    // ask(fcn) {
+    //     for (
+    //         let i = 0, len = this.length;
+    //         i < len || i < this.length; // this[i] !== undefined;
+    //         i++
+    //     ) {
+    //         fcn(this[i], i, this)
+    //     }
+    //     // return this
+    // }
     ask(fcn) {
         const length = this.length;
-        for (let i = 0; i < this.length; i++) {
+        // for (let i = 0; i < length || i < this.length; i++) {
+        for (let i = 0; i < Math.min(length, this.length); i++) {
             fcn(this[i], i, this);
             if (length != this.length) {
                 const name = this.name || this.constructor.name;
@@ -789,7 +798,7 @@ class AgentArray extends Array {
                 );
             }
         }
-        return this
+        // return this
     }
     // ask(fcn) {
     //     if (this.length === 0) return
@@ -1224,11 +1233,20 @@ class AgentSet extends AgentArray {
         return Object.setPrototypeOf(a, this.agentProto)
     }
 
+    ask(fcn) {
+        if (this.length === 0) return
+        const lastID = this.last().id;
+        for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
+        // for (let i = 0; this[i].id <= lastID; i++) { // nope.
+            fcn(this[i], i, this);
+        }
+    }
     // Call fcn(agent, index, array) for each item in AgentArray.
     // Return the AgentArray for chaining.
     // Note: 5x+ faster than this.forEach(fcn) !!
     // Manages immutability reasonably well.
     askSet(fcn) {
+        if (this.length === 0) return
         if (this.name === 'patches') super.ask(fcn); // Patches are static
         if (this.isBaseSet()) this.baseSetAsk(fcn);
         if (this.isBreedSet()) this.cloneAsk(fcn);
@@ -1239,7 +1257,7 @@ class AgentSet extends AgentArray {
     // This allows us to manage mutations by allowing length change,
     // and managing deletions only within the original length.
     baseSetAsk(fcn) {
-        if (this.length === 0) return this
+        if (this.length === 0) return
         // const length = this.length
         const lastID = this.last().id;
 
@@ -1272,7 +1290,7 @@ class AgentSet extends AgentArray {
                 fcn(obj, i, clone);
             }
         }
-        return this
+        // return this
     }
 }
 
