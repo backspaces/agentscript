@@ -88,4 +88,7 @@ const testSamples = {
 
     turtles:
         '{"model":["worldOptions","world","patches","turtles","links","modelDone"],"patches":1089,"patch":{"id":624},"turtles":10000,"turtle":{"id":758,"theta":5.215523556289598,"speed":0.04402307923326556,"x":8.389262507841408,"y":12.916766215385438},"links":0}',
+
+    water:
+        '{"model":["worldOptions","world","patches","turtles","links","strength","surfaceTension","friction","modelDone"],"patches":10201,"patch":{"id":1371,"zpos":-0.4077752004758064,"deltaZ":-0.036026089818331775,"neighbors4":[1270,1372,1472,1370]},"turtles":0,"links":0}',
 }

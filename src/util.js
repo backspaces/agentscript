@@ -572,18 +572,18 @@ const util = {
     // steps < 0: forever (default), steps === 0 is no-op
     // Returns a promise for when done. If forever, no need to use it.
     async timeoutLoop(fcn, steps = -1, ms = 0) {
-        while (steps-- !== 0) {
-            // Note decr occurs *after* comparison
-            fcn()
+        let i = 0
+        while (i++ !== steps) {
+            fcn(i)
             await this.timeoutPromise(ms)
         }
     },
 
     yieldLoop(fcn, steps = -1) {
+        let i = 0
         function* gen() {
-            while (steps-- !== 0) {
-                // Note decr occurs *after* comparison
-                yield fcn()
+            while (i++ !== steps) {
+                yield fcn(i)
             }
         }
         const iterator = gen()
@@ -595,9 +595,9 @@ const util = {
         return new Promise(resolve => requestAnimationFrame(resolve))
     },
     async rafLoop(fcn, steps = -1) {
-        while (steps-- !== 0) {
-            // Note decr occurs *after* comparison
-            fcn()
+        let i = 0
+        while (i++ !== steps) {
+            fcn(i)
             await this.rafPromise()
         }
     },
