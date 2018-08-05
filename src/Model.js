@@ -25,6 +25,7 @@ class Model {
         this[name] = agentset
     }
     resetModel() {
+        this.ticks = 0
         this.world = new World(this.worldOptions)
         // Base AgentSets setup here. Breeds handled by setup
         this.initAgentSet('patches', Patches, Patch)
@@ -33,6 +34,9 @@ class Model {
     }
     reset() {
         this.resetModel()
+    }
+    tick() {
+        this.ticks++
     }
 
     // ### User Model Creation

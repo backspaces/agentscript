@@ -9,7 +9,7 @@
     const appName = document.location.search.substring(1) || 'test'
     const appPath = `./${appName}.js`
     console.log('running:', appPath)
-    document.title = `test:${appName}`
+    document.title = `${appName}`
 
     util.setScript(appPath, {type: 'module'})
   </script>
