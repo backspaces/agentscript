@@ -354,6 +354,15 @@ const util = {
 
     // ### Arrays, Objects and Iteration
 
+    objectPropertyTypes(obj) {
+        const propNames = Object.keys(obj);
+        const result = {};
+        for (const prop of propNames) {
+            result[prop] = this.typeOf(obj[prop]);
+        }
+        return result
+    },
+
     // Repeat function f(i, a) n times, i in 0, n-1, a is optional array
     repeat(n, f, a = []) {
         for (let i = 0; i < n; i++) f(i, a);
@@ -2657,13 +2666,13 @@ class RGBDataSet extends DataSet {
 // See stack overflow Ramda fcn: https://goo.gl/VNb362
 // REMIND: util.isObject(msg)
 
-function type(val) {
-    return val === null
-        ? 'Null'
-        : val === undefined
-            ? 'Undefined'
-            : Object.prototype.toString.call(val).slice(8, -1)
-}
+// function type(val) {
+//     return val === null
+//         ? 'Null'
+//         : val === undefined
+//             ? 'Undefined'
+//             : Object.prototype.toString.call(val).slice(8, -1)
+// }
 
 function toJSON(obj, indent = 0, topLevelArrayOK = true) {
     let firstCall = topLevelArrayOK;
@@ -2713,12 +2722,10 @@ function sampleJSON(model, indent = 0) {
 // Print a message to an html element.
 // If msg is an object, convert to JSON.
 function printToPage(msg, element = document.body) {
-    // if (this.isObject(msg)) msg = JSON.stringify(msg, null, 2)
-    if (type(msg) === 'Object') {
+    if (util.isObject(msg)) {
         msg = JSON.stringify(msg, null, 2);
         msg = '<pre>' + msg + '</pre>';
     }
-    // const isObj = type(msg) === 'Object'
 
     element.style.fontFamily = 'monospace';
     element.innerHTML += msg + '<br />';
