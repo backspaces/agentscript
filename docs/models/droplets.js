@@ -1,4 +1,4 @@
-import {AgentArray, RGBDataSet, Model, modelIO, util} from '../dist/agentscript.esm.js'
+import {AgentArray, RGBDataSet, Model, modelIO, util} from '../dist/agentscript.esm.min.js'
 
 util.toWindow({ AgentArray, Model, RGBDataSet, modelIO, util })
 

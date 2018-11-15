@@ -1,4 +1,4 @@
-import {Model} from '../dist/agentscript.esm.js'
+import {Model} from '../dist/agentscript.esm.min.js'
 // import util from '../src/util.js'
 
 export default class WaterModel extends Model {

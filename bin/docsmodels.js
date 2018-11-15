@@ -17,7 +17,7 @@ paths.forEach(path => {
     shell.echo('=====', `${path}: ${importNames}`)
 
     // Make the one-liner import
-    const imports = `import {${importNames}} from '../dist/agentscript.esm.js'`
+    const imports = `import {${importNames}} from '../dist/agentscript.esm.min.js'`
 
     // Replace multiple imports with single import.
     // Write results to docs/path

@@ -1,4 +1,4 @@
-import {Model, util} from '../dist/agentscript.esm.js'
+import {Model, util} from '../dist/agentscript.esm.min.js'
 
 export default class FlockModel extends Model {
     constructor(world) {

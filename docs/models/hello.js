@@ -1,4 +1,4 @@
-import {modelIO, util} from '../dist/agentscript.esm.js'
+import {modelIO, util} from '../dist/agentscript.esm.min.js'
 import HelloModel from './HelloModel.js'
 
 util.toWindow({ HelloModel, modelIO, util })

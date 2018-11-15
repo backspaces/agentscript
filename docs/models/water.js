@@ -1,4 +1,4 @@
-import {modelIO, util} from '../dist/agentscript.esm.js'
+import {modelIO, util} from '../dist/agentscript.esm.min.js'
 import WaterModel from './WaterModel.js'
 
 util.toWindow({ WaterModel, modelIO, util })

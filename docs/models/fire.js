@@ -1,4 +1,4 @@
-import {modelIO, util} from '../dist/agentscript.esm.js'
+import {modelIO, util} from '../dist/agentscript.esm.min.js'
 import FireModel from './FireModel.js'
 
 util.toWindow({ FireModel, modelIO, util })
