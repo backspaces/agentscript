@@ -53,6 +53,81 @@ class AgentArray extends Array {
         }
         return result
     }
+    propsArrays(keys, indexed = true) {
+        const result = indexed ? {} : new AgentArray(this.length)
+        if (util.isString(keys)) keys = keys.split(' ')
+        for (let i = 0; i < this.length; i++) {
+            const vals = []
+            const agent = this[i]
+            for (let j = 0; j < keys.length; j++) {
+                vals.push(agent[keys[j]])
+            }
+            result[indexed ? agent.id : i] = vals
+        }
+        return result
+    }
+    propsObjects(keys, indexed = true) {
+        const result = indexed ? {} : new AgentArray(this.length)
+        // if (util.isString(keys)) keys = keys.split(' ')
+        if (util.isString(keys)) keys = keys.split(/,*  */)
+        for (let i = 0; i < this.length; i++) {
+            const vals = {}
+            const agent = this[i]
+            for (let j = 0; j < keys.length; j++) {
+                // Parse key/val pair for nested objects
+                let key = keys[j],
+                    val
+                if (key.includes(':')) {
+                    [key, val] = key.split(':')
+                    val = util.getNestedObject(agent, val)
+                } else {
+                    if (key.includes('.')) {
+                        throw Error(
+                            'propsObjects: dot notation requires name:val: ' +
+                                key
+                        )
+                    }
+                    val = agent[key]
+                }
+
+                // If function, val is result of calling it w/ no args
+                if (util.typeOf(val) === 'function') val = agent[val.name]()
+
+                // Do id substitution for arrays & objects
+                if (util.isArray(val)) {
+                    if (util.isInteger(val[0].id)) {
+                        if (val.ID) {
+                            throw Error(
+                                'propsObjects: value cannot be an AgentSet: ' +
+                                    key
+                            )
+                        }
+                        // assume all are agents, replace w/ id
+                        val = val.map(v => v.id)
+                    } else {
+                        // Should check that all values are primitives
+                        val = util.clone(val)
+                    }
+                } else if (util.isObject(val)) {
+                    if (util.isInteger(val.id)) {
+                        val = val.id
+                    } else {
+                        val = Object.assign({}, obj)
+                        util.forEach(val, (v, key) => {
+                            // Should check that all values are primitives
+                            if (util.isInteger(v.id)) {
+                                v[key] = v.id
+                            }
+                        })
+                    }
+                }
+
+                vals[key] = val
+            }
+            result[indexed ? agent.id : i] = vals
+        }
+        return result
+    }
     // Return AgentArray of values of the function fcn
     // Similar to "props" but can return computation over all keys
     // Odd: as.props('type') twice as fast as as.values(p => p.type)?

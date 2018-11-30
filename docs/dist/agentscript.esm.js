@@ -12,25 +12,35 @@ const util = {
             .call(obj)
             .match(/\s(\w+)/)[1]
             .toLowerCase()),
+    isType: (obj, string) => util.typeOf(obj) === string,
+    // Is a number an integer (rather than a float w/ non-zero fractional part)
+    isString: obj => util.isType(obj, 'string'),
+    isObject: obj => util.isType(obj, 'object'),
+    isArray: obj => util.isType(obj, 'array'),
+    isNumber: obj => util.isType(obj, 'number'),
+    // isInteger: Number.isInteger || (num => Math.floor(num) === num),
+    isInteger: obj => Number.isInteger(obj), // assume es6, babel otherwise.
+    isImage: obj => util.isType(obj, 'image'),
+
+    // Is undefined, null, bool, number, string, symbol
+    isPrimitive: obj => obj == null || 'object' != typeof obj,
+
     isOneOfTypes: (obj, array) => array.includes(util.typeOf(obj)),
-    // isUintArray: (obj) => util.typeOf(obj).match(/uint.*array/),
-    isUintArray: obj => /^uint.*array$/.test(util.typeOf(obj)),
-    isIntArray: obj => /^int.*array$/.test(util.typeOf(obj)),
-    isFloatArray: obj => /^float.*array$/.test(util.typeOf(obj)),
-    isImage: obj => util.typeOf(obj) === 'image',
     isImageable: obj =>
         util.isOneOfTypes(obj, [
             'image',
             'htmlimageelement',
             'htmlcanvaselement',
+            'offscreencanvas',
         ]),
+
+    // isUintArray: (obj) => util.typeOf(obj).match(/uint.*array/),
+    isUintArray: obj => /^uint.*array$/.test(util.typeOf(obj)),
+    isIntArray: obj => /^int.*array$/.test(util.typeOf(obj)),
+    isFloatArray: obj => /^float.*array$/.test(util.typeOf(obj)),
     // Is obj TypedArray? If obj.buffer not present, works, type is 'undefined'
     isTypedArray: obj => util.typeOf(obj.buffer) === 'arraybuffer',
-    // Is a number an integer (rather than a float w/ non-zero fractional part)
-    isInteger: Number.isInteger || (num => Math.floor(num) === num),
-    // Is obj a string?
-    isString: obj => util.typeOf(obj) === 'string',
-    isObject: obj => util.typeOf(obj) === 'object',
+
     // Return array's type (Array or TypedArray variant)
     typeName: obj => obj.constructor.name,
 
@@ -357,6 +367,15 @@ const util = {
         return result
     },
 
+    getNestedObject(object, string) {
+        const objs = string.split('.');
+        if (objs.length === 1) return object[string]
+        return objs.reduce((acc, val) => {
+            if (acc === undefined) return undefined
+            return acc[val]
+        }, object)
+    },
+
     // Repeat function f(i, a) n times, i in 0, n-1, a is optional array
     repeat(n, f, a = []) {
         for (let i = 0; i < n; i++) f(i, a);
@@ -411,6 +430,15 @@ const util = {
         }
         return arrayOrObj
     },
+    // forEach(array, fcn) {
+    //     // typed & std arrays
+    //     for (let i = 0, len = array.length; i < len; i++) {
+    //         fcn(array[i], i, array)
+    //     }
+    // },
+    // forEachKey(obj, fcn) {
+    //     Object.keys(obj).forEach(k => fcn(obj[k], k, obj))
+    // },
 
     // Return a new shallow of array, either Array or TypedArray
     clone(array) {
@@ -648,9 +676,14 @@ const util = {
 
     // Create a blank 2D canvas of a given width/height
     createCanvas(width, height) {
-        const can = document.createElement('canvas');
-        Object.assign(can, { width, height });
-        return can
+        // Try OffscreenCanvas in workers and main:
+        if (OffscreenCanvas) return new OffscreenCanvas(width, height)
+        // Fallback to DOM if in main
+        if (document) return document.createElement('canvas')
+        // Error if in worker and no OffscreenCanvas
+        throw Error(
+            'createCanvas: Browser does not support worker OffscreenCanvas'
+        )
     },
     // As above, but returing the 2D context object.
     // NOTE: ctx.canvas is the canvas for the ctx, and can be use as an image.
@@ -699,6 +732,73 @@ const util = {
         this.setIdentity(ctx); // set/restore identity
         ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.restore();
+    },
+
+    // Use webgl texture to convert img to Uint8Array w/o alpha premultiply
+    // or color profile modification.
+    // Img can be Image, ImageData, Canvas: [See MDN](https://goo.gl/a3oyRA).
+    // `flipY` is used to invert image to upright.
+    imageToBytesCtx: null,
+    imageToBytes(img, flipY = false, imgFormat = 'RGBA') {
+        // Create the gl context using the image width and height
+        if (!this.imageToBytesCtx) {
+            const can = this.createCanvas(0, 0);
+            this.imageToBytesCtx = can.getContext('webgl', {
+                premultipliedAlpha: false,
+            });
+        }
+
+        const { width, height } = img;
+        const gl = this.imageToBytesCtx;
+        Object.assign(gl.canvas, { width, height });
+        const fmt = gl[imgFormat];
+
+        // Create and initialize the texture.
+        const texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        if (flipY) {
+            // Mainly used for pictures rather than data
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        }
+        // Insure [no color profile applied](https://goo.gl/BzBVJ9):
+        gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+        // Insure no [alpha premultiply](http://goo.gl/mejNCK).
+        // False is the default, but lets make sure!
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+
+        // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
+        gl.texImage2D(gl.TEXTURE_2D, 0, fmt, fmt, gl.UNSIGNED_BYTE, img);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+
+        // Create the framebuffer used for the texture
+        const framebuffer = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+        gl.framebufferTexture2D(
+            gl.FRAMEBUFFER,
+            gl.COLOR_ATTACHMENT0,
+            gl.TEXTURE_2D,
+            texture,
+            0
+        );
+
+        // See if it all worked. Apparently not async.
+        const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        if (status !== gl.FRAMEBUFFER_COMPLETE) {
+            throw Error(
+                `imageToBytes: status not FRAMEBUFFER_COMPLETE: ${status}`
+            )
+        }
+
+        // If all OK, create the pixels buffer and read data.
+        const pixSize = imgFormat === 'RGB' ? 3 : 4;
+        const pixels = new Uint8Array(pixSize * width * height);
+        // gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels)
+        gl.readPixels(0, 0, width, height, fmt, gl.UNSIGNED_BYTE, pixels);
+
+        // Unbind the framebuffer and return pixels
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        return pixels
     },
 };
 
@@ -752,6 +852,81 @@ class AgentArray extends Array {
         const result = new AgentArray(this.length);
         for (let i = 0; i < this.length; i++) {
             result[i] = this[i][key];
+        }
+        return result
+    }
+    propsArrays(keys, indexed = true) {
+        const result = indexed ? {} : new AgentArray(this.length);
+        if (util.isString(keys)) keys = keys.split(' ');
+        for (let i = 0; i < this.length; i++) {
+            const vals = [];
+            const agent = this[i];
+            for (let j = 0; j < keys.length; j++) {
+                vals.push(agent[keys[j]]);
+            }
+            result[indexed ? agent.id : i] = vals;
+        }
+        return result
+    }
+    propsObjects(keys, indexed = true) {
+        const result = indexed ? {} : new AgentArray(this.length);
+        // if (util.isString(keys)) keys = keys.split(' ')
+        if (util.isString(keys)) keys = keys.split(/,*  */);
+        for (let i = 0; i < this.length; i++) {
+            const vals = {};
+            const agent = this[i];
+            for (let j = 0; j < keys.length; j++) {
+                // Parse key/val pair for nested objects
+                let key = keys[j],
+                    val;
+                if (key.includes(':')) {
+                    [key, val] = key.split(':');
+                    val = util.getNestedObject(agent, val);
+                } else {
+                    if (key.includes('.')) {
+                        throw Error(
+                            'propsObjects: dot notation requires name:val: ' +
+                                key
+                        )
+                    }
+                    val = agent[key];
+                }
+
+                // If function, val is result of calling it w/ no args
+                if (util.typeOf(val) === 'function') val = agent[val.name]();
+
+                // Do id substitution for arrays & objects
+                if (util.isArray(val)) {
+                    if (util.isInteger(val[0].id)) {
+                        if (val.ID) {
+                            throw Error(
+                                'propsObjects: value cannot be an AgentSet: ' +
+                                    key
+                            )
+                        }
+                        // assume all are agents, replace w/ id
+                        val = val.map(v => v.id);
+                    } else {
+                        // Should check that all values are primitives
+                        val = util.clone(val);
+                    }
+                } else if (util.isObject(val)) {
+                    if (util.isInteger(val.id)) {
+                        val = val.id;
+                    } else {
+                        val = Object.assign({}, obj);
+                        util.forEach(val, (v, key) => {
+                            // Should check that all values are primitives
+                            if (util.isInteger(v.id)) {
+                                v[key] = v.id;
+                            }
+                        });
+                    }
+                }
+
+                vals[key] = val;
+            }
+            result[indexed ? agent.id : i] = vals;
         }
         return result
     }

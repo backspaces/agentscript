@@ -28,7 +28,7 @@
         "clean": "cross-env-shell \"shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs\"",
         "build": "npm-run-all clean build-dist minify build-docs",
         "minify": "terser dist/agentscript.umd.js > dist/agentscript.umd.min.js && terser dist/agentscript.esm.js > dist/agentscript.esm.min.js",
-        "build-docs": "shx cp -R README.md dist docs && node bin/docsmodels.js && node bin/docsscripts.js",
+        "build-docs": "shx cp -R README.md dist tests docs && node bin/docsmodels.js && node bin/docsscripts.js",
         "build-dist": "rollup -c",
         "test": "ava",
         "pup": "ava test/models.js",

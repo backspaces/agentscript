@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fire</title>
+
+        <script src="https://backspaces.github.io/agentscript/dist/agentscript.umd.js"></script>
+
+    </head>
+
+    <body>
+        <script>
+            const src = `
+                // importScripts('../dist/agentscript.umd.js')
+                // importScripts('../models/FireScript.js')
+                importScripts('https://backspaces.github.io/agentscript/dist/agentscript.umd.js')
+                importScripts('https://backspaces.github.io/agentscript/models/FireScript.js')
+
+
+                // note using script global, AS dumped into self
+                util.randomSeed(1)
+
+                const options = FireModel.defaultWorld(125) // ditto
+                const model = new FireModel(options)
+                model.setup()
+                console.log('worker model', model)
+
+                const perf = util.fps()
+                while (!model.isDone()) {
+                    model.step()
+                    const data = model.patches.props('type')
+                    postMessage(data)
+                    perf()
+                }
+                // postMessage('done') // could let main know we're done
+                console.log('worker: done. steps, fps', perf.steps, perf.fps)
+                postMessage('done')
+            `
+            const srcURL = URL.createObjectURL(new Blob([src]))
+            const worker = new Worker(srcURL)
+
+            worker.onerror = function(e) {
+                console.log('ERROR: Line ', e.lineno, ': ', e.message)
+            }
+
+            const perf = AS.util.fps()
+            const data = [] // 515 arrays of 63001 elements each!
+            worker.onmessage = e => {
+                if (e.data === 'done') {
+                    console.log('main: done. steps, fps', perf.steps, perf.fps)
+                    console.log('data:', data)
+                } else {
+                    data.push(e.data)
+                    perf()
+                }
+            }
+            // use "perf.fps" in console to see the current fps.
+        </script>
+    </body>
+</html>
