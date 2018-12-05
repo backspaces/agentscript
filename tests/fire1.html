@@ -12,19 +12,20 @@
             worker.onerror = function(e) {
                 console.log('ERROR: Line ', e.lineno, ': ', e.message)
             }
+            console.log('worker:', worker)
 
             const perf = util.fps()
             const data = [] // 515 arrays of 63001 elements each!
             worker.onmessage = e => {
                 if (e.data === 'done') {
-                    console.log('main: done. steps, fps', perf.steps, perf.fps)
+                    console.log('main: done.')
                     console.log('data:', data)
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                 } else {
                     data.push(e.data)
                     perf()
                 }
             }
-            console.log('worker:', worker)
         </script>
     </body>
 </html>

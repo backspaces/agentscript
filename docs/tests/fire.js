@@ -5,7 +5,7 @@ import FireModel from '../models/FireModel.js'
 let model
 
 onmessage = e => {
-    console.log('worker onmessage e.data = ', e.data)
+    // console.log('worker onmessage e.data = ', e.data)
     if (e.data.cmd === 'init') {
         const options = FireModel.defaultWorld(e.data.size)
         model = new FireModel(options)

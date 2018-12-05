@@ -23,27 +23,26 @@
                 console.log('ERROR: Line ', e.lineno, ': ', e.message)
             }
             worker.postMessage({ cmd: 'init', size: maxX })
-
-            util.toWindow({worker})
+            console.log('worker:', worker)
+            util.toWindow({ worker })
 
             const perf = util.fps()
             const data = [] // 515 arrays of 63001 elements each!
             worker.onmessage = e => {
                 if (e.data === 'done') {
-                    console.log('main: done. steps, fps', perf.steps, perf.fps)
+                    console.log('main: done.')
                     console.log('data:', data)
-                    console.log('main onmessage e.data = ', e.data)
+                    // console.log('main onmessage e.data = ', e.data)
                     console.log('First data', data[0])
                     console.log('Last data', data[data.length - 1])
                     window.data = data
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                 } else {
                     console.log('main: step')
                     data.push(e.data)
                     perf()
                     draw(e.data)
-                    // setTimeout(() => {
                     worker.postMessage({ cmd: 'step' })
-                    // }, 0)
                 }
             }
 
@@ -65,8 +64,6 @@
                 s = s.replace(/0/g, '.')
                 document.body.innerHTML = `<pre>${s}</pre>`
             }
-
-            console.log('worker:', worker)
         </script>
     </body>
 </html>

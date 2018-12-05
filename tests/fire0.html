@@ -2,21 +2,35 @@
 <html>
     <head>
         <title>Fire</title>
-
-        <script src="https://backspaces.github.io/agentscript/dist/agentscript.umd.js"></script>
-
     </head>
 
     <body>
-        <script>
-            const src = `
-                // importScripts('../dist/agentscript.umd.js')
-                // importScripts('../models/FireScript.js')
-                importScripts('https://backspaces.github.io/agentscript/dist/agentscript.umd.js')
-                importScripts('https://backspaces.github.io/agentscript/models/FireScript.js')
+        <script type="module">
+            import { util } from '../dist/agentscript.esm.js'
+            function fcnToURL(fcn) {
+                const str = fcn
+                    .toString()
+                    // .replace(/^.*\(\).*{/, '')
+                    .replace(/^.*{/, '')
+                    .replace(/}$/, '')
+                    .replace(/\/\/  *import /g, 'import ')
+                window.fstr = str
+                return URL.createObjectURL(
+                    new Blob([str], { type: 'text/javascript' })
+                )
+            }
+            function workerSrc() {
+                // Note blob urls must be local or global, not relative
+                // import {util} from 'https://backspaces.github.io/agentscript/dist/agentscript.esm.js'
+                // import FireModel from 'https://backspaces.github.io/agentscript/models/FireModel.js'
+                // importScripts(
+                //     'https://backspaces.github.io/agentscript/dist/agentscript.umd.js'
+                // )
+                // importScripts(
+                //     'https://backspaces.github.io/agentscript/models/FireScript.js'
+                // )
 
-
-                // note using script global, AS dumped into self
+                // note using importScripts, AS dumped into self
                 util.randomSeed(1)
 
                 const options = FireModel.defaultWorld(125) // ditto
@@ -31,29 +45,30 @@
                     postMessage(data)
                     perf()
                 }
-                // postMessage('done') // could let main know we're done
+
                 console.log('worker: done. steps, fps', perf.steps, perf.fps)
                 postMessage('done')
-            `
-            const srcURL = URL.createObjectURL(new Blob([src]))
-            const worker = new Worker(srcURL)
+            }
 
+            const workerURL = fcnToURL(workerSrc)
+            const worker = new Worker(workerURL, { type: 'module' })
             worker.onerror = function(e) {
                 console.log('ERROR: Line ', e.lineno, ': ', e.message)
             }
+            console.log('worker:', worker)
 
-            const perf = AS.util.fps()
+            const perf = util.fps()
             const data = [] // 515 arrays of 63001 elements each!
             worker.onmessage = e => {
                 if (e.data === 'done') {
-                    console.log('main: done. steps, fps', perf.steps, perf.fps)
+                    console.log('main: done.')
                     console.log('data:', data)
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                 } else {
                     data.push(e.data)
                     perf()
                 }
             }
-            // use "perf.fps" in console to see the current fps.
         </script>
     </body>
 </html>

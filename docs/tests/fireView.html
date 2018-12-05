@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fire</title>
+        <style>
+            /* Drawing with fixed width text */
+            body {
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 8px;
+            }
+            /* canvas {
+                width: 600px;
+                height: 600px;
+            } */
+        </style>
+    </head>
+
+    <body>
+        <canvas id="model" width="600" height="600"></canvas>
+        <script type="module">
+            import { util } from '../dist/agentscript.esm.js'
+            import PatchesView from './PatchesView.js'
+            util.toWindow({ util, PatchesView })
+
+            const maxX = 50
+            const width = 2 * maxX + 1
+            const canvas = document.getElementById('model')
+            const canvasCtx = canvas.getContext('2d')
+            canvasCtx.imageSmoothingEnabled = false
+            util.toWindow({ canvas, canvasCtx })
+
+            const worker = new Worker('fireView.js', { type: 'module' })
+            worker.onerror = function(e) {
+                console.log('ERROR: Line ', e.lineno, ': ', e.message)
+            }
+            worker.postMessage({ cmd: 'init', size: maxX })
+            console.log('worker:', worker)
+            util.toWindow({ worker })
+
+            const perf = util.fps()
+            const data = [] // one array of width**2 long each step
+            worker.onmessage = e => {
+                if (e.data === 'done') {
+                    console.log('main: done.')
+                    console.log('data:', data)
+                    console.log('First data', data[0])
+                    console.log('Last data', data[data.length - 1])
+                    console.log('Last pixels', patchesView.pixels)
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                } else {
+                    console.log('main: step')
+                    data.push(e.data)
+                    perf()
+                    draw(e.data)
+                    worker.postMessage({ cmd: 'step' })
+                }
+            }
+
+            const patchesView = new PatchesView(width, width)
+            const patchPixels = {
+                dirt: PatchesView.cssToPixel('yellow'),
+                tree: PatchesView.cssToPixel('green'),
+                fire: PatchesView.cssToPixel('red'),
+                ember4: PatchesView.rgbaToPixel(255 - 25, 0, 0),
+                ember3: PatchesView.rgbaToPixel(255 - 50, 0, 0),
+                ember2: PatchesView.rgbaToPixel(255 - 75, 0, 0),
+                ember1: PatchesView.rgbaToPixel(255 - 100, 0, 0),
+                ember0: PatchesView.rgbaToPixel(255 - 125, 0, 0),
+            }
+            util.toWindow({ patchesView, patchPixels })
+            function draw(data) {
+                patchesView.installPixels(data, d => patchPixels[d])
+                patchesView.draw(canvasCtx)
+            }
+        </script>
+    </body>
+</html>

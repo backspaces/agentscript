@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 const shell = require('shelljs')
 
 const paths = shell.ls('models/*.js')
