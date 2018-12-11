@@ -32,7 +32,7 @@
         "build-dist": "rollup -c",
         "test": "ava",
         "pup": "ava test/models.js",
-        "foo": "node bin/docsscripts.js"
+        "foo": "shx cp -R tests docs"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "devDependencies": {

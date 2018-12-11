@@ -26,7 +26,7 @@ export default class PatchesView {
 
     // Ctor: create a 2D context and imageData for this View
     constructor(width, height) {
-        this.ctx = util.createCtx(width, width)
+        this.ctx = util.createCtx(width, height)
         this.imageData = util.ctxImageData(this.ctx)
         this.pixels = new Uint32Array(this.imageData.data.buffer)
     }
@@ -36,7 +36,12 @@ export default class PatchesView {
     // or data derived from patches using patch state values.
     installPixels(data, pixelFcn) {
         if (data.length != this.pixels.length) {
-            throw Error('installPixels, data.length != pixels.length')
+            throw Error(
+                'installPixels, data.length != pixels.length ' +
+                    data.length +
+                    ' ' +
+                    this.pixels.length
+            )
         }
         util.forEach(data, (d, i) => {
             this.pixels[i] = pixelFcn(d)

@@ -227,14 +227,28 @@ const util = {
     // ### HTML, CSS, DOM
 
     // REST: Parse the query, returning an object of key/val pairs.
-    parseQueryString() {
+    // parseQueryString() {
+    //     const results = {}
+    //     const query = document.location.search.substring(1)
+    //     query.split('&').forEach(s => {
+    //         const param = s.split('=')
+    //         // If just key, no val, set val to true
+    //         results[param[0]] = param.length === 1 ? true : param[1]
+    //     })
+    //     return results
+    // },
+    parseQueryString(paramsString = window.location.search.substr(1)) {
         const results = {};
-        const query = document.location.search.substring(1);
-        query.split('&').forEach(s => {
-            const param = s.split('=');
-            // If just key, no val, set val to true
-            results[param[0]] = param.length === 1 ? true : param[1];
-        });
+        const searchParams = new URLSearchParams(paramsString);
+        for (var pair of searchParams.entries()) {
+            let [key, val] = pair;
+
+            if (val.match(/^[0-9.]+$/)) val = Number(val);
+            if (['true', 't', ''].includes(val)) val = true;
+            if (['false', 'f'].includes(val)) val = false;
+
+            results[key] = val;
+        }
         return results
     },
 

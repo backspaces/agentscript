@@ -21,7 +21,7 @@ function postBits() {
     const data = model.patches.props('type')
     patchesView.installPixels(data, d => patchPixels[d])
     // const img = createImageBitmap(patchesView.imageData)
-    patchesView.getImageBitmap().then(img => postMessage(img))
+    patchesView.getImageBitmap().then(img => postMessage(img, [img]))
     // createImageBitmap(patchesView.imageData).then(img => postMessage(img))
 }
 

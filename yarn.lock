@@ -2813,8 +2813,8 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.0.tgz#a37d732f4271b4ab1ad070d35508e8290788ffaa"
 
 progress@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.1.tgz#c9242169342b1c29d275889c95734621b1952e31"
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.2.tgz#db9476f916bcc9ebe8a04efb22b18b0740376c61"
 
 proxy-from-env@^1.0.0:
   version "1.0.0"
@@ -3492,8 +3492,8 @@ term-size@^1.2.0:
     execa "^0.7.0"
 
 terser@^3.10.11:
-  version "3.10.13"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-3.10.13.tgz#00a8b2e9c1bec3f681257d90f96c3b1292ada97a"
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-3.11.0.tgz#60782893e1f4d6788acc696351f40636d0e37af0"
   dependencies:
     commander "~2.17.1"
     source-map "~0.6.1"
