@@ -38,6 +38,7 @@ const util = {
             'htmlimageelement',
             'htmlcanvaselement',
             'offscreencanvas',
+            'imagebitmap'
         ]),
 
     // isUintArray: (obj) => util.typeOf(obj).match(/uint.*array/),
@@ -746,6 +747,13 @@ const util = {
     // Return the (complete) ImageData object for this context object
     ctxImageData(ctx) {
         return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+    },
+    // Fill this context with the given css color string.
+    fillCtx(ctx, cssColor) {
+        util.setIdentity(ctx);
+        ctx.fillStyle = cssColor;
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.restore();
     },
     // Fill this context with the given image. Will scale image to fit ctx size.
     fillCtxWithImage(ctx, img) {

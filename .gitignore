@@ -6,4 +6,5 @@
 node_modules/
 npm-debug.log
 yarn-error.log
+src/SpriteSheet.js
 **/.DS_Store

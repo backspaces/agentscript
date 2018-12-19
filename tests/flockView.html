@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>FireView</title>
+        <title>FlockView</title>
     </head>
     <body>
         <canvas id="model"></canvas>
         <script type="module">
-            import { util } from '../dist/agentscript.esm.js'
-            import PatchesView from './PatchesView.js'
-            util.toWindow({ util, PatchesView })
+            import util from '../src/util.js'
+            import Shapes from '../src/Shapes.js'
+            util.toWindow({ util, Shapes })
 
             const params = {
                 seed: null,
@@ -17,16 +17,7 @@
                 cell: 3,
                 img: null,
                 data: null,
-                patchPixels: {
-                    dirt: PatchesView.cssToPixel('yellow'),
-                    tree: PatchesView.cssToPixel('green'),
-                    fire: PatchesView.cssToPixel('red'),
-                    ember4: PatchesView.rgbaToPixel(255 - 25, 0, 0),
-                    ember3: PatchesView.rgbaToPixel(255 - 50, 0, 0),
-                    ember2: PatchesView.rgbaToPixel(255 - 75, 0, 0),
-                    ember1: PatchesView.rgbaToPixel(255 - 100, 0, 0),
-                    ember0: PatchesView.rgbaToPixel(255 - 125, 0, 0),
-                },
+                done: 0.9, // stop model when model.flockVectorSize() > done
             }
             Object.assign(params, util.parseQueryString())
             if (!params.maxY) params.maxY = params.maxX
@@ -38,15 +29,15 @@
             canvas.width = params.width * params.cell
             canvas.height = params.height * params.cell
             const canvasCtx = canvas.getContext('2d')
-            canvasCtx.imageSmoothingEnabled = false
+            // canvasCtx.imageSmoothingEnabled = false
             util.toWindow({ canvas, canvasCtx })
             if (!params.img) {
-                const patchesView = new PatchesView(params.width, params.height)
-                util.toWindow({ patchesView })
+                const shapes = new Shapes()
+                util.toWindow({ shapes })
             }
 
-            const worker = new Worker('fireView.js', { type: 'module' })
-            // const worker = new Worker('fireView.js')
+            const worker = new Worker('flockView.js', { type: 'module' })
+            // const worker = new Worker('flockView.js')
             worker.onerror = function(e) {
                 console.log('ERROR: Line ', e.lineno, ': ', e.message)
             }
@@ -85,14 +76,14 @@
                 }
             }
 
-            // const patchesView = new PatchesView(params.width, params.height)
             function draw(data) {
-                if (params.img) {
-                    util.fillCtxWithImage(canvasCtx, data)
-                } else {
-                    patchesView.installPixels(data, d => params.patchPixels[d])
-                    patchesView.draw(canvasCtx)
-                }
+                console.log('data:', data)
+                // if (params.img) {
+                //     util.fillCtxWithImage(canvasCtx, data)
+                // } else {
+                //     patchesView.installPixels(data, d => params.patchPixels[d])
+                //     patchesView.draw(canvasCtx)
+                // }
             }
         </script>
     </body>

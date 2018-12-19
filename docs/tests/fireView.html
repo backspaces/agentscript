@@ -1,22 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Fire</title>
-        <!--
-            <style>
-                /* Drawing with fixed width text */
-                body {
-                    font-family: 'Courier New', Courier, monospace;
-                    font-size: 8px;
-                }
-                /* canvas {
-                    width: 600px;
-                    height: 600px;
-                } */
-            </style>
-        -->
+        <title>FireView</title>
     </head>
-
     <body>
         <canvas id="model"></canvas>
         <script type="module">
@@ -55,7 +41,8 @@
             canvasCtx.imageSmoothingEnabled = false
             util.toWindow({ canvas, canvasCtx })
             if (!params.img) {
-                var patchesView = new PatchesView(params.width, params.height)
+                const patchesView = new PatchesView(params.width, params.height)
+                util.toWindow({ patchesView })
             }
 
             const worker = new Worker('fireView.js', { type: 'module' })
@@ -70,22 +57,28 @@
             console.log('main worker:', worker)
             util.toWindow({ worker })
 
-            const perf = util.fps()
             const data = [] // one array of width*height long each step
+            let lastData
+
+            const perf = util.fps()
             worker.onmessage = e => {
                 if (e.data === 'done') {
                     console.log('main: done.')
                     if (params.data) {
-                        util.toWindow({data})
+                        util.toWindow({ data })
                         console.log('data:', data)
                         console.log('First data', data[0])
                         console.log('Last data', data[data.length - 1])
                         // console.log('Last pixels', patchesView.pixels)
+                    } else {
+                        util.toWindow({ lastData })
+                        console.log('lastData', lastData)
                     }
                     console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                 } else {
                     // console.log('main: step')
                     if (params.data) data.push(e.data)
+                    else lastData = e.data
                     perf()
                     draw(e.data)
                     worker.postMessage({ cmd: 'step' })
@@ -93,7 +86,6 @@
             }
 
             // const patchesView = new PatchesView(params.width, params.height)
-            util.toWindow({ patchesView })
             function draw(data) {
                 if (params.img) {
                     util.fillCtxWithImage(canvasCtx, data)
