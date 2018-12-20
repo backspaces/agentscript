@@ -1,7 +1,7 @@
 # Local ignores, also see ~/.gitignore
 
 # Derived files other than docs/
-/dist/
+# /dist/
 
 node_modules/
 npm-debug.log

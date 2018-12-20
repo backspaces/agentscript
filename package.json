@@ -23,12 +23,13 @@
     "bugs": {
         "url": "https://github.com/backspaces/agentscript/issues"
     },
-    "mkdirs": "dist docs",
+    "mkdirs": "dist",
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
         "build": "npm-run-all clean build-dist minify build-docs",
         "minify": "terser dist/agentscript.umd.js > dist/agentscript.umd.min.js && terser dist/agentscript.esm.js > dist/agentscript.esm.min.js",
-        "build-docs": "shx cp -R README.md _config.yml models dist tests src docs && node bin/docsmodels.js && node bin/docsscripts.js",
+        "build-docs": "shx echo build docs no-op",
+        "build-docsx": "shx cp -R README.md _config.yml models dist tests src docs && node bin/docsmodels.js && node bin/docsscripts.js",
         "build-dist": "rollup -c",
         "test": "ava",
         "pup": "ava test/models.js",
