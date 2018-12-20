@@ -23,16 +23,16 @@
     "bugs": {
         "url": "https://github.com/backspaces/agentscript/issues"
     },
-    "mkdirs": "dist docs/dist docs/models",
+    "mkdirs": "dist docs",
     "scripts": {
-        "clean": "cross-env-shell \"shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs\"",
+        "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
         "build": "npm-run-all clean build-dist minify build-docs",
         "minify": "terser dist/agentscript.umd.js > dist/agentscript.umd.min.js && terser dist/agentscript.esm.js > dist/agentscript.esm.min.js",
-        "build-docs": "shx cp -R README.md dist tests docs && node bin/docsmodels.js && node bin/docsscripts.js",
+        "build-docs": "shx cp -R README.md _config.yml models dist tests src docs && node bin/docsmodels.js && node bin/docsscripts.js",
         "build-dist": "rollup -c",
         "test": "ava",
         "pup": "ava test/models.js",
-        "foo": "shx cp -R tests docs"
+        "foo": "shx echo theme: jekyll-theme-architect > docs/_config.yml"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "devDependencies": {
