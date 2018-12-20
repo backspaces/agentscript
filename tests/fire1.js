@@ -1,4 +1,4 @@
-import { util } from '../dist/agentscript.esm.js'
+import util from '../src/util.js'
 import FireModel from '../models/FireModel.js'
 
 util.randomSeed(1) // for consistant results over runs

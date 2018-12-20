@@ -1,10 +1,9 @@
-import { util } from '../dist/agentscript.esm.js'
+import util from '../src/util.js'
 
 // The shared 1x1 canvas 2D context.
 const sharedCtx1x1 = util.createCtx(1, 1)
 
 export default class TurtlesView {
-
     // Ctor: create a 2D context and imageData for this View
     constructor(width, height) {
         this.ctx = util.createCtx(width, height)

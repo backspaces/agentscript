@@ -1,6 +1,6 @@
 // importScripts('../dist/agentscript.umd.js')
 // importScripts('../docs/models/FireScript.js')
-import { util } from '../dist/agentscript.esm.js'
+import util from '../src/util.js'
 import PatchesView from './PatchesView.js'
 import FireModel from '../models/FireModel.js'
 

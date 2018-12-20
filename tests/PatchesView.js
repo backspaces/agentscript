@@ -1,4 +1,4 @@
-import { util } from '../dist/agentscript.esm.js'
+import util from '../src/util.js'
 
 // The shared 1x1 canvas 2D context.
 const sharedCtx1x1 = util.createCtx(1, 1)
