@@ -2047,8 +2047,8 @@ class World {
     setWorld() {
         this.numX = this.maxX - this.minX + 1;
         this.numY = this.maxY - this.minY + 1;
-        this.width = this.numX; // REMIND: remove?
-        this.height = this.numY;
+        // this.width = this.numX // REMIND: remove?
+        // this.height = this.numY
         this.minXcor = this.minX - 0.5;
         this.maxXcor = this.maxX + 0.5;
         this.minYcor = this.minY - 0.5;
@@ -2068,11 +2068,11 @@ class World {
     // Convert a canvas to world coordinates.
     // The size is determined by patchSize.
     setCtxTransform(ctx, patchSize) {
-        ctx.canvas.width = this.width * patchSize;
-        ctx.canvas.height = this.height * patchSize;
+        ctx.canvas.width = this.numX * patchSize;
+        ctx.canvas.height = this.numY * patchSize;
         ctx.save();
         ctx.scale(patchSize, -patchSize);
-        ctx.translate(-(this.minXcor * patchSize), -(this.maxYcor * patchSize));
+        ctx.translate(-this.minXcor, -this.maxYcor);
     }
 }
 
