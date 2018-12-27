@@ -31,7 +31,7 @@ const util = {
             'htmlimageelement',
             'htmlcanvaselement',
             'offscreencanvas',
-            'imagebitmap'
+            'imagebitmap',
         ]),
 
     // isUintArray: (obj) => util.typeOf(obj).match(/uint.*array/),
@@ -254,6 +254,22 @@ const util = {
         // this.forEach(props, (val, key) => { scriptTag[key] = val })
         Object.assign(scriptTag, props)
         document.querySelector('head').appendChild(scriptTag)
+    },
+
+    // Convert a function into a worker via blob url.
+    // Adds generic error handler. Scripts only, not modules.
+    fcnToWorker(fcn) {
+        const href = document.location.href
+        const root = href.replace(/\/[^\/]+$/, '/')
+        const fcnStr = `(${fcn.toString(root)})("${root}")`
+        const objUrl = URL.createObjectURL(
+            new Blob([fcnStr], { type: 'text/javascript' })
+        )
+        const worker = new Worker(objUrl)
+        worker.onerror = function(e) {
+            console.log('ERROR: Line ', e.lineno, ': ', e.message)
+        }
+        return worker
     },
 
     // Get element (i.e. canvas) relative x,y position from event/mouse position.

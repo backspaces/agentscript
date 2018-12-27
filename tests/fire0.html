@@ -7,33 +7,25 @@
     <body>
         <script type="module">
             import util from '../src/util.js'
-            function fcnToURL(fcn) {
-                const str = fcn
-                    .toString()
-                    // .replace(/^.*\(\).*{/, '')
-                    .replace(/^.*{/, '')
-                    .replace(/}$/, '')
-                    .replace(/\/\/  *import /g, 'import ')
-                window.fstr = str
-                return URL.createObjectURL(
-                    new Blob([str], { type: 'text/javascript' })
-                )
-            }
-            function workerSrc() {
-                // Note blob urls must be local or global, not relative
-                // import {util} from 'https://backspaces.github.io/agentscript/dist/agentscript.esm.js'
-                // import FireModel from 'https://backspaces.github.io/agentscript/models/FireModel.js'
-                // importScripts(
-                //     'https://backspaces.github.io/agentscript/dist/agentscript.umd.js'
-                // )
-                // importScripts(
-                //     'https://backspaces.github.io/agentscript/models/FireScript.js'
-                // )
+            function workerSrc(root) {
+                importScripts(root + '../dist/agentscript.umd.js')
+                importScripts(root + '../models/FireScript.js')
+                console.log('worker self', self)
 
-                // note using importScripts, AS dumped into self
                 util.randomSeed(1)
+                const patchPixels = {
+                    ember0: 4278190210,
+                    ember1: 4278190235,
+                    ember2: 4278190260,
+                    ember3: 4278190285,
+                    ember4: 4278190310,
+                    fire: 4278190335,
+                    tree: 4278222848,
+                }
+                // main: ~70 -> 442 fps. worker around 442 either way.
+                const postPixels = true
 
-                const options = FireModel.defaultWorld(125) // ditto
+                const options = FireModel.defaultWorld(125)
                 const model = new FireModel(options)
                 model.setup()
                 console.log('worker model', model)
@@ -42,7 +34,16 @@
                 while (!model.isDone()) {
                     model.step()
                     const data = model.patches.props('type')
-                    postMessage(data)
+                    if (postPixels) {
+                        const ta = new Float64Array(data.length)
+                        util.forEach((type, i) => {
+                            // util.forEach 3x faster than native forEach!
+                            ta[i] = patchPixels[type]
+                        })
+                        postMessage(ta.buffer, [ta.buffer])
+                    } else {
+                        postMessage(data)
+                    }
                     perf()
                 }
 
@@ -50,11 +51,7 @@
                 postMessage('done')
             }
 
-            const workerURL = fcnToURL(workerSrc)
-            const worker = new Worker(workerURL, { type: 'module' })
-            worker.onerror = function(e) {
-                console.log('ERROR: Line ', e.lineno, ': ', e.message)
-            }
+            const worker = util.fcnToWorker(workerSrc)
             console.log('worker:', worker)
 
             const perf = util.fps()

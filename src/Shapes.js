@@ -23,7 +23,7 @@ class Shapes {
 
     // Return random shape function. It's name is shape.name
     oneOf() {
-        return paths[util.oneValOf(this.simplePathNames)]
+        return paths[util.oneValOf(this.getPathNames())]
     }
 
     // Set the ctx.canvas size, and install transform.
@@ -54,7 +54,8 @@ class Shapes {
         function imagePath(ctx) {
             ctx.drawImage(img, -1, -1, 2, 2)
         }
-        paths[name] = imagePath
+        // paths[name] = imagePath
+        this.setPath(name, imagePath)
     }
 
     draw(ctx, name, x, y, cells, theta = 0, fill = 'red', stroke = 'black') {

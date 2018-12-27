@@ -16,22 +16,25 @@
 
             util.toWindow({ util, Shapes, shapes, can, ctx })
 
-            const [width, height, x0, y0, cell] = [400, 200, 200, 100, 2]
+            const [cell, width, height, x0, y0] = [2, 400, 200, 0, 100]
 
             shapes.resetCtx(ctx, cell, width, height, x0, y0) // util?
             util.fillCtx(ctx, 'gray')
 
-            const [cells, theta] = [20, util.radians(45)]
+            const [shapeSize, theta] = [20, util.radians(45)]
 
             async function addImages() {
                 await shapes.imagePathPromise('tweet', './data/twitter.png')
+                // console.log(shapes.getPath('tweet'))
                 await shapes.imagePathPromise('redfish', './data/redfish.png')
+                // console.log(shapes.getPath('redfish'))
             }
             addImages().then(() => {
                 shapes.getPathNames().forEach((path, i) => {
-                    const x = -x0 + cells / 2 + i * cells
-                    const y = cells
-                    shapes.draw(ctx, path, x, y, cells, theta, 'red')
+                    // const x = -x0 + shapeSize / 2 + i * shapeSize
+                    const x = (i + 0.5) * shapeSize
+                    const y = 0 // shapeSize / 2
+                    shapes.draw(ctx, path, x, y, shapeSize, theta, 'red')
                 })
             })
         </script>
