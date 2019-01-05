@@ -42,17 +42,34 @@ class AgentArray extends Array {
     last() {
         return this[this.length - 1]
     }
-    // Return AgentArray of property values for key from this array's objects
-    // props(key) { // WAY slower than for loop
-    //     return this.map(a => a[key])
-    // }
-    props(key) {
-        const result = new AgentArray(this.length)
+    // Return array of property values for key from this array's objects.
+    // Array type is specified, defaulted to AgentArray
+    // Note: forEach & map WAY slower than for loop
+    props(key, type = AgentArray) {
+        const result = new type(this.length)
         for (let i = 0; i < this.length; i++) {
             result[i] = this[i][key]
         }
         return result
     }
+    // Return several sets of props in an object
+    // Obj is key, arrayType pairs: x: Float32Array
+    // Result is this.props(key, arrayType) for each key
+    propsObject(obj) {
+        const length = this.length
+        const result = {}
+        util.forEach(obj, (val, key) => {
+            result[key] = this.props(key, val)
+        })
+        return result
+    }
+    // propsTypedArray(key, type = Float64Array) {
+    //     const result = new type(this.length)
+    //     for (let i = 0; i < this.length; i++) {
+    //         result[i] = this[i][key]
+    //     }
+    //     return result
+    // }
     propsArrays(keys, indexed = true) {
         const result = indexed ? {} : new AgentArray(this.length)
         if (util.isString(keys)) keys = keys.split(' ')

@@ -8,38 +8,46 @@
         <script>
             function workerSrc(root) {
                 importScripts(root + '../dist/agentscript.umd.js')
-                importScripts(root + '../models/FireScript.js')
+                importScripts(root + '../models/HelloScript.js')
                 console.log('worker self', self)
 
                 util.randomSeed(1)
-                const patchPixels = {
-                    ember0: 4278190210,
-                    ember1: 4278190235,
-                    ember2: 4278190260,
-                    ember3: 4278190285,
-                    ember4: 4278190310,
-                    fire: 4278190335,
-                    tree: 4278222848,
-                }
-                // main: ~70 -> 442 fps. worker around 442 either way.
-                const postPixels = true
 
-                const options = FireModel.defaultWorld(125)
-                const model = new FireModel(options)
+                const model = new HelloModel()
+                model.population = 1000
                 model.setup()
                 console.log('worker model', model)
 
+                const postBuffers = !true
+
                 const perf = util.fps()
-                while (!model.isDone()) {
+                let steps = 0
+                while (steps++ < 1000) {
                     model.step()
-                    const data = model.patches.props('type')
-                    if (postPixels) {
-                        const ta = new Float64Array(data.length)
-                        util.forEach((type, i) => {
-                            // util.forEach 3x faster than native forEach!
-                            ta[i] = patchPixels[type]
+                    const data = Object.assign(
+                        {},
+                        model.turtles.propsObject({
+                            x: Float32Array,
+                            y: Float32Array,
+                            theta: Float32Array,
+                        }),
+                        model.links.propsObject({
+                            x0: Float32Array,
+                            y0: Float32Array,
+                            x1: Float32Array,
+                            y1: Float32Array,
                         })
-                        postMessage(ta, [ta.buffer])
+                    )
+                    if (postBuffers) {
+                        postMessage(data, [
+                            data.x.buffer,
+                            data.y.buffer,
+                            data.theta.buffer,
+                            data.x0.buffer,
+                            data.y0.buffer,
+                            data.x1.buffer,
+                            data.y1.buffer,
+                        ])
                     } else {
                         postMessage(data)
                     }
@@ -50,6 +58,7 @@
                 postMessage('done')
             }
         </script>
+
         <script type="module">
             import util from '../src/util.js'
 
@@ -57,11 +66,12 @@
             console.log('worker:', worker)
 
             const perf = util.fps()
-            const data = [] // 515 arrays of 63001 elements each!
+            const data = [] // history of data after each step
             worker.onmessage = e => {
                 if (e.data === 'done') {
                     console.log('main: done.')
                     console.log('data:', data)
+                    util.toWindow({ data })
                     console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                 } else {
                     data.push(e.data)

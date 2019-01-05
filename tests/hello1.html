@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello</title>
+    </head>
+
+    <body>
+        <canvas id="model" style="border: 1px solid;"></canvas>
+        <script>
+            function workerSrc(root) {
+                importScripts(root + '../dist/agentscript.umd.js')
+                importScripts(root + '../models/HelloScript.js')
+                console.log('worker self', self)
+
+                let model, params
+                let steps = 0
+
+                function postData() {
+                    const data = Object.assign(
+                        {},
+                        model.turtles.propsObject({
+                            x: Float32Array,
+                            y: Float32Array,
+                            theta: Float32Array,
+                        }),
+                        model.links.propsObject({
+                            x0: Float32Array,
+                            y0: Float32Array,
+                            x1: Float32Array,
+                            y1: Float32Array,
+                        })
+                    )
+                    // postMessage ~same performance w/ & w/o transferables!
+                    if (params.to) {
+                        postMessage(data, [
+                            data.x.buffer,
+                            data.y.buffer,
+                            data.theta.buffer,
+                            data.x0.buffer,
+                            data.y0.buffer,
+                            data.x1.buffer,
+                            data.y1.buffer,
+                        ])
+                        if (data.x.length !== 0) console.log('to data', data)
+                    } else {
+                        postMessage(data)
+                    }
+                }
+                onmessage = e => {
+                    if (e.data.cmd === 'init') {
+                        params = e.data.params
+                        if (params.seed != null) util.randomSeed(params.seed)
+
+                        model = new HelloModel(params.world)
+                        model.population = params.population
+                        model.setup()
+
+                        console.log('worker: model:', model)
+                        console.log('worker: params', params)
+                        console.log('worker: world', params.world)
+                        console.log('worker: model.world', model.world)
+
+                        postData()
+                    } else if (e.data.cmd === 'step') {
+                        if (++steps === params.steps) {
+                            postMessage('done')
+                        } else {
+                            model.step()
+                            postData()
+                        }
+                    } else if (e.data.cmd === 'script') {
+                        importScripts(e.data.url)
+                    } else {
+                        console.log('Oops, unknown message: ', e)
+                    }
+                }
+            }
+        </script>
+
+        <script type="module">
+            import util from '../src/util.js'
+            import Shapes from '../src/Shapes.js'
+            import World from '../src/World.js'
+            import TurtlesView from './TurtlesView.js'
+
+            const params = {
+                seed: null,
+                population: 1000,
+                shape: 'dart', // triangle:78, square:95 faster, dart:66
+                shapeSize: 1.5,
+                speed: 0.1,
+                maxX: 30,
+                maxY: 20,
+                cell: 15,
+                steps: 500,
+                data: false,
+                to: false,
+            }
+            Object.assign(params, util.parseQueryString())
+            if (!params.maxY) params.maxY = params.maxX
+            params.world = new World(
+                World.defaultOptions(params.maxX, params.maxY)
+            )
+            console.log('main: params, world', params, params.world)
+
+            const can = document.getElementById('model')
+            const ctx = can.getContext('2d')
+            const shapes = new Shapes()
+            util.toWindow({ util, Shapes, TurtlesView, shapes, can, ctx })
+
+            // const shape = 'dart' // triangle:78, square:95 faster, dart:66
+            // const shapeSize = 1.5 // in cell units
+            const colors25 = util.repeat(25, (i, a) => {
+                a[i] = TurtlesView.randomColor()
+            })
+            params.world.setCtxTransform(ctx, params.cell)
+
+            const worker = util.fcnToWorker(workerSrc)
+            console.log('main: worker:', worker)
+            worker.onerror = function(e) {
+                console.log('ERROR: Line ', e.lineno, ': ', e.message)
+            }
+            worker.postMessage({ cmd: 'init', params: params })
+
+            const data = [] // history of data after each step
+            const perf = util.fps()
+            worker.onmessage = e => {
+                if (e.data === 'done') {
+                    console.log('main: done.')
+                    console.log('data:', data)
+                    util.toWindow({ data })
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                } else {
+                    if (params.data) data.push(e.data)
+                    else draw(e.data)
+                    perf()
+                    worker.postMessage({ cmd: 'step' })
+                }
+            }
+
+            function draw(data) {
+                util.fillCtx(ctx, 'lightgray')
+                util.repeat(data.x0.length, i => {
+                    shapes.drawLine(
+                        ctx,
+                        data.x0[i],
+                        data.y0[i],
+                        data.x1[i],
+                        data.y1[i],
+                        colors25[i % 25]
+                    )
+                })
+                util.repeat(data.x.length, i => {
+                    shapes.draw(
+                        ctx,
+                        params.shape,
+                        data.x[i],
+                        data.y[i],
+                        data.theta[i],
+                        params.shapeSize,
+                        colors25[i % 25]
+                    )
+                })
+            }
+        </script>
+    </body>
+</html>

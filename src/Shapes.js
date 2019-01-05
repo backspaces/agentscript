@@ -33,6 +33,8 @@ class Shapes {
         can.width = cellSize * width
         can.height = cellSize * height
 
+        ctx.restore() // in case we've been called before
+
         ctx.save()
         ctx.scale(cellSize, -cellSize)
         ctx.translate(0, -height)
@@ -58,20 +60,33 @@ class Shapes {
         this.setPath(name, imagePath)
     }
 
-    draw(ctx, name, x, y, cells, theta = 0, fill = 'red', stroke = 'black') {
+    draw(ctx, name, x, y, theta = 0, size = 1, fill = 'red', stroke = 'black') {
         ctx.save()
 
         ctx.fillStyle = fill
         ctx.strokeStyle = stroke
 
         ctx.translate(x, y)
-        ctx.scale(cells / 2, cells / 2)
-        ctx.rotate(theta)
+        ctx.scale(size / 2, size / 2)
+        if (theta !== 0) ctx.rotate(theta)
         ctx.beginPath()
         paths[name](ctx)
         ctx.closePath()
         ctx.fill()
 
+        ctx.restore()
+    }
+
+    drawLine(ctx, x0, y0, x1, y1, stroke = 'black', width = 1) {
+        // ctx.save() // set identity does a save()
+        ctx.strokeStyle = stroke
+        ctx.lineWidth = width
+        ctx.beginPath()
+        ctx.moveTo(x0, y0)
+        ctx.lineTo(x1, y1)
+        util.setIdentity(ctx)
+        ctx.closePath()
+        ctx.stroke()
         ctx.restore()
     }
 }

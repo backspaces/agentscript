@@ -44,6 +44,7 @@ class World {
     setCtxTransform(ctx, patchSize) {
         ctx.canvas.width = this.numX * patchSize
         ctx.canvas.height = this.numY * patchSize
+        ctx.restore() // close earlier save(). OK if no save called yet.
         ctx.save()
         ctx.scale(patchSize, -patchSize)
         ctx.translate(-this.minXcor, -this.maxYcor)

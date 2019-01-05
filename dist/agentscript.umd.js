@@ -395,25 +395,42 @@ const util = {
 
     // ### Arrays, Objects and Iteration
 
-    objectPropertyTypes(obj) {
-        const propNames = Object.keys(obj);
-        const result = {};
-        for (const prop of propNames) {
-            result[prop] = this.typeOf(obj[prop]);
+    // objectPropertyTypes(obj) {
+    //     const propNames = Object.keys(obj)
+    //     const result = {}
+    //     for (const prop of propNames) {
+    //         result[prop] = this.typeOf(obj[prop])
+    //     }
+    //     return result
+    // },
+
+    // getNestedObject(object, string) {
+    //     const objs = string.split('.')
+    //     if (objs.length === 1) return object[string]
+    //     return objs.reduce((acc, val) => {
+    //         if (acc === undefined) return undefined
+    //         return acc[val]
+    //     }, object)
+    // },
+    nestedProperty(obj, path) {
+        if (typeof path === 'string') path = path.split('.');
+        switch (path.length) {
+        case 1:
+            return obj[path[0]]
+        case 2:
+            return obj[path[0]][path[1]]
+        case 3:
+            return obj[path[0]][path[1]][path[2]]
+        case 4:
+            return obj[path[0]][path[1]][path[2]][path[3]]
+        default:
+            return path.reduce((obj, param) => obj[param], obj)
         }
-        return result
     },
 
-    getNestedObject(object, string) {
-        const objs = string.split('.');
-        if (objs.length === 1) return object[string]
-        return objs.reduce((acc, val) => {
-            if (acc === undefined) return undefined
-            return acc[val]
-        }, object)
-    },
-
-    // Repeat function f(i, a) n times, i in 0, n-1, a is optional array
+    // Repeat function f(i, a) n times, i in 0, n-1
+    // a is optional array, default a new Array.
+    // Return a.
     repeat(n, f, a = []) {
         for (let i = 0; i < n; i++) f(i, a);
         return a
@@ -888,17 +905,34 @@ class AgentArray extends Array {
     last() {
         return this[this.length - 1]
     }
-    // Return AgentArray of property values for key from this array's objects
-    // props(key) { // WAY slower than for loop
-    //     return this.map(a => a[key])
-    // }
-    props(key) {
-        const result = new AgentArray(this.length);
+    // Return array of property values for key from this array's objects.
+    // Array type is specified, defaulted to AgentArray
+    // Note: forEach & map WAY slower than for loop
+    props(key, type = AgentArray) {
+        const result = new type(this.length);
         for (let i = 0; i < this.length; i++) {
             result[i] = this[i][key];
         }
         return result
     }
+    // Return several sets of props in an object
+    // Obj is key, arrayType pairs: x: Float32Array
+    // Result is this.props(key, arrayType) for each key
+    propsObject(obj) {
+        const length = this.length;
+        const result = {};
+        util.forEach(obj, (val, key) => {
+            result[key] = this.props(key, val);
+        });
+        return result
+    }
+    // propsTypedArray(key, type = Float64Array) {
+    //     const result = new type(this.length)
+    //     for (let i = 0; i < this.length; i++) {
+    //         result[i] = this[i][key]
+    //     }
+    //     return result
+    // }
     propsArrays(keys, indexed = true) {
         const result = indexed ? {} : new AgentArray(this.length);
         if (util.isString(keys)) keys = keys.split(' ');
@@ -2025,6 +2059,19 @@ class Link {
         if (turtle === this.end1) return this.end0
         throw Error(`Link.otherEnd: turtle not a link turtle: ${turtle}`)
     }
+
+    get x0() {
+        return this.end0.x
+    }
+    get y0() {
+        return this.end0.y
+    }
+    get x1() {
+        return this.end1.x
+    }
+    get y1() {
+        return this.end1.y
+    }
 }
 
 // Links are a collection of all the Link objects between turtles.
@@ -2092,6 +2139,7 @@ class World {
     setCtxTransform(ctx, patchSize) {
         ctx.canvas.width = this.numX * patchSize;
         ctx.canvas.height = this.numY * patchSize;
+        ctx.restore(); // close earlier save(). OK if no save called yet.
         ctx.save();
         ctx.scale(patchSize, -patchSize);
         ctx.translate(-this.minXcor, -this.maxYcor);

@@ -47,6 +47,19 @@ class Link {
         if (turtle === this.end1) return this.end0
         throw Error(`Link.otherEnd: turtle not a link turtle: ${turtle}`)
     }
+
+    get x0() {
+        return this.end0.x
+    }
+    get y0() {
+        return this.end0.y
+    }
+    get x1() {
+        return this.end1.x
+    }
+    get y1() {
+        return this.end1.y
+    }
 }
 
 export default Link

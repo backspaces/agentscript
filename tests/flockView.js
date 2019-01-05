@@ -7,7 +7,14 @@ import FlockModel from '../models/FlockModel.js'
 let model, params, flockModel
 
 function postData() {
-    const data = model.turtles.propsObjects('x y theta', false)
+    const arrayType = Float64Array
+    const data = params.ta
+        ? {
+            x: model.turtles.props('x', arrayType),
+            y: model.turtles.props('y', arrayType),
+            theta: model.turtles.props('theta', arrayType),
+        }
+        : model.turtles.propsObjects('x y theta', false)
     if (params.img) {
         // patchesView.installPixels(data, d => params.patchPixels[d])
         // patchesView.getImageBitmap().then(img => {
@@ -16,7 +23,14 @@ function postData() {
         //     // if (img.height !== 0) console.log('!transferable')
         // })
     } else {
-        postMessage(data)
+        if (params.ta) {
+            //data.x && data.x.buffer) {
+            postMessage(data, [data.x.buffer, data.y.buffer, data.theta.buffer])
+            // if (data.x.length !== 0) console.log('Oops, ta not zero length')
+            // console.log(data) // x,y,theta all 0, yay!
+        } else {
+            postMessage(data)
+        }
     }
 }
 

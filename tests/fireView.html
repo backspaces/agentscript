@@ -50,10 +50,7 @@
             worker.onerror = function(e) {
                 console.log('ERROR: Line ', e.lineno, ': ', e.message)
             }
-            worker.postMessage({
-                cmd: 'init',
-                params: params,
-            })
+            worker.postMessage({ cmd: 'init', params: params })
             console.log('main worker:', worker)
             util.toWindow({ worker })
 

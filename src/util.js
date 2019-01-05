@@ -388,25 +388,42 @@ const util = {
 
     // ### Arrays, Objects and Iteration
 
-    objectPropertyTypes(obj) {
-        const propNames = Object.keys(obj)
-        const result = {}
-        for (const prop of propNames) {
-            result[prop] = this.typeOf(obj[prop])
+    // objectPropertyTypes(obj) {
+    //     const propNames = Object.keys(obj)
+    //     const result = {}
+    //     for (const prop of propNames) {
+    //         result[prop] = this.typeOf(obj[prop])
+    //     }
+    //     return result
+    // },
+
+    // getNestedObject(object, string) {
+    //     const objs = string.split('.')
+    //     if (objs.length === 1) return object[string]
+    //     return objs.reduce((acc, val) => {
+    //         if (acc === undefined) return undefined
+    //         return acc[val]
+    //     }, object)
+    // },
+    nestedProperty(obj, path) {
+        if (typeof path === 'string') path = path.split('.')
+        switch (path.length) {
+        case 1:
+            return obj[path[0]]
+        case 2:
+            return obj[path[0]][path[1]]
+        case 3:
+            return obj[path[0]][path[1]][path[2]]
+        case 4:
+            return obj[path[0]][path[1]][path[2]][path[3]]
+        default:
+            return path.reduce((obj, param) => obj[param], obj)
         }
-        return result
     },
 
-    getNestedObject(object, string) {
-        const objs = string.split('.')
-        if (objs.length === 1) return object[string]
-        return objs.reduce((acc, val) => {
-            if (acc === undefined) return undefined
-            return acc[val]
-        }, object)
-    },
-
-    // Repeat function f(i, a) n times, i in 0, n-1, a is optional array
+    // Repeat function f(i, a) n times, i in 0, n-1
+    // a is optional array, default a new Array.
+    // Return a.
     repeat(n, f, a = []) {
         for (let i = 0; i < n; i++) f(i, a)
         return a
