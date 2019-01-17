@@ -1,82 +1,119 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Fire</title>
+        <title>Hello</title>
     </head>
 
     <body>
-        <script>
-            function workerSrc(root) {
-                importScripts(root + '../dist/agentscript.umd.js')
-                importScripts(root + '../models/HelloScript.js')
-                console.log('worker self', self)
-
-                util.randomSeed(1)
-
-                const model = new HelloModel()
-                model.population = 1000
-                model.setup()
-                console.log('worker model', model)
-
-                const postBuffers = !true
-
-                const perf = util.fps()
-                let steps = 0
-                while (steps++ < 1000) {
-                    model.step()
-                    const data = Object.assign(
-                        {},
-                        model.turtles.propsObject({
-                            x: Float32Array,
-                            y: Float32Array,
-                            theta: Float32Array,
-                        }),
-                        model.links.propsObject({
-                            x0: Float32Array,
-                            y0: Float32Array,
-                            x1: Float32Array,
-                            y1: Float32Array,
-                        })
-                    )
-                    if (postBuffers) {
-                        postMessage(data, [
-                            data.x.buffer,
-                            data.y.buffer,
-                            data.theta.buffer,
-                            data.x0.buffer,
-                            data.y0.buffer,
-                            data.x1.buffer,
-                            data.y1.buffer,
-                        ])
-                    } else {
-                        postMessage(data)
-                    }
-                    perf()
-                }
-
-                console.log('worker: done. steps, fps', perf.steps, perf.fps)
-                postMessage('done')
-            }
-        </script>
-
+        <canvas id="model" style="border: 1px solid;"></canvas>
         <script type="module">
             import util from '../src/util.js'
+            import World from '../src/World.js'
+            import TurtlesView from './TurtlesView.js'
+            const can = document.getElementById('model')
+            const ctx = can.getContext('2d')
+            util.toWindow({ util, World, TurtlesView, ctx, can })
 
-            const worker = util.fcnToWorker(workerSrc)
-            console.log('worker:', worker)
+            const params = {
+                seed: null,
+                population: 1000,
+                shape: 'dart', // triangle:78, square:95 faster, dart:66
+                shapeSize: 1.5,
+                speed: 0.1,
+                maxX: 30,
+                maxY: 20,
+                cellSize: 15,
+                linkWidth: 1,
+                steps: 500,
+                data: false,
+                img: false,
+                main: false,
+                noRotate: false,
+            }
+            Object.assign(params, util.parseQueryString())
+            if (!params.maxY) params.maxY = params.maxX
+            params.colors25 = util.repeat(25, (i, a) => {
+                a[i] = TurtlesView.randomColor()
+            })
+            console.log('main: params', params)
 
-            const perf = util.fps()
-            const data = [] // history of data after each step
-            worker.onmessage = e => {
-                if (e.data === 'done') {
-                    console.log('main: done.')
-                    console.log('data:', data)
-                    util.toWindow({ data })
-                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
-                } else {
-                    data.push(e.data)
-                    perf()
+            if (params.main) {
+                import('../models/HelloModel.js').then(module => {
+                    const HelloModel = module.default
+                    var model = new HelloModel(
+                        World.defaultOptions(params.maxX, params.maxY)
+                    )
+                    model.population = params.population
+                    model.setup()
+                    util.toWindow({ HelloModel, model, view, draw })
+                    const perf = util.fps()
+                    // util.yieldLoop(steps => {
+                    util.timeoutLoop(steps => {
+                        // console.log('step', steps)
+                        model.step()
+                        draw(model)
+                        perf()
+                    }, params.steps).then(() => {
+                        console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                    })
+                })
+            } else {
+                const worker = new Worker('./hello.js', { type: 'module' })
+                console.log('main: worker:', worker)
+                worker.postMessage({ cmd: 'init', params: params })
+
+                let data = params.data ? [] : null
+                const perf = util.fps()
+                worker.onmessage = e => {
+                    if (e.data === 'done') {
+                        console.log('main: done.')
+                        console.log('data:', data)
+                        util.toWindow({ data })
+                        console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                        // worker.terminate()
+                    } else {
+                        if (params.data) {
+                            data.push(e.data)
+                        } else {
+                            data = e.data
+                            if (params.img) {
+                                util.setCtxImage(ctx, e.data)
+                            } else {
+                                draw(e.data)
+                            }
+                        }
+                        perf()
+                        worker.postMessage({ cmd: 'step' })
+                    }
                 }
+            }
+
+            if (params.main || !params.img) {
+                var view = new TurtlesView(
+                    ctx,
+                    params.cellSize,
+                    World.defaultOptions(params.maxX, params.maxY)
+                )
+            }
+
+            function draw(data) {
+                function turtleViewValues(turtle, i, turtles) {
+                    return {
+                        shape: params.shape,
+                        color: params.colors25[i % 25],
+                        size: params.shapeSize,
+                        noRotate: params.noRotate,
+                    }
+                }
+                function linkViewValues(link, i, links) {
+                    return {
+                        color: params.colors25[i % 25],
+                        width: params.linkWidth,
+                    }
+                }
+                util.fillCtx(ctx, 'lightgray')
+                view.drawLinks(data.links, linkViewValues)
+                view.drawTurtles(data.turtles, turtleViewValues)
             }
         </script>
     </body>

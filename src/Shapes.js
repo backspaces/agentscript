@@ -89,6 +89,11 @@ class Shapes {
         ctx.stroke()
         ctx.restore()
     }
+
+    // drawRect(ctx, x, y, width, height, fill = 'red') {
+    //     ctx.fillStyle = stroke
+    //     ctx.fillRect(x, y, width, height)
+    // }
 }
 
 function flipImage(img) {

@@ -21,6 +21,7 @@ const util = {
     // isInteger: Number.isInteger || (num => Math.floor(num) === num),
     isInteger: obj => Number.isInteger(obj), // assume es6, babel otherwise.
     isImage: obj => util.isType(obj, 'image'),
+    isImageBitmap: obj => util.isType(obj, 'imagebitmap'),
 
     // Is undefined, null, bool, number, string, symbol
     isPrimitive: obj => obj == null || 'object' != typeof obj,
@@ -171,7 +172,7 @@ const util = {
             steps++;
             const ms = performance.now() - start;
             const fps = parseFloat((steps / (ms / 1000)).toFixed(2));
-            Object.assign(step, { fps, ms, steps });
+            Object.assign(step, { fps, ms, start, steps });
         }
     },
 
@@ -271,6 +272,12 @@ const util = {
             console.log('ERROR: Line ', e.lineno, ': ', e.message);
         };
         return worker
+    },
+
+    workerScript(script, worker) {
+        const srcBlob = new Blob([script], { type: 'text/javascript' });
+        const srcURL = URL.createObjectURL(srcBlob);
+        worker.postMessage({ cmd: 'script', url: srcURL });
     },
 
     // Get element (i.e. canvas) relative x,y position from event/mouse position.
@@ -409,16 +416,16 @@ const util = {
     nestedProperty(obj, path) {
         if (typeof path === 'string') path = path.split('.');
         switch (path.length) {
-        case 1:
-            return obj[path[0]]
-        case 2:
-            return obj[path[0]][path[1]]
-        case 3:
-            return obj[path[0]][path[1]][path[2]]
-        case 4:
-            return obj[path[0]][path[1]][path[2]][path[3]]
-        default:
-            return path.reduce((obj, param) => obj[param], obj)
+            case 1:
+                return obj[path[0]]
+            case 2:
+                return obj[path[0]][path[1]]
+            case 3:
+                return obj[path[0]][path[1]][path[2]]
+            case 4:
+                return obj[path[0]][path[1]][path[2]][path[3]]
+            default:
+                return path.reduce((obj, param) => obj[param], obj)
         }
     },
 
@@ -469,9 +476,8 @@ const util = {
             for (let i = 0, len = arrayOrObj.length; i < len; i++) {
                 fcn(arrayOrObj[i], i, arrayOrObj);
             }
-        }
-        // obj
-        else {
+        } else {
+            // obj
             Object.keys(arrayOrObj).forEach(k =>
                 fcn(arrayOrObj[k], k, arrayOrObj)
             );
@@ -582,7 +588,8 @@ const util = {
         if (this.isString(f)) f = this.propFcn(f);
         return array.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
     },
-    // unique = (array) => [...new Set(array)],
+    // Simple uniq on sorted or unsorted array.
+    uniqUnsorted: array => Array.from(new Set(array)),
 
     // Return a "ramp" (array of uniformly ascending/descending floats)
     // in [start,stop] with numItems (positive integer > 1).
@@ -629,6 +636,13 @@ const util = {
             img.onload = () => resolve(img);
             img.onerror = () => reject(Error(`Could not load image ${url}`));
             img.src = url;
+        })
+    },
+
+    // Convert canvas.toBlob to a promise
+    canvasBlobPromise(can, mimeType = 'image/png', quality = 0.95) {
+        return new Promise((resolve, reject) => {
+            can.toBlob(blob => resolve(blob), mimeType, quality);
         })
     },
     // Return Promise for ajax/xhr data.
@@ -723,20 +737,22 @@ const util = {
     // ### Canvas utilities
 
     // Create a blank 2D canvas of a given width/height
-    createCanvas(width, height) {
+    createCanvas(width, height, offscreen = true) {
         // Try OffscreenCanvas in workers and main:
-        if (OffscreenCanvas) return new OffscreenCanvas(width, height)
+        // if (OffscreenCanvas) return new OffscreenCanvas(width, height)
         // Fallback to DOM if in main
-        if (document) return document.createElement('canvas')
+        // if (document) return document.createElement('canvas')
         // Error if in worker and no OffscreenCanvas
-        throw Error(
-            'createCanvas: Browser does not support worker OffscreenCanvas'
-        )
+        // throw Error(
+        //     'createCanvas: Browser does not support worker OffscreenCanvas'
+        // )
+        if (offscreen) return new OffscreenCanvas(width, height)
+        return document.createElement('canvas')
     },
     // As above, but returing the 2D context object.
     // NOTE: ctx.canvas is the canvas for the ctx, and can be use as an image.
-    createCtx(width, height) {
-        const can = this.createCanvas(width, height);
+    createCtx(width, height, offscreen = true) {
+        const can = this.createCanvas(width, height, offscreen);
         return can.getContext('2d')
     },
 
@@ -752,6 +768,17 @@ const util = {
         ctx.canvas.width = width;
         ctx.canvas.height = height;
         ctx.drawImage(copy.canvas, 0, 0);
+    },
+
+    // Set the ctx/canvas size if differs from width/height.
+    // It does not install a transform and assumes there is not one currently installed.
+    // The World object can do that for AgentSets.
+    setCtxSize(ctx, width, height) {
+        const can = ctx.canvas;
+        if (can.width !== width || can.height != height) {
+            can.width = width;
+            can.height = height;
+        }
     },
 
     // Install identity transform for this context.
@@ -787,6 +814,11 @@ const util = {
         this.setIdentity(ctx); // set/restore identity
         ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.restore();
+    },
+    // Fill this context with the given image, resizing it to img size if needed.
+    setCtxImage(ctx, img) {
+        this.setCtxSize(ctx, img.width, img.height);
+        ctx.drawImage(img, 0, 0, img.width, img.height);
     },
 
     // Use webgl texture to convert img to Uint8Array w/o alpha premultiply
@@ -913,7 +945,7 @@ class AgentArray extends Array {
     // Obj is key, arrayType pairs: x: Float32Array
     // Result is this.props(key, arrayType) for each key
     propsObject(obj) {
-        const length = this.length;
+        // const length = this.length
         const result = {};
         util.forEach(obj, (val, key) => {
             result[key] = this.props(key, val);
@@ -1423,8 +1455,9 @@ class AgentSet extends AgentArray {
         return o
     }
     clear() {
+        // die() is an agent method. sets it's id to -1
         while (!this.isEmpty()) this.last().die();
-    } // die() is an agent method
+    }
     // Remove an agent from the agentset, returning the agentset for chaining.
     // Note removeAgent(agent) different than remove(agent) which simply removes
     // the agent from it's array
@@ -1493,7 +1526,7 @@ class AgentSet extends AgentArray {
         if (this.length === 0) return
         const lastID = this.last().id;
         for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
-        // for (let i = 0; this[i].id <= lastID; i++) { // nope.
+            // for (let i = 0; this[i].id <= lastID; i++) { // nope.
             fcn(this[i], i, this);
         }
     }
@@ -1542,6 +1575,7 @@ class AgentSet extends AgentArray {
         const clone = this.clone();
         for (let i = 0; i < clone.length; i++) {
             const obj = clone[i];
+            // obj.id > 0: obj.die() sets id to -1
             if (obj.breed == this && obj.id > 0) {
                 fcn(obj, i, clone);
             }
@@ -2116,8 +2150,10 @@ class World {
         this.maxXcor = this.maxX + 0.5;
         this.minYcor = this.minY - 0.5;
         this.maxYcor = this.maxY + 0.5;
-        this.centerX = (this.minX + this.maxX) / 2;
-        this.centerY = (this.minY + this.maxY) / 2;
+        // The midpoints of the world, in world coords.
+        // (0, 0) for the centered default worlds. REMIND: remove?
+        // this.centerX = (this.minX + this.maxX) / 2
+        // this.centerY = (this.minY + this.maxY) / 2
     }
     // Test x,y for being on-world.
     isOnWorld(x, y) {
@@ -2137,6 +2173,15 @@ class World {
         ctx.save();
         ctx.scale(patchSize, -patchSize);
         ctx.translate(-this.minXcor, -this.maxYcor);
+    }
+
+    // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)
+    pixelXYtoPatchXY(x, y, patchSize = 1) {
+        return [this.minXcor + x / patchSize, this.maxYcor - y / patchSize]
+    }
+    // Convert patch coords (float) to pixel location (top/left offset i.e. mouse)
+    patchXYtoPixelXY(x, y, patchSize = 1) {
+        return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
 }
 

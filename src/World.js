@@ -27,8 +27,10 @@ class World {
         this.maxXcor = this.maxX + 0.5
         this.minYcor = this.minY - 0.5
         this.maxYcor = this.maxY + 0.5
-        this.centerX = (this.minX + this.maxX) / 2
-        this.centerY = (this.minY + this.maxY) / 2
+        // The midpoints of the world, in world coords.
+        // (0, 0) for the centered default worlds. REMIND: remove?
+        // this.centerX = (this.minX + this.maxX) / 2
+        // this.centerY = (this.minY + this.maxY) / 2
     }
     // Test x,y for being on-world.
     isOnWorld(x, y) {
@@ -48,6 +50,15 @@ class World {
         ctx.save()
         ctx.scale(patchSize, -patchSize)
         ctx.translate(-this.minXcor, -this.maxYcor)
+    }
+
+    // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)
+    pixelXYtoPatchXY(x, y, patchSize = 1) {
+        return [this.minXcor + x / patchSize, this.maxYcor - y / patchSize]
+    }
+    // Convert patch coords (float) to pixel location (top/left offset i.e. mouse)
+    patchXYtoPixelXY(x, y, patchSize = 1) {
+        return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
 }
 

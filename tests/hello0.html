@@ -14,6 +14,7 @@
 
                 let model, params
                 let steps = 0
+                const { World } = AS
 
                 function postData() {
                     const data = Object.assign(
@@ -51,15 +52,14 @@
                         params = e.data.params
                         if (params.seed != null) util.randomSeed(params.seed)
 
-                        model = new HelloModel(params.world)
+                        model = new HelloModel(
+                            World.defaultOptions(params.maxX, params.maxY)
+                        )
                         model.population = params.population
                         model.setup()
 
-                        console.log('worker: model:', model)
                         console.log('worker: params', params)
-                        console.log('worker: world', params.world)
-                        console.log('worker: model.world', model.world)
-
+                        console.log('worker: model:', model)
                         postData()
                     } else if (e.data.cmd === 'step') {
                         if (++steps === params.steps) {
@@ -79,9 +79,9 @@
 
         <script type="module">
             import util from '../src/util.js'
-            import Shapes from '../src/Shapes.js'
             import World from '../src/World.js'
             import TurtlesView from './TurtlesView.js'
+            util.toWindow({ util, World, TurtlesView })
 
             const params = {
                 seed: null,
@@ -91,36 +91,24 @@
                 speed: 0.1,
                 maxX: 30,
                 maxY: 20,
-                cell: 15,
+                cellSize: 15,
+                linkWidth: 1,
                 steps: 500,
                 data: false,
                 to: false,
+                noRotate: false,
             }
             Object.assign(params, util.parseQueryString())
             if (!params.maxY) params.maxY = params.maxX
-            params.world = new World(
-                World.defaultOptions(params.maxX, params.maxY)
-            )
-            console.log('main: params, world', params, params.world)
-
-            const can = document.getElementById('model')
-            const ctx = can.getContext('2d')
-            const shapes = new Shapes()
-            util.toWindow({ util, Shapes, TurtlesView, shapes, can, ctx })
-
-            // const shape = 'dart' // triangle:78, square:95 faster, dart:66
-            // const shapeSize = 1.5 // in cell units
-            const colors25 = util.repeat(25, (i, a) => {
+            params.colors25 = util.repeat(25, (i, a) => {
                 a[i] = TurtlesView.randomColor()
             })
-            params.world.setCtxTransform(ctx, params.cell)
+            console.log('main: params', params)
 
             const worker = util.fcnToWorker(workerSrc)
             console.log('main: worker:', worker)
-            worker.onerror = function(e) {
-                console.log('ERROR: Line ', e.lineno, ': ', e.message)
-            }
             worker.postMessage({ cmd: 'init', params: params })
+            util.workerScript('console.log("script:", self)', worker)
 
             const data = [] // history of data after each step
             const perf = util.fps()
@@ -130,6 +118,7 @@
                     console.log('data:', data)
                     util.toWindow({ data })
                     console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                    worker.terminate()
                 } else {
                     if (params.data) data.push(e.data)
                     else draw(e.data)
@@ -138,29 +127,33 @@
                 }
             }
 
+            const can = document.getElementById('model')
+            const ctx = can.getContext('2d')
+
+            const view = new TurtlesView(
+                ctx,
+                params.cellSize,
+                World.defaultOptions(params.maxX, params.maxY)
+            )
+            function turtleViewValues(turtle, i, turtles) {
+                return {
+                    shape: params.shape,
+                    color: params.colors25[i % 25],
+                    size: params.shapeSize,
+                    noRotate: params.noRotate,
+                }
+            }
+            function linkViewValues(link, i, links) {
+                return {
+                    color: params.colors25[i % 25],
+                    width: params.linkWidth,
+                }
+            }
+
             function draw(data) {
                 util.fillCtx(ctx, 'lightgray')
-                util.repeat(data.x0.length, i => {
-                    shapes.drawLine(
-                        ctx,
-                        data.x0[i],
-                        data.y0[i],
-                        data.x1[i],
-                        data.y1[i],
-                        colors25[i % 25]
-                    )
-                })
-                util.repeat(data.x.length, i => {
-                    shapes.draw(
-                        ctx,
-                        params.shape,
-                        data.x[i],
-                        data.y[i],
-                        data.theta[i],
-                        params.shapeSize,
-                        colors25[i % 25]
-                    )
-                })
+                view.drawLinks(data, linkViewValues)
+                view.drawTurtles(data, turtleViewValues)
             }
         </script>
     </body>

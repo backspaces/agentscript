@@ -56,7 +56,7 @@ class AgentArray extends Array {
     // Obj is key, arrayType pairs: x: Float32Array
     // Result is this.props(key, arrayType) for each key
     propsObject(obj) {
-        const length = this.length
+        // const length = this.length
         const result = {}
         util.forEach(obj, (val, key) => {
             result[key] = this.props(key, val)
@@ -95,7 +95,7 @@ class AgentArray extends Array {
                 let key = keys[j],
                     val
                 if (key.includes(':')) {
-                    [key, val] = key.split(':')
+                    ;[key, val] = key.split(':')
                     val = util.getNestedObject(agent, val)
                 } else {
                     if (key.includes('.')) {
@@ -355,7 +355,7 @@ class AgentArray extends Array {
             const a = this[i]
             const aval = reporter(a)
             if ((min && aval < val) || (!min && aval > val)) {
-                [o, val] = [a, aval]
+                ;[o, val] = [a, aval]
             }
         }
         return valueToo ? [o, val] : o

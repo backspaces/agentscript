@@ -110,8 +110,9 @@ class AgentSet extends AgentArray {
         return o
     }
     clear() {
+        // die() is an agent method. sets it's id to -1
         while (!this.isEmpty()) this.last().die()
-    } // die() is an agent method
+    }
     // Remove an agent from the agentset, returning the agentset for chaining.
     // Note removeAgent(agent) different than remove(agent) which simply removes
     // the agent from it's array
@@ -180,7 +181,7 @@ class AgentSet extends AgentArray {
         if (this.length === 0) return
         const lastID = this.last().id
         for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
-        // for (let i = 0; this[i].id <= lastID; i++) { // nope.
+            // for (let i = 0; this[i].id <= lastID; i++) { // nope.
             fcn(this[i], i, this)
         }
     }
@@ -229,6 +230,7 @@ class AgentSet extends AgentArray {
         const clone = this.clone()
         for (let i = 0; i < clone.length; i++) {
             const obj = clone[i]
+            // obj.id > 0: obj.die() sets id to -1
             if (obj.breed == this && obj.id > 0) {
                 fcn(obj, i, clone)
             }
