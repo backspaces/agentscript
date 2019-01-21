@@ -3,88 +3,119 @@
     <head>
         <title>FlockView</title>
     </head>
+
     <body>
-        <canvas id="model"></canvas>
+        <canvas id="model" style="border: 1px solid;"></canvas>
         <script type="module">
             import util from '../src/util.js'
-            import Shapes from '../src/Shapes.js'
-            util.toWindow({ util, Shapes })
+            import World from '../src/World.js'
+            import TurtlesView from './TurtlesView.js'
+            const can = document.getElementById('model')
+            const ctx = can.getContext('2d')
+            util.toWindow({ util, World, TurtlesView, ctx, can })
 
             const params = {
                 seed: 1,
-                ta: false,
-                maxX: 50,
-                maxY: null,
-                cell: 3,
-                img: null,
-                data: null,
-                done: 0.9, // stop model when model.flockVectorSize() > done
+                population: 1000,
+                shape: 'dart', // triangle:78, square:95 faster, dart:66
+                shapeSize: 1.5,
+                speed: 0.1,
+                maxX: 30,
+                maxY: 20,
+                cellSize: 15,
+                // linkWidth: 1,
+                steps: 500,
+                data: false,
+                img: false,
+                main: false,
+                noRotate: false,
             }
             Object.assign(params, util.parseQueryString())
+            if (params.seed != null) util.randomSeed(params.seed)
             if (!params.maxY) params.maxY = params.maxX
-            params.width = 2 * params.maxX + 1
-            params.height = 2 * params.maxY + 1
-            console.log('params', params)
-
-            const canvas = document.getElementById('model')
-            canvas.width = params.width * params.cell
-            canvas.height = params.height * params.cell
-            const canvasCtx = canvas.getContext('2d')
-            // canvasCtx.imageSmoothingEnabled = false
-            util.toWindow({ canvas, canvasCtx })
-            if (!params.img) {
-                const shapes = new Shapes()
-                util.toWindow({ shapes })
-            }
-
-            const worker = new Worker('flockView.js', { type: 'module' })
-            // const worker = new Worker('flockView.js')
-            worker.onerror = function(e) {
-                console.log('ERROR: Line ', e.lineno, ': ', e.message)
-            }
-            worker.postMessage({
-                cmd: 'init',
-                params: params,
+            params.colors25 = util.repeat(25, (i, a) => {
+                a[i] = TurtlesView.randomColor()
             })
-            console.log('main worker:', worker)
-            util.toWindow({ worker })
+            if (params.seed != null) util.randomSeed(params.seed) // reset seed
+            console.log('main: params', params)
 
-            const data = [] // one array of populatation long each step
-            let lastData
+            if (params.main) {
+                import('../models/FlockModel.js').then(module => {
+                    const FlockModel = module.default
+                    var model = new FlockModel(
+                        World.defaultOptions(params.maxX, params.maxY)
+                    )
+                    model.population = params.population
+                    model.setup()
+                    util.toWindow({ FlockModel, model, view, draw })
+                    const perf = util.fps()
+                    // util.yieldLoop(steps => {
+                    util.timeoutLoop(steps => {
+                        // console.log('step', steps)
+                        model.step()
+                        draw(model)
+                        perf()
+                    }, params.steps).then(() => {
+                        console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                    })
+                })
+            } else {
+                const worker = new Worker('./flockView.js', { type: 'module' })
+                console.log('main: worker:', worker)
+                worker.postMessage({ cmd: 'init', params: params })
 
-            const perf = util.fps()
-            worker.onmessage = e => {
-                if (e.data === 'done') {
-                    console.log('main: done.')
-                    if (params.data) {
-                        util.toWindow({ data })
+                let data = params.data ? [] : null
+                const perf = util.fps()
+                worker.onmessage = e => {
+                    if (e.data === 'done') {
+                        console.log('main: done.')
                         console.log('data:', data)
-                        console.log('First data', data[0])
-                        console.log('Last data', data[data.length - 1])
-                        // console.log('Last pixels', patchesView.pixels)
+                        util.toWindow({ data })
+                        console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                        // worker.terminate()
                     } else {
-                        util.toWindow({ lastData })
-                        console.log('lastData', lastData)
+                        if (params.data) {
+                            data.push(e.data)
+                        } else {
+                            data = e.data
+                            if (params.img) {
+                                util.setCtxImage(ctx, e.data)
+                            } else {
+                                draw(e.data)
+                            }
+                        }
+                        perf()
+                        worker.postMessage({ cmd: 'step' })
                     }
-                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
-                } else {
-                    // console.log('main: step')
-                    if (params.data) data.push(e.data)
-                    else lastData = e.data
-                    perf()
-                    draw(e.data)
-                    worker.postMessage({ cmd: 'step' })
                 }
             }
 
+            if (params.main || !params.img) {
+                var view = new TurtlesView(
+                    ctx,
+                    params.cellSize,
+                    World.defaultOptions(params.maxX, params.maxY)
+                )
+            }
+
             function draw(data) {
-                // console.log('data:', data)
-                // if (params.img) {
-                //     util.fillCtxWithImage(canvasCtx, data)
-                // } else {
-                //     patchesView.installPixels(data, d => params.patchPixels[d])
-                //     patchesView.draw(canvasCtx)
+                function turtleViewValues(turtle, i, turtles) {
+                    return {
+                        shape: params.shape,
+                        color: params.colors25[i % 25],
+                        size: params.shapeSize,
+                        noRotate: params.noRotate,
+                    }
+                }
+                // function linkViewValues(link, i, links) {
+                //     return {
+                //         color: params.colors25[i % 25],
+                //         width: params.linkWidth,
+                //     }
                 // }
+                util.fillCtx(ctx, 'lightgray')
+                // view.drawLinks(data.links, linkViewValues)
+                view.drawTurtles(data.turtles, turtleViewValues)
             }
         </script>
     </body>

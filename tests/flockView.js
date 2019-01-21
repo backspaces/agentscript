@@ -1,69 +1,94 @@
-// importScripts('../dist/agentscript.umd.js')
-// importScripts('../docs/models/FireScript.js')
 import util from '../src/util.js'
-import Shapes from '../src/Shapes.js'
+import World from '../src/World.js'
 import FlockModel from '../models/FlockModel.js'
+import TurtlesView from './TurtlesView.js'
+console.log('worker self', self)
 
-let model, params, flockModel
+let model, params
+let steps = 0
 
 function postData() {
-    const arrayType = Float64Array
-    const data = params.ta
-        ? {
-            x: model.turtles.props('x', arrayType),
-            y: model.turtles.props('y', arrayType),
-            theta: model.turtles.props('theta', arrayType),
-        }
-        : model.turtles.propsObjects('x y theta', false)
     if (params.img) {
-        // patchesView.installPixels(data, d => params.patchPixels[d])
-        // patchesView.getImageBitmap().then(img => {
-        //     postMessage(img, [img])
-        //     // postMessage(img)
-        //     // if (img.height !== 0) console.log('!transferable')
-        // })
+        draw(model)
+        view.getImageBitmap().then(imgBitMap => {
+            postMessage(imgBitMap, [imgBitMap])
+        })
     } else {
-        if (params.ta) {
-            //data.x && data.x.buffer) {
-            postMessage(data, [data.x.buffer, data.y.buffer, data.theta.buffer])
-            // if (data.x.length !== 0) console.log('Oops, ta not zero length')
-            // console.log(data) // x,y,theta all 0, yay!
-        } else {
-            postMessage(data)
+        const data = {
+            turtles: model.turtles.propsObject({
+                x: Float32Array,
+                y: Float32Array,
+                theta: Float32Array,
+            }),
+            // links: model.links.propsObject({
+            //     x0: Float32Array,
+            //     y0: Float32Array,
+            //     x1: Float32Array,
+            //     y1: Float32Array,
+            // }),
         }
+        postMessage(data, [
+            data.turtles.x.buffer,
+            data.turtles.y.buffer,
+            data.turtles.theta.buffer,
+            // data.links.x0.buffer,
+            // data.links.y0.buffer,
+            // data.links.x1.buffer,
+            // data.links.y1.buffer,
+        ])
+        if (data.turtles.x.length !== 0) console.log('to data', data)
     }
 }
 
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (params.seed) util.randomSeed(params.seed)
+        if (params.seed != null) util.randomSeed(params.seed)
+        if (params.img) Object.assign(self, setupView())
 
-        // if (params.img) {
-        //     patchesView = new PatchesView(params.width, params.height)
-        //     console.log('worker patchesView', patchesView)
-        // }
-
-        const options = FlockModel.defaultWorld(params.maxX, params.maxY)
-        model = new FlockModel(options)
+        model = new FlockModel(World.defaultOptions(params.maxX, params.maxY))
+        model.population = params.population
         model.setup()
 
-        console.log('worker model:', model)
-        console.log('worker params', params)
-        console.log('worker self:', self)
-        console.log('worker message data:', e.data)
-
+        console.log('worker: params', params)
+        console.log('worker: model:', model)
         postData()
     } else if (e.data.cmd === 'step') {
-        if (model.flockVectorSize() > params.done) {
+        if (++steps === params.steps) {
             postMessage('done')
         } else {
             model.step()
             postData()
         }
-        // } else if (e.data.cmd === 'script') {
-        //     importScripts(e.data.url)
     } else {
         console.log('Oops, unknown message: ', e)
     }
+}
+
+function setupView() {
+    const view = new TurtlesView(
+        util.createCtx(0, 0),
+        params.cellSize,
+        World.defaultOptions(params.maxX, params.maxY)
+    )
+    function draw(data) {
+        function turtleViewValues(turtle, i, turtles) {
+            return {
+                shape: params.shape,
+                color: params.colors25[i % 25],
+                size: params.shapeSize,
+                noRotate: params.noRotate,
+            }
+        }
+        // function linkViewValues(link, i, links) {
+        //     return {
+        //         color: params.colors25[i % 25],
+        //         width: params.linkWidth,
+        //     }
+        // }
+        util.fillCtx(view.ctx, 'lightgray')
+        // view.drawLinks(data.links, linkViewValues)
+        view.drawTurtles(data.turtles, turtleViewValues)
+    }
+    return { view, draw }
 }

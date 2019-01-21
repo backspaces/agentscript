@@ -4,7 +4,7 @@ import HelloModel from '../models/HelloModel.js'
 import TurtlesView from './TurtlesView.js'
 console.log('worker self', self)
 
-let model, params // , view
+let model, params
 let steps = 0
 
 function postData() {
@@ -92,34 +92,3 @@ function setupView() {
     }
     return { view, draw }
 }
-
-// class View {
-//     constructor() {
-//         this.ctx = util.createCtx(0, 0)
-//         this.view = new TurtlesView(
-//             this.ctx,
-//             params.cellSize,
-//             World.defaultOptions(params.maxX, params.maxY)
-//         )
-//     }
-
-//     draw(data) {
-//         function turtleViewValues(turtle, i, turtles) {
-//             return {
-//                 shape: params.shape,
-//                 color: params.colors25[i % 25],
-//                 size: params.shapeSize,
-//                 noRotate: params.noRotate,
-//             }
-//         }
-//         function linkViewValues(link, i, links) {
-//             return {
-//                 color: params.colors25[i % 25],
-//                 width: params.linkWidth,
-//             }
-//         }
-//         util.fillCtx(this.ctx, 'lightgray')
-//         this.view.drawLinks(data, linkViewValues)
-//         this.view.drawTurtles(data, turtleViewValues)
-//     }
-// }
