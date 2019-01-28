@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Test</title>
+        <title>Shapes</title>
     </head>
 
     <body>
         <canvas id="can"></canvas>
+        <div id="div"></div>
         <script type="module">
             import util from '../src/util.js'
             import Shapes from '../src/Shapes.js'
@@ -13,15 +14,16 @@
             const can = document.getElementById('can')
             const ctx = can.getContext('2d')
             const shapes = new Shapes()
+            const div = document.getElementById('div')
 
-            util.toWindow({ util, Shapes, shapes, can, ctx })
+            util.toWindow({ util, Shapes, shapes, can, ctx, div })
 
             const [cell, width, height, x0, y0] = [2, 400, 200, 0, 100]
 
             shapes.resetCtx(ctx, cell, width, height, x0, y0) // util?
             util.fillCtx(ctx, 'gray')
 
-            const [shapeSize, theta] = [20, util.radians(45)]
+            const [size, theta] = [20, util.radians(45)]
 
             async function addImages() {
                 await shapes.imagePathPromise('tweet', './data/twitter.png')
@@ -32,9 +34,14 @@
             addImages().then(() => {
                 shapes.getPathNames().forEach((path, i) => {
                     // const x = -x0 + shapeSize / 2 + i * shapeSize
-                    const x = (i + 0.5) * shapeSize
+                    const x = (i + 0.5) * size
                     const y = 0 // shapeSize / 2
-                    shapes.draw(ctx, path, x, y, theta, shapeSize, 'red')
+                    shapes.draw(ctx, path, x, y, theta, size, 'red', 'black')
+                })
+                shapes.getPathNames().forEach((path, i) => {
+                    const img = shapes.shapeToImage(path, 64, 'green', 'blue')
+                    const can = util.cloneCanvas(img, false) // convert to html canvas
+                    div.appendChild(can)
                 })
             })
         </script>

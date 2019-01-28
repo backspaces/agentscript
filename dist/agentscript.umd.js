@@ -58,10 +58,21 @@ const util = {
         return new Uint8ClampedArray(d32.buffer)[0] === 4
     },
 
-    inNode: () =>
-        typeof window === 'undefined' && typeof global !== 'undefined',
-    inBrowser: () => !util.inNode(),
-    globalObject: () => (util.inNode() ? global : window),
+    // inNode: () =>
+    //     typeof window === 'undefined' && typeof global !== 'undefined',
+    // inBrowser: () => !util.inNode(),
+    // globalObject: () => (util.inNode() ? global : window),
+
+    globalObject() {
+        // return window ? window : global ? global : self ? self : undefined
+        return window !== undefined
+            ? window
+            : global !== undefined
+                ? global
+                : self !== undefined
+                    ? self
+                    : undefined
+    },
 
     // Identity fcn, returning its argument unchanged. Used in callbacks
     identity: o => o,
@@ -154,7 +165,8 @@ const util = {
     // If msg is an object, convert to JSON
     print(msg, element = null) {
         if (this.isObject(msg)) msg = JSON.stringify(msg);
-        if (!element && this.inBrowser()) element = document.body;
+        // if (!element && this.inBrowser()) element = document.body
+        if (!element && document) element = document.body;
 
         if (element) {
             element.style.fontFamily = 'monospace';
@@ -205,8 +217,13 @@ const util = {
     // Return a string representation of an array of arrays
     arraysToString: arrays => arrays.map(a => `[${a}]`).join(','),
 
-    // Merge from's key/val pairs into to the global window namespace
+    // Merge from's key/val pairs into to the global/window namespace
     toWindow(obj) {
+        Object.assign(window, obj);
+        // Object.assign(this.globalObject(), obj)
+        console.log('toWindow:', Object.keys(obj).join(', '));
+    },
+    toGlobal(obj) {
         Object.assign(this.globalObject(), obj);
         console.log('toWindow:', Object.keys(obj).join(', '));
     },
@@ -753,7 +770,10 @@ const util = {
         //     'createCanvas: Browser does not support worker OffscreenCanvas'
         // )
         if (offscreen) return new OffscreenCanvas(width, height)
-        return document.createElement('canvas')
+        const can = document.createElement('canvas');
+        can.width = width;
+        can.height = height;
+        return can
     },
     // As above, but returing the 2D context object.
     // NOTE: ctx.canvas is the canvas for the ctx, and can be use as an image.
@@ -763,17 +783,33 @@ const util = {
     },
 
     // Duplicate a ctx's image. Returns the new ctx (who's canvas is ctx.caanvas)
-    cloneCtx(ctx0) {
-        const ctx = this.createCtx(ctx0.canvas.width, ctx0.canvas.height);
-        ctx.drawImage(ctx0.canvas, 0, 0);
-        return ctx
+    // cloneCtx(ctx0, offscreen = true) {
+    //     const ctx = this.createCtx(
+    //         ctx0.canvas.width,
+    //         ctx0.canvas.height,
+    //         offscreen
+    //     )
+    //     ctx.drawImage(ctx0.canvas, 0, 0)
+    //     return ctx
+    // },
+    // Duplicate a ctx's image. Returns the new ctx (who's canvas is ctx.caanvas)
+    // resizeCtx(ctx, width, height) {
+    //     const copy = this.cloneCtx(ctx)
+    //     ctx.canvas.width = width
+    //     ctx.canvas.height = height
+    //     ctx.drawImage(copy.canvas, 0, 0)
+    // },
+    cloneCanvas(can, offscreen = true) {
+        const ctx = this.createCtx(can.width, can.height, offscreen);
+        ctx.drawImage(can, 0, 0);
+        return ctx.canvas
     },
     // Resize a ctx/canvas and preserve data.
     resizeCtx(ctx, width, height) {
-        const copy = this.cloneCtx(ctx);
+        const copy = this.cloneCanvas(ctx.canvas);
         ctx.canvas.width = width;
         ctx.canvas.height = height;
-        ctx.drawImage(copy.canvas, 0, 0);
+        ctx.drawImage(copy, 0, 0);
     },
 
     // Set the ctx/canvas size if differs from width/height.
@@ -1052,10 +1088,11 @@ class AgentArray extends Array {
     }
     // Returns AgentArray of unique elements in this *sorted* AgentArray.
     // Use sortBy or clone & sortBy if needed.
-    uniq(f = util.identity) {
-        if (util.isString(f)) f = o => o[f];
-        return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
-    }
+    // uniq(f = util.identity) {
+    //     if (util.isString(f)) f = o => o[f]
+    //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
+    // }
+
     // Call fcn(agent, index, array) for each agent in AgentArray.
     // Array assumed not mutable
     // Note: 5x+ faster than this.forEach(fcn) !!

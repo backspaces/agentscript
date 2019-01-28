@@ -1,0 +1,153 @@
+import util from './util.js'
+import Shapes from './Shapes.js'
+
+// Sprites are shapes rendered within a sprite-sheet canvas.
+export default class SpriteSheet {
+    // Initialize a one row by cols initial sheet.
+    constructor(spriteSize = 64, cols = 16, usePowerOf2 = true) {
+        Object.assign(this, { spriteSize, cols, usePowerOf2 })
+        this.rows = 1
+        this.nextCol = 0
+        this.nextRow = 0
+        this.sprites = {} // index to sprites by name
+        this.shapes = new Shapes()
+        if (usePowerOf2) this.checkPowerOf2()
+        this.ctx = util.createCtx(this.width, this.height) // offscreen
+        // THREE texture optional, texture.needsUpdate = true on sheet change
+        this.texture = null
+    }
+    // A sprite identifies a slot in the sheet.
+    // If sprite in cache, return it. Otherwise create and return it.
+    newSprite(shapeName, color, strokeColor = null) {
+        // create a normalized name:
+        const name = this.spriteName(shapeName, color, strokeColor)
+        // If sprite of ths name already exists, return it.
+        if (this.sprites[name]) return this.sprites[name]
+
+        // The sprite image
+        const img = shapes.shapeToImage(
+            shapeName,
+            this.spriteSize,
+            color,
+            strokeColor
+        )
+
+        this.checkSheetSize() // Resize ctx if nextRow === rows
+        // pixel coords
+        const [x, y, size] = [this.nextX, this.nextY, this.spriteSize]
+        this.ctx.drawImage(img, x, y, size, size)
+
+        const { nextRow: row, nextCol: col } = this
+        const sprite = { name, x, y, row, col, size, sheet: this }
+        sprite.uvs = this.getUVs(sprite)
+
+        this.incrementRowCol()
+        // Add sprite to cache and return it.
+        this.sprites[name] = sprite
+        return sprite
+    }
+    // Get a sprite from cache. Create if not there.
+    // Currently an alias for newSprite() but may change.
+    getSprite(shapeName, color, strokeColor) {
+        return this.newSprite(shapeName, color, strokeColor)
+    }
+    // Return sprite image coords for drawing: x,y,size,size
+    getSpriteCoords(sprite) {
+        const { x, y, size } = sprite
+        return { x, y, size }
+    }
+    oneOf() {
+        // return paths[util.oneValOf(this.getPathNames())]
+        return util.oneValOf(this.sprites)
+    }
+    draw(ctx, sprite, x0, y0) {
+        const { x, y, size } = sprite
+        x0 = x0 - size / 2
+        y0 = y0 - size / 2
+        ctx.drawImage(this.ctx.canvas, x, y, size, size, x0, y0, size, size)
+    }
+
+    // getters for derived values.
+    // width & height in pixels
+    get width() {
+        return this.spriteSize * this.cols
+    }
+    get height() {
+        return this.spriteSize * this.rows
+    }
+    // next col, row in pixels
+    get nextX() {
+        return this.spriteSize * this.nextCol
+    }
+    get nextY() {
+        return this.spriteSize * this.nextRow
+    }
+    // id = number of sprites
+    // get id() {
+    //     return Object.keys(this.sprites).length
+    // }
+    checkPowerOf2() {
+        const { width, height } = this
+        if (!(util.isPowerOf2(width) && util.isPowerOf2(height))) {
+            throw Error(`SpriteSheet non power of 2: ${width}x${height}`)
+        }
+    }
+
+    // Given parameters for a sprite, create a name
+    spriteName(shapeName, color, strokeColor = null) {
+        const path = this.shapes.getPath(shapeName)
+        if (!path) throw Error(`spriteName: ${shapeName} not in Shapes`)
+
+        if (path.name === 'imagePath') return `${shapeName}_image`
+
+        if (!color) {
+            throw Error(`spriteName: No color for shape ${shapeName}`)
+        }
+        // OK to give strokeColor when not needed.
+        if (!this.shapes.needsStrokeColor(shapeName)) strokeColor = null
+
+        return `${shapeName}_${color}${strokeColor ? `_${strokeColor}` : ''}`
+    }
+
+    // Adjust for new sheet size if necessary:
+    checkSheetSize() {
+        if (this.nextRow === this.rows) {
+            // this.nextCol should be 0
+            this.rows = this.usePowerOf2 ? this.rows * 2 : this.rows + 1
+            // Resizes ctx preserving it's current image
+            util.resizeCtx(this.ctx, this.width, this.height)
+            // Recalculate existing sprite uvs.
+            util.forEach(this.sprites, sprite => {
+                sprite.uvs = this.getUVs(sprite)
+            })
+        }
+    }
+    // Advance nextCol/Row. Done after checkSheetSize enlarged ctx if needed.
+    incrementRowCol() {
+        this.nextCol += 1
+        if (this.nextCol < this.cols) return
+        this.nextCol = 0
+        this.nextRow += 1
+    }
+
+    // Return standard agentscript quad:
+    //      3   2
+    //      -----
+    //      |  /|
+    //      | / |
+    //      |/  |
+    //      -----
+    //      0   1
+    // I.e. botLeft, botRight, topRight, topLeft
+    getUVs(sprite) {
+        // note v's are measured from the bottom.
+        const { row, col } = sprite
+        const { rows, cols } = this
+        const u0 = col / cols
+        const v0 = (rows - (row + 1)) / rows
+        const u1 = (col + 1) / cols
+        const v1 = (rows - row) / rows
+        // return [[x0, y1], [x1, y1], [x1, y0], [x0, y0]]
+        return [u0, v0, u1, v0, u1, v1, u0, v1]
+    }
+}

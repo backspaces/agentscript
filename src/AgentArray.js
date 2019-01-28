@@ -157,10 +157,11 @@ class AgentArray extends Array {
     }
     // Returns AgentArray of unique elements in this *sorted* AgentArray.
     // Use sortBy or clone & sortBy if needed.
-    uniq(f = util.identity) {
-        if (util.isString(f)) f = o => o[f]
-        return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
-    }
+    // uniq(f = util.identity) {
+    //     if (util.isString(f)) f = o => o[f]
+    //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
+    // }
+
     // Call fcn(agent, index, array) for each agent in AgentArray.
     // Array assumed not mutable
     // Note: 5x+ faster than this.forEach(fcn) !!

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sprites</title>
+    </head>
+
+    <body>
+        <canvas id="can"></canvas>
+        <script type="module">
+            import util from '../src/util.js'
+            import Shapes from '../src/Shapes.js'
+            import SpriteSheet from '../src/SpriteSheet.js'
+
+            const can = document.getElementById('can')
+            const ctx = can.getContext('2d')
+            const sheet = new SpriteSheet(32)
+            const shapes = sheet.shapes
+
+            util.toWindow({
+                util,
+                Shapes,
+                SpriteSheet,
+                shapes,
+                sheet,
+                can,
+                ctx,
+            })
+
+            const [cell, width, height, x0, y0] = [2, 400, 200, 200, 100]
+
+            shapes.resetCtx(ctx, cell, width, height, x0, y0) // util?
+            util.fillCtx(ctx, 'gray')
+
+            const [shapeSize, theta] = [20, util.radians(45)]
+
+            async function addImages() {
+                await shapes.imagePathPromise('tweet', './data/twitter.png')
+                // console.log(shapes.getPath('tweet'))
+                await shapes.imagePathPromise('redfish', './data/redfish.png')
+                // console.log(shapes.getPath('redfish'))
+            }
+            addImages().then(() => {
+                // shapes.getPathNames().forEach((path, i) => {
+                //     // const x = -x0 + shapeSize / 2 + i * shapeSize
+                //     const x = (i + 0.5) * shapeSize
+                //     const y = 0 // shapeSize / 2
+                //     shapes.draw(ctx, path, x, y, theta, shapeSize, 'red')
+                // })
+                // shapes.getPathNames().forEach((path, i) => {
+                //     const img = shapes.shapeToImage(path, 64, 'green', 'blue')
+                //     const can = util.cloneCanvas(img, false) // convert to html canvas
+                //     div.appendChild(can)
+                // })
+                shapes.getPathNames().forEach((name, i) => {
+                    sheet.newSprite(name, 'red', 'orange')
+                    sheet.newSprite(name, 'gray', 'red')
+                    sheet.newSprite(name, 'blue', 'black')
+                })
+                const htmlsheet = util.cloneCanvas(sheet.ctx.canvas, false)
+                document.body.appendChild(htmlsheet)
+            })
+        </script>
+    </body>
+</html>
