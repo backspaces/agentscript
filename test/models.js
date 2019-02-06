@@ -39,7 +39,7 @@ models.forEach(async model => {
         })
         const page = await browser.newPage()
         // await page.setViewport({ width, height })
-        await page.setDefaultNavigationTimeout(60000)
+        await page.setDefaultNavigationTimeout(100000)
 
         await page.goto(url)
         // Typically modelDone returns true immediately!

@@ -9,17 +9,15 @@
         <div id="div"></div>
         <script type="module">
             import util from '../src/util.js'
-            import Shapes from '../src/Shapes.js'
+            import TurtlesView from './TurtlesView.js'
             import World from '../src/World.js'
 
             const can = document.getElementById('can')
             const ctx = can.getContext('2d')
-            const shapes = new Shapes()
             const div = document.getElementById('div')
 
-            util.toWindow({ util, Shapes, shapes, can, ctx, div })
+            util.toWindow({ util, TurtlesView, World, can, ctx, div })
 
-            // const [cell, width, height, x0, y0] = [4, 200, 100, 0, 50]
             const patchSize = 4
             const world = new World({
                 minX: 0,
@@ -28,11 +26,13 @@
                 maxY: 50,
             })
             const [size, theta] = [10, util.radians(45)]
-            const pixels = size * patchSize
+            // const pixels = size * patchSize
+            const view = new TurtlesView(ctx, patchSize, world)
+            const shapes = view.shapes
 
-            util.toWindow({ world, patchSize, size, theta })
+            util.toWindow({ view, world, patchSize, size, theta })
 
-            world.setCtxTransform(ctx, patchSize)
+            // world.setCtxTransform(ctx, patchSize)
             // shapes.resetCtx(ctx, patchSize, width, height, x0, y0) // util?
             util.fillCtx(ctx, 'lightgray')
 
@@ -47,7 +47,9 @@
                     // const x = -x0 + shapeSize / 2 + i * shapeSize
                     let x = (i + 0.5) * size
                     let y = 0
-                    shapes.draw(ctx, path, x, y, theta, size, 'red')
+                    // shapes.draw(ctx, path, x, y, theta, size, 'red')
+                    view.drawShape(path, x, y, theta, size, 'red')
+                    // drawShape(name, x, y, theta = 0, size = 1, fill, stroke)
                 })
                 shapes.getPathNames().forEach((path, i) => {
                     // const px = size * patchSize
@@ -62,21 +64,8 @@
                     let y = size
                     const px = size * patchSize // ctx.canvas.cellSize
                     const img = shapes.shapeToImage(path, px, 'green', 'blue')
-                    shapes.drawImage(ctx, img, x, y, theta, world)
-
-                    // const [x0, y0] = world.patchXYtoPixelXY(x, y, patchSize)
-                    // const halfpx = px / 2
-                    // const img = shapes.shapeToImage(path, px, 'green', 'blue')
-                    // ctx.drawImage(img, x0 - halfpx, y0 - halfpx, px, px)
-
-                    // y += size
-                    // const [px, py] = world.patchXYtoPixelXY(x, y, patchSize)
-                    // console.log(px, py)
-                    // // [x, y] = [pt[0], pt[1]]
-                    // // //[x, y] = pt
-                    // util.setIdentity(ctx)
-                    // shapes.drawImage(ctx, path, px, py, theta, pixels, 'red')
-                    // ctx.restore
+                    // shapes.drawImage(ctx, img, x, y, theta, world)
+                    view.drawImage(img, x, y, theta)
                 })
             })
         </script>
