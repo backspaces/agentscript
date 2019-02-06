@@ -133,7 +133,7 @@
             const view = new TurtlesView(
                 ctx,
                 params.cellSize,
-                World.defaultOptions(params.maxX, params.maxY)
+                new World(World.defaultOptions(params.maxX, params.maxY))
             )
             function turtleViewValues(turtle, i, turtles) {
                 return {

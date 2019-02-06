@@ -10,6 +10,7 @@
         <script type="module">
             import util from '../src/util.js'
             import Shapes from '../src/Shapes.js'
+            import World from '../src/World.js'
 
             const can = document.getElementById('can')
             const ctx = can.getContext('2d')
@@ -18,12 +19,22 @@
 
             util.toWindow({ util, Shapes, shapes, can, ctx, div })
 
-            const [cell, width, height, x0, y0] = [2, 400, 200, 0, 100]
+            // const [cell, width, height, x0, y0] = [4, 200, 100, 0, 50]
+            const patchSize = 4
+            const world = new World({
+                minX: 0,
+                maxX: 200,
+                minY: -50,
+                maxY: 50,
+            })
+            const [size, theta] = [10, util.radians(45)]
+            const pixels = size * patchSize
 
-            shapes.resetCtx(ctx, cell, width, height, x0, y0) // util?
-            util.fillCtx(ctx, 'gray')
+            util.toWindow({ world, patchSize, size, theta })
 
-            const [size, theta] = [20, util.radians(45)]
+            world.setCtxTransform(ctx, patchSize)
+            // shapes.resetCtx(ctx, patchSize, width, height, x0, y0) // util?
+            util.fillCtx(ctx, 'lightgray')
 
             async function addImages() {
                 await shapes.imagePathPromise('tweet', './data/twitter.png')
@@ -34,14 +45,38 @@
             addImages().then(() => {
                 shapes.getPathNames().forEach((path, i) => {
                     // const x = -x0 + shapeSize / 2 + i * shapeSize
-                    const x = (i + 0.5) * size
-                    const y = 0 // shapeSize / 2
-                    shapes.draw(ctx, path, x, y, theta, size, 'red', 'black')
+                    let x = (i + 0.5) * size
+                    let y = 0
+                    shapes.draw(ctx, path, x, y, theta, size, 'red')
                 })
                 shapes.getPathNames().forEach((path, i) => {
-                    const img = shapes.shapeToImage(path, 64, 'green', 'blue')
+                    // const px = size * patchSize
+                    const px = size * patchSize // ctx.canvas.cellSize
+                    const img = shapes.shapeToImage(path, px, 'green', 'blue')
                     const can = util.cloneCanvas(img, false) // convert to html canvas
                     div.appendChild(can)
+                })
+                util.setIdentity(ctx)
+                shapes.getPathNames().forEach((path, i) => {
+                    let x = (i + 0.5) * size
+                    let y = size
+                    const px = size * patchSize // ctx.canvas.cellSize
+                    const img = shapes.shapeToImage(path, px, 'green', 'blue')
+                    shapes.drawImage(ctx, img, x, y, theta, world)
+
+                    // const [x0, y0] = world.patchXYtoPixelXY(x, y, patchSize)
+                    // const halfpx = px / 2
+                    // const img = shapes.shapeToImage(path, px, 'green', 'blue')
+                    // ctx.drawImage(img, x0 - halfpx, y0 - halfpx, px, px)
+
+                    // y += size
+                    // const [px, py] = world.patchXYtoPixelXY(x, y, patchSize)
+                    // console.log(px, py)
+                    // // [x, y] = [pt[0], pt[1]]
+                    // // //[x, y] = pt
+                    // util.setIdentity(ctx)
+                    // shapes.drawImage(ctx, path, px, py, theta, pixels, 'red')
+                    // ctx.restore
                 })
             })
         </script>

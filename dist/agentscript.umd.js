@@ -860,7 +860,9 @@ const util = {
     // Fill this context with the given image, resizing it to img size if needed.
     setCtxImage(ctx, img) {
         this.setCtxSize(ctx, img.width, img.height);
+        this.setIdentity(ctx);
         ctx.drawImage(img, 0, 0, img.width, img.height);
+        ctx.restore();
     },
 
     // Use webgl texture to convert img to Uint8Array w/o alpha premultiply
@@ -2187,16 +2189,26 @@ class World {
     setWorld() {
         this.numX = this.maxX - this.minX + 1;
         this.numY = this.maxY - this.minY + 1;
-        // this.width = this.numX // REMIND: remove?
-        // this.height = this.numY
         this.minXcor = this.minX - 0.5;
         this.maxXcor = this.maxX + 0.5;
         this.minYcor = this.minY - 0.5;
         this.maxYcor = this.maxY + 0.5;
+
         // The midpoints of the world, in world coords.
         // (0, 0) for the centered default worlds. REMIND: remove?
         // this.centerX = (this.minX + this.maxX) / 2
         // this.centerY = (this.minY + this.maxY) / 2
+    }
+    randomPosition(float = true) {
+        return float
+            ? [
+                util.randomFloat2(this.minXcor, this.maxXcor),
+                util.randomFloat2(this.minYcor, this.maxYcor),
+            ]
+            : [
+                util.randomInt2(this.minX, this.maxX),
+                util.randomInt2(this.minY, this.maxY),
+            ]
     }
     // Test x,y for being on-world.
     isOnWorld(x, y) {
@@ -2225,6 +2237,14 @@ class World {
     // Convert patch coords (float) to pixel location (top/left offset i.e. mouse)
     patchXYtoPixelXY(x, y, patchSize = 1) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
+    }
+    // Calculate patchSize from canvas (any imagable) dimensions
+    canvasPatchSize(canvas) {
+        // const [width, height] = canvas
+        return canvas.width / this.numX
+    }
+    canvasSize(patchSize) {
+        return [this.numX * patchSize, this.numY * patchSize]
     }
 }
 

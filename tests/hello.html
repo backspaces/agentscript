@@ -10,6 +10,7 @@
             import util from '../src/util.js'
             import World from '../src/World.js'
             import TurtlesView from './TurtlesView.js'
+            // import HelloModel from '../models/HelloModel.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
             util.toWindow({ util, World, TurtlesView, ctx, can })
@@ -26,16 +27,51 @@
                 linkWidth: 1,
                 steps: 500,
                 data: false,
+                noLinks: false,
+                noTurtles: false,
+                sprites: false,
+                links: { color: 'gray', width: 1 },
                 img: false,
                 main: false,
-                transcan: false,
+                strokeColor: 'red',
+                // transcan: false,
                 noRotate: false,
             }
             Object.assign(params, util.parseQueryString())
             if (!params.maxY) params.maxY = params.maxX
+            params.world = new World(
+                World.defaultOptions(params.maxX, params.maxY)
+            )
             params.colors25 = util.repeat(25, (i, a) => {
                 a[i] = TurtlesView.randomColor()
             })
+            const view = new TurtlesView(
+                ctx,
+                params.cellSize,
+                params.world,
+                params.sprites
+            )
+            const shapes = view.shapes
+            const pathNames = shapes.getPathNames()
+            // params.spritesArray = shapes.getPathNames().map((name, i, a) => {
+            //     const color = util.oneOf(params.colors25)
+            //     const pixels = params.cellSize * params.shapeSize
+            //     return shapes.shapeToImage(name, pixels, color, 'black')
+            // })
+            params.shapes25names = []
+            const sprites25 = util.repeat(25, (i, a) => {
+                const color = params.colors25[i % 25]
+                const pixels = params.cellSize * params.shapeSize
+                a[i] = shapes.shapeToImage(
+                    params.shape,
+                    pixels,
+                    color,
+                    params.strokeColor
+                )
+                params.shapes25names.push(a[i].name)
+            })
+            // params.sprites25info = sprites25.map(sprite => sprite.name)
+            util.toWindow({ params, view, shapes, sprites25 })
             console.log('main: params', params)
 
             if (params.main) {
@@ -89,22 +125,20 @@
                 }
             }
 
-            if (params.main || !params.img) {
-                var view = new TurtlesView(
-                    ctx,
-                    params.cellSize,
-                    World.defaultOptions(params.maxX, params.maxY)
-                )
-            }
-
             function draw(data) {
                 function turtleViewValues(turtle, i, turtles) {
-                    return {
-                        shape: params.shape,
-                        color: params.colors25[i % 25],
-                        size: params.shapeSize,
-                        noRotate: params.noRotate,
-                    }
+                    return params.sprites
+                        ? {
+                              sprite: sprites25[i % 25],
+                              noRotate: params.noRotate,
+                          }
+                        : {
+                              shape: params.shape,
+                              color: params.colors25[i % 25],
+                              strokeColor: params.strokeColor,
+                              size: params.shapeSize,
+                              noRotate: params.noRotate,
+                          }
                 }
                 function linkViewValues(link, i, links) {
                     return {
@@ -113,8 +147,15 @@
                     }
                 }
                 util.fillCtx(ctx, 'lightgray')
-                view.drawLinks(data.links, linkViewValues)
-                view.drawTurtles(data.turtles, turtleViewValues)
+                if (!params.noLinks)
+                    view.drawLinks(
+                        data.links,
+                        util.isObject(params.links)
+                            ? params.links
+                            : linkViewValues
+                    )
+                if (!params.noTurtles)
+                    view.drawTurtles(data.turtles, turtleViewValues)
             }
         </script>
     </body>

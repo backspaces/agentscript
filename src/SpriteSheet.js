@@ -60,10 +60,10 @@ export default class SpriteSheet {
         // return paths[util.oneValOf(this.getPathNames())]
         return util.oneValOf(this.sprites)
     }
-    draw(ctx, sprite, x0, y0) {
+    draw(ctx, sprite, x0, y0, size0 = sprite.size) {
         const { x, y, size } = sprite
-        x0 = x0 - size / 2
-        y0 = y0 - size / 2
+        x0 = x0 - size0 / 2
+        y0 = y0 - size0 / 2
         ctx.drawImage(this.ctx.canvas, x, y, size, size, x0, y0, size, size)
     }
 

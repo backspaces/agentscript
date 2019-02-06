@@ -8,30 +8,30 @@
         <canvas id="can"></canvas>
         <script type="module">
             import util from '../src/util.js'
-            import Shapes from '../src/Shapes.js'
+            // import Shapes from '../src/Shapes.js'
+            import World from '../src/World.js'
             import SpriteSheet from '../src/SpriteSheet.js'
+            util.toWindow({ util, World, SpriteSheet })
+
+            const patchSize = 4
+            const world = new World({
+                minX: 0,
+                maxX: 200,
+                minY: -50,
+                maxY: 50,
+            })
+            const [size, theta] = [10, util.radians(45)]
+            const pixels = size * patchSize
 
             const can = document.getElementById('can')
             const ctx = can.getContext('2d')
-            const sheet = new SpriteSheet(32)
+            const sheet = new SpriteSheet(size * patchSize, 16, false)
             const shapes = sheet.shapes
+            util.toWindow({ shapes, sheet, can, ctx })
 
-            util.toWindow({
-                util,
-                Shapes,
-                SpriteSheet,
-                shapes,
-                sheet,
-                can,
-                ctx,
-            })
-
-            const [cell, width, height, x0, y0] = [2, 400, 200, 200, 100]
-
-            shapes.resetCtx(ctx, cell, width, height, x0, y0) // util?
-            util.fillCtx(ctx, 'gray')
-
-            const [shapeSize, theta] = [20, util.radians(45)]
+            // world.setCtxTransform(ctx, patchSize)
+            // shapes.resetCtx(ctx, patchSize, width, height, x0, y0) // util?
+            util.fillCtx(ctx, 'lightgray')
 
             async function addImages() {
                 await shapes.imagePathPromise('tweet', './data/twitter.png')
@@ -40,17 +40,6 @@
                 // console.log(shapes.getPath('redfish'))
             }
             addImages().then(() => {
-                // shapes.getPathNames().forEach((path, i) => {
-                //     // const x = -x0 + shapeSize / 2 + i * shapeSize
-                //     const x = (i + 0.5) * shapeSize
-                //     const y = 0 // shapeSize / 2
-                //     shapes.draw(ctx, path, x, y, theta, shapeSize, 'red')
-                // })
-                // shapes.getPathNames().forEach((path, i) => {
-                //     const img = shapes.shapeToImage(path, 64, 'green', 'blue')
-                //     const can = util.cloneCanvas(img, false) // convert to html canvas
-                //     div.appendChild(can)
-                // })
                 shapes.getPathNames().forEach((name, i) => {
                     sheet.newSprite(name, 'red', 'orange')
                     sheet.newSprite(name, 'gray', 'red')

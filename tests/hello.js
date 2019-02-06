@@ -66,19 +66,31 @@ onmessage = e => {
 }
 
 function setupView() {
+    // console.log(('worker:', params))
     const view = new TurtlesView(
         util.createCtx(0, 0),
         params.cellSize,
-        World.defaultOptions(params.maxX, params.maxY)
+        new World(params.world),
+        params.sprites
     )
+    const shapes = view.shapes
+    const sprites25 = params.shapes25names.map(name =>
+        shapes.imageNameToImage(name)
+    )
+
     function draw(data) {
         function turtleViewValues(turtle, i, turtles) {
-            return {
-                shape: params.shape,
-                color: params.colors25[i % 25],
-                size: params.shapeSize,
-                noRotate: params.noRotate,
-            }
+            return params.sprites
+                ? {
+                    sprite: sprites25[i % 25],
+                    noRotate: params.noRotate,
+                }
+                : {
+                    shape: params.shape,
+                    color: params.colors25[i % 25],
+                    size: params.shapeSize,
+                    noRotate: params.noRotate,
+                }
         }
         function linkViewValues(link, i, links) {
             return {
@@ -87,8 +99,34 @@ function setupView() {
             }
         }
         util.fillCtx(view.ctx, 'lightgray')
-        view.drawLinks(data.links, linkViewValues)
-        view.drawTurtles(data.turtles, turtleViewValues)
+        if (!params.noLinks) {
+            view.drawLinks(
+                data.links,
+                util.isObject(params.links) ? params.links : linkViewValues
+            )
+        }
+        if (!params.noTurtles) view.drawTurtles(data.turtles, turtleViewValues)
     }
+
     return { view, draw }
 }
+
+// function draw(data) {
+//     function turtleViewValues(turtle, i, turtles) {
+//         return {
+//             shape: params.shape,
+//             color: params.colors25[i % 25],
+//             size: params.shapeSize,
+//             noRotate: params.noRotate,
+//         }
+//     }
+//     function linkViewValues(link, i, links) {
+//         return {
+//             color: params.colors25[i % 25],
+//             width: params.linkWidth,
+//         }
+//     }
+//     util.fillCtx(view.ctx, 'lightgray')
+//     view.drawLinks(data.links, linkViewValues)
+//     view.drawTurtles(data.turtles, turtleViewValues)
+// }

@@ -69,7 +69,8 @@ function setupView() {
     const view = new TurtlesView(
         util.createCtx(0, 0),
         params.cellSize,
-        World.defaultOptions(params.maxX, params.maxY)
+        // World.defaultOptions(params.maxX, params.maxY)
+        new World(World.defaultOptions(params.maxX, params.maxY))
     )
     function draw(data) {
         function turtleViewValues(turtle, i, turtles) {
