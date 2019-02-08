@@ -50,7 +50,7 @@
             )
             util.toWindow({ util, World, TurtlesView, ctx, can, view })
 
-            const worker = new Worker('./Walkers.umd.js')
+            const worker = new Worker('./walkers.umd.js')
             console.log('main: worker:', worker)
             worker.postMessage({ cmd: 'init', params: params })
 

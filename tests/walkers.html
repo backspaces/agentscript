@@ -56,7 +56,7 @@
             )
             util.toWindow({ util, World, TurtlesView, ctx, can, view })
 
-            const worker = new Worker('./Walkers.js', {
+            const worker = new Worker('./walkers.js', {
                 type: 'module',
             })
             console.log('main: worker:', worker)
