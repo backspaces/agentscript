@@ -16,11 +16,72 @@ export default class SpriteSheet {
         // THREE texture optional, texture.needsUpdate = true on sheet change
         this.texture = null
     }
+    // Get a sprite from cache. Create if not there.
+    // Currently an alias for newSprite() but may change.
+    getSprite(shapeName, color, strokeColor) {
+        return this.newSprite(shapeName, color, strokeColor)
+    }
+    // Return a random sprite from the cache.
+    oneOf() {
+        return util.oneValOf(this.sprites)
+    }
+
+    // Draw the sprite on ctx with given x,y,theta.
+    // Uses world/patchSize euclidean coords & angle
+    // Does not use transformed ctx, just canvas pixels.
+    draw(ctx, sprite, x, y, theta, world, patchSize, noRotate = false) {
+        const [x0, y0] = world.patchXYtoPixelXY(x, y, patchSize)
+        const theta0 = -theta
+        this.drawCanvas(ctx, sprite, x0, y0, theta0, noRotate)
+    }
+    // Draw the sprite on ctx with given x,y,theta.
+    // Uses canvas pixel coords
+    drawCanvas(ctx, sprite, x, y, theta = 0, noRotate = false) {
+        const { x: x0, y: y0, size } = sprite
+        const halfSize = size / 2
+        if (noRotate) theta = 0
+
+        if (theta === 0) {
+            ctx.drawImage(
+                this.ctx.canvas,
+                x0,
+                y0,
+                size,
+                size,
+                x - halfSize,
+                y - halfSize,
+                size,
+                size
+            )
+        } else {
+            ctx.save()
+            ctx.translate(x, y)
+            ctx.rotate(theta)
+            ctx.drawImage(
+                this.ctx.canvas,
+                x0,
+                y0,
+                size,
+                size,
+                -halfSize,
+                -halfSize,
+                size,
+                size
+            )
+            ctx.restore()
+        }
+    }
+
     // A sprite identifies a slot in the sheet.
     // If sprite in cache, return it. Otherwise create and return it.
     newSprite(shapeName, color, strokeColor = null) {
-        // create a normalized name:
-        const name = this.spriteName(shapeName, color, strokeColor)
+        // Create a normalized name. Use shapes (includes size)
+        const name = this.shapes.imageName(
+            shapeName,
+            this.spriteSize,
+            color,
+            strokeColor
+        )
         // If sprite of ths name already exists, return it.
         if (this.sprites[name]) return this.sprites[name]
 
@@ -38,33 +99,13 @@ export default class SpriteSheet {
         this.ctx.drawImage(img, x, y, size, size)
 
         const { nextRow: row, nextCol: col } = this
-        const sprite = { name, x, y, row, col, size, sheet: this }
+        const sprite = { name, x, y, row, col, size } // , sheet: this
         sprite.uvs = this.getUVs(sprite)
 
         this.incrementRowCol()
         // Add sprite to cache and return it.
         this.sprites[name] = sprite
         return sprite
-    }
-    // Get a sprite from cache. Create if not there.
-    // Currently an alias for newSprite() but may change.
-    getSprite(shapeName, color, strokeColor) {
-        return this.newSprite(shapeName, color, strokeColor)
-    }
-    // Return sprite image coords for drawing: x,y,size,size
-    getSpriteCoords(sprite) {
-        const { x, y, size } = sprite
-        return { x, y, size }
-    }
-    oneOf() {
-        // return paths[util.oneValOf(this.getPathNames())]
-        return util.oneValOf(this.sprites)
-    }
-    draw(ctx, sprite, x0, y0, size0 = sprite.size) {
-        const { x, y, size } = sprite
-        x0 = x0 - size0 / 2
-        y0 = y0 - size0 / 2
-        ctx.drawImage(this.ctx.canvas, x, y, size, size, x0, y0, size, size)
     }
 
     // getters for derived values.
@@ -82,31 +123,11 @@ export default class SpriteSheet {
     get nextY() {
         return this.spriteSize * this.nextRow
     }
-    // id = number of sprites
-    // get id() {
-    //     return Object.keys(this.sprites).length
-    // }
     checkPowerOf2() {
         const { width, height } = this
         if (!(util.isPowerOf2(width) && util.isPowerOf2(height))) {
             throw Error(`SpriteSheet non power of 2: ${width}x${height}`)
         }
-    }
-
-    // Given parameters for a sprite, create a name
-    spriteName(shapeName, color, strokeColor = null) {
-        const path = this.shapes.getPath(shapeName)
-        if (!path) throw Error(`spriteName: ${shapeName} not in Shapes`)
-
-        if (path.name === 'imagePath') return `${shapeName}_image`
-
-        if (!color) {
-            throw Error(`spriteName: No color for shape ${shapeName}`)
-        }
-        // OK to give strokeColor when not needed.
-        if (!this.shapes.needsStrokeColor(shapeName)) strokeColor = null
-
-        return `${shapeName}_${color}${strokeColor ? `_${strokeColor}` : ''}`
     }
 
     // Adjust for new sheet size if necessary:
@@ -151,3 +172,30 @@ export default class SpriteSheet {
         return [u0, v0, u1, v0, u1, v1, u0, v1]
     }
 }
+
+// Return sprite image coords for drawing: x,y,size,size
+// getSpriteCoords(sprite) {
+//     const { x, y, size } = sprite
+//     return { x, y, size }
+// }
+
+// Given parameters for a sprite, create a name
+// spriteName(shapeName, color, strokeColor = null) {
+//     const path = this.shapes.getPath(shapeName)
+//     if (!path) throw Error(`spriteName: ${shapeName} not in Shapes`)
+//
+//     if (path.name === 'imagePath') return `${shapeName}_image`
+//
+//     if (!color) {
+//         throw Error(`spriteName: No color for shape ${shapeName}`)
+//     }
+//     // OK to give strokeColor when not needed.
+//     if (!this.shapes.needsStrokeColor(shapeName)) strokeColor = null
+//
+//     return `${shapeName}_${color}${strokeColor ? `_${strokeColor}` : ''}`
+// }
+
+// id = number of sprites
+// get id() {
+//     return Object.keys(this.sprites).length
+// }

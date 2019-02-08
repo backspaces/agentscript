@@ -808,8 +808,7 @@ const util = {
     // Set the ctx/canvas size if differs from width/height.
     // It does not install a transform and assumes there is not one currently installed.
     // The World object can do that for AgentSets.
-    setCtxSize(ctx, width, height) {
-        const can = ctx.canvas
+    setCanvasSize(can, width, height) {
         if (can.width !== width || can.height != height) {
             can.width = width
             can.height = height
@@ -852,10 +851,11 @@ const util = {
     },
     // Fill this context with the given image, resizing it to img size if needed.
     setCtxImage(ctx, img) {
-        this.setCtxSize(ctx, img.width, img.height)
-        this.setIdentity(ctx)
-        ctx.drawImage(img, 0, 0, img.width, img.height)
-        ctx.restore()
+        this.setCanvasSize(ctx.canvas, img.width, img.height)
+        this.fillCtxWithImage(ctx, img)
+        // this.setIdentity(ctx)
+        // ctx.drawImage(img, 0, 0, img.width, img.height)
+        // ctx.restore()
     },
 
     // Use webgl texture to convert img to Uint8Array w/o alpha premultiply

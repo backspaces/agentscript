@@ -25,8 +25,7 @@ export default class TurtlesView {
         this.patchSize = patchSize
         if (this.useSprites) {
             // If using sprites, do not install the transform
-            const [width, height] = this.world.canvasSize(patchSize)
-            util.setCtxSize(this.ctx, width, height)
+            this.world.setCanvasSize(this.ctx.canvas, patchSize)
         } else {
             // If using shapes, create euclidean transform.
             this.world.setCtxTransform(this.ctx, patchSize)

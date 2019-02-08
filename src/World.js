@@ -27,11 +27,6 @@ class World {
         this.maxXcor = this.maxX + 0.5
         this.minYcor = this.minY - 0.5
         this.maxYcor = this.maxY + 0.5
-
-        // The midpoints of the world, in world coords.
-        // (0, 0) for the centered default worlds. REMIND: remove?
-        // this.centerX = (this.minX + this.maxX) / 2
-        // this.centerY = (this.minY + this.maxY) / 2
     }
     randomPosition(float = true) {
         return float
@@ -53,8 +48,8 @@ class World {
             y <= this.maxYcor
         )
     }
-    // Convert a canvas to world coordinates.
-    // The size is determined by patchSize.
+    // Convert a canvas context to world euclidean coordinates
+    // Change the ctx.canvas size, determined by patchSize.
     setCtxTransform(ctx, patchSize) {
         ctx.canvas.width = this.numX * patchSize
         ctx.canvas.height = this.numY * patchSize
@@ -65,21 +60,33 @@ class World {
     }
 
     // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)
-    pixelXYtoPatchXY(x, y, patchSize = 1) {
+    pixelXYtoPatchXY(x, y, patchSize) {
         return [this.minXcor + x / patchSize, this.maxYcor - y / patchSize]
     }
     // Convert patch coords (float) to pixel location (top/left offset i.e. mouse)
-    patchXYtoPixelXY(x, y, patchSize = 1) {
+    patchXYtoPixelXY(x, y, patchSize) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
-    // Calculate patchSize from canvas (any imagable) dimensions
-    canvasPatchSize(canvas) {
-        // const [width, height] = canvas
-        return canvas.width / this.numX
-    }
-    canvasSize(patchSize) {
-        return [this.numX * patchSize, this.numY * patchSize]
+    // Change canvas size to this world's size.
+    // Does not change size if already the same, preserving the ctx content.
+    setCanvasSize(canvas, patchSize) {
+        const [width, height] = [this.numX * patchSize, this.numY * patchSize]
+        util.setCanvasSize(canvas, width, height)
     }
 }
 
 export default World
+
+// The midpoints of the world, in world coords.
+// (0, 0) for the centered default worlds. REMIND: remove?
+// this.centerX = (this.minX + this.maxX) / 2
+// this.centerY = (this.minY + this.maxY) / 2
+
+// Calculate patchSize from canvas (any imagable) dimensions
+// canvasPatchSize(canvas) {
+//     // const [width, height] = canvas
+//     return canvas.width / this.numX
+// }
+// canvasSize(patchSize) {
+//     return [this.numX * patchSize, this.numY * patchSize]
+// }

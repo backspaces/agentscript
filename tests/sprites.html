@@ -11,27 +11,21 @@
             // import Shapes from '../src/Shapes.js'
             import World from '../src/World.js'
             import SpriteSheet from '../src/SpriteSheet.js'
-            util.toWindow({ util, World, SpriteSheet })
+            import WalkersModel from '../models/WalkersModel.js'
+            util.toWindow({ util, World, SpriteSheet, WalkersModel })
 
             const patchSize = 4
-            const world = new World({
-                minX: 0,
-                maxX: 200,
-                minY: -50,
-                maxY: 50,
-            })
+            const world = new World(World.defaultOptions(100, 50))
             const [size, theta] = [10, util.radians(45)]
             const pixels = size * patchSize
+            util.toWindow({ world, patchSize, size, theta, pixels })
 
             const can = document.getElementById('can')
             const ctx = can.getContext('2d')
+            world.setCanvasSize(can, patchSize)
             const sheet = new SpriteSheet(size * patchSize, 16, false)
             const shapes = sheet.shapes
             util.toWindow({ shapes, sheet, can, ctx })
-
-            // world.setCtxTransform(ctx, patchSize)
-            // shapes.resetCtx(ctx, patchSize, width, height, x0, y0) // util?
-            util.fillCtx(ctx, 'lightgray')
 
             async function addImages() {
                 await shapes.imagePathPromise('tweet', './data/twitter.png')
@@ -40,14 +34,54 @@
                 // console.log(shapes.getPath('redfish'))
             }
             addImages().then(() => {
+                newSprites() // make sure dups detected
+                newSprites()
+                newSprites()
+                // Convert sheet from offscreen canvas to an html element
+                const htmlsheet = util.cloneCanvas(sheet.ctx.canvas, false)
+                document.body.appendChild(htmlsheet)
+
+                const model = new WalkersModel(world)
+                model.population = 100
+                model.setup()
+                const sprites = []
+                util.forEach(sheet.sprites, s => sprites.push(s))
+                util.toWindow({ model, sprites })
+
+                const perf = util.fps()
+                util.timeoutLoop(steps => {
+                    model.step()
+                    // draw(model)
+                    perf()
+                }, 500).then(() => {
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                })
+            })
+
+            function newSprites() {
                 shapes.getPathNames().forEach((name, i) => {
                     sheet.newSprite(name, 'red', 'orange')
                     sheet.newSprite(name, 'gray', 'red')
                     sheet.newSprite(name, 'blue', 'black')
                 })
-                const htmlsheet = util.cloneCanvas(sheet.ctx.canvas, false)
-                document.body.appendChild(htmlsheet)
-            })
+            }
+
+            // function draw(data) {
+            //     function turtleViewValues(turtle, i, turtles) {
+            //         return {
+            //             shape:
+            //                 params.shape === 'all'
+            //                     ? shapeNames[i % shapeNames.length]
+            //                     : params.shape,
+            //             color: params.colors25[i % 25],
+            //             strokeColor: params.strokeColor,
+            //             size: params.shapeSize,
+            //             noRotate: params.noRotate,
+            //         }
+            //     }
+            //     util.fillCtx(ctx, 'lightgray')
+            //     view.drawTurtles(data.turtles, turtleViewValues)
+            // }
         </script>
     </body>
 </html>

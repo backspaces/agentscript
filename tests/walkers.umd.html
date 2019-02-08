@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WalkersView</title>
+    </head>
+
+    <body>
+        <canvas id="model" style="border: 1px solid;"></canvas>
+        <script type="module">
+            import util from '../src/util.js'
+            import World from '../src/World.js'
+            import TurtlesView from './TurtlesView.js'
+            const can = document.getElementById('model')
+            const ctx = can.getContext('2d')
+
+            const params = {
+                seed: 1,
+                shape: 'all', // triangle:78, square:95 faster, dart:66
+                shapeSize: 1.5,
+                population: 1000,
+                speed: 0.1,
+                speedDelta: 0.1,
+                wiggle: 0.2,
+                maxX: 30,
+                maxY: 20,
+                cellSize: 15,
+                sprites: false,
+                strokeColor: 'red',
+                steps: 500,
+                data: false,
+                noRotate: false,
+            }
+            Object.assign(params, util.parseQueryString())
+            if (params.seed != null) util.randomSeed(params.seed)
+            if (!params.maxY) params.maxY = params.maxX
+            params.colors25 = util.repeat(25, (i, a) => {
+                a[i] = TurtlesView.randomColor()
+            })
+            params.world = new World(
+                World.defaultOptions(params.maxX, params.maxY)
+            )
+
+            if (params.seed != null) util.randomSeed(params.seed) // reset seed
+            console.log('main: params', params)
+            const view = new TurtlesView(
+                ctx,
+                params.cellSize,
+                params.world,
+                params.sprites
+            )
+            util.toWindow({ util, World, TurtlesView, ctx, can, view })
+
+            const worker = new Worker('./Walkers.umd.js')
+            console.log('main: worker:', worker)
+            worker.postMessage({ cmd: 'init', params: params })
+
+            let data = params.data ? [] : null
+            const perf = util.fps()
+            worker.onmessage = e => {
+                if (e.data === 'done') {
+                    console.log('main: done.')
+                    console.log('data:', data)
+                    util.toWindow({ data })
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                    // worker.terminate()
+                } else {
+                    if (params.data) {
+                        data.push(e.data)
+                    } else {
+                        data = e.data
+                        draw(e.data)
+                    }
+                    perf()
+                    worker.postMessage({ cmd: 'step' })
+                }
+            }
+
+            const shapeNames = view.shapes.getPathNames()
+            function draw(data) {
+                function turtleViewValues(turtle, i, turtles) {
+                    return {
+                        shape:
+                            params.shape === 'all'
+                                ? shapeNames[i % shapeNames.length]
+                                : params.shape,
+                        color: params.colors25[i % 25],
+                        strokeColor: params.strokeColor,
+                        size: params.shapeSize,
+                        noRotate: params.noRotate,
+                    }
+                }
+                util.fillCtx(ctx, 'lightgray')
+                view.drawTurtles(data.turtles, turtleViewValues)
+            }
+        </script>
+    </body>
+</html>

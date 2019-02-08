@@ -815,8 +815,7 @@ const util = {
     // Set the ctx/canvas size if differs from width/height.
     // It does not install a transform and assumes there is not one currently installed.
     // The World object can do that for AgentSets.
-    setCtxSize(ctx, width, height) {
-        const can = ctx.canvas;
+    setCanvasSize(can, width, height) {
         if (can.width !== width || can.height != height) {
             can.width = width;
             can.height = height;
@@ -859,10 +858,11 @@ const util = {
     },
     // Fill this context with the given image, resizing it to img size if needed.
     setCtxImage(ctx, img) {
-        this.setCtxSize(ctx, img.width, img.height);
-        this.setIdentity(ctx);
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-        ctx.restore();
+        this.setCanvasSize(ctx.canvas, img.width, img.height);
+        this.fillCtxWithImage(ctx, img);
+        // this.setIdentity(ctx)
+        // ctx.drawImage(img, 0, 0, img.width, img.height)
+        // ctx.restore()
     },
 
     // Use webgl texture to convert img to Uint8Array w/o alpha premultiply
@@ -2193,11 +2193,6 @@ class World {
         this.maxXcor = this.maxX + 0.5;
         this.minYcor = this.minY - 0.5;
         this.maxYcor = this.maxY + 0.5;
-
-        // The midpoints of the world, in world coords.
-        // (0, 0) for the centered default worlds. REMIND: remove?
-        // this.centerX = (this.minX + this.maxX) / 2
-        // this.centerY = (this.minY + this.maxY) / 2
     }
     randomPosition(float = true) {
         return float
@@ -2219,8 +2214,8 @@ class World {
             y <= this.maxYcor
         )
     }
-    // Convert a canvas to world coordinates.
-    // The size is determined by patchSize.
+    // Convert a canvas context to world euclidean coordinates
+    // Change the ctx.canvas size, determined by patchSize.
     setCtxTransform(ctx, patchSize) {
         ctx.canvas.width = this.numX * patchSize;
         ctx.canvas.height = this.numY * patchSize;
@@ -2231,22 +2226,36 @@ class World {
     }
 
     // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)
-    pixelXYtoPatchXY(x, y, patchSize = 1) {
+    pixelXYtoPatchXY(x, y, patchSize) {
         return [this.minXcor + x / patchSize, this.maxYcor - y / patchSize]
     }
     // Convert patch coords (float) to pixel location (top/left offset i.e. mouse)
-    patchXYtoPixelXY(x, y, patchSize = 1) {
+    patchXYtoPixelXY(x, y, patchSize) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
-    // Calculate patchSize from canvas (any imagable) dimensions
-    canvasPatchSize(canvas) {
-        // const [width, height] = canvas
-        return canvas.width / this.numX
-    }
-    canvasSize(patchSize) {
-        return [this.numX * patchSize, this.numY * patchSize]
+    // Change canvas size to this world's size.
+    // Does not change size if already the same, preserving the ctx content.
+    setCanvasSize(canvas, patchSize) {
+        const [width, height] = [this.numX * patchSize, this.numY * patchSize];
+        util.setCanvasSize(canvas, width, height);
     }
 }
+
+
+
+// The midpoints of the world, in world coords.
+// (0, 0) for the centered default worlds. REMIND: remove?
+// this.centerX = (this.minX + this.maxX) / 2
+// this.centerY = (this.minY + this.maxY) / 2
+
+// Calculate patchSize from canvas (any imagable) dimensions
+// canvasPatchSize(canvas) {
+//     // const [width, height] = canvas
+//     return canvas.width / this.numX
+// }
+// canvasSize(patchSize) {
+//     return [this.numX * patchSize, this.numY * patchSize]
+// }
 
 // Patches are the world other agentsets live on. They create a coord system
 // from Model's world values: minX, maxX, minY, maxY

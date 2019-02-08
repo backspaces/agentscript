@@ -1,5 +1,5 @@
-import util from '../src/util.js'
-import WalkersModel from '../models/WalkersModel.js'
+importScripts('../dist/agentscript.umd.js')
+importScripts('../models/WalkersScript.js')
 console.log('worker self', self)
 
 let model, params
