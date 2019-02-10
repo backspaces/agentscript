@@ -1,5 +1,4 @@
 import util from '../src/util.js'
-// import World from '../src/World.js'
 import Shapes from '../src/Shapes.js'
 
 export default class TurtlesView {
@@ -31,11 +30,6 @@ export default class TurtlesView {
             this.world.setCtxTransform(this.ctx, patchSize)
         }
     }
-    // Calll this to change the view's canvas size.
-    // setTransform(patchSize) {
-    //     this.patchSize = patchSize
-    //     this.world.setCtxTransform(this.ctx, patchSize)
-    // }
 
     drawTurtles(data, viewFcn) {
         const isOofA = !util.isArray(data)
@@ -67,12 +61,26 @@ export default class TurtlesView {
                     strokeColor
                 )
             }
-            this.drawImage(
-                sprite,
-                turtle.x,
-                turtle.y,
-                noRotate ? 0 : turtle.theta
-            )
+
+            if (sprite.sheet) {
+                sprite.sheet.draw(
+                    this.ctx,
+                    sprite,
+                    turtle.x,
+                    turtle.y,
+                    turtle.theta,
+                    this.world,
+                    this.patchSize,
+                    noRotate
+                )
+            } else {
+                this.drawImage(
+                    sprite,
+                    turtle.x,
+                    turtle.y,
+                    noRotate ? 0 : turtle.theta
+                )
+            }
         } else {
             const { shape, color, size, noRotate } = viewData
             this.drawShape(
@@ -235,4 +243,10 @@ ToDo:
 //     } else {
 //         throw Error(`drawTurtle: bad viewData: ${viewData}`)
 //     }
+// }
+
+// Calll this to change the view's canvas size.
+// setTransform(patchSize) {
+//     this.patchSize = patchSize
+//     this.world.setCtxTransform(this.ctx, patchSize)
 // }

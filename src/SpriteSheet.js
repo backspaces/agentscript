@@ -4,7 +4,9 @@ import Shapes from './Shapes.js'
 // Sprites are shapes rendered within a sprite-sheet canvas.
 export default class SpriteSheet {
     // Initialize a one row by cols initial sheet.
-    constructor(spriteSize = 64, cols = 16, usePowerOf2 = true) {
+    // spriteSize rounded up if a float.
+    constructor(spriteSize = 64, cols = 16, usePowerOf2 = false) {
+        spriteSize = Math.ceil(spriteSize) // in integer pixels
         Object.assign(this, { spriteSize, cols, usePowerOf2 })
         this.rows = 1
         this.nextCol = 0
@@ -86,7 +88,7 @@ export default class SpriteSheet {
         if (this.sprites[name]) return this.sprites[name]
 
         // The sprite image
-        const img = shapes.shapeToImage(
+        const img = this.shapes.shapeToImage(
             shapeName,
             this.spriteSize,
             color,
@@ -99,7 +101,7 @@ export default class SpriteSheet {
         this.ctx.drawImage(img, x, y, size, size)
 
         const { nextRow: row, nextCol: col } = this
-        const sprite = { name, x, y, row, col, size } // , sheet: this
+        const sprite = { name, x, y, row, col, size, sheet: this }
         sprite.uvs = this.getUVs(sprite)
 
         this.incrementRowCol()

@@ -10,22 +10,26 @@
             import util from '../src/util.js'
             // import Shapes from '../src/Shapes.js'
             import World from '../src/World.js'
+            import TurtlesView from './TurtlesView.js'
             import SpriteSheet from '../src/SpriteSheet.js'
             import WalkersModel from '../models/WalkersModel.js'
             util.toWindow({ util, World, SpriteSheet, WalkersModel })
 
             const patchSize = 4
             const world = new World(World.defaultOptions(100, 50))
-            const [size, theta] = [10, util.radians(45)]
+            const [size, theta] = [5, util.radians(45)]
             const pixels = size * patchSize
-            util.toWindow({ world, patchSize, size, theta, pixels })
+            const noRotate = false
+            const population = 1000
+            util.toWindow({ world, patchSize, size, theta, pixels, noRotate })
 
             const can = document.getElementById('can')
             const ctx = can.getContext('2d')
             world.setCanvasSize(can, patchSize)
             const sheet = new SpriteSheet(size * patchSize, 16, false)
             const shapes = sheet.shapes
-            util.toWindow({ shapes, sheet, can, ctx })
+            const view = new TurtlesView(ctx, patchSize, world, true)
+            util.toWindow({ shapes, sheet, can, ctx, view })
 
             async function addImages() {
                 await shapes.imagePathPromise('tweet', './data/twitter.png')
@@ -42,46 +46,41 @@
                 document.body.appendChild(htmlsheet)
 
                 const model = new WalkersModel(world)
-                model.population = 100
+                model.population = population
                 model.setup()
-                const sprites = []
-                util.forEach(sheet.sprites, s => sprites.push(s))
+
                 util.toWindow({ model, sprites })
 
                 const perf = util.fps()
                 util.timeoutLoop(steps => {
                     model.step()
-                    // draw(model)
+                    draw(model)
                     perf()
                 }, 500).then(() => {
                     console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                 })
             })
 
+            let sprites
             function newSprites() {
                 shapes.getPathNames().forEach((name, i) => {
                     sheet.newSprite(name, 'red', 'orange')
                     sheet.newSprite(name, 'gray', 'red')
                     sheet.newSprite(name, 'blue', 'black')
                 })
+                sprites = Object.values(sheet.sprites)
             }
 
-            // function draw(data) {
-            //     function turtleViewValues(turtle, i, turtles) {
-            //         return {
-            //             shape:
-            //                 params.shape === 'all'
-            //                     ? shapeNames[i % shapeNames.length]
-            //                     : params.shape,
-            //             color: params.colors25[i % 25],
-            //             strokeColor: params.strokeColor,
-            //             size: params.shapeSize,
-            //             noRotate: params.noRotate,
-            //         }
-            //     }
-            //     util.fillCtx(ctx, 'lightgray')
-            //     view.drawTurtles(data.turtles, turtleViewValues)
-            // }
+            function draw(data) {
+                function turtleViewValues(turtle, i, turtles) {
+                    return {
+                        sprite: sprites[i % sprites.length],
+                        noRotate: noRotate,
+                    }
+                }
+                util.fillCtx(ctx, 'lightgray')
+                view.drawTurtles(data.turtles, turtleViewValues)
+            }
         </script>
     </body>
 </html>

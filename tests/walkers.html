@@ -9,6 +9,7 @@
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
+            import SpriteSheet from '../src/SpriteSheet.js'
             import TurtlesView from './TurtlesView.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
@@ -23,8 +24,9 @@
                 wiggle: 0.2,
                 maxX: 30,
                 maxY: 20,
-                cellSize: 15,
+                patchSize: 15,
                 sprites: false,
+                sheet: false,
                 strokeColor: 'red',
                 steps: 500,
                 data: false,
@@ -33,6 +35,7 @@
             Object.assign(params, util.parseQueryString())
             if (params.seed != null) util.randomSeed(params.seed)
             if (!params.maxY) params.maxY = params.maxX
+            if (params.sheet) params.sprites = true
             params.colors25 = util.repeat(25, (i, a) => {
                 a[i] = TurtlesView.randomColor()
             })
@@ -40,20 +43,15 @@
                 World.defaultOptions(params.maxX, params.maxY)
             )
 
-            // params.shapes8 = util.repeat(25, (i, a) => {
-            //     a[i] = TurtlesView.randomColor()
-            // })
             if (params.seed != null) util.randomSeed(params.seed) // reset seed
             console.log('main: params', params)
-            // const world = new World(
-            //     World.defaultOptions(params.maxX, params.maxY)
-            // )
             const view = new TurtlesView(
                 ctx,
-                params.cellSize,
+                params.patchSize,
                 params.world,
                 params.sprites
             )
+            const shapes = view.shapes
             util.toWindow({ util, World, TurtlesView, ctx, can, view })
 
             const worker = new Worker('./walkers.js', {
@@ -83,19 +81,52 @@
                 }
             }
 
-            const shapeNames = view.shapes.getPathNames()
+            const shapeNames = shapes.getPathNames()
+            const sheet = new SpriteSheet(params.shapeSize * params.patchSize)
+            function getShapeName(i) {
+                return params.shape === 'all'
+                    ? shapeNames[i % shapeNames.length]
+                    : params.shape
+            }
+            function getColor(i) {
+                return params.colors25[i % 25]
+            }
+            function getSprites() {
+                // if (!params.sprites) return null
+                const sprites = []
+                const strokeColor = params.strokeColor
+                const px = sheet.spriteSize
+                util.repeat(params.population, (i, a) => {
+                    const name =
+                        params.shape === 'all'
+                            ? shapeNames[i % shapeNames.length]
+                            : params.shape
+                    const color = params.colors25[i % 25]
+                    sprites.push(
+                        params.sheet
+                            ? sheet.getSprite(name, color, strokeColor)
+                            : shapes.shapeToImage(name, px, color, strokeColor)
+                    )
+                })
+                return sprites
+            }
+            const sprites = getSprites()
+            util.toWindow({ shapeNames, sheet, sprites })
+
             function draw(data) {
                 function turtleViewValues(turtle, i, turtles) {
-                    return {
-                        shape:
-                            params.shape === 'all'
-                                ? shapeNames[i % shapeNames.length]
-                                : params.shape,
-                        color: params.colors25[i % 25],
-                        strokeColor: params.strokeColor,
-                        size: params.shapeSize,
-                        noRotate: params.noRotate,
-                    }
+                    return params.sprites
+                        ? {
+                              sprite: sprites[i],
+                              noRotate: params.noRotate,
+                          }
+                        : {
+                              shape: getShapeName(i),
+                              color: getColor(i), // params.colors25[i % 25],
+                              strokeColor: params.strokeColor,
+                              size: params.shapeSize,
+                              noRotate: params.noRotate,
+                          }
                 }
                 util.fillCtx(ctx, 'lightgray')
                 view.drawTurtles(data.turtles, turtleViewValues)
