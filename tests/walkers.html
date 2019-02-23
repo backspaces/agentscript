@@ -10,7 +10,7 @@
             import util from '../src/util.js'
             import World from '../src/World.js'
             import SpriteSheet from '../src/SpriteSheet.js'
-            import TurtlesView from './TurtlesView.js'
+            import TurtlesView from '../src/TurtlesView.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
 
@@ -37,7 +37,7 @@
             if (!params.maxY) params.maxY = params.maxX
             if (params.sheet) params.sprites = true
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = TurtlesView.randomColor()
+                a[i] = util.randomColor()
             })
             params.world = new World(
                 World.defaultOptions(params.maxX, params.maxY)
@@ -52,7 +52,7 @@
                 params.sprites
             )
             const shapes = view.shapes
-            util.toWindow({ util, World, TurtlesView, ctx, can, view })
+            util.toWindow({ util, World, TurtlesView, params, ctx, can, view })
 
             const worker = new Worker('./walkers.js', {
                 type: 'module',

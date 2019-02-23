@@ -1,4 +1,4 @@
-import util from '../src/util.js'
+import util from './util.js'
 
 // class World defines the coordinate system for the model.
 // It will be upgraded with methods converting from other
@@ -21,12 +21,16 @@ class World {
     }
     // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
     setWorld() {
-        this.numX = this.maxX - this.minX + 1
-        this.numY = this.maxY - this.minY + 1
+        this.numX = this.width = this.maxX - this.minX + 1
+        this.numY = this.height = this.maxY - this.minY + 1
         this.minXcor = this.minX - 0.5
         this.maxXcor = this.maxX + 0.5
         this.minYcor = this.minY - 0.5
         this.maxYcor = this.maxY + 0.5
+        // The midpoints of the world, in world coords.
+        // (0, 0) for the centered default worlds. REMIND: remove?
+        this.centerX = (this.minX + this.maxX) / 2
+        this.centerY = (this.minY + this.maxY) / 2
     }
     randomPosition(float = true) {
         return float
@@ -67,10 +71,14 @@ class World {
     patchXYtoPixelXY(x, y, patchSize) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
+    getWorldSize(patchSize = 1) {
+        return [this.numX * patchSize, this.numY * patchSize]
+    }
     // Change canvas size to this world's size.
     // Does not change size if already the same, preserving the ctx content.
     setCanvasSize(canvas, patchSize) {
-        const [width, height] = [this.numX * patchSize, this.numY * patchSize]
+        // const [width, height] = [this.numX * patchSize, this.numY * patchSize]
+        const [width, height] = this.getWorldSize(patchSize)
         util.setCanvasSize(canvas, width, height)
     }
 }

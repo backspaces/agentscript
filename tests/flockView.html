@@ -9,7 +9,7 @@
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
-            import TurtlesView from './TurtlesView.js'
+            import TurtlesView from '../src/TurtlesView.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
             util.toWindow({ util, World, TurtlesView, ctx, can })
@@ -22,7 +22,7 @@
                 speed: 0.1,
                 maxX: 30,
                 maxY: 20,
-                cellSize: 15,
+                patchSize: 15,
                 // linkWidth: 1,
                 steps: 500,
                 data: false,
@@ -34,7 +34,7 @@
             if (params.seed != null) util.randomSeed(params.seed)
             if (!params.maxY) params.maxY = params.maxX
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = TurtlesView.randomColor()
+                a[i] = util.randomColor()
             })
             if (params.seed != null) util.randomSeed(params.seed) // reset seed
             console.log('main: params', params)
@@ -93,7 +93,7 @@
             if (params.main || !params.img) {
                 var view = new TurtlesView(
                     ctx,
-                    params.cellSize,
+                    params.patchSize,
                     new World(World.defaultOptions(params.maxX, params.maxY))
                 )
                 util.toWindow({ view })
@@ -114,7 +114,10 @@
                 //         width: params.linkWidth,
                 //     }
                 // }
-                util.fillCtx(ctx, 'lightgray')
+                // util.fillCtx(ctx, 'lightgray')
+                // util.fillCtx(ctx, 'rgba(0,0,0,0)')
+                util.clearCtx(ctx)
+                // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
                 // view.drawLinks(data.links, linkViewValues)
                 view.drawTurtles(data.turtles, turtleViewValues)
             }

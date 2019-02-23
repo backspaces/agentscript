@@ -1,15 +1,7 @@
-import util from '../src/util.js'
-import Shapes from '../src/Shapes.js'
+import util from './util.js'
+import Shapes from './Shapes.js'
 
 export default class TurtlesView {
-    static rgbColor(r, g, b) {
-        return `rgb(${r},${g},${b})`
-    }
-    static randomColor() {
-        const r255 = () => util.randomInt(256) // random int in [0,255]
-        return this.rgbColor(r255(), r255(), r255())
-    }
-
     constructor(ctx, patchSize, world, useSprites = false) {
         Object.assign(this, { ctx, world, patchSize, useSprites })
         this.shapes = new Shapes()

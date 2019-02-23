@@ -9,7 +9,7 @@
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
-            import TurtlesView from './TurtlesView.js'
+            import TurtlesView from '../src/TurtlesView.js'
             // import HelloModel from '../models/HelloModel.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
@@ -23,7 +23,7 @@
                 speed: 0.1,
                 maxX: 30,
                 maxY: 20,
-                cellSize: 15,
+                patchSize: 15,
                 linkWidth: 1,
                 steps: 500,
                 data: false,
@@ -43,11 +43,11 @@
                 World.defaultOptions(params.maxX, params.maxY)
             )
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = TurtlesView.randomColor()
+                a[i] = util.randomColor()
             })
             const view = new TurtlesView(
                 ctx,
-                params.cellSize,
+                params.patchSize,
                 params.world,
                 params.sprites
             )
@@ -55,13 +55,13 @@
             const pathNames = shapes.getPathNames()
             // params.spritesArray = shapes.getPathNames().map((name, i, a) => {
             //     const color = util.oneOf(params.colors25)
-            //     const pixels = params.cellSize * params.shapeSize
+            //     const pixels = params.patchSize * params.shapeSize
             //     return shapes.shapeToImage(name, pixels, color, 'black')
             // })
             params.shapes25names = []
             const sprites25 = util.repeat(25, (i, a) => {
                 const color = params.colors25[i % 25]
-                const pixels = params.cellSize * params.shapeSize
+                const pixels = params.patchSize * params.shapeSize
                 a[i] = shapes.shapeToImage(
                     params.shape,
                     pixels,

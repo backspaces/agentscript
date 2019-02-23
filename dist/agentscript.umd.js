@@ -439,16 +439,16 @@ const util = {
     nestedProperty(obj, path) {
         if (typeof path === 'string') path = path.split('.');
         switch (path.length) {
-            case 1:
-                return obj[path[0]]
-            case 2:
-                return obj[path[0]][path[1]]
-            case 3:
-                return obj[path[0]][path[1]][path[2]]
-            case 4:
-                return obj[path[0]][path[1]][path[2]][path[3]]
-            default:
-                return path.reduce((obj, param) => obj[param], obj)
+        case 1:
+            return obj[path[0]]
+        case 2:
+            return obj[path[0]][path[1]]
+        case 3:
+            return obj[path[0]][path[1]][path[2]]
+        case 4:
+            return obj[path[0]][path[1]][path[2]][path[3]]
+        default:
+            return path.reduce((obj, param) => obj[param], obj)
         }
     },
 
@@ -757,6 +757,50 @@ const util = {
     //     setTimeout(() => { this.waitOn(done, f, ms) }, ms)
     // },
 
+    // ### Color utilities
+
+    rgbaToPixel(r, g, b, a = 255) {
+        const rgba = new Uint8Array([r, g, b, a]);
+        const pixels = new Uint32Array(rgba.buffer);
+        return pixels[0]
+    },
+    randomPixel() {
+        const r255 = () => util.randomInt(256); // random int in [0,255]
+        return this.rgbaToPixel(r255(), r255(), r255())
+    },
+    randomGrayPixel(min = 0, max = 255) {
+        const gray = util.randomInt2(min, max); // random int in [min,max]
+        return this.rgbaToPixel(gray, gray, gray)
+    },
+    cssToRGBA(string) {
+        sharedCtx1x1.clearRect(0, 0, 1, 1);
+        sharedCtx1x1.fillStyle = string;
+        sharedCtx1x1.fillRect(0, 0, 1, 1);
+        return sharedCtx1x1.getImageData(0, 0, 1, 1).data
+        // const rgba = sharedCtx1x1.getImageData(0, 0, 1, 1).data
+        // return this.rgbaToPixel(...rgba)
+    },
+    cssToPixel(string) {
+        const rgba = this.cssToRGBA(string);
+        // sharedCtx1x1.clearRect(0, 0, 1, 1)
+        // sharedCtx1x1.fillStyle = string
+        // sharedCtx1x1.fillRect(0, 0, 1, 1)
+        // const rgba = sharedCtx1x1.getImageData(0, 0, 1, 1).data
+        return this.rgbaToPixel(...rgba)
+    },
+    rgbColor(r, g, b) {
+        return `rgb(${r},${g},${b})`
+    },
+    randomColor() {
+        const r255 = () => util.randomInt(256); // random int in [0,255]
+        return this.rgbColor(r255(), r255(), r255())
+    },
+    randomGray(min = 0, max = 255) {
+        const gray = util.randomInt2(min, max); // random int in [min,max]
+        return this.rgbColor(gray, gray, gray)
+    },
+
+
     // ### Canvas utilities
 
     // Create a blank 2D canvas of a given width/height
@@ -842,6 +886,12 @@ const util = {
     // Return the (complete) ImageData object for this context object
     ctxImageData(ctx) {
         return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+    },
+    // Fill this context with the given css color string.
+    clearCtx(ctx) {
+        util.setIdentity(ctx);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.restore();
     },
     // Fill this context with the given css color string.
     fillCtx(ctx, cssColor) {
@@ -932,6 +982,8 @@ const util = {
         return pixels
     },
 };
+
+const sharedCtx1x1 = util.createCtx(1, 1);
 
 // An Array superclass with convenience methods used by NetLogo.
 // Tipically the items in the array are Objects, NetLogo Agents,
@@ -2139,11 +2191,17 @@ class Link {
     get y0() {
         return this.end0.y
     }
+    get z0() {
+        return this.end0.z ? this.end0.z : 0 // REMIND: move to turtles
+    }
     get x1() {
         return this.end1.x
     }
     get y1() {
         return this.end1.y
+    }
+    get z1() {
+        return this.end1.z ? this.end1.z : 0
     }
 }
 
@@ -2187,12 +2245,16 @@ class World {
     }
     // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
     setWorld() {
-        this.numX = this.maxX - this.minX + 1;
-        this.numY = this.maxY - this.minY + 1;
+        this.numX = this.width = this.maxX - this.minX + 1;
+        this.numY = this.height = this.maxY - this.minY + 1;
         this.minXcor = this.minX - 0.5;
         this.maxXcor = this.maxX + 0.5;
         this.minYcor = this.minY - 0.5;
         this.maxYcor = this.maxY + 0.5;
+        // The midpoints of the world, in world coords.
+        // (0, 0) for the centered default worlds. REMIND: remove?
+        this.centerX = (this.minX + this.maxX) / 2;
+        this.centerY = (this.minY + this.maxY) / 2;
     }
     randomPosition(float = true) {
         return float
@@ -2233,10 +2295,14 @@ class World {
     patchXYtoPixelXY(x, y, patchSize) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
+    getWorldSize(patchSize = 1) {
+        return [this.numX * patchSize, this.numY * patchSize]
+    }
     // Change canvas size to this world's size.
     // Does not change size if already the same, preserving the ctx content.
     setCanvasSize(canvas, patchSize) {
-        const [width, height] = [this.numX * patchSize, this.numY * patchSize];
+        // const [width, height] = [this.numX * patchSize, this.numY * patchSize]
+        const [width, height] = this.getWorldSize(patchSize);
         util.setCanvasSize(canvas, width, height);
     }
 }

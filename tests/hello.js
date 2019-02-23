@@ -1,7 +1,7 @@
 import util from '../src/util.js'
 import World from '../src/World.js'
 import HelloModel from '../models/HelloModel.js'
-import TurtlesView from './TurtlesView.js'
+import TurtlesView from '../src/TurtlesView.js'
 console.log('worker self', self)
 
 let model, params
@@ -69,7 +69,7 @@ function setupView() {
     // console.log(('worker:', params))
     const view = new TurtlesView(
         util.createCtx(0, 0),
-        params.cellSize,
+        params.patchSize,
         new World(params.world),
         params.sprites
     )

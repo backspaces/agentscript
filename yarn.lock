@@ -3652,6 +3652,10 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
+three@mrdoob/three.js:
+  version "0.101.1"
+  resolved "https://codeload.github.com/mrdoob/three.js/tar.gz/b0d421ab4366b3b5c7abc0e42a78de27aeaf30eb"
+
 through2@^2.0.0, through2@~2.0.0:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.5.tgz#01c1e39eb31d07cb7d03a96a70823260b23132cd"

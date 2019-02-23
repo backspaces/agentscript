@@ -24,20 +24,27 @@
         "url": "https://github.com/backspaces/agentscript/issues"
     },
     "mkdirs": "dist",
+    "scripts comments": {
+        "postinstall": "rollup -c rollup.vendor.js"
+    },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "build": "npm-run-all clean build-dist minify",
+        "build": "npm-run-all clean vendor build-dist minify",
         "minify": "terser dist/agentscript.umd.js > dist/agentscript.umd.min.js && terser dist/agentscript.esm.js > dist/agentscript.esm.min.js",
         "build-dist": "rollup -c",
         "build-scripts": "node bin/models2scripts.js",
+        "vendor": "rollup -c rollup.vendor.js",
         "test": "ava",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
         "watch": "npm-run-all watch-src watch-models",
         "pup": "ava test/models.js",
-        "foo": "node bin/models2scripts.js"
+        "foo": "ava -help"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
+    "dependencies": {
+        "three": "mrdoob/three.js"
+    },
     "devDependencies": {
         "ava": "0.25.0",
         "chokidar-cli": "^1.2.1",

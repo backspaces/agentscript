@@ -1,7 +1,7 @@
 // importScripts('../dist/agentscript.umd.js')
 // importScripts('../docs/models/FireScript.js')
 import util from '../src/util.js'
-import PatchesView from './PatchesView.js'
+import PatchesView from '../src/PatchesView.js'
 import FireModel from '../models/FireModel.js'
 
 let model, params, patchesView
@@ -15,6 +15,10 @@ function postData() {
             // postMessage(img)
             // if (img.height !== 0) console.log('!transferable')
         })
+    } else if (params.postPixels) {
+        const pixels = data.map(type => params.patchPixels[type])
+        const ta = new Uint32Array(pixels)
+        postMessage(ta, [ta.buffer])
     } else {
         postMessage(data)
     }

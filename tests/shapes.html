@@ -9,7 +9,7 @@
         <div id="div"></div>
         <script type="module">
             import util from '../src/util.js'
-            import TurtlesView from './TurtlesView.js'
+            import TurtlesView from '../src/TurtlesView.js'
             import World from '../src/World.js'
 
             const can = document.getElementById('can')
@@ -53,7 +53,7 @@
                 })
                 shapes.getPathNames().forEach((path, i) => {
                     // const px = size * patchSize
-                    const px = size * patchSize // ctx.canvas.cellSize
+                    const px = size * patchSize
                     const img = shapes.shapeToImage(path, px, 'green', 'blue')
                     const can = util.cloneCanvas(img, false) // convert to html canvas
                     div.appendChild(can)
@@ -62,7 +62,7 @@
                 shapes.getPathNames().forEach((path, i) => {
                     let x = (i + 0.5) * size
                     let y = size
-                    const px = size * patchSize // ctx.canvas.cellSize
+                    const px = size * patchSize
                     const img = shapes.shapeToImage(path, px, 'green', 'blue')
                     // shapes.drawImage(ctx, img, x, y, theta, world)
                     view.drawImage(img, x, y, theta)

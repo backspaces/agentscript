@@ -7,25 +7,26 @@
         <canvas id="model"></canvas>
         <script type="module">
             import util from '../src/util.js'
-            import PatchesView from './PatchesView.js'
+            import PatchesView from '../src/PatchesView.js'
             util.toWindow({ util, PatchesView })
 
             const params = {
                 seed: null,
-                maxX: 50,
+                maxX: 100,
                 maxY: null,
-                cell: 3,
+                patchSize: 4,
+                postPixels: false,
                 img: null,
                 data: null,
                 patchPixels: {
-                    dirt: PatchesView.cssToPixel('yellow'),
-                    tree: PatchesView.cssToPixel('green'),
-                    fire: PatchesView.cssToPixel('red'),
-                    ember4: PatchesView.rgbaToPixel(255 - 25, 0, 0),
-                    ember3: PatchesView.rgbaToPixel(255 - 50, 0, 0),
-                    ember2: PatchesView.rgbaToPixel(255 - 75, 0, 0),
-                    ember1: PatchesView.rgbaToPixel(255 - 100, 0, 0),
-                    ember0: PatchesView.rgbaToPixel(255 - 125, 0, 0),
+                    dirt: util.cssToPixel('yellow'),
+                    tree: util.cssToPixel('green'),
+                    fire: util.cssToPixel('red'),
+                    ember4: util.rgbaToPixel(255 - 25, 0, 0),
+                    ember3: util.rgbaToPixel(255 - 50, 0, 0),
+                    ember2: util.rgbaToPixel(255 - 75, 0, 0),
+                    ember1: util.rgbaToPixel(255 - 100, 0, 0),
+                    ember0: util.rgbaToPixel(255 - 125, 0, 0),
                 },
             }
             Object.assign(params, util.parseQueryString())
@@ -35,8 +36,8 @@
             console.log('params', params)
 
             const canvas = document.getElementById('model')
-            canvas.width = params.width * params.cell
-            canvas.height = params.height * params.cell
+            canvas.width = params.width * params.patchSize
+            canvas.height = params.height * params.patchSize
             const canvasCtx = canvas.getContext('2d')
             canvasCtx.imageSmoothingEnabled = false
             util.toWindow({ canvas, canvasCtx })
@@ -86,6 +87,9 @@
             function draw(data) {
                 if (params.img) {
                     util.fillCtxWithImage(canvasCtx, data)
+                } else if (params.postPixels) {
+                    patchesView.installPixels(data, d => d)
+                    patchesView.draw(canvasCtx)
                 } else {
                     patchesView.installPixels(data, d => params.patchPixels[d])
                     patchesView.draw(canvasCtx)

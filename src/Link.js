@@ -54,11 +54,17 @@ class Link {
     get y0() {
         return this.end0.y
     }
+    get z0() {
+        return this.end0.z ? this.end0.z : 0 // REMIND: move to turtles
+    }
     get x1() {
         return this.end1.x
     }
     get y1() {
         return this.end1.y
+    }
+    get z1() {
+        return this.end1.z ? this.end1.z : 0
     }
 }
 

@@ -80,7 +80,7 @@
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
-            import TurtlesView from './TurtlesView.js'
+            import TurtlesView from '../src/TurtlesView.js'
             util.toWindow({ util, World, TurtlesView })
 
             const params = {
@@ -91,7 +91,7 @@
                 speed: 0.1,
                 maxX: 30,
                 maxY: 20,
-                cellSize: 15,
+                patchSize: 15,
                 linkWidth: 1,
                 steps: 500,
                 data: false,
@@ -101,7 +101,7 @@
             Object.assign(params, util.parseQueryString())
             if (!params.maxY) params.maxY = params.maxX
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = TurtlesView.randomColor()
+                a[i] = util.randomColor()
             })
             console.log('main: params', params)
 
@@ -132,7 +132,7 @@
 
             const view = new TurtlesView(
                 ctx,
-                params.cellSize,
+                params.patchSize,
                 new World(World.defaultOptions(params.maxX, params.maxY))
             )
             function turtleViewValues(turtle, i, turtles) {

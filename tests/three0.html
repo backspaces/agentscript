@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Three0</title>
+    </head>
+
+    <body>
+        <canvas id="model" style="border: 1px solid; padding: 2px;"></canvas>
+        <canvas id="three" style="border: 1px solid; padding: 2px;"></canvas>
+        <!-- <div id="three" style="border: 1px solid;; padding: 8px;"></div> -->
+        <!-- <style>
+            #three {
+                border: 1px solid;
+                padding: 8px;
+                width: 100%;
+            }
+        </style> -->
+        <script type="module">
+            import util from '../src/util.js'
+            import World from '../src/World.js'
+            // import SpriteSheet from '../src/SpriteSheet.js'
+            import HelloModel from '../models/HelloModel.js'
+            import TurtlesView from '../src/TurtlesView.js'
+            // import * as THREE from '../node_modules/three/build/three.module.js'
+            import { THREE } from '../dist/vendor.esm.js'
+            import ThreeView from '../src/ThreeView.js'
+            import PatchesView from '../src/PatchesView.js'
+            const can = document.getElementById('model')
+            const ctx = can.getContext('2d')
+            util.toWindow({ util, World, TurtlesView, ThreeView, ctx, can })
+
+            const params = {
+                seed: 1,
+                population: 10,
+                shape: 'dart',
+                shapeSize: 1.5,
+                patchSize: 15,
+                speed: 0.1,
+                // maxX: 30,
+                // maxY: 20,
+                maxX: 15,
+                maxY: 15,
+                steps: 500,
+                data: false,
+                strokeColor: 'red',
+            }
+            Object.assign(params, util.parseQueryString())
+            if (!params.maxY) params.maxY = params.maxX
+            params.world = new World(
+                World.defaultOptions(params.maxX, params.maxY)
+            )
+            params.colors25 = util.repeat(25, (i, a) => {
+                a[i] = util.randomColor()
+            })
+            const view = new TurtlesView(
+                ctx,
+                params.patchSize,
+                params.world,
+                false
+            )
+            util.toWindow({ params, view, world: params.world })
+            console.log('main: params', params)
+
+            var model = new HelloModel(world)
+            model.population = params.population
+            model.setup()
+            util.toWindow({ HelloModel, model, view, draw })
+            const perf = util.fps()
+            // util.yieldLoop(steps => {
+            util.timeoutLoop(steps => {
+                // console.log('step', steps)
+                model.step()
+                draw(model)
+                perf()
+            }, params.steps).then(() => {
+                console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+            })
+
+            function draw(data) {
+                function turtleViewValues(turtle, i, turtles) {
+                    return {
+                        shape: params.shape,
+                        color: params.colors25[i % 25],
+                        strokeColor: params.strokeColor,
+                        size: params.shapeSize,
+                        noRotate: params.noRotate,
+                    }
+                }
+                function linkViewValues(link, i, links) {
+                    return {
+                        color: params.colors25[i % 25],
+                        width: params.linkWidth,
+                    }
+                }
+                util.fillCtx(ctx, 'lightgray')
+                view.drawLinks(data.links, linkViewValues)
+                view.drawTurtles(data.turtles, turtleViewValues)
+            }
+
+            // ===================
+            const usePoints = false
+            window.o = ThreeView.defaultOptions()
+
+            window.patchesView = new PatchesView(world.width, world.height)
+            patchesView.installPixels(model.patches, d =>
+                util.randomGrayPixel(128, 250)
+            )
+            patchesView.updateCanvas()
+
+            if (usePoints) {
+                o.turtles = {
+                    meshClass: 'PointsMesh',
+                    options: { pointSize: 2, color: 'orange' },
+                }
+            }
+
+            window.tcan = document.getElementById('three')
+            tcan.width = can.width
+            tcan.height = can.height
+            window.v = new ThreeView(tcan, world, o)
+            v.renderer.setSize(can.width, can.height)
+            if (!usePoints) {
+                const sheet = v.spriteSheet
+                sheet.shapes.getPathNames().forEach((name, i) => {
+                    sheet.newSprite(name, 'red', 'orange')
+                })
+                const sprites = Object.values(sheet.sprites)
+
+                util.forEach(model.turtles, (t, i) => {
+                    t.sprite = sprites[i % sprites.length]
+                })
+
+                model.turtles.setDefault('size', 2)
+            }
+
+            window.p = v.meshes.patches
+            window.t = v.meshes.turtles
+            window.l = v.meshes.links
+            p.init(patchesView.canvas)
+            l.init()
+            t.init()
+            model.links.forEach((l, i) => {
+                l.color = new THREE.Color(params.colors25[i % 25]).toArray()
+            })
+            util.timeoutLoop(
+                i => {
+                    l.update(model.links)
+                    t.update(model.turtles)
+                    v.renderer.render(v.scene, v.camera)
+                },
+                -1,
+                50
+            ).then(() => {
+                console.log('three done')
+            })
+        </script>
+    </body>
+</html>

@@ -107,6 +107,7 @@ export default class SpriteSheet {
         this.incrementRowCol()
         // Add sprite to cache and return it.
         this.sprites[name] = sprite
+        if (this.texture) this.texture.needsUpdate = true
         return sprite
     }
 

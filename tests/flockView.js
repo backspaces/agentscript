@@ -1,7 +1,7 @@
 import util from '../src/util.js'
 import World from '../src/World.js'
 import FlockModel from '../models/FlockModel.js'
-import TurtlesView from './TurtlesView.js'
+import TurtlesView from '../src/TurtlesView.js'
 console.log('worker self', self)
 
 let model, params
@@ -68,7 +68,7 @@ onmessage = e => {
 function setupView() {
     const view = new TurtlesView(
         util.createCtx(0, 0),
-        params.cellSize,
+        params.patchSize,
         // World.defaultOptions(params.maxX, params.maxY)
         new World(World.defaultOptions(params.maxX, params.maxY))
     )
