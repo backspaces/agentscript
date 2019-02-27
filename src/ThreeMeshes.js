@@ -64,24 +64,25 @@ export class BaseMesh {
 // ============= CanvasMesh =============
 
 export class CanvasMesh extends BaseMesh {
-    init(canvas) {
+    init(canvas, useSegments = false) {
         if (this.mesh) this.dispose()
         const { textureOptions, z } = this.options
         Object.assign(this, { canvas, z, textureOptions })
-        // const {width, height, numX, numY, centerX, centerY, patchSize} = this.model.world
-        // const { width, height, numX, numY, centerX, centerY } = this.world
         const { width, height, centerX, centerY } = this.world
-        const patchSize = 1 // REMIND
 
         const texture = new THREE.CanvasTexture(canvas)
         for (const key in textureOptions) {
-            // texture[key] = THREE[textureOptions[key]]
             texture[key] = textureOptions[key]
         }
 
-        const geometry = new THREE.PlaneGeometry(width, height, width, height)
+        const geometry = new THREE.PlaneBufferGeometry(
+            width,
+            height,
+            useSegments ? width : 1,
+            useSegments ? height : 1
+        )
         // not needed for centered world
-        geometry.translate(centerX * patchSize, centerY * patchSize, 0)
+        geometry.translate(centerX, centerY, 0)
 
         const material = new THREE.MeshBasicMaterial({
             map: texture,
@@ -189,8 +190,6 @@ export class QuadSpritesMesh extends BaseMesh {
     update(turtles) {
         const mesh = this.mesh
         const { vertices, indices } = this.unitQuad
-        // const patchSize = this.model.world.patchSize
-        const patchSize = 1 // REMIND
         const positionAttrib = mesh.geometry.getAttribute('position')
         const uvAttrib = mesh.geometry.getAttribute('uv')
         const indexAttrib = mesh.geometry.getIndex()
@@ -202,7 +201,7 @@ export class QuadSpritesMesh extends BaseMesh {
             const turtle = turtles[i]
             // if (turtle.sprite.needsUpdate) turtle.setSprite()
             // if (!turtle.sprite) turtle.setSprite()
-            const size = turtle.size // * patchSize
+            const size = turtle.size
             const theta = turtle.theta
             const cos = Math.cos(theta)
             const sin = Math.sin(theta)
@@ -211,13 +210,11 @@ export class QuadSpritesMesh extends BaseMesh {
             for (let j = 0; j < vertices.length; j = j + 3) {
                 const x0 = vertices[j]
                 const y0 = vertices[j + 1]
-                const x = turtle.x // * patchSize
-                const y = turtle.y // * patchSize
-                positions[j + offset] =
-                    (size * (x0 * cos - y0 * sin) + x) * patchSize
-                positions[j + offset + 1] =
-                    (size * (x0 * sin + y0 * cos) + y) * patchSize
-                positions[j + offset + 2] = turtle.z * patchSize
+                const x = turtle.x
+                const y = turtle.y
+                positions[j + offset] = size * (x0 * cos - y0 * sin) + x
+                positions[j + offset + 1] = size * (x0 * sin + y0 * cos) + y
+                positions[j + offset + 2] = turtle.z
             }
             indexes.push(...indices.map(ix => ix + i * 4)) // 4
             uvs.push(...turtle.sprite.uvs)
@@ -243,7 +240,6 @@ export class PointsMesh extends BaseMesh {
     }
     init() {
         if (this.mesh) this.dispose()
-        // const pointSize = this.options.pointSize * this.model.world.patchSize
         const pointSize = this.options.pointSize // REMIND
         const color = this.options.color
             ? new THREE.Color(this.options.color)
@@ -281,14 +277,12 @@ export class PointsMesh extends BaseMesh {
         const colorAttrib = this.mesh.geometry.getAttribute('color')
         const vertices = []
         const colors = colorAttrib == null ? null : []
-        // const patchSize = this.model.world.patchSize
-        const patchSize = 1 // REMIND
 
         // const red = [1, 0, 0] // REMIND: add color/shape to turtles
 
         for (let i = 0; i < turtles.length; i++) {
             const { x, y, z, color } = turtles[i]
-            vertices.push(x * patchSize, y * patchSize, z * patchSize)
+            vertices.push(x, y, z)
             // if (colors != null) colors.push(...red)
             if (colors != null) colors.push(...color.webgl)
         }
@@ -345,16 +339,12 @@ export class LinksMesh extends BaseMesh {
         const vertices = []
         const colors = this.options.color ? null : []
         for (let i = 0; i < links.length; i++) {
-            // const { end0, end1, color } = links[i]
-            // const { x: x0, y: y0, z: z0 } = end0
-            // const { x: x1, y: y1, z: z1 } = end1
             const { x0, y0, z0, x1, y1, z1 } = links[i]
-            // const ps = this.model.world.patchSize
-            // const ps = 1 // REMIND
             vertices.push(x0, y0, z0, x1, y1, z1)
-            // const color = [Math.random(), Math.random(), Math.random()]
-            const color = links[i].color
-            if (colors) colors.push(...color, ...color)
+            if (colors) {
+                const color = links[i].color
+                colors.push(...color, ...color)
+            }
         }
         const positionAttrib = this.mesh.geometry.getAttribute('position')
         positionAttrib.setArray(new Float32Array(vertices))

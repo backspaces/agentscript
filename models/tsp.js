@@ -19,7 +19,6 @@ const { world, patches, turtles } = model
 util.toWindow({ world, patches, turtles, model })
 
 util.yieldLoop(i => {
-    model.tick()
     model.step()
 }, 5000)
 

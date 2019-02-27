@@ -20,7 +20,6 @@ util.toWindow({ world, patches, turtles, model })
 
 util.yieldLoop(i => {
     model.step()
-    if (i % 50 === 0) model.createWave(patches.oneOf())
 }, 500)
 
 const avgZPos = patches.props('zpos').sum() / patches.length

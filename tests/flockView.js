@@ -87,7 +87,8 @@ function setupView() {
         //         width: params.linkWidth,
         //     }
         // }
-        util.fillCtx(view.ctx, 'lightgray')
+        util.clearCtx(view.ctx)
+        // util.fillCtx(view.ctx, 'lightgray')
         // view.drawLinks(data.links, linkViewValues)
         view.drawTurtles(data.turtles, turtleViewValues)
     }

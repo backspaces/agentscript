@@ -218,10 +218,13 @@ const util = {
     arraysToString: arrays => arrays.map(a => `[${a}]`).join(','),
 
     // Merge from's key/val pairs into to the global/window namespace
-    toWindow(obj) {
+    toWindow(obj, logToo = false) {
         Object.assign(window, obj);
         // Object.assign(this.globalObject(), obj)
         console.log('toWindow:', Object.keys(obj).join(', '));
+        if (logToo) {
+            Object.keys(obj).forEach(key => console.log('  ', key, obj[key]));
+        }
     },
     toGlobal(obj) {
         Object.assign(this.globalObject(), obj);
@@ -697,7 +700,7 @@ const util = {
     async timeoutLoop(fcn, steps = -1, ms = 0) {
         let i = 0;
         while (i++ !== steps) {
-            fcn(i);
+            fcn(i - 1);
             await this.timeoutPromise(ms);
         }
     },
@@ -706,7 +709,7 @@ const util = {
         let i = 0;
         function* gen() {
             while (i++ !== steps) {
-                yield fcn(i);
+                yield fcn(i - 1);
             }
         }
         const iterator = gen();
@@ -720,7 +723,7 @@ const util = {
     async rafLoop(fcn, steps = -1) {
         let i = 0;
         while (i++ !== steps) {
-            fcn(i);
+            fcn(i - 1);
             await this.rafPromise();
         }
     },
@@ -799,7 +802,6 @@ const util = {
         const gray = util.randomInt2(min, max); // random int in [min,max]
         return this.rgbColor(gray, gray, gray)
     },
-
 
     // ### Canvas utilities
 

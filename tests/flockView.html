@@ -12,6 +12,7 @@
             import TurtlesView from '../src/TurtlesView.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
+            ctx.imageSmoothingEnabled = false
             util.toWindow({ util, World, TurtlesView, ctx, can })
 
             const params = {
@@ -79,6 +80,7 @@
                         } else {
                             data = e.data
                             if (params.img) {
+                                util.clearCtx(ctx)
                                 util.setCtxImage(ctx, e.data)
                             } else {
                                 draw(e.data)

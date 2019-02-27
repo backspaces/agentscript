@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WaterView</title>
+    </head>
+    <body>
+        <canvas id="model"></canvas>
+        <script type="module">
+            import util from '../src/util.js'
+            import World from '../src/World.js'
+            import PatchesView from '../src/PatchesView.js'
+            import ColorMap from '../src/ColorMap.js'
+            util.toWindow({ util, PatchesView, ColorMap })
+
+            const params = {
+                seed: null,
+                maxX: 100,
+                maxY: 50,
+                patchSize: 3,
+                steps: 500,
+                pixels: false,
+                img: false,
+                data: false,
+                maxZ: 10,
+                smooth: false,
+            }
+            Object.assign(params, util.parseQueryString())
+            params.world = new World(
+                World.defaultOptions(params.maxX, params.maxY)
+            )
+
+            const canvas = document.getElementById('model')
+            params.world.setCanvasSize(canvas, params.patchSize)
+            const canvasCtx = canvas.getContext('2d')
+            if (!params.smooth) canvasCtx.imageSmoothingEnabled = false
+            if (!params.img) {
+                const { width, height } = params.world
+                var patchesView = new PatchesView(width, height)
+            }
+
+            // Will be transferred as an array to worker.
+            // ColorMap.basicColorMap(array) converts back to cmap!
+            params.cmap = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
+            util.toWindow({ params, canvas, canvasCtx, patchesView }, true)
+
+            const worker = new Worker('waterView.js', { type: 'module' })
+            worker.onerror = function(e) {
+                console.log('ERROR: Line ', e.lineno, ': ', e.message)
+            }
+            worker.postMessage({ cmd: 'init', params: params })
+            util.toWindow({ worker }, true)
+
+            // data: either most recent or all data during run.
+            let data = params.data ? [] : null
+
+            const perf = util.fps()
+            worker.onmessage = e => {
+                if (e.data === 'done') {
+                    util.toWindow({ data }, true)
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                } else {
+                    if (params.data) {
+                        data.push(e.data)
+                    } else {
+                        data = e.data
+                        draw(e.data)
+                    }
+                    perf()
+                    worker.postMessage({ cmd: 'step' })
+                }
+            }
+
+            function draw(data) {
+                if (params.img) {
+                    util.fillCtxWithImage(canvasCtx, data)
+                } else if (params.pixels) {
+                    patchesView.installPixels(data, d => d)
+                    patchesView.draw(canvasCtx)
+                } else {
+                    const { cmap, maxZ } = params
+                    patchesView.installPixels(
+                        data,
+                        d => cmap.scaleColor(d, -maxZ, maxZ).pixel
+                    )
+                    patchesView.draw(canvasCtx)
+                }
+            }
+        </script>
+    </body>
+</html>

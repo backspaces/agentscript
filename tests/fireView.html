@@ -75,10 +75,13 @@
                     console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                 } else {
                     // console.log('main: step')
-                    if (params.data) data.push(e.data)
-                    else lastData = e.data
+                    if (params.data) {
+                        data.push(e.data)
+                    } else {
+                        lastData = e.data
+                        draw(e.data)
+                    }
                     perf()
-                    draw(e.data)
                     worker.postMessage({ cmd: 'step' })
                 }
             }

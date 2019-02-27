@@ -95,7 +95,6 @@ export default class TurtlesView {
         ctx.strokeStyle = stroke
 
         ctx.translate(x, y)
-        // ctx.scale(size / 2, size / 2)
         ctx.scale(size, size)
         if (theta !== 0) ctx.rotate(theta)
         ctx.beginPath()

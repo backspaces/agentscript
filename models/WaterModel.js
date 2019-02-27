@@ -2,11 +2,22 @@ import Model from '../src/Model.js'
 // import util from '../src/util.js'
 
 export default class WaterModel extends Model {
-    setup() {
-        this.strength = 57
-        this.surfaceTension = 56
-        this.friction = 0.99
+    static defaults() {
+        return {
+            strength: 100,
+            surfaceTension: 56,
+            friction: 0.99,
+            drip: 50,
+        }
+    }
 
+    // ======================
+
+    constructor(options) {
+        super(options)
+        Object.assign(this, this.constructor.defaults())
+    }
+    setup() {
         // this.cmap = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
 
         this.patches.ask(p => {
@@ -17,10 +28,10 @@ export default class WaterModel extends Model {
     }
 
     step() {
+        if (this.ticks % this.drip === 0) this.createWave(this.patches.oneOf())
         this.patches.ask(p => this.computeDeltaZ(p))
         this.patches.ask(p => this.updateZ(p))
         // this.colorPatches()
-        // if (this.anim.ticks % 50 === 0) this.createWave(this.patches.oneOf())
     }
 
     createWave(p) {
@@ -34,8 +45,8 @@ export default class WaterModel extends Model {
     // }
     computeDeltaZ(p) {
         const k = 1 - 0.01 * this.surfaceTension
-        const n4 = p.neighbors4
-        p.deltaZ = p.deltaZ + k * (n4.sum('zpos') - n4.length * p.zpos)
+        const n = p.neighbors4
+        p.deltaZ = p.deltaZ + k * (n.sum('zpos') - n.length * p.zpos)
     }
     updateZ(p) {
         p.zpos = (p.zpos + p.deltaZ) * this.friction
