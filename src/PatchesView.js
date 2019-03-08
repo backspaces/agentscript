@@ -7,16 +7,17 @@ export default class PatchesView {
         this.canvas = this.ctx.canvas
         this.imageData = util.ctxImageData(this.ctx)
         this.pixels = new Uint32Array(this.imageData.data.buffer)
+        this.length = this.pixels.length
     }
 
     // Install pixels in this imageData object.
     // pixelFcn(d) returns a pixel for each data item.data can be patches
     // or data derived from patches using patch state values.
-    // installPixels(data, pixelFcn, updateCanvas = true) {
-    installPixels(data, pixelFcn) {
-        if (data.length != this.pixels.length) {
+    // installData(data, pixelFcn, updateCanvas = true) {
+    installData(data, pixelFcn = d => d) {
+        if (data.length !== this.pixels.length) {
             throw Error(
-                'installPixels, data.length != pixels.length ' +
+                'installData, data.length != pixels.length ' +
                     data.length +
                     ' ' +
                     this.pixels.length
@@ -26,6 +27,10 @@ export default class PatchesView {
             this.pixels[i] = pixelFcn(d)
         })
 
+        // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
+    }
+    createPixels(pixelFcn) {
+        util.repeat(this.length, i => (this.pixels[i] = pixelFcn(i)))
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
     }
 

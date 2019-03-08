@@ -9,6 +9,7 @@
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
+            import Color from '../src/Color.js'
             import TurtlesView from '../src/TurtlesView.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
@@ -35,7 +36,7 @@
             if (params.seed != null) util.randomSeed(params.seed)
             if (!params.maxY) params.maxY = params.maxX
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = util.randomColor()
+                a[i] = Color.randomCssColor()
             })
             if (params.seed != null) util.randomSeed(params.seed) // reset seed
             console.log('main: params', params)

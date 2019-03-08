@@ -74,11 +74,11 @@
                 if (params.img) {
                     util.fillCtxWithImage(canvasCtx, data)
                 } else if (params.pixels) {
-                    patchesView.installPixels(data, d => d)
+                    patchesView.installData(data)
                     patchesView.draw(canvasCtx)
                 } else {
                     const { cmap, maxZ } = params
-                    patchesView.installPixels(
+                    patchesView.installData(
                         data,
                         d => cmap.scaleColor(d, -maxZ, maxZ).pixel
                     )

@@ -9,6 +9,7 @@
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
+            import Color from '../src/Color.js'
             import TurtlesView from '../src/TurtlesView.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
@@ -33,7 +34,7 @@
                 World.defaultOptions(params.maxX, params.maxY)
             )
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = util.randomColor()
+                a[i] = Color.randomCssColor()
             })
             const view = new TurtlesView(
                 ctx,

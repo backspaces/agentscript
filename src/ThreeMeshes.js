@@ -3,6 +3,16 @@
 // import THREE from '../dist/three.wrapper.js'
 // import * as THREE from '../node_modules/three/build/three.module.js'
 import { THREE } from '../dist/vendor.esm.js'
+import util from './util.js'
+import Turtle from './Turtle.js'
+
+function createQuad(r, z = 0) {
+    // r is radius of xy quad: [-r,+r], z is quad z
+    const vertices = [-r, -r, z, r, -r, z, r, r, z, -r, r, z]
+    const indices = [0, 1, 2, 0, 2, 3]
+    return { vertices, indices }
+}
+const unitQuad = createQuad(0.5, 0)
 
 // Utility classes meant to be subclassed:
 // ============= BaseMesh =============
@@ -14,16 +24,6 @@ export class BaseMesh {
         Object.assign(this, { scene, world, view, options })
         this.mesh = null
         this.name = this.constructor.name
-        // this.fixedColor = options.color
-        // this.fixedSize = options.pointSize
-        // this.fixedShape =
-        //     this.name === 'PatchesMesh'
-        //         ? 'Patch'
-        //         : this.name === 'PointsMesh'
-        //             ? 'Point'
-        //             : this.name === 'LinksMesh'
-        //                 ? 'Link'
-        //                 : undefined
         this.useSprites = this.name.match(/sprites/i) != null
     }
     dispose() {
@@ -43,13 +43,6 @@ export class BaseMesh {
         throw Error('update is abstract, must be overriden')
     }
 
-    // Utilities
-    createQuad(r, z = 0) {
-        // r is radius of xy quad: [-r,+r], z is quad z
-        const vertices = [-r, -r, z, r, -r, z, r, r, z, -r, r, z]
-        const indices = [0, 1, 2, 0, 2, 3]
-        return { vertices, indices }
-    }
     get spriteSheetTexture() {
         if (this.view.spriteSheet.texture == null) {
             const texture = new THREE.CanvasTexture(
@@ -96,7 +89,6 @@ export class CanvasMesh extends BaseMesh {
         this.scene.add(this.mesh)
     }
     update() {
-        // REMIND: have canvas owner set a flag
         this.mesh.material.map.needsUpdate = true
     }
 }
@@ -135,16 +127,15 @@ export class PatchesMesh extends CanvasMesh {
                 magFilter: THREE.NearestFilter,
             },
             z: 1.0,
+            useSegments: false,
         }
     }
-    init(canvas) {
-        // this.patchesView = new PatchesView(world.width, world.height)
-        // REMIND: pass in patches instead of canvas
-        // super.init(this.patchesView.canvas)
-        super.init(canvas)
+    init(canvas = this.view.patchesView.canvas) {
+        super.init(canvas, this.options.useSegments)
     }
-    update(patches) {
-        // patches.installPixels()
+    update(data, viewFcn = d => d) {
+        this.view.patchesView.installData(data, viewFcn)
+        this.view.patchesView.updateCanvas()
         super.update()
     }
 }
@@ -156,10 +147,6 @@ export class QuadSpritesMesh extends BaseMesh {
         return {
             z: 2.0,
         }
-    }
-    constructor(view, options) {
-        super(view, options)
-        this.unitQuad = this.createQuad(0.5, 0)
     }
     init() {
         if (this.mesh) this.dispose()
@@ -187,22 +174,18 @@ export class QuadSpritesMesh extends BaseMesh {
     }
     // update takes any array of objects with x,y,z,size,sprite .. position & uvs
     // REMIND: optimize by flags for position/uvs need updates
-    update(turtles) {
-        const mesh = this.mesh
-        const { vertices, indices } = this.unitQuad
-        const positionAttrib = mesh.geometry.getAttribute('position')
-        const uvAttrib = mesh.geometry.getAttribute('uv')
-        const indexAttrib = mesh.geometry.getIndex()
+    update(turtles, viewFcn) {
+        const { vertices, indices } = unitQuad
         const positions = new Float32Array(vertices.length * turtles.length)
         const uvs = []
         const indexes = []
 
-        for (let i = 0; i < turtles.length; i++) {
-            const turtle = turtles[i]
-            // if (turtle.sprite.needsUpdate) turtle.setSprite()
-            // if (!turtle.sprite) turtle.setSprite()
-            const size = turtle.size
-            const theta = turtle.theta
+        // for (let i = 0; i < turtles.length; i++) {
+        util.forEach(turtles, (turtle, i) => {
+            // const turtle = turtles[i]
+            let { x, y, z, theta } = turtle
+            if (!z) z = 0
+            const { size, sprite } = viewFcn(turtle, i)
             const cos = Math.cos(theta)
             const sin = Math.sin(theta)
             const offset = i * vertices.length
@@ -210,15 +193,17 @@ export class QuadSpritesMesh extends BaseMesh {
             for (let j = 0; j < vertices.length; j = j + 3) {
                 const x0 = vertices[j]
                 const y0 = vertices[j + 1]
-                const x = turtle.x
-                const y = turtle.y
                 positions[j + offset] = size * (x0 * cos - y0 * sin) + x
                 positions[j + offset + 1] = size * (x0 * sin + y0 * cos) + y
-                positions[j + offset + 2] = turtle.z
+                positions[j + offset + 2] = z
             }
             indexes.push(...indices.map(ix => ix + i * 4)) // 4
-            uvs.push(...turtle.sprite.uvs)
-        }
+            uvs.push(...sprite.uvs)
+        })
+        // const mesh = this.mesh
+        const positionAttrib = this.mesh.geometry.getAttribute('position')
+        const uvAttrib = this.mesh.geometry.getAttribute('uv')
+        const indexAttrib = this.mesh.geometry.getIndex()
         positionAttrib.setArray(positions)
         positionAttrib.needsUpdate = true
         uvAttrib.setArray(new Float32Array(uvs))
@@ -240,8 +225,8 @@ export class PointsMesh extends BaseMesh {
     }
     init() {
         if (this.mesh) this.dispose()
-        const pointSize = this.options.pointSize // REMIND
-        const color = this.options.color
+        const pointSize = this.options.pointSize // REMIND: variable or fixed?
+        this.fixedColor = this.options.color
             ? new THREE.Color(this.options.color)
             : null
 
@@ -250,15 +235,18 @@ export class PointsMesh extends BaseMesh {
             'position',
             new THREE.BufferAttribute(new Float32Array(), 3)
         )
-        if (color == null) {
+        if (!this.fixedColor) {
             geometry.addAttribute(
                 'color',
                 new THREE.BufferAttribute(new Float32Array(), 3)
             )
         }
 
-        const material = color
-            ? new THREE.PointsMaterial({ size: pointSize, color: color })
+        const material = this.fixedColor
+            ? new THREE.PointsMaterial({
+                size: pointSize,
+                color: this.fixedColor,
+            })
             : new THREE.PointsMaterial({
                 size: pointSize,
                 vertexColors: THREE.VertexColors,
@@ -271,24 +259,22 @@ export class PointsMesh extends BaseMesh {
     // update takes any array of objects with x,y,z,color .. position & color
     // If non-null color passed to init, only x,y,z .. position used
     // REMIND: optimize by flags for position/uvs need updates
-    update(turtles) {
-        const positionAttrib = this.mesh.geometry.getAttribute('position')
+    update(turtles, viewFcn) {
         // const positionBuff = positionAttrib.array
-        const colorAttrib = this.mesh.geometry.getAttribute('color')
         const vertices = []
-        const colors = colorAttrib == null ? null : []
+        const colors = this.fixedColor ? null : []
 
-        // const red = [1, 0, 0] // REMIND: add color/shape to turtles
-
-        for (let i = 0; i < turtles.length; i++) {
-            const { x, y, z, color } = turtles[i]
+        util.forEach(turtles, (turtle, i) => {
+            let { x, y, z } = turtle
+            if (!z) z = 0
             vertices.push(x, y, z)
-            // if (colors != null) colors.push(...red)
-            if (colors != null) colors.push(...color.webgl)
-        }
+            if (colors) colors.push(...viewFcn(turtle, i).color)
+        })
+        const positionAttrib = this.mesh.geometry.getAttribute('position')
         positionAttrib.setArray(new Float32Array(vertices))
         positionAttrib.needsUpdate = true
         if (colors) {
+            const colorAttrib = this.mesh.geometry.getAttribute('color')
             colorAttrib.setArray(new Float32Array(colors))
             colorAttrib.needsUpdate = true
         }
@@ -306,28 +292,28 @@ export class LinksMesh extends BaseMesh {
     }
     init() {
         if (this.mesh) this.dispose()
-        const color = this.options.color
+        this.fixedColor = this.options.color
             ? new THREE.Color(this.options.color)
             : null
+        // const color = this.options.color
+        //     ? new THREE.Color(this.options.color)
+        //     : null
 
         const geometry = new THREE.BufferGeometry()
         geometry.addAttribute(
             'position',
             new THREE.BufferAttribute(new Float32Array(), 3)
         )
-        if (color == null) {
+        if (!this.fixedColor) {
             geometry.addAttribute(
                 'color',
                 new THREE.BufferAttribute(new Float32Array(), 3)
             )
         }
 
-        const material = color
-            ? new THREE.LineBasicMaterial({ color: color })
+        const material = this.fixedColor
+            ? new THREE.LineBasicMaterial({ color: this.fixedColor })
             : new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors })
-        // const material = color
-        // ? new THREE.PointsMaterial({size: pointSize, color: color})
-        // : new THREE.PointsMaterial({size: pointSize, vertexColors: THREE.VertexColors})
 
         this.mesh = new THREE.LineSegments(geometry, material)
         this.mesh.position.z = this.options.z
@@ -335,17 +321,19 @@ export class LinksMesh extends BaseMesh {
     }
     // update takes any array of objects with color & end0, end1 having x,y,z
     // REMIND: optimize by flags for position/uvs need updates
-    update(links) {
+    update(links, viewFcn) {
         const vertices = []
-        const colors = this.options.color ? null : []
-        for (let i = 0; i < links.length; i++) {
-            const { x0, y0, z0, x1, y1, z1 } = links[i]
+        const colors = this.fixedColor ? null : []
+        util.forEach(links, (link, i) => {
+            let { x0, y0, z0, x1, y1, z1 } = link
+            if (!z0) z0 = 0
+            if (!z1) z1 = 0
             vertices.push(x0, y0, z0, x1, y1, z1)
             if (colors) {
-                const color = links[i].color
+                const color = viewFcn(link, i).color
                 colors.push(...color, ...color)
             }
-        }
+        })
         const positionAttrib = this.mesh.geometry.getAttribute('position')
         positionAttrib.setArray(new Float32Array(vertices))
         positionAttrib.needsUpdate = true

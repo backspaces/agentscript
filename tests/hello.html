@@ -8,6 +8,7 @@
         <canvas id="model" style="border: 1px solid;"></canvas>
         <script type="module">
             import util from '../src/util.js'
+            import Color from '../src/Color.js'
             import World from '../src/World.js'
             import TurtlesView from '../src/TurtlesView.js'
             // import HelloModel from '../models/HelloModel.js'
@@ -43,7 +44,7 @@
                 World.defaultOptions(params.maxX, params.maxY)
             )
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = util.randomColor()
+                a[i] = Color.randomCssColor()
             })
             const view = new TurtlesView(
                 ctx,

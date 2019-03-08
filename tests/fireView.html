@@ -7,6 +7,7 @@
         <canvas id="model"></canvas>
         <script type="module">
             import util from '../src/util.js'
+            import Color from '../src/Color.js'
             import PatchesView from '../src/PatchesView.js'
             util.toWindow({ util, PatchesView })
 
@@ -19,14 +20,14 @@
                 img: null,
                 data: null,
                 patchPixels: {
-                    dirt: util.cssToPixel('yellow'),
-                    tree: util.cssToPixel('green'),
-                    fire: util.cssToPixel('red'),
-                    ember4: util.rgbaToPixel(255 - 25, 0, 0),
-                    ember3: util.rgbaToPixel(255 - 50, 0, 0),
-                    ember2: util.rgbaToPixel(255 - 75, 0, 0),
-                    ember1: util.rgbaToPixel(255 - 100, 0, 0),
-                    ember0: util.rgbaToPixel(255 - 125, 0, 0),
+                    dirt: Color.cssToPixel('yellow'),
+                    tree: Color.cssToPixel('green'),
+                    fire: Color.cssToPixel('red'),
+                    ember4: Color.rgbaToPixel(255 - 25, 0, 0),
+                    ember3: Color.rgbaToPixel(255 - 50, 0, 0),
+                    ember2: Color.rgbaToPixel(255 - 75, 0, 0),
+                    ember1: Color.rgbaToPixel(255 - 100, 0, 0),
+                    ember0: Color.rgbaToPixel(255 - 125, 0, 0),
                 },
             }
             Object.assign(params, util.parseQueryString())
@@ -91,10 +92,10 @@
                 if (params.img) {
                     util.fillCtxWithImage(canvasCtx, data)
                 } else if (params.postPixels) {
-                    patchesView.installPixels(data, d => d)
+                    patchesView.installData(data)
                     patchesView.draw(canvasCtx)
                 } else {
-                    patchesView.installPixels(data, d => params.patchPixels[d])
+                    patchesView.installData(data, d => params.patchPixels[d])
                     patchesView.draw(canvasCtx)
                 }
             }

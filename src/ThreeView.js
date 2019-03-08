@@ -1,9 +1,9 @@
 import util from './util.js'
+import World from './World.js'
 import SpriteSheet from './SpriteSheet.js'
+import PatchesView from './PatchesView.js'
 import ThreeMeshes from './ThreeMeshes.js'
 
-// import * as THREE from '../node_modules/three/build/three.module.js'
-// import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js'
 import { THREE, OrbitControls } from '../dist/vendor.esm.js'
 
 util.toWindow({ THREE, OrbitControls })
@@ -28,43 +28,31 @@ class ThreeView {
                 meshClass: 'LinksMesh',
             },
         }
-        util.forEach(options, (val, key) => {
-            if (val.meshClass) {
-                const Mesh = ThreeMeshes[val.meshClass]
-                const meshOptions = Mesh.options()
-                val.options = meshOptions
-            }
-        })
+        // util.forEach(options, (val, key) => {
+        //     if (val.meshClass) {
+        //         const Mesh = ThreeMeshes[val.meshClass]
+        //         const meshOptions = Mesh.options()
+        //         val.options = meshOptions
+        //     }
+        // })
 
         return options
-    }
-    static printMeshOptions() {
-        const obj = {}
-        for (const MeshName in ThreeMeshes) {
-            const optionsFcn = ThreeMeshes[MeshName].options
-            if (optionsFcn) {
-                obj[MeshName] = {
-                    options: ThreeMeshes[MeshName].options(),
-                }
-            }
-        }
-        const str = util.objectToString(obj)
-        console.log(str)
     }
 
     // -----------------------------------------------
 
-    constructor(div, world, options = {}) {
+    // div? or can?
+    // https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer
+    // worldOptions can be options or a world instance, both work.
+    constructor(
+        div,
+        worldOptions = World.defaultOptions(),
+        options = ThreeView.defaultOptions()
+    ) {
         this.div = util.isString(div) ? document.getElementById(div) : div
-        this.world = world
-        // this.spriteSheet = model.spriteSheet // REMIND: Temp
+        this.world = new World(worldOptions)
+        this.renderOptions = options
 
-        // Initialize options
-        this.renderOptions = ThreeView.defaultOptions(true)
-        Object.assign(this.renderOptions, options) // install defaults
-
-        // Object.assign(this, ThreeView.defaultOptions) // install defaults
-        // Object.assign(this, options) // override defaults
         if (this.renderOptions.spriteSize !== 0) {
             const isPOT = util.isPowerOf2(this.renderOptions.spriteSize)
             this.spriteSheet = new SpriteSheet(
@@ -73,14 +61,14 @@ class ThreeView {
                 isPOT
             )
         }
-        // this.view = new ThreeMeshes(this, rendererOptions)
-        // this.view = new ThreeMeshes()
 
-        // if (this.Renderer !== ThreeView) {
-        //     throw Error('ThreeView ctor: Renderer not ThreeView', this.renderer)
-        // }
+        if (options.patches && options.patches.meshClass === 'PatchesMesh') {
+            this.patchesView = new PatchesView(
+                this.world.width,
+                this.world.height
+            )
+        }
 
-        // Initialize Three.js
         this.initThree()
         this.initThreeHelpers()
         this.initMeshes()
@@ -158,7 +146,7 @@ class ThreeView {
     }
     resize() {
         const { clientWidth, clientHeight } = this.div
-        const [width, height] = this.world.getWorldSize()
+        const [width, height] = this.world.getWorldSize() // w/o "patchSize"
 
         if (this.renderOptions.orthoView) {
             const zoom = Math.min(clientWidth / width, clientHeight / height)
@@ -223,35 +211,32 @@ class ThreeView {
             if (val.meshClass) {
                 const Mesh = ThreeMeshes[val.meshClass]
                 const options = Mesh.options() // default options
-                Object.assign(options, val.options) // override by user's
+                // override by user's
+                if (val.options) Object.assign(options, val.options)
                 const mesh = new ThreeMeshes[val.meshClass](this, options)
                 this.meshes[key] = mesh
-                // mesh.init() // mesh.init(agentset)
+                mesh.init() // can be called again by modeler
             }
         })
     }
 
     draw() {
-        // const {scene, camera} = this.view
-        // util.forEach(this.meshes)
-        // if (this.patches.length > 0) {
-        //     this.patches.renderer.update(this.patches)
-        // }
-
-        // if (this.turtles.length > 0) {
-        //     this.turtles.renderer.update(this.turtles)
-        // }
-
-        // if (this.links.length > 0) {
-        //     this.links.renderer.update(this.links)
-        // }
-
-        // const links = this.meshes.links
-        // links.update(????)
-
         // REMIND: generalize.
         this.renderer.render(this.scene, this.camera)
         // if (this.view.stats) this.view.stats.update()
+    }
+
+    drawPatches(data, viewFcn) {
+        if (util.isOofA(data)) data = util.toAofO(data)
+        this.meshes.patches.update(data, viewFcn)
+    }
+    drawTurtles(data, viewFcn) {
+        if (util.isOofA(data)) data = util.toAofO(data)
+        this.meshes.turtles.update(data, viewFcn)
+    }
+    drawLinks(data, viewFcn) {
+        if (util.isOofA(data)) data = util.toAofO(data)
+        this.meshes.links.update(data, viewFcn)
     }
 }
 

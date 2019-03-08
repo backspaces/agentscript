@@ -31,6 +31,7 @@ class World {
         // (0, 0) for the centered default worlds. REMIND: remove?
         this.centerX = (this.minX + this.maxX) / 2
         this.centerY = (this.minY + this.maxY) / 2
+        this.numPatches = this.width * this.height
     }
     randomPosition(float = true) {
         return float

@@ -64,8 +64,10 @@ models.forEach(async model => {
 })
 
 const testSamples = {
+    ants:
+        '{"model":["worldOptions","ticks","world","patches","turtles","links","population","speed","maxPheromone","diffusionRate","evaporationRate","wiggleAngle","modelDone"],"patches":6561,"patch":{"id":4228,"isFood":false,"isNest":false,"foodPheromone":0.2786201326777384,"nestPheromone":0.0003394546214499573,"_diffuseNext":0,"neighbors":[4146,4147,4148,4229,4310,4309,4308,4227]},"turtles":255,"turtle":{"id":137,"theta":1.9848532531501206,"x":-15.749383890402344,"y":5.916090567673656,"carryingFood":false,"pheromone":0.09586246074836942},"links":0}',
     diffuse:
-        '{"model":["worldOptions","world","patches","turtles","links","population","radius","modelDone"],"patches":80601,"patch":{"id":45451,"ran":0.5300913129775815,"_diffuseNext":0,"neighbors":[45049,45050,45051,45452,45853,45852,45851,45450]},"turtles":2,"turtle":{"id":1,"theta":3.629027286903738,"x":141.86152785070743,"y":77.14560949853987},"links":0}',
+        '{"model":["worldOptions","ticks","world","patches","turtles","links","population","speed","maxPheromone","diffusionRate","evaporationRate","wiggleAngle","modelDone"],"patches":6561,"patch":{"id":4228,"isFood":false,"isNest":false,"foodPheromone":0.2786201326777384,"nestPheromone":0.0003394546214499573,"_diffuseNext":0,"neighbors":[4146,4147,4148,4229,4310,4309,4308,4227]},"turtles":255,"turtle":{"id":137,"theta":1.9848532531501206,"x":-15.749383890402344,"y":5.916090567673656,"carryingFood":false,"pheromone":0.09586246074836942},"links":0}',
 
     droplets:
         '{"model":["worldOptions","world","patches","turtles","links","stepType","killOffworld","elevation","dzdx","dzdy","slope","aspect","speed","localMins","modelDone"],"patches":10201,"patch":{"id":5057,"elevation":1729.07421875,"aspect":4.363121122510324,"neighbors":[4955,4956,4957,5058,5159,5158,5157,5056],"turtles":[]},"turtles":10201,"turtle":{"id":7694,"theta":5.176785652915809,"x":-4.519901971517734,"y":-21.148097732906376},"links":0}',

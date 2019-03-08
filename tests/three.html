@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Hello</title>
+        <title>Three</title>
     </head>
 
     <body>
         <canvas id="model" style="border: 1px solid; padding: 2px;"></canvas>
-        <canvas id="three" style="border: 1px solid; padding: 2px;"></canvas>
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
-            import TurtlesView from '../src/TurtlesView.js'
+            import Color from '../src/Color.js'
             import ThreeView from '../src/ThreeView.js'
             const can = document.getElementById('model')
-            const ctx = can.getContext('2d')
-            util.toWindow({ util, World, TurtlesView, ThreeView, ctx, can })
+            // const ctx = can.getContext('2d')
+            util.toWindow({ util, World, ThreeView, Color, can })
 
             const params = {
                 seed: 1,
                 population: 10,
-                shape: 'dart',
+                shape: 'darts', // 'points',
+                linksColor: null,
+                // linksColor: 'lightgray',
                 shapeSize: 1.5,
-                patchSize: 15,
+                patchSize: 10,
                 speed: 0.1,
-                // maxX: 30,
-                // maxY: 20,
-                maxX: 15,
-                maxY: 10,
+                maxX: 30,
+                maxY: null,
                 steps: 500,
                 data: false,
-                strokeColor: 'red',
             }
             Object.assign(params, util.parseQueryString())
             if (!params.maxY) params.maxY = params.maxX
@@ -37,35 +35,30 @@
                 World.defaultOptions(params.maxX, params.maxY)
             )
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = util.randomColor()
+                a[i] = Color.randomTypedColor()
             })
-            const view = new TurtlesView(
-                ctx,
-                params.patchSize,
-                params.world,
-                false
-            )
-            util.toWindow({ params, view, world: params.world })
-            console.log('main: params', params)
+
+            const view = createView()
 
             const worker = new Worker('./three.js', { type: 'module' })
-            console.log('main: worker:', worker)
             worker.postMessage({ cmd: 'init', params: params })
+
+            util.toWindow({ params, view, world: params.world, worker }, true)
 
             let data = params.data ? [] : null
             const perf = util.fps()
             worker.onmessage = e => {
                 if (e.data === 'done') {
                     console.log('main: done.')
-                    console.log('data:', data)
-                    util.toWindow({ data })
+                    util.toWindow({ data }, true)
                     console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                     // worker.terminate()
+                    // Keep orbit control running:
+                    util.timeoutLoop(() => view.draw(), -1, 100)
                 } else {
                     if (params.data) {
                         data.push(e.data)
                     } else {
-                        data = e.data
                         draw(e.data)
                     }
                     perf()
@@ -74,24 +67,63 @@
             }
 
             function draw(data) {
-                function turtleViewValues(turtle, i, turtles) {
-                    return {
-                        shape: params.shape,
-                        color: params.colors25[i % 25],
-                        strokeColor: params.strokeColor,
-                        size: params.shapeSize,
-                        noRotate: params.noRotate,
+                view.drawTurtles(data.turtles, (t, i) => {
+                    const usePoints = params.shape === 'points'
+                    const sprites = view.spriteSheet.sprites
+                    return usePoints
+                        ? { color: params.colors25[i % 25].webgl }
+                        : {
+                              sprite: sprites[i % sprites.length],
+                              size: params.shapeSize,
+                          }
+                })
+                view.drawLinks(data.links, (l, i) => {
+                    return { color: params.colors25[i % 25].webgl }
+                })
+                view.draw()
+            }
+
+            function createView() {
+                const usePoints = params.shape === 'points'
+                const options = ThreeView.defaultOptions()
+                util.toWindow({ options }, true)
+
+                if (usePoints)
+                    options.turtles = {
+                        meshClass: 'PointsMesh',
+                        options: { pointSize: 2 },
+                        // options: { pointSize: 2, color: 'orange' },
                     }
+
+                if (params.linksColor)
+                    options.links.options = { color: params.linksColor }
+
+                const can = document.getElementById('model')
+                params.world.setCanvasSize(can, params.patchSize)
+
+                const view = new ThreeView(can, params.world, options)
+                // view.renderer.setSize(can.width, can.height)
+
+                if (!usePoints) {
+                    const sheet = view.spriteSheet
+                    sheet.shapes.getPathNames().forEach((name, i) => {
+                        sheet.newSprite(
+                            name,
+                            Color.randomCssColor(),
+                            Color.randomCssColor()
+                        )
+                    })
                 }
-                function linkViewValues(link, i, links) {
-                    return {
-                        color: params.colors25[i % 25],
-                        width: params.linkWidth,
-                    }
-                }
-                util.fillCtx(ctx, 'lightgray')
-                view.drawLinks(data.links, linkViewValues)
-                view.drawTurtles(data.turtles, turtleViewValues)
+                // Just draw patches once:
+                view.drawPatches(
+                    util.repeat(params.world.numPatches, (i, a) => {
+                        a[i] = Color.randomGrayPixel(0, 100)
+                    })
+                )
+
+                view.draw()
+
+                return view
             }
         </script>
     </body>

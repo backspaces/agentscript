@@ -24,16 +24,8 @@ export default class TurtlesView {
     }
 
     drawTurtles(data, viewFcn) {
-        const isOofA = !util.isArray(data)
-        const length = isOofA ? data.x.length : data.length
-        util.repeat(length, i => {
-            const turtle = isOofA
-                ? {
-                    x: data.x[i],
-                    y: data.y[i],
-                    theta: data.theta[i],
-                }
-                : data[i]
+        if (util.isOofA(data)) data = util.toAofO(data)
+        util.forEach(data, (turtle, i) => {
             const viewData = viewFcn(turtle, i, data)
             this.drawTurtle(turtle, viewData)
         })
@@ -123,8 +115,7 @@ export default class TurtlesView {
     }
 
     drawLinks(data, viewFcn) {
-        const isOofA = !util.isArray(data)
-        const length = isOofA ? data.x0.length : data.length
+        if (util.isOofA(data)) data = util.toAofO(data)
         const uniformLinks = util.isObject(viewFcn)
         const ctx = this.ctx
         util.setIdentity(this.ctx)
@@ -133,15 +124,7 @@ export default class TurtlesView {
             ctx.lineWidth = viewFcn.width
             ctx.beginPath()
         }
-        util.repeat(length, i => {
-            const link = isOofA
-                ? {
-                    x0: data.x0[i],
-                    y0: data.y0[i],
-                    x1: data.x1[i],
-                    y1: data.y1[i],
-                }
-                : data[i]
+        util.forEach(data, (link, i) => {
             if (uniformLinks) {
                 this.drawLink(link)
             } else {
@@ -200,44 +183,3 @@ ToDo:
     - The OofA needs parameters/template, not just x,y,theta
 
 */
-
-// drawTurtle(turtle, viewData) {
-//     if (viewData.shape) {
-//         const { shape, color, size, noRotate } = viewData
-//         if (this.useSprites) {
-//             const pixels = size * this.patchSize
-//             const sprite = this.shapes.shapeToImage(shape, pixels, color)
-//             this.drawImage(
-//                 sprite,
-//                 turtle.x,
-//                 turtle.y,
-//                 noRotate ? 0 : turtle.theta
-//             )
-//         } else {
-//             this.drawShape(
-//                 shape,
-//                 turtle.x,
-//                 turtle.y,
-//                 noRotate ? 0 : turtle.theta,
-//                 size,
-//                 color
-//             )
-//         }
-//     } else if (viewData.sprite) {
-//         const { sprite, noRotate } = viewData
-//         this.drawImage(
-//             sprite,
-//             turtle.x,
-//             turtle.y,
-//             noRotate ? 0 : turtle.theta
-//         )
-//     } else {
-//         throw Error(`drawTurtle: bad viewData: ${viewData}`)
-//     }
-// }
-
-// Calll this to change the view's canvas size.
-// setTransform(patchSize) {
-//     this.patchSize = patchSize
-//     this.world.setCtxTransform(this.ctx, patchSize)
-// }

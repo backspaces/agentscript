@@ -79,6 +79,7 @@
 
         <script type="module">
             import util from '../src/util.js'
+            import Color from '../src/Color.js'
             import World from '../src/World.js'
             import TurtlesView from '../src/TurtlesView.js'
             util.toWindow({ util, World, TurtlesView })
@@ -101,7 +102,7 @@
             Object.assign(params, util.parseQueryString())
             if (!params.maxY) params.maxY = params.maxX
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = util.randomColor()
+                a[i] = Color.randomCssColor()
             })
             console.log('main: params', params)
 

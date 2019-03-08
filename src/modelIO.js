@@ -67,3 +67,28 @@ export function printToPage(msg, element = document.body) {
     element.style.fontFamily = 'monospace'
     element.innerHTML += msg + '<br />'
 }
+
+export function testStartup(toWindowObj) {
+    util.toWindow(toWindowObj)
+    const usingPuppeteer = navigator.userAgent === 'Puppeteer'
+    if (usingPuppeteer) util.randomSeed()
+}
+
+export function testSetup(model) {
+    this.printToPage('patches: ' + model.patches.length)
+    this.printToPage('turtles: ' + model.turtles.length)
+    this.printToPage('links: ' + model.links.length)
+    const { world, patches, turtles, links } = model
+    util.toWindow({ world, patches, turtles, links, model })
+}
+
+export function testDone(model) {
+    const usingPuppeteer = navigator.userAgent === 'Puppeteer'
+    modelIO.printToPage('')
+    modelIO.printToPage(modelIO.sampleObj(model))
+
+    if (usingPuppeteer) {
+        window.modelDone = model.modelDone = true
+        window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+    }
+}

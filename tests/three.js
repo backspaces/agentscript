@@ -3,7 +3,6 @@ import HelloModel from '../models/HelloModel.js'
 console.log('worker self', self)
 
 let model, params
-let steps = 0
 
 function postData() {
     const data = {
@@ -29,6 +28,7 @@ function postData() {
         data.links.y1.buffer,
     ])
     if (data.turtles.x.length !== 0) console.log('to data', data)
+    model.tick()
 }
 
 onmessage = e => {
@@ -44,7 +44,7 @@ onmessage = e => {
         console.log('worker: model:', model)
         postData()
     } else if (e.data.cmd === 'step') {
-        if (++steps === params.steps) {
+        if (model.ticks === params.steps) {
             postMessage('done')
         } else {
             model.step()

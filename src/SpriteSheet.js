@@ -11,7 +11,8 @@ export default class SpriteSheet {
         this.rows = 1
         this.nextCol = 0
         this.nextRow = 0
-        this.sprites = {} // index to sprites by name
+        this.spritesIndex = {} // index to sprites by name
+        this.sprites = []
         this.shapes = new Shapes()
         if (usePowerOf2) this.checkPowerOf2()
         this.ctx = util.createCtx(this.width, this.height) // offscreen
@@ -25,7 +26,7 @@ export default class SpriteSheet {
     }
     // Return a random sprite from the cache.
     oneOf() {
-        return util.oneValOf(this.sprites)
+        return util.oneOf(this.sprites)
     }
 
     // Draw the sprite on ctx with given x,y,theta.
@@ -85,7 +86,7 @@ export default class SpriteSheet {
             strokeColor
         )
         // If sprite of ths name already exists, return it.
-        if (this.sprites[name]) return this.sprites[name]
+        if (this.spritesIndex[name]) return this.spritesIndex[name]
 
         // The sprite image
         const img = this.shapes.shapeToImage(
@@ -101,12 +102,22 @@ export default class SpriteSheet {
         this.ctx.drawImage(img, x, y, size, size)
 
         const { nextRow: row, nextCol: col } = this
-        const sprite = { name, x, y, row, col, size, sheet: this }
+        const sprite = {
+            name,
+            id: this.sprites.length,
+            x,
+            y,
+            row,
+            col,
+            size,
+            sheet: this,
+        }
         sprite.uvs = this.getUVs(sprite)
 
         this.incrementRowCol()
         // Add sprite to cache and return it.
-        this.sprites[name] = sprite
+        this.spritesIndex[name] = sprite
+        this.sprites.push(sprite)
         if (this.texture) this.texture.needsUpdate = true
         return sprite
     }

@@ -178,6 +178,7 @@ const util = {
 
     // Use chrome/ffox/ie console.time()/timeEnd() performance functions
     timeit(f, runs = 1e5, name = 'test') {
+        name = name + '-' + runs;
         console.time(name);
         for (let i = 0; i < runs; i++) f(i);
         console.timeEnd(name);
@@ -225,6 +226,11 @@ const util = {
         if (logToo) {
             Object.keys(obj).forEach(key => console.log('  ', key, obj[key]));
         }
+    },
+    // toWindow plus also calling console.log for each item.
+    toConsole(obj) {
+        this.toWindow(obj);
+        Object.keys(obj).forEach(key => console.log('  ', key, obj[key]));
     },
     toGlobal(obj) {
         Object.assign(this.globalObject(), obj);
@@ -651,6 +657,40 @@ const util = {
         return this.normalize(array, lo, hi).map(n => Math.round(n))
     },
 
+    // ### OofA/AofO
+
+    isOofA(data) {
+        return !this.isArray(data)
+    },
+    toOofA(aofo, spec) {
+        const length = aofo.length;
+        const keys = Object.keys(spec);
+        const oofa = {};
+        keys.forEach(k => {
+            oofa[k] = new spec[k](length);
+        });
+        util.forEach(aofo, (o, i) => {
+            keys.forEach(key => (oofa[key][i] = o[key]));
+        });
+
+        return oofa
+    },
+    oofaObject(oofa, i, keys) {
+        const obj = {};
+        keys.forEach(key => {
+            obj[key] = oofa[key][i];
+        });
+        return obj
+    },
+    toAofO(oofa, keys = Object.keys(oofa)) {
+        const length = oofa[keys[0]].length;
+        const aofo = new Array(length);
+        this.forEach(aofo, (val, i) => {
+            aofo[i] = this.oofaObject(oofa, i, keys);
+        });
+        return aofo
+    },
+
     // ### Async
 
     // Return Promise for getting an image.
@@ -759,49 +799,6 @@ const util = {
     //   else
     //     setTimeout(() => { this.waitOn(done, f, ms) }, ms)
     // },
-
-    // ### Color utilities
-
-    rgbaToPixel(r, g, b, a = 255) {
-        const rgba = new Uint8Array([r, g, b, a]);
-        const pixels = new Uint32Array(rgba.buffer);
-        return pixels[0]
-    },
-    randomPixel() {
-        const r255 = () => util.randomInt(256); // random int in [0,255]
-        return this.rgbaToPixel(r255(), r255(), r255())
-    },
-    randomGrayPixel(min = 0, max = 255) {
-        const gray = util.randomInt2(min, max); // random int in [min,max]
-        return this.rgbaToPixel(gray, gray, gray)
-    },
-    cssToRGBA(string) {
-        sharedCtx1x1.clearRect(0, 0, 1, 1);
-        sharedCtx1x1.fillStyle = string;
-        sharedCtx1x1.fillRect(0, 0, 1, 1);
-        return sharedCtx1x1.getImageData(0, 0, 1, 1).data
-        // const rgba = sharedCtx1x1.getImageData(0, 0, 1, 1).data
-        // return this.rgbaToPixel(...rgba)
-    },
-    cssToPixel(string) {
-        const rgba = this.cssToRGBA(string);
-        // sharedCtx1x1.clearRect(0, 0, 1, 1)
-        // sharedCtx1x1.fillStyle = string
-        // sharedCtx1x1.fillRect(0, 0, 1, 1)
-        // const rgba = sharedCtx1x1.getImageData(0, 0, 1, 1).data
-        return this.rgbaToPixel(...rgba)
-    },
-    rgbColor(r, g, b) {
-        return `rgb(${r},${g},${b})`
-    },
-    randomColor() {
-        const r255 = () => util.randomInt(256); // random int in [0,255]
-        return this.rgbColor(r255(), r255(), r255())
-    },
-    randomGray(min = 0, max = 255) {
-        const gray = util.randomInt2(min, max); // random int in [min,max]
-        return this.rgbColor(gray, gray, gray)
-    },
 
     // ### Canvas utilities
 
@@ -2257,6 +2254,7 @@ class World {
         // (0, 0) for the centered default worlds. REMIND: remove?
         this.centerX = (this.minX + this.maxX) / 2;
         this.centerY = (this.minY + this.maxY) / 2;
+        this.numPatches = this.width * this.height;
     }
     randomPosition(float = true) {
         return float
@@ -3171,12 +3169,40 @@ function printToPage(msg, element = document.body) {
     element.innerHTML += msg + '<br />';
 }
 
+function testStartup(toWindowObj) {
+    util.toWindow(toWindowObj);
+    const usingPuppeteer = navigator.userAgent === 'Puppeteer';
+    if (usingPuppeteer) util.randomSeed();
+}
 
-var modelIO = Object.freeze({
+function testSetup(model) {
+    this.printToPage('patches: ' + model.patches.length);
+    this.printToPage('turtles: ' + model.turtles.length);
+    this.printToPage('links: ' + model.links.length);
+    const { world, patches, turtles, links } = model;
+    util.toWindow({ world, patches, turtles, links, model });
+}
+
+function testDone(model) {
+    const usingPuppeteer = navigator.userAgent === 'Puppeteer';
+    modelIO.printToPage('');
+    modelIO.printToPage(modelIO.sampleObj(model));
+
+    if (usingPuppeteer) {
+        window.modelDone = model.modelDone = true;
+        window.modelSample = model.modelSample = modelIO.sampleJSON(model);
+    }
+}
+
+
+var modelIO$1 = Object.freeze({
 	toJSON: toJSON,
 	sampleObj: sampleObj,
 	sampleJSON: sampleJSON,
-	printToPage: printToPage
+	printToPage: printToPage,
+	testStartup: testStartup,
+	testSetup: testSetup,
+	testDone: testDone
 });
 
 // This is the importer/exporter of all our modules.
@@ -3194,7 +3220,7 @@ exports.RGBDataSet = RGBDataSet;
 exports.Turtle = Turtle;
 exports.Turtles = Turtles;
 exports.World = World;
-exports.modelIO = modelIO;
+exports.modelIO = modelIO$1;
 exports.util = util;
 
 Object.defineProperty(exports, '__esModule', { value: true });

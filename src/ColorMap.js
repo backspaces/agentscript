@@ -25,7 +25,9 @@ const ColorMap = {
     // Locs are floats from 0-1, default is equally spaced.
     gradientImageData(nColors, stops, locs) {
         // Convert the color stops to css strings
-        stops = stops.map(c => (Array.isArray(c) ? Color.rgbaString(...c) : c))
+        stops = stops.map(c =>
+            Array.isArray(c) ? Color.rgbaCssColor(...c) : c
+        )
         const ctx = util.createCtx(nColors, 1)
         // Install default locs if none provide
         if (!locs) locs = util.aRamp(0, 1, stops.length)
@@ -50,7 +52,7 @@ const ColorMap = {
             4,
             // Note: can't share subarray as color's typed array:
             // it's buffer is for entire array, not just subarray.
-            i => array.push(Color.color(...typedArray.subarray(i, i + 4)))
+            i => array.push(Color.typedColor(...typedArray.subarray(i, i + 4)))
         )
         array.typedArray = typedArray
         return array
@@ -231,7 +233,9 @@ const ColorMap = {
     // Convert the HSL values to Color.colors, default to bright hue ramp (L=50).
     hslColorMap(H, S = [100], L = [50]) {
         const hslArray = this.permuteArrays(H, S, L)
-        const array = hslArray.map(a => Color.toColor(Color.hslString(...a)))
+        const array = hslArray.map(a =>
+            Color.toTypedColor(Color.hslCssColor(...a))
+        )
         return this.basicColorMap(array)
     },
 
@@ -274,7 +278,7 @@ const ColorMap = {
     ),
     // Create a named colors colormap
     cssColorMap(cssArray, createNameIndex = false) {
-        const array = cssArray.map(str => Color.stringToUint8s(str))
+        const array = cssArray.map(str => Color.cssToUint8Array(str))
         const map = this.basicColorMap(array)
         map.cssNames = cssArray
         // REMIND: kinda tacky? Maybe map.name.yellow? Maybe generalize for other

@@ -23,7 +23,7 @@ const Color = {
     // Convert 4 r,g,b,a ints in [0-255] ("a" defaulted to 255) to a
     // css color string. Alpha "a" is converted to float in 0-1 for css string.
     // We use alpha in [0-255] to be compatible with TypedArray conventions.
-    rgbaString(r, g, b, a = 255) {
+    rgbaCssColor(r, g, b, a = 255) {
         a = a / 255
         const a2 = a.toPrecision(2)
         return a === 1 ? `rgb(${r},${g},${b})` : `rgba(${r},${g},${b},${a2})`
@@ -33,7 +33,7 @@ const Color = {
     // css color string. Alpha "a" is converted to float in 0-1 for css string.
     //
     // NOTE: h=0 and h=360 are the same, use h in 0-359 for unique colors.
-    hslString(h, s, l, a = 255) {
+    hslCssColor(h, s, l, a = 255) {
         a = a / 255
         const a4 = a.toPrecision(4)
         return a === 1
@@ -46,44 +46,53 @@ const Color = {
     //
     // Both #nnn and #nnnnnn forms supported.
     // Default is to check for the short hex form.
-    hexString(r, g, b, shortOK = true) {
-        if (shortOK) {
-            const [r0, g0, b0] = [r / 17, g / 17, b / 17]
-            if (
-                util.isInteger(r0) &&
-                util.isInteger(g0) &&
-                util.isInteger(b0)
-            ) {
-                return this.hexShortString(r0, g0, b0)
-            }
-        }
+    hexCssColor(r, g, b) {
         return `#${(0x1000000 | (b | (g << 8) | (r << 16)))
             .toString(16)
             .slice(-6)}`
     },
-    // Return the 4 char short version of a hex color.  Each of the r,g,b values
-    // must be in [0-15].  The resulting color will be equivalent
-    // to `r*17`, `g*17`, `b*17`, resulting in the 16 values:
+
+    // cssColor is a hybrid string and is our standard.  It returns:
     //
-    //     0, 17, 34, 51, 68, 85, 102, 119, 136, 153, 170, 187, 204, 221, 238, 255
-    //
-    // This is equivalent util.aIntRamp(0,255,16), i.e. 16 values per rgb channel.
-    hexShortString(r, g, b) {
-        if (r > 15 || g > 15 || b > 15) {
-            throw Error(`hexShortString: one of ${[r, g, b]} > 15`)
-        }
-        return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`
+    // * rgbaCssColor if a not 255 (i.e. not opaque)
+    // * hexCssColor otherwise
+    cssColor(r, g, b, a = 255) {
+        return a === 255
+            ? this.hexCssColor(r, g, b, true)
+            : this.rgbaCssColor(r, g, b, a)
     },
 
-    // Tristring is a hybrid string and is our standard.  It returns:
-    //
-    // * rgbaString if a not 255 (i.e. not opaque)
-    // * hexString otherwise
-    // * with the hexShortString if appropriate
-    triString(r, g, b, a = 255) {
-        return a === 255
-            ? this.hexString(r, g, b, true)
-            : this.rgbaString(r, g, b, a)
+    randomCssColor() {
+        const r255 = () => util.randomInt(256) // random int in [0,255]
+        return this.cssColor(r255(), r255(), r255())
+    },
+
+    randomGrayCssColor(min = 0, max = 255) {
+        const gray = util.randomInt2(min, max) // random int in [min,max]
+        return this.cssColor(gray, gray, gray)
+    },
+
+    // ### Pixels
+
+    cssToPixel(string) {
+        const rgba = this.cssToUint8Array(string)
+        return this.rgbaToPixel(...rgba)
+    },
+
+    rgbaToPixel(r, g, b, a = 255) {
+        const rgba = new Uint8Array([r, g, b, a])
+        const pixels = new Uint32Array(rgba.buffer)
+        return pixels[0]
+    },
+
+    randomPixel() {
+        const r255 = () => util.randomInt(256) // random int in [0,255]
+        return this.rgbaToPixel(r255(), r255(), r255())
+    },
+
+    randomGrayPixel(min = 0, max = 255) {
+        const gray = util.randomInt2(min, max) // random int in [min,max]
+        return this.rgbaToPixel(gray, gray, gray)
     },
 
     // ### CSS String Conversions
@@ -99,7 +108,8 @@ const Color = {
     sharedCtx1x1: util.createCtx(1, 1), // share across calls.
     // Convert any css string to 4 element Uint8ClampedArray TypedArray.
     // If you need a JavaScript Array, use `new Array(...TypedArray)`
-    stringToUint8s(string) {
+    // Slow, but works for all css strings: hsl, rgb, .. as well as names.
+    cssToUint8Array(string) {
         this.sharedCtx1x1.clearRect(0, 0, 1, 1)
         this.sharedCtx1x1.fillStyle = string
         this.sharedCtx1x1.fillRect(0, 0, 1, 1)
@@ -115,31 +125,29 @@ const Color = {
     // This provides a universal color, good for canvas2d pixels, webgl & image
     // TypedArrays, and css/canvas2d strings.
 
-    // Create Color from r,g,b,a. Use `toColor()` below for strings etc.
-    color(r, g, b, a = 255) {
+    // Create Color from r,g,b,a. Use `toTypedColor()` below for strings etc.
+    typedColor(r, g, b, a = 255) {
         const u8array = new Uint8ClampedArray([r, g, b, a])
         u8array.pixelArray = new Uint32Array(u8array.buffer) // one element array
-        // Make this an instance of ColorProto
-        Object.setPrototypeOf(u8array, ColorProto)
+        // Make this an instance of TypedColorProto
+        Object.setPrototypeOf(u8array, TypedColorProto)
         return u8array
     },
-    isColor(color) {
-        return (
-            color && color.constructor === Uint8ClampedArray && color.pixelArray
-        )
+    isTypedColor(any) {
+        return any && any.constructor === Uint8ClampedArray && any.pixelArray
     },
     // Create a Color from a css string, pixel, JavaScript or Typed Array.
     // Returns `any` if is Color already. Useful for
     // ```
-    // css: `toColor('#ff0a00')`
-    // hsl: `toColor('hsl(200,100%,50%)')`
-    // named colors: `toColor('CadetBlue')`
-    // pixels: `toColor(4294945280)`
-    // JavaScript Arrays: `toColor([255,0,0])`
+    // css: `toTypedColor('#ff0a00')`
+    // hsl: `toTypedColor('hsl(200,100%,50%)')`
+    // named colors: `toTypedColor('CadetBlue')`
+    // pixels: `toTypedColor(4294945280)` !! Little Endian !!
+    // JavaScript Arrays: `toTypedColor([255,0,0])`
     // ```
-    toColor(any) {
-        if (this.isColor(any)) return any
-        const tc = this.color(0, 0, 0, 0)
+    toTypedColor(any) {
+        if (this.isTypedColor(any)) return any
+        const tc = this.typedColor(0, 0, 0, 0) // "empty" typed color
         if (util.isInteger(any)) {
             tc.setPixel(any)
         } else if (typeof any === 'string') {
@@ -149,26 +157,26 @@ const Color = {
         } else if (util.isFloatArray(any)) {
             tc.setWebgl(any)
         } else {
-            throw Error('toColor: invalid argument', any)
+            throw Error('toTypedColor: invalid argument', any)
         }
         return tc
     },
     // Return a random rgb Color, a=255
-    randomColor() {
+    randomTypedColor() {
         const r255 = () => util.randomInt(256) // random int in [0,255]
-        return this.color(r255(), r255(), r255())
+        return this.typedColor(r255(), r255(), r255())
     },
     // Random gray color, alpha = 255
-    randomGray(min = 0, max = 255) {
+    randomGrayTypedColor(min = 0, max = 255) {
         const gray = util.randomInt2(min, max) // random int in [min,max]
-        return this.color(gray, gray, gray)
+        return this.typedColor(gray, gray, gray)
     },
     // A static transparent color, set at end of file
     // transparent: null
 }
 
 // Prototype for Color. Getters/setters for usability, may be slower.
-const ColorProto = {
+const TypedColorProto = {
     // Inherit from Uint8ClampedArray
     __proto__: Uint8ClampedArray.prototype,
 
@@ -208,13 +216,13 @@ const ColorProto = {
     // 'red', '#f00', 'ff0000', 'rgb(255,0,0)', etc.
     //
     // Does *not* set the chached this.string, which will be lazily evaluated
-    // to its common triString by getCss(). The above would all return '#f00'.
+    // to its common cssColor by getCss(). The above would all return '#f00'.
     setCss(string) {
-        return this.setColor(...Color.stringToUint8s(string))
+        return this.setColor(...Color.cssToUint8Array(string))
     },
-    // Return the triString for this Color, cached in the @string value
+    // Return the cssColor for this Color, cached in the @string value
     getCss() {
-        if (this.string == null) this.string = Color.triString(...this)
+        if (this.string == null) this.string = Color.cssColor(...this)
         return this.string
     },
     get css() {

@@ -49,7 +49,7 @@
                 model.population = population
                 model.setup()
 
-                util.toWindow({ model, sprites })
+                util.toWindow({ model, sprites: sheet.sprites })
 
                 const perf = util.fps()
                 util.timeoutLoop(steps => {
@@ -61,20 +61,21 @@
                 })
             })
 
-            let sprites
+            // let sprites
             function newSprites() {
                 shapes.getPathNames().forEach((name, i) => {
                     sheet.newSprite(name, 'red', 'orange')
                     sheet.newSprite(name, 'gray', 'red')
                     sheet.newSprite(name, 'blue', 'black')
                 })
-                sprites = Object.values(sheet.sprites)
+                // sprites = Object.values(sheet.sprites)
+                // sprites = sheet.sprites
             }
 
             function draw(data) {
                 function turtleViewValues(turtle, i, turtles) {
                     return {
-                        sprite: sprites[i % sprites.length],
+                        sprite: sheet.sprites[i % sheet.sprites.length],
                         noRotate: noRotate,
                     }
                 }

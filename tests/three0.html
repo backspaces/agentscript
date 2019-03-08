@@ -18,6 +18,7 @@
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
+            import Color from '../src/Color.js'
             // import SpriteSheet from '../src/SpriteSheet.js'
             import HelloModel from '../models/HelloModel.js'
             import TurtlesView from '../src/TurtlesView.js'
@@ -50,7 +51,7 @@
                 World.defaultOptions(params.maxX, params.maxY)
             )
             params.colors25 = util.repeat(25, (i, a) => {
-                a[i] = util.randomColor()
+                a[i] = Color.randomCssColor()
             })
             const view = new TurtlesView(
                 ctx,
@@ -98,14 +99,8 @@
             }
 
             // ===================
-            const usePoints = false
+            const usePoints = true
             window.o = ThreeView.defaultOptions()
-
-            window.patchesView = new PatchesView(world.width, world.height)
-            patchesView.installPixels(model.patches, d =>
-                util.randomGrayPixel(128, 250)
-            )
-            patchesView.updateCanvas()
 
             if (usePoints) {
                 o.turtles = {
@@ -118,6 +113,11 @@
             tcan.width = can.width
             tcan.height = can.height
             window.v = new ThreeView(tcan, world, o)
+            window.patchesView = v.patchesView
+            // patchesView.createPixels(i => util.randomGrayPixel(128, 250))
+            patchesView.createPixels(i => Color.randomGrayPixel(0, 50))
+            patchesView.updateCanvas()
+
             v.renderer.setSize(can.width, can.height)
             if (!usePoints) {
                 const sheet = v.spriteSheet
@@ -136,15 +136,18 @@
             window.p = v.meshes.patches
             window.t = v.meshes.turtles
             window.l = v.meshes.links
-            p.init(patchesView.canvas)
-            l.init()
-            t.init()
+            // p.init()
+            // l.init()
+            // t.init()
             model.links.forEach((l, i) => {
                 l.color = new THREE.Color(params.colors25[i % 25]).toArray()
             })
             util.timeoutLoop(
                 i => {
-                    l.update(model.links)
+                    // l.update(model.links, (l, i) => {
+                    //     return { color: l.color }
+                    // })
+                    l.update(model.links, (l, i) => ({ color: l.color }))
                     t.update(model.turtles)
                     v.renderer.render(v.scene, v.camera)
                 },
