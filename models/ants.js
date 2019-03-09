@@ -10,6 +10,9 @@ model.setup()
 
 modelIO.testSetup(model)
 
-util.yieldLoop(() => model.step(), 500)
+util.yieldLoop(() => {
+    model.step()
+    model.tick()
+}, 500)
 
 modelIO.testDone(model)

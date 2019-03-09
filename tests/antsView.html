@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ants</title>
+    </head>
+
+    <body>
+        <canvas id="model" style="border: 1px solid; padding: 2px;"></canvas>
+        <script type="module">
+            import util from '../src/util.js'
+            import World from '../src/World.js'
+            import Color from '../src/Color.js'
+            import ColorMap from '../src/ColorMap.js'
+            import ThreeView from '../src/ThreeView.js'
+            const can = document.getElementById('model')
+            // const ctx = can.getContext('2d')
+            util.toWindow({ util, World, ThreeView, Color, can })
+
+            const params = {
+                seed: 1,
+                population: 10,
+                usePoints: false, // 'points',
+                shapeSize: 1.5,
+                patchSize: 5,
+                nestColor: 'yellow',
+                foodColor: 'blue',
+                speed: 0.1,
+                maxX: 40,
+                maxY: null,
+                steps: 500,
+                data: false,
+            }
+            Object.assign(params, util.parseQueryString())
+            if (!params.maxY) params.maxY = params.maxX
+            params.world = new World(
+                World.defaultOptions(params.maxX, params.maxY)
+            )
+            params.colors25 = util.repeat(25, (i, a) => {
+                a[i] = Color.randomTypedColor()
+            })
+            util.toWindow({ params, world: params.world }, true)
+
+            const nestColor = Color.toTypedColor(params.nestColor)
+            const foodColor = Color.toTypedColor(params.foodColor)
+            const nestColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                params.nestColor,
+            ])
+            const foodColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                params.foodColor,
+            ])
+            util.toWindow({ nestColor, nestColorMap, foodColor, foodColorMap })
+
+            const view = createView()
+            const nestSprite = view.spriteSheet.newSprite('bug', nestColor.css)
+            const foodSprite = view.spriteSheet.newSprite('bug', foodColor.css)
+            util.toWindow({ view, nestSprite, foodSprite }, true)
+
+            const worker = new Worker('./antsView.js', { type: 'module' })
+            worker.postMessage({ cmd: 'init', params: params })
+            util.toWindow({ worker }, true)
+
+            let data = params.data ? [] : null
+            const perf = util.fps()
+            worker.onmessage = e => {
+                if (e.data === 'done') {
+                    console.log('main: done.')
+                    util.toWindow({ data }, true)
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
+                    // worker.terminate()
+                    // Keep orbit control running:
+                    util.timeoutLoop(() => view.draw(), -1, 100)
+                } else {
+                    if (params.data) {
+                        data.push(e.data)
+                    } else {
+                        data = e.data
+                        draw(e.data)
+                    }
+                    perf()
+                    worker.postMessage({ cmd: 'step' })
+                }
+            }
+
+            function draw(data) {
+                view.drawPatches(data.patches, (p, i) => {
+                    // util.repeat(params.world.numPatches, (i, a) => {
+                    //     a[i] = Color.randomGrayPixel(0, 100)
+                    // })
+                    if (p.isNest) return nestColor.pixel
+                    if (p.isFood) return foodColor.pixel
+                    const color =
+                        p.foodPheromone > p.nestPheromone
+                            ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
+                            : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+                    return color.pixel
+                })
+                view.drawTurtles(data.turtles, (t, i) => {
+                    // const usePoints = params.shape === 'points'
+                    // const sprite = t.carryingFood
+                    //     ? this.nestSprite
+                    //     : this.foodSprite
+
+                    // const sprites = view.spriteSheet.sprites
+                    return params.usePoints
+                        ? {
+                              color: t.carryingFood
+                                  ? nestColor.webgl
+                                  : foodColor.webgl,
+                          }
+                        : {
+                              sprite: t.carryingFood ? nestSprite : foodSprite,
+                              size: params.shapeSize,
+                          }
+                })
+                view.draw()
+            }
+
+            function createView() {
+                // const usePoints = params.shape === 'points'
+                const options = ThreeView.defaultOptions()
+                util.toWindow({ options }, true)
+
+                if (params.usePoints)
+                    options.turtles = {
+                        meshClass: 'PointsMesh',
+                        options: { pointSize: 2 },
+                        // options: { pointSize: 2, color: 'orange' },
+                    }
+
+                if (params.linksColor)
+                    options.links.options = { color: params.linksColor }
+
+                const can = document.getElementById('model')
+                params.world.setCanvasSize(can, params.patchSize)
+
+                const view = new ThreeView(can, params.world, options)
+                // view.renderer.setSize(can.width, can.height)
+
+                if (!params.usePoints) {
+                    const sheet = view.spriteSheet
+                    sheet.shapes.getPathNames().forEach((name, i) => {
+                        sheet.newSprite(
+                            name,
+                            Color.randomCssColor(),
+                            Color.randomCssColor()
+                        )
+                    })
+                }
+
+                view.draw()
+
+                return view
+            }
+        </script>
+    </body>
+</html>
