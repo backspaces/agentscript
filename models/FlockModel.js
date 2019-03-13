@@ -2,25 +2,24 @@ import Model from '../src/Model.js'
 import util from '../src/util.js'
 
 export default class FlockModel extends Model {
-    constructor(world) {
-        super(world)
-        this.UI = {
+    static defaults() {
+        return {
+            population: 1000,
             vision: 3,
             speed: 0.25,
             maxTurn: util.radians(3.0),
             minSeparation: 0.75,
-            population: 1000,
         }
-        // this.vision = 3
-        // this.speed = 0.25
-        // this.maxTurnDegrees = 3.0
-        // this.minSeparation = 0.75
-        // this.population = 1000
     }
-    setVision(vision) {
-        this.vision = vision
-        this.patches.cacheRect(vision)
+
+    // ======================
+
+    constructor(options) {
+        super(options)
+        // Object.assign(this, this.constructor.defaults()) // both work.
+        Object.assign(this, FlockModel.defaults())
     }
+
     // setMaxTurn(maxTurnDegrees) {
     //     this.maxTurn = util.radians(maxTurnDegrees)
     // }
@@ -46,6 +45,11 @@ export default class FlockModel extends Model {
             this.patches.oneOf().sprout()
         })
     }
+
+    // setVision(vision) {
+    //     this.vision = vision
+    //     this.patches.cacheRect(vision)
+    // }
 
     step() {
         this.turtles.ask(t => {

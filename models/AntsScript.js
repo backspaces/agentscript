@@ -100,7 +100,7 @@ class AntsModel extends Model {
         // })
         this.updateTurtles()
         this.updatePatches()
-        this.tick()
+        // this.tick()
     }
     updateTurtles() {
         this.turtles.ask(t => {

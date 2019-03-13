@@ -1,10 +1,11 @@
 import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
-import HelloModel from './HelloModel.js'
+import WallFollowerModel from './WallFollowerModel.js'
 
-modelIO.testStartup({ HelloModel, modelIO, util })
+modelIO.testStartup({ WallFollowerModel, modelIO, util })
 
-const model = new HelloModel() // default options
+const options = WallFollowerModel.defaultWorld(35)
+const model = new WallFollowerModel(options)
 model.setup()
 
 modelIO.testSetup(model)

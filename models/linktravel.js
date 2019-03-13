@@ -1,10 +1,10 @@
 import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
-import HelloModel from './HelloModel.js'
+import LinkTravelModel from './LinkTravelModel.js'
 
-modelIO.testStartup({ HelloModel, modelIO, util })
+modelIO.testStartup({ LinkTravelModel, modelIO, util })
 
-const model = new HelloModel() // default options
+const model = new LinkTravelModel() // default world
 model.setup()
 
 modelIO.testSetup(model)

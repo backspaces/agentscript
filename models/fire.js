@@ -2,40 +2,24 @@ import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
 import FireModel from './FireModel.js'
 
-util.toWindow({ FireModel, modelIO, util })
-
-const usingPuppeteer = navigator.userAgent === 'Puppeteer'
-if (usingPuppeteer) util.randomSeed()
+modelIO.testStartup({ FireModel, modelIO, util })
 
 // const div = document.body
 const options = FireModel.defaultWorld(125)
 const model = new FireModel(options)
 model.setup()
 
-// Debugging
-modelIO.printToPage('patches: ' + model.patches.length)
-modelIO.printToPage('turtles: ' + model.turtles.length)
-modelIO.printToPage('links: ' + model.links.length)
-modelIO.printToPage('fires: ' + model.fires.length)
-modelIO.printToPage('embers: ' + model.embers.length)
-const { world, patches, fires, embers } = model
-util.toWindow({ world, patches, fires, embers, model })
+modelIO.testSetup(model)
 
-// util.repeat(500, () => model.step())
-util.yieldLoop(() => model.step(), 500)
+util.yieldLoop(() => {
+    model.step()
+    model.tick()
+}, 500)
 
-modelIO.printToPage('')
-modelIO.printToPage('isDone: ' + model.isDone())
-modelIO.printToPage('fires: ' + model.fires.length)
-modelIO.printToPage('embers: ' + model.embers.length)
-modelIO.printToPage('initialTrees: ' + model.initialTrees)
-modelIO.printToPage('burnedTrees: ' + model.burnedTrees)
-modelIO.printToPage('percentBurned: ' + model.percentBurned().toFixed(2))
-
-modelIO.printToPage('')
-modelIO.printToPage(modelIO.sampleObj(model))
-
-if (usingPuppeteer) {
-    window.modelDone = model.modelDone = true
-    window.modelSample = model.modelSample = modelIO.sampleJSON(model)
-}
+modelIO.testDone(model, [
+    'fires',
+    'embers',
+    'initialTrees',
+    'burnedTrees',
+    'percentBurned',
+])

@@ -43,7 +43,7 @@ class TSPModel extends Model {
         this.travelers.ask(t => this.makeTour(t))
         this.installBestTour()
         this.stopIfDone()
-        this.tick()
+        // this.tick()
     }
 
     createTourLinks(nodeList) {

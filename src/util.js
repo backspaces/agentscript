@@ -17,8 +17,11 @@ const util = {
     isObject: obj => util.isType(obj, 'object'),
     isArray: obj => util.isType(obj, 'array'),
     isNumber: obj => util.isType(obj, 'number'),
-    // isInteger: Number.isInteger || (num => Math.floor(num) === num),
-    isInteger: obj => Number.isInteger(obj), // assume es6, babel otherwise.
+    isFunction: obj => util.isType(obj, 'function'),
+
+    isInteger: n => Number.isInteger(n), // assume es6, babel otherwise.
+    isFloat: n => util.isNumber(n) && n % 1 !== 0, // https://goo.gl/6MS0Tm
+
     isImage: obj => util.isType(obj, 'image'),
     isImageBitmap: obj => util.isType(obj, 'imagebitmap'),
 
@@ -156,17 +159,40 @@ const util = {
     // Default to document.body if in browser.
     // Default to console.log if in node.
     // If msg is an object, convert to JSON
-    print(msg, element = null) {
-        if (this.isObject(msg)) msg = JSON.stringify(msg)
-        // if (!element && this.inBrowser()) element = document.body
-        if (!element && document) element = document.body
+    // print(msg, element = null) {
+    //     if (this.isObject(msg)) msg = JSON.stringify(msg)
+    //     // if (!element && this.inBrowser()) element = document.body
+    //     if (!element && document) element = document.body
 
-        if (element) {
-            element.style.fontFamily = 'monospace'
-            element.innerHTML += msg + '<br />'
-        } else {
-            console.log(msg)
+    //     if (element) {
+    //         element.style.fontFamily = 'monospace'
+    //         element.innerHTML += msg + '<br />'
+    //     } else {
+    //         console.log(msg)
+    //     }
+    // },
+
+    printToPage(msg, element = document.body) {
+        if (util.isObject(msg)) {
+            msg = JSON.stringify(msg, null, 2)
+            msg = '<pre>' + msg + '</pre>'
         }
+
+        element.style.fontFamily = 'monospace'
+        element.innerHTML += msg + '<br />'
+    },
+
+    logHistogram(name, array) {
+        // const hist = AgentArray.fromArray(dataset.data).histogram()
+        const hist = this.histogram(array)
+        const { min, max } = hist.parameters
+        console.log(
+            `${name}:`, // name + ':'
+            hist.toString(),
+            'min/max:',
+            min.toFixed(3),
+            max.toFixed(3)
+        )
     },
 
     // Use chrome/ffox/ie console.time()/timeEnd() performance functions
@@ -548,25 +574,49 @@ const util = {
     // - min/maxVal: the min/max values in the array
     // - bins: the number of bins
     // - hist: the array of bins
-    histogram(array, bin = 1, min = Math.floor(this.arrayMin(array))) {
-        const hist = []
-        let [minBin, maxBin] = [Number.MAX_VALUE, Number.MIN_VALUE]
-        let [minVal, maxVal] = [Number.MAX_VALUE, Number.MIN_VALUE]
-        for (const a of array) {
-            const i = Math.floor(a / bin) - min
-            hist[i] = hist[i] === undefined ? 1 : hist[i] + 1
-            minBin = Math.min(minBin, i)
-            maxBin = Math.max(maxBin, i)
-            minVal = Math.min(minVal, a)
-            maxVal = Math.max(maxVal, a)
-        }
-        for (const i in hist) {
-            if (hist[i] === undefined) {
-                hist[i] = 0
+    // histogram(array, bin = 1, min = Math.floor(this.arrayMin(array))) {
+    //     const hist = []
+    //     let [minBin, maxBin] = [Number.MAX_VALUE, Number.MIN_VALUE]
+    //     let [minVal, maxVal] = [Number.MAX_VALUE, Number.MIN_VALUE]
+    //     for (const a of array) {
+    //         const i = Math.floor(a / bin) - min
+    //         hist[i] = hist[i] === undefined ? 1 : hist[i] + 1
+    //         minBin = Math.min(minBin, i)
+    //         maxBin = Math.max(maxBin, i)
+    //         minVal = Math.min(minVal, a)
+    //         maxVal = Math.max(maxVal, a)
+    //     }
+    //     for (const i in hist) {
+    //         if (hist[i] === undefined) {
+    //             hist[i] = 0
+    //         }
+    //     }
+    //     const bins = maxBin - minBin + 1
+    //     return { bins, minBin, maxBin, minVal, maxVal, hist }
+    // },
+
+    histogram(
+        array,
+        bins = 10,
+        min = this.arrayMin(array),
+        max = this.arrayMax(array)
+    ) {
+        const binSize = (max - min) / bins
+        const hist = new Array(bins)
+        hist.fill(0)
+        this.forEach(array, val => {
+            // const val = key ? a[key] : a
+            if (val < min || val > max) {
+                util.warn(`histogram bounds error: ${val}: ${min}-${max}`)
+            } else {
+                let bin = Math.floor((val - min) / binSize)
+                if (bin === bins) bin-- // val is max, round down
+                hist[bin]++
             }
-        }
-        const bins = maxBin - minBin + 1
-        return { bins, minBin, maxBin, minVal, maxVal, hist }
+        })
+        // Object.assign(hist, {bins, min, max, binSize, key})
+        hist.parameters = { bins, min, max, binSize, arraySize: array.length }
+        return hist
     },
 
     // Return random one of array items.

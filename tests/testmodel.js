@@ -33,9 +33,9 @@ const model = new TestModel() // default world.
 model.setup()
 
 // Debugging
-modelIO.printToPage('patches: ' + model.patches.length)
-modelIO.printToPage('turtles: ' + model.turtles.length)
-modelIO.printToPage('links: ' + model.links.length)
+util.printToPage('patches: ' + model.patches.length)
+util.printToPage('turtles: ' + model.turtles.length)
+util.printToPage('links: ' + model.links.length)
 
 const { world, patches, turtles, links } = model
 util.toWindow({ world, patches, turtles, links, model })
@@ -43,8 +43,8 @@ util.toWindow({ world, patches, turtles, links, model })
 // util.repeat(500, () => model.step())
 util.yieldLoop(() => model.step(), 500)
 
-modelIO.printToPage('')
-modelIO.printToPage(modelIO.sampleObj(model))
+util.printToPage('')
+util.printToPage(modelIO.sampleObj(model))
 
 if (usingPuppeteer) {
     window.modelDone = model.modelDone = true
