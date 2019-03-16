@@ -12,6 +12,7 @@ const util = {
             .match(/\s(\w+)/)[1]
             .toLowerCase()),
     isType: (obj, string) => util.typeOf(obj) === string,
+    isOneOfTypes: (obj, array) => array.includes(util.typeOf(obj)),
     // Is a number an integer (rather than a float w/ non-zero fractional part)
     isString: obj => util.isType(obj, 'string'),
     isObject: obj => util.isType(obj, 'object'),
@@ -21,6 +22,9 @@ const util = {
 
     isInteger: n => Number.isInteger(n), // assume es6, babel otherwise.
     isFloat: n => util.isNumber(n) && n % 1 !== 0, // https://goo.gl/6MS0Tm
+    isCanvas: obj =>
+        util.isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']),
+    isHtmlElement: obj => /^html.*element$/.test(util.typeOf(obj)),
 
     isImage: obj => util.isType(obj, 'image'),
     isImageBitmap: obj => util.isType(obj, 'imagebitmap'),
@@ -28,7 +32,6 @@ const util = {
     // Is undefined, null, bool, number, string, symbol
     isPrimitive: obj => obj == null || 'object' != typeof obj,
 
-    isOneOfTypes: (obj, array) => array.includes(util.typeOf(obj)),
     isImageable: obj =>
         util.isOneOfTypes(obj, [
             'image',
@@ -846,7 +849,8 @@ const util = {
     // ### Canvas utilities
 
     // Create a blank 2D canvas of a given width/height
-    createCanvas(width, height, offscreen = true) {
+    // width/height defaulted so can be modified later by caller
+    createCanvas(width = 0, height = 0, offscreen = true) {
         // Try OffscreenCanvas in workers and main:
         // if (OffscreenCanvas) return new OffscreenCanvas(width, height)
         // Fallback to DOM if in main

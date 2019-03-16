@@ -6,9 +6,9 @@ import ThreeMeshes from './ThreeMeshes.js'
 
 import { THREE, OrbitControls } from '../dist/vendor.esm.js'
 
-util.toWindow({ THREE, OrbitControls })
+// util.toWindow({ THREE, OrbitControls })
 
-class ThreeView {
+export default class ThreeView {
     static defaultOptions(useThreeHelpers = true) {
         const options = {
             orthoView: false, // 'Perspective', 'Orthographic'
@@ -240,7 +240,7 @@ class ThreeView {
     }
 }
 
-export default ThreeView
+// export default ThreeView
 
 /*
 

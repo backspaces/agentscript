@@ -5,7 +5,11 @@ export default class TurtlesView {
     constructor(ctx, patchSize, world, useSprites = false) {
         Object.assign(this, { ctx, world, patchSize, useSprites })
         this.shapes = new Shapes()
-        this.resetCtx(patchSize)
+        this.resetCtx(patchSize, useSprites)
+    }
+    reset(patchSize, useSprites) {
+        this.useSprites = useSprites
+        this.resetCtx(patchSize) // sets this.patchSize
     }
 
     getImageBitmap() {
@@ -25,8 +29,9 @@ export default class TurtlesView {
 
     drawTurtles(data, viewFcn) {
         if (util.isOofA(data)) data = util.toAofO(data)
+        const constantView = util.isObject(viewFcn)
         util.forEach(data, (turtle, i) => {
-            const viewData = viewFcn(turtle, i, data)
+            const viewData = constantView ? viewFcn : viewFcn(turtle, i, data)
             this.drawTurtle(turtle, viewData)
         })
     }
@@ -121,7 +126,7 @@ export default class TurtlesView {
         util.setIdentity(this.ctx)
         if (uniformLinks) {
             ctx.strokeStyle = viewFcn.color
-            ctx.lineWidth = viewFcn.width
+            ctx.lineWidth = viewFcn.width || 1
             ctx.beginPath()
         }
         util.forEach(data, (link, i) => {

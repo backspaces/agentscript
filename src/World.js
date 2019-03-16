@@ -13,6 +13,9 @@ class World {
             maxY: maxY,
         }
     }
+    static defaultWorld(maxX = 16, maxY = maxX) {
+        return new World(World.defaultOptions(maxX, maxY))
+    }
     // Initialize the world w/ defaults overridden w/ options.
     constructor(options = {}) {
         Object.assign(this, World.defaultOptions()) // initial this w/ defaults

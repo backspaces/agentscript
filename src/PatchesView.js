@@ -8,6 +8,10 @@ export default class PatchesView {
         this.imageData = util.ctxImageData(this.ctx)
         this.pixels = new Uint32Array(this.imageData.data.buffer)
         this.length = this.pixels.length
+        this.useImageSmoothing = false
+    }
+    setPatchesSmoothing(smoothting) {
+        this.useImageSmoothing = smoothting
     }
 
     // Install pixels in this imageData object.
@@ -15,6 +19,7 @@ export default class PatchesView {
     // or data derived from patches using patch state values.
     // installData(data, pixelFcn, updateCanvas = true) {
     installData(data, pixelFcn = d => d) {
+        if (util.isOofA(data)) data = util.toAofO(data)
         if (data.length !== this.pixels.length) {
             throw Error(
                 'installData, data.length != pixels.length ' +
@@ -35,19 +40,24 @@ export default class PatchesView {
     }
 
     // Draw this pixel canvas onto a View canvas ctx.
-    draw(ctx, async = false) {
-        if (async) {
-            this.getImageBitmap().then(img => util.fillCtxWithImage(ctx, img))
-        } else {
-            this.ctx.putImageData(this.imageData, 0, 0)
-            // this.updateCanvas()
-            util.fillCtxWithImage(ctx, this.ctx.canvas)
-        }
+    draw(ctx) {
+        const smoothing = this.ctx.imageSmoothingEnabled
+        ctx.imageSmoothingEnabled = this.useImageSmoothing
+        this.ctx.putImageData(this.imageData, 0, 0)
+        // this.updateCanvas()
+        util.fillCtxWithImage(ctx, this.ctx.canvas)
+        ctx.imageSmoothingEnabled = smoothing
     }
 
     // Return promise for an imageBitmap of the current ctx
-    getImageBitmap() {
-        return createImageBitmap(this.imageData)
+    // REMIND: See if imagebitmaps can avoid img alpha premultiply etc
+    getImageBitmap(options = {}) {
+        return createImageBitmap(this.imageData, options)
+    }
+    drawImageBitmap(ctx, options = {}) {
+        createImageBitmap(this.imageData, options).then(img =>
+            util.fillCtxWithImage(ctx, img)
+        )
     }
 
     // Push imageData to canvas, return the canvas
