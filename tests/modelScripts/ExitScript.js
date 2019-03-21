@@ -1,7 +1,7 @@
-import Model from '../src/Model.js'
+const Model = AS.Model
 // import util from '../src/util.js'
 
-export default class ExitModel extends Model {
+class ExitModel extends Model {
     static defaults() {
         return {
             numExits: 10,

@@ -79,7 +79,9 @@ export class CanvasMesh extends BaseMesh {
 
         const material = new THREE.MeshBasicMaterial({
             map: texture,
-            shading: THREE.FlatShading,
+            // shading: THREE.FlatShading, // obsolete
+            // https://threejsfundamentals.org/threejs/lessons/threejs-materials.html
+            flatShading: true, // ?? default false.
             side: THREE.DoubleSide,
             transparent: true,
         })

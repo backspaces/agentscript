@@ -13,8 +13,8 @@ export default class WaterModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
+    constructor(worldDptions) {
+        super(worldDptions)
         Object.assign(this, WaterModel.defaults())
     }
     setup() {

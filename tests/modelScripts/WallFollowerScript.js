@@ -1,6 +1,6 @@
 // import ColorMap from '../src/ColorMap.js'
-import util from '../src/util.js'
-import Model from '../src/Model.js'
+const util = AS.util
+const Model = AS.Model
 
 // The NetLogo models library wall followers example
 // http://ccl.northwestern.edu/netlogo/models/WallFollowingExample
@@ -15,7 +15,7 @@ import Model from '../src/Model.js'
 // Similarly for left-hand wall followers w/ obvious changes, managed
 // by a +/-1 direction turtle variable.
 
-export default class WallFollowerModel extends Model {
+class WallFollowerModel extends Model {
     static defaults() {
         return {
             population: 40,

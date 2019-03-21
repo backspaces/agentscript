@@ -29,7 +29,7 @@
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "build": "npm-run-all clean vendor build-dist minify",
+        "build": "npm-run-all clean build-scripts vendor build-dist minify",
         "minify": "terser dist/agentscript.umd.js > dist/agentscript.umd.min.js && terser dist/agentscript.esm.js > dist/agentscript.esm.min.js",
         "build-dist": "rollup -c",
         "build-scripts": "node bin/models2scripts.js",

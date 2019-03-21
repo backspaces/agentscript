@@ -6,7 +6,8 @@ shell.cd('./models')
 const models = shell.ls('[A-Z]*Model.js')
 
 models.forEach(model => {
-    const script = model.replace('Model', 'Script')
+    let script = model.replace('Model', 'Script')
+    script = `../tests/modelScripts/${script}`
     shell.echo(model, '->', script)
     shell.cp(model, script)
     shell.sed('-i', 'export default class', 'class', script)

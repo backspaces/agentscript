@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>test</title>
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+
+            window.modelParams = util.parseQueryString()
+            const appName = Object.keys(modelParams)[0]
+            delete modelParams[appName]
+            modelParams.app = appName
+            console.log(appName, modelParams)
+
+            const appPath = `./${appName}.js`
+            console.log('running:', appPath)
+            document.title = `${appName}`
+
+            util.setScript(appPath, { type: 'module' })
+        </script>
+        <div id="modeldiv"></div>
+    </body>
+</html>

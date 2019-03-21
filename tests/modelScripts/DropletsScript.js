@@ -1,9 +1,9 @@
-import util from '../src/util.js'
-import Model from '../src/Model.js'
-import AgentArray from '../src/AgentArray.js'
-import RGBDataSet from '../src/RGBDataSet.js'
+const util = AS.util
+const Model = AS.Model
+const AgentArray = AS.AgentArray
+const RGBDataSet = AS.RGBDataSet
 
-export default class DropletsModel extends Model {
+class DropletsModel extends Model {
     static defaults() {
         return {
             // stepType choices:

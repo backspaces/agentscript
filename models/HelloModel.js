@@ -12,8 +12,8 @@ export default class HelloModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
+    constructor(worldDptions) {
+        super(worldDptions)
         // Either of these work, ctor call doesn't need to know class name
         // Object.assign(this, this.constructor.defaults())
         Object.assign(this, HelloModel.defaults())

@@ -14,8 +14,8 @@ export default class TSPModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
+    constructor(worldDptions) {
+        super(worldDptions)
         Object.assign(this, TSPModel.defaults())
     }
 

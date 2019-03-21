@@ -45,13 +45,14 @@ export default class ThreeView {
     // https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer
     // worldOptions can be options or a world instance, both work.
     constructor(
-        div,
+        div = document.body,
         worldOptions = World.defaultOptions(),
         options = ThreeView.defaultOptions()
     ) {
         this.div = util.isString(div) ? document.getElementById(div) : div
         this.world = new World(worldOptions)
         this.renderOptions = options
+        this.steps = 0
 
         if (this.renderOptions.spriteSize !== 0) {
             const isPOT = util.isPowerOf2(this.renderOptions.spriteSize)
@@ -120,11 +121,16 @@ export default class ThreeView {
         //   camera.position.set(width, -width, width)
         // camera.up.set(0, 0, 1)
 
-        const renderer = new THREE.WebGLRenderer({ canvas: this.div })
+        // const renderer = new THREE.WebGLRenderer({ canvas: this.div })
+        // const isCanvas = util.isCanvas(this.div)
+        // const threeOpts = isCanvas ? { canvas: this.div } : {}
+        // const renderer = new THREE.WebGLRenderer(threeOpts)
+        const renderer = new THREE.WebGLRenderer()
         renderer.setPixelRatio(window.devicePixelRatio)
         renderer.setSize(clientWidth, clientHeight)
         renderer.setClearColor(clearColor)
-        // this.div.appendChild(renderer.domElement)
+        // if (!isCanvas) this.div.appendChild(renderer.domElement)
+        this.div.appendChild(renderer.domElement)
 
         // window.addEventListener('resize', () => {
         //   const {clientWidth, clientHeight} = this.model.div
@@ -132,9 +138,9 @@ export default class ThreeView {
         //   camera.updateProjectionMatrix()
         //   renderer.setSize(clientWidth, clientHeight)
         // })
-        // window.addEventListener('resize', () => {
-        //     this.resize()
-        // })
+        window.addEventListener('resize', () => {
+            this.resize()
+        })
 
         Object.assign(this, {
             scene,
@@ -158,13 +164,14 @@ export default class ThreeView {
         }
     }
     toggleCamera() {
-        this.orthoView = !this.orthoView
+        this.renderOptions.orthoView = !this.renderOptions.orthoView
         if (this.renderOptions.orthoView) {
             this.camera = this.orthographicCam
         } else {
             this.camera = this.perspectiveCam
         }
         this.resize()
+        this.renderer.render(this.scene, this.camera)
     }
     // Return a dataURL for the current model step.
     snapshot(useOrtho = true) {
@@ -189,7 +196,7 @@ export default class ThreeView {
         const helpers = {}
 
         if (useAxes) {
-            helpers.axes = new THREE.AxisHelper((1.5 * width) / 2)
+            helpers.axes = new THREE.AxesHelper((1.5 * width) / 2)
             scene.add(helpers.axes)
         }
         if (useGrid) {
@@ -223,20 +230,27 @@ export default class ThreeView {
     draw() {
         // REMIND: generalize.
         this.renderer.render(this.scene, this.camera)
+        this.steps++
         // if (this.view.stats) this.view.stats.update()
     }
 
+    // Sugar if viewFcn is a constant obj, convert to fcn.
+    checkViewFcn(viewFcn) {
+        return util.isObject(viewFcn) ? () => viewFcn : viewFcn
+    }
     drawPatches(data, viewFcn) {
         if (util.isOofA(data)) data = util.toAofO(data)
-        this.meshes.patches.update(data, viewFcn)
+        this.meshes.patches.update(data, viewFcn, this.steps)
     }
     drawTurtles(data, viewFcn) {
         if (util.isOofA(data)) data = util.toAofO(data)
-        this.meshes.turtles.update(data, viewFcn)
+        viewFcn = this.checkViewFcn(viewFcn)
+        this.meshes.turtles.update(data, viewFcn, this.steps)
     }
     drawLinks(data, viewFcn) {
         if (util.isOofA(data)) data = util.toAofO(data)
-        this.meshes.links.update(data, viewFcn)
+        viewFcn = this.checkViewFcn(viewFcn)
+        this.meshes.links.update(data, viewFcn, this.steps)
     }
 }
 

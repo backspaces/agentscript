@@ -1,7 +1,7 @@
-import Model from '../src/Model.js'
-import util from '../src/util.js'
+const Model = AS.Model
+const util = AS.util
 
-export default class DiffuseModel extends Model {
+class DiffuseModel extends Model {
     static defaults() {
         return {
             population: 2,
