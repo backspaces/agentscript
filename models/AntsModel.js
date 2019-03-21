@@ -16,8 +16,8 @@ export default class AntsModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
+    constructor(worldDptions) {
+        super(worldDptions)
         Object.assign(this, AntsModel.defaults())
         // this.animRate = 30
     }

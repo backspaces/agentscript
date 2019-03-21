@@ -1,8 +1,8 @@
 // import ColorMap from '../src/ColorMap.js'
-import util from '../src/util.js'
-import Model from '../src/Model.js'
+const util = AS.util
+const Model = AS.Model
 
-export default class LinkTravelModel extends Model {
+class LinkTravelModel extends Model {
     static defaults() {
         return {
             layoutCircle: true,

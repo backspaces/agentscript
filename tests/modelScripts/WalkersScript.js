@@ -13,9 +13,9 @@ class WalkersModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
-        Object.assign(this, this.constructor.defaults())
+    constructor(worldDptions) {
+        super(worldDptions)
+        Object.assign(this, WalkersModel.defaults())
     }
     setup() {
         this.turtles.setDefault('atEdge', 'wrap')

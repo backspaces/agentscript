@@ -14,9 +14,8 @@ export default class FlockModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
-        // Object.assign(this, this.constructor.defaults()) // both work.
+    constructor(worldDptions) {
+        super(worldDptions)
         Object.assign(this, FlockModel.defaults())
     }
 

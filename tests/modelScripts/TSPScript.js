@@ -2,19 +2,31 @@ const Model = AS.Model
 const util = AS.util
 
 class TSPModel extends Model {
+    static defaults() {
+        return {
+            nodeCount: 50,
+            travelersCount: 100,
+            growPopulation: true,
+            useInversion: true,
+            stopTickDifference: 500,
+        }
+    }
+
+    // ======================
+
+    constructor(worldDptions) {
+        super(worldDptions)
+        Object.assign(this, TSPModel.defaults())
+    }
+
     setup() {
         this.turtleBreeds('nodes travelers')
 
         // globals
-        this.nodeCount = 50
-        this.travelersCount = 100
-        this.growPopulation = true
-        this.useInversion = true
+        this.done = false
         this.bestTourNodes = []
         this.bestTourLength = 0
         this.bestTourTick = 0
-        this.stopTickDifference = 500
-        this.done = false
 
         this.nodes.setDefault('heading', 0) // override promotion to random angle
         // this.travelers.setDefault('hidden', true) // REMIND
@@ -43,7 +55,6 @@ class TSPModel extends Model {
         this.travelers.ask(t => this.makeTour(t))
         this.installBestTour()
         this.stopIfDone()
-        // this.tick()
     }
 
     createTourLinks(nodeList) {

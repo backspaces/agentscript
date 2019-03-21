@@ -16,9 +16,9 @@ class AntsModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
-        Object.assign(this, this.constructor.defaults())
+    constructor(worldDptions) {
+        super(worldDptions)
+        Object.assign(this, AntsModel.defaults())
         // this.animRate = 30
     }
 

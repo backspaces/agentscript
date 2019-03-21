@@ -40,6 +40,9 @@ export default class View2d {
             world,
             options.useSprites
         )
+
+        // this.viewFcns = {}
+        // this.steps = 0
     }
     reset(patchSize, useSprites = this.useSprites) {
         this.turtlesView.reset(patchSize, useSprites)
@@ -68,6 +71,8 @@ export default class View2d {
     setPatchesSmoothing(smoothing) {
         this.patchesView.setPatchesSmoothing(smoothing)
     }
+
+    // If no data, redraw with existing patchesView cache
     drawPatches(data, pixelFcn) {
         if (data != null) {
             this.patchesView.installData(data, pixelFcn)
@@ -82,6 +87,11 @@ export default class View2d {
     drawLinks(data, viewFcn) {
         this.turtlesView.drawLinks(data, viewFcn)
     }
+
+    // installViewFcns(viewFcns) {
+    //     this.viewFcns = viewFcns
+    // }
+    // draw()
 }
 
 // draw() {

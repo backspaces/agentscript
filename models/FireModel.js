@@ -10,8 +10,8 @@ export default class FireModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
+    constructor(worldDptions) {
+        super(worldDptions)
         Object.assign(this, FireModel.defaults())
     }
 

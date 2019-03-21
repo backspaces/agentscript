@@ -1,6 +1,6 @@
-import Model from '../src/Model.js'
+const Model = AS.Model
 
-export default class ButtonsModel extends Model {
+class ButtonsModel extends Model {
     static defaults() {
         return {
             population: 200, // number of buttons

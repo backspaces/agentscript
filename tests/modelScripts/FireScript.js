@@ -2,6 +2,19 @@ const Model = AS.Model
 const util = AS.util
 
 class FireModel extends Model {
+    static defaults() {
+        return {
+            density: 60, // percent
+        }
+    }
+
+    // ======================
+
+    constructor(worldDptions) {
+        super(worldDptions)
+        Object.assign(this, FireModel.defaults())
+    }
+
     setup() {
         this.patchBreeds('fires embers')
 
@@ -19,7 +32,7 @@ class FireModel extends Model {
         this.treeType = this.patchTypes[1]
         this.fireType = this.patchTypes[2]
 
-        this.density = 60 // percent
+        // this.density = 60 // percent
         // this.patches.askSet(p => { // patches static, askSet === ask
         this.patches.ask(p => {
             if (p.x === this.world.minX) this.ignight(p)
@@ -47,7 +60,7 @@ class FireModel extends Model {
         return p.type === this.treeType
     }
     percentBurned() {
-        return this.burnedTrees / this.initialTrees * 100
+        return (this.burnedTrees / this.initialTrees) * 100
     }
     isDone() {
         return this.fires.length + this.embers.length === 0

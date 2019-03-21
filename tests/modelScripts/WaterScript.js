@@ -13,9 +13,9 @@ class WaterModel extends Model {
 
     // ======================
 
-    constructor(options) {
-        super(options)
-        Object.assign(this, this.constructor.defaults())
+    constructor(worldDptions) {
+        super(worldDptions)
+        Object.assign(this, WaterModel.defaults())
     }
     setup() {
         // this.cmap = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
@@ -50,5 +50,10 @@ class WaterModel extends Model {
     }
     updateZ(p) {
         p.zpos = (p.zpos + p.deltaZ) * this.friction
+    }
+
+    // Used by modeler for reporting stats, not needed by model itself
+    averageZpos() {
+        return this.patches.props('zpos').sum() / this.patches.length
     }
 }
