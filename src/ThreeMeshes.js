@@ -4,7 +4,7 @@
 // import * as THREE from '../node_modules/three/build/three.module.js'
 import { THREE } from '../dist/vendor.esm.js'
 import util from './util.js'
-import Turtle from './Turtle.js'
+// import Turtle from './Turtle.js'
 
 function createQuad(r, z = 0) {
     // r is radius of xy quad: [-r,+r], z is quad z
@@ -64,9 +64,10 @@ export class CanvasMesh extends BaseMesh {
         const { width, height, centerX, centerY } = this.world
 
         const texture = new THREE.CanvasTexture(canvas)
-        for (const key in textureOptions) {
-            texture[key] = textureOptions[key]
-        }
+        Object.assign(texture, textureOptions)
+        // for (const key in textureOptions) {
+        //     texture[key] = textureOptions[key]
+        // }
 
         const geometry = new THREE.PlaneBufferGeometry(
             width,
@@ -127,6 +128,8 @@ export class PatchesMesh extends CanvasMesh {
             textureOptions: {
                 minFilter: THREE.NearestFilter,
                 magFilter: THREE.NearestFilter,
+                // minFilter: THREE.NearestFilter,
+                // magFilter: THREE.LinearFilter,
             },
             z: 1.0,
             useSegments: false,

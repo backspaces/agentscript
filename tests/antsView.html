@@ -2,19 +2,33 @@
 <html>
     <head>
         <title>Ants</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+            }
+            #modelDiv {
+                width: 100%;
+                height: 100%;
+            }
+            /* #modelDiv {
+                    width: 800px;
+                    height: 500px;
+                } */
+        </style>
     </head>
 
     <body>
-        <canvas id="model" style="border: 1px solid; padding: 2px;"></canvas>
+        <div id="modelDiv" style="border: 1px solid; padding: 2px;"></div>
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
             import Color from '../src/Color.js'
             import ColorMap from '../src/ColorMap.js'
             import ThreeView from '../src/ThreeView.js'
-            const can = document.getElementById('model')
-            // const ctx = can.getContext('2d')
-            util.toWindow({ util, World, ThreeView, Color, can })
+            const div = document.getElementById('modelDiv')
+            util.toWindow({ util, World, ThreeView, Color, div })
 
             const params = {
                 seed: null,
@@ -132,11 +146,7 @@
                 if (params.linksColor)
                     options.links.options = { color: params.linksColor }
 
-                const can = document.getElementById('model')
-                params.world.setCanvasSize(can, params.patchSize)
-
-                const view = new ThreeView(can, params.world, options)
-                // view.renderer.setSize(can.width, can.height)
+                const view = new ThreeView(div, params.world, options)
 
                 if (!params.usePoints) {
                     const sheet = view.spriteSheet

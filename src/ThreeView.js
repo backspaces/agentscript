@@ -226,7 +226,15 @@ export default class ThreeView {
             }
         })
     }
+    // Call this right after ctor. Or add options to default params
+    setPatchesSmoothing(smooth = false) {
+        const filter = smooth ? THREE.LinearFilter : THREE.NearestFilter
+        this.meshes.patches.mesh.material.map.magFilter = filter
+    }
 
+    idle(ms = 32) {
+        util.timeoutLoop(() => view.draw(), -1, ms)
+    }
     draw() {
         // REMIND: generalize.
         this.renderer.render(this.scene, this.camera)
@@ -239,6 +247,7 @@ export default class ThreeView {
         return util.isObject(viewFcn) ? () => viewFcn : viewFcn
     }
     drawPatches(data, viewFcn) {
+        // REMIND: may not be needed, patchesView does this check too.
         if (util.isOofA(data)) data = util.toAofO(data)
         this.meshes.patches.update(data, viewFcn, this.steps)
     }
@@ -258,12 +267,6 @@ export default class ThreeView {
 
 /*
 
-- windowresize ends up incrementally growing canvas
-        // window.addEventListener('resize', () => {
-        //     this.resize()
-        // })
-
-- canvasMesh: convert from PlaneGeometry to PlaneBufferGeometry
-- fix numX/Y vs width/height.
+- patches smoothing: set textureOptions to linear for mag filter
 
 */

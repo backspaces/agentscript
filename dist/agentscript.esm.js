@@ -707,7 +707,10 @@ const util = {
     // ### OofA/AofO
 
     isOofA(data) {
-        return !this.isArray(data)
+        // const isAofO = this.isArray(data) && this.isObject(data[0])
+        // return !isAofO
+        if (!this.isObject(data)) return false
+        return Object.values(data).every(v => Array.isArray(v))
     },
     toOofA(aofo, spec) {
         const length = aofo.length;

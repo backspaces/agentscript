@@ -34,8 +34,5 @@ util.timeoutLoop(
     timeoutMS
 ).then(() => {
     console.log(`Done, steps: ${perf.steps}, fps: ${perf.fps}`)
+    view.idle()
 })
-
-// view.drawLinks(model.links, () => {
-//     return { color: linkColor.webgl }
-// })
