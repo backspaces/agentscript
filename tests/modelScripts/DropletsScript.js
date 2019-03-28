@@ -14,7 +14,7 @@ class DropletsModel extends Model {
             stepType: 'dataSetAspectNearest',
             killOffworld: false, // Kill vs clamp turtles when offworld.
             url:
-                'http://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png',
+                'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png',
             speed: 0.2,
         }
     }

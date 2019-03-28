@@ -246,6 +246,11 @@ export default class ThreeView {
     checkViewFcn(viewFcn) {
         return util.isObject(viewFcn) ? () => viewFcn : viewFcn
     }
+    createPatchPixels(pixelFcn) {
+        this.patchesView.createPixels(pixelFcn)
+        const data = this.patchesView.pixels
+        this.meshes.patches.update(data, d => d, this.steps)
+    }
     drawPatches(data, viewFcn) {
         // REMIND: may not be needed, patchesView does this check too.
         if (util.isOofA(data)) data = util.toAofO(data)

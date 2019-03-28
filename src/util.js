@@ -209,12 +209,20 @@ const util = {
     fps() {
         const start = performance.now()
         let steps = 0
-        return function step() {
+        // return function step() {
+        //     steps++
+        //     const ms = performance.now() - start
+        //     const fps = parseFloat((steps / (ms / 1000)).toFixed(2))
+        //     Object.assign(step, { fps, ms, start, steps })
+        // }
+        function perf() {
             steps++
             const ms = performance.now() - start
             const fps = parseFloat((steps / (ms / 1000)).toFixed(2))
-            Object.assign(step, { fps, ms, start, steps })
+            Object.assign(perf, { fps, ms, start, steps })
         }
+        perf.steps = 0
+        return perf
     },
 
     // Print Prototype Stack: see your vars all the way down!
@@ -709,7 +717,8 @@ const util = {
         // const isAofO = this.isArray(data) && this.isObject(data[0])
         // return !isAofO
         if (!this.isObject(data)) return false
-        return Object.values(data).every(v => Array.isArray(v))
+        // return Object.values(data).every(v => Array.isArray(v))
+        return Object.values(data).every(v => util.isTypedArray(v))
     },
     toOofA(aofo, spec) {
         const length = aofo.length
@@ -738,6 +747,13 @@ const util = {
             aofo[i] = this.oofaObject(oofa, i, keys)
         })
         return aofo
+    },
+    oofaBuffers(postData) {
+        const buffers = []
+        this.forEach(postData, obj =>
+            this.forEach(obj, a => buffers.push(a.buffer))
+        )
+        return buffers
     },
 
     // ### Async
