@@ -14,7 +14,7 @@ const spriteSize = 0.3
 const world = DropletsModel.defaultWorld(50)
 const model = new DropletsModel(world)
 const view = new ThreeView(document.body, world)
-const sprite = view.spriteSheet.newSprite(spriteShape, spriteColor)
+const sprite = view.getSprite(spriteShape, spriteColor)
 
 util.toWindow({ model, view, util })
 

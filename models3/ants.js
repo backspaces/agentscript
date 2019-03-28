@@ -16,8 +16,8 @@ const model = new AntsModel(worldOptions)
 model.setup()
 
 const view = new ThreeView(document.body, worldOptions)
-const nestSprite = view.spriteSheet.newSprite('bug', nestColor.css)
-const foodSprite = view.spriteSheet.newSprite('bug', foodColor.css)
+const nestSprite = view.getSprite('bug', nestColor.css)
+const foodSprite = view.getSprite('bug', foodColor.css)
 util.toWindow({ model, view, util })
 
 const perf = util.fps()

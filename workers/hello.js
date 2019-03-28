@@ -9,6 +9,7 @@ const params = {
     maxX: 30,
     maxY: null,
     steps: 500,
+    shapeSize: 2,
     world: null,
 }
 Object.assign(params, util.parseQueryString())
@@ -37,8 +38,8 @@ worker.onmessage = e => {
         view.idle()
     } else {
         view.drawTurtles(e.data.turtles, (t, i) => ({
-            sprite: view.spriteSheet.newSprite('dart', colors25[i % 25]),
-            size: 2,
+            sprite: view.getSprite('dart', colors25[i % 25]),
+            size: params.shapeSize,
         }))
         view.drawLinks(e.data.links, { color: linkColor.webgl })
         view.draw()

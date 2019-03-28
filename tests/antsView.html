@@ -67,8 +67,8 @@
             util.toWindow({ nestColor, nestColorMap, foodColor, foodColorMap })
 
             const view = createView()
-            const nestSprite = view.spriteSheet.newSprite('bug', nestColor.css)
-            const foodSprite = view.spriteSheet.newSprite('bug', foodColor.css)
+            const nestSprite = view.getSprite('bug', nestColor.css)
+            const foodSprite = view.getSprite('bug', foodColor.css)
             util.toWindow({ view, nestSprite, foodSprite }, true)
 
             const worker = new Worker('./antsView.js', { type: 'module' })

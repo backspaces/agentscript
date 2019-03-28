@@ -242,6 +242,10 @@ export default class ThreeView {
         // if (this.view.stats) this.view.stats.update()
     }
 
+    getSprite(shape, fillColor, strokeColor = null) {
+        return this.spriteSheet.getSprite(shape, fillColor, strokeColor)
+    }
+
     // Sugar if viewFcn is a constant obj, convert to fcn.
     checkViewFcn(viewFcn) {
         return util.isObject(viewFcn) ? () => viewFcn : viewFcn
