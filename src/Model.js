@@ -11,8 +11,14 @@ import Link from './Link.js'
 class Model {
     // Static class method for default setting.
     // Default world is centered, min/max = 16
+    // static defaultWorld(maxX = 16, maxY = maxX) {
+    //     return World.defaultOptions(maxX, maxY)
+    // }
+    // static defaultWorldOptions(maxX = 16, maxY = maxX) {
+    //     return World.defaultOptions(maxX, maxY)
+    // }
     static defaultWorld(maxX = 16, maxY = maxX) {
-        return World.defaultOptions(maxX, maxY)
+        return new World(World.defaultOptions(maxX, maxY))
     }
 
     // The Model constructor takes a World object.

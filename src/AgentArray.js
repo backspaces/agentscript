@@ -52,7 +52,7 @@ class AgentArray extends Array {
         }
         return result
     }
-    // Return several sets of props in an object
+    // Creates an OofA for several sets of props.
     // Obj is key, arrayType pairs: x: Float32Array
     // Result is this.props(key, arrayType) for each key
     propsObject(obj) {
@@ -63,92 +63,11 @@ class AgentArray extends Array {
         })
         return result
     }
-    // propsTypedArray(key, type = Float64Array) {
-    //     const result = new type(this.length)
-    //     for (let i = 0; i < this.length; i++) {
-    //         result[i] = this[i][key]
-    //     }
-    //     return result
-    // }
-    propsArrays(keys, indexed = true) {
-        const result = indexed ? {} : new AgentArray(this.length)
-        if (util.isString(keys)) keys = keys.split(' ')
-        for (let i = 0; i < this.length; i++) {
-            const vals = []
-            const agent = this[i]
-            for (let j = 0; j < keys.length; j++) {
-                vals.push(agent[keys[j]])
-            }
-            result[indexed ? agent.id : i] = vals
-        }
-        return result
-    }
-    propsObjects(keys, indexed = true) {
-        const result = indexed ? {} : new AgentArray(this.length)
-        // if (util.isString(keys)) keys = keys.split(' ')
-        if (util.isString(keys)) keys = keys.split(/,*  */)
-        for (let i = 0; i < this.length; i++) {
-            const vals = {}
-            const agent = this[i]
-            for (let j = 0; j < keys.length; j++) {
-                // Parse key/val pair for nested objects
-                let key = keys[j],
-                    val
-                if (key.includes(':')) {
-                    ;[key, val] = key.split(':')
-                    val = util.getNestedObject(agent, val)
-                } else {
-                    if (key.includes('.')) {
-                        throw Error(
-                            'propsObjects: dot notation requires name:val: ' +
-                                key
-                        )
-                    }
-                    val = agent[key]
-                }
 
-                // If function, val is result of calling it w/ no args
-                if (util.typeOf(val) === 'function') val = agent[val.name]()
-
-                // Do id substitution for arrays & objects
-                if (util.isArray(val)) {
-                    if (util.isInteger(val[0].id)) {
-                        if (val.ID) {
-                            throw Error(
-                                'propsObjects: value cannot be an AgentSet: ' +
-                                    key
-                            )
-                        }
-                        // assume all are agents, replace w/ id
-                        val = val.map(v => v.id)
-                    } else {
-                        // Should check that all values are primitives
-                        val = util.clone(val)
-                    }
-                } else if (util.isObject(val)) {
-                    if (util.isInteger(val.id)) {
-                        val = val.id
-                    } else {
-                        val = Object.assign({}, obj)
-                        util.forEach(val, (v, key) => {
-                            // Should check that all values are primitives
-                            if (util.isInteger(v.id)) {
-                                v[key] = v.id
-                            }
-                        })
-                    }
-                }
-
-                vals[key] = val
-            }
-            result[indexed ? agent.id : i] = vals
-        }
-        return result
-    }
-    // Return AgentArray of values of the function fcn
+    // Return AgentArray of results of the function fcn
     // Similar to "props" but can return computation over all keys
-    // Odd: as.props('type') twice as fast as as.values(p => p.type)?
-    values(fcn) {
+    // Odd: as.props('type') twice as fast as as.results(p => p.type)?
+    results(fcn) {
         const result = new AgentArray(this.length)
         for (let i = 0; i < this.length; i++) {
             result[i] = fcn(this[i])
@@ -174,45 +93,19 @@ class AgentArray extends Array {
 
     // Call fcn(agent, index, array) for each item in AgentArray.
     // Array can shrink. If it grows, will not visit beyond original length
-    // ask(fcn) {
-    //     for (
-    //         let i = 0, len = this.length;
-    //         i < len || i < this.length; // this[i] !== undefined;
-    //         i++
-    //     ) {
-    //         fcn(this[i], i, this)
-    //     }
-    //     // return this
-    // }
     ask(fcn) {
         const length = this.length
         // for (let i = 0; i < length || i < this.length; i++) {
         for (let i = 0; i < Math.min(length, this.length); i++) {
             fcn(this[i], i, this)
-            if (length != this.length) {
-                const name = this.name || this.constructor.name
-                const direction =
-                    this.length < length ? 'decreasing' : 'increasing'
-                util.warn(
-                    `AgentArray.ask array mutation: ${name}: ${direction}`
-                )
-            }
+        }
+        if (length != this.length) {
+            const name = this.name || this.constructor.name
+            const direction = this.length < length ? 'decreasing' : 'increasing'
+            util.warn(`AgentArray.ask array mutation: ${name}: ${direction}`)
         }
         // return this
     }
-    // ask(fcn) {
-    //     if (this.length === 0) return
-    //     const lastID = this.last().id
-    //     let obj = this[0]
-    //     for (let i = 0; obj && obj.id <= lastID; i++) {
-    //         // const lastObj = obj
-    //         fcn(obj, i, this)
-    //         obj = this[i++]
-    //         // if (!obj || obj === lastObj) continue
-    //         // if (!obj || obj === lastObj) continue
-    //     }
-    //     return this
-    // }
 
     // Return count of agents with reporter(agent) true
     count(reporter) {
@@ -260,8 +153,11 @@ class AgentArray extends Array {
     // Return shallow copy of a portion of this AgentArray
     // [See Array.slice](https://goo.gl/Ilgsok)
     // Default is to clone entire AgentArray
-    clone(begin = 0, end = this.length) {
+    cloneRange(begin = 0, end = this.length) {
         return this.slice(begin, end) // Returns an AgentArray rather than Array!
+    }
+    clone() {
+        return this.slice(0) // Returns an AgentArray rather than Array!
     }
     // Randomize the AgentArray in place. Use clone first if new AgentArray needed.
     // Return "this" for chaining.
@@ -356,7 +252,7 @@ class AgentArray extends Array {
             const a = this[i]
             const aval = reporter(a)
             if ((min && aval < val) || (!min && aval > val)) {
-                ;[o, val] = [a, aval]
+                [o, val] = [a, aval]
             }
         }
         return valueToo ? [o, val] : o

@@ -13,7 +13,7 @@ export default class DropletsModel extends Model {
             //    'dataSetAspectBilinear',
             stepType: 'dataSetAspectNearest',
             killOffworld: false, // Kill vs clamp turtles when offworld.
-            url:
+            tile:
                 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png',
             speed: 0.2,
         }
@@ -26,9 +26,18 @@ export default class DropletsModel extends Model {
     }
 
     async startup() {
-        const png = await util.imagePromise(this.url)
+        const png = await util.imagePromise(this.tile)
         const elevation = new RGBDataSet(png, -32768, 1 / 256, AgentArray)
+        this.installDataSets(elevation)
 
+        // const slopeAndAspect = elevation.slopeAndAspect()
+        // const { dzdx, dzdy, slope, aspect } = slopeAndAspect
+        // Object.assign(this, { elevation, dzdx, dzdy, slope, aspect })
+
+        // this.patches.importDataSet(elevation, 'elevation', true)
+        // this.patches.importDataSet(aspect, 'aspect', true)
+    }
+    installDataSets(elevation) {
         const slopeAndAspect = elevation.slopeAndAspect()
         const { dzdx, dzdy, slope, aspect } = slopeAndAspect
         Object.assign(this, { elevation, dzdx, dzdy, slope, aspect })
@@ -44,7 +53,7 @@ export default class DropletsModel extends Model {
         }
         // this.speed = 0.2
 
-        this.localMins = new AgentArray()
+        this.localMins = [] // new AgentArray()
         this.patches.ask(p => {
             if (p.neighbors.minOneOf('elevation').elevation > p.elevation) {
                 this.localMins.push(p)

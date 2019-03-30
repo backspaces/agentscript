@@ -512,6 +512,7 @@ const util = {
 
     arrayMax: array => array.reduce((a, b) => Math.max(a, b)),
     arrayMin: array => array.reduce((a, b) => Math.min(a, b)),
+    arrayExtent: array => [util.arrayMin(array), util.arrayMax(array)],
     arraySum: array => array.reduce((a, b) => a + b),
     arraysEqual(a1, a2) {
         if (a1.length !== a2.length) return false

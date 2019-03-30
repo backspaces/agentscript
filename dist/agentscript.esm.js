@@ -513,6 +513,7 @@ const util = {
 
     arrayMax: array => array.reduce((a, b) => Math.max(a, b)),
     arrayMin: array => array.reduce((a, b) => Math.min(a, b)),
+    arrayExtent: array => [util.arrayMin(array), util.arrayMax(array)],
     arraySum: array => array.reduce((a, b) => a + b),
     arraysEqual(a1, a2) {
         if (a1.length !== a2.length) return false
@@ -1103,7 +1104,7 @@ class AgentArray extends Array {
         }
         return result
     }
-    // Return several sets of props in an object
+    // Creates an OofA for several sets of props.
     // Obj is key, arrayType pairs: x: Float32Array
     // Result is this.props(key, arrayType) for each key
     propsObject(obj) {
@@ -1114,92 +1115,11 @@ class AgentArray extends Array {
         });
         return result
     }
-    // propsTypedArray(key, type = Float64Array) {
-    //     const result = new type(this.length)
-    //     for (let i = 0; i < this.length; i++) {
-    //         result[i] = this[i][key]
-    //     }
-    //     return result
-    // }
-    propsArrays(keys, indexed = true) {
-        const result = indexed ? {} : new AgentArray(this.length);
-        if (util.isString(keys)) keys = keys.split(' ');
-        for (let i = 0; i < this.length; i++) {
-            const vals = [];
-            const agent = this[i];
-            for (let j = 0; j < keys.length; j++) {
-                vals.push(agent[keys[j]]);
-            }
-            result[indexed ? agent.id : i] = vals;
-        }
-        return result
-    }
-    propsObjects(keys, indexed = true) {
-        const result = indexed ? {} : new AgentArray(this.length);
-        // if (util.isString(keys)) keys = keys.split(' ')
-        if (util.isString(keys)) keys = keys.split(/,*  */);
-        for (let i = 0; i < this.length; i++) {
-            const vals = {};
-            const agent = this[i];
-            for (let j = 0; j < keys.length; j++) {
-                // Parse key/val pair for nested objects
-                let key = keys[j],
-                    val;
-                if (key.includes(':')) {
-                    [key, val] = key.split(':');
-                    val = util.getNestedObject(agent, val);
-                } else {
-                    if (key.includes('.')) {
-                        throw Error(
-                            'propsObjects: dot notation requires name:val: ' +
-                                key
-                        )
-                    }
-                    val = agent[key];
-                }
 
-                // If function, val is result of calling it w/ no args
-                if (util.typeOf(val) === 'function') val = agent[val.name]();
-
-                // Do id substitution for arrays & objects
-                if (util.isArray(val)) {
-                    if (util.isInteger(val[0].id)) {
-                        if (val.ID) {
-                            throw Error(
-                                'propsObjects: value cannot be an AgentSet: ' +
-                                    key
-                            )
-                        }
-                        // assume all are agents, replace w/ id
-                        val = val.map(v => v.id);
-                    } else {
-                        // Should check that all values are primitives
-                        val = util.clone(val);
-                    }
-                } else if (util.isObject(val)) {
-                    if (util.isInteger(val.id)) {
-                        val = val.id;
-                    } else {
-                        val = Object.assign({}, obj);
-                        util.forEach(val, (v, key) => {
-                            // Should check that all values are primitives
-                            if (util.isInteger(v.id)) {
-                                v[key] = v.id;
-                            }
-                        });
-                    }
-                }
-
-                vals[key] = val;
-            }
-            result[indexed ? agent.id : i] = vals;
-        }
-        return result
-    }
-    // Return AgentArray of values of the function fcn
+    // Return AgentArray of results of the function fcn
     // Similar to "props" but can return computation over all keys
-    // Odd: as.props('type') twice as fast as as.values(p => p.type)?
-    values(fcn) {
+    // Odd: as.props('type') twice as fast as as.results(p => p.type)?
+    results(fcn) {
         const result = new AgentArray(this.length);
         for (let i = 0; i < this.length; i++) {
             result[i] = fcn(this[i]);
@@ -1225,45 +1145,19 @@ class AgentArray extends Array {
 
     // Call fcn(agent, index, array) for each item in AgentArray.
     // Array can shrink. If it grows, will not visit beyond original length
-    // ask(fcn) {
-    //     for (
-    //         let i = 0, len = this.length;
-    //         i < len || i < this.length; // this[i] !== undefined;
-    //         i++
-    //     ) {
-    //         fcn(this[i], i, this)
-    //     }
-    //     // return this
-    // }
     ask(fcn) {
         const length = this.length;
         // for (let i = 0; i < length || i < this.length; i++) {
         for (let i = 0; i < Math.min(length, this.length); i++) {
             fcn(this[i], i, this);
-            if (length != this.length) {
-                const name = this.name || this.constructor.name;
-                const direction =
-                    this.length < length ? 'decreasing' : 'increasing';
-                util.warn(
-                    `AgentArray.ask array mutation: ${name}: ${direction}`
-                );
-            }
+        }
+        if (length != this.length) {
+            const name = this.name || this.constructor.name;
+            const direction = this.length < length ? 'decreasing' : 'increasing';
+            util.warn(`AgentArray.ask array mutation: ${name}: ${direction}`);
         }
         // return this
     }
-    // ask(fcn) {
-    //     if (this.length === 0) return
-    //     const lastID = this.last().id
-    //     let obj = this[0]
-    //     for (let i = 0; obj && obj.id <= lastID; i++) {
-    //         // const lastObj = obj
-    //         fcn(obj, i, this)
-    //         obj = this[i++]
-    //         // if (!obj || obj === lastObj) continue
-    //         // if (!obj || obj === lastObj) continue
-    //     }
-    //     return this
-    // }
 
     // Return count of agents with reporter(agent) true
     count(reporter) {
@@ -1311,8 +1205,11 @@ class AgentArray extends Array {
     // Return shallow copy of a portion of this AgentArray
     // [See Array.slice](https://goo.gl/Ilgsok)
     // Default is to clone entire AgentArray
-    clone(begin = 0, end = this.length) {
+    cloneRange(begin = 0, end = this.length) {
         return this.slice(begin, end) // Returns an AgentArray rather than Array!
+    }
+    clone() {
+        return this.slice(0) // Returns an AgentArray rather than Array!
     }
     // Randomize the AgentArray in place. Use clone first if new AgentArray needed.
     // Return "this" for chaining.
@@ -1699,10 +1596,18 @@ class AgentSet extends AgentArray {
     // Manages immutability reasonably well.
     askSet(fcn) {
         if (this.length === 0) return
-        if (this.name === 'patches') super.ask(fcn); // Patches are static
-        if (this.isBaseSet()) this.baseSetAsk(fcn);
-        if (this.isBreedSet()) this.cloneAsk(fcn);
+        // Patches are static
+        if (this.name === 'patches') super.each(fcn);
+        else if (this.isBaseSet()) this.baseSetAsk(fcn);
+        else if (this.isBreedSet()) this.cloneAsk(fcn);
     }
+    // askSet(fcn) {
+    //     if (this.length === 0) return
+    //     // Patches are static
+    //     if (this.name === 'patches') return super.each(fcn)
+    //     if (this.isBaseSet()) return this.baseSetAsk(fcn)
+    //     if (this.isBreedSet()) return this.cloneAsk(fcn)
+    // }
 
     // An ask function for mutable baseSets.
     // BaseSets can only add past the end of the array.
@@ -1717,17 +1622,40 @@ class AgentSet extends AgentArray {
         // There Be Dragons:
         // - AgentSet can become length 0 if all deleted
         // - While loop tricky:
-        //   - i can beocme negative w/in while loop:
-        //   - i can beocme bigger than current AgentSet:
+        //   - i can become negative w/in while loop:
+        //   - i can become bigger than current AgentSet:
         //   - Guard w/ i<len & i>=0
-        for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
-            const id = this[i].id;
-            fcn(this[i], i, this);
-            while (i < this.length && i >= 0 && this[i].id > id) {
-                i--;
+        for (let i = 0; i < this.length; i++) {
+            const obj = this[i];
+            const id = obj.id;
+            if (id > lastID) break
+            fcn(obj, i, this);
+            if (i >= this.length) break
+            if (this[i].id > id) {
+                while (i >= 0 && this[i].id > id) i--; // ok if -1
             }
         }
     }
+    // baseSetAsk(fcn) {
+    //     if (this.length === 0) return
+    //     // const length = this.length
+    //     const lastID = this.last().id
+
+    //     // Added obj's have id > lastID. Just check for deletions.
+    //     // There Be Dragons:
+    //     // - AgentSet can become length 0 if all deleted
+    //     // - While loop tricky:
+    //     //   - i can beocme negative w/in while loop:
+    //     //   - i can beocme bigger than current AgentSet:
+    //     //   - Guard w/ i<len & i>=0
+    //     for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
+    //         const id = this[i].id
+    //         fcn(this[i], i, this)
+    //         while (i < this.length && i >= 0 && this[i].id > id) {
+    //             i--
+    //         }
+    //     }
+    // }
 
     // For breeds, mutations can occur in many ways.
     // This solves this by cloning the initial array and
@@ -1744,6 +1672,84 @@ class AgentSet extends AgentArray {
             }
         }
         // return this
+    }
+
+    // Temp: data transfer. May not use if AgentArray.propsObject
+    // (OofA) is sufficient.
+    propsArrays(keys, indexed = true) {
+        const result = indexed ? {} : new AgentArray(this.length);
+        if (util.isString(keys)) keys = keys.split(' ');
+        for (let i = 0; i < this.length; i++) {
+            const vals = [];
+            const agent = this[i];
+            for (let j = 0; j < keys.length; j++) {
+                vals.push(agent[keys[j]]);
+            }
+            result[indexed ? agent.id : i] = vals;
+        }
+        return result
+    }
+    propsObjects(keys, indexed = true) {
+        const result = indexed ? {} : new AgentArray(this.length);
+        // if (util.isString(keys)) keys = keys.split(' ')
+        if (util.isString(keys)) keys = keys.split(/,*  */);
+        for (let i = 0; i < this.length; i++) {
+            const vals = {};
+            const agent = this[i];
+            for (let j = 0; j < keys.length; j++) {
+                // Parse key/val pair for nested objects
+                let key = keys[j],
+                    val;
+                if (key.includes(':')) {
+                    [key, val] = key.split(':');
+                    val = util.getNestedObject(agent, val);
+                } else {
+                    if (key.includes('.')) {
+                        throw Error(
+                            'propsObjects: dot notation requires name:val: ' +
+                                key
+                        )
+                    }
+                    val = agent[key];
+                }
+
+                // If function, val is result of calling it w/ no args
+                if (util.typeOf(val) === 'function') val = agent[val.name]();
+
+                // Do id substitution for arrays & objects
+                if (util.isArray(val)) {
+                    if (util.isInteger(val[0].id)) {
+                        if (val.ID) {
+                            throw Error(
+                                'propsObjects: value cannot be an AgentSet: ' +
+                                    key
+                            )
+                        }
+                        // assume all are agents, replace w/ id
+                        val = val.map(v => v.id);
+                    } else {
+                        // Should check that all values are primitives
+                        val = util.clone(val);
+                    }
+                } else if (util.isObject(val)) {
+                    if (util.isInteger(val.id)) {
+                        val = val.id;
+                    } else {
+                        val = Object.assign({}, obj);
+                        util.forEach(val, (v, key) => {
+                            // Should check that all values are primitives
+                            if (util.isInteger(v.id)) {
+                                v[key] = v.id;
+                            }
+                        });
+                    }
+                }
+
+                vals[key] = val;
+            }
+            result[indexed ? agent.id : i] = vals;
+        }
+        return result
     }
 }
 
@@ -3091,8 +3097,14 @@ class Turtle {
 class Model {
     // Static class method for default setting.
     // Default world is centered, min/max = 16
+    // static defaultWorld(maxX = 16, maxY = maxX) {
+    //     return World.defaultOptions(maxX, maxY)
+    // }
+    // static defaultWorldOptions(maxX = 16, maxY = maxX) {
+    //     return World.defaultOptions(maxX, maxY)
+    // }
     static defaultWorld(maxX = 16, maxY = maxX) {
-        return World.defaultOptions(maxX, maxY)
+        return new World(World.defaultOptions(maxX, maxY))
     }
 
     // The Model constructor takes a World object.

@@ -191,10 +191,18 @@ class AgentSet extends AgentArray {
     // Manages immutability reasonably well.
     askSet(fcn) {
         if (this.length === 0) return
-        if (this.name === 'patches') super.ask(fcn) // Patches are static
-        if (this.isBaseSet()) this.baseSetAsk(fcn)
-        if (this.isBreedSet()) this.cloneAsk(fcn)
+        // Patches are static
+        if (this.name === 'patches') super.each(fcn)
+        else if (this.isBaseSet()) this.baseSetAsk(fcn)
+        else if (this.isBreedSet()) this.cloneAsk(fcn)
     }
+    // askSet(fcn) {
+    //     if (this.length === 0) return
+    //     // Patches are static
+    //     if (this.name === 'patches') return super.each(fcn)
+    //     if (this.isBaseSet()) return this.baseSetAsk(fcn)
+    //     if (this.isBreedSet()) return this.cloneAsk(fcn)
+    // }
 
     // An ask function for mutable baseSets.
     // BaseSets can only add past the end of the array.
@@ -209,17 +217,40 @@ class AgentSet extends AgentArray {
         // There Be Dragons:
         // - AgentSet can become length 0 if all deleted
         // - While loop tricky:
-        //   - i can beocme negative w/in while loop:
-        //   - i can beocme bigger than current AgentSet:
+        //   - i can become negative w/in while loop:
+        //   - i can become bigger than current AgentSet:
         //   - Guard w/ i<len & i>=0
-        for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
-            const id = this[i].id
-            fcn(this[i], i, this)
-            while (i < this.length && i >= 0 && this[i].id > id) {
-                i--
+        for (let i = 0; i < this.length; i++) {
+            const obj = this[i]
+            const id = obj.id
+            if (id > lastID) break
+            fcn(obj, i, this)
+            if (i >= this.length) break
+            if (this[i].id > id) {
+                while (i >= 0 && this[i].id > id) i-- // ok if -1
             }
         }
     }
+    // baseSetAsk(fcn) {
+    //     if (this.length === 0) return
+    //     // const length = this.length
+    //     const lastID = this.last().id
+
+    //     // Added obj's have id > lastID. Just check for deletions.
+    //     // There Be Dragons:
+    //     // - AgentSet can become length 0 if all deleted
+    //     // - While loop tricky:
+    //     //   - i can beocme negative w/in while loop:
+    //     //   - i can beocme bigger than current AgentSet:
+    //     //   - Guard w/ i<len & i>=0
+    //     for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
+    //         const id = this[i].id
+    //         fcn(this[i], i, this)
+    //         while (i < this.length && i >= 0 && this[i].id > id) {
+    //             i--
+    //         }
+    //     }
+    // }
 
     // For breeds, mutations can occur in many ways.
     // This solves this by cloning the initial array and
@@ -236,6 +267,84 @@ class AgentSet extends AgentArray {
             }
         }
         // return this
+    }
+
+    // Temp: data transfer. May not use if AgentArray.propsObject
+    // (OofA) is sufficient.
+    propsArrays(keys, indexed = true) {
+        const result = indexed ? {} : new AgentArray(this.length)
+        if (util.isString(keys)) keys = keys.split(' ')
+        for (let i = 0; i < this.length; i++) {
+            const vals = []
+            const agent = this[i]
+            for (let j = 0; j < keys.length; j++) {
+                vals.push(agent[keys[j]])
+            }
+            result[indexed ? agent.id : i] = vals
+        }
+        return result
+    }
+    propsObjects(keys, indexed = true) {
+        const result = indexed ? {} : new AgentArray(this.length)
+        // if (util.isString(keys)) keys = keys.split(' ')
+        if (util.isString(keys)) keys = keys.split(/,*  */)
+        for (let i = 0; i < this.length; i++) {
+            const vals = {}
+            const agent = this[i]
+            for (let j = 0; j < keys.length; j++) {
+                // Parse key/val pair for nested objects
+                let key = keys[j],
+                    val
+                if (key.includes(':')) {
+                    [key, val] = key.split(':')
+                    val = util.getNestedObject(agent, val)
+                } else {
+                    if (key.includes('.')) {
+                        throw Error(
+                            'propsObjects: dot notation requires name:val: ' +
+                                key
+                        )
+                    }
+                    val = agent[key]
+                }
+
+                // If function, val is result of calling it w/ no args
+                if (util.typeOf(val) === 'function') val = agent[val.name]()
+
+                // Do id substitution for arrays & objects
+                if (util.isArray(val)) {
+                    if (util.isInteger(val[0].id)) {
+                        if (val.ID) {
+                            throw Error(
+                                'propsObjects: value cannot be an AgentSet: ' +
+                                    key
+                            )
+                        }
+                        // assume all are agents, replace w/ id
+                        val = val.map(v => v.id)
+                    } else {
+                        // Should check that all values are primitives
+                        val = util.clone(val)
+                    }
+                } else if (util.isObject(val)) {
+                    if (util.isInteger(val.id)) {
+                        val = val.id
+                    } else {
+                        val = Object.assign({}, obj)
+                        util.forEach(val, (v, key) => {
+                            // Should check that all values are primitives
+                            if (util.isInteger(v.id)) {
+                                v[key] = v.id
+                            }
+                        })
+                    }
+                }
+
+                vals[key] = val
+            }
+            result[indexed ? agent.id : i] = vals
+        }
+        return result
     }
 }
 
