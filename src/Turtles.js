@@ -6,12 +6,20 @@ import AgentSet from './AgentSet.js'
 // from Model's world values: size, minX, maxX, minY, maxY
 class Turtles extends AgentSet {
     // Use AgentSet ctr: constructor (model, AgentClass, name)
+    createOne(initFcn) {
+        const turtle = this.addAgent()
+        turtle.theta = util.randomFloat(Math.PI * 2)
+        initFcn(turtle)
+        return turtle
+    }
     create(num = 1, initFcn = turtle => {}) {
+        if (num === 1) return this.createOne(initFcn)
         return util.repeat(num, (i, a) => {
             const turtle = this.addAgent()
             turtle.theta = util.randomFloat(Math.PI * 2)
             initFcn(turtle)
-            a.push(turtle) // Return array of new agents. REMIND: should be agentarray?
+            // Return array of new agents. REMIND: should be agentarray?
+            a.push(turtle)
         })
     }
 
@@ -66,7 +74,7 @@ class Turtles extends AgentSet {
         startAngle = Math.PI / 2,
         direction = -1
     ) {
-        const dTheta = 2 * Math.PI / this.length
+        const dTheta = (2 * Math.PI) / this.length
         const [x0, y0] = center
         this.ask((turtle, i) => {
             turtle.setxy(x0, y0)

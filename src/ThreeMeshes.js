@@ -128,8 +128,8 @@ export class PatchesMesh extends CanvasMesh {
             textureOptions: {
                 minFilter: THREE.NearestFilter,
                 magFilter: THREE.NearestFilter,
-                // minFilter: THREE.NearestFilter,
-                // magFilter: THREE.LinearFilter,
+                // minFilter: THREE.LinearFilter,
+                // magFilter: THREE.NearestFilter,
             },
             z: 1.0,
             useSegments: false,

@@ -56,6 +56,18 @@ class World {
             y <= this.maxYcor
         )
     }
+
+    bboxTransform(topLeft, bottomRight) {
+        return new BBoxTransform(topLeft, bottomRight, this)
+    }
+
+    // ### Following use PatchSize
+
+    // Get the world size in pixels. PatchSize is optional, defalting to 1
+    getWorldSize(patchSize = 1) {
+        return [this.numX * patchSize, this.numY * patchSize]
+    }
+
     // Convert a canvas context to world euclidean coordinates
     // Change the ctx.canvas size, determined by patchSize.
     setCtxTransform(ctx, patchSize) {
@@ -75,15 +87,52 @@ class World {
     patchXYtoPixelXY(x, y, patchSize) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
-    getWorldSize(patchSize = 1) {
-        return [this.numX * patchSize, this.numY * patchSize]
-    }
     // Change canvas size to this world's size.
     // Does not change size if already the same, preserving the ctx content.
     setCanvasSize(canvas, patchSize) {
-        // const [width, height] = [this.numX * patchSize, this.numY * patchSize]
         const [width, height] = this.getWorldSize(patchSize)
         util.setCanvasSize(canvas, width, height)
+    }
+}
+
+class BBoxTransform {
+    constructor(topLeft, bottomRight, world) {
+        // const [topX, topY] = topLeft
+        // const [botX, botY] = bottomRight
+        let [topX, topY] = topLeft
+        let [botX, botY] = bottomRight
+
+        if (topX < botX) console.log('flipX')
+        if (topY < botY) console.log('flipY')
+
+        if (topX < botX) [topX, botX] = [botX, topX]
+        if (topY < botY) [topY, botY] = [botY, topY]
+        const { maxXcor, maxYcor, minXcor, minYcor } = world
+
+        // console.log('topX, botX:', topX, botX)
+        // console.log('topY, botY', topY, botY)
+
+        const mx = (topX - botX) / (maxXcor - minXcor)
+        const my = (topY - botY) / (maxYcor - minYcor)
+
+        const bx = (topX + botX - mx * (maxXcor + minXcor)) / 2
+        const by = (topY + botY - my * (maxYcor + minYcor)) / 2
+
+        Object.assign(this, { mx, my, bx, by })
+    }
+    toWorld(tlbrPoint) {
+        const { mx, my, bx, by } = this
+        const [tlbrX, tlbrY] = tlbrPoint
+        const x = (tlbrX - bx) / mx
+        const y = (tlbrY - by) / my
+        return [x, y]
+    }
+    toBBox(worldPoint) {
+        const { mx, my, bx, by } = this
+        const [worldX, worldY] = worldPoint
+        const x = mx * worldX + bx
+        const y = my * worldY + by
+        return [x, y]
     }
 }
 

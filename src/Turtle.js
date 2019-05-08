@@ -90,16 +90,16 @@ class Turtle {
     setxy(x, y, z = null) {
         const p0 = this.patch
         if (z != null) this.z = z // don't promote z if null, use default z instead.
-        if (this.model.world.isOnWorld(x, y)) {
+        if (this.model.world.isOnWorld(x, y) || this.atEdge === 'OK') {
             this.x = x
             this.y = y
         } else {
             this.handleEdge(x, y)
         }
         const p = this.patch
-        if (p.turtles != null && p !== p0) {
+        if (p && p.turtles != null && p !== p0) {
             // util.removeItem(p0.turtles, this)
-            util.removeArrayItem(p0.turtles, this)
+            if (p0) util.removeArrayItem(p0.turtles, this)
             p.turtles.push(this)
         }
     }

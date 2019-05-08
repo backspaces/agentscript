@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <title>SantaFe</title>
+        <!-- <meta charset="utf-8" /> -->
+        <link
+            rel="stylesheet"
+            href="http://cdn.leafletjs.com/leaflet/leaflet.css"
+        />
+        <script src="http://cdn.leafletjs.com/leaflet/leaflet.js"></script>
+    </head>
+    <body>
+        <div id="map" style="height:800px"></div>
+        <!-- <script src="play0.js"></script> -->
+        <script type="module">
+            import util from '../src/util.js'
+            import World from '../src/World.js'
+            import gis from '../src/gis.js'
+            const world = World.defaultWorld(10, 20)
+            util.toWindow({ util, World, gis, world })
+
+            // https://github.com/leaflet-extras/leaflet-providers
+            async function run() {
+                const geojson = await util.xhrPromise(
+                    '14.3370.6451.osm.geojson'
+                )
+                window.json = JSON.parse(geojson)
+                const roadTypes = [
+                    'primary',
+                    'secondary',
+                    'tertiary',
+                    'residential',
+                ]
+                json.features = json.features.reduce((acc, feature) => {
+                    if (
+                        feature.geometry.type === 'LineString' &&
+                        roadTypes.includes(feature.properties.highway)
+                        // feature.properties.highway === 'primary_link'
+                    )
+                        acc.push(feature)
+                    return acc
+                }, [])
+
+                const provider = 'tile.openstreetmap.org'
+                const mapUrl = 'http://{s}.' + provider + '/{z}/{x}/{y}.png'
+
+                const map = L.map('map').setView([35.67514, -105.94116], 12)
+
+                const mapAttr =
+                    '<a href="http://openstreetmap.org">OpenStreetMap</a>'
+                L.tileLayer(mapUrl, {
+                    attribution: 'Map data &copy; ' + mapAttr,
+                    maxZoom: 18,
+                }).addTo(map)
+                L.geoJson(json).addTo(map)
+
+                // const url = './14.3370.6451.json'
+                // const url = './14.3370.6451.osm.geojson'
+                // const xhr = xhrLoadFile(url, function(e) {
+                //     const geoJson = JSON.parse(xhr.response)
+                //     L.geoJson(geoJson).addTo(map)
+                // })
+
+                // function xhrLoadFile(name, f) {
+                //     const xhr = new XMLHttpRequest()
+
+                //     xhr.open('GET', name, true) // true: async
+                //     xhr.responseType = 'text'
+                //     xhr.onload = f
+                //     xhr.send()
+
+                //     return xhr
+                // }
+            }
+            run().then(() => console.log('done'))
+
+            // function xhrPromise(url, type = 'text', method = 'GET') {
+            //     return new Promise((resolve, reject) => {
+            //         const xhr = new XMLHttpRequest()
+            //         xhr.open(method, url)
+            //         xhr.responseType = type
+            //         xhr.onload = () => resolve(xhr.response)
+            //         xhr.onerror = () =>
+            //             reject(Error(`Could not load ${url}: ${xhr.status}`))
+            //         xhr.send()
+            //     })
+            // }
+        </script>
+    </body>
+</html>

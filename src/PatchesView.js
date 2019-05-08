@@ -39,7 +39,7 @@ export default class PatchesView {
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
     }
 
-    // Draw this pixel canvas onto a View canvas ctx.
+    // Draw this pixel canvas onto a View 2D canvas ctx.
     draw(ctx) {
         const smoothing = this.ctx.imageSmoothingEnabled
         ctx.imageSmoothingEnabled = this.useImageSmoothing

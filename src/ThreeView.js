@@ -250,6 +250,13 @@ export default class ThreeView {
     checkViewFcn(viewFcn) {
         return util.isObject(viewFcn) ? () => viewFcn : viewFcn
     }
+    installDrawing(img) {
+        this.meshes.patches.options.textureOptions = {
+            minFilter: THREE.NearestFilter,
+            magFilter: THREE.LinearFilter,
+        }
+        this.meshes.patches.init(img)
+    }
     createPatchPixels(pixelFcn) {
         this.patchesView.createPixels(pixelFcn)
         const data = this.patchesView.pixels

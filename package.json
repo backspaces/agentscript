@@ -29,17 +29,17 @@
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "build": "npm-run-all clean build-scripts vendor build-dist minify",
+        "build": "npm-run-all clean build-bin build-scripts build-dist minify",
         "minify": "terser dist/agentscript.umd.js > dist/agentscript.umd.min.js && terser dist/agentscript.esm.js > dist/agentscript.esm.min.js",
-        "build-dist": "rollup -c",
+        "build-dist": "rollup -c && rollup -c rollup.vendor.js && rollup -c rollup.osm.js",
         "build-scripts": "node bin/models2scripts.js",
-        "vendor": "rollup -c rollup.vendor.js",
+        "build-bin": "rollup -f umd -n gis src/gis.js > bin/gis.umd.js",
         "test": "ava",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
         "watch": "npm-run-all watch-src watch-models",
-        "pup": "ava test/models.js",
-        "foo": "ava -help"
+        "build-data": "bin/zxy2osm.js 14/3370/6451 | osmtogeojson | bin/json2streets.js > models/santafestreets.json",
+        "temp": "rollup -c rollup.osm.js"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
@@ -49,10 +49,12 @@
         "ava": "0.25.0",
         "chokidar-cli": "^1.2.1",
         "cross-env": "5.1.3",
-        "live-server": "1.2.0",
+        "live-server": "latest",
         "npm-run-all": "4.1.2",
+        "osmtogeojson": "^3.0.0-beta.3",
         "puppeteer": "1.9.0",
         "rollup": "0.55.5",
+        "rollup-plugin-commonjs": "8.3.0",
         "shx": "0.2.2",
         "tap-xunit": "2.2.0",
         "terser": "^3.10.11"

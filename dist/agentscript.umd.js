@@ -520,7 +520,7 @@ const util = {
     arrayMax: array => array.reduce((a, b) => Math.max(a, b)),
     arrayMin: array => array.reduce((a, b) => Math.min(a, b)),
     arrayExtent: array => [util.arrayMin(array), util.arrayMax(array)],
-    arraySum: array => array.reduce((a, b) => a + b),
+    arraySum: array => array.reduce((a, b) => a + b, 0),
     arraysEqual(a1, a2) {
         if (a1.length !== a2.length) return false
         for (let i = 0; i < a1.length; i++) {
@@ -1055,8 +1055,6 @@ const util = {
         return pixels
     },
 };
-
-const sharedCtx1x1 = util.createCtx(1, 1);
 
 // An Array superclass with convenience methods used by NetLogo.
 // Tipically the items in the array are Objects, NetLogo Agents,
@@ -2290,14 +2288,23 @@ class Links extends AgentSet {
     // Factory: Add 1 or more links from the from turtle to the to turtle(s) which
     // can be a single turtle or an array of turtles. The optional init
     // proc is called on the new link after inserting in the agentSet.
+    createOne(from, to, initFcn) {
+        const link = this.addAgent();
+        link.init(from, to);
+        initFcn(link);
+        return link
+    }
     create(from, to, initFcn = link => {}) {
-        if (!Array.isArray(to)) to = [to];
+        if (!Array.isArray(to)) return this.createOne(from, to, initFcn)
+        // if (!Array.isArray(to)) to = [to]
+        // Return array of new links. REMIND: should be agentarray?
         return to.map(t => {
             // REMIND: skip dups
-            const link = this.addAgent();
-            link.init(from, t);
-            initFcn(link);
-            return link
+            // const link = this.addAgent()
+            // link.init(from, t)
+            // initFcn(link)
+            // return link
+            return this.createOne(from, t, initFcn)
         }) // REMIND: return single link if to not an array?
     }
 }
@@ -2358,6 +2365,18 @@ class World {
             y <= this.maxYcor
         )
     }
+
+    bboxTransform(topLeft, bottomRight) {
+        return new BBoxTransform(topLeft, bottomRight, this)
+    }
+
+    // ### Following use PatchSize
+
+    // Get the world size in pixels. PatchSize is optional, defalting to 1
+    getWorldSize(patchSize = 1) {
+        return [this.numX * patchSize, this.numY * patchSize]
+    }
+
     // Convert a canvas context to world euclidean coordinates
     // Change the ctx.canvas size, determined by patchSize.
     setCtxTransform(ctx, patchSize) {
@@ -2377,15 +2396,52 @@ class World {
     patchXYtoPixelXY(x, y, patchSize) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
-    getWorldSize(patchSize = 1) {
-        return [this.numX * patchSize, this.numY * patchSize]
-    }
     // Change canvas size to this world's size.
     // Does not change size if already the same, preserving the ctx content.
     setCanvasSize(canvas, patchSize) {
-        // const [width, height] = [this.numX * patchSize, this.numY * patchSize]
         const [width, height] = this.getWorldSize(patchSize);
         util.setCanvasSize(canvas, width, height);
+    }
+}
+
+class BBoxTransform {
+    constructor(topLeft, bottomRight, world) {
+        // const [topX, topY] = topLeft
+        // const [botX, botY] = bottomRight
+        let [topX, topY] = topLeft;
+        let [botX, botY] = bottomRight;
+
+        if (topX < botX) console.log('flipX');
+        if (topY < botY) console.log('flipY');
+
+        if (topX < botX) [topX, botX] = [botX, topX];
+        if (topY < botY) [topY, botY] = [botY, topY];
+        const { maxXcor, maxYcor, minXcor, minYcor } = world;
+
+        // console.log('topX, botX:', topX, botX)
+        // console.log('topY, botY', topY, botY)
+
+        const mx = (topX - botX) / (maxXcor - minXcor);
+        const my = (topY - botY) / (maxYcor - minYcor);
+
+        const bx = (topX + botX - mx * (maxXcor + minXcor)) / 2;
+        const by = (topY + botY - my * (maxYcor + minYcor)) / 2;
+
+        Object.assign(this, { mx, my, bx, by });
+    }
+    toWorld(tlbrPoint) {
+        const { mx, my, bx, by } = this;
+        const [tlbrX, tlbrY] = tlbrPoint;
+        const x = (tlbrX - bx) / mx;
+        const y = (tlbrY - by) / my;
+        return [x, y]
+    }
+    toBBox(worldPoint) {
+        const { mx, my, bx, by } = this;
+        const [worldX, worldY] = worldPoint;
+        const x = mx * worldX + bx;
+        const y = my * worldY + by;
+        return [x, y]
     }
 }
 
@@ -2809,12 +2865,20 @@ class Patch {
 // from Model's world values: size, minX, maxX, minY, maxY
 class Turtles extends AgentSet {
     // Use AgentSet ctr: constructor (model, AgentClass, name)
+    createOne(initFcn) {
+        const turtle = this.addAgent();
+        turtle.theta = util.randomFloat(Math.PI * 2);
+        initFcn(turtle);
+        return turtle
+    }
     create(num = 1, initFcn = turtle => {}) {
+        if (num === 1) return this.createOne(initFcn)
         return util.repeat(num, (i, a) => {
             const turtle = this.addAgent();
             turtle.theta = util.randomFloat(Math.PI * 2);
             initFcn(turtle);
-            a.push(turtle); // Return array of new agents. REMIND: should be agentarray?
+            // Return array of new agents. REMIND: should be agentarray?
+            a.push(turtle);
         })
     }
 
@@ -2869,7 +2933,7 @@ class Turtles extends AgentSet {
         startAngle = Math.PI / 2,
         direction = -1
     ) {
-        const dTheta = 2 * Math.PI / this.length;
+        const dTheta = (2 * Math.PI) / this.length;
         const [x0, y0] = center;
         this.ask((turtle, i) => {
             turtle.setxy(x0, y0);
@@ -2968,16 +3032,16 @@ class Turtle {
     setxy(x, y, z = null) {
         const p0 = this.patch;
         if (z != null) this.z = z; // don't promote z if null, use default z instead.
-        if (this.model.world.isOnWorld(x, y)) {
+        if (this.model.world.isOnWorld(x, y) || this.atEdge === 'OK') {
             this.x = x;
             this.y = y;
         } else {
             this.handleEdge(x, y);
         }
         const p = this.patch;
-        if (p.turtles != null && p !== p0) {
+        if (p && p.turtles != null && p !== p0) {
             // util.removeItem(p0.turtles, this)
-            util.removeArrayItem(p0.turtles, this);
+            if (p0) util.removeArrayItem(p0.turtles, this);
             p.turtles.push(this);
         }
     }
