@@ -21,7 +21,7 @@
             // https://github.com/leaflet-extras/leaflet-providers
             async function run() {
                 const geojson = await util.xhrPromise(
-                    '14.3370.6451.osm.geojson'
+                    '../models/santafestreets.json'
                 )
                 window.json = JSON.parse(geojson)
                 const roadTypes = [
