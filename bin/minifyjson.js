@@ -15,5 +15,6 @@ process.stdin.on('end', () => {
 })
 
 function processData(data) {
-    return gis.minify(data)
+    const json = JSON.parse(data)
+    return gis.minify(json)
 }

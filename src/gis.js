@@ -111,7 +111,7 @@ out;`
         this.featureFilter(
             json,
             'properties.highway',
-            'residential primary secondary tertiary'
+            'motorway residential primary secondary tertiary'
         )
         this.propertiesFilter(json, 'highway oneway name tiger:name_base')
         return json
