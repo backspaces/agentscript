@@ -6,6 +6,7 @@ import AgentSet from './AgentSet.js'
 import DataSet from './DataSet.js'
 import Link from './Link.js'
 import Links from './Links.js'
+import gis from './gis.js'
 import Model from './Model.js'
 import Patch from './Patch.js'
 import Patches from './Patches.js'
@@ -22,6 +23,7 @@ export {
     DataSet,
     Link,
     Links,
+    gis,
     Model,
     Patch,
     Patches,

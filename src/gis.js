@@ -1,13 +1,14 @@
-import util from '../src/util.js'
+// import util from '../src/util.js'
 const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan } = Math
 const radians = degrees => (degrees * PI) / 180
 const degrees = radians => (radians * 180) / PI
+function nestedProperty(obj, path) {
+    if (typeof path === 'string') path = path.split('.')
+    return path.reduce((obj, param) => obj[param], obj)
+}
 
 const gis = {
-    //
-    //  Slippy Tile Helpers
-    //     http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
-    //
+    // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
     lon2x(lon, z) {
         return floor(((lon + 180) / 360) * pow(2, z))
     },
@@ -25,13 +26,8 @@ const gis = {
         return (x / pow(2, z)) * 360 - 180
     },
     y2lat(y, z) {
-        // const n = PI - (2 * PI * y) / pow(2, z)
-        // // return (180 / PI) * atan(0.5 * (exp(n) - exp(-n)))
-        // return degrees(atan(0.5 * (exp(n) - exp(-n))))
         const rads = atan(sinh(PI - (2 * PI * y) / pow(2, z)))
         return degrees(rads)
-        // var n = PI - (2 * PI * y) / pow(2, z)
-        // return (180 / PI) * atan(0.5 * (exp(n) - exp(-n)))
     },
     xy2lonlat(x, y, z) {
         return [this.x2lon(x, z), this.y2lat(y, z)]
@@ -47,12 +43,11 @@ const gis = {
 
     // Create a url for OSM json data.
     // https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
-    // Args are south, west, north, east
-    getOsmURL(minLat, minLon, maxLat, maxLon) {
+    // south, west, north, east = minLat, minLon, maxLat, maxLon
+    getOsmURL(south, west, north, east) {
         const url = 'https://overpass-api.de/api/interpreter?data='
-        // [bbox:south,west,north,east]
         const params = `\
-[out:json][timeout:180][bbox:${minLat},${minLon},${maxLat},${maxLon}];
+[out:json][timeout:180][bbox:${south},${west},${north},${east}];
 way[highway];
 (._;>;);
 out;`
@@ -78,21 +73,57 @@ out;`
     },
 
     // geojson utilities
-    clone(obj) {
-        return JSON.parse(JSON.stringify(obj))
+    cloneJson(json) {
+        return JSON.parse(JSON.stringify(json))
+    },
+    areEqual(json0, json1) {
+        return JSON.stringify(json0) === JSON.stringify(json1)
     },
 
-    featureFilter(json, featurePath, values) {
+    // The filters modify the input json. Use cloneJson to preserve original.
+
+    flattenMultiLineStrings(json) {
+        const features = []
+        json.features.forEach(feature => {
+            if (feature.geometry.type === 'MultiLineString') {
+                feature.geometry.coordinates.forEach(coords => {
+                    const copy = Object.assign({}, feature)
+                    copy.geometry.type = 'LineString'
+                    copy.geometry.coordinates = coords
+                    features.push(copy)
+                })
+            } else {
+                features.push(feature)
+            }
+        })
+        json.features = features
+        return json
+    },
+
+    // The most general filter: keeps a feature only if
+    // filterFcn(feature, i, features) returns true.
+    // The filterFcn can also modify feature properties.
+    // json is mutated, equals the return value (sugar)
+    featureFilter(json, filterFcn) {
+        json.features = json.features.filter(filterFcn)
+        return json
+    },
+
+    // Filter by a property (path) matching one of values array.
+    pathFilter(json, featurePath, values) {
         if (typeof values === 'string') values = values.split(' ')
-        json.features = json.features.filter(feature => {
-            const value = util.nestedProperty(feature, featurePath)
+        this.featureFilter(json, feature => {
+            const value = nestedProperty(feature, featurePath)
             return values.includes(value)
         })
         return json
     },
+    // The above specific to geometry (Point, Polygon, LineString)
     geometryFilter(json, values) {
-        return this.featureFilter(json, 'geometry.type', values)
+        return this.pathFilter(json, 'geometry.type', values)
     },
+
+    // Reduces the feature properties to only those in the properties array.
     propertiesFilter(json, properties) {
         if (typeof properties === 'string') properties = properties.split(' ')
         json.features.forEach(feature => {
@@ -106,50 +137,52 @@ out;`
         })
         return json
     },
-    streetsFilter(json) {
-        this.featureFilter(json, 'geometry.type', 'LineString')
-        this.featureFilter(
-            json,
-            'properties.highway',
-            'motorway residential primary secondary tertiary'
-        )
-        this.propertiesFilter(json, 'highway oneway name tiger:name_base')
-        return json
-    },
-    filter(json, geometry, properties) {
-        json = this.clone(json)
-        this.geometryFilter(json, geometry)
-        this.propertiesFilter(json, properties)
+
+    // service highways could be of interest too, esp fire/emergency
+    //     "highway": "service",
+    //     "service": "xxx" where service is (in santafe zoom 10)
+    //    6     "service": "emergency_access"
+    //  120     "service": "alley"
+    //  141     "service": "drive-through"
+    // 1300     "service": "driveway"
+    // 1506     "service": "parking_aisle"
+    streetTypes: [
+        'motorway',
+        'trunk',
+        'residential',
+        'primary',
+        'secondary',
+        'tertiary',
+        'motorway_link',
+        'trunk_link',
+        'primary_link',
+        'secondary_link',
+        'tertiary_link',
+    ],
+    streetProperties: ['highway', 'oneway', 'name', 'tiger:name_base'],
+    // A simple filter for streets.
+    // Filters for:
+    //   - LineString geometry
+    //   - highways matching streetTypes array, defaulted to above
+    //   - properties reduced to streetProperties, defaulted to above
+    streetsFilter(
+        json,
+        streetTypes = this.streetTypes,
+        streetProperties = this.streetProperties
+    ) {
+        this.geometryFilter(json, 'LineString')
+        // see https://wiki.openstreetmap.org/wiki/Highways
+        // note motorway_junction's are Point geometries
+        this.pathFilter(json, 'properties.highway', streetTypes)
+        this.propertiesFilter(json, streetProperties)
         return json
     },
 
-    minify(json, geometry = null, properties = null) {
-        json = this.clone(json)
-        if (geometry) json = this.geometryFilter(json, geometry)
-        if (properties) json = this.propertiesFilter(json, properties)
+    minify(json) {
         const str = JSON.stringify(json) // compact form
         // newline for each feature
         return str.replace(/,{"type":"Feature"/g, '\n,\n{"type":"Feature"')
     },
-    areEqual(json0, json1) {
-        return JSON.stringify(json0) === JSON.stringify(json1)
-    },
 }
 
 export default gis
-
-// aliasFilter(json, name, aliases) {
-//     json.features.map(feature => {
-//         const props = feature.properties
-//         if (!props[name]) {
-//             aliases.forEach(alias => {
-//                 if (feature.properties[prop] !== undefined) {
-//                     obj[prop] = feature.properties[prop]
-//                 }
-//             })
-//         }
-//         return feature
-//     })
-//     return json
-//     // return { type: 'FeatureCollection', features: features }
-// },

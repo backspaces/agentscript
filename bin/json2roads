@@ -4,7 +4,6 @@ const process = require('process')
 const gis = require('./gis.umd.js')
 
 let data = ''
-let chunk
 process.stdin.on('readable', () => {
     while ((chunk = process.stdin.read()) !== null) {
         data += chunk
@@ -18,5 +17,6 @@ process.stdin.on('end', () => {
 function processData(data) {
     const json = JSON.parse(data)
     gis.streetsFilter(json)
-    return gis.minify(json)
+    return JSON.stringify(json, null, 2)
+    // return gis.minify(json)
 }

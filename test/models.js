@@ -15,6 +15,7 @@ const models = shell
     .sed(/.js$/, '')
     .replace(/\n$/, '')
     .split('\n')
+// const models = ['roads']
 shell.echo(models)
 
 const delay = (seconds = 1) =>

@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+const gis = require('./gis.umd.js')
+const https = require('https')
+
+const bbox = process.argv[2]
+// console.log(bbox)
+
+// const [, south, west, north, east] = bbox.match(
+//     /([^,]+),([^,]+),([^,]+),([^,]+)/
+// )
+const [, south, west, north, east] = bbox.match(/(.+),(.+),(.+),(.+)/)
+// console.log(south, west, north, east)
+
+// // convert to numbers!
+// const [topleft, bottomright] = gis.xy2bbox(+x, +y, +z)
+// const [west, north] = topleft
+// const [east, south] = bottomright
+
+// Use + to convert to numbers!
+const url = gis.getOsmURL(+south, +west, +north, +east)
+// console.log(url)
+
+https.get(url, res => {
+    res.setEncoding('utf8')
+    res.on('data', data => {
+        process.stdout.write(data)
+    })
+    res.on('end', () => {})
+})
+
+/*
+
+
+node ./zxy2osm.js 10/210/403 > santafe10.osm
+osmtogeojson -f json santafe10.osm > santafe10.json
+
+node ./zxy2osm.js 12/842/1613 > santafe12.osm
+osmtogeojson -f json santafe12.osm > santafe12.json
+
+node ./zxy2osm.js 14/3370/6451 > santafe14.osm
+osmtogeojson -f json santafe14.osm > santafe14.json
+
+*/
