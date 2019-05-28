@@ -5,14 +5,9 @@ const Model = AS.Model
 class RoadsModel extends Model {
     static defaults() {
         const { Z, X, Y } = { Z: 14, X: 3370, Y: 6451 }
-        const agentscriptPath = location.href.replace(
-            /\/agentscript\/.*$/,
-            '/agentscript/'
-        )
         return {
             zxy: { Z, X, Y },
-            // jsonUrl: agentscriptPath + `models/roads${Z}vt.json`,
-            jsonUrl: 'https://backspaces.net/temp/roads14vt.json',
+            jsonUrl: `https://backspaces.github.io/agentscript/models/roads${Z}vt.json`,
         }
     }
 
