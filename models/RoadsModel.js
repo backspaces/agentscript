@@ -12,7 +12,7 @@ export default class RoadsModel extends Model {
         return {
             zxy: { Z, X, Y },
             // jsonUrl: agentscriptPath + `models/roads${Z}vt.json`,
-            jsonUrl: 'http://backspaces.net/temp/roads14vt.json',
+            jsonUrl: 'https://backspaces.net/temp/roads14vt.json',
         }
     }
 
