@@ -2,7 +2,7 @@ import util from '../src/util.js'
 import World from '../src/World.js'
 import Color from '../src/Color.js'
 import ThreeView from '../src/ThreeView.js'
-import RoadsModel from '../models/RoadsModel'
+import RoadsModel from '../models/RoadsModel.js'
 
 async function run() {
     const model = new RoadsModel(World.defaultWorld(100))
