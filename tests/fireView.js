@@ -1,5 +1,6 @@
 // importScripts('../dist/agentscript.umd.js')
 // importScripts('../docs/models/FireScript.js')
+import World from '../src/World.js'
 import util from '../src/util.js'
 import PatchesView from '../src/PatchesView.js'
 import FireModel from '../models/FireModel.js'
@@ -34,7 +35,7 @@ onmessage = e => {
             console.log('worker patchesView', patchesView)
         }
 
-        const options = FireModel.defaultWorld(params.maxX, params.maxY)
+        const options = World.defaultWorld(params.maxX, params.maxY)
         model = new FireModel(options)
         model.setup()
 

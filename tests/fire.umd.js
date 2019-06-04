@@ -1,14 +1,14 @@
 importScripts('../dist/agentscript.umd.js')
-importScripts('../models/FireScript.js')
+importScripts('./modelScripts/FireScript.js')
 
-// util.randomSeed(1) // for consistant results over runs
+// AS.util.randomSeed(1) // for consistant results over runs
 
 let model
 
 onmessage = e => {
     console.log('worker onmessage e.data = ', e.data)
     if (e.data.cmd === 'init') {
-        const options = FireModel.defaultWorld(e.data.size)
+        const options = AS.World.defaultWorld(e.data.size)
         model = new FireModel(options)
         model.setup()
         console.log('worker model:', model)

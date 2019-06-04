@@ -1,3 +1,4 @@
+import World from '../src/World.js'
 import util from '../src/util.js'
 // import DataSet from '../src/DataSet.js'
 import Color from '../src/Color.js'
@@ -21,7 +22,7 @@ const params = {
 Object.assign(params, util.parseQueryString())
 if (params.seed != null) util.randomSeed(params.seed)
 if (params.maxY == null) params.maxY = params.maxX
-params.world = DropletsModel.defaultWorld(params.maxX, params.maxY)
+params.world = World.defaultWorld(params.maxX, params.maxY)
 
 const grayColorMap = ColorMap.grayColorMap()
 const localMinColor = Color.typedColor(255, 0, 0)

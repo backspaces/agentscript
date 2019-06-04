@@ -1,3 +1,4 @@
+import World from '../src/World.js'
 import FireModel from '../models/FireModel.js'
 
 // util.randomSeed(1) // for consistant results over runs
@@ -7,7 +8,7 @@ let model
 onmessage = e => {
     // console.log('worker onmessage e.data = ', e.data)
     if (e.data.cmd === 'init') {
-        const options = FireModel.defaultWorld(e.data.size)
+        const options = World.defaultWorld(e.data.size)
         model = new FireModel(options)
         model.setup()
         console.log('worker model:', model)

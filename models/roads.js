@@ -5,7 +5,8 @@ import RoadsModel from './RoadsModel.js'
 
 modelIO.testStartup({ RoadsModel, modelIO, World, util })
 
-const model = new RoadsModel(World.defaultWorld(100)) // default options
+const options = World.defaultOptions(100)
+const model = new RoadsModel(options) // default world options
 
 model.startup().then(() => {
     model.setup()

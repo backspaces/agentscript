@@ -17,12 +17,12 @@ class Model {
     // static defaultWorldOptions(maxX = 16, maxY = maxX) {
     //     return World.defaultOptions(maxX, maxY)
     // }
-    static defaultWorld(maxX = 16, maxY = maxX) {
-        return new World(World.defaultOptions(maxX, maxY))
-    }
+    // static defaultWorld(maxX = 16, maxY = maxX) {
+    //     return new World(World.defaultOptions(maxX, maxY))
+    // }
 
-    // The Model constructor takes a World object.
-    constructor(worldOptions = Model.defaultWorld()) {
+    // The Model constructor takes a World or WorldOptions object.
+    constructor(worldOptions = World.defaultOptions()) {
         this.worldOptions = worldOptions
         this.resetModel() // REMIND: Temporary. Inline?
     }

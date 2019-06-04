@@ -1,3 +1,4 @@
+import World from '../src/World.js'
 import util from '../src/util.js'
 import Color from '../src/Color.js'
 import ThreeView from '../src/ThreeView.js'
@@ -17,7 +18,7 @@ const timeoutMS = 0
 const steps = 500
 const density = 60
 
-const world = FireModel.defaultWorld(125)
+const world = World.defaultWorld(125)
 const model = new FireModel(world)
 model.density = density
 model.setup()

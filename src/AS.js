@@ -1,36 +1,18 @@
 // This is the importer/exporter of all our modules.
 // It is only used by Rollup for bundling.
 
-import AgentArray from './AgentArray.js'
-import AgentSet from './AgentSet.js'
-import DataSet from './DataSet.js'
-import Link from './Link.js'
-import Links from './Links.js'
-import gis from './gis.js'
-import Model from './Model.js'
-import Patch from './Patch.js'
-import Patches from './Patches.js'
-import RGBDataSet from './RGBDataSet.js'
-import Turtle from './Turtle.js'
-import Turtles from './Turtles.js'
-import World from './World.js'
-import * as modelIO from './modelIO.js'
-import util from './util.js'
-
-export {
-    AgentArray,
-    AgentSet,
-    DataSet,
-    Link,
-    Links,
-    gis,
-    Model,
-    Patch,
-    Patches,
-    RGBDataSet,
-    Turtle,
-    Turtles,
-    World,
-    modelIO,
-    util,
-}
+export { default as AgentArray } from './AgentArray.js'
+export { default as AgentSet } from './AgentSet.js'
+export { default as DataSet } from './DataSet.js'
+export { default as Link } from './Link.js'
+export { default as Links } from './Links.js'
+export { default as gis } from './gis.js'
+export { default as Model } from './Model.js'
+export { default as Patch } from './Patch.js'
+export { default as Patches } from './Patches.js'
+export { default as RGBDataSet } from './RGBDataSet.js'
+export { default as Turtle } from './Turtle.js'
+export { default as Turtles } from './Turtles.js'
+export { default as World } from './World.js'
+export * from './modelIO.js'
+export { default as util } from './util.js'

@@ -20,7 +20,7 @@
 
             async function run() {
                 const geojson = await util.xhrPromise(
-                    '../models/santafestreets.json'
+                    '../models/roads14vt.json'
                 )
                 window.json = JSON.parse(geojson)
                 const roadTypes = [

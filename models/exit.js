@@ -1,10 +1,11 @@
-import util from '../src/util.js'
 import * as modelIO from '../src/modelIO.js'
+import util from '../src/util.js'
+import World from '../src/World.js'
 import ExitModel from './ExitModel.js'
 
 modelIO.testStartup({ ExitModel, modelIO, util })
 
-const options = ExitModel.defaultWorld(35)
+const options = World.defaultOptions(35)
 const model = new ExitModel(options)
 model.setup()
 

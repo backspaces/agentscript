@@ -4,7 +4,7 @@ import WalkersModel from './WalkersModel.js'
 
 modelIO.testStartup({ WalkersModel, modelIO, util })
 
-const model = new WalkersModel() // default world.
+const model = new WalkersModel() // default world options
 model.setup()
 
 modelIO.testSetup(model)

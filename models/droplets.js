@@ -1,21 +1,22 @@
 import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
+import World from '../src/World.js'
 import DropletsModel from './DropletsModel.js'
 
 modelIO.testStartup({ DropletsModel, modelIO, util })
 
-const options = DropletsModel.defaultWorld(50)
+const options = World.defaultOptions(50)
 const model = new DropletsModel(options)
 
 model.startup().then(() => {
     model.setup()
     modelIO.testSetup(model)
 
-    const { png, elevation, dzdx, dzdy, slope, aspect, localMins } = model
-    util.toWindow({ png, elevation, dzdx, dzdy, slope, aspect, localMins })
-    ;['elevation', 'aspect', 'slope', 'dzdx', 'dzdy'].forEach(str => {
-        util.logHistogram(str, model[str].data)
-    })
+    // const { png, elevation, dzdx, dzdy, slope, aspect, localMins } = model
+    // util.toWindow({ png, elevation, dzdx, dzdy, slope, aspect, localMins })
+    // ;['elevation', 'aspect', 'slope', 'dzdx', 'dzdy'].forEach(str => {
+    //     util.logHistogram(str, model[str].data)
+    // })
 
     util.yieldLoop(() => {
         model.step()

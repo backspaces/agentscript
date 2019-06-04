@@ -1,3 +1,4 @@
+import World from '../src/World.js'
 import util from '../src/util.js'
 import ColorMap from '../src/ColorMap.js'
 import ThreeView from '../src/ThreeView.js'
@@ -8,7 +9,7 @@ const cmap = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
 const maxZ = 10
 const useSmoothing = true // unusual to have non-crisp patches
 
-const world = WaterModel.defaultWorld(50)
+const world = World.defaultWorld(50)
 const model = new WaterModel(world)
 model.setup()
 

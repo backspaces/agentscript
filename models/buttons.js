@@ -1,10 +1,10 @@
-import util from '../src/util.js'
 import * as modelIO from '../src/modelIO.js'
+import util from '../src/util.js'
 import ButtonsModel from './ButtonsModel.js'
 
 modelIO.testStartup({ ButtonsModel, modelIO, util })
 
-const model = new ButtonsModel(document.body)
+const model = new ButtonsModel() // default world options
 model.setup()
 
 modelIO.testSetup(model)

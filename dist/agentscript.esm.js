@@ -3354,12 +3354,12 @@ class Model {
     // static defaultWorldOptions(maxX = 16, maxY = maxX) {
     //     return World.defaultOptions(maxX, maxY)
     // }
-    static defaultWorld(maxX = 16, maxY = maxX) {
-        return new World(World.defaultOptions(maxX, maxY))
-    }
+    // static defaultWorld(maxX = 16, maxY = maxX) {
+    //     return new World(World.defaultOptions(maxX, maxY))
+    // }
 
-    // The Model constructor takes a World object.
-    constructor(worldOptions = Model.defaultWorld()) {
+    // The Model constructor takes a World or WorldOptions object.
+    constructor(worldOptions = World.defaultOptions()) {
         this.worldOptions = worldOptions;
         this.resetModel(); // REMIND: Temporary. Inline?
     }
@@ -3529,17 +3529,7 @@ function sampleJSON(model, indent = 0) {
 //     element.innerHTML += msg + '<br />'
 // }
 
-
-var modelIO$1 = Object.freeze({
-	testStartup: testStartup,
-	testSetup: testSetup,
-	testDone: testDone,
-	toJSON: toJSON,
-	sampleObj: sampleObj,
-	sampleJSON: sampleJSON
-});
-
 // This is the importer/exporter of all our modules.
 // It is only used by Rollup for bundling.
 
-export { AgentArray, AgentSet, DataSet, Link, Links, gis, Model, Patch, Patches, RGBDataSet, Turtle, Turtles, World, modelIO$1 as modelIO, util };
+export { AgentArray, AgentSet, DataSet, Link, Links, gis, Model, Patch, Patches, RGBDataSet, Turtle, Turtles, World, util, testStartup, testSetup, testDone, toJSON, sampleObj, sampleJSON };

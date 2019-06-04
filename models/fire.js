@@ -1,11 +1,11 @@
 import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
+import World from '../src/World.js'
 import FireModel from './FireModel.js'
 
 modelIO.testStartup({ FireModel, modelIO, util })
 
-// const div = document.body
-const options = FireModel.defaultWorld(125)
+const options = World.defaultOptions(125)
 const model = new FireModel(options)
 model.setup()
 

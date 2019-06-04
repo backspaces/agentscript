@@ -6,7 +6,7 @@
         <script type="module">
             import util from '../src/util.js'
 
-            window.modelParams = util.parseQueryString()
+            const modelParams = util.parseQueryString()
             const appName = Object.keys(modelParams)[0] || 'hello'
             delete modelParams[appName]
             modelParams.app = appName
@@ -14,10 +14,10 @@
 
             const appPath = `./${appName}.js`
             console.log('running:', appPath)
-            document.title = `${appName}`
+            document.title = `3D:${appName}`
 
             util.setScript(appPath, { type: 'module' })
         </script>
-        <div id="modeldiv"></div>
+        <div id="modelDiv"></div>
     </body>
 </html>

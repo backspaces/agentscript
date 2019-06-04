@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>test</title>
+    </head>
+    <body>
+        <script type="module">
+            import * as AS from '../../dist/agentscript.esm.js'
+            window.AS = AS
+
+            const name = document.location.search.substring(1) || 'hello'
+            const scriptName = name[0].toUpperCase() + name.substring(1)
+            document.title = `esm:${scriptName}`
+
+            const modelName = scriptName + 'Model'
+            const script = `./${scriptName}Script.js`
+            // let model
+            // AS.util.setScript(script)
+            // AS.util.timeoutPromise().then(() => {
+            //     model = eval(`new ${modelName}()`)
+            //     console.log(model)
+            //     model.setup()
+            //     model.step()
+            // })
+        </script>
+    </body>
+</html>

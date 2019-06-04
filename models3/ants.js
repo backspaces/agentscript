@@ -1,3 +1,4 @@
+import World from '../src/World.js'
 import util from '../src/util.js'
 import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
@@ -17,7 +18,7 @@ const params = {
 Object.assign(params, util.parseQueryString())
 if (params.seed != null) util.randomSeed(params.seed)
 if (params.maxY == null) params.maxY = params.maxX
-params.world = AntsModel.defaultWorld(params.maxX, params.maxY)
+params.world = World.defaultWorld(params.maxX, params.maxY)
 
 const nestColor = Color.toTypedColor('yellow')
 const foodColor = Color.toTypedColor('blue')

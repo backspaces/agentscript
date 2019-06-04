@@ -8,7 +8,8 @@
         <script>
             function workerSrc(root) {
                 importScripts(root + '../dist/agentscript.umd.js')
-                importScripts(root + '../models/FireScript.js')
+                importScripts(root + './modelScripts/FireScript.js')
+
                 console.log('worker self', self)
 
                 util.randomSeed(1)
@@ -24,7 +25,7 @@
                 // main: ~70 -> 442 fps. worker around 442 either way.
                 const postPixels = true
 
-                const options = FireModel.defaultWorld(125)
+                const options = AS.World.defaultWorld(125)
                 const model = new FireModel(options)
                 model.setup()
                 console.log('worker model', model)

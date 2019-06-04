@@ -1,10 +1,11 @@
 import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
+import World from '../src/World.js'
 import WaterModel from './WaterModel.js'
 
 modelIO.testStartup({ WaterModel, modelIO, util })
 
-const options = WaterModel.defaultWorld(50)
+const options = World.defaultOptions(50)
 const model = new WaterModel(options)
 model.setup()
 

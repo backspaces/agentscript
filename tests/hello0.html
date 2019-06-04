@@ -9,7 +9,7 @@
         <script>
             function workerSrc(root) {
                 importScripts(root + '../dist/agentscript.umd.js')
-                importScripts(root + '../models/HelloScript.js')
+                importScripts(root + './modelScripts/HelloScript.js')
                 console.log('worker self', self)
 
                 let model, params

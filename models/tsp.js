@@ -1,10 +1,11 @@
 import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
+import World from '../src/World.js'
 import TSPModel from './TSPModel.js'
 
 modelIO.testStartup({ TSPModel, modelIO, util })
 
-const options = TSPModel.defaultWorld(50)
+const options = World.defaultOptions(50)
 const model = new TSPModel(options)
 model.setup()
 
