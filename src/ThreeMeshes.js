@@ -186,7 +186,7 @@ export class QuadSpritesMesh extends BaseMesh {
         const indexes = []
 
         // for (let i = 0; i < turtles.length; i++) {
-        util.forEach(turtles, (turtle, i) => {
+        util.forLoop(turtles, (turtle, i) => {
             // const turtle = turtles[i]
             let { x, y, z, theta } = turtle
             if (!z) z = 0
@@ -269,7 +269,7 @@ export class PointsMesh extends BaseMesh {
         const vertices = []
         const colors = this.fixedColor ? null : []
 
-        util.forEach(turtles, (turtle, i) => {
+        util.forLoop(turtles, (turtle, i) => {
             let { x, y, z } = turtle
             if (!z) z = 0
             vertices.push(x, y, z)
@@ -329,7 +329,7 @@ export class LinksMesh extends BaseMesh {
     update(links, viewFcn) {
         const vertices = []
         const colors = this.fixedColor ? null : []
-        util.forEach(links, (link, i) => {
+        util.forLoop(links, (link, i) => {
             let { x0, y0, z0, x1, y1, z1 } = link
             if (!z0) z0 = 0
             if (!z1) z1 = 0

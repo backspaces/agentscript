@@ -116,5 +116,5 @@ export default class View2d {
 // }
 
 // installTurtlesViewData(data, pixelFcn) {
-//     this.turtlesViewData = util.forEach(data, (d, i, array))
+//     this.turtlesViewData = util.forLoop(data, (d, i, array))
 // }

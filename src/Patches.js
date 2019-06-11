@@ -131,7 +131,7 @@ class Patches extends AgentSet {
         const { numX, numY } = this.model.world
         // let data = util.arrayProps(this, patchVar)
         let data = this.props(patchVar)
-        data = util.convertArray(data, Type)
+        data = util.convertArrayType(data, Type)
         return new DataSet(numX, numY, data)
     }
 

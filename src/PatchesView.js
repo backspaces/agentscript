@@ -28,7 +28,7 @@ export default class PatchesView {
                     this.pixels.length
             )
         }
-        util.forEach(data, (d, i) => {
+        util.forLoop(data, (d, i) => {
             this.pixels[i] = pixelFcn(d)
         })
 

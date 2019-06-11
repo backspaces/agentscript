@@ -331,7 +331,7 @@ class AgentSet extends AgentArray {
                         val = val.id
                     } else {
                         val = Object.assign({}, obj)
-                        util.forEach(val, (v, key) => {
+                        util.forLoop(val, (v, key) => {
                             // Should check that all values are primitives
                             if (util.isInteger(v.id)) {
                                 v[key] = v.id

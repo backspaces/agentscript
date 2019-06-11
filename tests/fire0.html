@@ -36,8 +36,8 @@
                     const data = model.patches.props('type')
                     if (postPixels) {
                         const ta = new Float64Array(data.length)
-                        util.forEach((type, i) => {
-                            // util.forEach 3x faster than native forEach!
+                        util.forLoop((type, i) => {
+                            // util.forLoop 3x faster than native forEach!
                             ta[i] = patchPixels[type]
                         })
                         postMessage(ta, [ta.buffer])

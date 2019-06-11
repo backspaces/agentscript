@@ -6,12 +6,15 @@
         <script type="module">
             import util from '../src/util.js'
 
-            const appName = document.location.search.substring(1) || 'hello'
+            const modelParams = util.parseQueryString()
+            const appName = Object.keys(modelParams)[0] || 'hello'
             const appPath = `./${appName}.js`
             console.log('running:', appPath)
             document.title = `${appName}`
 
-            util.setScript(appPath, { type: 'module' })
+            // Note: using import() causes tests to pause in puppeteer.
+            // util.setScript(appPath, { type: 'module' })
+            import(appPath)
         </script>
         <div id="modelDiv"></div>
     </body>

@@ -152,7 +152,7 @@ export default class SpriteSheet {
             // Resizes ctx preserving it's current image
             util.resizeCtx(this.ctx, this.width, this.height)
             // Recalculate existing sprite uvs.
-            util.forEach(this.sprites, sprite => {
+            util.forLoop(this.sprites, sprite => {
                 sprite.uvs = this.getUVs(sprite)
             })
         }

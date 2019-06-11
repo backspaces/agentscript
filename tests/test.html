@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+    </head>
+
+    <body>
+        <canvas id="model" style="border: 1px solid;"></canvas>
+        <script type="module">
+            import * as canvas from '../src/utils/canvas.js'
+            import * as types from '../src/utils/types.js'
+            import util from '../src/util.js'
+            window.types = types
+            window.canvas = canvas
+            // window.util = util
+        </script>
+    </body>
+</html>

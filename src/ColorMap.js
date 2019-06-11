@@ -30,7 +30,7 @@ const ColorMap = {
         )
         const ctx = util.createCtx(nColors, 1)
         // Install default locs if none provide
-        if (!locs) locs = util.aRamp(0, 1, stops.length)
+        if (!locs) locs = util.floatRamp(0, 1, stops.length)
         // Create a new gradient and fill it with the color stops
         const grad = ctx.createLinearGradient(0, 0, nColors, 0)
         util.repeat(stops.length, i => grad.addColorStop(locs[i], stops[i]))
@@ -83,7 +83,7 @@ const ColorMap = {
     // Use permuteArrays to create uniformly spaced color ramp permutation.
     // Ex: if numRs is 3, permuteArrays's A1 would be [0, 127, 255]
     permuteRGBColors(numRs, numGs = numRs, numBs = numRs) {
-        const toRamp = num => util.aIntRamp(0, 255, num)
+        const toRamp = num => util.integerRamp(0, 255, num)
         const ramps = [numRs, numGs, numBs].map(toRamp)
         return this.permuteArrays(...ramps)
     },
@@ -206,7 +206,7 @@ const ColorMap = {
     // These are typically 256 entries but can be smaller
     // by passing a size parameter and the min/max range.
     grayColorMap(min = 0, max = 255, size = max - min + 1) {
-        const ramp = util.aIntRamp(min, max, size)
+        const ramp = util.integerRamp(min, max, size)
         return this.basicColorMap(ramp.map(i => [i, i, i]))
     },
 

@@ -221,7 +221,7 @@ class DataSet {
     // Convert this dataset's data to new type. Precision may be lost.
     // Does nothing if current data is already of this Type.
     convertType(type) {
-        this.data = util.convertArray(this.data, type)
+        this.data = util.convertArrayType(this.data, type)
     }
 
     // Concatinate a dataset of equal height to my right to my east.
@@ -265,8 +265,8 @@ class DataSet {
     // x,y is in topleft-bottomright box: [tlx,tly,tlx+w,tly-h], y positive util.
     // Ex: NetLogo's coords: x, y, minXcor, maxYcor, numX, numY
     transformCoords(x, y, tlx, tly, w, h) {
-        const xs = (x - tlx) * (this.width - 1) / w
-        const ys = (tly - y) * (this.height - 1) / h
+        const xs = ((x - tlx) * (this.width - 1)) / w
+        const ys = ((tly - y) * (this.height - 1)) / h
         return [xs, ys]
     }
 

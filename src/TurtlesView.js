@@ -30,7 +30,7 @@ export default class TurtlesView {
     drawTurtles(data, viewFcn) {
         if (util.isOofA(data)) data = util.toAofO(data)
         const constantView = util.isObject(viewFcn)
-        util.forEach(data, (turtle, i) => {
+        util.forLoop(data, (turtle, i) => {
             const viewData = constantView ? viewFcn : viewFcn(turtle, i, data)
             this.drawTurtle(turtle, viewData)
         })
@@ -129,7 +129,7 @@ export default class TurtlesView {
             ctx.lineWidth = viewFcn.width || 1
             ctx.beginPath()
         }
-        util.forEach(data, (link, i) => {
+        util.forLoop(data, (link, i) => {
             if (uniformLinks) {
                 this.drawLink(link)
             } else {

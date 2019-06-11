@@ -58,7 +58,7 @@ class AgentArray extends Array {
     propsObject(obj) {
         // const length = this.length
         const result = {}
-        util.forEach(obj, (val, key) => {
+        util.forLoop(obj, (val, key) => {
             result[key] = this.props(key, val)
         })
         return result
@@ -76,7 +76,7 @@ class AgentArray extends Array {
     }
     // Returns AgentArray of unique elements in this *sorted* AgentArray.
     // Use sortBy or clone & sortBy if needed.
-    // uniq(f = util.identity) {
+    // uniq(f = util.identityFcn) {
     //     if (util.isString(f)) f = o => o[f]
     //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
     // }
@@ -192,7 +192,7 @@ class AgentArray extends Array {
     // f is used to return an integer for sorting, defaults to identity.
     // If f is a string, it is the object property to sort by.
     // Adapted from underscore's _.sortedIndex.
-    sortedIndex(item, f = util.identity) {
+    sortedIndex(item, f = util.identityFcn) {
         if (util.isString(f)) f = util.propFcn(f)
         const value = f(item)
         // Why not array.length - 1? Because we can insert 1 after end of array.

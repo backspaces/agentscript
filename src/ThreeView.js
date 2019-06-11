@@ -28,7 +28,7 @@ export default class ThreeView {
                 meshClass: 'LinksMesh',
             },
         }
-        // util.forEach(options, (val, key) => {
+        // util.forLoop(options, (val, key) => {
         //     if (val.meshClass) {
         //         const Mesh = ThreeMeshes[val.meshClass]
         //         const meshOptions = Mesh.options()
@@ -214,7 +214,7 @@ export default class ThreeView {
 
     initMeshes() {
         this.meshes = {}
-        util.forEach(this.renderOptions, (val, key) => {
+        util.forLoop(this.renderOptions, (val, key) => {
             if (val.meshClass) {
                 const Mesh = ThreeMeshes[val.meshClass]
                 const options = Mesh.options() // default options

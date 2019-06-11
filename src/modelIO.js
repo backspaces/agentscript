@@ -14,7 +14,7 @@ export function testSetup(model) {
     util.printToPage('turtles: ' + turtles.length)
     util.printToPage('links: ' + links.length)
     const breeds = Object.assign({}, turtles.breeds, patches.breeds)
-    util.forEach(breeds, (val, key) => {
+    util.forLoop(breeds, (val, key) => {
         util.printToPage(key + ': ' + val.length)
     })
     util.toWindow({ world, patches, turtles, links, model })

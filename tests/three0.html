@@ -126,7 +126,7 @@
                 })
                 const sprites = Object.values(sheet.sprites)
 
-                util.forEach(model.turtles, (t, i) => {
+                util.forLoop(model.turtles, (t, i) => {
                     t.sprite = sprites[i % sprites.length]
                 })
 
