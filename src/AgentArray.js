@@ -55,7 +55,7 @@ class AgentArray extends Array {
     // Creates an OofA for several sets of props.
     // Obj is key, arrayType pairs: x: Float32Array
     // Result is this.props(key, arrayType) for each key
-    propsObject(obj) {
+    typedSample(obj) {
         // const length = this.length
         const result = {}
         util.forLoop(obj, (val, key) => {

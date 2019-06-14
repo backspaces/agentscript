@@ -6,11 +6,11 @@ let model, params
 
 function postData() {
     const data = {
-        patches: model.patches.propsObject({
+        patches: model.patches.typedSample({
             foodPheromone: Float32Array,
             nestPheromone: Float32Array,
         }),
-        turtles: model.turtles.propsObject({
+        turtles: model.turtles.typedSample({
             x: Float32Array,
             y: Float32Array,
             theta: Float32Array,

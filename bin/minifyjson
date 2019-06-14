@@ -2,12 +2,9 @@
 
 const process = require('process')
 
+// const gis = require('./gis.umd.js')
 const esmImport = require('esm')(module)
 const gis = esmImport('../src/gis.js').default
-
-// const gis = require('./gis.umd.js')
-
-console.log(gis)
 
 let data = ''
 process.stdin.on('readable', () => {

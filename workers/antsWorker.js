@@ -6,13 +6,13 @@ let model, params
 
 function postData() {
     const data = {
-        patches: model.patches.propsObject({
+        patches: model.patches.typedSample({
             isNest: Uint8Array, // bool: 0 = false, 1 = true
             isFood: Uint8Array,
             foodPheromone: Float32Array,
             nestPheromone: Float32Array,
         }),
-        turtles: model.turtles.propsObject({
+        turtles: model.turtles.typedSample({
             x: Float32Array,
             y: Float32Array,
             theta: Float32Array,

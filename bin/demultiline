@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 const process = require('process')
-const gis = require('./gis.umd.js')
+// const gis = require('./gis.umd.js')
+const esmImport = require('esm')(module)
+const gis = esmImport('../src/gis.js').default
 
 let data = ''
 process.stdin.on('readable', () => {

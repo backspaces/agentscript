@@ -269,7 +269,7 @@ class AgentSet extends AgentArray {
         // return this
     }
 
-    // Temp: data transfer. May not use if AgentArray.propsObject
+    // Temp: data transfer. May not use if AgentArray.typedSample
     // (OofA) is sufficient.
     propsArrays(keys, indexed = true) {
         const result = indexed ? {} : new AgentArray(this.length)

@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+const shell = require('shelljs')
+
+const dir = process.argv[2]
+console.log('dir:', dir)
+if (!dir) throw Error('Needs dir name argument')
+
+const models = shell
+    .ls(`${dir}/[a-z]*.js`) // Avoid FooModel.js, just foo.js
+    .sed(/^.*\//, '')
+    .sed(/.js$/, '')
+    .replace(/\n$/, '') // remove final newline
+    .split('\n') // split at internal newlines
+shell.echo('models:', models)
+
+models.forEach(model => shell.exec(`bin/runmodel ${dir}/${model}`))
+
+// if (shell.exec('git commit -am "Auto-commit"').code !== 0) {
+//     shell.echo('Error: Git commit failed');
+//     shell.exit(1);
+//   }

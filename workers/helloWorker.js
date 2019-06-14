@@ -6,12 +6,12 @@ let model, params
 
 function postData() {
     const data = {
-        turtles: model.turtles.propsObject({
+        turtles: model.turtles.typedSample({
             x: Float32Array,
             y: Float32Array,
             theta: Float32Array,
         }),
-        links: model.links.propsObject({
+        links: model.links.typedSample({
             x0: Float32Array,
             y0: Float32Array,
             x1: Float32Array,

@@ -7,14 +7,14 @@ let model, params
 
 function postData() {
     const data = {
-        turtles: model.turtles.propsObject({
+        turtles: model.turtles.typedSample({
             x: Float32Array,
             y: Float32Array,
             theta: Float32Array,
         }),
     }
     if (model.ticks === 0) {
-        data.patches = model.patches.propsObject({
+        data.patches = model.patches.typedSample({
             elevation: Float32Array,
         })
         const localMinIDs = model.localMins.map(p => p.id)

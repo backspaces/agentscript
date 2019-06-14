@@ -7,7 +7,7 @@ let steps = 0
 
 function postData() {
     const data = {
-        turtles: model.turtles.propsObject({
+        turtles: model.turtles.typedSample({
             x: Float32Array,
             y: Float32Array,
             theta: Float32Array,
