@@ -24,15 +24,3 @@ https.get(url, res => {
     })
     res.on('end', () => {})
 })
-
-/*
-node ./zxy2osm.js 10/210/403 > santafe10.osm
-osmtogeojson -f json santafe10.osm > santafe10.json
-
-node ./zxy2osm.js 12/842/1613 > santafe12.osm
-osmtogeojson -f json santafe12.osm > santafe12.json
-
-node ./zxy2osm.js 14/3370/6451 > santafe14.osm
-osmtogeojson -f json santafe14.osm > santafe14.json
-
-*/

@@ -7,12 +7,15 @@
     <body>
         <canvas id="model" style="border: 1px solid;"></canvas>
         <script type="module">
+            import util from '../src/util.js'
+
             import * as canvas from '../src/utils/canvas.js'
             import * as types from '../src/utils/types.js'
-            import util from '../src/util.js'
-            window.types = types
-            window.canvas = canvas
-            // window.util = util
+            import * as AS from '../dist/agentscript.esm.js'
+            // Object.assign(window, {canvas, types, util})
+            util.toWindow({ AS, canvas, types, util })
+
+            import * as THREE from '../web_modules/three.js'
         </script>
     </body>
 </html>

@@ -8,3 +8,7 @@ npm-debug.log
 yarn-error.log
 # src/SpriteSheet.js
 **/.DS_Store
+
+# package-lock.json
+# yarn.lock
+web_modules/

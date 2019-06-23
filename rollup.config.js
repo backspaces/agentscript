@@ -1,3 +1,5 @@
+import { terser } from 'rollup-plugin-terser'
+
 export default {
     input: 'src/AS.js',
     output: [
@@ -13,4 +15,5 @@ export default {
             banner: '/* eslint-disable */',
         },
     ],
+    plugins: [terser()],
 }
