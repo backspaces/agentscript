@@ -155,8 +155,6 @@ class DataSet {
     resample(width, height, useNearest = true, Type = Array) {
         if (width === this.width && height === this.height) return this.copy()
         const ds = DataSet.emptyDataSet(width, height, Type)
-        // const xScale = (this.width - 1) / (width - 1)
-        // const yScale = (this.height - 1) / (height - 1)
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 ds.setXY(
