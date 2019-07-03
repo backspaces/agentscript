@@ -5,7 +5,7 @@ import AntsModel from './AntsModel.js'
 
 modelIO.testStartup({ AntsModel, modelIO, util })
 
-const options = World.defaultWorld(40)
+const options = World.defaultOptions(40)
 const model = new AntsModel(options)
 model.setup()
 

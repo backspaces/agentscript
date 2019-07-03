@@ -1,13 +1,9 @@
 #!/usr/bin/env node
-
-// /* eslint-disable */
-// import test from 'ava'
 const puppeteer = require('puppeteer')
 const shell = require('shelljs')
 
 const path = process.argv[2]
-console.log(path)
-if (!path) throw Error('Needs path name argument')
+if (!path) throw Error('Needs path argument')
 
 const [dir, model] = path.split('/')
 console.log('path:', path, 'dir:', dir, 'model:', model)
@@ -31,7 +27,12 @@ const [width, height] = [500, 600]
 
 async function run() {
     const browser = await puppeteer.launch({
-        args: ['--user-agent=Puppeteer', `--window-size=${width},${height}`],
+        args: [
+            '--user-agent=Puppeteer',
+            `--window-size=${width},${height}`,
+            // for worker es6 modules
+            '--enable-experimental-web-platform-features',
+        ],
         headless: false,
         // devtools: true,
     })

@@ -4,7 +4,7 @@ import FireModel from '../models/FireModel.js'
 
 util.randomSeed(1) // for consistant results over runs
 
-const options = World.defaultWorld(125)
+const options = World.defaultOptions(125)
 const model = new FireModel(options)
 model.setup()
 console.log('worker model:', model)

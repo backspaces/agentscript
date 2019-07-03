@@ -9,7 +9,7 @@ const cmap = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
 const maxZ = 10
 const useSmoothing = true // unusual to have non-crisp patches
 
-const world = World.defaultWorld(50)
+const world = World.defaultOptions(50)
 const model = new WaterModel(world)
 model.setup()
 

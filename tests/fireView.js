@@ -35,7 +35,7 @@ onmessage = e => {
             console.log('worker patchesView', patchesView)
         }
 
-        const options = World.defaultWorld(params.maxX, params.maxY)
+        const options = World.defaultOptions(params.maxX, params.maxY)
         model = new FireModel(options)
         model.setup()
 

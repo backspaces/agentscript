@@ -18,7 +18,7 @@ const timeoutMS = 0
 const steps = 500
 const density = 60
 
-const world = World.defaultWorld(125)
+const world = World.defaultOptions(125)
 const model = new FireModel(world)
 model.density = density
 model.setup()

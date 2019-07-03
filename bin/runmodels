@@ -7,16 +7,13 @@ console.log('dir:', dir)
 if (!dir) throw Error('Needs dir name argument')
 
 const models = shell
-    .ls(`${dir}/[a-z]*.js`) // Avoid FooModel.js, just foo.js
+    .ls(`${dir}/*.js`)
+    // Avoid FooModel.js, fooWorker.js, just foo.js
+    .grep('-v', '[A-Z]')
     .sed(/^.*\//, '')
     .sed(/.js$/, '')
-    .replace(/\n$/, '') // remove final newline
-    .split('\n') // split at internal newlines
+    .replace(/\n+$/, '')
+    .split('\n')
+
 shell.echo('models:', models)
-
 models.forEach(model => shell.exec(`bin/runmodel ${dir}/${model}`))
-
-// if (shell.exec('git commit -am "Auto-commit"').code !== 0) {
-//     shell.echo('Error: Git commit failed');
-//     shell.exit(1);
-//   }

@@ -8,7 +8,7 @@ let model
 onmessage = e => {
     // console.log('worker onmessage e.data = ', e.data)
     if (e.data.cmd === 'init') {
-        const options = World.defaultWorld(e.data.size)
+        const options = World.defaultOptions(e.data.size)
         model = new FireModel(options)
         model.setup()
         console.log('worker model:', model)

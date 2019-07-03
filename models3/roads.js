@@ -5,7 +5,7 @@ import ThreeView from '../src/ThreeView.js'
 import RoadsModel from '../models/RoadsModel.js'
 
 async function run() {
-    const model = new RoadsModel(World.defaultWorld(100))
+    const model = new RoadsModel(World.defaultOptions(100))
     await model.startup()
     model.setup()
 

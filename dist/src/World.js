@@ -17,10 +17,11 @@ class World {
         return new World(World.defaultOptions(maxX, maxY))
     }
     // Initialize the world w/ defaults overridden w/ options.
-    constructor(options = {}) {
-        Object.assign(this, World.defaultOptions()) // initial this w/ defaults
-        Object.assign(this, options) // override defaults with options
-        this.setWorld()
+    constructor(options = World.defaultOptions()) {
+        // Object.assign(this, World.defaultOptions()) // initial this w/ defaults
+        // Object.assign(this, options) // override defaults with options
+        Object.assign(this, options) // set the 4 option values
+        this.setWorld() // convert these to rest of world parameters
     }
     // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
     setWorld() {

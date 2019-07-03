@@ -16,7 +16,7 @@ const params = {
 Object.assign(params, util.parseQueryString())
 if (params.seed != null) util.randomSeed(params.seed)
 if (params.maxY == null) params.maxY = params.maxX
-params.world = World.defaultWorld(params.maxX, params.maxY)
+params.world = World.defaultOptions(params.maxX, params.maxY)
 
 const nestColor = Color.toTypedColor('yellow')
 const foodColor = Color.toTypedColor('blue')
