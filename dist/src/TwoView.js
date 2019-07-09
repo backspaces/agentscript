@@ -3,7 +3,7 @@ import World from './World.js'
 import PatchesView from './PatchesView.js'
 import TurtlesView from './TurtlesView.js'
 
-export default class View2d {
+export default class TwoView {
     static defaultOptions() {
         const options = {
             // canvasStack: false,
@@ -18,7 +18,7 @@ export default class View2d {
     constructor(
         div = document.body,
         worldOptions = World.defaultOptions(),
-        options = View2d.defaultOptions()
+        options = TwoView.defaultOptions()
     ) {
         div = util.isString(div) ? document.getElementById(div) : div
         if (!util.isCanvas(div)) {
@@ -29,7 +29,7 @@ export default class View2d {
         const ctx = div.getContext('2d')
         const world = new World(worldOptions)
         // override defaults:
-        options = Object.assign(View2d.defaultOptions(), options)
+        options = Object.assign(TwoView.defaultOptions(), options)
         // Object.assign(this, { ctx, world }, options)
         Object.assign(this, { ctx, world })
 
@@ -43,6 +43,9 @@ export default class View2d {
 
         // this.viewFcns = {}
         // this.steps = 0
+    }
+    get canvas() {
+        return this.ctx.canvas
     }
     reset(patchSize, useSprites = this.useSprites) {
         this.turtlesView.reset(patchSize, useSprites)
@@ -67,6 +70,9 @@ export default class View2d {
     }
     createPatchPixels(pixelFcn) {
         this.patchesView.createPixels(pixelFcn)
+    }
+    setPatchPixel(index, pixel) {
+        this.patchesView.setPixel(index, pixel)
     }
     setPatchesSmoothing(smoothing) {
         this.patchesView.setPatchesSmoothing(smoothing)

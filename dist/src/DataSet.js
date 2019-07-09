@@ -152,14 +152,27 @@ class DataSet {
     // Create new dataset of size width/height/type by resampling each point.
     // Type is not this.type() due to integer/float differences. Default Array.
     // If same size, return a copy of this.
+    // NOTE: This used to calc an x & y scale and apply it:
+    //      const xScale = (this.width - 1) / (width - 1)
+    //      const yScale = (this.height - 1) / (height - 1)
+    //      ...
+    //      ds.setXY(x, y, this.sample(x * xScale, y * yScale, useNearest))
+    // .. which had precision errors.
+    // Multiplying first, then dividing more accurate.
     resample(width, height, useNearest = true, Type = Array) {
         if (width === this.width && height === this.height) return this.copy()
         const ds = DataSet.emptyDataSet(width, height, Type)
-        const xScale = (this.width - 1) / (width - 1)
-        const yScale = (this.height - 1) / (height - 1)
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
-                ds.setXY(x, y, this.sample(x * xScale, y * yScale, useNearest))
+                ds.setXY(
+                    x,
+                    y,
+                    this.sample(
+                        (x * (this.width - 1)) / (width - 1),
+                        (y * (this.height - 1)) / (height - 1),
+                        useNearest
+                    )
+                )
             }
         }
         return ds

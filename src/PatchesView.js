@@ -4,7 +4,7 @@ export default class PatchesView {
     // Ctor: create a 2D context and imageData for this View
     constructor(width, height) {
         this.ctx = util.createCtx(width, height)
-        this.canvas = this.ctx.canvas
+        // this.canvas = this.ctx.canvas
         this.imageData = util.ctxImageData(this.ctx)
         this.pixels = new Uint32Array(this.imageData.data.buffer)
         this.length = this.pixels.length
@@ -37,6 +37,9 @@ export default class PatchesView {
     createPixels(pixelFcn) {
         util.repeat(this.length, i => (this.pixels[i] = pixelFcn(i)))
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
+    }
+    setPixel(index, pixel) {
+        this.pixels[index] = pixel
     }
 
     // Draw this pixel canvas onto a View 2D canvas ctx.

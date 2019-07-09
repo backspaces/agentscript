@@ -4,54 +4,46 @@
 #
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/node:latest-browsers
-      # - image: circleci/node:10-jessie-browsers
+    build:
+        docker:
+            - image: circleci/node:latest-browsers
+            # - image: circleci/node:10-jessie-browsers
 
-    working_directory: ~/repo
+        working_directory: ~/repo
 
-    steps:
-      - checkout
+        steps:
+            - checkout
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn install
+            - run: yarn install
 
-      - run: yarn build
+            - run: yarn build
 
-      - run:
-          command: mkdir -p ~/reports
+            - run:
+                  command: mkdir -p ~/reports
 
-      - run:
-          command: |
-            ./node_modules/ava/cli.js --tap | ./node_modules/tap-xunit/bin/tap-xunit > ~/reports/ava.xml
-          when: always
+            - run: yarn test
 
-      - store_test_results:
-          path: ~/reports
+            - store_test_results:
+                  path: ~/reports
 
-      - store_artifacts:
-          path: ~/reports
+            - store_artifacts:
+                  path: ~/reports
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-
-    #   - run:
-    #       command: mkdir -p ~/reports
-
-    #   - run:
-    #       command: |
-    #         ./node_modules/ava/cli.js --tap | ./node_modules/tap-xunit/bin/tap-xunit > ~/reports/ava.xml
-    #       when: always
-
-    #   - store_test_results:
-    #       path: ~/reports
-
-    #   - store_artifacts:
-    #       path: ~/reports
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
+        #   - run:
+        #       command: mkdir -p ~/reports
+        #   - run:
+        #       command: |
+        #         ./node_modules/ava/cli.js --tap | ./node_modules/tap-xunit/bin/tap-xunit > ~/reports/ava.xml
+        #       when: always
+        #   - store_test_results:
+        #       path: ~/reports
+        #   - store_artifacts:
+        #       path: ~/reports
