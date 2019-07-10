@@ -45,7 +45,7 @@ export default class Mouse {
         this.down = down
         this.moved = moved
         this.setXY(e)
-        this.callback(e)
+        this.callback(e, this)
     }
     handleMouseDown(e) {
         this.action = 'down'

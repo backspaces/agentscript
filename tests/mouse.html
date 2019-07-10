@@ -26,7 +26,8 @@
                 const { xCor, yCor } = mouse
                 const index = mouse.pixelXYtoPatchIndex(xCor, yCor)
                 console.log(xCor, yCor, index)
-                view.setPatchPixel(index, colors.randomColor().pixel)
+                const color = mouse.down ? colors[0] : colors.randomColor()
+                view.setPatchPixel(index, color.pixel)
                 view.drawPatches()
             }
             const mouse = new Mouse(view.canvas, model.world, callback)
