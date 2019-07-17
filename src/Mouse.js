@@ -1,18 +1,17 @@
 // A NetLogo-like mouse handler.
 export default class Mouse {
     // Create and start mouse obj, args: a model, and a callback method.
-    constructor(canvas, world, callback = evt => {}) {
+    constructor(canvas, world, callback = (evt, mouse) => {}) {
         if (typeof canvas === 'string') {
             canvas = document.getElementById(canvas)
         }
         Object.assign(this, { canvas, world, callback })
 
         // instance event handlers: arrow fcns to insure "this" is us.
+        // I.e. doesn't work to just use handleXXX in addEventListener.
         this.mouseDown = e => this.handleMouseDown(e)
         this.mouseUp = e => this.handleMouseUp(e)
         this.mouseMove = e => this.handleMouseMove(e)
-
-        // this.start()
     }
 
     // Start/stop the mouseListeners.  Note that NetLogo's model is to have
@@ -65,48 +64,14 @@ export default class Mouse {
 
     // set x, y to be event location in patch coordinates.
     setXY(e) {
+        const { canvas, world } = this
+        const patchSize = world.patchSize(canvas)
         const rect = this.canvas.getBoundingClientRect()
         const pixX = e.clientX - rect.left
         const pixY = e.clientY - rect.top
-        // return this.pixelXYtoPatchXY(pixX, pixY)
-        // const xy = this.pixelXYtoPatchXY(pixX, pixY)
-        // [this.xCor, this.yCor] = xy // this.pixelXYtoPatchXY(pixX, pixY)
-        Object.assign(this, this.pixelXYtoPatchXY(pixX, pixY))
-    }
 
-    patchSize() {
-        const { numX, numY } = this.world
-        const { clientWidth: width, clientHeight: height } = this.canvas
-        const xSize = width / numX
-        const ySize = height / numY
-        if (xSize !== ySize) {
-            throw Error(
-                `Mouse patchSize: xSize, ySize differ ${xSize}, ${ySize}`
-            )
-        }
-        return xSize
+        // const [xCor, yCor] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
+        // Object.assign(this, { xCor, yCor })
+        ;[this.xCor, this.yCor] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
     }
-
-    // Convert pixel location (top/left offset i.e. mouse)
-    // to patch coords(float)
-    pixelXYtoPatchXY(x, y) {
-        const patchSize = this.patchSize()
-        const { minXcor, maxYcor } = this.world
-        return {
-            xCor: minXcor + x / patchSize,
-            yCor: maxYcor - y / patchSize,
-        }
-    }
-    pixelXYtoPatchIndex(x, y) {
-        x = Math.round(x)
-        y = Math.round(y)
-        const { minX, maxY, numX } = this.world
-        return x - minX + numX * (maxY - y)
-    }
-
-    // Convert patch coords (float) to pixel location
-    // (top / left offset i.e.mouse)
-    // patchXYtoPixelXY(x, y) {
-    //     return [(x - this.minXcor) * this.size, (this.maxYcor - y) * this.size]
-    // }
 }

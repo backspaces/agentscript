@@ -115,6 +115,12 @@ const ColorMap = {
         randomColor() {
             return this[this.randomIndex()]
         },
+        modIndex(index) {
+            return index % this.length
+        },
+        modColor(index) {
+            return this[this.modIndex(index)]
+        },
         // Return the index of a typedColor within the colormap,
         // undefined if no exact match.
         // Use the `closest` methods below for nearest, not exact, match.

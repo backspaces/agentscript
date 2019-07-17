@@ -20,7 +20,7 @@ export default class HelloModel extends Model {
     }
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')
-        this.turtles.setDefault('speed', this.speed)
+        // this.turtles.setDefault('speed', this.speed)
 
         this.turtles.create(this.population, t => {
             const patch = this.patches.oneOf()
@@ -35,7 +35,7 @@ export default class HelloModel extends Model {
     step() {
         this.turtles.ask(t => {
             t.direction += util.randomCentered(this.wiggle)
-            t.forward(t.speed)
+            t.forward(this.speed)
         })
     }
 }

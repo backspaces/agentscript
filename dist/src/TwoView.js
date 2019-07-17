@@ -18,7 +18,7 @@ export default class TwoView {
     constructor(
         div = document.body,
         worldOptions = World.defaultOptions(),
-        options = TwoView.defaultOptions()
+        options = {} // TwoView.defaultOptions()
     ) {
         div = util.isString(div) ? document.getElementById(div) : div
         if (!util.isCanvas(div)) {

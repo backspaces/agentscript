@@ -4,7 +4,7 @@ import util from './util.js'
 // It will be upgraded with methods converting from other
 // transforms like GIS and DataSets.
 
-class World {
+export default class World {
     static defaultOptions(maxX = 16, maxY = maxX) {
         return {
             minX: -maxX,
@@ -79,6 +79,24 @@ class World {
         ctx.scale(patchSize, -patchSize)
         ctx.translate(-this.minXcor, -this.maxYcor)
     }
+    // Return patch size for given canvas.
+    // Error if canvas patch width/height differ.
+    patchSize(canvas) {
+        const { numX, numY } = this
+        const { clientWidth: width, clientHeight: height } = canvas
+        const xSize = width / numX
+        const ySize = height / numY
+        if (xSize !== ySize) {
+            throw Error(`World patchSize: x/y sizes differ ${xSize}, ${ySize}`)
+        }
+        return xSize
+    }
+    // Change canvas size to this world's size.
+    // Does not change size if already the same, preserving the ctx content.
+    setCanvasSize(canvas, patchSize) {
+        const [width, height] = this.getWorldSize(patchSize)
+        util.setCanvasSize(canvas, width, height)
+    }
 
     // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)
     pixelXYtoPatchXY(x, y, patchSize) {
@@ -88,11 +106,11 @@ class World {
     patchXYtoPixelXY(x, y, patchSize) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
-    // Change canvas size to this world's size.
-    // Does not change size if already the same, preserving the ctx content.
-    setCanvasSize(canvas, patchSize) {
-        const [width, height] = this.getWorldSize(patchSize)
-        util.setCanvasSize(canvas, width, height)
+    patchXYtoPatchIndex(x, y) {
+        x = Math.round(x)
+        y = Math.round(y)
+        const { minX, maxY, numX } = this
+        return x - minX + numX * (maxY - y)
     }
 }
 
@@ -137,7 +155,7 @@ class BBoxTransform {
     }
 }
 
-export default World
+// export default World
 
 // The midpoints of the world, in world coords.
 // (0, 0) for the centered default worlds. REMIND: remove?
