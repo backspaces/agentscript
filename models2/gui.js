@@ -3,7 +3,7 @@ import ColorMap from '../src/ColorMap.js'
 import Animator from '../src/Animator.js'
 import GUI from '../src/GUI.js'
 import TwoView from '../src/TwoView.js'
-import HelloModel from '../models/HelloModel'
+import HelloModel from '../models/HelloModel.js'
 import util from '../src/util.js'
 util.toWindow({ Color, ColorMap, Animator, GUI, TwoView, HelloModel, util })
 
