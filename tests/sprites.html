@@ -16,6 +16,7 @@
             util.toWindow({ util, World, SpriteSheet, WalkersModel })
 
             const patchSize = 4
+            const useSprites = true
             const world = new World(World.defaultOptions(100, 50))
             const [size, theta] = [5, util.radians(45)]
             const pixels = size * patchSize
@@ -28,7 +29,7 @@
             world.setCanvasSize(can, patchSize)
             const sheet = new SpriteSheet(size * patchSize, 16, false)
             const shapes = sheet.shapes
-            const view = new TurtlesView(ctx, patchSize, world, true)
+            const view = new TurtlesView(ctx, world, { patchSize, useSprites })
             util.toWindow({ shapes, sheet, can, ctx, view })
 
             async function addImages() {

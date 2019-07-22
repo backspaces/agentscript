@@ -43,6 +43,7 @@ function postData() {
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
+        params.world = new World(params.world)
         if (params.seed != null) util.randomSeed(params.seed)
         if (params.img) Object.assign(self, setupView())
 
@@ -67,12 +68,10 @@ onmessage = e => {
 
 function setupView() {
     // console.log(('worker:', params))
-    const view = new TurtlesView(
-        util.createCtx(0, 0),
-        params.patchSize,
-        new World(params.world),
-        params.sprites
-    )
+    const view = new TurtlesView(util.createCtx(0, 0), params.world, {
+        patchSize: params.patchSize,
+        useSprites: params.sprites,
+    })
     const shapes = view.shapes
     const sprites25 = params.shapes25names.map(name =>
         shapes.imageNameToImage(name)

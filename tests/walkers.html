@@ -46,12 +46,10 @@
 
             if (params.seed != null) util.randomSeed(params.seed) // reset seed
             console.log('main: params', params)
-            const view = new TurtlesView(
-                ctx,
-                params.patchSize,
-                params.world,
-                params.sprites
-            )
+            const view = new TurtlesView(ctx, params.world, {
+                patchSize: params.patchSize,
+                useSprites: params.sprites,
+            })
             const shapes = view.shapes
             util.toWindow({ util, World, TurtlesView, params, ctx, can, view })
 

@@ -4,15 +4,15 @@ import PatchesView from './PatchesView.js'
 import TurtlesView from './TurtlesView.js'
 
 export default class TwoView {
-    static defaultOptions() {
-        const options = {
-            // canvasStack: false,
-            useSprites: false,
-            patchSize: 10,
-        }
-        return options
-    }
-
+    // static defaultOptions() {
+    //     const options = {
+    //         // canvasStack: false,
+    //         useSprites: false,
+    //         patchSize: 10,
+    //     }
+    //     return options
+    // }
+    //
     // ======================
 
     constructor(
@@ -26,23 +26,17 @@ export default class TwoView {
             div.appendChild(can)
             div = can
         }
+
         const ctx = div.getContext('2d')
         const world = new World(worldOptions)
         // override defaults:
-        options = Object.assign(TwoView.defaultOptions(), options)
+        // options = Object.assign(TwoView.defaultOptions(), options)
+        options = Object.assign(TurtlesView.defaultOptions(), options)
         // Object.assign(this, { ctx, world }, options)
         Object.assign(this, { ctx, world })
 
         this.patchesView = new PatchesView(world.width, world.height)
-        this.turtlesView = new TurtlesView(
-            ctx,
-            options.patchSize,
-            world,
-            options.useSprites
-        )
-
-        // this.viewFcns = {}
-        // this.steps = 0
+        this.turtlesView = new TurtlesView(ctx, world, options)
     }
     get canvas() {
         return this.ctx.canvas
@@ -71,8 +65,8 @@ export default class TwoView {
     createPatchPixels(pixelFcn) {
         this.patchesView.createPixels(pixelFcn)
     }
-    setPatchPixel(index, pixel) {
-        this.patchesView.setPixel(index, pixel)
+    setPatchPixel(x, y, pixel) {
+        this.patchesView.setPixel(x, y, pixel)
     }
     setPatchesSmoothing(smoothing) {
         this.patchesView.setPatchesSmoothing(smoothing)
@@ -93,11 +87,6 @@ export default class TwoView {
     drawLinks(data, viewFcn) {
         this.turtlesView.drawLinks(data, viewFcn)
     }
-
-    // installViewFcns(viewFcns) {
-    //     this.viewFcns = viewFcns
-    // }
-    // draw()
 }
 
 // draw() {

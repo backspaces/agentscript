@@ -57,6 +57,7 @@ export default class World {
             y <= this.maxYcor
         )
     }
+    // cropToWorld(x, y) {}
 
     bboxTransform(topLeft, bottomRight) {
         return new BBoxTransform(topLeft, bottomRight, this)
@@ -106,12 +107,15 @@ export default class World {
     patchXYtoPixelXY(x, y, patchSize) {
         return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
     }
-    patchXYtoPatchIndex(x, y) {
-        x = Math.round(x)
-        y = Math.round(y)
-        const { minX, maxY, numX } = this
+
+    xyToPatchIndex(x, y) {
+        if (!this.isOnWorld(x, y)) return undefined
+        const { minX, maxY, numX, maxXcor, maxYcor } = this
+        x = x === maxXcor ? maxX : Math.round(x)
+        y = y === maxYcor ? maxY : Math.round(y)
         return x - minX + numX * (maxY - y)
     }
+    // patchIndexToXY(index) {}
 }
 
 class BBoxTransform {

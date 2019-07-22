@@ -135,7 +135,7 @@ export class PatchesMesh extends CanvasMesh {
             useSegments: false,
         }
     }
-    init(canvas = this.view.patchesView.canvas) {
+    init(canvas = this.view.patchesView.ctx.canvas) {
         super.init(canvas, this.options.useSegments)
     }
     update(data, viewFcn = d => d) {

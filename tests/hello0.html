@@ -133,8 +133,8 @@
 
             const view = new TurtlesView(
                 ctx,
-                params.patchSize,
-                new World(World.defaultOptions(params.maxX, params.maxY))
+                new World(World.defaultOptions(params.maxX, params.maxY)),
+                { patchSize: params.patchSize }
             )
             function turtleViewValues(turtle, i, turtles) {
                 return {

@@ -2,10 +2,21 @@ import util from './util.js'
 import Shapes from './Shapes.js'
 
 export default class TurtlesView {
-    constructor(ctx, patchSize, world, useSprites = false) {
-        Object.assign(this, { ctx, world, patchSize, useSprites })
+    static defaultOptions() {
+        const options = {
+            // canvasStack: false,
+            useSprites: false,
+            patchSize: 10,
+        }
+        return options
+    }
+
+    // constructor(ctx, patchSize, world, useSprites = false) {
+    constructor(ctx, world, options = {}) {
+        options = Object.assign(TurtlesView.defaultOptions(), options)
+        Object.assign(this, { ctx, world }, options)
         this.shapes = new Shapes()
-        this.resetCtx(patchSize, useSprites)
+        this.resetCtx(this.patchSize, this.useSprites)
     }
     reset(patchSize, useSprites) {
         this.useSprites = useSprites

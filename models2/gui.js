@@ -67,7 +67,7 @@ class HelloView extends TwoView {
         this.drawLinks(model.links, { color: linkColor.css, width: 1 })
         this.drawTurtles(model.turtles, t => ({
             shape: controls.shape,
-            color: colors.modColor(t.id).css,
+            color: colors.atIndex(t.id).css,
             size: controls.shapeSize,
         }))
         this.draws++

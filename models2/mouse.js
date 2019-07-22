@@ -16,10 +16,9 @@ view.drawPatches()
 
 const callback = e => {
     const { xCor, yCor } = mouse
-    const index = world.patchXYtoPatchIndex(xCor, yCor)
-    console.log(xCor, yCor, index)
+    console.log(xCor, yCor)
     const color = mouse.down ? colors[0] : colors.randomColor()
-    view.setPatchPixel(index, color.pixel)
+    view.setPatchPixel(xCor, yCor, color.pixel)
     view.drawPatches()
 }
 const mouse = new Mouse(view.canvas, world, callback)

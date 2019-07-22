@@ -125,8 +125,11 @@ const Color = {
     // This provides a universal color, good for canvas2d pixels, webgl & image
     // TypedArrays, and css/canvas2d strings.
 
-    // Create Color from r,g,b,a. Use `toTypedColor()` below for strings etc.
+    // Create Color from r,g,b,a.
+    // This uses prototypal inheritance and does not need the new keyword.
+    // If g is undefinec, returns toTypedColor(g)
     typedColor(r, g, b, a = 255) {
+        if (g === undefined) return this.toTypedColor(r)
         const u8array = new Uint8ClampedArray([r, g, b, a])
         u8array.pixelArray = new Uint32Array(u8array.buffer) // one element array
         // Make this an instance of TypedColorProto

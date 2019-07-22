@@ -11,7 +11,7 @@
             import Color from '../src/Color.js'
             import World from '../src/World.js'
             import TurtlesView from '../src/TurtlesView.js'
-            // import HelloModel from '../models/HelloModel.js'
+            import HelloModel from '../models/HelloModel.js'
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
             util.toWindow({ util, World, TurtlesView, ctx, can })
@@ -46,12 +46,10 @@
             params.colors25 = util.repeat(25, (i, a) => {
                 a[i] = Color.randomCssColor()
             })
-            const view = new TurtlesView(
-                ctx,
-                params.patchSize,
-                params.world,
-                params.sprites
-            )
+            const view = new TurtlesView(ctx, params.world, {
+                patchSize: params.patchSize,
+                useSprites: params.sprites,
+            })
             const shapes = view.shapes
             const pathNames = shapes.getPathNames()
             // params.spritesArray = shapes.getPathNames().map((name, i, a) => {
@@ -76,24 +74,21 @@
             console.log('main: params', params)
 
             if (params.main) {
-                import('../models/HelloModel.js').then(module => {
-                    const HelloModel = module.default
-                    var model = new HelloModel(
-                        World.defaultOptions(params.maxX, params.maxY)
-                    )
-                    model.population = params.population
-                    model.setup()
-                    util.toWindow({ HelloModel, model, view, draw })
-                    const perf = util.fps()
-                    // util.yieldLoop(steps => {
-                    util.timeoutLoop(steps => {
-                        // console.log('step', steps)
-                        model.step()
-                        draw(model)
-                        perf()
-                    }, params.steps).then(() => {
-                        console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
-                    })
+                var model = new HelloModel(
+                    World.defaultOptions(params.maxX, params.maxY)
+                )
+                model.population = params.population
+                model.setup()
+                util.toWindow({ HelloModel, model, view, draw })
+                const perf = util.fps()
+                // util.yieldLoop(steps => {
+                util.timeoutLoop(steps => {
+                    // console.log('step', steps)
+                    model.step()
+                    draw(model)
+                    perf()
+                }, params.steps).then(() => {
+                    console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                 })
             } else {
                 const worker = new Worker('./hello.js', { type: 'module' })

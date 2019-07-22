@@ -25,8 +25,8 @@ const ColorMap = {
     // Locs are floats from 0-1, default is equally spaced.
     gradientImageData(nColors, stops, locs) {
         // Convert the color stops to css strings
-        stops = stops.map(c =>
-            Array.isArray(c) ? Color.rgbaCssColor(...c) : c
+        stops = stops.map(
+            c => (Array.isArray(c) ? Color.rgbaCssColor(...c) : c)
         )
         const ctx = util.createCtx(nColors, 1)
         // Install default locs if none provide
@@ -107,19 +107,14 @@ const ColorMap = {
                 if (this.cssNames) this.index[this.cssNames[i]] = i
             })
         },
-        // Return a random index into the colormap array
-        randomIndex() {
-            return util.randomInt(this.length)
-        },
         // Return a random color within the colormap
         randomColor() {
-            return this[this.randomIndex()]
+            return this[util.randomInt(this.length)]
         },
-        modIndex(index) {
-            return index % this.length
-        },
-        modColor(index) {
-            return this[this.modIndex(index)]
+        // Return the color at index of this array.
+        // Wrap the index to be within the array.
+        atIndex(index) {
+            return this[index % this.length]
         },
         // Return the index of a typedColor within the colormap,
         // undefined if no exact match.

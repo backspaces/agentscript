@@ -68,9 +68,8 @@ onmessage = e => {
 function setupView() {
     const view = new TurtlesView(
         util.createCtx(0, 0),
-        params.patchSize,
-        // World.defaultOptions(params.maxX, params.maxY)
-        new World(World.defaultOptions(params.maxX, params.maxY))
+        new World(World.defaultOptions(params.maxX, params.maxY)),
+        { patchSize: params.patchSize }
     )
     function draw(data) {
         function turtleViewValues(turtle, i, turtles) {

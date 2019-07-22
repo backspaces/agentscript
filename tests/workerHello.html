@@ -36,12 +36,10 @@
             params.colors25 = util.repeat(25, (i, a) => {
                 a[i] = Color.randomCssColor()
             })
-            const view = new TurtlesView(
-                ctx,
-                params.patchSize,
-                params.world,
-                false
-            )
+            const view = new TurtlesView(ctx, params.world, {
+                patchSize: params.patchSize,
+                useSprites: false,
+            })
             util.toWindow({ params, view })
             console.log('main: params', params)
 

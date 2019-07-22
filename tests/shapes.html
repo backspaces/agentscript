@@ -27,7 +27,7 @@
             })
             const [size, theta] = [10, util.radians(45)]
             // const pixels = size * patchSize
-            const view = new TurtlesView(ctx, patchSize, world)
+            const view = new TurtlesView(ctx, world, { patchSize })
             const shapes = view.shapes
 
             util.toWindow({ view, world, patchSize, size, theta })

@@ -48,7 +48,7 @@
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
-        "three": "mrdoob/three.js"
+        "three": "latest"
     },
     "devDependencies": {
         "@pika/web": "^0.4.3",
