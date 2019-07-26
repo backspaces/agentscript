@@ -25,8 +25,8 @@ const ColorMap = {
     // Locs are floats from 0-1, default is equally spaced.
     gradientImageData(nColors, stops, locs) {
         // Convert the color stops to css strings
-        stops = stops.map(
-            c => (Array.isArray(c) ? Color.rgbaCssColor(...c) : c)
+        stops = stops.map(c =>
+            Array.isArray(c) ? Color.rgbaCssColor(...c) : c
         )
         const ctx = util.createCtx(nColors, 1)
         // Install default locs if none provide
@@ -134,6 +134,7 @@ const ColorMap = {
         scaleColor(number, min, max) {
             number = util.clamp(number, min, max)
             const scale = util.lerpScale(number, min, max)
+            if (isNaN(scale)) scale = 0
             const index = Math.round(util.lerp(0, this.length - 1, scale))
             return this[index]
         },
