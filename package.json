@@ -38,6 +38,8 @@
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
         "watch": "npm-run-all watch-src watch-models",
+        "run2d": "bin/runmodels models2",
+        "run3d": "bin/runmodels models3",
         "temp": "ava test/*.js"
     },
     "@pika/web": {
@@ -57,7 +59,7 @@
         "esm": "^3.2.25",
         "live-server": "latest",
         "npm-run-all": "4.1.2",
-        "puppeteer": "1.9.0",
+        "puppeteer": "latest",
         "rollup": "^1.15.0",
         "rollup-plugin-commonjs": "8.3.0",
         "rollup-plugin-terser": "^5.0.0",

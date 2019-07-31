@@ -1,8 +1,9 @@
-const util = AS.util
+const World = AS.World
 const Model = AS.Model
+const util = AS.util
 
 class AntsModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 255,
             speed: 1.0,
@@ -15,9 +16,9 @@ class AntsModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(40)) {
         super(worldDptions)
-        Object.assign(this, AntsModel.defaults())
+        Object.assign(this, AntsModel.defaultOptions())
     }
 
     setup() {

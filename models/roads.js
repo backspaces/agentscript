@@ -3,10 +3,10 @@ import util from '../src/util.js'
 import World from '../src/World.js'
 import RoadsModel from './RoadsModel.js'
 
-modelIO.testStartup({ RoadsModel, modelIO, World, util })
+modelIO.testStartup({ RoadsModel, modelIO, util })
 
-const options = World.defaultOptions(100)
-const model = new RoadsModel(options) // default world options
+// const options = World.defaultOptions(100)
+const model = new RoadsModel()
 
 model.startup().then(() => {
     model.setup()

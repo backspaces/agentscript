@@ -5,8 +5,8 @@ import WallFollowerModel from './WallFollowerModel.js'
 
 modelIO.testStartup({ WallFollowerModel, modelIO, util })
 
-const options = World.defaultOptions(35)
-const model = new WallFollowerModel(options)
+// const options = World.defaultOptions(35)
+const model = new WallFollowerModel()
 model.setup()
 
 modelIO.testSetup(model)

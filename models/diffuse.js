@@ -5,8 +5,8 @@ import DiffuseModel from './DiffuseModel.js'
 
 modelIO.testStartup({ DiffuseModel, modelIO, util })
 
-const options = World.defaultOptions(200, 100)
-const model = new DiffuseModel(options)
+// const options = World.defaultOptions(200, 100)
+const model = new DiffuseModel()
 model.setup()
 
 modelIO.testSetup(model)

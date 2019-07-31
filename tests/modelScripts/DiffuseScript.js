@@ -1,8 +1,9 @@
+const World = AS.World
 const Model = AS.Model
 const util = AS.util
 
 class DiffuseModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 2,
             speed: 0.5,
@@ -13,9 +14,9 @@ class DiffuseModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(200, 100)) {
         super(worldDptions)
-        Object.assign(this, DiffuseModel.defaults())
+        Object.assign(this, DiffuseModel.defaultOptions())
     }
 
     setup() {

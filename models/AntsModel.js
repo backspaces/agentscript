@@ -1,8 +1,9 @@
-import util from '../src/util.js'
+import World from '../src/World.js'
 import Model from '../src/Model.js'
+import util from '../src/util.js'
 
 export default class AntsModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 255,
             speed: 1.0,
@@ -15,9 +16,9 @@ export default class AntsModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(40)) {
         super(worldDptions)
-        Object.assign(this, AntsModel.defaults())
+        Object.assign(this, AntsModel.defaultOptions())
     }
 
     setup() {

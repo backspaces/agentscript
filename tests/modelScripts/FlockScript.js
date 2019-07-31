@@ -2,7 +2,7 @@ const Model = AS.Model
 const util = AS.util
 
 class FlockModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 1000,
             vision: 3,
@@ -15,8 +15,8 @@ class FlockModel extends Model {
     // ======================
 
     constructor(worldDptions) {
-        super(worldDptions)
-        Object.assign(this, FlockModel.defaults())
+        super(worldDptions) // default world options
+        Object.assign(this, FlockModel.defaultOptions())
     }
 
     // setMaxTurn(maxTurnDegrees) {

@@ -2,7 +2,7 @@ const Model = AS.Model
 const util = AS.util
 
 class WalkersModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 10,
             speed: 0.1,
@@ -14,8 +14,8 @@ class WalkersModel extends Model {
     // ======================
 
     constructor(worldDptions) {
-        super(worldDptions)
-        Object.assign(this, WalkersModel.defaults())
+        super(worldDptions) // default world options
+        Object.assign(this, WalkersModel.defaultOptions())
     }
     setup() {
         this.turtles.setDefault('atEdge', 'wrap')

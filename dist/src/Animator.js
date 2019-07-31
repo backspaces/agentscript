@@ -6,7 +6,7 @@
 //    https://developer.mozilla.org/en-US/docs/JavaScript/Timers)
 // * [Using timers & requestAnimationFrame together](http://goo.gl/ymEEX)
 
-class Animator {
+export default class Animator {
     // Create initial animator for the model, specifying rate (fps) and
     // multiStep. Called by Model during initialization, use setRate to modify.
     // If multiStep, run the draw() and step() methods separately by
@@ -58,7 +58,7 @@ class Animator {
     }
     draw() {
         this.draws++
-        this.view.draw()
+        this.view.draw(this.model)
     }
     // step and draw the model once
     once() {
@@ -120,5 +120,3 @@ class Animator {
         this.animateDraws()
     }
 }
-
-export default Animator

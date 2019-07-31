@@ -2,7 +2,7 @@ import Model from '../src/Model.js'
 import util from '../src/util.js'
 
 export default class HelloModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 10,
             speed: 0.1,
@@ -13,14 +13,11 @@ export default class HelloModel extends Model {
     // ======================
 
     constructor(worldDptions) {
-        super(worldDptions)
-        // Either of these work, ctor call doesn't need to know class name
-        // Object.assign(this, this.constructor.defaults())
-        Object.assign(this, HelloModel.defaults())
+        super(worldDptions) // default world options
+        Object.assign(this, HelloModel.defaultOptions())
     }
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')
-        // this.turtles.setDefault('speed', this.speed)
 
         this.turtles.create(this.population, t => {
             const patch = this.patches.oneOf()
@@ -29,6 +26,28 @@ export default class HelloModel extends Model {
 
         this.turtles.ask(t => {
             this.links.create(t, this.turtles.otherOneOf(t))
+        })
+    }
+
+    setPopulation(population) {
+        const delta = population - this.population
+        if (delta === 0) return
+
+        this.population = population
+        if (delta < 0) {
+            while (this.turtles.length !== population) {
+                this.turtles.oneOf().die()
+            }
+        } else {
+            this.turtles.create(delta, t => {
+                const patch = this.patches.oneOf()
+                t.setxy(patch.x, patch.y)
+            })
+        }
+        this.turtles.ask(t => {
+            if (t.links.length === 0) {
+                this.links.create(t, this.turtles.otherOneOf(t))
+            }
         })
     }
 

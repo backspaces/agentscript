@@ -1,8 +1,9 @@
+import World from '../src/World.js'
 import Model from '../src/Model.js'
 import util from '../src/util.js'
 
 export default class DiffuseModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 2,
             speed: 0.5,
@@ -13,9 +14,9 @@ export default class DiffuseModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(200, 100)) {
         super(worldDptions)
-        Object.assign(this, DiffuseModel.defaults())
+        Object.assign(this, DiffuseModel.defaultOptions())
     }
 
     setup() {

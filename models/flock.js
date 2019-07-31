@@ -4,7 +4,7 @@ import FlockModel from './FlockModel.js'
 
 modelIO.testStartup({ FlockModel, modelIO, util })
 
-const model = new FlockModel() // default world options
+const model = new FlockModel()
 model.setup()
 
 modelIO.testSetup(model)

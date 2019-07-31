@@ -1,9 +1,10 @@
-import util from '../src/util.js'
 import gis from '../src/gis.js'
+import World from '../src/World.js'
 import Model from '../src/Model.js'
+import util from '../src/util.js'
 
 export default class RoadsModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         const { Z, X, Y } = { Z: 14, X: 3370, Y: 6451 }
         return {
             zxy: { Z, X, Y },
@@ -13,9 +14,9 @@ export default class RoadsModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(100)) {
         super(worldDptions)
-        Object.assign(this, RoadsModel.defaults())
+        Object.assign(this, RoadsModel.defaultOptions())
         this.nodeCache = {}
     }
 

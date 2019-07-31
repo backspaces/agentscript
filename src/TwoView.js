@@ -4,15 +4,10 @@ import PatchesView from './PatchesView.js'
 import TurtlesView from './TurtlesView.js'
 
 export default class TwoView {
-    // static defaultOptions() {
-    //     const options = {
-    //         // canvasStack: false,
-    //         useSprites: false,
-    //         patchSize: 10,
-    //     }
-    //     return options
-    // }
-    //
+    static defaultOptions() {
+        return TurtlesView.defaultOptions()
+    }
+
     // ======================
 
     constructor(
@@ -20,6 +15,9 @@ export default class TwoView {
         worldOptions = World.defaultOptions(),
         options = {} // TwoView.defaultOptions()
     ) {
+        // options: override defaults:
+        options = Object.assign(TwoView.defaultOptions(), options)
+
         div = util.isString(div) ? document.getElementById(div) : div
         if (!util.isCanvas(div)) {
             const can = util.createCanvas(0, 0, false) // not offscreen
@@ -29,14 +27,17 @@ export default class TwoView {
 
         const ctx = div.getContext('2d')
         const world = new World(worldOptions)
-        // override defaults:
-        // options = Object.assign(TwoView.defaultOptions(), options)
-        options = Object.assign(TurtlesView.defaultOptions(), options)
+
         // Object.assign(this, { ctx, world }, options)
         Object.assign(this, { ctx, world })
 
         this.patchesView = new PatchesView(world.width, world.height)
         this.turtlesView = new TurtlesView(ctx, world, options)
+
+        this.ticks = 0
+    }
+    tick() {
+        this.ticks++
     }
     get canvas() {
         return this.ctx.canvas

@@ -5,8 +5,8 @@ import FireModel from './FireModel.js'
 
 modelIO.testStartup({ FireModel, modelIO, util })
 
-const options = World.defaultOptions(125)
-const model = new FireModel(options)
+// const options = World.defaultOptions(125)
+const model = new FireModel()
 model.setup()
 
 modelIO.testSetup(model)

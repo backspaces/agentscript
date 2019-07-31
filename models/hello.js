@@ -4,7 +4,7 @@ import HelloModel from './HelloModel.js'
 
 modelIO.testStartup({ HelloModel, modelIO, util })
 
-const model = new HelloModel() // default world options
+const model = new HelloModel()
 model.setup()
 
 modelIO.testSetup(model)

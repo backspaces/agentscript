@@ -1,9 +1,10 @@
-const util = AS.util
 const gis = AS.gis
+const World = AS.World
 const Model = AS.Model
+const util = AS.util
 
 class RoadsModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         const { Z, X, Y } = { Z: 14, X: 3370, Y: 6451 }
         return {
             zxy: { Z, X, Y },
@@ -13,9 +14,9 @@ class RoadsModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(100)) {
         super(worldDptions)
-        Object.assign(this, RoadsModel.defaults())
+        Object.assign(this, RoadsModel.defaultOptions())
         this.nodeCache = {}
     }
 

@@ -5,8 +5,8 @@ import ExitModel from './ExitModel.js'
 
 modelIO.testStartup({ ExitModel, modelIO, util })
 
-const options = World.defaultOptions(35)
-const model = new ExitModel(options)
+// const options = World.defaultOptions(35)
+const model = new ExitModel()
 model.setup()
 
 modelIO.testSetup(model)

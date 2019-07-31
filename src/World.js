@@ -16,6 +16,9 @@ export default class World {
     static defaultWorld(maxX = 16, maxY = maxX) {
         return new World(World.defaultOptions(maxX, maxY))
     }
+
+    // ======================
+
     // Initialize the world w/ defaults overridden w/ options.
     constructor(options = World.defaultOptions()) {
         // Object.assign(this, World.defaultOptions()) // initial this w/ defaults

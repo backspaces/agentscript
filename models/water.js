@@ -5,8 +5,8 @@ import WaterModel from './WaterModel.js'
 
 modelIO.testStartup({ WaterModel, modelIO, util })
 
-const options = World.defaultOptions(50)
-const model = new WaterModel(options)
+// const options = World.defaultOptions(50)
+const model = new WaterModel()
 model.setup()
 
 modelIO.testSetup(model)

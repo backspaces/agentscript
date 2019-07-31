@@ -1,8 +1,9 @@
+import World from '../src/World.js'
 import Model from '../src/Model.js'
 // import util from '../src/util.js'
 
 export default class WaterModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             strength: 100,
             surfaceTension: 56,
@@ -13,9 +14,9 @@ export default class WaterModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        Object.assign(this, WaterModel.defaults())
+        Object.assign(this, WaterModel.defaultOptions())
     }
     setup() {
         // this.cmap = ColorMap.gradientColorMap(256, ['navy', 'aqua'])

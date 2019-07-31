@@ -1,7 +1,7 @@
 import Model from '../src/Model.js'
 
 export default class ButtonsModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 200, // number of buttons
         }
@@ -10,8 +10,8 @@ export default class ButtonsModel extends Model {
     // ======================
 
     constructor(worldDptions) {
-        super(worldDptions)
-        Object.assign(this, ButtonsModel.defaults())
+        super(worldDptions) // default world options
+        Object.assign(this, ButtonsModel.defaultOptions())
     }
 
     setup() {

@@ -1,10 +1,11 @@
 const util = AS.util
+const World = AS.World
 const Model = AS.Model
 const AgentArray = AS.AgentArray
 const RGBDataSet = AS.RGBDataSet
 
 class DropletsModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             // stepType choices:
             //    'minNeighbor',
@@ -20,9 +21,9 @@ class DropletsModel extends Model {
     }
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        Object.assign(this, DropletsModel.defaults())
+        Object.assign(this, DropletsModel.defaultOptions())
     }
 
     async startup() {

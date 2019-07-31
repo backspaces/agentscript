@@ -47,8 +47,11 @@ export default class ThreeView {
     constructor(
         div = document.body,
         worldOptions = World.defaultOptions(),
-        options = ThreeView.defaultOptions()
+        options = {} // ThreeView.defaultOptions()
     ) {
+        // options: override defaults:
+        options = Object.assign(ThreeView.defaultOptions(), options)
+
         this.div = util.isString(div) ? document.getElementById(div) : div
         this.world = new World(worldOptions)
         this.renderOptions = options

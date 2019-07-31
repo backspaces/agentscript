@@ -4,6 +4,7 @@ import util from './util.js'
 
 export function testStartup(toWindowObj) {
     util.toWindow(toWindowObj)
+    window.util = util
     const usingPuppeteer = navigator.userAgent === 'Puppeteer'
     if (usingPuppeteer) util.randomSeed()
 }
@@ -22,6 +23,10 @@ export function testSetup(model) {
 
 export function testDone(model, propsNames = []) {
     const usingPuppeteer = navigator.userAgent === 'Puppeteer'
+    if (usingPuppeteer) {
+        window.modelSample = modelIO.sampleJSON(model)
+    }
+
     util.printToPage('')
     util.printToPage('Done:')
     propsNames.forEach(name => {
@@ -32,11 +37,8 @@ export function testDone(model, propsNames = []) {
     })
     // util.printToPage('')
     util.printToPage(modelIO.sampleObj(model))
-
-    if (usingPuppeteer) {
-        window.modelDone = model.modelDone = true
-        window.modelSample = model.modelSample = modelIO.sampleJSON(model)
-    }
+    // util.printToPage('JSON:')
+    // util.printToPage(modelIO.sampleJSON(model))
 }
 
 // ### Utilities

@@ -1,9 +1,9 @@
 // import ColorMap from '../src/ColorMap.js'
-const util = AS.util
 const Model = AS.Model
+const util = AS.util
 
 class LinkTravelModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             layoutCircle: true,
             numNodes: 30,
@@ -16,8 +16,8 @@ class LinkTravelModel extends Model {
     // ======================
 
     constructor(worldDptions) {
-        super(worldDptions)
-        Object.assign(this, LinkTravelModel.defaults())
+        super(worldDptions) // default world options
+        Object.assign(this, LinkTravelModel.defaultOptions())
     }
 
     setup() {

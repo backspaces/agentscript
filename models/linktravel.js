@@ -4,7 +4,7 @@ import LinkTravelModel from './LinkTravelModel.js'
 
 modelIO.testStartup({ LinkTravelModel, modelIO, util })
 
-const model = new LinkTravelModel() // default world options
+const model = new LinkTravelModel()
 model.setup()
 
 modelIO.testSetup(model)

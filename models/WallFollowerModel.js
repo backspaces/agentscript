@@ -1,6 +1,7 @@
 // import ColorMap from '../src/ColorMap.js'
-import util from '../src/util.js'
+import World from '../src/World.js'
 import Model from '../src/Model.js'
+import util from '../src/util.js'
 
 // The NetLogo models library wall followers example
 // http://ccl.northwestern.edu/netlogo/models/WallFollowingExample
@@ -16,7 +17,7 @@ import Model from '../src/Model.js'
 // by a +/-1 direction turtle variable.
 
 export default class WallFollowerModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 40,
             wallPercent: 0.04,
@@ -25,9 +26,9 @@ export default class WallFollowerModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(35)) {
         super(worldDptions)
-        Object.assign(this, WallFollowerModel.defaults())
+        Object.assign(this, WallFollowerModel.defaultOptions())
     }
 
     setup() {

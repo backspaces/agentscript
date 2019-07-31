@@ -2,7 +2,7 @@ import Model from '../src/Model.js'
 import util from '../src/util.js'
 
 export default class FlockModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             population: 1000,
             vision: 3,
@@ -15,8 +15,8 @@ export default class FlockModel extends Model {
     // ======================
 
     constructor(worldDptions) {
-        super(worldDptions)
-        Object.assign(this, FlockModel.defaults())
+        super(worldDptions) // default world options
+        Object.assign(this, FlockModel.defaultOptions())
     }
 
     // setMaxTurn(maxTurnDegrees) {

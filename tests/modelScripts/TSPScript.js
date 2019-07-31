@@ -1,8 +1,9 @@
+const World = AS.World
 const Model = AS.Model
 const util = AS.util
 
 class TSPModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             nodeCount: 50,
             travelersCount: 100,
@@ -14,9 +15,9 @@ class TSPModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        Object.assign(this, TSPModel.defaults())
+        Object.assign(this, TSPModel.defaultOptions())
     }
 
     setup() {

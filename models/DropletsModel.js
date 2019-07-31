@@ -1,10 +1,11 @@
 import util from '../src/util.js'
+import World from '../src/World.js'
 import Model from '../src/Model.js'
 import AgentArray from '../src/AgentArray.js'
 import RGBDataSet from '../src/RGBDataSet.js'
 
 export default class DropletsModel extends Model {
-    static defaults() {
+    static defaultOptions() {
         return {
             // stepType choices:
             //    'minNeighbor',
@@ -20,9 +21,9 @@ export default class DropletsModel extends Model {
     }
     // ======================
 
-    constructor(worldDptions) {
+    constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        Object.assign(this, DropletsModel.defaults())
+        Object.assign(this, DropletsModel.defaultOptions())
     }
 
     async startup() {

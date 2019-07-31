@@ -9,35 +9,23 @@ import Link from './Link.js'
 // Class Model is the primary interface for modelers, integrating
 // all the parts of a model. It also contains NetLogo's `observer` methods.
 class Model {
-    // Static class method for default setting.
-    // Default world is centered, min/max = 16
-    // static defaultWorld(maxX = 16, maxY = maxX) {
-    //     return World.defaultOptions(maxX, maxY)
-    // }
-    // static defaultWorldOptions(maxX = 16, maxY = maxX) {
-    //     return World.defaultOptions(maxX, maxY)
-    // }
-    // static defaultWorld(maxX = 16, maxY = maxX) {
-    //     return new World(World.defaultOptions(maxX, maxY))
-    // }
-
     // The Model constructor takes a World or WorldOptions object.
     constructor(worldOptions = World.defaultOptions()) {
-        this.worldOptions = worldOptions
-        this.resetModel() // REMIND: Temporary. Inline?
+        this.resetModel(worldOptions)
     }
-    initAgentSet(name, AgentsetClass, AgentClass) {
-        const agentset = new AgentsetClass(this, AgentClass, name)
-        this[name] = agentset
-    }
-    resetModel() {
+
+    resetModel(worldOptions) {
+        const initAgentSet = (name, AgentsetClass, AgentClass) => {
+            this[name] = new AgentsetClass(this, AgentClass, name)
+        }
         this.ticks = 0
-        this.world = new World(this.worldOptions)
+        this.world = new World(worldOptions)
         // Base AgentSets setup here. Breeds handled by setup
-        this.initAgentSet('patches', Patches, Patch)
-        this.initAgentSet('turtles', Turtles, Turtle)
-        this.initAgentSet('links', Links, Link)
+        initAgentSet('patches', Patches, Patch)
+        initAgentSet('turtles', Turtles, Turtle)
+        initAgentSet('links', Links, Link)
     }
+
     reset() {
         this.resetModel()
     }
@@ -50,6 +38,10 @@ class Model {
     // A user's model is made by subclassing Model and over-riding these
     // 2 abstract methods. `super` need not be called.
 
+    isAsync() {
+        return this.startup.toString() !== 'async startup() {}'
+    }
+    async startup() {}
     setup() {} // Your initialization code goes here
     // Update/step your model here
     step() {} // called each step of the model
