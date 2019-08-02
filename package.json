@@ -31,9 +31,10 @@
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "build": "npm-run-all clean build-scripts build-dist ",
-        "build-dist": "rollup -c && cp -R src dist && rollup -c rollup.three.js && cp node_modules/dat.gui/build/dat.gui.module.js dist",
+        "build": "npm-run-all clean build-scripts build-dist build-vendor",
+        "build-dist": "rollup -c && cp -R src dist",
         "build-scripts": "node bin/models2scripts",
+        "build-vendor": "cp node_modules/dat.gui/build/dat.gui.module.js dist && rollup -c rollup.three.js",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",

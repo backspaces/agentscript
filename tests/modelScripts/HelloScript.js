@@ -45,9 +45,11 @@ export class HelloModelPlus extends HelloModel {
         super.step()
     }
     checkPopulation() {
+        // return if no change
         const delta = this.population - this.turtles.length
         if (delta === 0) return
 
+        // add/remove turtles as needed
         if (delta < 0) {
             util.repeat(-delta, () => this.turtles.oneOf().die())
         } else {
