@@ -27,12 +27,12 @@
     "scripts comments": {
         "ava": "0.25.0",
         "build-bin": "rollup -f umd -n gis src/gis.js > bin/gis.umd.js",
-        "postinstall": "rollup -c rollup.vendor.js"
+        "postinstall": "rollup -c rollup.three.js"
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
         "build": "npm-run-all clean build-scripts build-dist ",
-        "build-dist": "rollup -c && rollup -c rollup.vendor.js && cp -R src dist",
+        "build-dist": "rollup -c && cp -R src dist && rollup -c rollup.three.js && cp node_modules/dat.gui/build/dat.gui.module.js dist",
         "build-scripts": "node bin/models2scripts",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
@@ -50,6 +50,7 @@
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
+        "dat.gui": "^0.7.6",
         "three": "latest"
     },
     "devDependencies": {

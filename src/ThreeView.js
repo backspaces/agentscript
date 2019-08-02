@@ -4,7 +4,7 @@ import SpriteSheet from './SpriteSheet.js'
 import PatchesView from './PatchesView.js'
 import ThreeMeshes from './ThreeMeshes.js'
 
-import { THREE, OrbitControls } from '../dist/vendor.esm.js'
+import { THREE, OrbitControls } from '../dist/three.esm.js'
 
 // util.toWindow({ THREE, OrbitControls })
 

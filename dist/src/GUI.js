@@ -1,5 +1,6 @@
 import util from './util.js'
-import dat from 'https://unpkg.com/dat.gui/build/dat.gui.module.js'
+// import dat from 'https://unpkg.com/dat.gui/build/dat.gui.module.js'
+import dat from '../dist/dat.gui.module.js'
 
 export default class GUI {
     constructor(template, callback = null) {

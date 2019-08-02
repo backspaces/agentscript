@@ -10,7 +10,7 @@
             const appName = Object.keys(modelParams)[0] || 'hello'
             const appPath = `./${appName}.js`
             console.log('running:', appPath)
-            document.title = `${appName}`
+            document.title = `M:${appName}`
 
             // Note: using import() causes tests to pause in puppeteer.
             // util.setScript(appPath, { type: 'module' })

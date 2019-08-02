@@ -29,32 +29,38 @@ class HelloModel extends Model {
         })
     }
 
-    setPopulation(population) {
-        const delta = population - this.population
+    step() {
+        this.turtles.ask(t => {
+            t.direction += util.randomCentered(this.wiggle)
+            t.forward(this.speed)
+        })
+    }
+}
+
+// Here is a simple modification that allows setting the population dynamically.
+// Note that speed & wiggle are already dynamic.
+export class HelloModelPlus extends HelloModel {
+    step() {
+        this.checkPopulation()
+        super.step()
+    }
+    checkPopulation() {
+        const delta = this.population - this.turtles.length
         if (delta === 0) return
 
-        this.population = population
         if (delta < 0) {
-            while (this.turtles.length !== population) {
-                this.turtles.oneOf().die()
-            }
+            util.repeat(-delta, () => this.turtles.oneOf().die())
         } else {
             this.turtles.create(delta, t => {
                 const patch = this.patches.oneOf()
                 t.setxy(patch.x, patch.y)
             })
         }
+        // make sure all turtles have at least one link
         this.turtles.ask(t => {
             if (t.links.length === 0) {
                 this.links.create(t, this.turtles.otherOneOf(t))
             }
-        })
-    }
-
-    step() {
-        this.turtles.ask(t => {
-            t.direction += util.randomCentered(this.wiggle)
-            t.forward(this.speed)
         })
     }
 }

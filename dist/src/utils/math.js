@@ -45,7 +45,12 @@ export const between = (val, min, max) => min <= val && val <= max
 export const lerp = (lo, hi, scale) =>
     lo <= hi ? lo + (hi - lo) * scale : lo - (lo - hi) * scale
 // Calculate the lerp scale given lo/hi pair and a number between them.
-export const lerpScale = (number, lo, hi) => (number - lo) / (hi - lo)
+// Clamps number to be between lo & hi.
+export function lerpScale(number, lo, hi) {
+    if (lo === hi) throw Error('lerpScale: lo === hi')
+    number = util.clamp(number, lo, hi)
+    return (number - lo) / (hi - lo)
+}
 
 // ### Geometry
 

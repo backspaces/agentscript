@@ -1,9 +1,9 @@
 import { terser } from 'rollup-plugin-terser'
 
 export default {
-    input: './vendor.js',
+    input: './three.index.js',
     output: {
-        file: 'dist/vendor.esm.js',
+        file: 'dist/three.esm.js',
         format: 'es',
         banner: '/* eslint-disable */',
     },
