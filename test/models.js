@@ -9,26 +9,21 @@ liveServer.start({
     ignore: '*',
 })
 
+// Stunt to avoid shell.echo printing str .. silent mode.
 const samplesFile = 'test/samples.txt'
 const to = str => new shell.ShellString(str + '\n').to(samplesFile)
 const toEnd = str => new shell.ShellString(str + '\n').toEnd(samplesFile)
 
 const models = shell
-    .ls('models/[a-z]*.js') // Avoid FooModel.js, just foo.js
-    .sed(/^models./, '')
-    .sed(/.js$/, '')
+    .ls('models/*Model.js') // Just the Model files
+    .sed(/^models\//, '')
+    .sed(/Model.js$/, '')
     .replace(/\n$/, '')
     .split('\n')
-// const models = ['roads']
+    .map(str => str.charAt(0).toLowerCase() + str.slice(1))
+
 shell.echo(models)
-// shell.echo('const testSamples = {').to(samplesFile)
 to('const testSamples = {')
-
-// const delay = (seconds = 1) =>
-//     new Promise(resolve => setTimeout(resolve, seconds * 1000))
-
-// const puppeteerHeadless = true
-const [width, height] = [500, 500]
 
 models.forEach(async model => {
     await test.serial(model, async t => {
@@ -36,27 +31,18 @@ models.forEach(async model => {
         // Let model know it is being run by Puppeteer:
         const browser = await puppeteer.launch({
             args: [
+                // Let model know it is being run by Puppeteer:
                 '--user-agent=Puppeteer',
-                `--window-size=${width},${height}`,
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
+                // Don't know if these still needed: CI?
+                // '--no-sandbox',
+                // '--disable-setuid-sandbox',
             ],
             headless: true,
         })
         const page = await browser.newPage()
-        // await page.setViewport({ width, height })
         await page.setDefaultNavigationTimeout(200000)
 
         await page.goto(url)
-        // Typically modelDone returns true immediately!
-        // while (!(await page.evaluate(() => window.modelSample))) {
-        //     console.log('Puppeteer waiting till model done:', model)
-        //     await delay()
-        // }
-        // await page.evaluate(() => {
-        //     return util.waitPromise(() => window.util && window.modelDone)
-        // })
-        // const sample = await page.evaluate('window.modelSample')
 
         const sample = await page.evaluate(() => {
             return new Promise(resolve => {
@@ -76,20 +62,11 @@ models.forEach(async model => {
         toEnd(`    '${sample}',`)
         if (model === models[models.length - 1]) toEnd('}')
 
-        // shell.echo(`${model}:`).toEnd(samplesFile)
-        // shell.echo(`    '${sample}',`).toEnd(samplesFile)
-        // if (model === models[models.length - 1]) {
-        //     shell.echo('}').toEnd(samplesFile)
-        // }
-
-        // console.log(`\n\nTesting: ${model} ${url}\n'${sample}',\n`)
         if (testSample) {
             t.is(sample, testSample)
         } else {
             t.pass()
         }
-
-        // await delay(2)
 
         await page.close()
         await browser.close()

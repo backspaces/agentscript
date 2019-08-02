@@ -2,8 +2,8 @@ import util from './util.js'
 
 // ### Sugar functions for running models:
 
-export function testStartup(toWindowObj) {
-    util.toWindow(toWindowObj)
+export function testStartup(toWindowObj = null) {
+    if (toWindowObj) util.toWindow(toWindowObj)
     window.util = util
     const usingPuppeteer = navigator.userAgent === 'Puppeteer'
     if (usingPuppeteer) util.randomSeed()
