@@ -54,6 +54,8 @@ const handleMouse = mouse => {
     case 'down':
         selectedTurtle = model.turtles.closestTurtle(xCor, yCor, 2)
         // console.log('down', selectedTurtle)
+        if (selectedTurtle === null) return
+        selectedTurtle.setxy(xCor, yCor)
         break
     case 'drag':
         if (selectedTurtle === null) return
