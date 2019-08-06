@@ -23,13 +23,22 @@ class Turtles extends AgentSet {
         })
     }
 
-    // Return a random valid float x,y point in turtle coord space.
-    randomPt() {
-        const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world
-        return [
-            util.randomFloat2(minXcor, maxXcor),
-            util.randomFloat2(minYcor, maxYcor),
-        ]
+    // // Return a random valid float x,y point in turtle coord space.
+    // randomPt() {
+    //     const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world
+    //     return [
+    //         util.randomFloat2(minXcor, maxXcor),
+    //         util.randomFloat2(minYcor, maxYcor),
+    //     ]
+    // }
+
+    // Return the closest turtle within radius distance of x,y
+    // Return null if no turtles within radius
+    closestTurtle(x, y, radius) {
+        const ts = this.inPatchRectXY(x, y, radius)
+        if (ts.length === 0) return null
+        return ts.minOneOf(t => t.distanceXY(x, y))
+        //pDisk.minOneOf(t => t.dist)
     }
 
     // Return an array of this breed within the array of patchs
@@ -40,20 +49,32 @@ class Turtles extends AgentSet {
         if (this.isBreedSet()) array = array.filter(a => a.agentSet === this)
         return array
     }
+
     // Return an array of turtles/breeds within the patchRect, dx/y integers
     // Note: will return turtle too. Also slightly inaccurate due to being
     // patch based, not turtle based.
     inPatchRect(turtle, dx, dy = dx, meToo = false) {
         // meToo: true for patches, could have several turtles on patch
-        const patches = this.model.patches.inRect(turtle.patch, dx, dy, true)
-        const agents = this.inPatches(patches)
+        // const patches = this.model.patches.inRect(turtle.patch, dx, dy, true)
+        // const agents = this.inPatches(patches)
+        const agents = this.inPatchRectXY(turtle.x, turtle.y, dx, dy)
         // don't use agents.removeAgent: breeds
         if (!meToo) util.removeArrayItem(agents, turtle)
         // if (!meToo) util.removeItem(agents, turtle)
         return agents // this.inPatches(patches)
+        // return this.inPatchRect(turtle.x, turtle.y, dx, dy, meToo)
     }
+    inPatchRectXY(x, y, dx, dy = dx) {
+        const patches = this.model.patches.patchRectXY(x, y, dx, dy, true)
+        return this.inPatches(patches)
+    }
+
     // Return the members of this agentset that are within radius distance
     // from me, using a patch rect.
+    // inRadiusXY(x, y, radius, meToo = false) {
+    //     const agents = this.inPatchRectXY(x, y, radius)
+    //     return agents.inRadius(turtle, radius, meToo)
+    // }
     inRadius(turtle, radius, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true)
         return agents.inRadius(turtle, radius, meToo)

@@ -10,9 +10,11 @@ export default class GUI {
         this.gui = new dat.GUI()
         util.forLoop(template, (obj, key) => {
             this.parse(obj)
-            console.log(key, obj)
+            // console.log(key, obj)
             this.addUI(this.target, key, obj)
+            // console.log(key, obj)
         })
+        // console.log('gui', this)
     }
     parse(options) {
         let functionType = null

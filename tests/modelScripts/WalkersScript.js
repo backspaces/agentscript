@@ -22,7 +22,7 @@ class WalkersModel extends Model {
 
         this.turtles.create(this.population, t => {
             t.speed = this.speed + util.randomCentered(this.speedDelta)
-            t.setxy(...this.world.randomPosition())
+            t.setxy(...this.world.randomPoint())
         })
     }
     step() {

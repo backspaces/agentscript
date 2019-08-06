@@ -14,14 +14,14 @@ const colors = ColorMap.Rgb256
 view.createPatchPixels(() => colors.randomColor().pixel)
 view.drawPatches()
 
-const callback = e => {
+const callback = mouse => {
     const { xCor, yCor } = mouse
-    console.log(xCor, yCor)
+    // console.log(xCor, yCor)
     const color = mouse.down ? colors[0] : colors.randomColor()
     view.setPatchPixel(xCor, yCor, color.pixel)
     view.drawPatches()
 }
-const mouse = new Mouse(view.canvas, world, callback)
+const mouse = new Mouse(view.canvas, world, callback).start()
 util.toWindow({ model, view, world, mouse, colors })
 
-mouse.start()
+// mouse.start()

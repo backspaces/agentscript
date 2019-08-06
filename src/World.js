@@ -40,16 +40,17 @@ export default class World {
         this.centerY = (this.minY + this.maxY) / 2
         this.numPatches = this.width * this.height
     }
-    randomPosition(float = true) {
-        return float
-            ? [
-                util.randomFloat2(this.minXcor, this.maxXcor),
-                util.randomFloat2(this.minYcor, this.maxYcor),
-            ]
-            : [
-                util.randomInt2(this.minX, this.maxX),
-                util.randomInt2(this.minY, this.maxY),
-            ]
+    randomPoint() {
+        return [
+            util.randomFloat2(this.minXcor, this.maxXcor),
+            util.randomFloat2(this.minYcor, this.maxYcor),
+        ]
+    }
+    randomPatchPoint() {
+        return [
+            util.randomInt2(this.minX, this.maxX),
+            util.randomInt2(this.minY, this.maxY),
+        ]
     }
     // Test x,y for being on-world.
     isOnWorld(x, y) {

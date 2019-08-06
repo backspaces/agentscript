@@ -33,7 +33,7 @@ class ButtonsModel extends Model {
         // })
 
         this.turtles.create(this.population, t =>
-            t.setxy(...this.patches.randomPt())
+            t.setxy(...this.world.randomPatchPoint())
         )
     }
 

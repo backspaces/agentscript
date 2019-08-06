@@ -29,7 +29,7 @@
                 model.setup()
                 modelIO.testSetup(model)
 
-                util.yieldLoop(() => {
+                await util.timeoutLoop(() => {
                     model.step()
                     model.tick()
                 }, 500)

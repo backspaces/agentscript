@@ -33,7 +33,7 @@ models.forEach(async model => {
             args: [
                 // Let model know it is being run by Puppeteer:
                 '--user-agent=Puppeteer',
-                // Don't know if these still needed: CI?
+                // Don't know if these still needed: CI nneded a while back?
                 // '--no-sandbox',
                 // '--disable-setuid-sandbox',
             ],

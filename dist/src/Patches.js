@@ -102,11 +102,11 @@ class Patches extends AgentSet {
         return as
     }
 
-    // Return a random valid int x,y point in patch space
-    randomPt() {
-        const { minX, maxX, minY, maxY } = this.model.world
-        return [util.randomInt2(minX, maxX), util.randomInt2(minY, maxY)]
-    }
+    // // Return a random valid int x,y point in patch space
+    // randomPt() {
+    //     const { minX, maxX, minY, maxY } = this.model.world
+    //     return [util.randomInt2(minX, maxX), util.randomInt2(minY, maxY)]
+    // }
 
     // Import/export DataSet to/from patch variable `patchVar`.
     // `useNearest`: true for fast rounding to nearest; false for bi-linear.
