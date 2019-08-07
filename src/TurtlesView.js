@@ -3,12 +3,16 @@ import Shapes from './Shapes.js'
 
 export default class TurtlesView {
     static defaultOptions() {
-        const options = {
+        // const options = {
+        //     // canvasStack: false,
+        //     useSprites: false,
+        //     patchSize: 10,
+        // }
+        return {
             // canvasStack: false,
             useSprites: false,
             patchSize: 10,
         }
-        return options
     }
 
     // constructor(ctx, patchSize, world, useSprites = false) {
@@ -16,9 +20,9 @@ export default class TurtlesView {
         options = Object.assign(TurtlesView.defaultOptions(), options)
         Object.assign(this, { ctx, world }, options)
         this.shapes = new Shapes()
-        this.resetCtx(this.patchSize, this.useSprites)
+        this.reset(this.patchSize, this.useSprites)
     }
-    reset(patchSize, useSprites) {
+    reset(patchSize, useSprites = this.useSprites) {
         this.useSprites = useSprites
         this.resetCtx(patchSize) // sets this.patchSize
     }
@@ -32,9 +36,12 @@ export default class TurtlesView {
         if (this.useSprites) {
             // If using sprites, do not install the transform
             this.world.setCanvasSize(this.ctx.canvas, patchSize)
+            // Fix for sticky euclidean xfm if no size change
+            this.ctx.restore()
+            // util.setIdentity(this.ctx)
         } else {
             // If using shapes, create euclidean transform.
-            this.world.setCtxTransform(this.ctx, patchSize)
+            this.world.setEuclideanTransform(this.ctx, patchSize)
         }
     }
 

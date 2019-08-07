@@ -45,11 +45,18 @@ export default class TwoView {
     reset(patchSize, useSprites = this.useSprites) {
         this.turtlesView.reset(patchSize, useSprites)
     }
+
     get patchSize() {
         return this.turtlesView.patchSize
     }
+    set patchSize(val) {
+        this.reset(val, this.useSprites)
+    }
     get useSprites() {
         return this.turtlesView.useSprites
+    }
+    set useSprites(val) {
+        this.reset(this.patchSize, val)
     }
 
     clear(cssColor = null) {

@@ -14,8 +14,8 @@ class Links extends AgentSet {
         return link
     }
     create(from, to, initFcn = link => {}) {
-        if (!Array.isArray(to)) return this.createOne(from, to, initFcn)
-        // if (!Array.isArray(to)) to = [to]
+        // if (!Array.isArray(to)) return this.createOne(from, to, initFcn)
+        if (!Array.isArray(to)) to = [to]
         // Return array of new links. REMIND: should be agentarray?
         return to.map(t => {
             // REMIND: skip dups

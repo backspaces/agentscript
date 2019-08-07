@@ -76,9 +76,10 @@ export default class World {
 
     // Convert a canvas context to world euclidean coordinates
     // Change the ctx.canvas size, determined by patchSize.
-    setCtxTransform(ctx, patchSize) {
-        ctx.canvas.width = this.numX * patchSize
-        ctx.canvas.height = this.numY * patchSize
+    setEuclideanTransform(ctx, patchSize) {
+        // ctx.canvas.width = this.numX * patchSize
+        // ctx.canvas.height = this.numY * patchSize
+        this.setCanvasSize(ctx.canvas, patchSize)
         ctx.restore() // close earlier save(). OK if no save called yet.
         ctx.save()
         ctx.scale(patchSize, -patchSize)

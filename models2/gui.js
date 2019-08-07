@@ -29,7 +29,7 @@ const template = {
     },
     shape: {
         value: 'dart',
-        extent: ['dart', 'circle', 'square'],
+        extent: ['dart', 'circle', 'square', 'bug'],
         cmd: val => (view.shape = val),
     },
     shapeSize: {
@@ -38,9 +38,10 @@ const template = {
         cmd: val => (view.shapeSize = val),
     },
     run: { value: () => animator.toggle() },
+    useSprites: { value: false, cmd: val => (view.useSprites = val) },
     population: {
-        value: 10,
-        extent: [10, 1000, 10],
+        value: 20,
+        extent: [5, 1000, 5],
         cmd: val => (model.population = val),
     },
 }
@@ -69,10 +70,11 @@ const handleMouse = mouse => {
 }
 
 const model = new HelloModelPlus()
+util.assign(model, controls, 'speed wiggle population')
 model.setup()
 
 const view = new HelloView('modelDiv', model.world, {
-    useSprites: true,
+    useSprites: controls.useSprites,
     patchSize: controls.patchSize,
 })
 
@@ -81,3 +83,5 @@ animator.start()
 
 const mouse = new Mouse(view.canvas, model.world, handleMouse).start()
 util.toWindow({ template, controls, mouse, model, view, animator })
+const { patches, turtles, links } = model
+util.toWindow({ patches, turtles, links })

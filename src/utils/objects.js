@@ -65,6 +65,7 @@ export function arraysEqual(a1, a2) {
 export function removeArrayItem(array, item) {
     const ix = array.indexOf(item)
     if (ix !== -1) array.splice(ix, 1)
+    // else throw Error(`removeArrayItem: ${item} not in array`)
     else console.log(`removeArrayItem: ${item} not in array`)
     return array // for chaining
 }
@@ -101,6 +102,22 @@ export function forLoop(arrayOrObj, fcn) {
 // Return a new shallow of array, either Array or TypedArray
 export function clone(array) {
     return array.slice(0)
+}
+
+// Assign values from one object to another.
+// Values is a string of space separated property names.
+// Similar to Object.assign:
+//    util.assign(model, controls, 'speed wiggle population')
+// is equivalent to
+//    {
+//        const { speed, wiggle, population } = controls
+//        Object.assign(model, { speed, wiggle, population })
+//    }
+export function assign(to, from, values) {
+    values = values.split(' ')
+    this.forLoop(values, val => {
+        to[val] = from[val]
+    })
 }
 
 // Return a new array that is the concatination two arrays.
