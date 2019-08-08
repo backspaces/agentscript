@@ -67,8 +67,8 @@ export default class GUI {
             control = this.gui.add(target, name)
             break
 
-        case 'input':
         case 'monitor':
+        case 'input':
             control = this.gui.add(target, name)
             break
 

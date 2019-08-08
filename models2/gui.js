@@ -44,6 +44,7 @@ const template = {
         extent: [5, 1000, 5],
         cmd: val => (model.population = val),
     },
+    perf: { value: 0, cmd: 'listen' },
 }
 const controls = new GUI(template).target
 
@@ -81,7 +82,11 @@ const view = new HelloView('modelDiv', model.world, {
 const animator = new Animator(model, view, controls.fps)
 animator.start()
 
+// REMIND: use evented animator!
+util.timeoutLoop(() => (controls.perf = animator.fps), -1, 1000)
+
 const mouse = new Mouse(view.canvas, model.world, handleMouse).start()
+
 util.toWindow({ template, controls, mouse, model, view, animator })
 const { patches, turtles, links } = model
 util.toWindow({ patches, turtles, links })
