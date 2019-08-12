@@ -30,7 +30,7 @@ class RoadsModel extends Model {
         let node = this.nodeCache[key]
         if (node) return node
 
-        node = this.turtles.create(1, t => {
+        node = this.turtles.createOne(t => {
             t.setxy(...this.xfm.toWorld(pt))
         })
         this.nodeCache[key] = node
@@ -39,7 +39,7 @@ class RoadsModel extends Model {
     newLink(pt0, pt1) {
         const t0 = this.getNode(pt0)
         const t1 = this.getNode(pt1)
-        return this.links.create(t0, t1)
+        return this.links.createOne(t0, t1)
     }
     lineStringToLinks(lineString) {
         // const lineLinks =

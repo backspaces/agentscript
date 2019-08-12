@@ -80,6 +80,9 @@ export function fillCtx(ctx, cssColor) {
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.restore()
 }
+// These image functions use "imagable" objects: Image, ImageBitmap, Canvas ...
+// https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
+
 // Fill this context with the given image. Will scale image to fit ctx size.
 export function fillCtxWithImage(ctx, img) {
     setIdentity(ctx) // set/restore identity
@@ -96,6 +99,7 @@ export function setCtxImage(ctx, img) {
 // or color profile modification.
 // Img can be Image, ImageData, Canvas: [See MDN](https://goo.gl/a3oyRA).
 // `flipY` is used to invert image to upright.
+// REMIND: use webgl12 if it works .. allows all imagables, not just Image.
 const imageToBytesCtx = null
 export function imageToBytes(img, flipY = false, imgFormat = 'RGBA') {
     // Create the gl context using the image width and height

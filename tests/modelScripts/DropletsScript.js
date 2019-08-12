@@ -14,6 +14,7 @@ class DropletsModel extends Model {
             //    'dataSetAspectBilinear',
             stepType: 'dataSetAspectNearest',
             killOffworld: false, // Kill vs clamp turtles when offworld.
+            // tile: './dropletstile.png',
             tile:
                 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png',
             speed: 0.2,
@@ -27,7 +28,9 @@ class DropletsModel extends Model {
     }
 
     async startup() {
-        const png = await util.imagePromise(this.tile)
+        // const png = await util.imagePromise(this.tile)
+        const png = await util.imageBitmapPromise(this.tile)
+        console.log('png', png)
         const elevation = new RGBDataSet(png, -32768, 1 / 256, AgentArray)
         this.installDataSets(elevation)
 

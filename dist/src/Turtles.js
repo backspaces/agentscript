@@ -5,21 +5,29 @@ import AgentSet from './AgentSet.js'
 // Turtles are the world other agentsets live on. They create a coord system
 // from Model's world values: size, minX, maxX, minY, maxY
 class Turtles extends AgentSet {
-    // Use AgentSet ctr: constructor (model, AgentClass, name)
-    createOne(initFcn) {
+    // Factories:
+    // Add 1 or more turtles.
+    // Can be a single turtle or an array of turtles. The optional init
+    // proc is called on the new link after inserting in the agentSet.
+
+    // Return a single turtle
+    createOne(initFcn = turtle => {}) {
         const turtle = this.addAgent()
         turtle.theta = util.randomFloat(Math.PI * 2)
         initFcn(turtle)
         return turtle
     }
-    create(num = 1, initFcn = turtle => {}) {
-        if (num === 1) return this.createOne(initFcn)
+    // Create num turtles, returning an array.
+    // If num == 1, return array with single turtle
+    create(num, initFcn = turtle => {}) {
+        // if (num === 1) return this.createOne(initFcn)
         return util.repeat(num, (i, a) => {
-            const turtle = this.addAgent()
-            turtle.theta = util.randomFloat(Math.PI * 2)
-            initFcn(turtle)
+            // const turtle = this.addAgent()
+            // turtle.theta = util.randomFloat(Math.PI * 2)
+            // initFcn(turtle)
             // Return array of new agents. REMIND: should be agentarray?
-            a.push(turtle)
+            // a.push(turtle)
+            a.push(this.createOne(initFcn))
         })
     }
 

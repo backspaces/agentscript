@@ -11,6 +11,10 @@ export function imagePromise(url) {
         img.src = url
     })
 }
+export async function imageBitmapPromise(url) {
+    const blob = await xhrPromise(url, 'blob')
+    return createImageBitmap(blob)
+}
 
 // Convert canvas.toBlob to a promise
 export function canvasBlobPromise(can, mimeType = 'image/png', quality = 0.95) {

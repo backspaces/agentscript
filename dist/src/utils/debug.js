@@ -1,30 +1,5 @@
 import { isObject } from './types.js'
 
-// Two seedable random number generators
-export function randomSeedSin(seed = Math.PI / 4) {
-    // ~3.4 million b4 repeat.
-    // https://stackoverflow.com/a/19303725/1791917
-    return () => {
-        const x = Math.sin(seed++) * 10000
-        return x - Math.floor(x)
-    }
-}
-export function randomSeedParkMiller(seed = 123456) {
-    // doesn't repeat b4 JS dies.
-    // https://gist.github.com/blixt/f17b47c62508be59987b
-    seed = seed % 2147483647
-    return () => {
-        seed = (seed * 16807) % 2147483647
-        return (seed - 1) / 2147483646
-    }
-}
-// Replace Math.random with one of these
-export function randomSeed(seed, useParkMiller = true) {
-    Math.random = useParkMiller
-        ? randomSeedParkMiller(seed)
-        : randomSeedSin(seed)
-}
-
 // Print a message just once.
 let logOnceMsgSet
 export function logOnce(msg) {
