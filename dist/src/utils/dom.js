@@ -1,3 +1,4 @@
+// import { isObject } from './types.js' // see printToPage
 // ### HTML, CSS, DOM
 
 // REST: Parse the query, returning an object of key/val pairs.
@@ -27,6 +28,21 @@ export function setScript(path, props = {}) {
     scriptTag.src = path
     Object.assign(scriptTag, props)
     document.querySelector('head').appendChild(scriptTag)
+}
+
+// Print a message to an html element
+// Default to document.body if in browser.
+// If msg is an object, convert to JSON
+// (object canot have cycles etc)
+export function printToPage(msg, element = document.body) {
+    // if (isObject(msg)) {
+    if (typeof msg === 'object') {
+        msg = JSON.stringify(msg, null, 2)
+        msg = '<pre>' + msg + '</pre>'
+    }
+
+    element.style.fontFamily = 'monospace'
+    element.innerHTML += msg + '<br />'
 }
 
 // Convert a function into a worker via blob url.

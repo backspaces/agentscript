@@ -1,9 +1,4 @@
-import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
-
-// import AntsModel from '../models/AntsModel.js'
-// console.log('worker self', self)
-// console.log('modules', modelIO, util)
 
 let model, params
 
@@ -47,7 +42,7 @@ onmessage = e => {
             })
             console.log('worker: done, model', model)
 
-            postMessage(modelIO.sampleObj(model))
+            postMessage(util.sampleModel(model))
         }
         run()
 

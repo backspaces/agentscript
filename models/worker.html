@@ -1,12 +1,11 @@
 <html>
     <head>
         <title>test</title>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            // import * as modelIO from '../src/modelIO.js'
 
             const modelParams = util.parseQueryString()
             const str = Object.keys(modelParams)[0] || 'hello'
@@ -18,41 +17,18 @@
             const params = {
                 classPath: `./${className}.js`,
                 steps: 500,
-                seed: true,
+                seed: navigator.userAgent === 'Puppeteer',
             }
+            console.log(params)
 
             const worker = new Worker('./runWorker.js', { type: 'module' })
             worker.postMessage({ cmd: 'init', params: params })
             worker.onmessage = e => {
                 console.log(e.data)
                 util.printToPage(e.data)
-                window.modelSample = JSON.stringify(e.data)
+                if (params.seed) window.modelSample = JSON.stringify(e.data)
                 worker.terminate()
             }
-
-            // async function run() {
-            //     const module = await import(`./${className}.js`)
-            //     const Model = module.default
-            //     // util.toWindow({ module, Model, modelIO, util })
-
-            //     modelIO.testStartup()
-
-            //     const model = new Model()
-            //     util.toWindow({ model, module, Model, modelIO, util })
-
-            //     await model.startup()
-
-            //     model.setup()
-            //     modelIO.testSetup(model)
-
-            //     await util.timeoutLoop(() => {
-            //         model.step()
-            //         model.tick()
-            //     }, 500)
-
-            //     modelIO.testDone(model)
-            // }
-            // run()
         </script>
         <div id="modelDiv"></div>
     </body>

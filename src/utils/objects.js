@@ -118,6 +118,7 @@ export function assign(to, from, values) {
     this.forLoop(values, val => {
         to[val] = from[val]
     })
+    return to
 }
 
 // Return a new array that is the concatination two arrays.

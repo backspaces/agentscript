@@ -22,23 +22,9 @@ class Turtles extends AgentSet {
     create(num, initFcn = turtle => {}) {
         // if (num === 1) return this.createOne(initFcn)
         return util.repeat(num, (i, a) => {
-            // const turtle = this.addAgent()
-            // turtle.theta = util.randomFloat(Math.PI * 2)
-            // initFcn(turtle)
-            // Return array of new agents. REMIND: should be agentarray?
-            // a.push(turtle)
             a.push(this.createOne(initFcn))
         })
     }
-
-    // // Return a random valid float x,y point in turtle coord space.
-    // randomPt() {
-    //     const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world
-    //     return [
-    //         util.randomFloat2(minXcor, maxXcor),
-    //         util.randomFloat2(minYcor, maxYcor),
-    //     ]
-    // }
 
     // Return the closest turtle within radius distance of x,y
     // Return null if no turtles within radius

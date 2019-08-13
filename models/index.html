@@ -1,16 +1,11 @@
 <html>
     <head>
         <title>test</title>
-        <link
-            rel="icon"
-            type="image/x-icon"
-            href="https://backspaces.github.io/agentscript/favicon.ico"
-        />
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import * as modelIO from '../src/modelIO.js'
 
             const modelParams = util.parseQueryString()
             const str = Object.keys(modelParams)[0] || 'hello'
@@ -22,24 +17,26 @@
             async function run() {
                 const module = await import(`./${className}.js`)
                 const Model = module.default
-                // util.toWindow({ module, Model, modelIO, util })
 
-                modelIO.testStartup()
+                const testing = navigator.userAgent === 'Puppeteer'
+
+                if (testing) util.randomSeed()
 
                 const model = new Model()
-                util.toWindow({ model, module, Model, modelIO, util })
+                const { patches, turtles, links } = model
+                util.toWindow({ model, util, patches, turtles, links })
 
                 await model.startup()
-
                 model.setup()
-                modelIO.testSetup(model)
-
                 await util.timeoutLoop(() => {
                     model.step()
                     model.tick()
                 }, 500)
 
-                modelIO.testDone(model)
+                const sample = util.sampleModel(model)
+                util.printToPage(sample)
+
+                if (testing) window.modelSample = JSON.stringify(sample)
             }
             run()
         </script>
