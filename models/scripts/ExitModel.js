@@ -1,5 +1,5 @@
-const World = AS.World
-const Model = AS.Model
+var World = AS.World
+var Model = AS.Model
 // import util from '../src/util.js'
 
 class ExitModel extends Model {
@@ -91,3 +91,5 @@ class ExitModel extends Model {
         })
     }
 }
+const defaultModel = ExitModel
+

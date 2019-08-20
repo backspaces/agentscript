@@ -1,6 +1,6 @@
-const World = AS.World
-const Model = AS.Model
-const util = AS.util
+var World = AS.World
+var Model = AS.Model
+var util = AS.util
 
 class FireModel extends Model {
     static defaultOptions() {
@@ -85,3 +85,5 @@ class FireModel extends Model {
         })
     }
 }
+const defaultModel = FireModel
+

@@ -1,5 +1,5 @@
-const Model = AS.Model
-const util = AS.util
+var Model = AS.Model
+var util = AS.util
 
 class WalkersModel extends Model {
     static defaultOptions() {
@@ -32,3 +32,5 @@ class WalkersModel extends Model {
         })
     }
 }
+const defaultModel = WalkersModel
+

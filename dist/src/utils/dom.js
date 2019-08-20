@@ -1,5 +1,4 @@
 // import { isObject } from './types.js' // see printToPage
-// ### HTML, CSS, DOM
 
 // REST: Parse the query, returning an object of key/val pairs.
 export function parseQueryString(
@@ -23,11 +22,20 @@ export function parseQueryString(
 //   <script src="./test/src/three0.js" type="module"></script>
 // NOTE: Use import(path) for es6 modules.
 // I.e. this is legacy, for umd's only.
-export function setScript(path, props = {}) {
-    const scriptTag = document.createElement('script')
-    scriptTag.src = path
-    Object.assign(scriptTag, props)
-    document.querySelector('head').appendChild(scriptTag)
+// export function loadScript(path, props = {}) {
+//     const scriptTag = document.createElement('script')
+//     scriptTag.src = path
+//     Object.assign(scriptTag, props)
+//     document.querySelector('head').appendChild(scriptTag)
+// }
+export function loadScript(path, props = {}) {
+    return new Promise((resolve, reject) => {
+        const scriptTag = document.createElement('script')
+        scriptTag.onload = () => resolve(scriptTag)
+        scriptTag.src = path
+        Object.assign(scriptTag, props)
+        document.querySelector('head').appendChild(scriptTag)
+    })
 }
 
 // Print a message to an html element

@@ -1,4 +1,4 @@
-const Model = AS.Model
+var Model = AS.Model
 
 class ButtonsModel extends Model {
     static defaultOptions() {
@@ -70,3 +70,5 @@ class ButtonsModel extends Model {
         })
     }
 }
+const defaultModel = ButtonsModel
+

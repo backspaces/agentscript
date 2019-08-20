@@ -1,3 +1,7 @@
+import { loadScript } from './dom.js'
+import { randomSeed, repeat } from './math.js'
+import { timeoutLoop } from './async.js'
+
 export function toJSON(obj, indent = 0, topLevelArrayOK = true) {
     let firstCall = topLevelArrayOK
     const blackList = ['rectCache']
@@ -38,4 +42,37 @@ export function sampleModel(model) {
 
 export function sampleJSON(model, indent = 0) {
     return toJSON(sampleModel(model), indent)
+}
+
+// params; classPath, steps, seed,
+export async function runModel(params) {
+    const inWorker = self.document === undefined
+    const prefix = inWorker ? 'worker ' : 'main '
+    console.log(prefix + 'params', params)
+
+    if (inWorker) importScripts(params.classPath)
+    else await loadScript(params.classPath)
+
+    if (params.seed) randomSeed()
+
+    // const Model = eval(params.className)
+    const model = new defaultModel()
+    console.log(prefix + 'model', model)
+
+    await model.startup()
+    model.setup()
+    if (inWorker) {
+        repeat(params.steps, () => {
+            model.step()
+            model.tick()
+        })
+    } else {
+        await timeoutLoop(() => {
+            model.step()
+            model.tick()
+        }, params.steps)
+    }
+    console.log(prefix + 'done, model', model)
+
+    return sampleModel(model)
 }

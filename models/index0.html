@@ -13,7 +13,7 @@
             document.title = `M:${appName}`
 
             // Note: using import() causes tests to pause in puppeteer.
-            // util.setScript(appPath, { type: 'module' })
+            // util.loadScript(appPath, { type: 'module' })
             import(appPath)
         </script>
         <div id="modelDiv"></div>

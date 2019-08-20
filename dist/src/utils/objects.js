@@ -30,24 +30,6 @@ export function nestedProperty(obj, path) {
     }
 }
 
-// Repeat function f(i, a) n times, i in 0, n-1
-// a is optional array, default a new Array.
-// Return a.
-export function repeat(n, f, a = []) {
-    for (let i = 0; i < n; i++) f(i, a)
-    return a
-}
-// Repeat function n/step times, incrementing i by step each step.
-export function step(n, step, f) {
-    for (let i = 0; i < n; i += step) f(i)
-}
-// Return range [0, length-1]. Note: 6x faster than Array.from!
-export function range(length) {
-    return repeat(length, (i, a) => {
-        a[i] = i
-    })
-}
-
 export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
 export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
 export const arrayExtent = array => [

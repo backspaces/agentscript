@@ -1,5 +1,5 @@
-const Model = AS.Model
-const util = AS.util
+var Model = AS.Model
+var util = AS.util
 
 class HelloModel extends Model {
     static defaultOptions() {
@@ -39,7 +39,7 @@ class HelloModel extends Model {
 
 // Here is a simple modification that allows setting the population dynamically.
 // Note that speed & wiggle are already dynamic.
-export class HelloModelPlus extends HelloModel {
+class HelloModelPlus extends HelloModel {
     step() {
         this.checkPopulation()
         super.step()
@@ -66,3 +66,5 @@ export class HelloModelPlus extends HelloModel {
         })
     }
 }
+const defaultModel = HelloModel
+

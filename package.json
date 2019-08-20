@@ -41,7 +41,7 @@
         "watch": "npm-run-all watch-src watch-models",
         "run2d": "bin/runmodels models2",
         "run3d": "bin/runmodels models3",
-        "temp": "ava test/*.js"
+        "temp": "rollup -c rollup.model.js"
     },
     "@pika/web": {
         "webDependencies": [

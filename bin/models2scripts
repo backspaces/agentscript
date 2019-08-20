@@ -2,14 +2,26 @@
 const shell = require('shelljs')
 
 shell.cd('./models')
+// shell.mkdir('scripts')
+shell.rm('scripts/*Model.js')
 
 const models = shell.ls('[A-Z]*Model.js')
 
 models.forEach(model => {
-    let script = model.replace('Model', 'Script')
-    script = `../tests/modelScripts/${script}`
+    const defaultName = shell
+        .grep('export default', model)
+        .replace('export default class ', '')
+        .replace(/ .*/, '')
+
+    const script = 'scripts/' + model
     shell.echo(model, '->', script)
     shell.cp(model, script)
-    shell.sed('-i', 'export default class', 'class', script)
-    shell.sed('-i', /^import (\w+) .*$/, 'const $1 = AS.$1', script)
+
+    shell.sed('-i', 'export default ', '', script)
+    shell.sed('-i', 'export ', '', script)
+    shell.sed('-i', /^import (\w+) .*$/, 'var $1 = AS.$1', script)
+
+    if (defaultName) {
+        shell.echo(`const defaultModel = ${defaultName}`).toEnd(script)
+    }
 })

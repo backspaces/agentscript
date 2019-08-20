@@ -8,14 +8,14 @@
             import util from '../src/util.js'
 
             const modelParams = util.parseQueryString()
-            const str = Object.keys(modelParams)[0] || 'hello'
-            const className =
-                str.charAt(0).toUpperCase() + str.slice(1) + 'Model'
+            const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
+            const className = name[0].toUpperCase() + name.slice(1)
             console.log('Running', className)
             document.title = `W:${className}`
 
             const params = {
                 classPath: `./${className}.js`,
+                className: className,
                 steps: 500,
                 seed: navigator.userAgent === 'Puppeteer',
             }

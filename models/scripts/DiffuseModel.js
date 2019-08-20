@@ -1,6 +1,6 @@
-const World = AS.World
-const Model = AS.Model
-const util = AS.util
+var World = AS.World
+var Model = AS.Model
+var util = AS.util
 
 class DiffuseModel extends Model {
     static defaultOptions() {
@@ -46,3 +46,5 @@ class DiffuseModel extends Model {
         this.patches.diffuse('ran', 0.05)
     }
 }
+const defaultModel = DiffuseModel
+

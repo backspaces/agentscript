@@ -1,6 +1,6 @@
 // import ColorMap from '../src/ColorMap.js'
-const Model = AS.Model
-const util = AS.util
+var Model = AS.Model
+var util = AS.util
 
 class LinkTravelModel extends Model {
     static defaultOptions() {
@@ -73,3 +73,5 @@ class LinkTravelModel extends Model {
         })
     }
 }
+const defaultModel = LinkTravelModel
+

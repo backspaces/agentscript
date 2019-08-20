@@ -1,8 +1,8 @@
-const util = AS.util
-const World = AS.World
-const Model = AS.Model
-const AgentArray = AS.AgentArray
-const RGBDataSet = AS.RGBDataSet
+var util = AS.util
+var World = AS.World
+var Model = AS.Model
+var AgentArray = AS.AgentArray
+var RGBDataSet = AS.RGBDataSet
 
 class DropletsModel extends Model {
     static defaultOptions() {
@@ -111,3 +111,5 @@ class DropletsModel extends Model {
         )
     }
 }
+const defaultModel = DropletsModel
+

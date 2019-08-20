@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>test</title>
+        <script src="../../dist/agentscript.umd.js"></script>
+        <!-- <script src="./AntsModel.js"></script> -->
+    </head>
+    <body>
+        <script>
+            var util = AS.util // var: avoid similar use in scripts
+
+            const queryString = util.parseQueryString()
+            const name = (Object.keys(queryString)[0] || 'hello') + 'Model'
+            const className = name[0].toUpperCase() + name.slice(1)
+            const testing = navigator.userAgent === 'Puppeteer'
+
+            document.title = `S:${className}`
+
+            const params = {
+                classPath: `./${className}.js`,
+                className, // : className,
+                steps: 500,
+                testing,
+                seed: testing,
+                worker: true,
+            }
+            Object.assign(params, queryString)
+
+            console.log('Running', className, 'params', params)
+
+            if (params.worker) {
+                const worker = new Worker('./runWorker.js')
+                worker.postMessage({ cmd: 'init', params: params })
+                worker.onmessage = e => finish(e.data)
+            } else {
+                util.runModel(params).then(sample => finish(sample))
+            }
+
+            function finish(sample) {
+                console.log('main', sample)
+                util.printToPage(sample)
+                if (params.testing) window.modelSample = JSON.stringify(sample)
+            }
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

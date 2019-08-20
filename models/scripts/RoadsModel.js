@@ -1,7 +1,7 @@
-const gis = AS.gis
-const World = AS.World
-const Model = AS.Model
-const util = AS.util
+var gis = AS.gis
+var World = AS.World
+var Model = AS.Model
+var util = AS.util
 
 class RoadsModel extends Model {
     static defaultOptions() {
@@ -91,3 +91,5 @@ class RoadsModel extends Model {
         )
     }
 }
+const defaultModel = RoadsModel
+

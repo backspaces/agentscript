@@ -1,5 +1,5 @@
-const Model = AS.Model
-const util = AS.util
+var Model = AS.Model
+var util = AS.util
 
 class FlockModel extends Model {
     static defaultOptions() {
@@ -108,3 +108,5 @@ class FlockModel extends Model {
         return Math.sqrt(dx * dx + dy * dy) / this.population
     }
 }
+const defaultModel = FlockModel
+

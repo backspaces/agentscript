@@ -1,7 +1,7 @@
 // import ColorMap from '../src/ColorMap.js'
-const World = AS.World
-const Model = AS.Model
-const util = AS.util
+var World = AS.World
+var Model = AS.Model
+var util = AS.util
 
 // The NetLogo models library wall followers example
 // http://ccl.northwestern.edu/netlogo/models/WallFollowingExample
@@ -121,3 +121,5 @@ class WallFollowerModel extends Model {
         return p && p.isBreed(this.walls)
     }
 }
+const defaultModel = WallFollowerModel
+

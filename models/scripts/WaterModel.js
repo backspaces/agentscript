@@ -1,5 +1,5 @@
-const World = AS.World
-const Model = AS.Model
+var World = AS.World
+var Model = AS.Model
 // import util from '../src/util.js'
 
 class WaterModel extends Model {
@@ -58,3 +58,5 @@ class WaterModel extends Model {
         return this.patches.props('zpos').sum() / this.patches.length
     }
 }
+const defaultModel = WaterModel
+

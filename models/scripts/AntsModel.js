@@ -1,6 +1,6 @@
-const World = AS.World
-const Model = AS.Model
-const util = AS.util
+var World = AS.World
+var Model = AS.Model
+var util = AS.util
 
 class AntsModel extends Model {
     static defaultOptions() {
@@ -94,3 +94,5 @@ class AntsModel extends Model {
         })
     }
 }
+const defaultModel = AntsModel
+
