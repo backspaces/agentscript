@@ -1,8 +1,7 @@
 import Model from '../src/Model.js'
-import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
 
-util.toWindow({ Model, modelIO, util })
+util.toWindow({ Model, util })
 
 class LinksModel extends Model {
     setup() {
@@ -51,9 +50,11 @@ util.toWindow({ world, patches, turtles, links, model })
 util.yieldLoop(() => model.step(), 500)
 
 util.printToPage('')
-util.printToPage(modelIO.sampleObj(model))
+const sample = util.sampleModel(model)
+util.printToPage(sample)
 
 if (usingPuppeteer) {
-    window.modelDone = model.modelDone = true
-    window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+    // window.modelDone = model.modelDone = true
+    // window.modelSample = model.modelSample = util.sampleJSON(model)
+    window.modelSample = JSON.stringify(sample)
 }

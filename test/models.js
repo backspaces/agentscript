@@ -9,8 +9,9 @@ liveServer.start({
     ignore: '*',
 })
 
-// Stunt to avoid shell.echo printing str .. silent mode.
+// Store model samples here:
 const samplesFile = 'test/samples.txt'
+// Stunt to avoid shell.echo printing str .. silent mode.
 const to = str => new shell.ShellString(str + '\n').to(samplesFile)
 const toEnd = str => new shell.ShellString(str + '\n').toEnd(samplesFile)
 
@@ -28,17 +29,18 @@ to('const testSamples = {')
 
 models.forEach(async model => {
     await test.serial(model, async t => {
+        // ? `http://127.0.0.1:8080/models/scripts/?${model}&seed&testing`
         const url = workers
-            ? `http://127.0.0.1:8080/models/worker.html?${model}`
+            ? `http://127.0.0.1:8080/models/scripts/?${model}`
             : `http://127.0.0.1:8080/models/?${model}`
-        // Let model know it is being run by Puppeteer:
+
         const browser = await puppeteer.launch({
             args: [
                 // Let model know it is being run by Puppeteer:
                 '--user-agent=Puppeteer',
                 // let workers use es6 imports
-                '--enable-experimental-web-platform-features',
-                // Don't know if these still needed: CI nneded a while back?
+                // '--enable-experimental-web-platform-features',
+                // Don't know if these still needed: CI needed a while back?
                 // '--no-sandbox',
                 // '--disable-setuid-sandbox',
             ],

@@ -1,8 +1,7 @@
 import Model from '../src/Model.js'
-import * as modelIO from '../src/modelIO.js'
 import util from '../src/util.js'
 
-util.toWindow({ Model, modelIO, util })
+util.toWindow({ Model, util })
 
 class TestModel extends Model {
     setup() {
@@ -44,9 +43,9 @@ util.toWindow({ world, patches, turtles, links, model })
 util.yieldLoop(() => model.step(), 500)
 
 util.printToPage('')
-util.printToPage(modelIO.sampleObj(model))
+util.printToPage(util.sampleModel(model))
 
 if (usingPuppeteer) {
     window.modelDone = model.modelDone = true
-    window.modelSample = model.modelSample = modelIO.sampleJSON(model)
+    window.modelSample = model.modelSample = util.sampleJSON(model)
 }

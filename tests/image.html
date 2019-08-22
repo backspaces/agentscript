@@ -5,17 +5,16 @@
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import { printToPage } from '../src/modelIO.js'
-            util.toWindow(util, printToPage)
+            util.toWindow(util)
 
             const url =
                 document.location.search.substring(1) ||
                 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png'
             console.log('using:', url)
 
-            printToPage(`Testing URL ${url}`)
-            printToPage(`running..`)
-            printToPage(``)
+            util.printToPage(`Testing URL ${url}`)
+            util.printToPage(`running..`)
+            util.printToPage(``)
 
             async function test(url) {
                 const imgBuffer = await util.xhrPromise(url, 'arraybuffer') // 131,309
@@ -79,30 +78,32 @@
                 util.toWindow(vars)
                 console.log(vars)
 
-                printToPage(`done.`)
-                printToPage(``)
-                printToPage(`Image Size on Disk: ${imgBuffer.byteLength}`)
-                printToPage(`Image Size: ${imgsize}   (width*length*4)`)
+                util.printToPage(`done.`)
+                util.printToPage(``)
+                util.printToPage(`Image Size on Disk: ${imgBuffer.byteLength}`)
+                util.printToPage(`Image Size: ${imgsize}   (width*length*4)`)
 
-                printToPage(``)
-                printToPage(`Canvas: width/height ${can.width}/${can.height}`)
-                printToPage(
+                util.printToPage(``)
+                util.printToPage(
+                    `Canvas: width/height ${can.width}/${can.height}`
+                )
+                util.printToPage(
                     `Canvas ctx imageData: length ${imageData.data.length}`
                 )
 
-                printToPage(``)
-                printToPage(`Canvas blob: length ${canblob.size}`)
-                printToPage(
+                util.printToPage(``)
+                util.printToPage(`Canvas blob: length ${canblob.size}`)
+                util.printToPage(
                     `Canvas dataurl: length:${
                         candataurl.length
                     }  ${candataurl.slice(0, 40)}...`
                 )
 
-                printToPage(``)
-                printToPage(`Open console to play with these variables:`)
-                printToPage(``)
-                printToPage(`>   ${Object.keys(vars)}`)
-                printToPage(``)
+                util.printToPage(``)
+                util.printToPage(`Open console to play with these variables:`)
+                util.printToPage(``)
+                util.printToPage(`>   ${Object.keys(vars)}`)
+                util.printToPage(``)
                 document.body.appendChild(img)
             })
         </script>

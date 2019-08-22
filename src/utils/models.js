@@ -2,7 +2,7 @@ import { loadScript } from './dom.js'
 import { randomSeed, repeat } from './math.js'
 import { timeoutLoop } from './async.js'
 
-export function toJSON(obj, indent = 0, topLevelArrayOK = true) {
+function toJSON(obj, indent = 0, topLevelArrayOK = true) {
     let firstCall = topLevelArrayOK
     const blackList = ['rectCache']
     const json = JSON.stringify(
@@ -38,10 +38,6 @@ export function sampleModel(model) {
     }
     const json = toJSON(obj)
     return JSON.parse(json)
-}
-
-export function sampleJSON(model, indent = 0) {
-    return toJSON(sampleModel(model), indent)
 }
 
 // params; classPath, steps, seed,

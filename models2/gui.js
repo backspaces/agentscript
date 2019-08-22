@@ -38,6 +38,7 @@ const template = {
         cmd: val => (view.shapeSize = val),
     },
     run: { value: () => animator.toggle() },
+    useMouse: { value: true, cmd: val => mouse.run(val) },
     useSprites: { value: false, cmd: val => (view.useSprites = val) },
     population: {
         value: 20,

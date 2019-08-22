@@ -38,6 +38,21 @@ export default class Mouse {
         this.resetParams()
         return this // chaining
     }
+    get running() {
+        return !isNaN(this.xCor)
+    }
+    run(on = true) {
+        if (on) this.start()
+        else this.stop()
+    }
+    // set run(on = true) {
+    //     if (on) this.start()
+    //     else this.stop()
+    // }
+    // toggle() {
+    //     if (isNaN(this.xCor)) this.start()
+    //     else this.stop()
+    // }
 
     // Handlers for eventListeners
     generalHandler(e, down, moved) {
