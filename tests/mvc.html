@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>!!</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import MVC from '../src/MVC.js'
+            import HelloMVC from './HelloMVC.js'
+            util.toWindow({ util, MVC, HelloMVC })
+
+            const model = new HelloMVC('modelDiv')
+            const { patches, turtles, links, view } = model
+            util.toWindow({ model, patches, turtles, links, view })
+
+            model.setup()
+            model.start()
+        </script>
+        <div id="modelDiv"></div>
+        <!-- <canvas id="modelDiv" style="border: 1px solid;"></canvas> -->
+    </body>
+</html>

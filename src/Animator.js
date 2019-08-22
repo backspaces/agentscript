@@ -11,7 +11,7 @@ export default class Animator {
     // multiStep. Called by Model during initialization, use setRate to modify.
     // If multiStep, run the draw() and step() methods separately by
     // draw() using requestAnimationFrame and step() using setTimeout.
-    constructor(model, view, rate = 60, multiStep = false) {
+    constructor(model, view = model, rate = 30, multiStep = false) {
         Object.assign(this, { model, view, rate, multiStep })
         this.reset()
     }
@@ -53,12 +53,14 @@ export default class Animator {
     // Two handlers used by animation loop
     step() {
         this.model.tick()
-        this.ticks++
+        // this.ticks++
         this.model.step()
+        this.ticks++
     }
     draw() {
-        this.draws++
+        // this.draws++
         this.view.draw(this.model)
+        this.draws++
     }
     // step and draw the model once
     once() {

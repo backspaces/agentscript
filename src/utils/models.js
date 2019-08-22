@@ -40,9 +40,15 @@ export function sampleModel(model) {
     return JSON.parse(json)
 }
 
+export function inWorker() {
+    return self.window === undefined
+}
+
 // params; classPath, steps, seed,
 export async function runModel(params) {
-    const inWorker = self.document === undefined
+    // fails in test/models.js: Cannot access 'inWorker' before initialization
+    // const inWorker = inWorker() // fails in test/models.js
+    const inWorker = self.window === undefined
     const prefix = inWorker ? 'worker ' : 'main '
     console.log(prefix + 'params', params)
 
