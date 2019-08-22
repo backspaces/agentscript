@@ -1,10 +1,10 @@
 // Attempt to make the refactoring of AgentScript into many
 // parts easier for the modeler.
 
-import Model from './Model'
+import Model from './Model.js'
 import TwoView from './TwoView.js'
-import Animator from './Animator'
-import World from './World'
+import Animator from './Animator.js'
+import World from './World.js'
 // import util from './util.js'
 
 // export default class MVC {
