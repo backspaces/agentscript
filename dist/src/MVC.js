@@ -13,7 +13,7 @@ export default class MVC extends Model {
         super(world)
         Object.assign(this, { div, world })
         // this.model = new this(world)
-        this.view = new TwoView(this.div, world)
+        this.view = new TwoView(div, world)
         this.animator = new Animator(this)
     }
 
