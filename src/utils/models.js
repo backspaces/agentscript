@@ -1,4 +1,4 @@
-import { loadScript } from './dom.js'
+import { loadScript, inWorker } from './dom.js'
 import { randomSeed, repeat } from './math.js'
 import { timeoutLoop } from './async.js'
 
@@ -40,19 +40,13 @@ export function sampleModel(model) {
     return JSON.parse(json)
 }
 
-export function inWorker() {
-    return self.window === undefined
-}
-
 // params; classPath, steps, seed,
 export async function runModel(params) {
-    // fails in test/models.js: Cannot access 'inWorker' before initialization
-    // const inWorker = inWorker() // fails in test/models.js
-    const inWorker = self.window === undefined
-    const prefix = inWorker ? 'worker ' : 'main '
+    var worker = inWorker() // fails in test/models.js
+    const prefix = worker ? 'worker ' : 'main '
     console.log(prefix + 'params', params)
 
-    if (inWorker) importScripts(params.classPath)
+    if (worker) importScripts(params.classPath)
     else await loadScript(params.classPath)
 
     if (params.seed) randomSeed()
@@ -63,7 +57,7 @@ export async function runModel(params) {
 
     await model.startup()
     model.setup()
-    if (inWorker) {
+    if (worker) {
         repeat(params.steps, () => {
             model.step()
             model.tick()

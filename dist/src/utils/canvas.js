@@ -1,9 +1,14 @@
-// ### Canvas utilities
+// import { inWorker } from './dom.js'
+
+function offscreenOK() {
+    return !!self.OffscreenCanvas
+}
 
 // Create a blank 2D canvas of a given width/height
 // width/height defaulted so can be modified later by caller
 // Default to off-screen canvas.
-export function createCanvas(width = 0, height = 0, offscreen = true) {
+// export function createCanvas(width = 0, height = 0, offscreen = true) {
+export function createCanvas(width, height, offscreen = offscreenOK()) {
     if (offscreen) return new OffscreenCanvas(width, height)
     const can = document.createElement('canvas')
     can.width = width
@@ -12,13 +17,13 @@ export function createCanvas(width = 0, height = 0, offscreen = true) {
 }
 // As above, but returing the 2D context object.
 // NOTE: ctx.canvas is the canvas for the ctx, and can be use as an image.
-export function createCtx(width, height, offscreen = true) {
+export function createCtx(width, height, offscreen = offscreenOK()) {
     const can = createCanvas(width, height, offscreen)
     return can.getContext('2d')
 }
 
 // Duplicate a canvas, preserving it's current image/drawing
-export function cloneCanvas(can, offscreen = true) {
+export function cloneCanvas(can, offscreen = offscreenOK()) {
     const ctx = createCtx(can.width, can.height, offscreen)
     ctx.drawImage(can, 0, 0)
     return ctx.canvas

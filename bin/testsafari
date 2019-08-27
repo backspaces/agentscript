@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+const shell = require('shelljs')
+
+const child = shell.exec(
+    './node_modules/.bin/live-server --no-browser --quiet --watch=src',
+    {
+        async: true,
+    },
+    function(code, stdout, stderr) {
+        shell.echo('Server Started')
+    }
+)
+
+// const child = shell.exec(
+//     './node_modules/.bin/live-server --no-browser --quiet --watch=src'
+// )
+
+const models = shell.ls('models/[A-Z]*Model.js')
+models.forEach(model => {
+    model = model.replace('Model.js', '').replace('models/', '')
+    model = model.charAt(0).toLowerCase() + model.slice(1)
+    // const url = `http://localhost/src/agentscript/models/?${model}`
+    const url = `http://127.0.0.1:8080/models/?${model}`
+    const cmd = `open -a Safari ${url}`
+    shell.echo(cmd)
+    shell.exec(cmd)
+})

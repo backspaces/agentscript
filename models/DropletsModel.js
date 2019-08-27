@@ -29,7 +29,9 @@ export default class DropletsModel extends Model {
 
     async startup() {
         // const png = await util.imagePromise(this.tile)
-        const png = await util.imageBitmapPromise(this.tile)
+        const png = self.ImageBitmap
+            ? await util.imageBitmapPromise(this.tile)
+            : await util.imagePromise(this.tile)
         console.log('png', png)
         const elevation = new RGBDataSet(png, -32768, 1 / 256, AgentArray)
         this.installDataSets(elevation)
