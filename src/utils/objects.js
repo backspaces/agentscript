@@ -30,6 +30,8 @@ export function nestedProperty(obj, path) {
     }
 }
 
+export const arrayFirst = array => array[0]
+export const arrayLast = array => array[array.length - 1]
 export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
 export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
 export const arrayExtent = array => [

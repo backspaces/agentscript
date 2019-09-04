@@ -2,7 +2,7 @@
 
 // import THREE from '../dist/three.wrapper.js'
 // import * as THREE from '../node_modules/three/build/three.module.js'
-import { THREE } from '../dist/three.esm.js'
+import { THREE } from '../dist/three.esm.min.js'
 import util from './util.js'
 // import Turtle from './Turtle.js'
 

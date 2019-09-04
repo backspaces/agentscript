@@ -34,7 +34,7 @@
         "build": "npm-run-all clean build-scripts build-dist build-vendor",
         "build-dist": "rollup -c && cp -R src dist",
         "build-scripts": "node bin/models2scripts",
-        "build-vendor": "cp node_modules/dat.gui/build/dat.gui.module.js dist && rollup -c rollup.three.js",
+        "build-vendor": "rollup -c rollup.vendor.js",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
@@ -52,6 +52,7 @@
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
+        "chart.js": "^2.8.0",
         "dat.gui": "^0.7.6",
         "three": "latest"
     },
@@ -64,7 +65,8 @@
         "npm-run-all": "4.1.2",
         "puppeteer": "latest",
         "rollup": "^1.15.0",
-        "rollup-plugin-commonjs": "8.3.0",
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-copy": "^3.1.0",
         "rollup-plugin-terser": "^5.0.0",
         "shx": "0.3",
         "terser": "^3.10.11"
