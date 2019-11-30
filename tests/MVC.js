@@ -1,10 +1,10 @@
 // Attempt to make the refactoring of AgentScript into many
 // parts easier for the modeler.
 
-import Model from './Model.js'
-import TwoView from './TwoView.js'
-import Animator from './Animator.js'
-import World from './World.js'
+import Model from '../src/Model.js'
+import TwoView from '../src/TwoView.js'
+import Animator from '../src/Animator.js'
+import World from '../src/World.js'
 // import util from './util.js'
 
 // export default class MVC {
@@ -17,8 +17,13 @@ export default class MVC extends Model {
         this.animator = new Animator(this)
     }
 
-    // draw() {}
-    // step() {}
+    // MVC model must override these:
+    draw() {
+        console.log('Oops: override draw in your MVC subclass')
+    }
+    step() {
+        console.log('Oops: override step in your MVC subclass')
+    }
 
     start() {
         this.animator.start()

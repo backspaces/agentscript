@@ -23,6 +23,7 @@ const colors25 = util.repeat(25, (i, a) => {
 const linkColor = Color.typedColor(255, 255, 255)
 
 const worker = new Worker('./helloWorker.js', { type: 'module' })
+// const worker = new Worker('./helloWorker.js')
 worker.postMessage({ cmd: 'init', params: params })
 
 const view = new ThreeView(document.body, params.world)

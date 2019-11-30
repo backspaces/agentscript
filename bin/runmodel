@@ -19,6 +19,10 @@ const child = shell.exec(
     }
 )
 
+// const waitSecs = model === 'flock' ? 15 : 5
+
+const waitFinish = dir === 'models' ? true : false
+const waitSecs = waitFinish ? 2 : 5
 function wait(seconds = 1) {
     return new Promise((resolve, reject) => {
         setTimeout(() => resolve(), seconds * 1000)
@@ -45,8 +49,25 @@ async function run() {
 
     // console.log('page')
     await page.goto(url)
-    console.log('waiting 4 seconds') // works! lets model run n seconds
-    await wait(4)
+
+    if (waitFinish) {
+        console.log(`waiting model finish`)
+        await page.evaluate(() => {
+            return new Promise(resolve => {
+                function waitOn() {
+                    if (window.modelSample) {
+                        return resolve()
+                    } else {
+                        setTimeout(waitOn, 10)
+                    }
+                }
+                waitOn()
+            })
+        })
+    }
+
+    console.log(`waiting ${waitSecs} seconds`)
+    await wait(waitSecs)
     console.log('done waiting')
 
     // await page.screenshot({ path: `test/${model}.png` })

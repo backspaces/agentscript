@@ -6,14 +6,37 @@ const dir = process.argv[2]
 console.log('dir:', dir)
 if (!dir) throw Error('Needs dir name argument')
 
-const models = shell
-    .ls(`${dir}/*.js`)
-    // Avoid FooModel.js, fooWorker.js, just foo.js
-    .grep('-v', '[A-Z]')
+let models
+// const models = shell.ls(`${dir}/*.js`)
+if (dir === 'models') {
+    models = shell
+        .ls(`${dir}/*Model.js`)
+        // OK if first char is capitolized, index.html will just recap
+        .sed(/Model/, '')
+} else {
+    models = shell
+        .ls(`${dir}/*.js`)
+        // Avoid FooModel.js, fooWorker.js, just foo.js
+        .grep('-v', '[A-Z]')
+}
+
+models = models
     .sed(/^.*\//, '')
     .sed(/.js$/, '')
     .replace(/\n+$/, '')
     .split('\n')
+    .map(str => str.charAt(0).toLowerCase() + str.slice(1))
+
+// console.log('models:', models)
+
+// const models = shell
+//     .ls(`${dir}/*.js`)
+//     // Avoid FooModel.js, fooWorker.js, just foo.js
+//     .grep('-v', '[A-Z]')
+//     .sed(/^.*\//, '')
+//     .sed(/.js$/, '')
+//     .replace(/\n+$/, '')
+//     .split('\n')
 
 shell.echo('models:', models)
 models.forEach(model => shell.exec(`bin/runmodel ${dir}/${model}`))

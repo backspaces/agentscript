@@ -1,5 +1,5 @@
 // import Model from '../src/Model.js'
-import MVC from '../src/MVC.js'
+import MVC from './MVC.js'
 import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
 import util from '../src/util.js'

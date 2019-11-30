@@ -39,9 +39,10 @@
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
         "watch": "npm-run-all watch-src watch-models",
-        "run2d": "bin/runmodels models2",
-        "run3d": "bin/runmodels models3",
-        "safari": "bin/testsafari",
+        "run1": "bin/runmodels models",
+        "run2": "bin/runmodels models2",
+        "run3": "bin/runmodels models3",
+        "safari": "bin/testsafari &",
         "temp": "bin/testsafari"
     },
     "@pika/web": {

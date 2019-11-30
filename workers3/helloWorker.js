@@ -1,5 +1,6 @@
 import util from '../src/util.js'
 import HelloModel from '../models/HelloModel.js'
+// importScripts('../src/util.js', '../models/HelloModel.js')
 console.log('worker self', self)
 
 let model, params
