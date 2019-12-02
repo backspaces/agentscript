@@ -26,8 +26,7 @@ function postData() {
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (params.seed != null) util.randomSeed(params.seed)
-
+        if (params.seed) util.randomSeed()
         model = new HelloModel(params.world)
         model.population = params.population
         model.setup()

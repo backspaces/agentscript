@@ -4,21 +4,19 @@ import Color from '../src/Color.js'
 import TwoView from '../src/TwoView.js'
 import HelloModel from '../models/HelloModel.js'
 
-const params = {
-    seed: null,
+const params = util.RESTapi({
+    seed: false,
     population: 100,
     maxX: 30,
-    maxY: null,
+    maxY: 30,
     steps: 500,
     linkColor: 'white', // css
     shape: 'dart',
     shapeSize: 2,
     patchSize: 10,
     world: null,
-}
-Object.assign(params, util.parseQueryString())
-if (params.seed != null) util.randomSeed(params.seed)
-if (params.maxY == null) params.maxY = params.maxX
+})
+if (params.seed) util.randomSeed()
 params.world = World.defaultOptions(params.maxX, params.maxY)
 
 const colors25 = util.repeat(25, (i, a) => {

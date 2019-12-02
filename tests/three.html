@@ -32,7 +32,7 @@
 
             util.toWindow({ util, World, ThreeView, Color, div })
 
-            const params = {
+            const params = util.RESTapi({
                 seed: 1,
                 population: 10,
                 shape: 'darts', // 'points',
@@ -45,8 +45,7 @@
                 maxY: null,
                 steps: 500,
                 data: false,
-            }
-            Object.assign(params, util.parseQueryString())
+            })
             if (!params.maxY) params.maxY = params.maxX
             params.world = new World(
                 World.defaultOptions(params.maxX, params.maxY)

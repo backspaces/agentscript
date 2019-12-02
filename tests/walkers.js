@@ -13,11 +13,7 @@ function postData() {
             theta: Float32Array,
         }),
     }
-    postMessage(data, [
-        data.turtles.x.buffer,
-        data.turtles.y.buffer,
-        data.turtles.theta.buffer,
-    ])
+    postMessage(data, util.oofaBuffers(data))
     if (data.turtles.x.length !== 0) {
         console.log('Oops, data not transferable', data)
     }
@@ -26,8 +22,7 @@ function postData() {
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (params.seed != null) util.randomSeed(params.seed)
-
+        if (params.seed) util.randomSeed()
         model = new WalkersModel(params.world)
         model.population = params.population
         model.speed = params.speed

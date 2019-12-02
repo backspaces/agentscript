@@ -2,12 +2,18 @@
 const puppeteer = require('puppeteer')
 const shell = require('shelljs')
 
-const path = process.argv[2]
-if (!path) throw Error('Needs path argument')
+// const path = process.argv[2]
+// if (!path) throw Error('Needs path argument')
 
-const [dir, model] = path.split('/')
-console.log('path:', path, 'dir:', dir, 'model:', model)
-if (!dir || !model) throw Error('Needs dir/model argument')
+// const dir = process.argv[2]
+const dir = process.argv[2].replace(/\/$/, '') // remove optional final "/"
+
+const model = process.argv[3]
+if (!dir || !model) throw Error('Needs dir & model arguments')
+
+// const [dir, model] = path.split('/')
+// console.log('path:', path, 'dir:', dir, 'model:', model)
+// if (!dir || !model) throw Error('Needs dir/model argument')
 
 const url = `http://127.0.0.1:8080/${dir}/?${model}`
 console.log('url:', url)
@@ -21,7 +27,7 @@ const child = shell.exec(
 
 // const waitSecs = model === 'flock' ? 15 : 5
 
-const waitFinish = dir === 'models' ? true : false
+const waitFinish = dir === 'models' || dir === 'models/scripts' ? true : false
 const waitSecs = waitFinish ? 2 : 5
 function wait(seconds = 1) {
     return new Promise((resolve, reject) => {

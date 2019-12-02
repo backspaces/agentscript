@@ -3,18 +3,16 @@ import World from '../src/World.js'
 import Color from '../src/Color.js'
 import ThreeView from '../src/ThreeView.js'
 
-const params = {
-    seed: null,
+const params = util.RESTapi({
+    seed: false,
     population: 100,
     maxX: 30,
-    maxY: null,
+    maxY: 30,
     steps: 500,
     shapeSize: 2,
     world: null,
-}
-Object.assign(params, util.parseQueryString())
-if (params.seed != null) util.randomSeed(params.seed)
-if (params.maxY == null) params.maxY = params.maxX
+})
+if (params.seed) util.randomSeed()
 params.world = World.defaultWorld(params.maxX, params.maxY)
 
 const colors25 = util.repeat(25, (i, a) => {

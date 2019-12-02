@@ -33,25 +33,16 @@
                     )
                     // postMessage ~same performance w/ & w/o transferables!
                     if (params.to) {
-                        postMessage(data, [
-                            data.x.buffer,
-                            data.y.buffer,
-                            data.theta.buffer,
-                            data.x0.buffer,
-                            data.y0.buffer,
-                            data.x1.buffer,
-                            data.y1.buffer,
-                        ])
+                        postMessage(data, util.oofaBuffers(data))
                         if (data.x.length !== 0) console.log('to data', data)
                     } else {
-                        postMessage(data)
+                        postMessage(data, util.oofaBuffers(data))
                     }
                 }
                 onmessage = e => {
                     if (e.data.cmd === 'init') {
                         params = e.data.params
-                        if (params.seed != null) util.randomSeed(params.seed)
-
+                        if (params.seed) util.randomSeed()
                         model = new HelloModel(
                             World.defaultOptions(params.maxX, params.maxY)
                         )
@@ -84,8 +75,8 @@
             import TurtlesView from '../src/TurtlesView.js'
             util.toWindow({ util, World, TurtlesView })
 
-            const params = {
-                seed: null,
+            const params = util.RESTapi({
+                seed: false,
                 population: 1000,
                 shape: 'dart', // triangle:78, square:95 faster, dart:66
                 shapeSize: 1.5,
@@ -98,8 +89,7 @@
                 data: false,
                 to: false,
                 noRotate: false,
-            }
-            Object.assign(params, util.parseQueryString())
+            })
             if (!params.maxY) params.maxY = params.maxX
             params.colors25 = util.repeat(25, (i, a) => {
                 a[i] = Color.randomCssColor()

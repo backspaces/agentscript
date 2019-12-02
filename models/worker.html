@@ -13,11 +13,13 @@
             console.log('Running', className)
             document.title = `W:${className}`
 
+            const testing = navigator.userAgent === 'Puppeteer'
+
             const params = {
                 classPath: `./${className}.js`,
                 className: className,
                 steps: 500,
-                seed: navigator.userAgent === 'Puppeteer',
+                seed: testing,
             }
             console.log(params)
 
@@ -26,7 +28,7 @@
             worker.onmessage = e => {
                 console.log(e.data)
                 util.printToPage(e.data)
-                if (params.seed) window.modelSample = JSON.stringify(e.data)
+                if (testing) window.modelSample = JSON.stringify(e.data)
                 worker.terminate()
             }
         </script>

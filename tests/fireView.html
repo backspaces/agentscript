@@ -11,8 +11,8 @@
             import PatchesView from '../src/PatchesView.js'
             util.toWindow({ util, Color, PatchesView })
 
-            const params = {
-                seed: null,
+            const params = util.RESTapi({
+                seed: false,
                 maxX: 100,
                 maxY: null,
                 patchSize: 4,
@@ -29,8 +29,7 @@
                     ember1: Color.rgbaToPixel(255 - 100, 0, 0),
                     ember0: Color.rgbaToPixel(255 - 125, 0, 0),
                 },
-            }
-            Object.assign(params, util.parseQueryString())
+            })
             if (!params.maxY) params.maxY = params.maxX
             params.width = 2 * params.maxX + 1
             params.height = 2 * params.maxY + 1

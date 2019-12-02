@@ -2,13 +2,13 @@
 
 const shell = require('shelljs')
 
-const dir = process.argv[2]
-console.log('dir:', dir)
+const dir = process.argv[2].replace(/\/$/, '') // remove optional final "/"
 if (!dir) throw Error('Needs dir name argument')
+console.log('dir:', dir)
 
 let models
 // const models = shell.ls(`${dir}/*.js`)
-if (dir === 'models') {
+if (dir === 'models' || dir === 'models/scripts') {
     models = shell
         .ls(`${dir}/*Model.js`)
         // OK if first char is capitolized, index.html will just recap
@@ -39,4 +39,4 @@ models = models
 //     .split('\n')
 
 shell.echo('models:', models)
-models.forEach(model => shell.exec(`bin/runmodel ${dir}/${model}`))
+models.forEach(model => shell.exec(`bin/runmodel ${dir} ${model}`))

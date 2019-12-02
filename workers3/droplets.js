@@ -7,10 +7,10 @@ import ColorMap from '../src/ColorMap.js'
 import ThreeView from '../src/ThreeView.js'
 util.toWindow({ util, DataSet, RGBDataSet, World, Color, ColorMap, ThreeView })
 
-const params = {
-    seed: null,
+const params = util.RESTapi({
+    seed: false,
     maxX: 50,
-    maxY: null,
+    maxY: 50,
     steps: 500,
     shape: 'circle',
     shapeColor: 'yellow',
@@ -20,11 +20,10 @@ const params = {
         'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png',
     // have main manage tile => elevation. Worker can't, uses Image
     elevation: null,
-}
-Object.assign(params, util.parseQueryString())
-if (params.seed != null) util.randomSeed(params.seed)
-if (params.maxY == null) params.maxY = params.maxX
+})
+if (params.seed) util.randomSeed()
 params.world = World.defaultWorld(params.maxX, params.maxY)
+
 util.imagePromise(params.tile).then(png => {
     params.elevation = new RGBDataSet(png, -32768, 1 / 256) //, AgentArray)
     const grayColorMap = ColorMap.grayColorMap()

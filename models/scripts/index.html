@@ -14,15 +14,13 @@
 
             document.title = `S:${className}`
 
-            const params = {
+            const params = util.RESTapi({
                 classPath: `./${className}.js`,
                 className, // : className,
                 steps: 500,
-                testing,
                 seed: testing,
                 worker: true,
-            }
-            Object.assign(params, queryString)
+            })
 
             console.log('Running', className, 'params', params)
 
@@ -37,7 +35,7 @@
             function finish(sample) {
                 console.log('main', sample)
                 util.printToPage(sample)
-                if (params.testing) window.modelSample = JSON.stringify(sample)
+                if (testing) window.modelSample = JSON.stringify(sample)
             }
         </script>
         <div id="modelDiv"></div>

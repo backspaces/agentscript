@@ -30,8 +30,7 @@ onmessage = e => {
         params = e.data.params
         const { width, height, data } = e.data.params.elevation
         params.elevation = new DataSet(width, height, data)
-        if (params.seed != null) util.randomSeed(params.seed)
-
+        if (params.seed) util.randomSeed()
         model = new DropletsModel(params.world)
         // model.tile = params.tile
         // model.startup().then(() => {

@@ -12,8 +12,8 @@
             import ColorMap from '../src/ColorMap.js'
             util.toWindow({ util, PatchesView, ColorMap })
 
-            const params = {
-                seed: null,
+            const params = util.RESTapi({
+                seed: false,
                 maxX: 100,
                 maxY: 50,
                 patchSize: 3,
@@ -23,8 +23,7 @@
                 data: false,
                 maxZ: 10,
                 smooth: false,
-            }
-            Object.assign(params, util.parseQueryString())
+            })
             params.world = new World(
                 World.defaultOptions(params.maxX, params.maxY)
             )

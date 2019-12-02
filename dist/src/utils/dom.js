@@ -1,6 +1,7 @@
 // import { isObject } from './types.js' // see printToPage
 
-// REST: Parse the query, returning an object of key/val pairs.
+// REST:
+// Parse the query, returning an object of key / val pairs.
 export function parseQueryString(
     paramsString = window.location.search.substr(1)
 ) {
@@ -16,6 +17,10 @@ export function parseQueryString(
         results[key] = val
     }
     return results
+}
+// Merge the querystring into the default parameters
+export function RESTapi(parameters) {
+    return Object.assign(parameters, parseQueryString())
 }
 
 // Create dynamic `<script>` tag, appending to `<head>`

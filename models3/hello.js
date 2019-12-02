@@ -4,20 +4,18 @@ import Color from '../src/Color.js'
 import ThreeView from '../src/ThreeView.js'
 import HelloModel from '../models/HelloModel.js'
 
-const params = {
-    seed: null,
+const params = util.RESTapi({
+    seed: false,
     population: 100,
     maxX: 30,
-    maxY: null,
+    maxY: 30,
     steps: 500,
     linkColor: 'white', // css converted to webgl color below
     shape: 'dart',
     shapeSize: 2,
     world: null,
-}
-Object.assign(params, util.parseQueryString())
-if (params.seed != null) util.randomSeed(params.seed)
-if (params.maxY == null) params.maxY = params.maxX
+})
+if (params.seed) util.randomSeed()
 params.world = World.defaultOptions(params.maxX, params.maxY)
 params.linkColor = Color.toTypedColor(params.linkColor).webgl // webgl 0-1 color
 

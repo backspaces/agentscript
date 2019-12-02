@@ -40,8 +40,10 @@
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
         "watch": "npm-run-all watch-src watch-models",
         "run1": "bin/runmodels models",
+        "run1s": "bin/runmodels models/scripts",
         "run2": "bin/runmodels models2",
         "run3": "bin/runmodels models3",
+        "run3w": "bin/runmodels workers3",
         "safari": "bin/testsafari &",
         "temp": "bin/testsafari"
     },

@@ -1,7 +1,7 @@
 import World from '../src/World.js'
 import FireModel from '../models/FireModel.js'
 
-// util.randomSeed(1) // for consistant results over runs
+// util.randomSeed() // for consistant results over runs
 
 let model
 

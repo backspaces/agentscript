@@ -25,8 +25,7 @@ function postData() {
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (params.seed != null) util.randomSeed(params.seed)
-
+        if (params.seed) util.randomSeed()
         model = new AntsModel(params.world)
         model.population = params.population
         model.setup()

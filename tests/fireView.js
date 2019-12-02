@@ -28,7 +28,7 @@ function postData() {
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (params.seed) util.randomSeed(params.seed)
+        if (params.seed) util.randomSeed()
 
         if (params.img) {
             patchesView = new PatchesView(params.width, params.height)

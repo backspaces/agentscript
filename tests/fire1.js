@@ -2,7 +2,7 @@ import World from '../src/World.js'
 import util from '../src/util.js'
 import FireModel from '../models/FireModel.js'
 
-util.randomSeed(1) // for consistant results over runs
+util.randomSeed() // for consistant results over runs
 
 const options = World.defaultOptions(125)
 const model = new FireModel(options)

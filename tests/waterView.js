@@ -11,8 +11,8 @@ function postData() {
     let data = model.patches.props('zpos')
     data = usePixels
         ? new Uint32Array(
-            data.map(z => cmap.scaleColor(z, -params.maxZ, params.maxZ).pixel)
-        )
+              data.map(z => cmap.scaleColor(z, -params.maxZ, params.maxZ).pixel)
+          )
         : new Float32Array(data)
 
     if (params.img) {
@@ -29,7 +29,7 @@ function postData() {
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (params.seed) util.randomSeed(params.seed)
+        if (params.seed) util.randomSeed()
         cmap = ColorMap.basicColorMap(params.cmap)
 
         if (params.img) {

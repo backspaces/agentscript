@@ -30,8 +30,8 @@
             const div = document.getElementById('modelDiv')
             util.toWindow({ util, World, ThreeView, Color, div })
 
-            const params = {
-                seed: null,
+            const params = util.RESTapi({
+                seed: false,
                 population: 100,
                 usePoints: false,
                 shapeSize: 1.5,
@@ -43,8 +43,7 @@
                 maxY: null,
                 steps: 500,
                 data: false,
-            }
-            Object.assign(params, util.parseQueryString())
+            })
             if (!params.maxY) params.maxY = params.maxX
             params.world = new World(
                 World.defaultOptions(params.maxX, params.maxY)

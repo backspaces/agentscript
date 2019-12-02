@@ -20,22 +20,9 @@ function postData() {
                 y: Float32Array,
                 theta: Float32Array,
             }),
-            // links: model.links.typedSample({
-            //     x0: Float32Array,
-            //     y0: Float32Array,
-            //     x1: Float32Array,
-            //     y1: Float32Array,
-            // }),
         }
-        postMessage(data, [
-            data.turtles.x.buffer,
-            data.turtles.y.buffer,
-            data.turtles.theta.buffer,
-            // data.links.x0.buffer,
-            // data.links.y0.buffer,
-            // data.links.x1.buffer,
-            // data.links.y1.buffer,
-        ])
+        postMessage(data, util.oofaBuffers(data))
+
         if (data.turtles.x.length !== 0) console.log('to data', data)
     }
 }
@@ -43,7 +30,7 @@ function postData() {
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (params.seed != null) util.randomSeed(params.seed)
+        if (params.seed) util.randomSeed()
         if (params.img) Object.assign(self, setupView())
 
         model = new FlockModel(World.defaultOptions(params.maxX, params.maxY))
@@ -80,15 +67,7 @@ function setupView() {
                 noRotate: params.noRotate,
             }
         }
-        // function linkViewValues(link, i, links) {
-        //     return {
-        //         color: params.colors25[i % 25],
-        //         width: params.linkWidth,
-        //     }
-        // }
         util.clearCtx(view.ctx)
-        // util.fillCtx(view.ctx, 'lightgray')
-        // view.drawLinks(data.links, linkViewValues)
         view.drawTurtles(data.turtles, turtleViewValues)
     }
     return { view, draw }

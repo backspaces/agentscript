@@ -1,7 +1,7 @@
 importScripts('../dist/agentscript.umd.js')
 importScripts('./modelScripts/FireScript.js')
 
-// AS.util.randomSeed(1) // for consistant results over runs
+// AS.util.randomSeed() // for consistant results over runs
 
 let model
 

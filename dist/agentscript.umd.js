@@ -405,7 +405,8 @@
 
     // import { isObject } from './types.js' // see printToPage
 
-    // REST: Parse the query, returning an object of key/val pairs.
+    // REST:
+    // Parse the query, returning an object of key / val pairs.
     function parseQueryString(
         paramsString = window.location.search.substr(1)
     ) {
@@ -421,6 +422,10 @@
             results[key] = val;
         }
         return results
+    }
+    // Merge the querystring into the default parameters
+    function RESTapi(parameters) {
+        return Object.assign(parameters, parseQueryString())
     }
 
     // Create dynamic `<script>` tag, appending to `<head>`
@@ -493,6 +498,7 @@
 
     var dom = /*#__PURE__*/Object.freeze({
         parseQueryString: parseQueryString,
+        RESTapi: RESTapi,
         loadScript: loadScript,
         inWorker: inWorker,
         printToPage: printToPage,

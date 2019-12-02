@@ -15,7 +15,7 @@
             const can = document.getElementById('model')
             const ctx = can.getContext('2d')
 
-            const params = {
+            const params = util.RESTapi({
                 seed: 1,
                 shape: 'all', // triangle:78, square:95 faster, dart:66
                 shapeSize: 1.5,
@@ -32,9 +32,8 @@
                 steps: 500,
                 data: false,
                 noRotate: false,
-            }
-            Object.assign(params, util.parseQueryString())
-            if (params.seed != null) util.randomSeed(params.seed)
+            })
+            if (params.seed) util.randomSeed()
             if (!params.maxY) params.maxY = params.maxX
             if (params.sheet) params.sprites = true
             params.colors25 = util.repeat(25, (i, a) => {
@@ -44,7 +43,7 @@
                 World.defaultOptions(params.maxX, params.maxY)
             )
 
-            if (params.seed != null) util.randomSeed(params.seed) // reset seed
+            if (params.seed) util.randomSeed() // reset seed
             console.log('main: params', params)
             const view = new TurtlesView(ctx, params.world, {
                 patchSize: params.patchSize,

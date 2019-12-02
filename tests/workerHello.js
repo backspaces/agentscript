@@ -19,23 +19,14 @@ function postData() {
             y1: Float32Array,
         }),
     }
-    postMessage(data, [
-        data.turtles.x.buffer,
-        data.turtles.y.buffer,
-        data.turtles.theta.buffer,
-        data.links.x0.buffer,
-        data.links.y0.buffer,
-        data.links.x1.buffer,
-        data.links.y1.buffer,
-    ])
+    postMessage(data, util.oofaBuffers(data))
     if (data.turtles.x.length !== 0) console.log('to data', data)
 }
 
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (params.seed != null) util.randomSeed(params.seed)
-
+        if (params.seed) util.randomSeed()
         model = new HelloModel(params.world)
         model.population = params.population
         model.setup()

@@ -15,7 +15,7 @@
             const ctx = can.getContext('2d')
             util.toWindow({ util, World, TurtlesView, ctx, can })
 
-            const params = {
+            const params = util.RESTapi({
                 seed: 1,
                 population: 10,
                 shape: 'dart',
@@ -27,8 +27,7 @@
                 steps: 500,
                 data: false,
                 strokeColor: 'red',
-            }
-            Object.assign(params, util.parseQueryString())
+            })
             if (!params.maxY) params.maxY = params.maxX
             params.world = new World(
                 World.defaultOptions(params.maxX, params.maxY)
