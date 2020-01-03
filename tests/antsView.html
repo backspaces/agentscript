@@ -53,8 +53,8 @@
             })
             util.toWindow({ params, world: params.world }, true)
 
-            const nestColor = Color.toTypedColor(params.nestColor)
-            const foodColor = Color.toTypedColor(params.foodColor)
+            const nestColor = Color.typedColor(params.nestColor)
+            const foodColor = Color.typedColor(params.foodColor)
             const nestColorMap = ColorMap.gradientColorMap(20, [
                 'black',
                 params.nestColor,

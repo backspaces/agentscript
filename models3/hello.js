@@ -17,7 +17,7 @@ const params = util.RESTapi({
 })
 if (params.seed) util.randomSeed()
 params.world = World.defaultOptions(params.maxX, params.maxY)
-params.linkColor = Color.toTypedColor(params.linkColor).webgl // webgl 0-1 color
+params.linkColor = Color.typedColor(params.linkColor).webgl // webgl 0-1 color
 
 const colors25 = util.repeat(25, (i, a) => {
     a[i] = Color.randomCssColor()

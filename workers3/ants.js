@@ -16,8 +16,8 @@ const params = util.RESTapi({
 if (params.seed) util.randomSeed()
 params.world = World.defaultOptions(params.maxX, params.maxY)
 
-const nestColor = Color.toTypedColor('yellow')
-const foodColor = Color.toTypedColor('blue')
+const nestColor = Color.typedColor('yellow')
+const foodColor = Color.typedColor('blue')
 const nestColorMap = ColorMap.gradientColorMap(20, ['black', nestColor.css])
 const foodColorMap = ColorMap.gradientColorMap(20, ['black', foodColor.css])
 
