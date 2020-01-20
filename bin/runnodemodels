@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+const shell = require('shelljs')
+
+// const dir = '../models'
+const dir = './models'
+
+let models
+models = shell
+    .ls(`${dir}/*Model.js`)
+    // OK if first char is capitolized, index.html will just recap
+    .sed(/Model/, '')
+
+models = models
+    .sed(/^.*\//, '')
+    .sed(/.js$/, '')
+    .replace(/\n+$/, '')
+    .split('\n')
+    .map(str => str.charAt(0).toLowerCase() + str.slice(1))
+
+// console.log('models:', models)
+
+// const models = shell
+//     .ls(`${dir}/*.js`)
+//     // Avoid FooModel.js, fooWorker.js, just foo.js
+//     .grep('-v', '[A-Z]')
+//     .sed(/^.*\//, '')
+//     .sed(/.js$/, '')
+//     .replace(/\n+$/, '')
+//     .split('\n')
+
+shell.echo('models:', models)
+models.forEach(model => shell.exec(`${dir}/runNode ${model}`))

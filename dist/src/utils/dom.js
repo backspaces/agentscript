@@ -47,6 +47,10 @@ export function inWorker() {
     return self.window === undefined
 }
 
+export function inNode() {
+    return typeof global !== 'undefined'
+}
+
 // Print a message to an html element
 // Default to document.body if in browser.
 // If msg is an object, convert to JSON

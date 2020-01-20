@@ -6,6 +6,7 @@
     "homepage": "https://github.com/backspaces/agentscript",
     "main": "dist/agentscript.umd.js",
     "module": "dist/agentscript.esm.js",
+    "type": "module",
     "files": [
         "/dist/",
         "/docs/"
@@ -44,6 +45,7 @@
         "run2": "bin/runmodels models2",
         "run3": "bin/runmodels models3",
         "run3w": "bin/runmodels workers3",
+        "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",
         "temp": "bin/testsafari"
     },

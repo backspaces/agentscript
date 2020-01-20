@@ -452,6 +452,10 @@
         return self.window === undefined
     }
 
+    function inNode() {
+        return typeof global !== 'undefined'
+    }
+
     // Print a message to an html element
     // Default to document.body if in browser.
     // If msg is an object, convert to JSON
@@ -501,6 +505,7 @@
         RESTapi: RESTapi,
         loadScript: loadScript,
         inWorker: inWorker,
+        inNode: inNode,
         printToPage: printToPage,
         fcnToWorker: fcnToWorker,
         workerScript: workerScript,
