@@ -6,7 +6,6 @@
     "homepage": "https://github.com/backspaces/agentscript",
     "main": "dist/agentscript.umd.js",
     "module": "dist/agentscript.esm.js",
-    "type": "module",
     "files": [
         "/dist/",
         "/docs/"
@@ -28,7 +27,8 @@
     "scripts comments": {
         "ava": "0.25.0",
         "build-bin": "rollup -f umd -n gis src/gis.js > bin/gis.umd.js",
-        "postinstall": "rollup -c rollup.three.js"
+        "postinstall": "rollup -c rollup.three.js",
+        "Node settig for esm: ": "type: module"
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
