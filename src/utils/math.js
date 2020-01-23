@@ -91,7 +91,7 @@ export const lerp = (lo, hi, scale) =>
 // Clamps number to be between lo & hi.
 export function lerpScale(number, lo, hi) {
     if (lo === hi) throw Error('lerpScale: lo === hi')
-    number = util.clamp(number, lo, hi)
+    number = clamp(number, lo, hi)
     return (number - lo) / (hi - lo)
 }
 
