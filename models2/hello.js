@@ -4,6 +4,16 @@ import Color from '../src/Color.js'
 import TwoView from '../src/TwoView.js'
 import HelloModel from '../models/HelloModel.js'
 
+// import {
+//     util,
+//     World,
+// } from 'https://backspaces.github.io/agentscript/dist/agentscript.esm.js'
+// import util from 'https://backspaces.github.io/agentscript/src/util.js'
+// import World from 'https://backspaces.github.io/agentscript/src/World.js'
+// import Color from 'https://backspaces.github.io/agentscript/src/Color.js'
+// import TwoView from 'https://backspaces.github.io/agentscript/src/TwoView.js'
+// import HelloModel from 'https://backspaces.github.io/agentscript/models/HelloModel.js'
+
 const params = util.RESTapi({
     seed: false,
     population: 100,
