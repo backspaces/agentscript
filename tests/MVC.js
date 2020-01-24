@@ -5,14 +5,11 @@ import Model from '../src/Model.js'
 import TwoView from '../src/TwoView.js'
 import Animator from '../src/Animator.js'
 import World from '../src/World.js'
-// import util from './util.js'
 
-// export default class MVC {
 export default class MVC extends Model {
     constructor(div = document.body, world = World.defaultWorld()) {
         super(world)
         Object.assign(this, { div, world })
-        // this.model = new this(world)
         this.view = new TwoView(div, world)
         this.animator = new Animator(this)
     }

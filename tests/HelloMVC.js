@@ -1,4 +1,3 @@
-// import Model from '../src/Model.js'
 import MVC from './MVC.js'
 import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
