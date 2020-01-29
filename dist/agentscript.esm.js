@@ -1545,10 +1545,12 @@ class AgentArray extends Array {
     }
 }
 
+// import util from './util.js'
+
 // AgentSets are arrays that are factories for their own agents/objects.
 // They are the base for Patches, Turtles and Links.
 
-// Vocab: AgentSets are NetLogo collections: Patches, Turtles, and Links.
+// Names: AgentSets are NetLogo collections: Patches, Turtles, and Links.
 // Agent is an object in an AgentSet: Patch, Turtle, Link.
 
 class AgentSet extends AgentArray {
@@ -1642,8 +1644,8 @@ class AgentSet extends AgentArray {
         console.log(`AgentSet: Abstract method called: ${this}`);
     }
 
-    // Add an agent to the list.  Only used by agentset factory methods. Adds
-    // the `id` property to all agents. Increment `ID`.
+    // Add an agent to the list.  Only used by agentset factory methods.
+    // Adds the `id` property to all agents. Increment `ID`.
     // Returns the object for chaining. The set will be sorted by `id`.
     addAgent(o) {
         // o only for breeds adding themselves to their baseSet
@@ -1723,15 +1725,13 @@ class AgentSet extends AgentArray {
 
     ask(fcn) {
         if (this.length === 0) return
-        const lastID = this.last().id;
+        const lastID = this.last().id; // would fail w/o 0 check above
+        // for (let i = 0; this[i].id <= lastID; i++) { // nope.
         for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
-            // for (let i = 0; this[i].id <= lastID; i++) { // nope.
             fcn(this[i], i, this);
         }
     }
     // Call fcn(agent, index, array) for each item in AgentArray.
-    // Return the AgentArray for chaining.
-    // Note: 5x+ faster than this.forEach(fcn) !!
     // Manages immutability reasonably well.
     askSet(fcn) {
         if (this.length === 0) return
@@ -1740,8 +1740,9 @@ class AgentSet extends AgentArray {
         else if (this.isBaseSet()) this.baseSetAsk(fcn);
         else if (this.isBreedSet()) this.cloneAsk(fcn);
     }
+    // // Above, returning array for chaining
     // askSet(fcn) {
-    //     if (this.length === 0) return
+    //     if (this.length === 0) return this
     //     // Patches are static
     //     if (this.name === 'patches') return super.each(fcn)
     //     if (this.isBaseSet()) return this.baseSetAsk(fcn)
@@ -1754,15 +1755,14 @@ class AgentSet extends AgentArray {
     // and managing deletions only within the original length.
     baseSetAsk(fcn) {
         if (this.length === 0) return
-        // const length = this.length
         const lastID = this.last().id;
 
         // Added obj's have id > lastID. Just check for deletions.
         // There Be Dragons:
         // - AgentSet can become length 0 if all deleted
-        // - While loop tricky:
-        //   - i can become negative w/in while loop:
-        //   - i can become bigger than current AgentSet:
+        // - For loop tricky:
+        //   - i can become negative w/in loop:
+        //   - i can become bigger than current AgentSet
         //   - Guard w/ i<len & i>=0
         for (let i = 0; i < this.length; i++) {
             const obj = this[i];
@@ -1813,83 +1813,83 @@ class AgentSet extends AgentArray {
         // return this
     }
 
-    // Temp: data transfer. May not use if AgentArray.typedSample
-    // (OofA) is sufficient.
-    propsArrays(keys, indexed = true) {
-        const result = indexed ? {} : new AgentArray(this.length);
-        if (util.isString(keys)) keys = keys.split(' ');
-        for (let i = 0; i < this.length; i++) {
-            const vals = [];
-            const agent = this[i];
-            for (let j = 0; j < keys.length; j++) {
-                vals.push(agent[keys[j]]);
-            }
-            result[indexed ? agent.id : i] = vals;
-        }
-        return result
-    }
-    propsObjects(keys, indexed = true) {
-        const result = indexed ? {} : new AgentArray(this.length);
-        // if (util.isString(keys)) keys = keys.split(' ')
-        if (util.isString(keys)) keys = keys.split(/,*  */);
-        for (let i = 0; i < this.length; i++) {
-            const vals = {};
-            const agent = this[i];
-            for (let j = 0; j < keys.length; j++) {
-                // Parse key/val pair for nested objects
-                let key = keys[j],
-                    val;
-                if (key.includes(':')) {
-                    [key, val] = key.split(':');
-                    val = util.getNestedObject(agent, val);
-                } else {
-                    if (key.includes('.')) {
-                        throw Error(
-                            'propsObjects: dot notation requires name:val: ' +
-                                key
-                        )
-                    }
-                    val = agent[key];
-                }
+    // // Temp: data transfer. May not use if AgentArray.typedSample
+    // // (OofA) is sufficient.
+    // propsArrays(keys, indexed = true) {
+    //     const result = indexed ? {} : new AgentArray(this.length)
+    //     if (util.isString(keys)) keys = keys.split(' ')
+    //     for (let i = 0; i < this.length; i++) {
+    //         const vals = []
+    //         const agent = this[i]
+    //         for (let j = 0; j < keys.length; j++) {
+    //             vals.push(agent[keys[j]])
+    //         }
+    //         result[indexed ? agent.id : i] = vals
+    //     }
+    //     return result
+    // }
+    // propsObjects(keys, indexed = true) {
+    //     const result = indexed ? {} : new AgentArray(this.length)
+    //     // if (util.isString(keys)) keys = keys.split(' ')
+    //     if (util.isString(keys)) keys = keys.split(/,*  */)
+    //     for (let i = 0; i < this.length; i++) {
+    //         const vals = {}
+    //         const agent = this[i]
+    //         for (let j = 0; j < keys.length; j++) {
+    //             // Parse key/val pair for nested objects
+    //             let key = keys[j],
+    //                 val
+    //             if (key.includes(':')) {
+    //                 [key, val] = key.split(':')
+    //                 val = util.getNestedObject(agent, val)
+    //             } else {
+    //                 if (key.includes('.')) {
+    //                     throw Error(
+    //                         'propsObjects: dot notation requires name:val: ' +
+    //                             key
+    //                     )
+    //                 }
+    //                 val = agent[key]
+    //             }
 
-                // If function, val is result of calling it w/ no args
-                if (util.typeOf(val) === 'function') val = agent[val.name]();
+    //             // If function, val is result of calling it w/ no args
+    //             if (util.typeOf(val) === 'function') val = agent[val.name]()
 
-                // Do id substitution for arrays & objects
-                if (util.isArray(val)) {
-                    if (util.isInteger(val[0].id)) {
-                        if (val.ID) {
-                            throw Error(
-                                'propsObjects: value cannot be an AgentSet: ' +
-                                    key
-                            )
-                        }
-                        // assume all are agents, replace w/ id
-                        val = val.map(v => v.id);
-                    } else {
-                        // Should check that all values are primitives
-                        val = util.clone(val);
-                    }
-                } else if (util.isObject(val)) {
-                    if (util.isInteger(val.id)) {
-                        val = val.id;
-                    } else {
-                        val = Object.assign({}, obj);
-                        util.forLoop(val, (v, key) => {
-                            // Should check that all values are primitives
-                            if (util.isInteger(v.id)) {
-                                v[key] = v.id;
-                            }
-                        });
-                    }
-                }
+    //             // Do id substitution for arrays & objects
+    //             if (util.isArray(val)) {
+    //                 if (util.isInteger(val[0].id)) {
+    //                     if (val.ID) {
+    //                         throw Error(
+    //                             'propsObjects: value cannot be an AgentSet: ' +
+    //                                 key
+    //                         )
+    //                     }
+    //                     // assume all are agents, replace w/ id
+    //                     val = val.map(v => v.id)
+    //                 } else {
+    //                     // Should check that all values are primitives
+    //                     val = util.clone(val)
+    //                 }
+    //             } else if (util.isObject(val)) {
+    //                 if (util.isInteger(val.id)) {
+    //                     val = val.id
+    //                 } else {
+    //                     val = Object.assign({}, obj)
+    //                     util.forLoop(val, (v, key) => {
+    //                         // Should check that all values are primitives
+    //                         if (util.isInteger(v.id)) {
+    //                             v[key] = v.id
+    //                         }
+    //                     })
+    //                 }
+    //             }
 
-                vals[key] = val;
-            }
-            result[indexed ? agent.id : i] = vals;
-        }
-        return result
-    }
+    //             vals[key] = val
+    //         }
+    //         result[indexed ? agent.id : i] = vals
+    //     }
+    //     return result
+    // }
 }
 
 // A **DataSet** is an object with width/height and an array

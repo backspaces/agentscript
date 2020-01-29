@@ -5,34 +5,42 @@ import TurtlesView from './TurtlesView.js'
 
 export default class TwoView {
     static defaultOptions() {
-        return TurtlesView.defaultOptions()
+        return {
+            div: document.body,
+            useSprites: false,
+            patchSize: 10,
+        }
+        // return TurtlesView.defaultOptions()
     }
 
     // ======================
 
-    constructor(
-        div = document.body,
-        worldOptions = World.defaultOptions(),
-        options = {} // TwoView.defaultOptions()
-    ) {
-        // options: override defaults:
-        options = Object.assign(TwoView.defaultOptions(), options)
+    // constructor(
+    //     div = document.body,
+    //     worldOptions = World.defaultOptions(),
+    //     options = {} // TwoView.defaultOptions()
+    // ) {
+    constructor(model, options = {}) {
+        // options: override defaults, assign to this
+        Object.assign(this, TwoView.defaultOptions(), options)
 
+        let div = this.div
         div = util.isString(div) ? document.getElementById(div) : div
         if (!util.isCanvas(div)) {
             const can = util.createCanvas(0, 0, false) // not offscreen
             div.appendChild(can)
             div = can
         }
+        // this.div = div
 
-        const ctx = div.getContext('2d')
-        const world = new World(worldOptions)
+        this.ctx = div.getContext('2d')
+        this.world = model.world
 
         // Object.assign(this, { ctx, world }, options)
-        Object.assign(this, { ctx, world })
+        // Object.assign(this, { ctx, world })
 
-        this.patchesView = new PatchesView(world.width, world.height)
-        this.turtlesView = new TurtlesView(ctx, world, options)
+        this.patchesView = new PatchesView(this.world.width, this.world.height)
+        this.turtlesView = new TurtlesView(this.ctx, this.world, options)
 
         this.ticks = 0
     }
@@ -46,18 +54,18 @@ export default class TwoView {
         this.turtlesView.reset(patchSize, useSprites)
     }
 
-    get patchSize() {
-        return this.turtlesView.patchSize
-    }
-    set patchSize(val) {
-        this.reset(val, this.useSprites)
-    }
-    get useSprites() {
-        return this.turtlesView.useSprites
-    }
-    set useSprites(val) {
-        this.reset(this.patchSize, val)
-    }
+    // get patchSize() {
+    //     return this.turtlesView.patchSize
+    // }
+    // set patchSize(val) {
+    //     this.reset(val, this.useSprites)
+    // }
+    // get useSprites() {
+    //     return this.turtlesView.useSprites
+    // }
+    // set useSprites(val) {
+    //     this.reset(this.patchSize, val)
+    // }
 
     clear(cssColor = null) {
         if (cssColor) {

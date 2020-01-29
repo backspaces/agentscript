@@ -111,6 +111,19 @@ const ColorMap = {
         randomColor() {
             return this[util.randomInt(this.length)]
         },
+
+        // Set alpha of all the colors ih the map
+        // Note this will be shared by all users of this map!
+        // Use clone() to have your own copy of a shared map.
+        setAlpha(alpha) {
+            util.forLoop(this, color => color.setAlpha(alpha))
+        },
+
+        // Clone this colorMap
+        clone() {
+            return ColorMap.cloneColorMap(this)
+        },
+
         // Return the color at index of this array.
         // Wrap the index to be within the array.
         atIndex(index) {
@@ -270,9 +283,9 @@ const ColorMap = {
     // * Two colors: stops = ['red', 'orange'] (blends the tow, center is white)
 
     // The 16 unique [CSS Color Names](https://goo.gl/sxo36X), case insensitive.
-    // Aqua == Cyan and Fuchsia == Magenta, 18 total color names.
-    // These sorted by hue/saturation/light, hue in 0-300 degrees.
     // In CSS 2.1, the color 'orange' was added to the 16 colors as a 17th color
+    // Aqua == Cyan and Fuchsia == Magenta, 19 total color names.
+    // These sorted by hue/saturation/light, hue in 0-300 degrees.
     // See [Mozilla Color Docs](https://goo.gl/tolSnS) for *lots* more!
     basicColorNames: 'white silver gray black red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
         ' '
@@ -294,9 +307,23 @@ const ColorMap = {
         return map
     },
 
+    // Clone a colorMap. Useful if you want to mutate an existing shared map
+    cloneColorMap(colorMap) {
+        const keys = Object.keys(colorMap)
+        const clone = this.basicColorMap(colorMap)
+        util.forLoop(keys, (val, i) => {
+            if (clone[i] === undefined) clone[val] = colorMap[val]
+        })
+        return clone
+    },
+
     // ### Shared Global ColorMaps
+    // NOTE: Do NOT modify one of these, they are shared and would
+    // surprise anyone useing them. Use cloneColorMap() to have your own
+    // private one, or call any of the map factories above .. see below.
 
     // The shared global colormaps are lazy evaluated to minimize memory use.
+    // NOTE: these are shared, so any change in them are seen by all users!
     LazyMap(name, map) {
         Object.defineProperty(this, name, { value: map, enumerable: true })
         return map

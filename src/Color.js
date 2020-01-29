@@ -199,6 +199,21 @@ const TypedColorProto = {
         return this
     },
 
+    // Set opacity to a value in 0-255
+    setAlpha(alpha) {
+        this.checkColorChange()
+        this[3] = alpha // Uint8ClampedArray will clamp to 0-255
+    },
+    getAlpha() {
+        return this[3]
+    },
+    get alpha() {
+        return this.getAlpha()
+    },
+    set alpha(alpha) {
+        this.setAlpha(alpha)
+    },
+
     // Set the Color to a new pixel value
     setPixel(pixel) {
         this.checkColorChange()

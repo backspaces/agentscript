@@ -7,10 +7,10 @@ import World from '../src/World.js'
 
 export default class MVC1 {
     constructor(ModelClass, div = document.body, world = World.defaultWorld()) {
+        // Object.assign(this, { ModelClass, div, world })
         this.model = new ModelClass(world)
-        Object.assign(this, { ModelClass, div, world })
         this.view = new TwoView(div, world)
-        this.animator = new Animator(this.model, this)
+        this.animator = new Animator(this)
     }
 
     // Model methods
@@ -22,6 +22,10 @@ export default class MVC1 {
     }
     step() {
         this.model.step()
+    }
+    // Called by animator. Add to step? Use local in animator?
+    tick() {
+        this.model.tick()
     }
 
     // MVC View must override draw:
