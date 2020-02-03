@@ -3,6 +3,7 @@
 
 import TwoView from './TwoView.js'
 import Animator from './Animator.js'
+import util from './util.js'
 
 export default class TwoMVC {
     static defaultOptions() {
@@ -10,7 +11,7 @@ export default class TwoMVC {
             // Model
             // Note: world (undefined) defaults to ModelClass's default world.
             // Supplying your own world will override the model's default.
-            world: undefined, // use model's default world
+            // world: undefined, // undefined => use model's default world
 
             // View
             div: document.body,
@@ -19,19 +20,30 @@ export default class TwoMVC {
         }
     }
 
-    // constructor(ModelClass, div = document.body, world) {
     // options *override* the defaults above. Just put in ones that differ.
-    constructor(ModelClass, options = {}) {
+    constructor(model, options = {}) {
         options = Object.assign(TwoMVC.defaultOptions(), options)
-        // Object.assign(this, options)
-        // Object.assign(this, TwoMVC.defaultOptions(), options)
-        // this.model = new ModelClass(this.world)
-        this.model = new ModelClass(options.world)
-        options.world = this.model.world
-        // The view uses the model's resulting world
-        // this.view = new TwoView(this.div, this.model.world)
-        this.view = new TwoView(this.model, options)
+
+        const modelDefaults = model.constructor.defaultOptions()
+        Object.assign(model, this.override(modelDefaults, options))
+        this.model = model
+
+        const viewDefaults = TwoView.defaultOptions()
+        this.view = new TwoView(
+            this.model,
+            this.override(viewDefaults, options)
+        )
+
         this.animator = new Animator(this)
+    }
+    override(defaults, options) {
+        const overrides = defaults
+        util.forLoop(defaults, (val, key) => {
+            if (options[key]) {
+                overrides[key] = options[key]
+            }
+        })
+        return overrides
     }
 
     // Model methods
@@ -66,7 +78,7 @@ export default class TwoMVC {
     }
 
     get fps() {
-        return this.animator.fps()
+        return this.animator.fps
     }
     set fps(fps) {
         this.animator.fps = fps

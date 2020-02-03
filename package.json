@@ -44,6 +44,7 @@
         "run1s": "bin/runmodels models/scripts",
         "run2": "bin/runmodels models2",
         "run3": "bin/runmodels models3",
+        "runmvc2": "bin/runmodels mvc2",
         "run3w": "bin/runmodels workers3",
         "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",

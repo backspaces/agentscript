@@ -1,5 +1,5 @@
 import util from './util.js'
-import World from './World.js'
+// import World from './World.js'
 import PatchesView from './PatchesView.js'
 import TurtlesView from './TurtlesView.js'
 

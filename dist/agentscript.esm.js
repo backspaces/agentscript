@@ -3567,8 +3567,8 @@ class Model {
         initAgentSet('links', Links, Link);
     }
 
-    reset() {
-        this.resetModel();
+    reset(worldOptions) {
+        this.resetModel(worldOptions);
     }
     tick() {
         this.ticks++;
@@ -3577,15 +3577,10 @@ class Model {
     // ### User Model Creation
 
     // A user's model is made by subclassing Model and over-riding these
-    // 2 abstract methods. `super` need not be called.
-
-    isAsync() {
-        return this.startup.toString() !== 'async startup() {}'
-    }
-    async startup() {}
+    // 3 abstract methods. `super` should not be called.
+    async startup() {} // One-time async data fetching goes here.
     setup() {} // Your initialization code goes here
-    // Update/step your model here
-    step() {} // called each step of the model
+    step() {} // Called each step of the model
 
     // Breeds: create breeds/subarrays of Patches, Agents, Links
     patchBreeds(breedNames) {

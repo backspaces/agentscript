@@ -3,11 +3,6 @@ import Shapes from './Shapes.js'
 
 export default class TurtlesView {
     static defaultOptions() {
-        // const options = {
-        //     // canvasStack: false,
-        //     useSprites: false,
-        //     patchSize: 10,
-        // }
         return {
             // canvasStack: false,
             useSprites: false,

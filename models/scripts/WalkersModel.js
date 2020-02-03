@@ -14,7 +14,7 @@ class WalkersModel extends Model {
     // ======================
 
     constructor(worldDptions) {
-        super(worldDptions) // default world options
+        super(worldDptions) // default world options if "undefined"
         Object.assign(this, WalkersModel.defaultOptions())
     }
     setup() {

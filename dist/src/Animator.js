@@ -17,7 +17,7 @@ export default class Animator {
     }
     // Adjust animator. Call before model.start()
     // in setup() to change default settings
-    setRate(rate, multiStep = this.multistep) {
+    setRate(rate, multiStep = this.multiStep) {
         Object.assign(this, { rate, multiStep })
         this.resetTimes()
     }

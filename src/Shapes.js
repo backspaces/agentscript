@@ -5,7 +5,7 @@ import util from './util.js'
 class Shapes {
     constructor() {
         this.cache = {}
-        this.paths = paths
+        this.paths = paths // For accessing the paths thru the Shapes instance
     }
     // Add a new path. Error if name already used
     addPath(name, pathFunction) {
@@ -145,7 +145,11 @@ const paths = {
     },
     bug2(ctx) {
         ctx.lineWidth = 0.05
-        poly(ctx, [[0.4, 0.225], [0.2, 0], [0.4, -0.225]])
+        poly(ctx, [
+            [0.4, 0.225],
+            [0.2, 0],
+            [0.4, -0.225],
+        ])
         ctx.stroke()
         ctx.beginPath()
         circle(ctx, 0.12, 0, 0.13)
@@ -157,15 +161,30 @@ const paths = {
         circle(ctx, 0, 0, 0.5)
     },
     dart(ctx) {
-        poly(ctx, [[0.5, 0], [-0.5, 0.4], [-0.25, 0], [-0.5, -0.4]])
+        poly(ctx, [
+            [0.5, 0],
+            [-0.5, 0.4],
+            [-0.25, 0],
+            [-0.5, -0.4],
+        ])
     },
     frame(ctx) {
         const inset = 0.2
         const r = 0.5 - inset
-        poly(ctx, [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]]) //cclockwise
+        poly(ctx, [
+            [-0.5, -0.5],
+            [0.5, -0.5],
+            [0.5, 0.5],
+            [-0.5, 0.5],
+        ]) //cclockwise
         ctx.closePath()
         // reverse direction for non-zero winding rule to leave empty center rect.
-        poly(ctx, [[-r, -r], [-r, r], [r, r], [r, -r]]) // clockwise
+        poly(ctx, [
+            [-r, -r],
+            [-r, r],
+            [r, r],
+            [r, -r],
+        ]) // clockwise
     },
     frame2(ctx) {
         const inset = 0.2
@@ -221,7 +240,11 @@ const paths = {
         square(ctx, 0, 0, 1)
     },
     triangle(ctx) {
-        poly(ctx, [[0.5, 0], [-0.5, -0.4], [-0.5, 0.4]])
+        poly(ctx, [
+            [0.5, 0],
+            [-0.5, -0.4],
+            [-0.5, 0.4],
+        ])
     },
 }
 

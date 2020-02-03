@@ -20,7 +20,7 @@ export default class HelloModel extends MVC {
     // ======================
 
     constructor(worldDptions) {
-        super(worldDptions) // default world options
+        super(worldDptions) // default world options if "undefined"
         Object.assign(this, HelloModel.defaultOptions())
     }
     setup() {

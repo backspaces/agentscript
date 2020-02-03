@@ -9,9 +9,13 @@ export default class FireMVC extends TwoMVC {
             // Model defaults, set by MVC ctor
             // density: 60, // percent
 
+            // TwoMVC defaults, you can override here:
+            // div: document.body,
+            // useSprites: false,
+            // patchSize: 10,
             patchSize: 4,
 
-            // Draw defaults
+            // View parameters
             dirt: Color.cssToPixel('yellow'),
             tree: Color.cssToPixel('green'),
             fire: Color.cssToPixel('red'),
@@ -25,14 +29,9 @@ export default class FireMVC extends TwoMVC {
 
     // ======================
 
-    // constructor(options) {
-    //     // Use model's default world unless overriden
-    //     super(FireModel, div, world)
-    //     Object.assign(this, FireMVC.defaultOptions())
-    // }
     constructor(options) {
         options = Object.assign(FireMVC.defaultOptions(), options)
-        super(FireModel, options)
+        super(new FireModel(), options)
         Object.assign(this, options)
     }
 

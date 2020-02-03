@@ -13,6 +13,8 @@ if (dir === 'models' || dir === 'models/scripts') {
         .ls(`${dir}/*Model.js`)
         // OK if first char is capitolized, index.html will just recap
         .sed(/Model/, '')
+} else if (dir === 'mvc2') {
+    models = shell.ls(`${dir}/*MVC.js`).sed(/MVC/, '')
 } else {
     models = shell
         .ls(`${dir}/*.js`)
