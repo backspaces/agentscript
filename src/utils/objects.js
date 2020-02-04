@@ -17,16 +17,16 @@ export const propFcn = prop => o => o[prop]
 export function nestedProperty(obj, path) {
     if (typeof path === 'string') path = path.split('.')
     switch (path.length) {
-    case 1:
-        return obj[path[0]]
-    case 2:
-        return obj[path[0]][path[1]]
-    case 3:
-        return obj[path[0]][path[1]][path[2]]
-    case 4:
-        return obj[path[0]][path[1]][path[2]][path[3]]
-    default:
-        return path.reduce((obj, param) => obj[param], obj)
+        case 1:
+            return obj[path[0]]
+        case 2:
+            return obj[path[0]][path[1]]
+        case 3:
+            return obj[path[0]][path[1]][path[2]]
+        case 4:
+            return obj[path[0]][path[1]][path[2]][path[3]]
+        default:
+            return path.reduce((obj, param) => obj[param], obj)
     }
 }
 
@@ -196,14 +196,32 @@ export function shuffle(array) {
     }
     return array
 }
-// Returns new array (of this type) of unique elements in this *sorted* array.
-// Sort or clone & sort if needed.
-export function uniq(array, f = identityFcn) {
-    if (isString(f)) f = propFcn(f)
-    return array.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
+// // Returns new array (of this type) of unique elements in this *sorted* array.
+// // Sort or clone & sort if needed.
+// export function uniq(array, f = identityFcn) {
+//     if (isString(f)) f = propFcn(f)
+//     return array.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
+// }
+// // Simple uniq on sorted or unsorted array.
+// export const uniqUnsorted = array => Array.from(new Set(array))
+
+// Set operations on arrays
+// union: elements in a1 or a2
+export function union(a1, a2) {
+    return Array.from(new Set(a1.concat(a2)))
 }
-// Simple uniq on sorted or unsorted array.
-export const uniqUnsorted = array => Array.from(new Set(array))
+// intersection: elements in a1 and a2
+export function intersection(a1, a2) {
+    // intersection = new Set([...set1].filter(x => set2.has(x)))
+    const set2 = new Set(a2)
+    return a1.filter(x => set2.has(x))
+}
+// Difference: elements from a1 not in a2
+export function difference(a1, a2) {
+    // difference = new Set([...set1].filter(x => !set2.has(x)))
+    const set2 = new Set(a2)
+    return a1.filter(x => !set2.has(x))
+}
 
 // Return a "ramp" (array of uniformly ascending/descending floats)
 // in [start,stop] with numItems (positive integer > 1).
