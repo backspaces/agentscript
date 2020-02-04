@@ -7,7 +7,7 @@ import World from '../src/World.js'
 export default class AntsMVC extends TwoMVC {
     static defaultOptions() {
         return {
-            // Model defaults, set by MVC ctor
+            // Model defaults, you can override here:
             // population: 255,
             // speed: 1.0,
             // maxPheromone: 35,
@@ -21,7 +21,7 @@ export default class AntsMVC extends TwoMVC {
             // patchSize: 10,
             useSprites: true,
 
-            // View parameters
+            // View parameters, used by draw() below
             shape: 'bug', // harder to draw, sprites help a LOT
             shapeSize: 3,
             nestColor: Color.typedColor('yellow'),
@@ -37,7 +37,7 @@ export default class AntsMVC extends TwoMVC {
         Object.assign(this, options)
     }
 
-    // extend setup to initialize patches
+    // Extend setup to initialize patches
     setup() {
         super.setup()
 
@@ -53,8 +53,6 @@ export default class AntsMVC extends TwoMVC {
 
     draw() {
         view.clear()
-        // view.drawPatches(model.patches, p => this[p.type])
-        // view.drawPatches() // redraw cached patches colors
         view.drawPatches(this.model.patches, p => {
             if (p.isNest) return this.nestColor.pixel
             if (p.isFood) return this.foodColor.pixel
@@ -65,23 +63,10 @@ export default class AntsMVC extends TwoMVC {
             return color.pixel
         })
 
-        // view.drawTurtles(this.model.turtles, t => ({
-        //     sprite: t.carryingFood ? nestSprite : foodSprite,
-        //     size: params.shapeSize,
-        // }))
         view.drawTurtles(model.turtles, t => ({
             shape: this.shape,
             color: t.carryingFood ? this.nestColor.css : this.foodColor.css,
             size: this.shapeSize,
         }))
-    }
-
-    // Use patches.elevation to get patch colors
-    getPatchColors() {
-        const elevation = model.patches.exportDataSet('elevation')
-        const grays = elevation.scale(0, 255).data
-        const colors = grays.map(d => this.grayColorMap[Math.round(d)])
-        model.localMins.forEach(p => (colors[p.id] = this.localMinColor))
-        return colors
     }
 }

@@ -5,7 +5,7 @@ import ColorMap from '../src/ColorMap.js'
 export default class HelloMVC extends MVC {
     static defaultOptions() {
         return {
-            // Model defaults, set by MVC ctor
+            // Model defaults, you can override here:
             // population: 10,
             // speed: 0.1,
             // wiggle: 0.1,

@@ -7,7 +7,7 @@ import World from '../src/World.js'
 export default class HelloMVC extends TwoMVC {
     static defaultOptions() {
         return {
-            // Model defaults, set by MVC ctor
+            // Model defaults, you can override here:
             // population: 10,
             // speed: 0.1,
             // wiggle: 0.1,
@@ -21,8 +21,7 @@ export default class HelloMVC extends TwoMVC {
             useSprites: true,
             patchSize: 15,
 
-            // View parameters
-            // linkColor: 'white',
+            // View parameters, used by draw() below
             linkColor: 'rgba(255,255,255,0.25',
             shape: 'bug', // harder to draw, sprites help a LOT
             shapeSize: 2,

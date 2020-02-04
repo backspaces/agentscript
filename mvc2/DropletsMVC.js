@@ -6,7 +6,7 @@ import ColorMap from '../src/ColorMap.js'
 export default class DropletsMVC extends TwoMVC {
     static defaultOptions() {
         return {
-            // Model defaults, set by MVC ctor
+            // Model defaults, you can override here:
             // stepType choices:
             //    'minNeighbor',
             //    'patchAspect',
@@ -25,7 +25,7 @@ export default class DropletsMVC extends TwoMVC {
 
             useSprites: true,
 
-            // View parameters
+            // View parameters, used by draw() below
             shape: 'circle',
             shapeColor: 'yellow',
             shapeSize: 0.5,
@@ -42,7 +42,7 @@ export default class DropletsMVC extends TwoMVC {
         Object.assign(this, options)
     }
 
-    // extend setup to initialize patches
+    // Extend setup to initialize patches
     setup() {
         console.log('calling super')
         super.setup()
@@ -51,18 +51,11 @@ export default class DropletsMVC extends TwoMVC {
         // Install patche colors from their elevations
         const patchColors = this.getPatchColors()
         this.view.createPatchPixels(i => patchColors[i].pixel)
-
-        // Create a droplet sprite: (only in ThreeView .. add to TwoView)
-        // this.sprite = this.view.getSprite(this.shape, this.shapeColor)
     }
 
     draw() {
         view.clear()
         view.drawPatches() // redraw cached patches colors
-        // view.drawTurtles(model.turtles, {
-        //     sprite: this.sprite,
-        //     size: this.shapeSize,
-        // })
         view.drawTurtles(model.turtles, {
             shape: this.shape,
             color: this.shapeColor,
@@ -70,7 +63,7 @@ export default class DropletsMVC extends TwoMVC {
         })
     }
 
-    // Use patches.elevation to get patch colors
+    // Use patches.elevation to set patch colors
     getPatchColors() {
         const elevation = model.patches.exportDataSet('elevation')
         const grays = elevation.scale(0, 255).data

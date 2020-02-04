@@ -1,12 +1,11 @@
 import FireModel from '../models/FireModel.js'
 import TwoMVC from '../src/TwoMVC.js'
 import Color from '../src/Color.js'
-// import ColorMap from '../src/ColorMap.js'
 
 export default class FireMVC extends TwoMVC {
     static defaultOptions() {
         return {
-            // Model defaults, set by MVC ctor
+            // Model defaults, you can override here:
             // density: 60, // percent
 
             // TwoMVC defaults, you can override here:
@@ -15,7 +14,7 @@ export default class FireMVC extends TwoMVC {
             // patchSize: 10,
             patchSize: 4,
 
-            // View parameters
+            // View parameters, used by draw() below
             dirt: Color.cssToPixel('yellow'),
             tree: Color.cssToPixel('green'),
             fire: Color.cssToPixel('red'),
