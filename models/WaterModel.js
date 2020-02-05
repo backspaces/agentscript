@@ -1,7 +1,7 @@
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-// import util from '../src/util.js'
 
+// Derived from Cody's water model.
 export default class WaterModel extends Model {
     static defaultOptions() {
         return {
@@ -19,31 +19,21 @@ export default class WaterModel extends Model {
         Object.assign(this, WaterModel.defaultOptions())
     }
     setup() {
-        // this.cmap = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
-
         this.patches.ask(p => {
             p.zpos = 0
             p.deltaZ = 0
         })
-        // this.colorPatches()
     }
 
     step() {
         if (this.ticks % this.drip === 0) this.createWave(this.patches.oneOf())
         this.patches.ask(p => this.computeDeltaZ(p))
         this.patches.ask(p => this.updateZ(p))
-        // this.colorPatches()
     }
 
     createWave(p) {
         p.zpos = this.strength
     }
-    // colorPatches() {
-    //     const maxWater = 10
-    //     this.patches.ask(p => {
-    //         p.color = this.cmap.scaleColor(p.zpos, -maxWater, maxWater)
-    //     })
-    // }
     computeDeltaZ(p) {
         const k = 1 - 0.01 * this.surfaceTension
         const n = p.neighbors4

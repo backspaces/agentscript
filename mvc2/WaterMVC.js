@@ -7,7 +7,10 @@ export default class WaterMVC extends TwoMVC {
     static defaultOptions() {
         return {
             // Model defaults, you can override here:
-            // density: 60, // percent
+            // strength: 100,
+            // surfaceTension: 56,
+            // friction: 0.99,
+            // drip: 50,
 
             // TwoMVC defaults, you can override here:
             // div: document.body,
