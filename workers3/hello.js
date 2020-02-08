@@ -1,6 +1,7 @@
 import util from '../src/util.js'
 import World from '../src/World.js'
 import Color from '../src/Color.js'
+import ColorMap from '../src/ColorMap.js'
 import ThreeView from '../src/ThreeView.js'
 
 const params = util.RESTapi({
@@ -15,32 +16,29 @@ const params = util.RESTapi({
 if (params.seed) util.randomSeed()
 params.world = World.defaultWorld(params.maxX, params.maxY)
 
-const colors25 = util.repeat(25, (i, a) => {
-    a[i] = Color.randomCssColor()
-})
-const linkColor = Color.typedColor(255, 255, 255)
+const colors = ColorMap.Basic16
+const linkColor = Color.typedColor('white')
 
 const worker = new Worker('./helloWorker.js', { type: 'module' })
-// const worker = new Worker('./helloWorker.js')
 worker.postMessage({ cmd: 'init', params: params })
 
 const view = new ThreeView(document.body, params.world)
 // Just draw patches once:
 view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
 
-util.toWindow({ view, worker, params, colors25, linkColor, Color, util })
+util.toWindow({ view, worker, params, colors, linkColor, Color, util })
 
-const perf = util.fps()
+const perf = util.fps() // Just for testing, not needed for production.
 worker.onmessage = e => {
     if (e.data === 'done') {
         console.log(`Done, steps: ${perf.steps}, fps: ${perf.fps}`)
         view.idle()
     } else {
         view.drawTurtles(e.data.turtles, (t, i) => ({
-            sprite: view.getSprite('dart', colors25[i % 25]),
+            sprite: view.getSprite('dart', colors.atIndex(i).css),
             size: params.shapeSize,
         }))
-        view.drawLinks(e.data.links, { color: linkColor.webgl })
+        view.drawLinks(e.data.links, { color: linkColor })
         view.draw()
         worker.postMessage({ cmd: 'step' })
         perf()

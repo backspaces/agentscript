@@ -8,7 +8,7 @@ util.toWindow({ util, Mouse, ColorMap, Model, TwoView })
 
 const model = new Model() // use default world
 const world = model.world
-const view = new TwoView('modelDiv', world, { patchSize: 20 })
+const view = new TwoView(world, { div: 'modelDiv', patchSize: 20 })
 
 const colors = ColorMap.Rgb256
 view.createPatchPixels(() => colors.randomColor().pixel)

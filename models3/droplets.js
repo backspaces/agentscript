@@ -40,7 +40,7 @@ model.startup().then(() => {
     const patchColors = getPatchColors(elevations)
     view.drawPatches(patchColors, c => c.pixel) // just once
 
-    const perf = util.fps()
+    const perf = util.fps() // Just for testing, not needed for production.
     util.timeoutLoop(() => {
         model.step()
         model.tick()

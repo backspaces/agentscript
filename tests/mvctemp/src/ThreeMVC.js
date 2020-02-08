@@ -1,11 +1,11 @@
 // Attempt to make the refactoring of AgentScript into many
 // parts easier for the modeler.
 
-import TwoView from './TwoView.js'
+import ThreeView from './ThreeView.js'
 import Animator from './Animator.js'
 import util from './util.js'
 
-export default class TwoMVC {
+export default class ThreeMVC {
     static defaultOptions() {
         return {
             // Model
@@ -22,14 +22,14 @@ export default class TwoMVC {
 
     // options *override* the defaults above. Just put in ones that differ.
     constructor(model, options = {}) {
-        options = Object.assign(TwoMVC.defaultOptions(), options)
+        options = Object.assign(ThreeMVC.defaultOptions(), options)
 
         const modelDefaults = model.constructor.defaultOptions()
         Object.assign(model, util.override(modelDefaults, options))
         this.model = model
 
-        const viewDefaults = TwoView.defaultOptions()
-        this.view = new TwoView(
+        const viewDefaults = ThreeView.defaultOptions()
+        this.view = new ThreeView(
             this.model,
             util.override(viewDefaults, options)
         )

@@ -30,7 +30,7 @@
                 model.setup()
                 console.log('worker model', model)
 
-                const perf = util.fps()
+                const perf = util.fps() // Just for testing, not needed for production.
                 while (!model.isDone()) {
                     model.step()
                     const data = model.patches.props('type')
@@ -57,7 +57,7 @@
             const worker = util.fcnToWorker(workerSrc)
             console.log('worker:', worker)
 
-            const perf = util.fps()
+            const perf = util.fps() // Just for testing, not needed for production.
             const data = [] // 515 arrays of 63001 elements each!
             worker.onmessage = e => {
                 if (e.data === 'done') {

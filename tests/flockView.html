@@ -49,7 +49,7 @@
                     model.population = params.population
                     model.setup()
                     util.toWindow({ FlockModel, model, view, draw })
-                    const perf = util.fps()
+                    const perf = util.fps() // Just for testing, not needed for production.
                     // util.yieldLoop(steps => {
                     util.timeoutLoop(steps => {
                         // console.log('step', steps)
@@ -66,7 +66,7 @@
                 worker.postMessage({ cmd: 'init', params: params })
 
                 let data = params.data ? [] : null
-                const perf = util.fps()
+                const perf = util.fps() // Just for testing, not needed for production.
                 worker.onmessage = e => {
                     if (e.data === 'done') {
                         console.log('main: done.')

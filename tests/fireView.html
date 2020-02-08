@@ -59,7 +59,7 @@
             const data = [] // one array of width*height long each step
             let lastData
 
-            const perf = util.fps()
+            const perf = util.fps() // Just for testing, not needed for production.
             worker.onmessage = e => {
                 if (e.data === 'done') {
                     console.log('main: done.')

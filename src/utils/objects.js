@@ -83,13 +83,13 @@ export function forLoop(arrayOrObj, fcn) {
 //     Object.keys(obj).forEach(k => fcn(obj[k], k, obj))
 // }
 
-// Return a new shallow of array, either Array or TypedArray
-export function clone(array) {
-    return array.slice(0)
+// Return a new shallow of array (either Array or TypedArray) or object
+export function clone(object) {
+    return object.slice ? array.slice(0) : Object.assign({}, object)
 }
 
 // Assign values from one object to another.
-// Values is a string of space separated property names.
+// keys is an array of keys or a string of space separated keys.
 // Similar to Object.assign:
 //    util.assign(model, controls, 'speed wiggle population')
 // is equivalent to
@@ -97,12 +97,25 @@ export function clone(array) {
 //        const { speed, wiggle, population } = controls
 //        Object.assign(model, { speed, wiggle, population })
 //    }
-export function assign(to, from, values) {
-    values = values.split(' ')
-    this.forLoop(values, val => {
-        to[val] = from[val]
+export function assign(to, from, keys) {
+    if (typeof keys === 'string') keys = keys.split(' ')
+    forLoop(keys, key => {
+        to[key] = from[key]
     })
     return to
+}
+// REMIND: use set function on object keys
+// export function override(defaults, options) {
+//     return assign(defaults, options, Object.keys(defaults))
+// }
+export function override(defaults, options) {
+    const overrides = defaults
+    forLoop(defaults, (val, key) => {
+        if (options[key]) {
+            overrides[key] = options[key]
+        }
+    })
+    return overrides
 }
 
 // Return a new array that is the concatination two arrays.

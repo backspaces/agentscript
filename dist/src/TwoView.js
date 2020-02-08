@@ -1,5 +1,5 @@
 import util from './util.js'
-// import World from './World.js'
+import World from './World.js'
 import PatchesView from './PatchesView.js'
 import TurtlesView from './TurtlesView.js'
 
@@ -10,17 +10,12 @@ export default class TwoView {
             useSprites: false,
             patchSize: 10,
         }
-        // return TurtlesView.defaultOptions()
     }
 
     // ======================
 
-    // constructor(
-    //     div = document.body,
-    //     worldOptions = World.defaultOptions(),
-    //     options = {} // TwoView.defaultOptions()
-    // ) {
-    constructor(model, options = {}) {
+    // Note: world can be a model, who'd model.world will be used
+    constructor(world, options = {}) {
         // options: override defaults, assign to this
         Object.assign(this, TwoView.defaultOptions(), options)
 
@@ -34,7 +29,7 @@ export default class TwoView {
         // this.div = div
 
         this.ctx = div.getContext('2d')
-        this.world = model.world
+        this.world = new World(world.world || world) // world can be model
 
         // Object.assign(this, { ctx, world }, options)
         // Object.assign(this, { ctx, world })

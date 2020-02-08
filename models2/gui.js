@@ -54,20 +54,20 @@ const handleMouse = mouse => {
     // console.log('mouse:', event, mouse)
     const { xCor, yCor } = mouse
     switch (mouse.action) {
-    case 'down':
-        selectedTurtle = model.turtles.closestTurtle(xCor, yCor, 2)
-        // console.log('down', selectedTurtle)
-        if (selectedTurtle === null) return
-        selectedTurtle.setxy(xCor, yCor)
-        break
-    case 'drag':
-        if (selectedTurtle === null) return
-        selectedTurtle.setxy(xCor, yCor)
-        // console.log('drag', selectedTurtle)
-        break
-    case 'up':
-        selectedTurtle = null
-        break
+        case 'down':
+            selectedTurtle = model.turtles.closestTurtle(xCor, yCor, 2)
+            // console.log('down', selectedTurtle)
+            if (selectedTurtle === null) return
+            selectedTurtle.setxy(xCor, yCor)
+            break
+        case 'drag':
+            if (selectedTurtle === null) return
+            selectedTurtle.setxy(xCor, yCor)
+            // console.log('drag', selectedTurtle)
+            break
+        case 'up':
+            selectedTurtle = null
+            break
     }
 }
 
@@ -75,7 +75,8 @@ const model = new HelloModelPlus()
 util.assign(model, controls, 'speed wiggle population')
 model.setup()
 
-const view = new HelloView('modelDiv', model.world, {
+const view = new HelloView(model.world, {
+    div: 'modelDiv',
     useSprites: controls.useSprites,
     patchSize: controls.patchSize,
 })

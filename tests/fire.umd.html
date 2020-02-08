@@ -33,7 +33,7 @@
             const srcURL = URL.createObjectURL(srcBlob)
             worker.postMessage({ cmd: 'script', url: srcURL })
 
-            const perf = util.fps()
+            const perf = util.fps() // Just for testing, not needed for production.
             const data = [] // 515 arrays of 63001 elements each!
             worker.onmessage = e => {
                 if (e.data === 'done') {

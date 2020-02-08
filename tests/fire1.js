@@ -10,7 +10,7 @@ model.setup()
 console.log('worker model:', model)
 console.log('worker self:', self)
 
-const perf = util.fps()
+const perf = util.fps() // Just for testing, not needed for production.
 while (!model.isDone()) {
     model.step()
     const data = model.patches.props('type')

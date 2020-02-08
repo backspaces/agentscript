@@ -52,7 +52,7 @@
 
                 util.toWindow({ model, sprites: sheet.sprites })
 
-                const perf = util.fps()
+                const perf = util.fps() // Just for testing, not needed for production.
                 util.timeoutLoop(steps => {
                     model.step()
                     draw(model)

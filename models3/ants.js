@@ -32,7 +32,7 @@ const nestSprite = view.getSprite('bug', nestColor.css)
 const foodSprite = view.getSprite('bug', foodColor.css)
 util.toWindow({ model, view })
 
-const perf = util.fps()
+const perf = util.fps() // Just for testing, not needed for production.
 util.timeoutLoop(() => {
     model.step()
     model.tick()

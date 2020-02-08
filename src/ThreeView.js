@@ -28,13 +28,6 @@ export default class ThreeView {
                 meshClass: 'LinksMesh',
             },
         }
-        // util.forLoop(options, (val, key) => {
-        //     if (val.meshClass) {
-        //         const Mesh = ThreeMeshes[val.meshClass]
-        //         const meshOptions = Mesh.options()
-        //         val.options = meshOptions
-        //     }
-        // })
 
         return options
     }

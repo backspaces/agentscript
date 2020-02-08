@@ -102,7 +102,7 @@
             util.workerScript('console.log("script:", self)', worker)
 
             const data = [] // history of data after each step
-            const perf = util.fps()
+            const perf = util.fps() // Just for testing, not needed for production.
             worker.onmessage = e => {
                 if (e.data === 'done') {
                     console.log('main: done.')

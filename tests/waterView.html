@@ -52,7 +52,7 @@
             // data: either most recent or all data during run.
             let data = params.data ? [] : null
 
-            const perf = util.fps()
+            const perf = util.fps() // Just for testing, not needed for production.
             worker.onmessage = e => {
                 if (e.data === 'done') {
                     util.toWindow({ data }, true)

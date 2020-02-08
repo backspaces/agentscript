@@ -11,7 +11,6 @@ const params = util.RESTapi({
     maxY: 30,
     steps: 500,
     shapeSize: 2,
-    world: null,
 })
 if (params.seed) util.randomSeed()
 params.world = World.defaultOptions(params.maxX, params.maxY)
@@ -29,7 +28,7 @@ const nestSprite = view.getSprite('bug', nestColor.css)
 const foodSprite = view.getSprite('bug', foodColor.css)
 util.toWindow({ view, worker, params, util })
 
-const perf = util.fps()
+const perf = util.fps() // Just for testing, not needed for production.
 worker.onmessage = e => {
     if (e.data === 'done') {
         console.log(`Done, steps: ${perf.steps}, fps: ${perf.fps}`)

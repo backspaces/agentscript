@@ -25,7 +25,8 @@ if (params.seed) util.randomSeed()
 params.world = World.defaultWorld(params.maxX, params.maxY)
 
 util.imagePromise(params.tile).then(png => {
-    params.elevation = new RGBDataSet(png, -32768, 1 / 256) //, AgentArray)
+    params.elevation = new RGBDataSet(png, -32768, 1 / 256)
+
     const grayColorMap = ColorMap.grayColorMap()
     const localMinColor = Color.typedColor(255, 0, 0)
 
@@ -36,7 +37,7 @@ util.imagePromise(params.tile).then(png => {
     const sprite = view.getSprite(params.shape, params.shapeColor)
     util.toWindow({ view, worker, params })
 
-    const perf = util.fps()
+    const perf = util.fps() // Just for testing, not needed for production.
     worker.onmessage = e => {
         if (e.data === 'done') {
             console.log(`Done, steps: ${perf.steps}, fps: ${perf.fps}`)

@@ -17,7 +17,7 @@ const view = new ThreeView(document.body, world)
 view.setPatchesSmoothing(useSmoothing)
 util.toWindow({ model, view, cmap, ColorMap, util })
 
-const perf = util.fps()
+const perf = util.fps() // Just for testing, not needed for production.
 util.timeoutLoop(
     () => {
         model.step()

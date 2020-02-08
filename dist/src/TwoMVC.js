@@ -25,25 +25,16 @@ export default class TwoMVC {
         options = Object.assign(TwoMVC.defaultOptions(), options)
 
         const modelDefaults = model.constructor.defaultOptions()
-        Object.assign(model, this.override(modelDefaults, options))
+        Object.assign(model, util.override(modelDefaults, options))
         this.model = model
 
         const viewDefaults = TwoView.defaultOptions()
         this.view = new TwoView(
             this.model,
-            this.override(viewDefaults, options)
+            util.override(viewDefaults, options)
         )
 
         this.animator = new Animator(this)
-    }
-    override(defaults, options) {
-        const overrides = defaults
-        util.forLoop(defaults, (val, key) => {
-            if (options[key]) {
-                overrides[key] = options[key]
-            }
-        })
-        return overrides
     }
 
     // Model methods

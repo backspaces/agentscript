@@ -33,7 +33,7 @@
             view.createPatchPixels(p => Color.randomGrayPixel())
             // view.installPatchPixels(model.patches, p => Color.randomGrayPixel())
 
-            const perf = util.fps()
+            const perf = util.fps() // Just for testing, not needed for production.
             util.timeoutLoop(() => {
                 model.step()
                 if (clearColor) {

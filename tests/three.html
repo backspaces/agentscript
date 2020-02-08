@@ -62,7 +62,7 @@
             util.toWindow({ params, view, world: params.world, worker }, true)
 
             let data = params.data ? [] : null
-            const perf = util.fps()
+            const perf = util.fps() // Just for testing, not needed for production.
             worker.onmessage = e => {
                 if (e.data === 'done') {
                     console.log('main: done.')

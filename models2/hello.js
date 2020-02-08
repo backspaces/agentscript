@@ -1,13 +1,10 @@
 import World from '../src/World.js'
 import util from '../src/util.js'
 import Color from '../src/Color.js'
+import ColorMap from '../src/ColorMap.js'
 import TwoView from '../src/TwoView.js'
 import HelloModel from '../models/HelloModel.js'
 
-// import {
-//     util,
-//     World,
-// } from 'https://backspaces.github.io/agentscript/dist/agentscript.esm.js'
 // import util from 'https://backspaces.github.io/agentscript/src/util.js'
 // import World from 'https://backspaces.github.io/agentscript/src/World.js'
 // import Color from 'https://backspaces.github.io/agentscript/src/Color.js'
@@ -15,38 +12,46 @@ import HelloModel from '../models/HelloModel.js'
 // import HelloModel from 'https://backspaces.github.io/agentscript/models/HelloModel.js'
 
 const params = util.RESTapi({
+    // Model
     seed: false,
     population: 100,
     maxX: 30,
     maxY: 30,
-    steps: 500,
+
+    // TwoView
+    patchSize: 10,
+    div: 'modelDiv',
+    useSprites: false,
+
+    // This model's View parameters
     linkColor: 'white', // css
     shape: 'dart',
     shapeSize: 2,
-    patchSize: 10,
-    world: null,
+
+    // How long to run: negative => forever
+    steps: 500,
 })
 if (params.seed) util.randomSeed()
-params.world = World.defaultOptions(params.maxX, params.maxY)
 
-const colors25 = util.repeat(25, (i, a) => {
-    a[i] = Color.randomCssColor()
-})
+const world = World.defaultOptions(params.maxX, params.maxY)
+const colors = ColorMap.Basic16
 
-const model = new HelloModel(params.world)
+const model = new HelloModel(world)
 model.population = params.population
 model.setup()
 
-const view = new TwoView('modelDiv', params.world, {
-    useSprites: true,
+const view = new TwoView(world, {
+    useSprites: params.useSprites,
     patchSize: params.patchSize,
+    div: params.div,
 })
 
-util.toWindow({ model, view, params, colors25, Color, util })
+util.toWindow({ model, view, params, colors, Color, util })
 
-// Just create patches colors once:
+// Just create patches colors once, random gray in [0, 100)
 view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
-const perf = util.fps()
+
+const perf = util.fps() // Just for testing, not needed for production.
 util.timeoutLoop(() => {
     model.step()
     model.tick()
@@ -55,9 +60,9 @@ util.timeoutLoop(() => {
     view.drawPatches() // redraw patches colors
 
     view.drawLinks(model.links, { color: params.linkColor, width: 1 })
-    view.drawTurtles(model.turtles, p => ({
+    view.drawTurtles(model.turtles, t => ({
         shape: params.shape,
-        color: colors25[p.id % 25],
+        color: colors.atIndex(t.id).css, // atIndex wraps to stay w/in map
         size: params.shapeSize,
     }))
     perf()

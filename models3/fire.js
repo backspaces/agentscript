@@ -25,7 +25,7 @@ model.setup()
 const view = new ThreeView(document.body, world)
 util.toWindow({ model, view, patchPixels, Color, util })
 
-const perf = util.fps()
+const perf = util.fps() // Just for testing, not needed for production.
 util.timeoutLoop(
     () => {
         model.step()
