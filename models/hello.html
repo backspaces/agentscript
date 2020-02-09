@@ -1,30 +1,19 @@
 <html>
     <head>
-        <title>test</title>
+        <title>Hello</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
-            // Run any model in this dir by it's short name via queryString.
-            // Ex: <url/path/to/dir>?ants runs ./AntsModel.js
-            // Note: see hello.html for how to run a single model, much simpler.
+            // A simpler version of index.html for running the ./HelloModel.js
+            // Run any model by changing the import's path (i.e. ./AntsModel.js)
             import util from '../src/util.js'
+            import Model from './HelloModel.js'
 
-            // Convert short name to model class name.
-            const modelParams = util.parseQueryString()
-            const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
-            const className = name[0].toUpperCase() + name.slice(1)
-            console.log('Running', className)
-            document.title = `M:${name}`
-
-            // Run the model. async used for importing the model and startup()
+            // Run the model. async used for startup().
+            // Not needed by Hello but in generally is used for one-time init.
             async function run() {
-                // Dynamically import the model:
-                const module = await import(`./${className}.js`)
-                const Model = module.default
-
-                // This is what you need to run your model in your own html file.
-                // First instanciate the Model:
+                // Init and run the model 500 steps
                 const model = new Model()
 
                 // Push several model properties to window from inside this module.

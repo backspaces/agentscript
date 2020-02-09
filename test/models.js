@@ -32,7 +32,7 @@ models.forEach(async model => {
         // ? `http://127.0.0.1:8080/models/scripts/?${model}&seed&testing`
         const url = workers
             ? `http://127.0.0.1:8080/models/scripts/?${model}`
-            : `http://127.0.0.1:8080/models/?${model}`
+            : `http://127.0.0.1:8080/models/test.html?${model}`
 
         const browser = await puppeteer.launch({
             args: [

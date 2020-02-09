@@ -466,6 +466,9 @@
             msg = JSON.stringify(msg, null, 2);
             msg = '<pre>' + msg + '</pre>';
         }
+        if (typeof element === 'string') {
+            element = document.getElementById(element);
+        }
 
         element.style.fontFamily = 'monospace';
         element.innerHTML += msg + '<br />';
