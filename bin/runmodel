@@ -9,13 +9,14 @@ const shell = require('shelljs')
 const dir = process.argv[2].replace(/\/$/, '') // remove optional final "/"
 
 const model = process.argv[3]
-if (!dir || !model) throw Error('Needs dir & model arguments')
+if (!dir || !model) throw Error(`Needs dir & model arguments: ${dir} ${model}`)
 
 // const [dir, model] = path.split('/')
 // console.log('path:', path, 'dir:', dir, 'model:', model)
 // if (!dir || !model) throw Error('Needs dir/model argument')
 
-const url = `http://127.0.0.1:8080/${dir}/?${model}`
+const indexFile = dir === 'models' ? 'test.html' : ''
+const url = `http://127.0.0.1:8080/${dir}/${indexFile}?${model}`
 console.log('url:', url)
 
 const child = shell.exec(

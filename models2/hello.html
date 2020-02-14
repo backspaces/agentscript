@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Hello</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            // A simpler version of index.html for running HelloModel & HelloView
+            // Run any model/view by changing the import's path (i.e. AntsModel.js)
+            import util from '../src/util.js'
+            import Model from '../models/HelloModel.js'
+            // If you change the model you can see surprising results!
+            // import Model from '../models/AntsModel.js'
+            import View from './HelloView.js'
+
+            // Run any model/view above, async used for startup().
+            async function run() {
+                // Create the model & view
+                const model = new Model()
+                const view = View.newView(model, { div: 'modelDiv' })
+
+                // Now init and run the model/view 500 steps async (don't block browser)
+                await model.startup()
+                model.setup()
+                await util.timeoutLoop(() => {
+                    model.step()
+                    model.tick() // Not needed if you don't need the tick count.
+                    View.drawView(model, view)
+                }, 500)
+                // That's it!
+            }
+            run()
+        </script>
+        <!--
+            A div for general use. We don't use it here. Printing could use:
+            util.printToPage(sample, 'modelDiv')
+        -->
+        <div id="modelDiv"></div>
+    </body>
+</html>

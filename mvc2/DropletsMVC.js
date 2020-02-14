@@ -54,7 +54,7 @@ export default class DropletsMVC extends TwoMVC {
     }
 
     draw() {
-        view.clear()
+        view.clear() // REMIND: uses toWindow's view!!
         view.drawPatches() // redraw cached patches colors
         view.drawTurtles(model.turtles, {
             shape: this.shape,

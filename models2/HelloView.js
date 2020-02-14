@@ -1,33 +1,31 @@
-import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
 import TwoView from '../src/TwoView.js'
-// import util from '../src/util.js'
-// util.toWindow({ Color, ColorMap, Animator, GUI, TwoView, HelloModel, util })
 
-export default class HelloView extends TwoView {
-    constructor(...args) {
-        super(...args)
-        this.colors = ColorMap.Basic16
-        this.linkColor = this.colors.gray // colors.randomColor()
-        this.shape = 'dart'
-        this.shapeSize = 1
-    }
-    initPatches() {
-        this.createPatchPixels(i => Color.randomGrayPixel(0, 100))
-    }
-    draw(model) {
-        // if (!this.draws) this.draws = 0
-        if (this.ticks === 0) this.initPatches()
+const patchesColors = ColorMap.DarkGray
+const turtleColors = ColorMap.Basic16
+const linkColor = 'rgba(255, 255, 255, 0.50'
+const shape = 'dart'
+const shapeSize = 2
 
-        this.clear()
-        this.drawPatches() // redraw patches colors
+const viewOptions = { patchSize: 20 }
 
-        this.drawLinks(model.links, { color: this.linkColor.css, width: 1 })
-        this.drawTurtles(model.turtles, t => ({
-            shape: this.shape,
-            color: this.colors.atIndex(t.id).css,
-            size: this.shapeSize,
-        }))
-        this.tick()
-    }
+function newView(model, options = {}) {
+    const view = new TwoView(model.world, Object.assign(viewOptions, options))
+    // one-time initialization: Create static patch colors
+    view.createPatchPixels(i => patchesColors.randomColor().pixel)
+    return view
 }
+
+function drawView(model, view) {
+    view.clear()
+    view.drawPatches() // redraw cached patches colors
+
+    view.drawLinks(model.links, { color: linkColor, width: 1 })
+    view.drawTurtles(model.turtles, t => ({
+        shape: shape,
+        color: turtleColors.atIndex(t.id).css,
+        size: shapeSize,
+    }))
+}
+
+export default { newView, drawView }

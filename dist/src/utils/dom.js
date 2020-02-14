@@ -55,6 +55,7 @@ export function inNode() {
 // Default to document.body if in browser.
 // If msg is an object, convert to JSON
 // (object canot have cycles etc)
+// If element is string, find element by ID
 export function printToPage(msg, element = document.body) {
     // if (isObject(msg)) {
     if (typeof msg === 'object') {
