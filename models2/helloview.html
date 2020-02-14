@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <title>Hello</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            // A version of hello.html for running HelloModel & a View inline
+            // It is "deconstructed", integrating HelloView.js into the page.
+
+            import util from '../src/util.js'
+            import Model from '../models/HelloModel.js'
+            // Change: For our TwoView code:
+            import ColorMap from '../src/ColorMap.js'
+            import TwoView from '../src/TwoView.js'
+
+            // Change: Here are our View parameters:
+            const patchesColors = ColorMap.DarkGray
+            const turtleColors = ColorMap.Basic16
+            const linkColor = 'rgba(255, 255, 255, 0.50'
+            const shape = 'dart'
+            const shapeSize = 2
+
+            // Run model above, async used for startup().
+            async function run() {
+                // Create the model & view
+                const model = new Model()
+                await model.startup() // HelloModel doesn't need this but..
+                model.setup()
+
+                // Change: Make the instance of TwoView we want to use.
+                // Our options will override TwoView's defaults
+                const view = new TwoView(model.world, {
+                    div: 'modelDiv',
+                    patchSize: 20,
+                })
+                // Change: one-time initialization: Create static patch colors
+                view.createPatchPixels(i => patchesColors.randomColor().pixel)
+
+                // Now init and run the model/view 500 steps async (don't block browser)
+                await util.timeoutLoop(() => {
+                    model.step()
+                    model.tick() // Not needed if you don't need the tick count.
+
+                    // Change: And here are our drawing commands:
+                    view.clear()
+                    view.drawPatches() // redraw cached patches colors
+                    view.drawLinks(model.links, { color: linkColor, width: 1 })
+                    view.drawTurtles(model.turtles, t => ({
+                        shape: shape,
+                        color: turtleColors.atIndex(t.id).css,
+                        size: shapeSize,
+                    }))
+                }, 500)
+                // That's it!
+            }
+            run()
+        </script>
+        <!--
+            A div for general use. We don't use it here. Printing could use:
+            util.printToPage(sample, 'modelDiv')
+        -->
+        <div id="modelDiv"></div>
+    </body>
+</html>
