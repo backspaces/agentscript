@@ -7,7 +7,6 @@
         <script type="module">
             // A version of hello.html for running HelloModel & a View inline
             // It is "deconstructed", integrating HelloView.js into the page.
-
             import util from '../src/util.js'
             import Model from '../models/HelloModel.js'
             // Change: For our TwoView code:
@@ -25,7 +24,7 @@
             async function run() {
                 // Create the model & view
                 const model = new Model()
-                await model.startup() // HelloModel doesn't need this but..
+                await model.startup()
                 model.setup()
 
                 // Change: Make the instance of TwoView we want to use.

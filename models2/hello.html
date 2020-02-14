@@ -15,13 +15,14 @@
 
             // Run any model/view above, async used for startup().
             async function run() {
-                // Create the model & view
+                // Create & initialize the model & view
                 const model = new Model()
+                await model.startup()
+                model.setup()
+                // View init comes last, it may need setup/startup to run
                 const view = View.newView(model, { div: 'modelDiv' })
 
                 // Now init and run the model/view 500 steps async (don't block browser)
-                await model.startup()
-                model.setup()
                 await util.timeoutLoop(() => {
                     model.step()
                     model.tick() // Not needed if you don't need the tick count.
