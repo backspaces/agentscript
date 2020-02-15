@@ -76,8 +76,11 @@ export default class TwoView {
     createPatchPixels(pixelFcn) {
         this.patchesView.createPixels(pixelFcn)
     }
-    setPatchPixel(x, y, pixel) {
-        this.patchesView.setPixel(x, y, pixel)
+    // setPatchPixel(x, y, pixel) {
+    //     this.patchesView.setPixel(x, y, pixel)
+    // }
+    setPatchPixel(index, pixel) {
+        this.patchesView.setPixel(index, pixel)
     }
     setPatchesSmoothing(smoothing) {
         this.patchesView.setPatchesSmoothing(smoothing)

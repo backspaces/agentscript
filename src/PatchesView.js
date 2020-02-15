@@ -38,8 +38,9 @@ export default class PatchesView {
         util.repeat(this.length, i => (this.pixels[i] = pixelFcn(i)))
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
     }
-    setPixel(x, y, pixel) {
-        const index = world.xyToPatchIndex(x, y)
+    // setPixel(x, y, pixel) {
+    setPixel(index, pixel) {
+        // const index = world.xyToPatchIndex(x, y)
         this.pixels[index] = pixel
     }
 

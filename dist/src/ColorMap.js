@@ -290,6 +290,10 @@ const ColorMap = {
     basicColorNames: 'white silver gray black red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
         ' '
     ),
+    // Note: first two colors are black & white
+    // basicColorNames: 'black white silver gray red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
+    //     ' '
+    // ),
     // Create a named colors colormap
     cssColorMap(cssArray, createNameIndex = false) {
         const array = cssArray.map(str => Color.cssToUint8Array(str))
