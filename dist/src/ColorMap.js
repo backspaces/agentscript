@@ -290,10 +290,9 @@ const ColorMap = {
     basicColorNames: 'white silver gray black red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
         ' '
     ),
-    // Note: first two colors are black & white
-    // basicColorNames: 'black white silver gray red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
-    //     ' '
-    // ),
+    brightColorNames: 'white silver red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
+        ' '
+    ),
     // Create a named colors colormap
     cssColorMap(cssArray, createNameIndex = false) {
         const array = cssArray.map(str => Color.cssToUint8Array(str))
@@ -355,6 +354,13 @@ const ColorMap = {
         return this.LazyMap(
             'Basic16',
             this.cssColorMap(this.basicColorNames, true)
+        )
+    },
+    get Bright16() {
+        // 17 unique + 2 "aliases" = 19 names. "16" historic
+        return this.LazyMap(
+            'Bright16',
+            this.cssColorMap(this.brightColorNames, true)
         )
     },
 }
