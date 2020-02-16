@@ -21,15 +21,16 @@ function drawView(model, view) {
         color: Basic16.atIndex(t.id).css,
         width: linkWidth,
     }))
-    view.drawTurtles(model.drivers, t => ({
-        shape: driverShape,
-        color: Basic16.atIndex(t.id).css,
-        size: driverSize,
-    }))
+    // Draw nodes first to not obscure drivers
     view.drawTurtles(model.nodes, t => ({
         shape: nodeShape,
         color: Basic16.atIndex(t.id).css,
         size: nodeSize,
+    }))
+    view.drawTurtles(model.drivers, t => ({
+        shape: driverShape,
+        color: Basic16.atIndex(t.id).css,
+        size: driverSize,
     }))
 }
 
