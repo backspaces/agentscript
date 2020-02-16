@@ -1,7 +1,7 @@
 import ColorMap from '../src/ColorMap.js'
 import TwoView from '../src/TwoView.js'
 
-const Basic16 = ColorMap.Bright16
+const Bright16 = ColorMap.Bright16
 const driverShape = 'dart'
 const nodeShape = 'circle'
 const driverSize = 1.25
@@ -18,18 +18,18 @@ function drawView(model, view) {
     view.clear('black') // solid black background for visibility
 
     view.drawLinks(model.links, t => ({
-        color: Basic16.atIndex(t.id).css,
+        color: Bright16.atIndex(t.id).css,
         width: linkWidth,
     }))
     // Draw nodes first to not obscure drivers
     view.drawTurtles(model.nodes, t => ({
         shape: nodeShape,
-        color: Basic16.atIndex(t.id).css,
+        color: Bright16.atIndex(t.id).css,
         size: nodeSize,
     }))
     view.drawTurtles(model.drivers, t => ({
         shape: driverShape,
-        color: Basic16.atIndex(t.id).css,
+        color: Bright16.atIndex(t.id).css,
         size: driverSize,
     }))
 }

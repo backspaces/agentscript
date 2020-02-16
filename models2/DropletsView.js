@@ -28,6 +28,7 @@ function drawView(model, view) {
     view.clear()
 
     view.drawPatches() // redraw cached patches colors
+    // Note this uses constant values, thus are an object, not function.
     view.drawTurtles(model.turtles, {
         shape: shape,
         color: shapeColor,
