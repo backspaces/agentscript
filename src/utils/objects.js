@@ -34,10 +34,7 @@ export const arrayFirst = array => array[0]
 export const arrayLast = array => array[array.length - 1]
 export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
 export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
-export const arrayExtent = array => [
-    objects.arrayMin(array),
-    objects.arrayMax(array),
-]
+export const arrayExtent = array => [arrayMin(array), arrayMax(array)]
 export const arraySum = array => array.reduce((a, b) => a + b, 0)
 export function arraysEqual(a1, a2) {
     if (a1.length !== a2.length) return false

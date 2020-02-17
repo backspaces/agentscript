@@ -890,10 +890,7 @@
     const arrayLast = array => array[array.length - 1];
     const arrayMax = array => array.reduce((a, b) => Math.max(a, b));
     const arrayMin = array => array.reduce((a, b) => Math.min(a, b));
-    const arrayExtent = array => [
-        objects.arrayMin(array),
-        objects.arrayMax(array),
-    ];
+    const arrayExtent = array => [arrayMin(array), arrayMax(array)];
     const arraySum = array => array.reduce((a, b) => a + b, 0);
     function arraysEqual(a1, a2) {
         if (a1.length !== a2.length) return false
@@ -1130,7 +1127,7 @@
         return normalize(array, lo, hi).map(n => Math.round(n))
     }
 
-    var objects$1 = /*#__PURE__*/Object.freeze({
+    var objects = /*#__PURE__*/Object.freeze({
         identityFcn: identityFcn,
         noopFcn: noopFcn,
         propFcn: propFcn,
@@ -1229,7 +1226,7 @@
         dom,
         math,
         models,
-        objects$1,
+        objects,
         oofa,
         types
     );

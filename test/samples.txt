@@ -4,7 +4,7 @@ ants:
 buttons:
     '{"model":["ticks","world","patches","turtles","links","population","clusterSize","done","newCluster"],"patches":1089,"patch":{"id":273},"turtles":200,"turtle":{"id":136,"theta":2.283142302887487,"x":-10,"y":-16,"links":[112,150,412,438]},"links":500,"link":{"id":482,"end0":{"id":121,"theta":3.7783750618803937,"x":10,"y":9,"links":[194,200,482,484]},"end1":{"id":192,"theta":5.1900867760030405,"x":-15,"y":-8,"links":[77,274,366,454,482,499]}}}',
 diffuse:
-    '{"model":["ticks","world","patches","turtles","links","population","speed","wiggle","radius"],"patches":80601,"patch":{"id":45451,"ran":0.5300092836148426,"_diffuseNext":0,"neighbors":[45049,45050,45051,45452,45853,45852,45851,45450]},"turtles":2,"turtle":{"id":1,"theta":3.629027286903738,"x":141.86152785070743,"y":77.14560949853987},"links":0}',
+    '{"model":["ticks","world","patches","turtles","links","population","speed","wiggle","radius","diffuseRate","seedDelta","seedMax"],"patches":80601,"patch":{"id":45451,"ran":0.5300913129775815,"_diffuseNext":0,"neighbors":[45049,45050,45051,45452,45853,45852,45851,45450]},"turtles":2,"turtle":{"id":1,"theta":3.629027286903738,"x":141.86152785070743,"y":77.14560949853987},"links":0}',
 droplets:
     '{"model":["ticks","world","patches","turtles","links","stepType","killOffworld","tile","speed","elevation","dzdx","dzdy","slope","aspect","localMins"],"patches":10201,"patch":{"id":5057,"elevation":1723.09375,"aspect":4.24928055747772,"neighbors":[4955,4956,4957,5058,5159,5158,5157,5056]},"turtles":10201,"turtle":{"id":7694,"theta":5.176785652915809,"x":-4.519901971517734,"y":-21.148097732906376},"links":0}',
 exit:
@@ -21,8 +21,6 @@ roads:
     '{"model":["ticks","world","patches","turtles","links","zxy","jsonUrl","nodeCache","geojson","bbox","xfm","lineStrings"],"patches":40401,"patch":{"id":2355},"turtles":1214,"turtle":{"id":970,"theta":1.4443188854011504,"x":102.708251953125,"y":74.00354977882115,"links":[1113,1114]},"links":1399,"link":{"id":1186,"end0":{"id":1034,"theta":0.8734899619536316,"x":28.609130859375,"y":-26.003056810098627,"links":[1185,1186]},"end1":{"id":1035,"theta":3.2249553200228087,"x":28.265625,"y":-25.070657257541775,"links":[1186,1187]},"lineString":[1181,1182,1183,1184,1185,1186,1187,1188]}}',
 tsp:
     '{"model":["ticks","world","patches","turtles","links","nodeCount","travelersCount","growPopulation","useInversion","stopTickDifference","nodes","travelers","done","bestTourNodes","bestTourLength","bestTourTick"],"patches":10201,"patch":{"id":6348},"turtles":150,"turtle":{"id":49358,"theta":6.2057057482528055,"x":0,"y":0,"tourNodes":[15,37,4,8,21,45,0,13,30,19,1,10,9,28,6,14,38,29,5,40,36,32,17,35,43,18,23,27,39,31,44,33,20,46,16,26,41,49,11,2,34,7,47,12,22,48,24,25,3,42],"tourLength":685.1126526519315},"links":50,"link":{"id":6045,"end0":{"id":48,"theta":5.300552062594213,"x":-21,"y":-4,"links":[6044,6045]},"end1":{"id":24,"theta":4.282976235528911,"x":-25,"y":-11,"links":[6045,6046]}}}',
-walkers:
-    '{"model":["ticks","world","patches","turtles","links","population","speed","speedDelta","wiggle"],"patches":1089,"patch":{"id":690},"turtles":10,"turtle":{"id":1,"theta":1.945223493967484,"speed":0.10813268301601772,"x":13.892538019305364,"y":-11.08178925932114},"links":0}',
 wallFollower:
     '{"model":["ticks","world","patches","turtles","links","population","wallPercent","walls","lefty","righty"],"patches":5041,"patch":{"id":2482,"neighbors4":[2411,2483,2553,2481]},"turtles":40,"turtle":{"id":27,"theta":1.5707963267948966,"x":17,"y":34},"links":0}',
 water:

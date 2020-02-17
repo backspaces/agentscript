@@ -8,7 +8,11 @@ export default class DiffuseModel extends Model {
             population: 2,
             speed: 0.5,
             wiggle: 0.1,
-            radius: 0,
+            radius: 6,
+
+            diffuseRate: 0.05,
+            seedDelta: 0.1,
+            seedMax: 0.8,
         }
     }
 
@@ -39,10 +43,10 @@ export default class DiffuseModel extends Model {
             t.theta += util.randomCentered(this.wiggle)
             t.forward(t.speed)
             this.patches.inRadius(t.patch, this.radius, true).ask(p => {
-                p.ran = Math.min(p.ran + 0.1, 0.8)
+                p.ran = Math.min(p.ran + this.seedDelta, this.seedMax)
             })
         })
 
-        this.patches.diffuse('ran', 0.05)
+        this.patches.diffuse('ran', this.diffuseRate)
     }
 }
