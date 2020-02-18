@@ -46,12 +46,16 @@
 
                 // Now init and run and draw the model 500 steps.
                 // Async so as to not block the browser.
-                await util.timeoutLoop(() => {
-                    model.step()
-                    model.tick() // Not needed if you don't need the tick count.
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick() // Not needed if you don't need the tick count.
 
-                    View.drawView(model, view)
-                }, 500)
+                        View.drawView(model, view)
+                    },
+                    500,
+                    33
+                )
                 // That's it!
             }
             run()
