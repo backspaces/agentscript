@@ -10,7 +10,7 @@ let model, params, patchesView
 function postData() {
     const data = model.patches.props('type')
     if (params.img) {
-        patchesView.installData(data, d => params.patchPixels[d])
+        patchesView.setPixels(data, d => params.patchPixels[d])
         patchesView.getImageBitmap().then(img => {
             postMessage(img, [img])
             // postMessage(img)

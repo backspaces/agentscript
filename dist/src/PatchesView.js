@@ -17,12 +17,11 @@ export default class PatchesView {
     // Install pixels in this imageData object.
     // pixelFcn(d) returns a pixel for each data item.data can be patches
     // or data derived from patches using patch state values.
-    // installData(data, pixelFcn, updateCanvas = true) {
-    installData(data, pixelFcn = d => d) {
+    setPixels(data, pixelFcn = d => d) {
         if (util.isOofA(data)) data = util.toAofO(data)
         if (data.length !== this.pixels.length) {
             throw Error(
-                'installData, data.length != pixels.length ' +
+                'setPixels, data.length != pixels.length ' +
                     data.length +
                     ' ' +
                     this.pixels.length

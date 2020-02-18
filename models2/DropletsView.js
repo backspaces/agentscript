@@ -25,7 +25,7 @@ function getPatchColors(model) {
 }
 
 function drawView(model, view) {
-    view.clear()
+    // view.clear()
 
     view.drawPatches() // redraw cached patches colors
     // Note this uses constant values, thus are an object, not function.

@@ -16,7 +16,7 @@ function newView(model, options = {}) {
 }
 
 function drawView(model, view) {
-    view.clear()
+    // view.clear()
     view.drawPatches(model.patches, p => {
         if (p.isNest) return nestColor.pixel
         if (p.isFood) return foodColor.pixel

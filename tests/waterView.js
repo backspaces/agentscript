@@ -16,7 +16,7 @@ function postData() {
         : new Float32Array(data)
 
     if (params.img) {
-        patchesView.installData(data)
+        patchesView.setPixels(data)
         patchesView.getImageBitmap().then(img => {
             postMessage(img, [img])
             if (img.height !== 0) console.log('!transferable')

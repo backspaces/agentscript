@@ -1,29 +1,31 @@
-import ColorMap from '../src/ColorMap.js'
+import Color from '../src/Color.js'
 import TwoView from '../src/TwoView.js'
 
-const patchesColors = ColorMap.DarkGray
-const turtleColors = ColorMap.Basic16
-const linkColor = 'rgba(255, 255, 255, 0.50'
+const wallsColor = Color.typedColor(222, 184, 135).pixel
+const backgroundColor = Color.typedColor('black').pixel
+const leftyColor = 'green'
+const rightyColor = 'red'
 const shape = 'dart'
 const shapeSize = 2
 
-const viewOptions = { patchSize: 20 }
+const viewOptions = {} // defaults ok
 
 function newView(model, options = {}) {
     const view = new TwoView(model.world, Object.assign(viewOptions, options))
     // one-time initialization: Create static patch colors
-    view.createPatchPixels(i => patchesColors.randomColor().pixel)
+    view.setPatchesPixels(model.patches, p =>
+        p.breed.name === 'walls' ? wallsColor : backgroundColor
+    )
     return view
 }
 
 function drawView(model, view) {
-    // view.clear()
+    // view.clear('black')
     view.drawPatches() // redraw cached patches colors
 
-    view.drawLinks(model.links, { color: linkColor, width: 1 })
     view.drawTurtles(model.turtles, t => ({
         shape: shape,
-        color: turtleColors.atIndex(t.id).css,
+        color: t.breed.name === 'lefty' ? leftyColor : rightyColor,
         size: shapeSize,
     }))
 }

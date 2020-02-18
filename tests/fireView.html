@@ -92,10 +92,10 @@
                 if (params.img) {
                     util.fillCtxWithImage(canvasCtx, data)
                 } else if (params.postPixels) {
-                    patchesView.installData(data)
+                    patchesView.setPixels(data)
                     patchesView.draw(canvasCtx)
                 } else {
-                    patchesView.installData(data, d => params.patchPixels[d])
+                    patchesView.setPixels(data, d => params.patchPixels[d])
                     patchesView.draw(canvasCtx)
                 }
             }

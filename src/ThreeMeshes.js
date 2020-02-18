@@ -139,7 +139,7 @@ export class PatchesMesh extends CanvasMesh {
         super.init(canvas, this.options.useSegments)
     }
     update(data, viewFcn = d => d) {
-        this.view.patchesView.installData(data, viewFcn)
+        this.view.patchesView.setPixels(data, viewFcn)
         this.view.patchesView.updateCanvas()
         super.update()
     }
@@ -249,13 +249,13 @@ export class PointsMesh extends BaseMesh {
 
         const material = this.fixedColor
             ? new THREE.PointsMaterial({
-                size: pointSize,
-                color: this.fixedColor,
-            })
+                  size: pointSize,
+                  color: this.fixedColor,
+              })
             : new THREE.PointsMaterial({
-                size: pointSize,
-                vertexColors: THREE.VertexColors,
-            })
+                  size: pointSize,
+                  vertexColors: THREE.VertexColors,
+              })
 
         this.mesh = new THREE.Points(geometry, material)
         this.mesh.position.z = this.options.z

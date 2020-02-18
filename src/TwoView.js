@@ -70,9 +70,6 @@ export default class TwoView {
         }
     }
 
-    installPatchPixels(data, pixelFcn) {
-        this.patchesView.installData(data, pixelFcn)
-    }
     createPatchPixels(pixelFcn) {
         this.patchesView.createPixels(pixelFcn)
     }
@@ -82,6 +79,9 @@ export default class TwoView {
     setPatchPixel(index, pixel) {
         this.patchesView.setPixel(index, pixel)
     }
+    setPatchesPixels(data, pixelFcn) {
+        this.patchesView.setPixels(data, pixelFcn)
+    }
     setPatchesSmoothing(smoothing) {
         this.patchesView.setPatchesSmoothing(smoothing)
     }
@@ -89,7 +89,7 @@ export default class TwoView {
     // If no data, redraw with existing patchesView cache
     drawPatches(data, pixelFcn) {
         if (data != null) {
-            this.patchesView.installData(data, pixelFcn)
+            this.patchesView.setPixels(data, pixelFcn)
         }
         this.patchesView.draw(this.ctx)
     }
@@ -114,7 +114,7 @@ export default class TwoView {
 //     this.staticTurtles = true
 //     this.turtleViewData = util.isObject(viewFcn)
 //         ? viewFcn
-//         : this.turtlesView.installData(data, viewFcn)
+//         : this.turtlesView.setPixels(data, viewFcn)
 // }
 
 // redrawPatches() {
