@@ -36,21 +36,28 @@
                 // Change: one-time initialization: Create static patch colors
                 view.createPatchPixels(i => patchesColors.randomColor().pixel)
 
-                // Now init and run the model/view 500 steps async (don't block browser)
-                await util.timeoutLoop(() => {
-                    model.step()
-                    model.tick() // Not needed if you don't need the tick count.
+                // Now init and run the model/view, 30fps, 500 steps async.
+                // async: don't block browser!
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick() // Not needed if you don't need the tick count.
 
-                    // Change: And here are our drawing commands:
-                    // view.clear()
-                    view.drawPatches() // redraw cached patches colors
-                    view.drawLinks(model.links, { color: linkColor, width: 1 })
-                    view.drawTurtles(model.turtles, t => ({
-                        shape: shape,
-                        color: turtleColors.atIndex(t.id).css,
-                        size: shapeSize,
-                    }))
-                }, 500)
+                        // Change: And here are our drawing commands:
+                        view.drawPatches() // redraw cached patches colors
+                        view.drawLinks(model.links, {
+                            color: linkColor,
+                            width: 1,
+                        })
+                        view.drawTurtles(model.turtles, t => ({
+                            shape: shape,
+                            color: turtleColors.atIndex(t.id).css,
+                            size: shapeSize,
+                        }))
+                    },
+                    500,
+                    33
+                )
                 // That's it!
             }
             run()

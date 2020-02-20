@@ -20,7 +20,6 @@ function newView(model, options = {}) {
 }
 
 function drawView(model, view) {
-    // view.clear('black')
     view.drawPatches() // redraw cached patches colors
 
     view.drawTurtles(model.turtles, t => ({

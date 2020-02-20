@@ -85,6 +85,9 @@ export default class TwoView {
     setPatchesSmoothing(smoothing) {
         this.patchesView.setPatchesSmoothing(smoothing)
     }
+    drawPatchesImage(img) {
+        if (img) util.fillCtxWithImage(this.ctx, img)
+    }
 
     // If no data, redraw with existing patchesView cache
     drawPatches(data, pixelFcn) {

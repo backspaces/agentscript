@@ -33,7 +33,6 @@ function newView(model, options = {}) {
     return view
 }
 function drawView(model, view) {
-    // view.clear()
     view.drawPatches() // redraw cached patches colors
 
     view.drawTurtles(model.turtles, t => ({

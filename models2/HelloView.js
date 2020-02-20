@@ -17,7 +17,6 @@ function newView(model, options = {}) {
 }
 
 function drawView(model, view) {
-    // view.clear()
     view.drawPatches() // redraw cached patches colors
 
     view.drawLinks(model.links, { color: linkColor, width: 1 })

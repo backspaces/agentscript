@@ -13,7 +13,7 @@
             // import Model from '../models/ExitModel.js'
             import View from './HelloView.js'
 
-            // Run any model/view above, async used for startup().
+            // Run any model/view above, 30fps, async used for startup().
             async function run() {
                 // Create & initialize the model & view
                 const model = new Model()
@@ -23,11 +23,15 @@
                 const view = View.newView(model, { div: 'modelDiv' })
 
                 // Now init and run the model/view 500 steps async (don't block browser)
-                await util.timeoutLoop(() => {
-                    model.step()
-                    model.tick() // Not needed if you don't need the tick count.
-                    View.drawView(model, view)
-                }, 500)
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick() // Not needed if you don't need the tick count.
+                        View.drawView(model, view)
+                    },
+                    500,
+                    33
+                )
                 // That's it!
             }
             run()

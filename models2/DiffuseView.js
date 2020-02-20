@@ -16,7 +16,6 @@ function newView(model, options = {}) {
 }
 
 function drawView(model, view) {
-    // view.clear()
     view.drawPatches(
         model.patches,
         p => patchColors.scaleColor(p.ran, 0, 1).pixel
