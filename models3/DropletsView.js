@@ -8,7 +8,7 @@ const shapeSize = 0.5
 const grayColorMap = ColorMap.grayColorMap()
 const localMinColor = Color.typedColor(255, 0, 0) // 'red'
 
-// const sprite = view.getSprite(params.shape, params.shapeColor)
+// Single sprite used for all droplets
 let sprite
 
 const viewOptions = { div: 'modelDiv' }
@@ -16,7 +16,7 @@ const viewOptions = { div: 'modelDiv' }
 function newView(model, options = {}) {
     const view = new ThreeView(model.world, Object.assign(viewOptions, options))
     sprite = view.getSprite(shape, shapeColor)
-    // Draw patches only once
+    // One-time initialization: Draw static patches only once.
     const patchColors = getPatchColors(model)
     view.drawPatches(patchColors, color => color.pixel)
     return view

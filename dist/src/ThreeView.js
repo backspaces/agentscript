@@ -240,7 +240,7 @@ export default class ThreeView {
     }
 
     idle(ms = 32) {
-        util.timeoutLoop(() => view.render(), -1, ms)
+        util.timeoutLoop(() => this.render(), -1, ms)
     }
     render() {
         // REMIND: generalize.
