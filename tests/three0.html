@@ -109,7 +109,8 @@
             window.tcan = document.getElementById('three')
             tcan.width = can.width
             tcan.height = can.height
-            window.v = new ThreeView(tcan, world, o)
+            o.div = tcan
+            window.v = new ThreeView(world, o)
             window.patchesView = v.patchesView
             // patchesView.createPixels(i => util.randomGrayPixel(128, 250))
             patchesView.createPixels(i => Color.randomGrayPixel(0, 50))

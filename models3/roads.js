@@ -8,7 +8,7 @@ async function run() {
     await model.startup()
     model.setup()
 
-    const view = new ThreeView(document.body, model.world)
+    const view = new ThreeView(model)
     const { Z, X, Y } = model.zxy
     // osm can be slooooow! use maptiler if a problem
     const baseUrl = `https://tile.openstreetmap.org/${Z}/${X}/${Y}.png`
@@ -26,7 +26,7 @@ async function run() {
     view.drawLinks(model.links, {
         color: 'black',
     })
-    view.draw()
+    view.render()
     view.idle()
 }
 

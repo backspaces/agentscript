@@ -70,7 +70,7 @@
                     console.log(`steps: ${perf.steps}, fps: ${perf.fps}`)
                     // worker.terminate()
                     // Keep orbit control running:
-                    util.timeoutLoop(() => view.draw(), -1, 100)
+                    util.timeoutLoop(() => view.render(), -1, 100)
                 } else {
                     if (params.data) {
                         data.push(e.data)
@@ -96,7 +96,7 @@
                 view.drawLinks(data.links, (l, i) => {
                     return { color: params.colors25[i % 25].webgl }
                 })
-                view.draw()
+                view.render()
             }
 
             function createView() {
@@ -104,6 +104,7 @@
                 const options = ThreeView.defaultOptions()
                 util.toWindow({ options }, true)
 
+                options.div = div
                 if (usePoints)
                     options.turtles = {
                         meshClass: 'PointsMesh',
@@ -114,7 +115,7 @@
                 if (params.linksColor)
                     options.links.options = { color: params.linksColor }
 
-                const view = new ThreeView(div, params.world, options)
+                const view = new ThreeView(params.world, options)
                 // view.renderer.setSize(can.width, can.height)
 
                 if (!usePoints) {
@@ -134,7 +135,7 @@
                     })
                 )
 
-                view.draw()
+                view.render()
 
                 return view
             }

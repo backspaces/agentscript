@@ -22,7 +22,7 @@ const linkColor = Color.typedColor('white')
 const worker = new Worker('./helloWorker.js', { type: 'module' })
 worker.postMessage({ cmd: 'init', params: params })
 
-const view = new ThreeView(document.body, params.world)
+const view = new ThreeView(params.world)
 // Just draw patches once:
 view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
 
@@ -39,7 +39,7 @@ worker.onmessage = e => {
             size: params.shapeSize,
         }))
         view.drawLinks(e.data.links, { color: linkColor })
-        view.draw()
+        view.render()
         worker.postMessage({ cmd: 'step' })
         perf()
     }

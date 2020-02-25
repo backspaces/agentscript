@@ -190,7 +190,14 @@ export class QuadSpritesMesh extends BaseMesh {
             // const turtle = turtles[i]
             let { x, y, z, theta } = turtle
             if (!z) z = 0
-            const { size, sprite } = viewFcn(turtle, i)
+
+            const viewData = viewFcn(turtle, i)
+            let { size, sprite } = viewData
+            if (!sprite)
+                sprite = this.view.getSprite(viewData.shape, viewData.color)
+
+            // const { size, sprite } = viewFcn(turtle, i)
+
             const cos = Math.cos(theta)
             const sin = Math.sin(theta)
             const offset = i * vertices.length

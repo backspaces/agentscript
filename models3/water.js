@@ -13,7 +13,7 @@ const world = World.defaultOptions(50)
 const model = new WaterModel(world)
 model.setup()
 
-const view = new ThreeView(document.body, world)
+const view = new ThreeView(world)
 view.setPatchesSmoothing(useSmoothing)
 util.toWindow({ model, view, cmap, ColorMap, util })
 
@@ -27,7 +27,7 @@ util.timeoutLoop(
             model.patches,
             p => cmap.scaleColor(p.zpos, -maxZ, maxZ).pixel
         )
-        view.draw()
+        view.render()
         perf()
     },
     500,

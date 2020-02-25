@@ -1,4 +1,4 @@
-import ColorMap from '../src/ColorMap.js'
+// import ColorMap from '../src/ColorMap.js'
 import TwoView from '../src/TwoView.js'
 
 const nodeShape = 'circle'

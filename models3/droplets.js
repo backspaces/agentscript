@@ -27,7 +27,7 @@ const localMinColor = Color.typedColor(255, 0, 0)
 
 const model = new DropletsModel(params.world)
 model.tile = params.tile
-const view = new ThreeView(document.body, params.world)
+const view = new ThreeView(params.world)
 const sprite = view.getSprite(params.shape, params.shapeColor)
 util.toWindow({ model, view, params })
 
@@ -46,7 +46,7 @@ model.startup().then(() => {
         model.tick()
 
         view.drawTurtles(model.turtles, { sprite, size: params.shapeSize })
-        view.draw()
+        view.render()
         perf()
     }, params.steps).then(() => {
         console.log(`Done, steps: ${perf.steps}, fps: ${perf.fps}`)

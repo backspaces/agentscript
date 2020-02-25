@@ -27,7 +27,9 @@ const model = new AntsModel(params.world)
 model.population = params.population
 model.setup()
 
-const view = new ThreeView(document.body, params.world)
+// const view = new ThreeView(params.world)
+// const view = new ThreeView(params.world, { div: document.body })
+const view = new ThreeView(params.world, { div: 'modelDiv' })
 const nestSprite = view.getSprite('bug', nestColor.css)
 const foodSprite = view.getSprite('bug', foodColor.css)
 util.toWindow({ model, view })
@@ -52,7 +54,7 @@ util.timeoutLoop(() => {
         size: params.shapeSize,
     }))
 
-    view.draw()
+    view.render()
     perf()
 }, params.steps).then(() => {
     console.log(`Done, steps: ${perf.steps}, fps: ${perf.fps}`)

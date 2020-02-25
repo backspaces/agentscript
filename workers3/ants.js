@@ -23,7 +23,7 @@ const foodColorMap = ColorMap.gradientColorMap(20, ['black', foodColor.css])
 const worker = new Worker('./antsWorker.js', { type: 'module' })
 worker.postMessage({ cmd: 'init', params: params })
 
-const view = new ThreeView(document.body, params.world)
+const view = new ThreeView(params.world)
 const nestSprite = view.getSprite('bug', nestColor.css)
 const foodSprite = view.getSprite('bug', foodColor.css)
 util.toWindow({ view, worker, params, util })
@@ -47,7 +47,7 @@ worker.onmessage = e => {
             sprite: t.carryingFood ? nestSprite : foodSprite,
             size: params.shapeSize,
         }))
-        view.draw()
+        view.render()
         worker.postMessage({ cmd: 'step' })
         perf()
     }
@@ -72,7 +72,7 @@ worker.onmessage = e => {
 //         size: params.shapeSize,
 //     }))
 
-//     view.draw()
+//     view.render()
 //     perf()
 // }, 500).then(() => {
 //     console.log(`Done, steps: ${perf.steps}, fps: ${perf.fps}`)

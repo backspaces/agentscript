@@ -25,7 +25,7 @@ const model = new HelloModel(world)
 model.population = params.population
 model.setup()
 
-const view = new ThreeView(document.body, world)
+const view = new ThreeView(world)
 
 util.toWindow({ model, view, params, colors, Color, util })
 
@@ -42,7 +42,7 @@ util.timeoutLoop(() => {
         size: params.shapeSize,
     }))
     view.drawLinks(model.links, { color: params.linkColor })
-    view.draw()
+    view.render()
     perf()
 }, params.steps).then(() => {
     console.log(`Done, steps: ${perf.steps}, fps: ${perf.fps}`)

@@ -22,7 +22,7 @@ const world = World.defaultOptions(125)
 const model = new FireModel(world)
 model.density = density
 model.setup()
-const view = new ThreeView(document.body, world)
+const view = new ThreeView(world)
 util.toWindow({ model, view, patchPixels, Color, util })
 
 const perf = util.fps() // Just for testing, not needed for production.
@@ -32,7 +32,7 @@ util.timeoutLoop(
         model.tick()
 
         view.drawPatches(model.patches, p => patchPixels[p.type])
-        view.draw()
+        view.render()
         perf()
     },
     steps,

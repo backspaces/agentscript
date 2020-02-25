@@ -11,6 +11,7 @@ import { THREE, OrbitControls } from '../dist/three.esm.min.js'
 export default class ThreeView {
     static defaultOptions(useThreeHelpers = true) {
         const options = {
+            div: document.body,
             orthoView: false, // 'Perspective', 'Orthographic'
             clearColor: 0x000000, // clear to black
             // clearColor: new THREE.Color(0x000000), // clear to black
@@ -36,17 +37,27 @@ export default class ThreeView {
 
     // div? or can?
     // https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer
-    // worldOptions can be options or a world instance, both work.
+    // world can be options or a world instance, both work.
     constructor(
-        div = document.body,
-        worldOptions = World.defaultOptions(),
+        // div = document.body,
+        world = World.defaultOptions(),
         options = {} // ThreeView.defaultOptions()
     ) {
         // options: override defaults:
         options = Object.assign(ThreeView.defaultOptions(), options)
 
-        this.div = util.isString(div) ? document.getElementById(div) : div
-        this.world = new World(worldOptions)
+        // this.div = options.div
+        // if (util.isString(this.div))
+        //     this.div = document.getElementById(this.div)
+        // this.div = util.isString(div) ? document.getElementById(div) : div
+        // this.world = new World(world)
+        this.div = util.isString(options.div)
+            ? document.getElementById(options.div)
+            : options.div
+        // If div height not set, default to 600px
+        if (!this.div.height) this.div.style.height = '600px'
+
+        this.world = new World(world.world || world) // world can be model
         this.renderOptions = options
         this.steps = 0
 
@@ -229,9 +240,9 @@ export default class ThreeView {
     }
 
     idle(ms = 32) {
-        util.timeoutLoop(() => view.draw(), -1, ms)
+        util.timeoutLoop(() => view.render(), -1, ms)
     }
-    draw() {
+    render() {
         // REMIND: generalize.
         this.renderer.render(this.scene, this.camera)
         this.steps++

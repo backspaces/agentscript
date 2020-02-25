@@ -33,7 +33,7 @@ util.imagePromise(params.tile).then(png => {
     const worker = new Worker('./dropletsWorker.js', { type: 'module' })
     worker.postMessage({ cmd: 'init', params: params })
 
-    const view = new ThreeView(document.body, params.world)
+    const view = new ThreeView(params.world)
     const sprite = view.getSprite(params.shape, params.shapeColor)
     util.toWindow({ view, worker, params })
 
@@ -52,7 +52,7 @@ util.imagePromise(params.tile).then(png => {
                 view.drawPatches(patchColors, c => c.pixel)
             }
             view.drawTurtles(e.data.turtles, { sprite, size: params.shapeSize })
-            view.draw()
+            view.render()
             worker.postMessage({ cmd: 'step' })
             perf()
         }
