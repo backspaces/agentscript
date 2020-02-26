@@ -18,7 +18,7 @@ async function run() {
 
     util.toWindow({ model, view, baseMapTile })
 
-    view.installDrawing(baseMapTile)
+    view.drawPatchesImage(baseMapTile)
     view.drawTurtles(model.turtles, t => ({
         sprite: view.getSprite('circle', 'red'),
         size: t.links.length > 2 ? 1 : 0.5,

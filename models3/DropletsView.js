@@ -11,7 +11,7 @@ const localMinColor = Color.typedColor(255, 0, 0) // 'red'
 // Single sprite used for all droplets
 let sprite
 
-const viewOptions = { div: 'modelDiv' }
+const viewOptions = { div: 'modelDiv' } // default is document.body
 
 function newView(model, options = {}) {
     const view = new ThreeView(model.world, Object.assign(viewOptions, options))

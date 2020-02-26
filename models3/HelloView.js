@@ -7,7 +7,7 @@ const linkColor = 'rgba(255, 255, 255, 0.50'
 const shape = 'dart'
 const shapeSize = 2
 
-const viewOptions = { patchSize: 20 }
+const viewOptions = { div: 'modelDiv' } // default is document.body
 
 function newView(model, options = {}) {
     const view = new ThreeView(model.world, Object.assign(viewOptions, options))

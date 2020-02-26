@@ -10,7 +10,7 @@ const nestColorMap = ColorMap.gradientColorMap(20, ['black', nestColor.css])
 const foodColorMap = ColorMap.gradientColorMap(20, ['black', foodColor.css])
 let nestSprite, foodSprite
 
-const viewOptions = { div: 'modelDiv' }
+const viewOptions = { div: 'modelDiv' } // default is document.body
 
 function newView(model, options = {}) {
     const view = new ThreeView(model.world, Object.assign(viewOptions, options))
