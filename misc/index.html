@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>test</title>
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="https://backspaces.github.io/agentscript/favicon.ico"
+        />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+
+            const modelParams = util.parseQueryString()
+            const appName = Object.keys(modelParams)[0] || 'hello'
+
+            const appPath = `./${appName}.js`
+            console.log('running:', appPath)
+            document.title = `2D:${appName}`
+
+            import(appPath)
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

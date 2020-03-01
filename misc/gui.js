@@ -1,10 +1,10 @@
 import Animator from '../src/Animator.js'
 import GUI from '../src/GUI.js'
 import Mouse from '../src/Mouse.js'
-import { HelloModelPlus } from '../models/HelloModel.js'
-import HelloView from './HelloView.js'
+import { HelloModelPlus as Model } from '../models/HelloModel.js'
+import View from '../models2/HelloView.js'
 import util from '../src/util.js'
-util.toWindow({ Animator, GUI, Mouse, HelloModelPlus, HelloView, util })
+util.toWindow({ Animator, GUI, Mouse, Model, View, util })
 
 const template = {
     fps: {
@@ -71,17 +71,21 @@ const handleMouse = mouse => {
     }
 }
 
-const model = new HelloModelPlus()
+// const model = new HelloModelPlus()
+const model = new Model()
 util.assign(model, controls, 'speed wiggle population')
 model.setup()
 
-const view = new HelloView(model.world, {
+// const view = HelloView.setupView(model.world, {
+const view = View.newView(model, {
     div: 'modelDiv',
     useSprites: controls.useSprites,
     patchSize: controls.patchSize,
 })
+// REMIND!!
+View.draw = () => View.drawView(model, view)
 
-const animator = new Animator(model, view, controls.fps)
+const animator = new Animator(model, View, controls.fps)
 animator.start()
 
 // REMIND: use evented animator!
