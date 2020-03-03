@@ -1,5 +1,5 @@
 import HelloModel from '../models/HelloModel.js'
-import TwoMVC from '../src/TwoMVC.js'
+import TwoMVC from './TwoMVC.js'
 import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
 import World from '../src/World.js'
@@ -46,7 +46,7 @@ export default class HelloMVC extends TwoMVC {
             view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
         }
 
-        view.clear()
+        // view.clear()
         view.drawPatches() // redraw cached patches colors
 
         view.drawLinks(model.links, { color: this.linkColor, width: 1 })

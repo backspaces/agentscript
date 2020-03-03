@@ -1,5 +1,5 @@
 import AntsModel from '../models/AntsModel.js'
-import TwoMVC from '../src/TwoMVC.js'
+import TwoMVC from './TwoMVC.js'
 import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
 import World from '../src/World.js'
@@ -52,7 +52,7 @@ export default class AntsMVC extends TwoMVC {
     }
 
     draw() {
-        view.clear()
+        // view.clear()
         view.drawPatches(this.model.patches, p => {
             if (p.isNest) return this.nestColor.pixel
             if (p.isFood) return this.foodColor.pixel

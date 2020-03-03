@@ -1,5 +1,5 @@
 import WaterModel from '../models/WaterModel.js'
-import TwoMVC from '../src/TwoMVC.js'
+import TwoMVC from './TwoMVC.js'
 import ColorMap from '../src/ColorMap.js'
 import World from '../src/World.js'
 

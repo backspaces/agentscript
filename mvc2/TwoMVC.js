@@ -1,9 +1,9 @@
 // Attempt to make the refactoring of AgentScript into many
 // parts easier for the modeler.
 
-import TwoView from './TwoView.js'
-import Animator from './Animator.js'
-import util from './util.js'
+import TwoView from '../src/TwoView.js'
+import Animator from '../src/Animator.js'
+import util from '../src/util.js'
 
 export default class TwoMVC {
     static defaultOptions() {

@@ -1,5 +1,5 @@
 import DropletsModel from '../models/DropletsModel.js'
-import TwoMVC from '../src/TwoMVC.js'
+import TwoMVC from './TwoMVC.js'
 import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
 
@@ -54,7 +54,7 @@ export default class DropletsMVC extends TwoMVC {
     }
 
     draw() {
-        view.clear() // REMIND: uses toWindow's view!!
+        // view.clear() // REMIND: uses toWindow's view!!
         view.drawPatches() // redraw cached patches colors
         view.drawTurtles(model.turtles, {
             shape: this.shape,

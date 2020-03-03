@@ -5,36 +5,40 @@
     </head>
 
     <body>
-        <canvas id="model" style="border: 1px solid;"></canvas>
         <script type="module">
             import util from '../src/util.js'
+            import {
+                TestModel as Model,
+                TestModule as module,
+            } from './TestModel.js'
+            util.toWindow({ util, Model, module })
 
-            // import GUI from '../src/GUI.js'
-            // import Evented from '../src/Evented.js'
-            // import Color from '../src/Color.js'
-            // import ColorMap from '../src/ColorMap.js'
-            // util.toWindow({ GUI, Evented, Color, ColorMap, util })
+            async function run() {
+                const model = new Model()
 
-            // import * as canvas from '../src/utils/canvas.js'
-            // import * as types from '../src/utils/types.js'
-            // import * as AS from '../dist/agentscript.esm.js'
-            // util.toWindow({ canvas, types, AS })
+                util.randomSeed()
+                await model.startup()
+                model.setup()
+                await util.timeoutLoop(() => {
+                    model.step()
+                    model.tick() // Not needed if you don't need the tick count.
+                }, 500)
 
-            // import MVC from '../src/MVC.js'
-            import ColorMap from '../src/ColorMap.js'
-            util.toWindow({ ColorMap, util })
+                util.printToPage(util.sampleModel(model))
 
-            // No hoisting!
-            // console.log(foo)
-            // var foo = 20
-            // function fun() {
-            //     var foo
-            //     console.log(foo)
-            //     foo = 20
-            // }
-            // fun()
+                // =====================
 
-            // import * as THREE from '../web_modules/three.js'
+                util.randomSeed()
+                await module.startup()
+                module.setup()
+                await util.timeoutLoop(() => {
+                    module.step()
+                    module.model.tick()
+                }, 500)
+
+                util.printToPage(util.sampleModel(module.model))
+            }
+            run()
         </script>
     </body>
 </html>

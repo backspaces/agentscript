@@ -1,5 +1,5 @@
 import FireModel from '../models/FireModel.js'
-import TwoMVC from '../src/TwoMVC.js'
+import TwoMVC from './TwoMVC.js'
 import Color from '../src/Color.js'
 
 export default class FireMVC extends TwoMVC {
