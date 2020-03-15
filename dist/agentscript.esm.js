@@ -106,7 +106,8 @@ var async = /*#__PURE__*/Object.freeze({
 // import { inWorker } from './dom.js'
 
 function offscreenOK() {
-    return !!self.OffscreenCanvas
+    // return !!self.OffscreenCanvas
+    return typeof OffscreenCanvas !== 'undefined'
 }
 
 // Create a blank 2D canvas of a given width/height
@@ -480,7 +481,7 @@ function fcnToWorker(fcn) {
     );
     const worker = new Worker(objUrl);
     worker.onerror = function(e) {
-        console.log('ERROR: Line ', e.lineno, ': ', e.message);
+        console.log('Worker ERROR: Line ', e.lineno, ': ', e.message);
     };
     return worker
 }
@@ -575,24 +576,6 @@ function clamp(v, min, max) {
 // Return true is val in [min, max] enclusive
 const between = (val, min, max) => min <= val && val <= max;
 
-// Repeat function f(i, a) n times, i in 0, n-1
-// a is optional array, default a new Array.
-// Return a.
-function repeat(n, f, a = []) {
-    for (let i = 0; i < n; i++) f(i, a);
-    return a
-}
-// Repeat function n times, incrementing i by step each call.
-function step(n, step, f) {
-    for (let i = 0; i < n; i += step) f(i);
-}
-// Return range [0, length-1]. Note: 6x faster than Array.from!
-function range(length) {
-    return repeat(length, (i, a) => {
-        a[i] = i;
-    })
-}
-
 // Return a linear interpolation between lo and hi.
 // Scale is in [0-1], a percentage, and the result is in [lo,hi]
 // If lo>hi, scaling is from hi end of range.
@@ -676,9 +659,6 @@ var math = /*#__PURE__*/Object.freeze({
     wrap: wrap,
     clamp: clamp,
     between: between,
-    repeat: repeat,
-    step: step,
-    range: range,
     lerp: lerp$1,
     lerpScale: lerpScale,
     radians: radians,
@@ -694,162 +674,7 @@ var math = /*#__PURE__*/Object.freeze({
     inCone: inCone
 });
 
-function toJSON(obj, indent = 0, topLevelArrayOK = true) {
-    let firstCall = topLevelArrayOK;
-    const blackList = ['rectCache'];
-    const json = JSON.stringify(
-        obj,
-        (key, val) => {
-            if (blackList.includes(key)) return undefined
-            const isAgentArray =
-                Array.isArray(val) &&
-                val.length > 0 &&
-                Number.isInteger(val[0].id);
-
-            if (isAgentArray && !firstCall) {
-                return val.map(v => v.id)
-            }
-
-            firstCall = false;
-            return val
-        },
-        indent
-    );
-    return json
-}
-
-function sampleModel(model) {
-    const obj = {
-        model: Object.keys(model),
-        patches: model.patches.length,
-        patch: model.patches.oneOf(),
-        turtles: model.turtles.length,
-        turtle: model.turtles.oneOf(),
-        links: model.links.length,
-        link: model.links.oneOf(),
-    };
-    const json = toJSON(obj);
-    return JSON.parse(json)
-}
-
-// params; classPath, steps, seed,
-async function runModel(params) {
-    var worker = inWorker(); // fails in test/models.js
-    const prefix = worker ? 'worker ' : 'main ';
-    console.log(prefix + 'params', params);
-
-    if (worker) importScripts(params.classPath);
-    else await loadScript(params.classPath);
-
-    if (params.seed) randomSeed();
-
-    // const Model = eval(params.className)
-    const model = new defaultModel();
-    console.log(prefix + 'model', model);
-
-    await model.startup();
-    model.setup();
-    if (worker) {
-        repeat(params.steps, () => {
-            model.step();
-            model.tick();
-        });
-    } else {
-        await timeoutLoop(() => {
-            model.step();
-            model.tick();
-        }, params.steps);
-    }
-    console.log(prefix + 'done, model', model);
-
-    return sampleModel(model)
-}
-
-var models = /*#__PURE__*/Object.freeze({
-    sampleModel: sampleModel,
-    runModel: runModel
-});
-
-// ### Types
-
-// Fix the javascript typeof operator https://goo.gl/Efdzk5
-const typeOf = obj =>
-    ({}.toString
-        .call(obj)
-        .match(/\s(\w+)/)[1]
-        .toLowerCase());
-const isType = (obj, string) => typeOf(obj) === string;
-const isOneOfTypes = (obj, array) => array.includes(typeOf(obj));
-
-const isString = obj => isType(obj, 'string');
-const isObject = obj => isType(obj, 'object');
-const isArray = obj => isType(obj, 'array');
-const isNumber = obj => isType(obj, 'number');
-const isFunction = obj => isType(obj, 'function');
-
-// Is a number an integer (rather than a float w/ non-zero fractional part)
-const isInteger = n => Number.isInteger(n); // assume es6, babel otherwise.
-const isFloat = n => isNumber(n) && n % 1 !== 0; // https://goo.gl/6MS0Tm
-const isCanvas = obj =>
-    isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']);
-
-const isImageable = obj =>
-    isOneOfTypes(obj, [
-        'image',
-        'htmlimageelement',
-        'htmlcanvaselement',
-        'offscreencanvas',
-        'imagebitmap',
-    ]);
-
-// Typed Arrays:
-const isTypedArray = obj => typeOf(obj.buffer) === 'arraybuffer';
-const isUintArray = obj => /^uint.*array$/.test(typeOf(obj));
-const isIntArray = obj => /^int.*array$/.test(typeOf(obj));
-const isFloatArray = obj => /^float.*array$/.test(typeOf(obj));
-
-function isLittleEndian() {
-    const d32 = new Uint32Array([0x01020304]);
-    return new Uint8ClampedArray(d32.buffer)[0] === 4
-}
-
-// Convert Array or TypedArray to given Type (Array or TypedArray).
-// Result same length as array, precision may be lost.
-function convertArrayType$1(array, Type) {
-    const Type0 = array.constructor;
-    if (Type0 === Type) return array // return array if already same Type
-    return Type.from(array) // Use .from (both TypedArrays and Arrays)
-}
-
-// Unused:
-// isHtmlElement: obj => /^html.*element$/.test(typeOf(obj))
-// isImage: obj => isType(obj, 'image')
-// isImageBitmap: obj => isType(obj, 'imagebitmap')
-// // Is undefined, null, bool, number, string, symbol
-// isPrimitive: obj => obj == null || 'object' != typeof obj
-// Return array's type (Array or TypedArray variant)
-// typeName: obj => obj.constructor.name
-
-var types = /*#__PURE__*/Object.freeze({
-    typeOf: typeOf,
-    isType: isType,
-    isOneOfTypes: isOneOfTypes,
-    isString: isString,
-    isObject: isObject,
-    isArray: isArray,
-    isNumber: isNumber,
-    isFunction: isFunction,
-    isInteger: isInteger,
-    isFloat: isFloat,
-    isCanvas: isCanvas,
-    isImageable: isImageable,
-    isTypedArray: isTypedArray,
-    isUintArray: isUintArray,
-    isIntArray: isIntArray,
-    isFloatArray: isFloatArray,
-    isLittleEndian: isLittleEndian,
-    convertArrayType: convertArrayType$1
-});
+// import { isString } from './types.js'
 
 // ### Arrays, Objects and Iteration
 
@@ -920,15 +745,23 @@ function forLoop(arrayOrObj, fcn) {
     }
     // return arrayOrObj
 }
-// export function forLoop(array, fcn) {
-//     // typed & std arrays
-//     for (let i = 0, len = array.length; i < len; i++) {
-//         fcn(array[i], i, array)
-//     }
-// }
-// export function forEachKey(obj, fcn) {
-//     Object.keys(obj).forEach(k => fcn(obj[k], k, obj))
-// }
+// Repeat function f(i, a) n times, i in 0, n-1
+// a is optional array, default a new Array.
+// Return a.
+function repeat(n, f, a = []) {
+    for (let i = 0; i < n; i++) f(i, a);
+    return a
+}
+// Repeat function n times, incrementing i by step each call.
+function step(n, step, f) {
+    for (let i = 0; i < n; i += step) f(i);
+}
+// Return range [0, length-1]. Note: 6x faster than Array.from!
+function range(length) {
+    return repeat(length, (i, a) => {
+        a[i] = i;
+    })
+}
 
 // Return a new shallow of array (either Array or TypedArray) or object
 function clone(object) {
@@ -1136,6 +969,9 @@ var objects = /*#__PURE__*/Object.freeze({
     removeArrayItem: removeArrayItem,
     arraysToString: arraysToString,
     forLoop: forLoop,
+    repeat: repeat,
+    step: step,
+    range: range,
     clone: clone,
     assign: assign,
     override: override,
@@ -1157,6 +993,164 @@ var objects = /*#__PURE__*/Object.freeze({
     normalize: normalize,
     normalize8: normalize8,
     normalizeInt: normalizeInt
+});
+
+function toJSON(obj, indent = 0, topLevelArrayOK = true) {
+    let firstCall = topLevelArrayOK;
+    const blackList = ['rectCache'];
+    const json = JSON.stringify(
+        obj,
+        (key, val) => {
+            if (blackList.includes(key)) return undefined
+            const isAgentArray =
+                Array.isArray(val) &&
+                val.length > 0 &&
+                Number.isInteger(val[0].id);
+
+            if (isAgentArray && !firstCall) {
+                return val.map(v => v.id)
+            }
+
+            firstCall = false;
+            return val
+        },
+        indent
+    );
+    return json
+}
+
+function sampleModel(model) {
+    const obj = {
+        ticks: model.ticks,
+        model: Object.keys(model),
+        patches: model.patches.length,
+        patch: model.patches.oneOf(),
+        turtles: model.turtles.length,
+        turtle: model.turtles.oneOf(),
+        links: model.links.length,
+        link: model.links.oneOf(),
+    };
+    const json = toJSON(obj);
+    return JSON.parse(json)
+}
+
+// params; classPath, steps, seed,
+async function runModel(params) {
+    var worker = inWorker(); // fails in test/models.js
+    const prefix = worker ? 'worker ' : 'main ';
+    console.log(prefix + 'params', params);
+
+    if (worker) importScripts(params.classPath);
+    else await loadScript(params.classPath);
+
+    if (params.seed) randomSeed();
+
+    // const Model = eval(params.className)
+    const model = new defaultModel();
+    console.log(prefix + 'model', model);
+
+    await model.startup();
+    model.setup();
+    if (worker) {
+        repeat(params.steps, () => {
+            model.step();
+            model.tick();
+        });
+    } else {
+        await timeoutLoop(() => {
+            model.step();
+            model.tick();
+        }, params.steps);
+    }
+    console.log(prefix + 'done, model', model);
+
+    return sampleModel(model)
+}
+
+var models = /*#__PURE__*/Object.freeze({
+    sampleModel: sampleModel,
+    runModel: runModel
+});
+
+// ### Types
+
+// Fix the javascript typeof operator https://goo.gl/Efdzk5
+const typeOf = obj =>
+    ({}.toString
+        .call(obj)
+        .match(/\s(\w+)/)[1]
+        .toLowerCase());
+const isType = (obj, string) => typeOf(obj) === string;
+const isOneOfTypes = (obj, array) => array.includes(typeOf(obj));
+
+const isString = obj => isType(obj, 'string');
+const isObject = obj => isType(obj, 'object');
+const isArray = obj => isType(obj, 'array');
+const isNumber = obj => isType(obj, 'number');
+const isFunction = obj => isType(obj, 'function');
+
+// Is a number an integer (rather than a float w/ non-zero fractional part)
+const isInteger = n => Number.isInteger(n); // assume es6, babel otherwise.
+const isFloat = n => isNumber(n) && n % 1 !== 0; // https://goo.gl/6MS0Tm
+const isCanvas = obj =>
+    isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']);
+
+const isImageable = obj =>
+    isOneOfTypes(obj, [
+        'image',
+        'htmlimageelement',
+        'htmlcanvaselement',
+        'offscreencanvas',
+        'imagebitmap',
+    ]);
+
+// Typed Arrays:
+const isTypedArray = obj => typeOf(obj.buffer) === 'arraybuffer';
+const isUintArray = obj => /^uint.*array$/.test(typeOf(obj));
+const isIntArray = obj => /^int.*array$/.test(typeOf(obj));
+const isFloatArray = obj => /^float.*array$/.test(typeOf(obj));
+
+function isLittleEndian() {
+    const d32 = new Uint32Array([0x01020304]);
+    return new Uint8ClampedArray(d32.buffer)[0] === 4
+}
+
+// Convert Array or TypedArray to given Type (Array or TypedArray).
+// Result same length as array, precision may be lost.
+function convertArrayType$1(array, Type) {
+    const Type0 = array.constructor;
+    if (Type0 === Type) return array // return array if already same Type
+    return Type.from(array) // Use .from (both TypedArrays and Arrays)
+}
+
+// Unused:
+// isHtmlElement: obj => /^html.*element$/.test(typeOf(obj))
+// isImage: obj => isType(obj, 'image')
+// isImageBitmap: obj => isType(obj, 'imagebitmap')
+// // Is undefined, null, bool, number, string, symbol
+// isPrimitive: obj => obj == null || 'object' != typeof obj
+// Return array's type (Array or TypedArray variant)
+// typeName: obj => obj.constructor.name
+
+var types = /*#__PURE__*/Object.freeze({
+    typeOf: typeOf,
+    isType: isType,
+    isOneOfTypes: isOneOfTypes,
+    isString: isString,
+    isObject: isObject,
+    isArray: isArray,
+    isNumber: isNumber,
+    isFunction: isFunction,
+    isInteger: isInteger,
+    isFloat: isFloat,
+    isCanvas: isCanvas,
+    isImageable: isImageable,
+    isTypedArray: isTypedArray,
+    isUintArray: isUintArray,
+    isIntArray: isIntArray,
+    isFloatArray: isFloatArray,
+    isLittleEndian: isLittleEndian,
+    convertArrayType: convertArrayType$1
 });
 
 // ### OofA/AofO

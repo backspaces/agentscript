@@ -1,7 +1,8 @@
 // import { inWorker } from './dom.js'
 
 function offscreenOK() {
-    return !!self.OffscreenCanvas
+    // return !!self.OffscreenCanvas
+    return typeof OffscreenCanvas !== 'undefined'
 }
 
 // Create a blank 2D canvas of a given width/height

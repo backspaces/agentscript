@@ -1,5 +1,5 @@
 importScripts('../dist/agentscript.umd.js')
-importScripts('./modelScripts/FireScript.js')
+importScripts('../models/scripts/FireModel.js')
 
 // AS.util.randomSeed() // for consistant results over runs
 

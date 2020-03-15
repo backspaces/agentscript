@@ -63,24 +63,6 @@ export function clamp(v, min, max) {
 // Return true is val in [min, max] enclusive
 export const between = (val, min, max) => min <= val && val <= max
 
-// Repeat function f(i, a) n times, i in 0, n-1
-// a is optional array, default a new Array.
-// Return a.
-export function repeat(n, f, a = []) {
-    for (let i = 0; i < n; i++) f(i, a)
-    return a
-}
-// Repeat function n times, incrementing i by step each call.
-export function step(n, step, f) {
-    for (let i = 0; i < n; i += step) f(i)
-}
-// Return range [0, length-1]. Note: 6x faster than Array.from!
-export function range(length) {
-    return repeat(length, (i, a) => {
-        a[i] = i
-    })
-}
-
 // Return a linear interpolation between lo and hi.
 // Scale is in [0-1], a percentage, and the result is in [lo,hi]
 // If lo>hi, scaling is from hi end of range.

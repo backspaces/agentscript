@@ -81,7 +81,7 @@ export function fcnToWorker(fcn) {
     )
     const worker = new Worker(objUrl)
     worker.onerror = function(e) {
-        console.log('ERROR: Line ', e.lineno, ': ', e.message)
+        console.log('Worker ERROR: Line ', e.lineno, ': ', e.message)
     }
     return worker
 }

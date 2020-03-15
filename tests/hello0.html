@@ -9,7 +9,8 @@
         <script>
             function workerSrc(root) {
                 importScripts(root + '../dist/agentscript.umd.js')
-                importScripts(root + './modelScripts/HelloScript.js')
+                // importScripts(root + './modelScripts/HelloScript.js')
+                importScripts(root + '../models/scripts/HelloModel.js')
                 console.log('worker self', self)
 
                 let model, params
@@ -17,27 +18,43 @@
                 const { World } = AS
 
                 function postData() {
-                    const data = Object.assign(
-                        {},
-                        model.turtles.typedSample({
+                    // const data = Object.assign(
+                    //     {},
+                    //     model.turtles.typedSample({
+                    //         x: Float32Array,
+                    //         y: Float32Array,
+                    //         theta: Float32Array,
+                    //     }),
+                    //     model.links.typedSample({
+                    //         x0: Float32Array,
+                    //         y0: Float32Array,
+                    //         x1: Float32Array,
+                    //         y1: Float32Array,
+                    //     })
+                    // )
+                    const data = {
+                        turtles: model.turtles.typedSample({
                             x: Float32Array,
                             y: Float32Array,
                             theta: Float32Array,
                         }),
-                        model.links.typedSample({
+                        links: model.links.typedSample({
                             x0: Float32Array,
                             y0: Float32Array,
                             x1: Float32Array,
                             y1: Float32Array,
-                        })
-                    )
-                    // postMessage ~same performance w/ & w/o transferables!
-                    if (params.to) {
-                        postMessage(data, util.oofaBuffers(data))
-                        if (data.x.length !== 0) console.log('to data', data)
-                    } else {
-                        postMessage(data, util.oofaBuffers(data))
+                        }),
                     }
+
+                    // postMessage ~same performance w/ & w/o transferables!
+                    // if (params.to) {
+                    //     postMessage(data, util.oofaBuffers(data))
+                    //     if (data.x.length !== 0) console.log('to data', data)
+                    // } else {
+                    //     postMessage(data, util.oofaBuffers(data))
+                    // }
+                    postMessage(data, util.oofaBuffers(data))
+                    // if (data.x.length !== 0) console.log('to data', data)
                 }
                 onmessage = e => {
                     if (e.data.cmd === 'init') {

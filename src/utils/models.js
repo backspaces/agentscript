@@ -1,5 +1,6 @@
 import { loadScript, inWorker } from './dom.js'
-import { randomSeed, repeat } from './math.js'
+import { randomSeed } from './math.js'
+import { repeat } from './objects.js'
 import { timeoutLoop } from './async.js'
 
 function toJSON(obj, indent = 0, topLevelArrayOK = true) {
@@ -28,6 +29,7 @@ function toJSON(obj, indent = 0, topLevelArrayOK = true) {
 
 export function sampleModel(model) {
     const obj = {
+        ticks: model.ticks,
         model: Object.keys(model),
         patches: model.patches.length,
         patch: model.patches.oneOf(),

@@ -1,5 +1,5 @@
 import { randomInt } from './math.js'
-import { isString } from './types.js'
+// import { isString } from './types.js'
 
 // ### Arrays, Objects and Iteration
 
@@ -70,15 +70,23 @@ export function forLoop(arrayOrObj, fcn) {
     }
     // return arrayOrObj
 }
-// export function forLoop(array, fcn) {
-//     // typed & std arrays
-//     for (let i = 0, len = array.length; i < len; i++) {
-//         fcn(array[i], i, array)
-//     }
-// }
-// export function forEachKey(obj, fcn) {
-//     Object.keys(obj).forEach(k => fcn(obj[k], k, obj))
-// }
+// Repeat function f(i, a) n times, i in 0, n-1
+// a is optional array, default a new Array.
+// Return a.
+export function repeat(n, f, a = []) {
+    for (let i = 0; i < n; i++) f(i, a)
+    return a
+}
+// Repeat function n times, incrementing i by step each call.
+export function step(n, step, f) {
+    for (let i = 0; i < n; i += step) f(i)
+}
+// Return range [0, length-1]. Note: 6x faster than Array.from!
+export function range(length) {
+    return repeat(length, (i, a) => {
+        a[i] = i
+    })
+}
 
 // Return a new shallow of array (either Array or TypedArray) or object
 export function clone(object) {
