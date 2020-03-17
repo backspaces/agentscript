@@ -14,7 +14,7 @@ const shapeSize = 1.5
 const viewOptions = { patchSize: 10 }
 
 function newView(model, options = {}) {
-    return = new TwoView(model.world, Object.assign(viewOptions, options))
+    return new TwoView(model.world, Object.assign(viewOptions, options))
 }
 
 function drawView(model, view) {
