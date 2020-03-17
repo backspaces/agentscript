@@ -218,6 +218,11 @@ class Turtle {
     linkNeighbors() {
         return this.links.map(l => this.otherEnd(l))
     }
+
+    isLinkNeighbor(t) {
+        // const linkNeighbors = this.linkNeighbors()
+        return t in this.linkNeighbors()
+    }
 }
 
 export default Turtle

@@ -185,12 +185,11 @@ class AgentSet extends AgentArray {
             fcn(this[i], i, this)
         }
     }
-    // Call fcn(agent, index, array) for each item in AgentArray.
     // Manages immutability reasonably well.
     askSet(fcn) {
         if (this.length === 0) return
         // Patches are static
-        if (this.name === 'patches') super.each(fcn)
+        if (this.name === 'patches') super.forLoop(fcn)
         else if (this.isBaseSet()) this.baseSetAsk(fcn)
         else if (this.isBreedSet()) this.cloneAsk(fcn)
     }

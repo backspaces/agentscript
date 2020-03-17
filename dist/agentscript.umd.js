@@ -1267,6 +1267,13 @@
         last() {
             return this[this.length - 1]
         }
+
+        // every(fcn) Array built-in: same as NetLogo all? operator
+        // fcn(obj, index, array)
+        all(fcn) {
+            return this.every(fcn)
+        }
+
         // Return array of property values for key from this array's objects.
         // Array type is specified, defaulted to AgentArray
         // Note: forEach & map WAY slower than for loop
@@ -1292,13 +1299,13 @@
         // Return AgentArray of results of the function fcn
         // Similar to "props" but can return computation over all keys
         // Odd: as.props('type') twice as fast as as.results(p => p.type)?
-        results(fcn) {
-            const result = new AgentArray(this.length);
-            for (let i = 0; i < this.length; i++) {
-                result[i] = fcn(this[i]);
-            }
-            return result
-        }
+        // results(fcn) {
+        //     const result = new AgentArray(this.length)
+        //     for (let i = 0; i < this.length; i++) {
+        //         result[i] = fcn(this[i])
+        //     }
+        //     return result
+        // }
         // Returns AgentArray of unique elements in this *sorted* AgentArray.
         // Use sortBy or clone & sortBy if needed.
         // uniq(f = util.identityFcn) {
@@ -1309,7 +1316,7 @@
         // Call fcn(agent, index, array) for each agent in AgentArray.
         // Array assumed not mutable
         // Note: 5x+ faster than this.forEach(fcn) !!
-        each(fcn) {
+        forLoop(fcn) {
             for (let i = 0, len = this.length; i < len; i++) {
                 fcn(this[i], i, this);
             }
@@ -1330,6 +1337,14 @@
                 util.warn(`AgentArray.ask array mutation: ${name}: ${direction}`);
             }
             // return this
+        }
+        // Return all elements returning f(obj, index, array) true
+        with(fcn) {
+            return this.filter(fcn)
+        }
+        // Return all other than me.
+        other(t) {
+            return this.filter(o => o !== t)
         }
 
         // Return count of agents with reporter(agent) true
@@ -1477,7 +1492,7 @@
                 const a = this[i];
                 const aval = reporter(a);
                 if ((min && aval < val) || (!min && aval > val)) {
-                    [o, val] = [a, aval];
+    [o, val] = [a, aval];
                 }
             }
             return valueToo ? [o, val] : o
@@ -1765,12 +1780,11 @@
                 fcn(this[i], i, this);
             }
         }
-        // Call fcn(agent, index, array) for each item in AgentArray.
         // Manages immutability reasonably well.
         askSet(fcn) {
             if (this.length === 0) return
             // Patches are static
-            if (this.name === 'patches') super.each(fcn);
+            if (this.name === 'patches') super.forLoop(fcn);
             else if (this.isBaseSet()) this.baseSetAsk(fcn);
             else if (this.isBreedSet()) this.cloneAsk(fcn);
         }
@@ -3578,6 +3592,11 @@ out;`;
         // Return all turtles linked to me
         linkNeighbors() {
             return this.links.map(l => this.otherEnd(l))
+        }
+
+        isLinkNeighbor(t) {
+            // const linkNeighbors = this.linkNeighbors()
+            return t in this.linkNeighbors()
         }
     }
 

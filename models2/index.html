@@ -42,8 +42,10 @@
 
                 // Push several properties to window from inside this module.
                 // You don't need to do this but is nice for debugging.
-                // const { patches, turtles, links } = model
-                // util.toWindow({ model, view, patches, turtles, links, util })
+                // We use aliases for patches, turtles, links to catch
+                // model omitting "this" for this.turtles.
+                const { patches: ps, turtles: ts, links: ls } = model
+                util.toWindow({ model, util, ps, ts, ls })
 
                 // Now init and run and draw the model 500 steps, 30fps.
                 // Async so as to not block the browser.
