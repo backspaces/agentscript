@@ -4,7 +4,7 @@ import Mouse from '../src/Mouse.js'
 import { HelloModelPlus as Model } from '../models/HelloModel.js'
 import View from '../models2/HelloView.js'
 import util from '../src/util.js'
-util.toWindow({ Animator, GUI, Mouse, Model, View, util })
+// util.toWindow({ Animator, GUI, Mouse, Model, View, util })
 
 const template = {
     fps: {

@@ -32,11 +32,11 @@ export default class HelloMVC extends TwoMVC {
     }
 
     draw() {
-        const model = this.model
-        const view = this.view
+        const { model, view, animator, gui } = this
 
+        // Draw the model world view
         // Just draw patches once, results cached in view.patchesView
-        if (this.animator.draws === 0) {
+        if (animator.draws === 0) {
             view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
         }
 
@@ -49,6 +49,9 @@ export default class HelloMVC extends TwoMVC {
             color: this.colorMap.atIndex(p.id).css,
             size: this.shapeSize,
         }))
+
+        // Draw data to the gui:
+        gui.perf = animator.ticksPerSec()
     }
 
     setGUI() {
@@ -72,7 +75,7 @@ export default class HelloMVC extends TwoMVC {
                 cmd: val => (model.wiggle = val),
             },
             patchSize: {
-                value: this.view.patchSize,
+                value: view.patchSize,
                 extent: [1, 20, 1],
                 cmd: val => view.reset(val),
             },
@@ -87,7 +90,7 @@ export default class HelloMVC extends TwoMVC {
                 cmd: val => (this.shapeSize = val),
             },
             run: { value: () => animator.toggle() },
-            // useMouse: { value: true, cmd: val => mouse.run(val) },
+            useMouse: { value: true, cmd: val => mouse.run(val) },
             useSprites: {
                 value: view.useSprites,
                 cmd: val => (view.useSprites = val),
@@ -97,9 +100,28 @@ export default class HelloMVC extends TwoMVC {
                 extent: [5, 1000, 5],
                 cmd: val => (model.population = val),
             },
-            // perf: { value: 0, cmd: 'listen' },
+            perf: { value: 0, cmd: 'listen' },
         }
         console.log(template)
         return super.setGUI(template)
+    }
+
+    handleMouse(mouse) {
+        const turtles = this.model.turtles
+        const { xCor, yCor } = mouse
+        switch (mouse.action) {
+            case 'down':
+                this.selectedTurtle = turtles.closestTurtle(xCor, yCor, 2)
+                if (this.selectedTurtle === null) return
+                this.selectedTurtle.setxy(xCor, yCor)
+                break
+            case 'drag':
+                if (this.selectedTurtle === null) return
+                this.selectedTurtle.setxy(xCor, yCor)
+                break
+            case 'up':
+                this.selectedTurtle = null
+                break
+        }
     }
 }

@@ -23,9 +23,7 @@ export default class TwoMVC {
                 // useSprites: false,
                 // patchSize: 10,
             },
-            // drawOptions: {
-            //     //
-            // },
+            // The rest are "draw options", used by draw()
         }
     }
 
@@ -43,17 +41,13 @@ export default class TwoMVC {
 
         this.animator = new Animator(this)
 
-        this.mouse = new Mouse(
-            this.view.canvas,
-            this.model.world,
-            this.handleMouse
+        this.mouse = new Mouse(this.view.canvas, this.model.world, mouse =>
+            this.handleMouse(mouse)
         ).start()
 
         const defaultKeys = Object.keys(TwoMVC.defaultOptions())
         const keys = Object.keys(options)
         const drawKeys = util.difference(keys, defaultKeys)
-        // export function assign(to, from, keys) {
-        // console.log(drawKeys)
         util.assign(this, options, drawKeys)
     }
 
