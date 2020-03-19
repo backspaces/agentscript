@@ -804,6 +804,9 @@
         return overrides
     }
 
+    // Get subset of object by it's keys
+    // export function getObjectValues(obj, keys) {}
+
     // Return a new array that is the concatination two arrays.
     // The resulting Type is that of the first array.
     function concatArrays(array1, array2) {
@@ -2746,6 +2749,7 @@ out;`;
         }
         randomPatchPoint() {
             return [
+                // REMIND: can maxX/Y be in the result?
                 util.randomInt2(this.minX, this.maxX),
                 util.randomInt2(this.minY, this.maxY),
             ]

@@ -85,10 +85,11 @@ export default class Animator {
         return dt === 0 ? 0 : Math.round((dt * 1000) / this.ms())
     }
     get fps() {
-        return Math.max(this.drawsPerSec(), this.ticksPerSec())
+        // return this.rate // Math.max(this.drawsPerSec(), this.ticksPerSec())
+        return this.rate
     }
-    set fps(fps) {
-        this.setRate(fps)
+    set fps(rate) {
+        this.setRate(rate)
     }
     // Return a status string for debugging and logging performance
     toString() {

@@ -3,38 +3,58 @@
 
 import TwoView from '../src/TwoView.js'
 import Animator from '../src/Animator.js'
+import GUI from '../src/GUI.js'
+import Mouse from '../src/Mouse.js'
 import util from '../src/util.js'
 
 export default class TwoMVC {
     static defaultOptions() {
         return {
-            // Model
-            // Note: world (undefined) defaults to ModelClass's default world.
-            // Supplying your own world will override the model's default.
-            // world: undefined, // undefined => use model's default world
+            // use model's default world
+            worldOptions: undefined,
 
-            // View
-            div: document.body,
-            useSprites: false,
-            patchSize: 10,
+            // override any of this models options
+            modelOptions: {
+                // population: 1000 .. a common override
+            },
+            // override any of the view options:
+            viewOptions: {
+                // div: document.body,
+                // useSprites: false,
+                // patchSize: 10,
+            },
+            // drawOptions: {
+            //     //
+            // },
         }
     }
 
     // options *override* the defaults above. Just put in ones that differ.
-    constructor(model, options = {}) {
-        options = Object.assign(TwoMVC.defaultOptions(), options)
+    constructor(modelClass, options, viewOptions = {}) {
+        // options = Object.assign(TwoMVC.defaultOptions(), options)
 
-        const modelDefaults = model.constructor.defaultOptions()
-        Object.assign(model, util.override(modelDefaults, options))
-        this.model = model
+        // const modelDefaults = model.constructor.defaultOptions()
+        // Object.assign(model, util.override(modelDefaults, options))
+        this.model = new modelClass(options.worldOptions)
+        Object.assign(this.model, options.modelOptions)
 
-        const viewDefaults = TwoView.defaultOptions()
-        this.view = new TwoView(
-            this.model,
-            util.override(viewDefaults, options)
-        )
+        Object.assign(options.viewOptions, viewOptions)
+        this.view = new TwoView(this.model.world, options.viewOptions)
 
         this.animator = new Animator(this)
+
+        this.mouse = new Mouse(
+            this.view.canvas,
+            this.model.world,
+            this.handleMouse
+        ).start()
+
+        const defaultKeys = Object.keys(TwoMVC.defaultOptions())
+        const keys = Object.keys(options)
+        const drawKeys = util.difference(keys, defaultKeys)
+        // export function assign(to, from, keys) {
+        // console.log(drawKeys)
+        util.assign(this, options, drawKeys)
     }
 
     // Model methods
@@ -73,5 +93,13 @@ export default class TwoMVC {
     }
     set fps(fps) {
         this.animator.fps = fps
+    }
+
+    setGUI(template) {
+        return new GUI(template).target
+    }
+
+    handleMouse(mouse) {
+        util.warn('no mouse handler')
     }
 }

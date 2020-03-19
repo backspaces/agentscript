@@ -123,6 +123,9 @@ export function override(defaults, options) {
     return overrides
 }
 
+// Get subset of object by it's keys
+// export function getObjectValues(obj, keys) {}
+
 // Return a new array that is the concatination two arrays.
 // The resulting Type is that of the first array.
 export function concatArrays(array1, array2) {

@@ -48,6 +48,7 @@ export default class World {
     }
     randomPatchPoint() {
         return [
+            // REMIND: can maxX/Y be in the result?
             util.randomInt2(this.minX, this.maxX),
             util.randomInt2(this.minY, this.maxY),
         ]

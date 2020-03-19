@@ -12,6 +12,7 @@ const template = {
         extent: [5, 60, 5],
         cmd: val => (animator.fps = val),
     },
+    // fps: GUI.item(animator, 'fps', 20, [5, 60, 5]),
     speed: {
         value: 0.1,
         extent: [0.01, 0.5, 0.01],

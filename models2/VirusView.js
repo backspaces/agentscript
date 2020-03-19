@@ -1,7 +1,6 @@
 import ColorMap from '../src/ColorMap.js'
 import TwoView from '../src/TwoView.js'
 
-const patchesColors = ColorMap.DarkGray
 const turtleColors = {
     infected: 'red',
     susceptible: 'blue',

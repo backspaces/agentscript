@@ -50,30 +50,30 @@ export default class GUI {
         target[name] = options.value
 
         switch (type) {
-        case 'slider':
-            const [min, max, step = 1] = extent
-            control = this.gui.add(target, name, min, max).step(step)
-            break
+            case 'slider':
+                const [min, max, step = 1] = extent
+                control = this.gui.add(target, name, min, max).step(step)
+                break
 
-        case 'chooser':
-            control = this.gui.add(target, name, extent)
-            break
+            case 'chooser':
+                control = this.gui.add(target, name, extent)
+                break
 
-        case 'button':
-            control = this.gui.add(target, name)
-            break
+            case 'button':
+                control = this.gui.add(target, name)
+                break
 
-        case 'toggle':
-            control = this.gui.add(target, name)
-            break
+            case 'toggle':
+                control = this.gui.add(target, name)
+                break
 
-        case 'monitor':
-        case 'input':
-            control = this.gui.add(target, name)
-            break
+            case 'monitor':
+            case 'input':
+                control = this.gui.add(target, name)
+                break
 
-        default:
-            throw Error(`Controller.addUI: bad type: ${type}`)
+            default:
+                throw Error(`Controller.addUI: bad type: ${type}`)
         }
 
         if (cmd) {
