@@ -29,10 +29,6 @@ export default class TwoMVC {
 
     // options *override* the defaults above. Just put in ones that differ.
     constructor(modelClass, options, viewOptions = {}) {
-        // options = Object.assign(TwoMVC.defaultOptions(), options)
-
-        // const modelDefaults = model.constructor.defaultOptions()
-        // Object.assign(model, util.override(modelDefaults, options))
         this.model = new modelClass(options.worldOptions)
         Object.assign(this.model, options.modelOptions)
 
@@ -69,6 +65,25 @@ export default class TwoMVC {
     // MVC View must override draw:
     draw() {
         console.log('Oops: override draw in your MVC subclass')
+    }
+    defaultDraw(params) {
+        const { model, view, animator } = this
+
+        // Draw the model world view
+        // Just draw patches once, results cached in view.patchesView
+        if (animator.draws === 0) {
+            view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
+        }
+
+        // view.clear()
+        view.drawPatches() // redraw cached patches colors
+
+        view.drawLinks(model.links, { color: this.linkColor, width: 1 })
+        view.drawTurtles(model.turtles, p => ({
+            shape: this.shape,
+            color: this.colorMap.atIndex(p.id).css,
+            size: this.shapeSize,
+        }))
     }
 
     // Animator methods
