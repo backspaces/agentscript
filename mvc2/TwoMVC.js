@@ -68,9 +68,6 @@ export default class TwoMVC {
     }
     defaultDraw(params) {
         const { model, view, animator } = this
-
-        // Draw the model world view
-        // Just draw patches once, results cached in view.patchesView
         if (animator.draws === 0) {
             view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
         }

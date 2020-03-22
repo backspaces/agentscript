@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chart</title>
+    </head>
+    <body>
+        <canvas id="chart"></canvas>
+
+        <script type="module">
+            import Plot from '../src/Plot.js'
+            import util from '../src/util.js'
+            util.toWindow({ Plot, util })
+
+            const template = {
+                susceptible: { color: 'blue' },
+                infected: { color: 'red' },
+                resistant: { color: 'black' },
+            }
+            const plot = new Plot('chart', template)
+
+            const increment = 25
+            const ranIncr = () => util.randomInt2(-increment, increment)
+            util.timeoutLoop(() => {
+                if (plot.ticks.length === 0) {
+                    util.forLoop(
+                        template,
+                        (val, key) => (template[key] = ranIncr())
+                    )
+                } else {
+                    util.forLoop(
+                        template,
+                        (val, key) => (template[key] += ranIncr())
+                    )
+                }
+                plot.addPoints(template)
+            }, 100)
+        </script>
+    </body>
+</html>

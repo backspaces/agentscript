@@ -11,9 +11,12 @@
             import { util } from '../dist/agentscript.esm.js'
             util.toWindow({ Chart, util })
 
-            const ticks = [0]
-            const data1 = [0]
-            const data2 = [0]
+            // const ticks = [0]
+            // const data1 = [0]
+            // const data2 = [0]
+            const ticks = []
+            const data1 = []
+            const data2 = []
             const chart = new Chart('chart', {
                 type: 'line',
                 data: {
@@ -23,21 +26,25 @@
                             data: data1,
                             label: 'Data1',
                             borderColor: 'red',
-                            tension: 0, // disables bezier curves
-                            showLine: false, // disable for a single dataset
-                            fill: false,
+                            // tension: 0, // disables bezier curves
+                            // showLine: false, // disable for a single dataset
+                            // fill: false,
+                            // pointRadius: 2.5,
                         },
                         {
                             data: data2,
                             label: 'Data2',
                             borderColor: 'blue',
-                            tension: 0, // disables bezier curves
-                            showLine: false, // disable for a single dataset
-                            fill: false,
+                            // tension: 0, // disables bezier curves
+                            // showLine: false, // disable for a single dataset
+                            // fill: false,
+                            // pointRadius: 2.5,
                         },
                     ],
                 },
                 options: {
+                    // showLines: false,
+
                     animation: {
                         duration: 0, // general animation time
                     },
@@ -45,6 +52,17 @@
                         animationDuration: 0, // duration of animations when hovering an item
                     },
                     responsiveAnimationDuration: 0, // animation duration after a resize
+                    elements: {
+                        line: {
+                            tension: 0, // disables bezier curves
+                            fill: false,
+                        },
+                        point: {
+                            // radius: 10, // default 3
+                            // pointStyle: 'cross',
+                            // borderWidth: 3,
+                        },
+                    },
                 },
             })
 
@@ -52,10 +70,17 @@
             const ranIncr = () => util.randomInt2(-increment, increment)
             util.timeoutLoop(() => {
                 ticks.push(ticks.length)
-                data1.push(util.arrayLast(data1) + ranIncr())
-                data2.push(util.arrayLast(data2) + ranIncr())
+                if (ticks.length === 1) {
+                    // data1.push(100)
+                    // data2.push(50)
+                    data1.push(ranIncr())
+                    data2.push(ranIncr())
+                } else {
+                    data1.push(util.arrayLast(data1) + ranIncr())
+                    data2.push(util.arrayLast(data2) + ranIncr())
+                }
                 chart.update()
-            }, 1000)
+            }, 10)
         </script>
     </body>
 </html>
