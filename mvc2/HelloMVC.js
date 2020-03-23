@@ -1,8 +1,5 @@
-// import HelloModel from '../models/HelloModel.js'
 import { HelloModelPlus as Model } from '../models/HelloModel.js'
 import TwoMVC from './TwoMVC.js'
-import Color from '../src/Color.js'
-import ColorMap from '../src/ColorMap.js'
 import util from '../src/util.js'
 
 export default class HelloMVC extends TwoMVC {
@@ -17,10 +14,8 @@ export default class HelloMVC extends TwoMVC {
             },
 
             // View parameters, used by draw() below
-            linkColor: 'rgba(255,255,255,0.25',
             shape: 'bug', // harder to draw, sprites help a LOT
             shapeSize: 2,
-            colorMap: ColorMap.Basic16,
         }
     }
 
@@ -32,26 +27,11 @@ export default class HelloMVC extends TwoMVC {
     }
 
     draw() {
-        const { model, view, animator, gui } = this
-
-        // Draw the model world view
-        // Just draw patches once, results cached in view.patchesView
-        if (animator.draws === 0) {
-            view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
-        }
-
-        // view.clear()
-        view.drawPatches() // redraw cached patches colors
-
-        view.drawLinks(model.links, { color: this.linkColor, width: 1 })
-        view.drawTurtles(model.turtles, t => ({
-            shape: this.shape,
-            color: this.colorMap.atIndex(t.id).css,
-            size: this.shapeSize,
-        }))
+        // Draw the model world view w defaultDraw w/ our shape & shapeSize
+        this.defaultDraw({ shape: this.shape, shapeSize: this.shapeSize })
 
         // Draw data to the gui:
-        gui.perf = animator.ticksPerSec()
+        this.gui.perf = animator.ticksPerSec()
     }
 
     setGUI() {

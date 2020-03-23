@@ -1,8 +1,5 @@
-// import HelloModel from '../models/HelloModel.js'
 import Model from '../models/VirusModel.js'
 import TwoMVC from './TwoMVC.js'
-// import Color from '../src/Color.js'
-import ColorMap from '../src/ColorMap.js'
 import util from '../src/util.js'
 
 export default class HelloMVC extends TwoMVC {
@@ -17,7 +14,6 @@ export default class HelloMVC extends TwoMVC {
             },
 
             // View parameters, used by draw() below
-            linkColor: 'rgba(255,255,255,0.25',
             shape: 'circle',
             shapeSize: 1,
             turtleColors: {
@@ -36,17 +32,12 @@ export default class HelloMVC extends TwoMVC {
     }
 
     draw() {
-        const { model, view, linkColor, shape, turtleColors, shapeSize } = this
-
-        // Draw the model world view
-        view.clear('black')
-
-        view.drawLinks(model.links, { color: linkColor, width: 1 })
-        view.drawTurtles(model.turtles, t => ({
-            shape: shape,
-            color: turtleColors[t.state],
-            size: shapeSize,
-        }))
+        // Draw the model world view w defaultDraw w/ our params
+        this.defaultDraw({
+            shape: this.shape,
+            shapeSize: this.shapeSize,
+            turtleColor: t => this.turtleColors[t.state],
+        })
 
         // Draw data to the gui:
         this.gui.perf = animator.ticksPerSec()

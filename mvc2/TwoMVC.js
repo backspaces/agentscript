@@ -2,6 +2,7 @@
 // parts easier for the modeler.
 
 import TwoView from '../src/TwoView.js'
+import ColorMap from '../src/ColorMap.js'
 import Animator from '../src/Animator.js'
 import GUI from '../src/GUI.js'
 import Mouse from '../src/Mouse.js'
@@ -10,7 +11,7 @@ import util from '../src/util.js'
 export default class TwoMVC {
     static defaultOptions() {
         return {
-            // use model's default world
+            // undefined => use model's default world
             worldOptions: undefined,
 
             // override any of this models options
@@ -23,12 +24,17 @@ export default class TwoMVC {
                 // useSprites: false,
                 // patchSize: 10,
             },
+
             // The rest are "draw options", used by draw()
+            defaultGrayMap: 'DarkGray',
+            defaultColorMap: 'Basic16',
         }
     }
 
     // options *override* the defaults above. Just put in ones that differ.
     constructor(modelClass, options, viewOptions = {}) {
+        options = Object.assign(TwoMVC.defaultOptions(), options)
+
         this.model = new modelClass(options.worldOptions)
         Object.assign(this.model, options.modelOptions)
 
@@ -41,10 +47,13 @@ export default class TwoMVC {
             this.handleMouse(mouse)
         ).start()
 
-        const defaultKeys = Object.keys(TwoMVC.defaultOptions())
-        const keys = Object.keys(options)
-        const drawKeys = util.difference(keys, defaultKeys)
-        util.assign(this, options, drawKeys)
+        delete options.worldOptions
+        delete options.modelOptions
+        delete options.viewOptions
+        Object.assign(this, options)
+
+        this.defaultGrayMap = ColorMap[this.defaultGrayMap]
+        this.defaultColorMap = ColorMap[this.defaultColorMap]
     }
 
     // Model methods
@@ -64,23 +73,8 @@ export default class TwoMVC {
 
     // MVC View must override draw:
     draw() {
-        console.log('Oops: override draw in your MVC subclass')
-    }
-    defaultDraw(params) {
-        const { model, view, animator } = this
-        if (animator.draws === 0) {
-            view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
-        }
-
-        // view.clear()
-        view.drawPatches() // redraw cached patches colors
-
-        view.drawLinks(model.links, { color: this.linkColor, width: 1 })
-        view.drawTurtles(model.turtles, p => ({
-            shape: this.shape,
-            color: this.colorMap.atIndex(p.id).css,
-            size: this.shapeSize,
-        }))
+        util.warn('No draw() method, using TwoMVC default draw')
+        this.defaultDraw()
     }
 
     // Animator methods
@@ -107,5 +101,45 @@ export default class TwoMVC {
 
     handleMouse(mouse) {
         util.warn('no mouse handler')
+    }
+
+    // A paramitized NL default draw
+    defaultDraw(params = {}) {
+        const defaults = {
+            patchColor: undefined, // if color, use as clear(color)
+            turtleColor: undefined, // if undefined, use random color
+            linkColor: 'rgba(255,255,255,0.25',
+            shape: 'dart',
+            shapeSize: 1,
+        }
+        params = Object.assign(defaults, params)
+        const { patchColor, turtleColor, linkColor, shape, shapeSize } = params
+        const { model, view, animator } = this
+
+        // Just draw patches once, results cached in view.patchesView
+        if (animator.draws === 0 && !patchColor) {
+            view.createPatchPixels(i => this.defaultGrayMap.randomColor().pixel)
+        }
+
+        if (typeof patchColor === 'undefined') {
+            view.drawPatches() // redraw cached patches colors
+        } else if (typeof patchColor === 'function') {
+            view.drawPatches(model.patches, p => patchColor(p))
+        } else {
+            view.clear(patchColor)
+        }
+
+        view.drawLinks(model.links, { color: linkColor, width: 1 })
+
+        view.drawTurtles(model.turtles, t => ({
+            shape: shape,
+            color:
+                typeof turtleColor === 'undefined'
+                    ? this.defaultColorMap.atIndex(t.id).css
+                    : typeof turtleColor === 'function'
+                    ? turtleColor(t)
+                    : turtleColor,
+            size: shapeSize,
+        }))
     }
 }

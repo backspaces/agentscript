@@ -1,6 +1,5 @@
 import Chart from '../dist/chart.esm.js'
 import util from './util.js'
-import { forLoop } from './utils/objects.js'
 
 export default class Plot {
     static defaultOptions() {
@@ -32,8 +31,13 @@ export default class Plot {
 
     // ======================
 
+    // Template looks like:
+    // const template = {
+    //     susceptible: { color: 'blue' },
+    //     infected: { color: 'red' },
+    //     resistant: { color: 'black' },
+    // }
     constructor(canvas, template) {
-        // util.forLoop(template, obj => (obj.data = []))
         const spec = Plot.defaultOptions()
         const dataArrays = {}
         const ticks = spec.data.labels
@@ -53,6 +57,7 @@ export default class Plot {
         Object.assign(this, { plot, dataArrays, ticks })
     }
 
+    // points: just reuse template with values of next number
     addPoints(points) {
         const { ticks, dataArrays } = this
         if (ticks.length === 0) {
@@ -65,24 +70,9 @@ export default class Plot {
             }
         }
         ticks.push(ticks.length)
-        forLoop(points, (val, key) => {
+        util.forLoop(points, (val, key) => {
             dataArrays[key].push(val)
         })
         this.plot.update()
     }
 }
-
-/*
-
-{
-  susceptible: {
-    color: 'blue',
-  },
-  infected: {
-    color: 'red',
-  },
-  resistant: {
-    color: 'black',
-  },
-}
-*/
