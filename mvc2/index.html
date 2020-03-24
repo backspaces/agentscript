@@ -17,7 +17,10 @@
 
             async function run() {
                 const MVC = (await import(`./${className}.js`)).default
-                const mvc = new MVC({ div: 'modelDiv' })
+                const mvc = new MVC({
+                    div: 'modelDiv',
+                    plotCanvas: 'plotCanvas',
+                })
 
                 const { model, view } = mvc
                 util.toWindow({ MVC, mvc, model, view, util })
@@ -28,6 +31,8 @@
             }
             run()
         </script>
+
         <div id="modelDiv"></div>
+        <canvas id="plotCanvas"></canvas>
     </body>
 </html>

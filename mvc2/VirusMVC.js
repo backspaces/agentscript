@@ -2,7 +2,7 @@ import Model from '../models/VirusModel.js'
 import TwoMVC from './TwoMVC.js'
 import util from '../src/util.js'
 
-export default class HelloMVC extends TwoMVC {
+export default class VirusMVC extends TwoMVC {
     static defaultOptions() {
         return {
             modelOptions: {
@@ -27,20 +27,52 @@ export default class HelloMVC extends TwoMVC {
     // ======================
 
     constructor(viewOverrides) {
-        super(Model, HelloMVC.defaultOptions(), viewOverrides)
+        super(Model, VirusMVC.defaultOptions(), viewOverrides)
         this.gui = this.setGUI()
+        const template = {}
+        util.forLoop(
+            this.turtleColors,
+            (val, key) => (template[key] = { color: val })
+        )
+        this.plot = super.setPlot(template)
     }
 
     draw() {
         // Draw the model world view w defaultDraw w/ our params
-        this.defaultDraw({
+        // view.clear('black')
+        // view.drawLinks(model.links, { color: 'white', width: 1 })
+        // view.drawTurtles(model.turtles, t => ({
+        //     shape: this.shape,
+        //     color: this.turtleColors[t.state],
+        //     size: this.shapeSize,
+        // }))
+
+        super.defaultDraw({
+            patchColor: 'black',
+            turtleColor: t => this.turtleColors[t.state],
             shape: this.shape,
             shapeSize: this.shapeSize,
-            turtleColor: t => this.turtleColors[t.state],
+            linkColor: 'white',
         })
 
         // Draw data to the gui:
         this.gui.perf = animator.ticksPerSec()
+
+        // Update plot
+        if (this.animator.ticks % 10 === 0) {
+            const turtles = this.model.turtles
+            this.plot.addPoints({
+                infected: turtles.with(t => t.state === 'infected').length,
+                susceptible: turtles.with(t => t.state === 'susceptible')
+                    .length,
+                resistant: turtles.with(t => t.state === 'resistant').length,
+            })
+        }
+    }
+
+    step() {
+        super.step()
+        if (this.model.done) this.animator.stop()
     }
 
     setGUI() {

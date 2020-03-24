@@ -6,6 +6,7 @@ import ColorMap from '../src/ColorMap.js'
 import Animator from '../src/Animator.js'
 import GUI from '../src/GUI.js'
 import Mouse from '../src/Mouse.js'
+import Plot from '../src/Plot.js'
 import util from '../src/util.js'
 
 export default class TwoMVC {
@@ -21,6 +22,7 @@ export default class TwoMVC {
             // override any of the view options:
             viewOptions: {
                 // div: document.body,
+                // plotCanvas: 'plotCanvas',
                 // useSprites: false,
                 // patchSize: 10,
             },
@@ -73,7 +75,7 @@ export default class TwoMVC {
 
     // MVC View must override draw:
     draw() {
-        util.warn('No draw() method, using TwoMVC default draw')
+        util.warn('No draw() method, using TwoMVC defaultDraw()')
         this.defaultDraw()
     }
 
@@ -99,9 +101,18 @@ export default class TwoMVC {
         return new GUI(template).target
     }
 
+    setPlot(template) {
+        return new Plot(this.view.plotCanvas, template)
+    }
+    // addPlotPoints(plot, template) {
+    //     plot.addPoints(template)
+    // }
+
     handleMouse(mouse) {
         util.warn('no mouse handler')
     }
+
+    // ======================
 
     // A paramitized NL default draw
     defaultDraw(params = {}) {

@@ -28,7 +28,7 @@ export default class HelloMVC extends TwoMVC {
 
     draw() {
         // Draw the model world view w defaultDraw w/ our shape & shapeSize
-        this.defaultDraw({ shape: this.shape, shapeSize: this.shapeSize })
+        super.defaultDraw({ shape: this.shape, shapeSize: this.shapeSize })
 
         // Draw data to the gui:
         this.gui.perf = animator.ticksPerSec()
