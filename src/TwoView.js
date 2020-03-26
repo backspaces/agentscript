@@ -38,6 +38,7 @@ export default class TwoView {
         this.turtlesView = new TurtlesView(this.ctx, this.world, options)
 
         this.ticks = 0
+        this.clear()
     }
     tick() {
         this.ticks++
@@ -62,7 +63,7 @@ export default class TwoView {
     //     this.reset(this.patchSize, val)
     // }
 
-    clear(cssColor = null) {
+    clear(cssColor = 'lightGray') {
         if (cssColor) {
             util.fillCtx(this.ctx, cssColor)
         } else {
@@ -129,4 +130,54 @@ export default class TwoView {
 
 // installTurtlesViewData(data, pixelFcn) {
 //     this.turtlesViewData = util.forLoop(data, (d, i, array))
+// }
+
+// defaultDraw(model, params = {}) {
+//     const defaults = {
+//         patchColor: undefined,
+//         turtleColor: undefined,
+//         linkColor: 'rgba(255,255,255,0.25',
+//         linkWidth: 1,
+//         shape: 'dart',
+//         shapeSize: 1,
+//     }
+
+//     // {} target: don't overwrite defaults!!
+//     params = Object.assign({}, defaults, params)
+//     const {
+//         patchColor,
+//         turtleColor,
+//         linkColor,
+//         linkWidth,
+//         shape,
+//         shapeSize,
+//     } = params
+
+//     // Just draw patches once, results cached in view.patchesView
+//     if (this.ticks === 0 && !patchColor) {
+//         this.createPatchPixels(i => defaultGrayMap.randomColor().pixel)
+//     }
+
+//     if (typeof patchColor === 'undefined') {
+//         this.drawPatches() // redraw cached patches colors
+//     } else if (typeof patchColor === 'function') {
+//         this.drawPatches(model.patches, p => patchColor(p))
+//     } else if (util.isImageable(patchColor)) {
+//         this.drawPatchesImage(patchColor)
+//     } else {
+//         this.clear(patchColor)
+//     }
+
+//     this.drawLinks(model.links, { color: linkColor, width: linkWidth })
+
+//     this.drawTurtles(model.turtles, t => ({
+//         shape: shape,
+//         color:
+//             typeof turtleColor === 'undefined'
+//                 ? defaultColorMap.atIndex(t.id).css
+//                 : typeof turtleColor === 'function'
+//                 ? turtleColor(t)
+//                 : turtleColor,
+//         size: shapeSize,
+//     }))
 // }

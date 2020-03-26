@@ -58,6 +58,14 @@ export default class TwoMVC {
         this.defaultColorMap = ColorMap[this.defaultColorMap]
     }
 
+    // MVC methods
+    reset() {
+        this.model.reset()
+        this.plot.reset()
+        this.animator.reset()
+        this.view.clear('lightGray')
+    }
+
     // Model methods
     async startup() {
         await this.model.startup()
@@ -97,15 +105,17 @@ export default class TwoMVC {
         this.animator.fps = fps
     }
 
+    // dat.gui methods
     setGUI(template) {
         return new GUI(template).target
     }
 
-    setPlot(template) {
-        return new Plot(this.view.plotCanvas, template)
+    // plot methods
+    setPlot(pens) {
+        this.plot = new Plot(this.view.plotCanvas, pens)
     }
-    // addPlotPoints(plot, template) {
-    //     plot.addPoints(template)
+    // addPlotPoints(plot, points) {
+    //     this.plot.addPoints(points)
     // }
 
     handleMouse(mouse) {
@@ -117,14 +127,22 @@ export default class TwoMVC {
     // A paramitized NL default draw
     defaultDraw(params = {}) {
         const defaults = {
-            patchColor: undefined, // if color, use as clear(color)
-            turtleColor: undefined, // if undefined, use random color
+            patchColor: undefined,
+            turtleColor: undefined,
             linkColor: 'rgba(255,255,255,0.25',
+            linkWidth: 1,
             shape: 'dart',
             shapeSize: 1,
         }
-        params = Object.assign(defaults, params)
-        const { patchColor, turtleColor, linkColor, shape, shapeSize } = params
+        params = Object.assign({}, defaults, params)
+        const {
+            patchColor,
+            turtleColor,
+            linkColor,
+            linkWidth,
+            shape,
+            shapeSize,
+        } = params
         const { model, view, animator } = this
 
         // Just draw patches once, results cached in view.patchesView
@@ -136,11 +154,13 @@ export default class TwoMVC {
             view.drawPatches() // redraw cached patches colors
         } else if (typeof patchColor === 'function') {
             view.drawPatches(model.patches, p => patchColor(p))
+        } else if (util.isImageable(patchColor)) {
+            view.drawPatchesImage(patchColor)
         } else {
             view.clear(patchColor)
         }
 
-        view.drawLinks(model.links, { color: linkColor, width: 1 })
+        view.drawLinks(model.links, { color: linkColor, width: linkWidth })
 
         view.drawTurtles(model.turtles, t => ({
             shape: shape,

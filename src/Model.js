@@ -26,7 +26,7 @@ class Model {
         initAgentSet('links', Links, Link)
     }
 
-    reset(worldOptions) {
+    reset(worldOptions = this.world) {
         this.resetModel(worldOptions)
     }
     tick() {

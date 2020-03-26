@@ -32,29 +32,34 @@ export default class Plot {
     // ======================
 
     // Template looks like:
+    // pens: {
+    //     infected: 'red',
+    //     susceptible: 'blue',
+    //     resistant: 'gray',
+    // },
     // const template = {
     //     susceptible: { color: 'blue' },
     //     infected: { color: 'red' },
     //     resistant: { color: 'black' },
     // }
-    constructor(canvas, template) {
+    constructor(canvas, pens) {
         const spec = Plot.defaultOptions()
         const dataArrays = {}
         const ticks = spec.data.labels
 
-        util.forLoop(template, (val, key) => {
+        util.forLoop(pens, (val, key) => {
             const dataset = {
                 data: [],
                 label: key,
-                borderColor: val.color,
+                borderColor: val,
             }
             dataArrays[key] = dataset.data
             spec.data.datasets.push(dataset)
         })
 
-        const plot = new Chart(canvas, spec)
-        util.toWindow({ template, dataArrays, spec, plot })
-        Object.assign(this, { plot, dataArrays, ticks })
+        const chart = new Chart(canvas, spec)
+        util.toWindow({ pens, dataArrays, spec, chart, plot: this })
+        Object.assign(this, { chart, dataArrays, ticks })
     }
 
     // points: just reuse template with values of next number
@@ -73,6 +78,14 @@ export default class Plot {
         util.forLoop(points, (val, key) => {
             dataArrays[key].push(val)
         })
-        this.plot.update()
+        this.chart.update()
+    }
+
+    // reset chart to initial condition
+    reset() {
+        util.forLoop(this.dataArrays, val => (val.length = 0))
+        this.ticks.length = 0
+        this.chart.reset()
+        this.chart.update()
     }
 }

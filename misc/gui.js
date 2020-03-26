@@ -94,6 +94,6 @@ util.timeoutLoop(() => (controls.perf = animator.fps), -1, 1000)
 
 const mouse = new Mouse(view.canvas, model.world, handleMouse).start()
 
-util.toWindow({ template, controls, mouse, model, view, animator })
+util.toWindow({ template, controls, mouse, model, view, animator, util })
 const { patches, turtles, links } = model
 util.toWindow({ patches, turtles, links })

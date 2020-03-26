@@ -6,7 +6,7 @@ export default class VirusMVC extends TwoMVC {
     static defaultOptions() {
         return {
             modelOptions: {
-                population: 1000,
+                population: 250, //1000,
             },
 
             viewOptions: {
@@ -29,24 +29,10 @@ export default class VirusMVC extends TwoMVC {
     constructor(viewOverrides) {
         super(Model, VirusMVC.defaultOptions(), viewOverrides)
         this.gui = this.setGUI()
-        const template = {}
-        util.forLoop(
-            this.turtleColors,
-            (val, key) => (template[key] = { color: val })
-        )
-        this.plot = super.setPlot(template)
+        super.setPlot(this.turtleColors)
     }
 
     draw() {
-        // Draw the model world view w defaultDraw w/ our params
-        // view.clear('black')
-        // view.drawLinks(model.links, { color: 'white', width: 1 })
-        // view.drawTurtles(model.turtles, t => ({
-        //     shape: this.shape,
-        //     color: this.turtleColors[t.state],
-        //     size: this.shapeSize,
-        // }))
-
         super.defaultDraw({
             patchColor: 'black',
             turtleColor: t => this.turtleColors[t.state],
@@ -57,6 +43,7 @@ export default class VirusMVC extends TwoMVC {
 
         // Draw data to the gui:
         this.gui.perf = animator.ticksPerSec()
+        this.gui.ticks = animator.ticks
 
         // Update plot
         if (this.animator.ticks % 10 === 0) {
@@ -79,6 +66,62 @@ export default class VirusMVC extends TwoMVC {
         const { model, view, animator, mouse } = this
         util.toWindow({ model, view, animator, mouse })
         const template = {
+            population: {
+                value: model.population,
+                extent: [50, 1000, 50],
+                cmd: val => {
+                    this.reset()
+                    model.population = val
+                },
+            },
+            nodeDegree: {
+                value: model.averageNodeDegree,
+                extent: [1, 20],
+                cmd: val => {
+                    this.reset()
+                    model.averageNodeDegree = val
+                },
+            },
+            outbreakSize: {
+                value: model.outbreakSize,
+                extent: [1, 20],
+                cmd: val => {
+                    this.reset()
+                    model.outbreakSize = val
+                },
+            },
+            setup: {
+                value: () => {
+                    this.reset()
+                    model.setup()
+                    animator.start()
+                },
+            },
+            // virusSpreadPercent: 2.5,
+            // virusCheckFrequency: 1,
+            // recoveryPercent: 5.0,
+            // gainResistancePercent: 5.0,
+            spreadPercent: {
+                value: model.virusSpreadPercent,
+                extent: [0, 10, 0.1],
+                cmd: val => (model.virusSpreadPercent = val),
+            },
+            checkFrequency: {
+                value: model.virusCheckFrequency,
+                extent: [1, 20, 1],
+                cmd: val => (model.virusCheckFrequency = val),
+            },
+            recoveryPercent: {
+                value: model.recoveryPercent,
+                extent: [0, 10, 0.1],
+                cmd: val => (model.recoveryPercent = val),
+            },
+            resistancePercent: {
+                value: model.gainResistancePercent,
+                extent: [0, 100, 1],
+                cmd: val => (model.gainResistancePercent = val),
+            },
+
             fps: {
                 value: animator.fps,
                 extent: [5, 60, 5],
@@ -94,17 +137,13 @@ export default class VirusMVC extends TwoMVC {
                 extent: [0.5, 5, 0.5],
                 cmd: val => (this.shapeSize = val),
             },
-            run: { value: () => animator.toggle() },
+            pause: { value: () => animator.toggle() },
             // useMouse: { value: true, cmd: val => mouse.run(val) },
             // useSprites: {
             //     value: view.useSprites,
             //     cmd: val => (view.useSprites = val),
             // },
-            // population: {
-            //     value: model.population,
-            //     extent: [5, 1000, 5],
-            //     cmd: val => (model.population = val),
-            // },
+            ticks: { value: 0, cmd: 'listen' },
             perf: { value: 0, cmd: 'listen' },
         }
         // console.log(template)
