@@ -15,8 +15,6 @@ class VirusModel extends Model {
             virusCheckFrequency: 1,
             recoveryPercent: 5.0,
             gainResistancePercent: 5.0,
-
-            done: false,
         }
     }
 
@@ -27,6 +25,7 @@ class VirusModel extends Model {
         Object.assign(this, VirusModel.defaultOptions())
     }
     setup() {
+        this.done = false
         this.setupNodes()
         this.setupNetwork()
         this.turtles.nOf(this.outbreakSize).ask(t => this.becomeInfected(t))

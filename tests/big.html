@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>test</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import World from '../src/World.js'
+            import run from './bigRunner'
+            util.toWindow({ util, World, run })
+
+            const modelParams = util.parseQueryString()
+            const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
+            const className = name[0].toUpperCase() + name.slice(1)
+            console.log('Running', className, 'params', modelParams)
+            document.title = `B:${name}`
+
+            const params = {
+                classPath: `../models/${className}.js`,
+                className: className,
+                steps: 500,
+                seed: false,
+            }
+            Object.assign(params, modelParams)
+
+            if (params.worker) {
+                const worker = new Worker('./bigWorker.js', { type: 'module' })
+                worker.postMessage({ cmd: 'init', params: params })
+                worker.onmessage = e => {
+                    printMemoryStats()
+                    util.printToPage(e.data)
+                    worker.terminate()
+                }
+            } else {
+                run(params).then(() => {
+                    printMemoryStats()
+                })
+            }
+
+            function printMemoryStats() {
+                console.log('\nperformance.memory values')
+                const tls = n => n.toLocaleString()
+                const pm = performance.memory
+                for (var k in pm) console.log('   ', k, tls(pm[k]))
+            }
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

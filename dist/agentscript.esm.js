@@ -409,8 +409,8 @@ function parseQueryString(
     const searchParams = new URLSearchParams(paramsString);
     for (var pair of searchParams.entries()) {
         let [key, val] = pair;
-
-        if (val.match(/^[0-9.]+$/)) val = Number(val);
+        if (val.match(/^[0-9.]+$/) || val.match(/^[0-9.]+e[0-9]+$/))
+            val = Number(val);
         if (['true', 't', ''].includes(val)) val = true;
         if (['false', 'f'].includes(val)) val = false;
 

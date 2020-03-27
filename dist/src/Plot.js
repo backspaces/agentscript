@@ -31,17 +31,12 @@ export default class Plot {
 
     // ======================
 
-    // Template looks like:
+    // Pens looks like:
     // pens: {
     //     infected: 'red',
     //     susceptible: 'blue',
     //     resistant: 'gray',
     // },
-    // const template = {
-    //     susceptible: { color: 'blue' },
-    //     infected: { color: 'red' },
-    //     resistant: { color: 'black' },
-    // }
     constructor(canvas, pens) {
         const spec = Plot.defaultOptions()
         const dataArrays = {}
@@ -62,7 +57,12 @@ export default class Plot {
         Object.assign(this, { chart, dataArrays, ticks })
     }
 
-    // points: just reuse template with values of next number
+    // points: like pens but the next number to be plotted
+    // points: {
+    //     infected: 42, // often like: infected: model.infected
+    //     susceptible: 55,
+    //     resistant: 23,
+    // },
     addPoints(points) {
         const { ticks, dataArrays } = this
         if (ticks.length === 0) {
