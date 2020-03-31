@@ -1,3 +1,5 @@
+import util from '../util'
+
 // Print a message just once.
 let logOnceMsgSet
 export function logOnce(msg) {
@@ -43,11 +45,14 @@ export function timeit(f, runs = 1e5, name = 'test') {
 //    }
 //    console.log(`Done, steps: ${perf.steps} fps: ${perf.fps}`)
 export function fps() {
-    const start = performance.now()
+    const timer = typeof performance === 'undefined' ? Date : performance
+    // const start = performance.now()
+    const start = timer.now()
     let steps = 0
     function perf() {
         steps++
-        const ms = performance.now() - start
+        // const ms = performance.now() - start
+        const ms = timer.now() - start
         const fps = parseFloat((steps / (ms / 1000)).toFixed(2))
         Object.assign(perf, { fps, ms, start, steps })
     }
@@ -82,6 +87,15 @@ export function toWindow(obj, logToo = false) {
     if (logToo) {
         Object.keys(obj).forEach(key => console.log('  ', key, obj[key]))
     }
+}
+
+// Dump model's patches turtles links to window
+export function dump(model = window.model) {
+    let { patches: ps, turtles: ts, links: ls } = model
+    Object.assign(window, { ps, ts, ls })
+    window.p = ps.length > 0 ? ps.oneOf() : {}
+    window.t = ts.length > 0 ? ts.oneOf() : {}
+    window.l = ls.length > 0 ? ls.oneOf() : {}
 }
 
 // Use JSON to return pretty, printable string of an object, array, other

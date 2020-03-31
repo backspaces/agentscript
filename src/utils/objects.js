@@ -140,6 +140,14 @@ export function concatArrays(array1, array2) {
     return array
 }
 
+// Convert obj to string via JSON. Use indent = 0 for one-liner
+// jsKeys true removes the jsonKeys quotes
+export function objectToString(obj, indent = 2, jsKeys = true) {
+    let str = JSON.stringify(obj, null, indent)
+    if (jsKeys) str = str.replace(/"([^"]+)":/gm, '$1:')
+    return str
+}
+
 // Compare Objects or Arrays via JSON string. Note: TypedArrays !== Arrays
 export const objectsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 

@@ -6,9 +6,9 @@
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import World from '../src/World.js'
-            import run from './bigRunner'
-            util.toWindow({ util, World, run })
+            // import World from '../src/World.js'
+            import run from './bigRunner.js'
+            util.toWindow({ util })
 
             const modelParams = util.parseQueryString()
             const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
@@ -19,8 +19,9 @@
             const params = {
                 classPath: `../models/${className}.js`,
                 className: className,
+                worker: false,
                 steps: 500,
-                seed: false,
+                seed: true,
             }
             Object.assign(params, modelParams)
 
@@ -28,16 +29,26 @@
                 const worker = new Worker('./bigWorker.js', { type: 'module' })
                 worker.postMessage({ cmd: 'init', params: params })
                 worker.onmessage = e => {
-                    printMemoryStats()
-                    util.printToPage(e.data)
+                    printResults(e.data)
+                    // printMemoryStats()
+                    // util.printToPage(e.data)
                     worker.terminate()
                 }
             } else {
-                run(params).then(() => {
-                    printMemoryStats()
+                run(params).then(sample => {
+                    printResults(sample)
+                    // printMemoryStats()
+                    // util.printToPage(sample)
                 })
             }
 
+            function printResults(sample) {
+                printMemoryStats()
+                util.printToPage('QueryString: ?' + util.getQueryString())
+                util.printToPage('Params: ' + util.objectToString(params))
+                util.printToPage(sample)
+                // util.printToPage('Model Sample: ' + util.objectToString(sample))
+            }
             function printMemoryStats() {
                 console.log('\nperformance.memory values')
                 const tls = n => n.toLocaleString()

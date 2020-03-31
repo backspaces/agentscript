@@ -1,4 +1,3 @@
-// import util from '../src/util.js'
 import run from './bigRunner'
 
 onmessage = e => {

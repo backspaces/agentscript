@@ -9,7 +9,10 @@ function toJSON(obj, indent = 0, topLevelArrayOK = true) {
     const json = JSON.stringify(
         obj,
         (key, val) => {
-            if (blackList.includes(key)) return undefined
+            if (blackList.includes(key)) {
+                // if (key === 'rectCache') return val.length
+                return undefined
+            }
             const isAgentArray =
                 Array.isArray(val) &&
                 val.length > 0 &&

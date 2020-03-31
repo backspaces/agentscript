@@ -2,8 +2,12 @@
 
 // REST:
 // Parse the query, returning an object of key / val pairs.
+export function getQueryString() {
+    return window.location.search.substr(1)
+}
 export function parseQueryString(
-    paramsString = window.location.search.substr(1)
+    // paramsString = window.location.search.substr(1)
+    paramsString = getQueryString()
 ) {
     const results = {}
     const searchParams = new URLSearchParams(paramsString)
@@ -44,7 +48,7 @@ export function loadScript(path, props = {}) {
 }
 
 export function inWorker() {
-    return self.window === undefined
+    return !inNode() && typeof self.window === 'undefined'
 }
 
 export function inNode() {
@@ -60,8 +64,10 @@ export function printToPage(msg, element = document.body) {
     // if (isObject(msg)) {
     if (typeof msg === 'object') {
         msg = JSON.stringify(msg, null, 2)
-        msg = '<pre>' + msg + '</pre>'
+        // msg = '<pre>' + msg + '</pre>'
     }
+    msg = '<pre>' + msg + '</pre>'
+
     if (typeof element === 'string') {
         element = document.getElementById(element)
     }

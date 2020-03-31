@@ -339,11 +339,14 @@
     //    }
     //    console.log(`Done, steps: ${perf.steps} fps: ${perf.fps}`)
     function fps() {
-        const start = performance.now();
+        const timer = typeof performance === 'undefined' ? Date : performance;
+        // const start = performance.now()
+        const start = timer.now();
         let steps = 0;
         function perf() {
             steps++;
-            const ms = performance.now() - start;
+            // const ms = performance.now() - start
+            const ms = timer.now() - start;
             const fps = parseFloat((steps / (ms / 1000)).toFixed(2));
             Object.assign(perf, { fps, ms, start, steps });
         }
@@ -380,6 +383,15 @@
         }
     }
 
+    // Dump model's patches turtles links to window
+    function dump(model = window.model) {
+        let { patches: ps, turtles: ts, links: ls } = model;
+        Object.assign(window, { ps, ts, ls });
+        window.p = ps.length > 0 ? ps.oneOf() : {};
+        window.t = ts.length > 0 ? ts.oneOf() : {};
+        window.l = ls.length > 0 ? ls.oneOf() : {};
+    }
+
     // Use JSON to return pretty, printable string of an object, array, other
     // Remove ""s around keys. Will fail on circular structures.
     // export function objectToString(obj) {
@@ -401,15 +413,20 @@
         timeit: timeit,
         fps: fps,
         pps: pps,
-        toWindow: toWindow
+        toWindow: toWindow,
+        dump: dump
     });
 
     // import { isObject } from './types.js' // see printToPage
 
     // REST:
     // Parse the query, returning an object of key / val pairs.
+    function getQueryString() {
+        return window.location.search.substr(1)
+    }
     function parseQueryString(
-        paramsString = window.location.search.substr(1)
+        // paramsString = window.location.search.substr(1)
+        paramsString = getQueryString()
     ) {
         const results = {};
         const searchParams = new URLSearchParams(paramsString);
@@ -450,7 +467,7 @@
     }
 
     function inWorker() {
-        return self.window === undefined
+        return !inNode() && typeof self.window === 'undefined'
     }
 
     function inNode() {
@@ -466,8 +483,10 @@
         // if (isObject(msg)) {
         if (typeof msg === 'object') {
             msg = JSON.stringify(msg, null, 2);
-            msg = '<pre>' + msg + '</pre>';
+            // msg = '<pre>' + msg + '</pre>'
         }
+        msg = '<pre>' + msg + '</pre>';
+
         if (typeof element === 'string') {
             element = document.getElementById(element);
         }
@@ -506,6 +525,7 @@
     }
 
     var dom = /*#__PURE__*/Object.freeze({
+        getQueryString: getQueryString,
         parseQueryString: parseQueryString,
         RESTapi: RESTapi,
         loadScript: loadScript,
@@ -821,6 +841,14 @@
         return array
     }
 
+    // Convert obj to string via JSON. Use indent = 0 for one-liner
+    // jsKeys true removes the jsonKeys quotes
+    function objectToString(obj, indent = 2, jsKeys = true) {
+        let str = JSON.stringify(obj, null, indent);
+        if (jsKeys) str = str.replace(/"([^"]+)":/gm, '$1:');
+        return str
+    }
+
     // Compare Objects or Arrays via JSON string. Note: TypedArrays !== Arrays
     const objectsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -985,6 +1013,7 @@
         assign: assign,
         override: override,
         concatArrays: concatArrays,
+        objectToString: objectToString,
         objectsEqual: objectsEqual,
         histogram: histogram,
         oneOf: oneOf,
@@ -1010,7 +1039,10 @@
         const json = JSON.stringify(
             obj,
             (key, val) => {
-                if (blackList.includes(key)) return undefined
+                if (blackList.includes(key)) {
+                    // if (key === 'rectCache') return val.length
+                    return undefined
+                }
                 const isAgentArray =
                     Array.isArray(val) &&
                     val.length > 0 &&
