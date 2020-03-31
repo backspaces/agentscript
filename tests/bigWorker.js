@@ -1,4 +1,4 @@
-import run from './bigRunner'
+import run from './bigRunner.js'
 
 onmessage = e => {
     if (e.data.cmd === 'init') {
