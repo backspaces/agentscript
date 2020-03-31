@@ -1,6 +1,5 @@
 var World = AS.World
 var Model = AS.Model
-// import util from '../src/util.js'
 
 class ExitModel extends Model {
     static defaultOptions() {

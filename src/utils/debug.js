@@ -1,5 +1,3 @@
-import util from '../util'
-
 // Print a message just once.
 let logOnceMsgSet
 export function logOnce(msg) {

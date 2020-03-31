@@ -1,6 +1,5 @@
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-// import util from '../src/util.js'
 
 export default class ExitModel extends Model {
     static defaultOptions() {
