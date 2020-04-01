@@ -1,19 +1,38 @@
-import util from './util.js'
+import util from '../src/util.js'
+import TwoView from '../src/TwoView.js'
 import ColorMap from '../src/ColorMap.js'
 
 const defaults = {
-    patchColor: undefined, // if color, use as clear(color)
-    turtleColor: undefined, // if undefined, use random color
+    patchColor: undefined,
+    turtleColor: undefined,
     linkColor: 'rgba(255,255,255,0.25',
+    linkWidth: 1,
     shape: 'dart',
     shapeSize: 1,
 }
 const defaultGrayMap = ColorMap.DarkGray
 const defaultColorMap = ColorMap.Basic16
 
+let view
+
+// Options can override any of these TwoView defaults:
+// {
+//     div: document.body,
+//     useSprites: false,
+//     patchSize: 10,
+// }
+function init(model, options = {}) {
+    view = new TwoView(model.world, options)
+    view.createPatchPixels(i => defaultGrayMap.randomColor().pixel)
+}
+
+function reset(patchSize, useSprites = view.useSprites) {
+    view.reset(patchSize, useSprites)
+}
+
 // A paramitized NL 2D default draw
-function twoDraw(model, view, params = {}) {
-    // {} target: don't overwrite defaults!!
+function draw(model, params = {}) {
+    if (!view) init(model)
     params = Object.assign({}, defaults, params)
     const {
         patchColor,
@@ -23,11 +42,6 @@ function twoDraw(model, view, params = {}) {
         shape,
         shapeSize,
     } = params
-
-    // Just draw patches once, results cached in view.patchesView
-    if (view.ticks === 0 && !patchColor) {
-        view.createPatchPixels(i => defaultGrayMap.randomColor().pixel)
-    }
 
     if (typeof patchColor === 'undefined') {
         view.drawPatches() // redraw cached patches colors
@@ -52,3 +66,5 @@ function twoDraw(model, view, params = {}) {
         size: shapeSize,
     }))
 }
+
+export { init, reset, draw }

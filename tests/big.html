@@ -6,7 +6,6 @@
     <body>
         <script type="module">
             import util from '../src/util.js'
-            // import World from '../src/World.js'
             import run from './bigRunner.js'
             util.toWindow({ util })
 
@@ -25,35 +24,42 @@
             }
             Object.assign(params, modelParams)
 
+            util.printToPage('starting up, may take a while')
+
             if (params.worker) {
                 const worker = new Worker('./bigWorker.js', { type: 'module' })
                 worker.postMessage({ cmd: 'init', params: params })
                 worker.onmessage = e => {
                     printResults(e.data)
-                    // printMemoryStats()
-                    // util.printToPage(e.data)
                     worker.terminate()
                 }
             } else {
                 run(params).then(sample => {
                     printResults(sample)
-                    // printMemoryStats()
-                    // util.printToPage(sample)
                 })
             }
 
             function printResults(sample) {
-                printMemoryStats()
+                const perfStr = memoryStats()
+
+                sample = sample.replace(
+                    'model sample',
+                    perfStr + '\nmodel sample'
+                )
+
                 util.printToPage('QueryString: ?' + util.getQueryString())
                 util.printToPage('Params: ' + util.objectToString(params))
                 util.printToPage(sample)
-                // util.printToPage('Model Sample: ' + util.objectToString(sample))
             }
-            function printMemoryStats() {
-                console.log('\nperformance.memory values')
+            function memoryStats() {
                 const tls = n => n.toLocaleString()
                 const pm = performance.memory
-                for (var k in pm) console.log('   ', k, tls(pm[k]))
+
+                let str = `performance.memory values`
+                for (var k in pm) str += `\n    ${k}, ${tls(pm[k])}`
+                str += '\n'
+
+                return str
             }
         </script>
         <div id="modelDiv"></div>
