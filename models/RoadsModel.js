@@ -2,6 +2,7 @@ import gis from '../src/gis.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
 import util from '../src/util.js'
+// import AgentArray from '../src/AgentArray.js'
 
 export default class RoadsModel extends Model {
     static defaultOptions() {
@@ -18,6 +19,7 @@ export default class RoadsModel extends Model {
         super(worldDptions)
         Object.assign(this, RoadsModel.defaultOptions())
         this.nodeCache = {}
+        this.trips = []
     }
 
     async startup() {
@@ -32,6 +34,8 @@ export default class RoadsModel extends Model {
 
         node = this.turtles.createOne(t => {
             t.setxy(...this.xfm.toWorld(pt))
+            t.lon = pt[0]
+            t.lat = pt[1]
         })
         this.nodeCache[key] = node
         return node
@@ -58,6 +62,8 @@ export default class RoadsModel extends Model {
         // lineLinks.forEach(link => link.)
     }
     setup() {
+        this.turtleBreeds('intersections')
+        this.linkBreeds('trips')
         this.turtles.setDefault('atEdge', 'OK')
 
         const { Z, X, Y } = this.zxy
@@ -89,5 +95,18 @@ export default class RoadsModel extends Model {
         this.lineStrings.forEach(lineString =>
             this.lineStringToLinks(lineString)
         )
+
+        this.turtles.ask(t => {
+            if (t.links.length > 2) this.intersections.setBreed(t)
+        })
+    }
+    step() {
+        const int1 = this.intersections.oneOf()
+        let int2 = this.intersections.oneOf()
+        while (int1.distance(int2) < 10) int2 = this.intersections.oneOf()
+        const trip = this.trips.createOne(int1, int2, l => {
+            l.date = new Date()
+        })
+        if (this.trips.length > 15) this.trips.otherOneOf(trip).die()
     }
 }

@@ -23,17 +23,18 @@ function drawView(model, view) {
     view.drawLinks(model.links, { color: linkColor, width: 1 })
 
     // Draw all the turtles a constant color (from t.id)
+    const set = model.cluster
     view.drawTurtles(model.turtles, t => ({
         shape: shape,
-        color: turtleColors.atIndex(t.id).css,
+        color: set.has(t) ? clusterColor : turtleColors.atIndex(t.id).css,
         size: shapeSize,
     }))
     // Now recolor the current cluster
-    view.drawTurtles(Array.from(model.cluster), t => ({
-        shape: shape,
-        color: clusterColor,
-        size: shapeSize,
-    }))
+    // view.drawTurtles(Array.from(model.cluster), t => ({
+    //     shape: shape,
+    //     color: clusterColor,
+    //     size: shapeSize,
+    // }))
 }
 
 export default { newView, drawView }

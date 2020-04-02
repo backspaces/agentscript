@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>2Draw</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import Color from '../src/Color.js'
+            import ColorMap from '../src/ColorMap.js'
+            import TwoDraw from './TwoDraw.js'
+
+            // Draw parameters
+            // patchColor: undefined,
+            // turtleColor: undefined,
+            // linkColor: 'rgba(255,255,255,0.25',
+            // linkWidth: 1,
+            // shape: 'dart',
+            // shapeSize: 1,
+
+            // ==========
+            // Your model here:
+            import Model from '../models/DiffuseModel.js'
+            // Your draw code here
+            const viewOptions = { div: 'modelDiv', patchSize: 3 }
+            const patchColors = ColorMap.Rgb256
+            const params = {
+                shapeSize: 8,
+                patchColor: p => patchColors.scaleColor(p.ran, 0, 1).pixel,
+                turtleColor: 'red',
+            }
+            // ==========
+
+            // Run the model 500 steps at roughly 30 fps
+            const model = new Model()
+            const twoDraw = new TwoDraw(model, viewOptions)
+            async function run() {
+                await model.startup()
+                model.setup()
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick()
+                        twoDraw.draw(params)
+                    },
+                    500,
+                    33
+                )
+
+                // Print out a sample of the model.
+                // Not needed for drawing but useful.
+                const sample = util.sampleModel(model)
+                util.printToPage(sample, 'textDiv')
+            }
+            run()
+        </script>
+        <!--
+            A div for general use. We don't use it here. Printing could use:
+            util.printToPage(sample, 'modelDiv')
+        -->
+        <div id="modelDiv"></div>
+        <div id="textDiv"></div>
+    </body>
+</html>

@@ -18,10 +18,13 @@
             // Convert short name to model & view class names.
             const modelParams = util.parseQueryString()
             const name = Object.keys(modelParams)[0] || 'hello'
+
             const modelName = name[0].toUpperCase() + name.slice(1) + 'Model'
             const viewName = name[0].toUpperCase() + name.slice(1) + 'View'
+
             const modelPath = `../models/${modelName}.js`
             const viewPath = `./${viewName}.js`
+
             console.log('Running', modelName, '&', viewName)
             document.title = `MV:${name}`
 

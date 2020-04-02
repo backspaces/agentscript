@@ -2,9 +2,14 @@ import util from '../src/util.js'
 import TwoView from '../src/TwoView.js'
 
 const linkColor = 'black'
+const tripColor = 'green'
 const shape = 'circle'
-const shapeSize = 1
-const shapeColor = 'red'
+// const shapeSize = 1
+
+const nodeColor = 'red'
+const intersectionColor = 'blue'
+const nodeSize = 1
+const intersectionSize = 2
 
 const viewOptions = { patchSize: 4 }
 
@@ -20,16 +25,20 @@ function newView(model, options = {}) {
     return view
 }
 
+const isIntersection = t => t.agentSet.name === 'intersections'
+const isTrip = l => l.agentSet.name === 'trips'
 function drawView(model, view) {
     if (!baseMapTile) return // wait for image to load
     view.drawPatchesImage(baseMapTile)
 
-    view.drawLinks(model.links, { color: linkColor })
-    view.drawTurtles(model.turtles, {
+    view.drawLinks(model.links, l => ({
+        color: isTrip(l) ? tripColor : linkColor,
+    }))
+    view.drawTurtles(model.turtles, t => ({
         shape: shape,
-        color: shapeColor,
-        size: shapeSize,
-    })
+        color: isIntersection(t) ? intersectionColor : nodeColor,
+        size: isIntersection(t) ? intersectionSize : nodeSize,
+    }))
 }
 
 export default { newView, drawView }

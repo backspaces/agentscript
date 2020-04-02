@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <title>2Draw</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import Color from '../src/Color.js'
+            import ColorMap from '../src/ColorMap.js'
+            import TwoDraw from './TwoDraw.js'
+
+            // Draw parameters
+            // patchColor: undefined,
+            // turtleColor: undefined,
+            // linkColor: 'rgba(255,255,255,0.25',
+            // linkWidth: 1,
+            // shape: 'dart',
+            // shapeSize: 1,
+
+            // ==========
+            // Your model here:
+            import Model from '../models/AntsModel.js'
+            // Your draw code here
+            const viewOptions = { div: 'modelDiv', useSprites: true }
+            const nestColor = Color.typedColor('yellow')
+            const foodColor = Color.typedColor('blue')
+            const nestColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                nestColor.css,
+            ])
+            const foodColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                foodColor.css,
+            ])
+            const params = {
+                shape: 'bug',
+                shapeSize: 3,
+                patchColor: p => {
+                    if (p.isNest) return nestColor.pixel
+                    if (p.isFood) return foodColor.pixel
+                    const color =
+                        p.foodPheromone > p.nestPheromone
+                            ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
+                            : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+                    return color.pixel
+                },
+                turtleColor: t =>
+                    t.carryingFood ? nestColor.css : foodColor.css,
+            }
+            // ==========
+
+            // Run the model 500 steps at roughly 30 fps
+            const model = new Model()
+            const twoDraw = new TwoDraw(model, viewOptions)
+            async function run() {
+                await model.startup()
+                model.setup()
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick()
+                        twoDraw.draw(params)
+                    },
+                    500,
+                    33
+                )
+
+                // Print out a sample of the model.
+                // Not needed for drawing but useful.
+                const sample = util.sampleModel(model)
+                util.printToPage(sample, 'textDiv')
+            }
+            run()
+        </script>
+        <!--
+            A div for general use. We don't use it here. Printing could use:
+            util.printToPage(sample, 'modelDiv')
+        -->
+        <div id="modelDiv"></div>
+        <div id="textDiv"></div>
+    </body>
+</html>

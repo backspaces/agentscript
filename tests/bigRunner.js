@@ -34,7 +34,6 @@ export default async function run(params) {
 
     let options = Model.defaultOptions()
     util.override(options, params)
-    console.log('options', options)
 
     const world = params.maxX ? World.defaultOptions(params.maxX) : undefined
 
@@ -42,7 +41,6 @@ export default async function run(params) {
 
     const model = new Model(world)
     Object.assign(model, options)
-    console.log('world', model.world)
 
     if (typeof window !== 'undefined') util.toWindow({ util, model }) // debug
 

@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>2Draw</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import TwoDraw from './TwoDraw.js'
+
+            // Convert short name to model class name.
+            const modelParams = util.parseQueryString()
+            const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
+            const className = name[0].toUpperCase() + name.slice(1)
+            console.log('Running', className)
+            document.title = `D:${name}`
+
+            async function run() {
+                const module = await import(`../models/${className}.js`)
+                const Model = module.default
+
+                const model = new Model()
+                const twoDraw = new TwoDraw(model, { div: 'modelDiv' })
+
+                util.toWindow({ model, twoDraw, util })
+
+                await model.startup()
+                model.setup()
+                await util.timeoutLoop(() => {
+                    model.step()
+                    model.tick()
+                    twoDraw.draw()
+                }, 500)
+
+                // For our use, we print out a sample of the model's variables.
+                // It will be different each run of the model
+                const sample = util.sampleModel(model)
+                util.printToPage(sample, 'textDiv')
+            }
+            run()
+        </script>
+        <!--
+            A div for general use. We don't use it here. Printing could use:
+            util.printToPage(sample, 'modelDiv')
+        -->
+        <div id="modelDiv"></div>
+        <div id="textDiv"></div>
+    </body>
+</html>
