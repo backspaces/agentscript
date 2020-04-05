@@ -2580,7 +2580,10 @@ const gis = {
         const [lon0, lat0] = this.xy2lonlat(x, y, z);
         // y increases "down" like pixel coords
         const [lon1, lat1] = this.xy2lonlat(x + 1, y + 1, z);
-        return [[lon0, lat0], [lon1, lat1]]
+        return [
+            [lon0, lat0],
+            [lon1, lat1],
+        ]
     },
 
     // Create a url for OSM json data.
@@ -2607,8 +2610,9 @@ out;`;
         const dLat = lat2 - lat1;
         const dLon = lon2 - lon1;
         const a =
-            pow(sin(dLat / 2), 2) +
-            cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
+            sin(dLat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dLon / 2) ** 2;
+        // pow(sin(dLat / 2), 2) +
+        // cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2)
         const c = 2 * atan2(sqrt(a), sqrt(1 - a));
         const d = R * c;
         return d * 1000 // meters

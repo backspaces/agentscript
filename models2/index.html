@@ -48,7 +48,7 @@
                 // We use aliases for patches, turtles, links to catch
                 // model omitting "this" for this.turtles.
                 const { patches: ps, turtles: ts, links: ls } = model
-                util.toWindow({ model, util, ps, ts, ls })
+                util.toWindow({ model, view, util })
 
                 // Now init and run and draw the model 500 steps, 30fps.
                 // Async so as to not block the browser.
