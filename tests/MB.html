@@ -50,6 +50,10 @@
                 type === 'geojson'
                     ? 'http://backspaces.net/temp/santafe7roads.json'
                     : 'mapbox://backspaces.04kiyweb'
+            // ? 'http://backspaces.net/temp/santafe7roads.json'
+            // : '../../tiles/santafe7.mbtiles'
+            // : 'http://backspaces.net/temp/santafe7.mbtiles'
+            // : 'mapbox://backspaces.04kiyweb'
             const id = 'santaFe'
             console.log({ type, data, id })
 
@@ -67,10 +71,7 @@
                     map.addLayer({
                         id: id,
                         type: 'line',
-                        source: {
-                            type,
-                            data: '../../tiles/santafe7roads.json',
-                        },
+                        source: { type, data },
                         layout: {},
                         paint: { 'line-color': 'red' },
                     })
