@@ -1337,10 +1337,10 @@ class AgentArray extends Array {
     // }
     // Returns AgentArray of unique elements in this *sorted* AgentArray.
     // Use sortBy or clone & sortBy if needed.
-    // uniq(f = util.identityFcn) {
-    //     if (util.isString(f)) f = o => o[f]
-    //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
-    // }
+    uniq(f = util.identityFcn) {
+        if (util.isString(f)) f = o => o[f];
+        return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
+    }
 
     // Call fcn(agent, index, array) for each agent in AgentArray.
     // Array assumed not mutable
@@ -1504,10 +1504,7 @@ class AgentArray extends Array {
     // otherNOf (n, agent) { return util.otherNOf(n, this, agent) }
     otherNOf(n, item) {
         if (this.length < n) throw Error('AgentArray: otherNOf: length < N')
-        return this.clone()
-            .remove(item)
-            .shuffle()
-            .slice(0, n)
+        return this.clone().remove(item).shuffle().slice(0, n)
     }
 
     // Return the first agent having the min/max of given value of f(agent).
@@ -3394,7 +3391,7 @@ class Turtles extends AgentSet {
     // +1 or -1 direction (counter clockwise or clockwise)
     // defaulting to -1 (clockwise).
     layoutCircle(
-        radius,
+        radius = this.model.world.maxX * 0.9,
         center = [0, 0],
         startAngle = Math.PI / 2,
         direction = -1
@@ -3592,6 +3589,9 @@ class Turtle {
     // distance (agent) { this.distanceXY(agent.x, agent.y) }
     distance(agent) {
         return util.distance(this.x, this.y, agent.x, agent.y)
+    }
+    sqDistance(agent) {
+        return util.sqDistance(this.x, this.y, agent.x, agent.y)
     }
     // Return angle towards agent/x,y
     // Use util.heading to convert to heading

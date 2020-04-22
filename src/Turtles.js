@@ -84,7 +84,7 @@ class Turtles extends AgentSet {
     // +1 or -1 direction (counter clockwise or clockwise)
     // defaulting to -1 (clockwise).
     layoutCircle(
-        radius,
+        radius = this.model.world.maxX * 0.9,
         center = [0, 0],
         startAngle = Math.PI / 2,
         direction = -1

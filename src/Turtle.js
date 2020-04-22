@@ -184,6 +184,9 @@ class Turtle {
     distance(agent) {
         return util.distance(this.x, this.y, agent.x, agent.y)
     }
+    sqDistance(agent) {
+        return util.sqDistance(this.x, this.y, agent.x, agent.y)
+    }
     // Return angle towards agent/x,y
     // Use util.heading to convert to heading
     towards(agent) {

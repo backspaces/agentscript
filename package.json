@@ -1,13 +1,18 @@
 {
-    "name": "@redfish/agentscript",
-    "version": "0.4.2",
+    "name": "agentscript",
+    "version": "0.5.3",
     "description": "AgentScript Model in Model/View architecture",
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
-    "main": "dist/agentscript.umd.js",
-    "module": "dist/agentscript.esm.js",
+    "main": "dist/agentscript.umd.min.js",
+    "module": "dist/agentscript.esm.min.js",
     "files": [
         "/dist/",
+        "/models/",
+        "/models2/",
+        "/models3/",
+        "/mvc2/",
+        "/tests/",
         "/docs/"
     ],
     "repository": {
@@ -25,6 +30,7 @@
     },
     "mkdirs": "dist",
     "scripts comments": {
+        "name": "@redfish/agentscript",
         "ava": "0.25.0",
         "build-bin": "rollup -f umd -n gis src/gis.js > bin/gis.umd.js",
         "postinstall": "rollup -c rollup.three.js",

@@ -26,5 +26,6 @@ module.exports = {
         quotes: ['error', 'single'],
         indent: ['error', 4],
         'comma-dangle': ['error', 'always-multiline'],
+        'arrow-parens': ['error', 'as-needed'],
     },
 }
