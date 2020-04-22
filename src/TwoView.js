@@ -50,6 +50,7 @@ export default class TwoView {
         this.turtlesView.reset(patchSize, useSprites)
     }
 
+    // Oops! Already variable names:
     // get patchSize() {
     //     return this.turtlesView.patchSize
     // }

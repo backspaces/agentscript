@@ -50,12 +50,13 @@ export default class TwoView {
         this.turtlesView.reset(patchSize, useSprites)
     }
 
-    get patchSize() {
-        return this.turtlesView.patchSize
-    }
-    set patchSize(val) {
-        this.reset(val, this.useSprites)
-    }
+    // Oops! Already variable names:
+    // get patchSize() {
+    //     return this.turtlesView.patchSize
+    // }
+    // set patchSize(val) {
+    //     this.reset(val)
+    // }
     // get useSprites() {
     //     return this.turtlesView.useSprites
     // }

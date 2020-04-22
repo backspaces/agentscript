@@ -18,8 +18,8 @@ class DiffuseModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(200, 100)) {
-        super(worldDptions)
+    constructor(worldOptions = World.defaultOptions(200, 100)) {
+        super(worldOptions)
         Object.assign(this, DiffuseModel.defaultOptions())
     }
 

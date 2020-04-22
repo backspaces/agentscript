@@ -16,8 +16,8 @@ export default class AntsModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(40)) {
-        super(worldDptions)
+    constructor(worldOptions = World.defaultOptions(40)) {
+        super(worldOptions)
         Object.assign(this, AntsModel.defaultOptions())
     }
 

@@ -9,8 +9,8 @@ class ButtonsModel extends Model {
 
     // ======================
 
-    constructor(worldDptions) {
-        super(worldDptions) // default world options if "undefined"
+    constructor(worldOptions) {
+        super(worldOptions) // default world options if "undefined"
         Object.assign(this, ButtonsModel.defaultOptions())
     }
 
