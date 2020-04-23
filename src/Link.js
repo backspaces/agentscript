@@ -1,5 +1,5 @@
 import util from './util.js'
-// import Color from './Color.js'
+import AgentArray from './AgentArray.js'
 
 // Class Link instances form a link between two turtles, forming a graph.
 // Flyweight object creation, see Patch/Patches.
@@ -37,7 +37,7 @@ class Link {
     }
 
     bothEnds() {
-        return [this.end0, this.end1]
+        return AgentArray.fromArray([this.end0, this.end1])
     }
     length() {
         return this.end0.distance(this.end1)

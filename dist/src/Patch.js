@@ -1,4 +1,5 @@
 import util from './util.js'
+import AgentArray from './AgentArray.js'
 
 // Class Patch instances represent a rectangle on a grid.  They hold variables
 // that are in the patches the turtles live on.  The set of all patches
@@ -24,7 +25,7 @@ class Patch {
     }
     // Getter for x,y derived from patch id, thus no setter.
     get x() {
-        return this.id % this.model.world.numX + this.model.world.minX
+        return (this.id % this.model.world.numX) + this.model.world.minX
     }
     get y() {
         return (
@@ -59,7 +60,7 @@ class Patch {
     turtlesHere() {
         if (this.turtles == null) {
             this.patches.ask(p => {
-                p.turtles = []
+                p.turtles = new AgentArray() // []
             })
             this.model.turtles.ask(t => {
                 t.patch.turtles.push(t)

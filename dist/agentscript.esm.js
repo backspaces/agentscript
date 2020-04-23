@@ -2434,8 +2434,6 @@ class DataSet {
     }
 }
 
-// import Color from './Color.js'
-
 // Class Link instances form a link between two turtles, forming a graph.
 // Flyweight object creation, see Patch/Patches.
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
@@ -2472,7 +2470,7 @@ class Link {
     }
 
     bothEnds() {
-        return [this.end0, this.end1]
+        return AgentArray.fromArray([this.end0, this.end1])
     }
     length() {
         return this.end0.distance(this.end1)
@@ -3226,7 +3224,7 @@ class Patch {
     }
     // Getter for x,y derived from patch id, thus no setter.
     get x() {
-        return this.id % this.model.world.numX + this.model.world.minX
+        return (this.id % this.model.world.numX) + this.model.world.minX
     }
     get y() {
         return (
@@ -3261,7 +3259,7 @@ class Patch {
     turtlesHere() {
         if (this.turtles == null) {
             this.patches.ask(p => {
-                p.turtles = [];
+                p.turtles = new AgentArray(); // []
             });
             this.model.turtles.ask(t => {
                 t.patch.turtles.push(t);

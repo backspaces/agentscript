@@ -47,6 +47,8 @@ export default class TwoView {
         return this.ctx.canvas
     }
     reset(patchSize, useSprites = this.useSprites) {
+        this.patchSize = patchSize
+        this.useSprites = useSprites
         this.turtlesView.reset(patchSize, useSprites)
     }
 
@@ -88,7 +90,8 @@ export default class TwoView {
         this.patchesView.setPatchesSmoothing(smoothing)
     }
     drawPatchesImage(img) {
-        if (img) util.fillCtxWithImage(this.ctx, img)
+        // if (img) util.fillCtxWithImage(this.ctx, img) ??
+        util.fillCtxWithImage(this.ctx, img)
     }
 
     // If no data, redraw with existing patchesView cache
