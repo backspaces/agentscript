@@ -37,7 +37,8 @@ export default class PatchesView {
         util.repeat(this.length, i => (this.pixels[i] = pixelFcn(i)))
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
     }
-    // setPixel(x, y, pixel) {
+    // Used to be: setPixel(x, y, pixel) {
+    // but best to be purely independent of world object
     setPixel(index, pixel) {
         // const index = world.xyToPatchIndex(x, y)
         this.pixels[index] = pixel
@@ -53,7 +54,8 @@ export default class PatchesView {
         ctx.imageSmoothingEnabled = smoothing
     }
 
-    // Return promise for an imageBitmap of the current ctx
+    // Return promise for an ImageBitmap of the current ctx
+    // Note safari does not support createImageBitmap as of 4/20
     // REMIND: See if imagebitmaps can avoid img alpha premultiply etc
     getImageBitmap(options = {}) {
         return createImageBitmap(this.imageData, options)

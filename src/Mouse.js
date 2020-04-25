@@ -19,7 +19,7 @@ export default class Mouse {
     // on mouse down/up.  We may want do make that optional, using the
     // more standard down/up enabling move events.
     resetParams() {
-        this.xCor = this.yCor = NaN
+        this.x = this.y = NaN
         this.moved = this.down = false
     }
     start() {
@@ -39,7 +39,7 @@ export default class Mouse {
         return this // chaining
     }
     get running() {
-        return !isNaN(this.xCor)
+        return !isNaN(this.x)
     }
     run(on = true) {
         if (on) this.start()
@@ -50,7 +50,7 @@ export default class Mouse {
     //     else this.stop()
     // }
     // toggle() {
-    //     if (isNaN(this.xCor)) this.start()
+    //     if (isNaN(this.x)) this.start()
     //     else this.stop()
     // }
 
@@ -77,7 +77,7 @@ export default class Mouse {
     // Event locations, clientX/Y, screenX/Y, offsetX/Y, pageX/Y .. confusing!
     // Stack Overflowhttps://tinyurl.com/y5k9rwhb
 
-    // set x, y to be event location in patch coordinates.
+    // set x, y to be event location in turtle coordinates, floats.
     setXY(e) {
         const { canvas, world } = this
         const patchSize = world.patchSize(canvas)
@@ -85,8 +85,8 @@ export default class Mouse {
         const pixX = e.clientX - rect.left
         const pixY = e.clientY - rect.top
 
-        // const [xCor, yCor] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
-        // Object.assign(this, { xCor, yCor })
-        ;[this.xCor, this.yCor] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
+        // const [x, y] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
+        // Object.assign(this, { x, y })
+        ;[this.x, this.y] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
     }
 }

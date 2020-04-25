@@ -53,17 +53,17 @@ const controls = new GUI(template).target
 let selectedTurtle = null
 const handleMouse = mouse => {
     // console.log('mouse:', event, mouse)
-    const { xCor, yCor } = mouse
+    const { x, y } = mouse
     switch (mouse.action) {
         case 'down':
-            selectedTurtle = model.turtles.closestTurtle(xCor, yCor, 2)
+            selectedTurtle = model.turtles.closestTurtle(x, y, 2)
             // console.log('down', selectedTurtle)
             if (selectedTurtle === null) return
-            selectedTurtle.setxy(xCor, yCor)
+            selectedTurtle.setxy(x, y)
             break
         case 'drag':
             if (selectedTurtle === null) return
-            selectedTurtle.setxy(xCor, yCor)
+            selectedTurtle.setxy(x, y)
             // console.log('drag', selectedTurtle)
             break
         case 'up':

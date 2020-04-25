@@ -2486,6 +2486,13 @@
             if (turtle === this.end1) return this.end0
             throw Error(`Link.otherEnd: turtle not a link turtle: ${turtle}`)
         }
+        distanceXY(x, y) {
+            return (
+                this.bothEnds()
+                    .map(t => t.distanceXY(x, y))
+                    .sum() - this.length()
+            )
+        }
 
         get x0() {
             return this.end0.x

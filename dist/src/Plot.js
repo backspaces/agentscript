@@ -1,6 +1,8 @@
 import Chart from '../dist/chart.esm.js'
 import util from './util.js'
 
+// Using https://github.com/chartjs/Chart.js
+// https://github.com/leeoniya/uPlot
 export default class Plot {
     static defaultOptions() {
         return {

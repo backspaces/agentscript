@@ -152,16 +152,16 @@ export default class VirusMVC extends TwoMVC {
 
     handleMouse(mouse) {
         const turtles = this.model.turtles
-        const { xCor, yCor } = mouse
+        const { x, y } = mouse
         switch (mouse.action) {
             case 'down':
-                this.selectedTurtle = turtles.closestTurtle(xCor, yCor, 2)
+                this.selectedTurtle = turtles.closestTurtle(x, y, 2)
                 if (this.selectedTurtle === null) return
-                this.selectedTurtle.setxy(xCor, yCor)
+                this.selectedTurtle.setxy(x, y)
                 break
             case 'drag':
                 if (this.selectedTurtle === null) return
-                this.selectedTurtle.setxy(xCor, yCor)
+                this.selectedTurtle.setxy(x, y)
                 break
             case 'up':
                 this.selectedTurtle = null

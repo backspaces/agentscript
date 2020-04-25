@@ -15,10 +15,12 @@ view.createPatchPixels(() => colors.randomColor().pixel)
 view.drawPatches()
 
 const callback = mouse => {
-    const { xCor, yCor } = mouse
-    // console.log(xCor, yCor)
+    const { x, y } = mouse
+    // console.log(x, y)
     const color = mouse.down ? colors[0] : colors.randomColor()
-    view.setPatchPixel(xCor, yCor, color.pixel)
+    // const ix = model.patches.patchIndex(x, y)
+    const ix = world.xyToPatchIndex(x, y)
+    view.setPatchPixel(ix, color.pixel)
     view.drawPatches()
 }
 const mouse = new Mouse(view.canvas, world, callback).start()
