@@ -16,11 +16,11 @@ if (!dir || !model) throw Error(`Needs dir & model arguments: ${dir} ${model}`)
 // if (!dir || !model) throw Error('Needs dir/model argument')
 
 const indexFile = dir === 'models' ? 'test.html' : ''
-const url = `http://127.0.0.1:8080/${dir}/${indexFile}?${model}`
+const url = `http://127.0.0.1:9009/${dir}/${indexFile}?${model}`
 console.log('url:', url)
 
 const child = shell.exec(
-    './node_modules/.bin/live-server --no-browser --quiet --watch=src',
+    './node_modules/.bin/live-server --port=9009 --no-browser --quiet --watch=src',
     {
         async: true,
     }

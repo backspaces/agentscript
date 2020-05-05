@@ -11,9 +11,10 @@ const zxy = process.argv[2]
 const [, z, x, y] = zxy.match(/(\d+)\/(\d+)\/(\d+)/)
 
 // convert to numbers!
-const [topleft, bottomright] = gis.xy2bbox(+x, +y, +z)
-const [west, north] = topleft
-const [east, south] = bottomright
+// const [topleft, bottomright] = gis.xy2bbox(+x, +y, +z)
+// const [west, north] = topleft
+// const [east, south] = bottomright
+const [west, south, east, north] = gis.xy2bbox(+x, +y, +z)
 
 const url = gis.getOsmURL(south, west, north, east)
 

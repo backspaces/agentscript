@@ -54,6 +54,7 @@
         "run3w": "bin/runmodels workers3",
         "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",
+        "serve": "live-server &",
         "temp": "bin/testsafari"
     },
     "@pika/web": {

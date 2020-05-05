@@ -84,14 +84,15 @@ export default class TurtlesView {
                 )
             }
         } else {
-            const { shape, color, size, noRotate } = viewData
+            const { shape, color, strokeColor, size, noRotate } = viewData
             this.drawShape(
                 shape,
                 turtle.x,
                 turtle.y,
                 noRotate ? 0 : turtle.theta,
                 size,
-                color
+                color,
+                strokeColor
             )
         }
     }

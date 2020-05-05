@@ -33,15 +33,24 @@ const gis = {
         return [this.x2lon(x, z), this.y2lat(y, z)]
     },
     // Return two lon/lat points for bbox of tile
+    // We use the usual convention of
+    //   [minX, minY, maxX, maxY] or [west, south, east, north]
     xy2bbox(x, y, z) {
         // REMIND: error check at 180, 0 etc
-        const [lon0, lat0] = this.xy2lonlat(x, y, z)
-        // y increases "down" like pixel coords
-        const [lon1, lat1] = this.xy2lonlat(x + 1, y + 1, z)
-        return [
-            [lon0, lat0],
-            [lon1, lat1],
-        ]
+        // const [lon0, lat0] = this.xy2lonlat(x, y, z)
+        const [west, north] = this.xy2lonlat(x, y, z)
+        // console.log('west, north', west, north)
+        // tile Y increases "down" like pixel coords
+        // const [lon1, lat1] = this.xy2lonlat(x + 1, y + 1, z)
+        const [east, south] = this.xy2lonlat(x + 1, y + 1, z)
+        // console.log('south, east', south, east)
+        // west, south, east, north
+        // lon0, lat1, lon1, lat0
+        return [west, south, east, north]
+        // return [
+        //     [lon0, lat0],
+        //     [lon1, lat1],
+        // ]
     },
 
     // Create a url for OSM json data.

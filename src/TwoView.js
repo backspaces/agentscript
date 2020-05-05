@@ -66,7 +66,9 @@ export default class TwoView {
     //     this.reset(this.patchSize, val)
     // }
 
-    clear(cssColor = 'lightGray') {
+    // clear(cssColor = 'lightGray') {
+    // Clear the view.canvas. If no color, make transparent.
+    clear(cssColor) {
         if (cssColor) {
             util.fillCtx(this.ctx, cssColor)
         } else {

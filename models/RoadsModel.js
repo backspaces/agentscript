@@ -19,12 +19,13 @@ export default class RoadsModel extends Model {
         super(worldDptions)
         Object.assign(this, RoadsModel.defaultOptions())
         this.nodeCache = {}
-        this.trips = []
+        // this.trips = []
     }
 
     async startup() {
-        const json = await util.xhrPromise(this.jsonUrl)
-        this.geojson = JSON.parse(json)
+        // const json = await util.xhrPromise(this.jsonUrl)
+        // this.geojson = JSON.parse(json)
+        this.geojson = await util.xhrPromise(this.jsonUrl, 'json')
     }
 
     getNode(pt) {
@@ -67,9 +68,15 @@ export default class RoadsModel extends Model {
         this.turtles.setDefault('atEdge', 'OK')
 
         const { Z, X, Y } = this.zxy
-        this.bbox = gis.xy2bbox(X, Y, Z)
-        this.xfm = this.world.bboxTransform(...this.bbox)
-        console.log('bbox size', gis.lonLat2meters(...this.bbox))
+        const bbox = gis.xy2bbox(X, Y, Z)
+        console.log('bbox', bbox.toString())
+        const [west, south, east, north] = bbox
+
+        this.xfm = this.world.bboxTransform(...bbox)
+        console.log(
+            'bbox diagonal size',
+            gis.lonLat2meters([west, south], [east, north])
+        )
 
         const features = this.geojson.features
         // note index is shared amongst the MultiLineStrings
@@ -101,12 +108,12 @@ export default class RoadsModel extends Model {
         })
     }
     step() {
-        const int1 = this.intersections.oneOf()
-        let int2 = this.intersections.oneOf()
-        while (int1.distance(int2) < 10) int2 = this.intersections.oneOf()
-        const trip = this.trips.createOne(int1, int2, l => {
-            l.date = new Date()
-        })
-        if (this.trips.length > 15) this.trips.otherOneOf(trip).die()
+        // const int1 = this.intersections.oneOf()
+        // let int2 = this.intersections.oneOf()
+        // while (int1.distance(int2) < 10) int2 = this.intersections.oneOf()
+        // const trip = this.trips.createOne(int1, int2, l => {
+        //     l.date = new Date()
+        // })
+        // if (this.trips.length > 15) this.trips.otherOneOf(trip).die()
     }
 }

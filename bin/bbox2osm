@@ -12,15 +12,13 @@ const bbox = process.argv[2]
 // const [, south, west, north, east] = bbox.match(
 //     /([^,]+),([^,]+),([^,]+),([^,]+)/
 // )
-const [, south, west, north, east] = bbox.match(/(.+),(.+),(.+),(.+)/)
-// console.log(south, west, north, east)
+// Our bbox is west, south, east, north
+const [, west, south, east, north] = bbox.match(/(.+),(.+),(.+),(.+)/)
 
 // // convert to numbers!
-// const [topleft, bottomright] = gis.xy2bbox(+x, +y, +z)
-// const [west, north] = topleft
-// const [east, south] = bottomright
+// const [west, south, east, north] = gis.xy2bbox(+x, +y, +z)
 
-// Use + to convert to numbers!
+// Use + to convert to numbers! Osm uses less standard directions
 const url = gis.getOsmURL(+south, +west, +north, +east)
 // console.log(url)
 
