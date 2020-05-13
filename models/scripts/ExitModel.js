@@ -36,8 +36,9 @@ class ExitModel extends Model {
             })
         })
 
-        this.wall.nOf(this.numExits).ask(p => {
+        this.wall.nOf(this.numExits).ask((p, i) => {
             p.setBreed(this.exits)
+            p.exitNumber = i
         })
     }
     setupTurtles() {

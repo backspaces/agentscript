@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>droplets</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            import Color from '../src/Color.js'
+            import ColorMap from '../src/ColorMap.js'
+            import Model from '../models/DropletsModel.js'
+
+            const drawOptions = {
+                turtleShape: 'circle',
+                turtleColor: 'yellow',
+                turtleSize: 0.5,
+                initPatches: (model, view) => {
+                    const elevation = model.patches.exportDataSet('elevation')
+                    const grays = elevation.scale(0, 255).data
+                    const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
+                    model.localMins.forEach(p => {
+                        colors[p.id] = Color.typedColor(255, 0, 0)
+                    })
+                    return colors
+                },
+            }
+
+            async function run() {
+                const model = new Model()
+                await model.startup()
+                model.setup()
+
+                const view = new TwoDraw(model, {
+                    div: 'modelDiv',
+                    useSprites: true,
+                })
+
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick()
+                        view.draw(drawOptions)
+                    },
+                    500,
+                    33
+                )
+            }
+            run()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

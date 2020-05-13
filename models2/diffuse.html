@@ -1,13 +1,14 @@
 <html>
     <head>
-        <title>hello</title>
+        <title>diffuse</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
             import TwoDraw from '../src/TwoDraw.js'
-            import Model from '../models/HelloModel.js'
+            import ColorMap from '../src/ColorMap.js'
+            import Model from '../models/DiffuseModel.js'
 
             async function run() {
                 const model = new Model()
@@ -16,14 +17,20 @@
 
                 const view = new TwoDraw(model, {
                     div: 'modelDiv',
-                    patchSize: 20,
+                    useSprites: true,
+                    patchSize: 3,
                 })
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw() // defalt draw!
+                        view.draw({
+                            patchColor: p =>
+                                ColorMap.Rgb256.scaleColor(p.ran, 0, 1).pixel,
+                            turtleColor: 'red',
+                            turtleSize: 8,
+                        })
                     },
                     500,
                     33

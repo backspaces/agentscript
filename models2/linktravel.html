@@ -1,13 +1,15 @@
 <html>
     <head>
-        <title>hello</title>
+        <title>linkTravel</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
             import TwoDraw from '../src/TwoDraw.js'
-            import Model from '../models/HelloModel.js'
+            import Color from '../src/Color.js'
+            import ColorMap from '../src/ColorMap.js'
+            import Model from '../models/LinkTravelModel.js'
 
             async function run() {
                 const model = new Model()
@@ -23,7 +25,14 @@
                     () => {
                         model.step()
                         model.tick()
-                        view.draw() // defalt draw!
+
+                        const isNode = t => t.breed.name === 'nodes'
+                        view.draw({
+                            patchColor: 'black',
+                            turtleColor: t => (isNode(t) ? 'red' : 'random'),
+                            turtleShape: t => (isNode(t) ? 'circle' : 'dart'),
+                            turtleSize: t => (isNode(t) ? 0.5 : 1.25),
+                        })
                     },
                     500,
                     33

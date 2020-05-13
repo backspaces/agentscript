@@ -4,31 +4,27 @@ import TwoView from '../src/TwoView.js'
 
 const shape = 'circle'
 const shapeSize = 1
-const Basic16 = ColorMap.Basic16
-const LightGray = ColorMap.LightGray
-const exitColors = {} // filled in by newView()
 
 const viewOptions = { useSprites: true, patchSize: 8 }
 
+let patchColors
 function newView(model, options = {}) {
     const view = new TwoView(model.world, Object.assign(viewOptions, options))
 
-    model.exits.ask((p, i) => (exitColors[p.id] = Basic16.atIndex(i + 4)))
-    view.createPatchPixels(i => LightGray.randomColor().pixel)
-
-    model.patches.ask(p => {
+    patchColors = model.patches.map(p => {
         switch (p.breed.name) {
             case 'exits':
-                view.setPatchPixel(p.id, exitColors[p.id].pixel)
-                break
+                // const exitNumber = model.exits.indexOf(p)
+                return ColorMap.Basic16.atIndex(p.exitNumber + 4)
             case 'inside':
-                view.setPatchPixel(p.id, Color.typedColor('black').pixel)
-                break
+                return Color.typedColor('black')
             case 'wall':
-                view.setPatchPixel(p.id, Color.typedColor('gray').pixel)
-                break
+                return Color.typedColor('gray')
+            default:
+                return ColorMap.LightGray.randomColor()
         }
     })
+    view.createPatchPixels(i => patchColors[i].pixel)
 
     return view
 }
@@ -37,7 +33,7 @@ function drawView(model, view) {
 
     view.drawTurtles(model.turtles, t => ({
         shape: shape,
-        color: exitColors[t.exit.id].css,
+        color: patchColors[t.exit.id].css,
         size: shapeSize,
     }))
 }

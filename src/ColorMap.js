@@ -357,7 +357,7 @@ const ColorMap = {
         )
     },
     get Bright16() {
-        // 17 unique + 2 "aliases" = 19 names. "16" historic
+        // Basic16 w/o grays: white, black
         return this.LazyMap(
             'Bright16',
             this.cssColorMap(this.brightColorNames, true)

@@ -1,13 +1,13 @@
 <html>
     <head>
-        <title>hello</title>
+        <title>buttons</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
             import TwoDraw from '../src/TwoDraw.js'
-            import Model from '../models/HelloModel.js'
+            import Model from '../models/ButtonsModel.js'
 
             async function run() {
                 const model = new Model()
@@ -16,6 +16,7 @@
 
                 const view = new TwoDraw(model, {
                     div: 'modelDiv',
+                    useSprites: true,
                     patchSize: 20,
                 })
 
@@ -23,7 +24,13 @@
                     () => {
                         model.step()
                         model.tick()
-                        view.draw() // defalt draw!
+                        view.draw({
+                            turtleColor: t =>
+                                model.cluster.has(t) ? 'red' : 'random',
+                            turtleShape: 'circle',
+                            turtleSize: 2,
+                            linkColor: 'rgba(255, 255, 255, 0.50',
+                        })
                     },
                     500,
                     33

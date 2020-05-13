@@ -5,7 +5,6 @@ import TwoView from '../src/TwoView.js'
 const shape = 'circle'
 const shapeColor = 'yellow'
 const shapeSize = 0.5
-const grayColorMap = ColorMap.grayColorMap()
 const localMinColor = Color.typedColor(255, 0, 0) // 'red'
 
 const viewOptions = { useSprites: true } // faster & only one yellow circle.
@@ -19,7 +18,7 @@ function newView(model, options = {}) {
 function getPatchColors(model) {
     const elevation = model.patches.exportDataSet('elevation')
     const grays = elevation.scale(0, 255).data
-    const colors = grays.map(d => grayColorMap[Math.round(d)])
+    const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
     model.localMins.forEach(p => (colors[p.id] = localMinColor))
     return colors
 }

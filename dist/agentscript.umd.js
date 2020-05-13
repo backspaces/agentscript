@@ -2877,15 +2877,6 @@ out;`;
         //    https://tools.ietf.org/html/rfc7946#section-5
         //    [west, south, east, north]
         constructor(minX, minY, maxX, maxY, world) {
-            // constructor(topLeft, bottomRight, world) {
-            // const [topX, topY] = topLeft
-            // const [botX, botY] = bottomRight
-            // let [topX, topY] = topLeft
-            // let [botX, botY] = bottomRight
-
-            // let [minX, minY, maxX, maxY] = [topX, botY, botX, topY]
-            // console.log(minX, minY, maxX, maxY)
-
             if (minX < maxX) console.log('flipX');
             if (maxY < minY) console.log('flipY');
 
@@ -2899,29 +2890,13 @@ out;`;
             const bx = (minX + maxX - mx * (maxXcor + minXcor)) / 2;
             const by = (maxY + minY - my * (maxYcor + minYcor)) / 2;
 
-            // if (topX < botX) console.log('flipX')
-            // if (topY < botY) console.log('flipY')
-
-            // if (topX < botX) [topX, botX] = [botX, topX]
-            // if (topY < botY) [topY, botY] = [botY, topY]
-            // const { maxXcor, maxYcor, minXcor, minYcor } = world
-
-            // // console.log('topX, botX:', topX, botX)
-            // // console.log('topY, botY', topY, botY)
-
-            // const mx = (topX - botX) / (maxXcor - minXcor)
-            // const my = (topY - botY) / (maxYcor - minYcor)
-
-            // const bx = (topX + botX - mx * (maxXcor + minXcor)) / 2
-            // const by = (topY + botY - my * (maxYcor + minYcor)) / 2
-
             Object.assign(this, { mx, my, bx, by });
         }
-        toWorld(tlbrPoint) {
+        toWorld(bboxPoint) {
             const { mx, my, bx, by } = this;
-            const [tlbrX, tlbrY] = tlbrPoint;
-            const x = (tlbrX - bx) / mx;
-            const y = (tlbrY - by) / my;
+            const [bboxX, bboxY] = bboxPoint;
+            const x = (bboxX - bx) / mx;
+            const y = (bboxY - by) / my;
             return [x, y]
         }
         toBBox(worldPoint) {

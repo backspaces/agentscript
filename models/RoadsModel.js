@@ -64,7 +64,7 @@ export default class RoadsModel extends Model {
     }
     setup() {
         this.turtleBreeds('intersections')
-        this.linkBreeds('trips')
+        // this.linkBreeds('trips')
         this.turtles.setDefault('atEdge', 'OK')
 
         const { Z, X, Y } = this.zxy
