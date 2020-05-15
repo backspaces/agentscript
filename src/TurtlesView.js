@@ -49,6 +49,7 @@ export default class TurtlesView {
         })
     }
     drawTurtle(turtle, viewData) {
+        if (viewData.size === 0) return // skip this turtle if size === 0
         if (this.useSprites) {
             let { sprite, noRotate } = viewData
             // If not the short form, create the image.

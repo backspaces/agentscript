@@ -1,25 +1,13 @@
 <html>
     <head>
-        <title>fire</title>
+        <title>roads</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
             import TwoDraw from '../src/TwoDraw.js'
-            import Color from '../src/Color.js'
-            import Model from '../models/FireModel.js'
-
-            const typeColors = {
-                dirt: Color.cssToPixel('yellow'),
-                tree: Color.cssToPixel('green'),
-                fire: Color.cssToPixel('red'),
-                ember4: Color.rgbaToPixel(255 - 25, 0, 0),
-                ember3: Color.rgbaToPixel(255 - 50, 0, 0),
-                ember2: Color.rgbaToPixel(255 - 75, 0, 0),
-                ember1: Color.rgbaToPixel(255 - 100, 0, 0),
-                ember0: Color.rgbaToPixel(255 - 125, 0, 0),
-            }
+            import Model from '../models/RoadsModel.js'
 
             async function run() {
                 const model = new Model()
@@ -31,12 +19,21 @@
                     patchSize: 4,
                 })
 
+                const { Z, X, Y } = model.zxy
+                const baseUrl = `https://tile.openstreetmap.org/${Z}/${X}/${Y}.png`
+                const baseMapTile = await util.imagePromise(baseUrl)
+                const isIntersection = t => t.breed.name === 'intersections'
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
                         view.draw({
-                            patchColor: p => typeColors[p.type],
+                            patchColor: baseMapTile,
+                            turtleShape: 'circle',
+                            turtleColor: t =>
+                                isIntersection(t) ? 'blue' : 'red',
+                            turtleSize: t => (isIntersection(t) ? 2 : 1),
+                            linkColor: 'black',
                         })
                     },
                     500,

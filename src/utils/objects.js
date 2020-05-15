@@ -231,8 +231,9 @@ export function shuffle(array) {
 //     if (isString(f)) f = propFcn(f)
 //     return array.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
 // }
-// // Simple uniq on sorted or unsorted array.
-// export const uniqUnsorted = array => Array.from(new Set(array))
+
+// Simple uniq on sorted or unsorted array.
+export const uniq = array => Array.from(new Set(array))
 
 // Set operations on arrays
 // union: elements in a1 or a2

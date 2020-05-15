@@ -36,7 +36,7 @@ class FireModel extends Model {
         // this.density = 60 // percent
         // this.patches.askSet(p => { // patches static, askSet === ask
         this.patches.ask(p => {
-            if (p.x === this.world.minX) this.ignight(p)
+            if (p.x === this.world.minX) this.ignite(p)
             else if (util.randomInt(100) < this.density) p.type = this.treeType
             else p.type = this.dirtType
         })
@@ -50,7 +50,7 @@ class FireModel extends Model {
         this.fires.ask(p => {
             // AgentArray, vanilla ask
             p.neighbors4.ask(n => {
-                if (this.isTree(n)) this.ignight(n)
+                if (this.isTree(n)) this.ignite(n)
             })
             p.setBreed(this.embers)
         })
@@ -67,7 +67,7 @@ class FireModel extends Model {
         return this.fires.length + this.embers.length === 0
     }
 
-    ignight(p) {
+    ignite(p) {
         p.type = this.fireType
         p.setBreed(this.fires)
         this.burnedTrees++

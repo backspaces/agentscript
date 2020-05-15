@@ -931,8 +931,9 @@
     //     if (isString(f)) f = propFcn(f)
     //     return array.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
     // }
-    // // Simple uniq on sorted or unsorted array.
-    // export const uniqUnsorted = array => Array.from(new Set(array))
+
+    // Simple uniq on sorted or unsorted array.
+    const uniq = array => Array.from(new Set(array));
 
     // Set operations on arrays
     // union: elements in a1 or a2
@@ -1022,6 +1023,7 @@
         sortNums: sortNums,
         sortObjs: sortObjs,
         shuffle: shuffle,
+        uniq: uniq,
         union: union,
         intersection: intersection,
         difference: difference,
@@ -1340,12 +1342,18 @@
         //     }
         //     return result
         // }
+
+        uniq() {
+            // return AgentArray.fromArray(Array.from(new Set(this)))
+            return AgentArray.from(new Set(this))
+        }
+
         // Returns AgentArray of unique elements in this *sorted* AgentArray.
         // Use sortBy or clone & sortBy if needed.
-        uniq(f = util.identityFcn) {
-            if (util.isString(f)) f = o => o[f];
-            return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
-        }
+        // uniq(f = util.identityFcn) {
+        //     if (util.isString(f)) f = o => o[f]
+        //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
+        // }
 
         // Call fcn(agent, index, array) for each agent in AgentArray.
         // Array assumed not mutable

@@ -24,12 +24,21 @@ export default class TwoDraw {
         this.view = new TwoView(model.world, twoViewOptions)
     }
 
+    // The parameters are easily mistaken: check they are all in the defaults.
+    checkParams(params) {
+        const keys = Object.keys(params)
+        const defaults = TwoDraw.defaultOptions()
+        keys.forEach(k => {
+            if (defaults[k] === undefined)
+                throw Error('Unknown TwoDraw parameter: ' + k)
+        })
+    }
     // The simple default draw() function.
     // The params object overrides the default options.
     // randomTurtle(t) {return turtlesMap.atIndex(l.id).css}
     draw(params = {}) {
-        params = Object.assign({}, TwoDraw.defaultOptions(), params)
-        const {
+        // params = Object.assign({}, TwoDraw.defaultOptions(), params)
+        let {
             patchColor,
             turtleColor,
             turtleShape,
@@ -39,10 +48,17 @@ export default class TwoDraw {
             patchesMap,
             turtlesMap,
             initPatches,
-        } = params
+        } = Object.assign({}, TwoDraw.defaultOptions(), params)
         const { model, view } = this
 
         if (view.ticks === 0) {
+            if (typeof turtlesMap === 'string')
+                turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
+            if (typeof patchesMap === 'string')
+                patchesMap = params.patchesMap = ColorMap[patchesMap]
+
+            this.checkParams(params) // just once
+
             if (initPatches) {
                 const colors = initPatches(model, view)
                 view.createPatchPixels(i => colors[i].pixel)
@@ -75,7 +91,6 @@ export default class TwoDraw {
         }))
 
         view.drawTurtles(model.turtles, t => ({
-            // shape: turtleShape,
             shape:
                 typeof turtleShape === 'function'
                     ? turtleShape(t)
