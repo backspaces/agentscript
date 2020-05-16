@@ -114,7 +114,7 @@ export default class TwoDraw {
 
         if (textProperty) {
             model.turtles.ask(t => {
-                if (t[textProperty])
+                if (t[textProperty] != null)
                     view.drawText(t[textProperty], t.x, t.y, textColor)
             })
         }

@@ -39,14 +39,11 @@ class GridPathModel extends Model {
         this.walker.choices = ok.length
 
         let turtle = this.walker.hatch()[0]
-        // this.walker.choices = ok.length
         ;[this.walker, turtle] = [turtle, this.walker]
 
         this.walker.moveTo(ok.oneOf())
         this.walker.patch.occupied = true
-        // this.walker.choices = this.okNeighbors(this.walker.patch).length
 
-        // this.walker.patch.occupied = true
         this.links.createOne(this.walker, turtle)
 
         this.probability /= ok.length
