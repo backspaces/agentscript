@@ -60,15 +60,31 @@ export function setIdentity(ctx) {
 // * font is a HTML/CSS string like: "9px sans-serif"
 // * align is left right center start end
 // * baseline is top hanging middle alphabetic ideographic bottom
-export function setTextParams(
+export function setTextProperties(
     ctx,
     font,
     textAlign = 'center',
     textBaseline = 'middle'
 ) {
-    // ctx.font = font; ctx.textAlign = align; ctx.textBaseline = baseline
     Object.assign(ctx, { font, textAlign, textBaseline })
 }
+
+// Draw string of the given color at the xy location, in ctx pixel coords.
+// Use setIdentity .. reset if a transform is being used by caller.
+export function drawText(ctx, string, x, y, color, useIdentity = true) {
+    if (useIdentity) setIdentity(ctx)
+    ctx.fillStyle = color.css || color // OK to use Color.typedColor
+    ctx.fillText(string, x, y)
+    if (useIdentity) ctx.restore()
+}
+
+// # Draw string of the given color at the xy location, in ctx pixel coords.
+// # Use setIdentity .. reset if a transform is being used by caller.
+// ctxDrawText: (ctx, string, x, y, color, setIdentity = true) ->
+//   @setIdentity(ctx) if setIdentity
+//   ctx.fillStyle = color.css # @colorStr color
+//   ctx.fillText(string, x, y)
+//   ctx.restore() if setIdentity
 
 // Return the (complete) ImageData object for this context object
 export function ctxImageData(ctx) {

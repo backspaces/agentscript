@@ -28,6 +28,7 @@ export default class GridPathModel extends Model {
         this.walker = this.turtles.createOne()
         this.walker.moveTo(this.patches.first())
         this.walker.patch.occupied = true
+        // this.walker.choices = 2
     }
 
     step() {
@@ -35,13 +36,23 @@ export default class GridPathModel extends Model {
         this.floodFill()
 
         const ok = this.okNeighbors(this.walker.patch)
+        this.walker.choices = ok.length
+
         let turtle = this.walker.hatch()[0]
+        // this.walker.choices = ok.length
         ;[this.walker, turtle] = [turtle, this.walker]
+
         this.walker.moveTo(ok.oneOf())
         this.walker.patch.occupied = true
+        // this.walker.choices = this.okNeighbors(this.walker.patch).length
+
+        // this.walker.patch.occupied = true
         this.links.createOne(this.walker, turtle)
 
         this.probability /= ok.length
+
+        if (this.done())
+            this.walker.choices = this.okNeighbors(this.walker.patch).length
     }
 
     done() {
@@ -58,7 +69,6 @@ export default class GridPathModel extends Model {
         while (pset.length > 0) {
             pset.ask(p => (p.ok = true))
             pset.ask(p => (p.step = step))
-            // let pnext = Array.from(new Set(pset.map(p => p.neighbors4).flat()))
             let pnext = pset
                 .map(p => p.neighbors4)
                 .flat()

@@ -19,6 +19,8 @@
                     patchSize: 50,
                 })
 
+                util.toWindow({ model, view, util })
+
                 await util.timeoutLoop(
                     () => {
                         model.step()
@@ -29,6 +31,9 @@
                             turtleSize: 0.5,
                             linkColor: 'red',
                             patchesMap: 'LightGray',
+                            textProperty: 'choices',
+                            textColor: 'white',
+                            textSize: 0.3,
                         })
                     },
                     500,

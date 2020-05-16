@@ -111,4 +111,15 @@ export default class TwoView {
     drawLinks(data, viewFcn) {
         this.turtlesView.drawLinks(data, viewFcn)
     }
+
+    setTextProperties(font, textAlign = 'center', textBaseline = 'middle') {
+        if (typeof font === 'number')
+            font = `${this.patchSize * font}px sans-serif`
+        util.setTextProperties(this.ctx, font, textAlign, textBaseline)
+    }
+    drawText(string, x, y, color = 'black') {
+        ;[x, y] = this.world.patchXYtoPixelXY(x, y, this.patchSize)
+        string = '' + string // convert numeric values to strings
+        util.drawText(this.ctx, string, x, y, color)
+    }
 }

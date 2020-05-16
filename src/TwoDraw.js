@@ -13,6 +13,9 @@ export default class TwoDraw {
             linkWidth: 1,
             patchesMap: ColorMap.DarkGray,
             turtlesMap: ColorMap.Basic16,
+            textProperty: null,
+            textSize: 0.5,
+            textColor: 'black',
             initPatches: null,
         }
     }
@@ -47,6 +50,9 @@ export default class TwoDraw {
             linkWidth,
             patchesMap,
             turtlesMap,
+            textProperty,
+            textSize,
+            textColor,
             initPatches,
         } = Object.assign({}, TwoDraw.defaultOptions(), params)
         const { model, view } = this
@@ -57,7 +63,9 @@ export default class TwoDraw {
             if (typeof patchesMap === 'string')
                 patchesMap = params.patchesMap = ColorMap[patchesMap]
 
-            this.checkParams(params) // just once
+            this.checkParams(params)
+
+            if (textProperty) view.setTextProperties(textSize)
 
             if (initPatches) {
                 const colors = initPatches(model, view)
@@ -103,6 +111,13 @@ export default class TwoDraw {
                     : turtleColor,
             size: typeof turtleSize === 'function' ? turtleSize(t) : turtleSize,
         }))
+
+        if (textProperty) {
+            model.turtles.ask(t => {
+                if (t[textProperty])
+                    view.drawText(t[textProperty], t.x, t.y, textColor)
+            })
+        }
 
         view.tick()
     }
