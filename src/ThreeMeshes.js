@@ -170,7 +170,8 @@ export class QuadSpritesMesh extends BaseMesh {
         const material = new THREE.MeshBasicMaterial({
             map: texture,
             alphaTest: 0.5,
-            // side: THREE.DoubleSide,
+            // Lets us see underside. Maybe not always?
+            side: THREE.DoubleSide,
         })
 
         this.mesh = new THREE.Mesh(geometry, material)

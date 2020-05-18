@@ -49,3 +49,29 @@ export default class FloodFill {
         while (!this.done) this.floodOnce()
     }
 }
+
+// as-app3d exit1
+// floodFill(exit) {
+//     let pset = new Set([exit])
+//     const flood = exit.floodVar
+//     this.inside.ask(p => {
+//         p[flood] = -1
+//     })
+//     let distance = 0
+
+//     while (pset.size > 0) {
+//         const pnext = new Set()
+//         for (const p of pset) {
+//             p[flood] = distance
+//         }
+//         for (const p of pset) {
+//             const next = p[UI.NeighborType].filter(p => p[flood] === -1)
+//             for (const p of next) {
+//                 pnext.add(p)
+//             }
+//         }
+
+//         pset = pnext
+//         distance += 1
+//     }
+// }

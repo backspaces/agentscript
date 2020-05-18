@@ -7,7 +7,20 @@ const linkColor = 'rgba(255, 255, 255, 0.50'
 const shape = 'dart'
 const shapeSize = 2
 
-const viewOptions = { div: 'modelDiv' } // default is document.body
+// const viewOptions = { div: 'modelDiv' } // default is document.body
+
+const viewOptions = {
+    div: 'modelDiv', // default is document.body
+    turtles: {
+        meshClass: 'PointsMesh',
+        // options: { color: 'red', z: 1.5 },
+        options: { z: 1.5, pointSize: 2 },
+    },
+    links: {
+        meshClass: 'LinksMesh',
+        options: { color: 'white' },
+    },
+}
 
 function newView(model, options = {}) {
     const view = new ThreeView(model.world, Object.assign(viewOptions, options))
@@ -22,7 +35,10 @@ function drawView(model, view) {
     view.drawLinks(model.links, { color: linkColor, width: 1 })
     view.drawTurtles(model.turtles, t => ({
         shape: shape,
-        color: turtleColors.atIndex(t.id).css,
+        color:
+            view.renderOptions.turtles.meshClass === 'PointsMesh'
+                ? turtleColors.atIndex(t.id).webgl
+                : turtleColors.atIndex(t.id).css,
         size: shapeSize,
     }))
 
