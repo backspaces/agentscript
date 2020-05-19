@@ -34,7 +34,8 @@
         "ava": "0.25.0",
         "build-bin": "rollup -f umd -n gis src/gis.js > bin/gis.umd.js",
         "postinstall": "rollup -c rollup.three.js",
-        "Node settig for esm: ": "type: module"
+        "Node settig for esm: ": "type: module",
+        "three": "^0.89.0"
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
@@ -67,7 +68,7 @@
     "dependencies": {
         "chart.js": "^2.8.0",
         "dat.gui": "^0.7.6",
-        "three": "latest"
+        "three": "0.108.0"
     },
     "devDependencies": {
         "@pika/web": "^0.4.3",
@@ -76,7 +77,7 @@
         "esm": "^3.2.25",
         "live-server": "latest",
         "npm-run-all": "4.1.2",
-        "puppeteer": "latest",
+        "puppeteer": "2.1.1",
         "rollup": "^1.15.0",
         "rollup-plugin-commonjs": "^10.1.0",
         "rollup-plugin-copy": "^3.1.0",
