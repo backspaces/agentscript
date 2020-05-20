@@ -36,7 +36,7 @@ function drawView(model, view) {
     view.drawTurtles(model.turtles, t => ({
         shape: shape,
         color:
-            view.renderOptions.turtles.meshClass === 'PointsMesh'
+            view.options.turtles.meshClass === 'PointsMesh'
                 ? turtleColors.atIndex(t.id).webgl
                 : turtleColors.atIndex(t.id).css,
         size: shapeSize,

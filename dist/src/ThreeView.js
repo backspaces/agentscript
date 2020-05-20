@@ -18,6 +18,7 @@ export default class ThreeView {
             useAxes: useThreeHelpers, // show x,y,z axes
             useGrid: useThreeHelpers, // show x,y plane
             useControls: useThreeHelpers, // navigation. REMIND: control name?
+            // REMIND: put in quadsprite options, defaulting to 64
             spriteSize: 64,
             patches: {
                 meshClass: 'PatchesMesh',
@@ -58,13 +59,13 @@ export default class ThreeView {
         if (!this.div.height) this.div.style.height = '600px'
 
         this.world = new World(world.world || world) // world can be model
-        this.renderOptions = options
+        this.options = options
         this.steps = 0
 
-        if (this.renderOptions.spriteSize !== 0) {
-            const isPOT = util.isPowerOf2(this.renderOptions.spriteSize)
+        if (this.options.spriteSize !== 0) {
+            const isPOT = util.isPowerOf2(this.options.spriteSize)
             this.spriteSheet = new SpriteSheet(
-                this.renderOptions.spriteSize,
+                this.options.spriteSize,
                 16,
                 isPOT
             )
@@ -84,7 +85,7 @@ export default class ThreeView {
     // Init Three.js core: scene, camera, renderer
     initThree() {
         const { clientWidth, clientHeight } = this.div
-        const { orthoView, clearColor } = this.renderOptions
+        const { orthoView, clearColor } = this.options
         // const {width, height, centerX, centerY} = this.world
         // const { width, height } = this.world
         const [width, height] = this.world.getWorldSize()
@@ -161,7 +162,7 @@ export default class ThreeView {
         const { clientWidth, clientHeight } = this.div
         const [width, height] = this.world.getWorldSize() // w/o "patchSize"
 
-        if (this.renderOptions.orthoView) {
+        if (this.options.orthoView) {
             const zoom = Math.min(clientWidth / width, clientHeight / height)
             this.renderer.setSize(zoom * width, zoom * height)
         } else {
@@ -171,8 +172,8 @@ export default class ThreeView {
         }
     }
     toggleCamera() {
-        this.renderOptions.orthoView = !this.renderOptions.orthoView
-        if (this.renderOptions.orthoView) {
+        this.options.orthoView = !this.options.orthoView
+        if (this.options.orthoView) {
             this.camera = this.orthographicCam
         } else {
             this.camera = this.perspectiveCam
@@ -198,7 +199,7 @@ export default class ThreeView {
     initThreeHelpers() {
         const { scene, renderer, camera } = this
         // const {useAxes, useGrid, useControls, useStats, useGUI} = this
-        const { useAxes, useGrid, useControls } = this.renderOptions
+        const { useAxes, useGrid, useControls } = this.options
         const { width } = this.world
         const helpers = {}
 
@@ -221,13 +222,15 @@ export default class ThreeView {
 
     initMeshes() {
         this.meshes = {}
-        util.forLoop(this.renderOptions, (val, key) => {
+        util.forLoop(this.options, (val, key) => {
             if (val.meshClass) {
                 const Mesh = ThreeMeshes[val.meshClass]
-                const options = Mesh.options() // default options
-                // override by user's
-                if (val.options) Object.assign(options, val.options)
-                const mesh = new ThreeMeshes[val.meshClass](this, options)
+                const options = val.options // null ok
+                // const options = Mesh.options() // default options
+                // // override by user's
+                // if (val.options) Object.assign(options, val.options)
+                // const mesh = new ThreeMeshes[val.meshClass](this, options)
+                const mesh = new Mesh(this, options)
                 this.meshes[key] = mesh
                 mesh.init() // can be called again by modeler
             }

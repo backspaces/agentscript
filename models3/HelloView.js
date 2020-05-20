@@ -14,10 +14,10 @@ const viewOptions = {
     //     // options: { color: 'red', z: 1.5 },
     //     options: { z: 1.5 },
     // },
-    links: {
-        meshClass: 'LinksMesh',
-        options: { color: 'white' },
-    },
+    // links: {
+    //     meshClass: 'LinksMesh',
+    //     options: { color: linkColor },
+    // },
 }
 
 function newView(model, options = {}) {
@@ -30,11 +30,11 @@ function newView(model, options = {}) {
 function drawView(model, view) {
     // view.drawPatches() // redraw cached patches colors
 
-    view.drawLinks(model.links, { color: linkColor, width: 1 })
+    view.drawLinks(model.links, { color: 'rgba(255, 255, 255, 0.50' })
     view.drawTurtles(model.turtles, t => ({
         shape: shape,
         // color: turtleColors.atIndex(t.id).css,
-        color: turtleColors.atIndex(t.id).webgl,
+        color: turtleColors.atIndex(t.id).css,
         size: shapeSize,
     }))
 

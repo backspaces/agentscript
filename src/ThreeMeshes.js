@@ -19,12 +19,15 @@ const unitQuad = createQuad(0.5, 0)
 // An abstract class for all Meshes.
 export class BaseMesh {
     // static options(): https://goo.gl/sKdxoY
-    constructor(view, options = this.constructor.options()) {
+    constructor(view, options = {}) {
+        this.view = view
+        // Overide default options
+        options = Object.assign(this.constructor.options(), options)
         const { scene, world } = view
         Object.assign(this, { scene, world, view, options })
         this.mesh = null
         this.name = this.constructor.name
-        this.useSprites = this.name.match(/sprites/i) != null
+        // this.useSprites = this.name.match(/sprites/i) != null
     }
     dispose() {
         if (!this.mesh) return
@@ -57,9 +60,24 @@ export class BaseMesh {
 // ============= CanvasMesh =============
 
 export class CanvasMesh extends BaseMesh {
-    init(canvas, useSegments = false) {
+    static options() {
+        return {
+            // https://threejs.org/docs/#api/en/textures/Texture
+            textureOptions: {
+                minFilter: THREE.LinearFilter,
+                magFilter: THREE.LinearFilter,
+            },
+            z: 1.0,
+            useSegments: false,
+            canvas: null, // fill in w/ BaseMesh ctor options
+        }
+    }
+    // init(canvas, useSegments = false) {
+    // init(canvas = this.canvas) {
+    init(canvas = this.options.canvas) {
+        // init() {
         if (this.mesh) this.dispose()
-        const { textureOptions, z } = this.options
+        const { textureOptions, useSegments, z } = this.options
         Object.assign(this, { canvas, z, textureOptions })
         const { width, height, centerX, centerY } = this.world
 
@@ -82,7 +100,7 @@ export class CanvasMesh extends BaseMesh {
             map: texture,
             // shading: THREE.FlatShading, // obsolete
             // https://threejsfundamentals.org/threejs/lessons/threejs-materials.html
-            flatShading: true, // ?? default false.
+            // flatShading: true, // ?? default false.
             side: THREE.DoubleSide,
             transparent: true,
         })
@@ -123,20 +141,25 @@ export class CanvasMesh extends BaseMesh {
 
 // Patch meshes are a form of Canvas Mesh
 export class PatchesMesh extends CanvasMesh {
+    // REMIND: use CanvasMesh options?
     static options() {
         return {
+            // https://threejs.org/docs/#api/en/textures/Texture
             textureOptions: {
                 minFilter: THREE.NearestFilter,
                 magFilter: THREE.NearestFilter,
-                // minFilter: THREE.LinearFilter,
-                // magFilter: THREE.NearestFilter,
             },
             z: 1.0,
             useSegments: false,
+            // get canvas() {
+            //     return this.view.patchesView.ctx.canvas
+            // },
         }
     }
     init(canvas = this.view.patchesView.ctx.canvas) {
-        super.init(canvas, this.options.useSegments)
+        // init() {
+        // super.init(canvas, this.options.useSegments)
+        super.init(canvas)
     }
     update(data, viewFcn = d => d) {
         this.view.patchesView.setPixels(data, viewFcn)
@@ -240,7 +263,7 @@ export class PointsMesh extends BaseMesh {
         if (this.mesh) this.dispose()
         const pointSize = this.options.pointSize // REMIND: variable or fixed?
         this.fixedColor = this.options.color
-            ? new THREE.Color(this.options.color)
+            ? this.options.color //new  THREE.Color(this.options.color)
             : null
 
         const geometry = new THREE.BufferGeometry()

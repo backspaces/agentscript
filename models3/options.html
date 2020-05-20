@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <title>options</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import ColorMap from '../src/ColorMap.js'
+            import ThreeView from '../src/ThreeView.js'
+            import Model from '../models/Hello3Model.js'
+
+            const patchesMap = ColorMap.LightGray
+            const turtlesMap = ColorMap.Basic16
+
+            const options = {
+                patches: {
+                    points: {
+                        meshClass: 'PointsMesh',
+                        options: { pointSize: 2, z: 1.5 },
+                    },
+                    canvas: {
+                        meshClass: 'CanvasMesh',
+                        options: { canvas: null },
+                    },
+                    patches: {
+                        meshClass: 'PatchesMesh',
+                        options: {},
+                    },
+                },
+                links: {
+                    mono: {
+                        meshClass: 'LinksMesh',
+                        options: { color: 'red' },
+                    },
+                    color: {
+                        meshClass: 'LinksMesh',
+                        options: {},
+                    },
+                },
+                turtles: {
+                    monoPoints: {
+                        meshClass: 'PointsMesh',
+                        options: { color: 'blue', pointSize: 2, z: 1.5 },
+                    },
+                    colorPoints: {
+                        meshClass: 'PointsMesh',
+                        options: { pointSize: 2, z: 1.5 },
+                    },
+                    sprites: {
+                        meshClass: 'QuadSpritesMesh',
+                        options: { pointSize: 3 },
+                    },
+                },
+            }
+            function draw(model, view) {
+                if (view.steps === 0) {
+                    if (view.options.patches.meshClass === 'PatchesMesh')
+                        view.createPatchPixels(
+                            i => patchesMap.randomColor().pixel
+                        )
+                    else
+                        view.drawPatches(model.patches, p => ({
+                            color: patchesMap.randomColor().webgl,
+                        }))
+                }
+
+                view.drawLinks(model.links, l => ({
+                    color: !view.options.links.options.color
+                        ? turtlesMap.atIndex(l.id).webgl
+                        : null,
+                }))
+
+                const turtleClass = view.options.turtles.meshClass
+                view.drawTurtles(model.turtles, t => ({
+                    shape: 'dart', // ignored by points
+                    color:
+                        turtleClass === 'QuadSpritesMesh'
+                            ? turtlesMap.atIndex(t.id).css
+                            : turtlesMap.atIndex(t.id).webgl,
+                    size: '1', // ignored by points
+                }))
+
+                view.render()
+            }
+
+            async function run() {
+                const image = await util.imagePromise(
+                    'https://tile.openstreetmap.org/14/3370/6451.png'
+                    // '../tests/santafe.png'
+                )
+                console.log(image)
+                options.patches.canvas.options.canvas = image
+
+                const model = new Model()
+                await model.startup()
+                model.setup()
+
+                const view = new ThreeView(model, {
+                    div: 'modelDiv',
+                    patches: util.oneValOf(options.patches),
+                    turtles: util.oneValOf(options.turtles),
+                    links: util.oneValOf(options.links),
+                })
+                console.log(view.options)
+
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick()
+                        draw(model, view)
+                    },
+                    500,
+                    33
+                )
+                console.log('done, idling.')
+                view.idle()
+            }
+            run()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>
