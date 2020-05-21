@@ -1,10 +1,7 @@
 // Meshes used by the Three.js view module
 
-// import THREE from '../dist/three.wrapper.js'
-// import * as THREE from '../node_modules/three/build/three.module.js'
 import { THREE } from '../dist/three.esm.min.js'
 import util from './util.js'
-// import Turtle from './Turtle.js'
 
 function createQuad(r, z = 0) {
     // r is radius of xy quad: [-r,+r], z is quad z
@@ -20,7 +17,7 @@ const unitQuad = createQuad(0.5, 0)
 export class BaseMesh {
     // static options(): https://goo.gl/sKdxoY
     constructor(view, options = {}) {
-        this.view = view
+        // this.view = view
         // Overide default options
         options = Object.assign(this.constructor.options(), options)
         const { scene, world } = view
@@ -72,10 +69,7 @@ export class CanvasMesh extends BaseMesh {
             canvas: null, // fill in w/ BaseMesh ctor options
         }
     }
-    // init(canvas, useSegments = false) {
-    // init(canvas = this.canvas) {
     init(canvas = this.options.canvas) {
-        // init() {
         if (this.mesh) this.dispose()
         const { textureOptions, useSegments, z } = this.options
         Object.assign(this, { canvas, z, textureOptions })
@@ -83,9 +77,6 @@ export class CanvasMesh extends BaseMesh {
 
         const texture = new THREE.CanvasTexture(canvas)
         Object.assign(texture, textureOptions)
-        // for (const key in textureOptions) {
-        //     texture[key] = textureOptions[key]
-        // }
 
         const geometry = new THREE.PlaneBufferGeometry(
             width,
@@ -117,7 +108,7 @@ export class CanvasMesh extends BaseMesh {
 // Several classes for patches, turtles, links, etc.
 
 // ============= DrawingMesh =============
-
+// For now, just use CanvasMesh
 // Drawing meshes are a form of Canvas Mesh
 // export class DrawingMesh extends CanvasMesh {
 //     static options() {
@@ -151,9 +142,6 @@ export class PatchesMesh extends CanvasMesh {
             },
             z: 1.0,
             useSegments: false,
-            // get canvas() {
-            //     return this.view.patchesView.ctx.canvas
-            // },
         }
     }
     init(canvas = this.view.patchesView.ctx.canvas) {
@@ -331,9 +319,6 @@ export class LinksMesh extends BaseMesh {
         this.fixedColor = this.options.color
             ? new THREE.Color(this.options.color)
             : null
-        // const color = this.options.color
-        //     ? new THREE.Color(this.options.color)
-        //     : null
 
         const geometry = new THREE.BufferGeometry()
         geometry.addAttribute(
@@ -389,12 +374,3 @@ export default {
     PointsMesh,
     LinksMesh,
 }
-
-/*
-
-- PlaneGeometry: switch to PlaneBufferGeometry
-- make resize work
-- test non centered world
-
-
-*/
