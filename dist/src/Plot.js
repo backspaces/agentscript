@@ -1,4 +1,4 @@
-import Chart from '../dist/chart.esm.js'
+import Chart from '../vendor/chart.esm.js'
 import util from './util.js'
 
 // Using https://github.com/chartjs/Chart.js

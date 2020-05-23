@@ -6,7 +6,7 @@ export default [
     {
         input: 'three.index.js',
         output: {
-            file: 'dist/three.esm.min.js',
+            file: 'vendor/three.esm.min.js',
             format: 'es',
             banner: '/* eslint-disable */',
         },
@@ -15,7 +15,7 @@ export default [
     {
         input: 'three.index.js',
         output: {
-            file: 'dist/three.esm.js',
+            file: 'vendor/three.esm.js',
             format: 'es',
             banner: '/* eslint-disable */',
         },
@@ -23,7 +23,7 @@ export default [
     {
         input: 'node_modules/dat.gui/build/dat.gui.module.js',
         output: {
-            file: 'dist/dat.gui.esm.min.js',
+            file: 'vendor/dat.gui.esm.min.js',
             format: 'es',
             banner: '/* eslint-disable */',
         },
@@ -33,7 +33,7 @@ export default [
                 targets: [
                     {
                         src: 'node_modules/dat.gui/build/dat.gui.module.js',
-                        dest: 'dist',
+                        dest: 'vendor',
                         rename: 'dat.gui.esm.js',
                     },
                 ],
@@ -43,7 +43,7 @@ export default [
     {
         input: 'node_modules/chart.js/dist/Chart.bundle.js',
         output: {
-            file: 'dist/chart.esm.min.js',
+            file: 'vendor/chart.esm.min.js',
             format: 'esm',
         },
         plugins: [terser(), commonjs()],
@@ -51,7 +51,7 @@ export default [
     {
         input: 'node_modules/chart.js/dist/Chart.bundle.js',
         output: {
-            file: 'dist/chart.esm.js',
+            file: 'vendor/chart.esm.js',
             format: 'esm',
         },
         plugins: [commonjs()],

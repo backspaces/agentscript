@@ -1,6 +1,6 @@
 // Meshes used by the Three.js view module
 
-import { THREE } from '../dist/three.esm.min.js'
+import { THREE } from '../vendor/three.esm.min.js'
 import util from './util.js'
 
 function createQuad(r, z = 0) {

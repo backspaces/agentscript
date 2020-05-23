@@ -635,9 +635,11 @@
     // ### Geometry
 
     // Degrees & Radians
+    // Note: quantity, not coord system xfm
     const radians = degrees => (degrees * Math.PI) / 180;
     const degrees = radians => (radians * 180) / Math.PI;
-    // Heading & Angles:
+
+    // Heading & Angles: coord system
     // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
     // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
     function heading(radians) {
@@ -647,8 +649,14 @@
     }
     function angle(heading) {
         // headingToAngle?
-        const degrees = mod(360 - heading, 360);
-        return radians(degrees)
+        const deg = mod(90 - heading, 360);
+        return radians(deg)
+    }
+    function headingToDegrees(heading) {
+        return mod(90 - heading, 360)
+    }
+    function degreesToHeading(degrees) {
+        return mod(90 - degrees, 360)
     }
     // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
     // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
@@ -676,6 +684,7 @@
     // Return squared distance .. i.e. avoid Math.sqrt. Faster comparisons
     const sqDistance = (x, y, x1, y1) =>
         (x - x1) * (x - x1) + (y - y1) * (y - y1);
+
     // Return true if x,y is within cone.
     // Cone: origin x0,y0 in given direction, with coneAngle width in radians.
     // All angles in radians
@@ -707,6 +716,8 @@
         degrees: degrees,
         heading: heading,
         angle: angle,
+        headingToDegrees: headingToDegrees,
+        degreesToHeading: degreesToHeading,
         subtractRadians: subtractRadians,
         subtractHeadings: subtractHeadings,
         radiansToward: radiansToward,

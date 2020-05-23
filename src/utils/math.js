@@ -80,9 +80,11 @@ export function lerpScale(number, lo, hi) {
 // ### Geometry
 
 // Degrees & Radians
+// Note: quantity, not coord system xfm
 export const radians = degrees => (degrees * Math.PI) / 180
 export const degrees = radians => (radians * 180) / Math.PI
-// Heading & Angles:
+
+// Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
 // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
 export function heading(radians) {
@@ -92,8 +94,14 @@ export function heading(radians) {
 }
 export function angle(heading) {
     // headingToAngle?
-    const degrees = mod(360 - heading, 360)
-    return radians(degrees)
+    const deg = mod(90 - heading, 360)
+    return radians(deg)
+}
+export function headingToDegrees(heading) {
+    return mod(90 - heading, 360)
+}
+export function degreesToHeading(degrees) {
+    return mod(90 - degrees, 360)
 }
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
@@ -121,6 +129,7 @@ export const distance = (x, y, x1, y1) => Math.sqrt(sqDistance(x, y, x1, y1))
 // Return squared distance .. i.e. avoid Math.sqrt. Faster comparisons
 export const sqDistance = (x, y, x1, y1) =>
     (x - x1) * (x - x1) + (y - y1) * (y - y1)
+
 // Return true if x,y is within cone.
 // Cone: origin x0,y0 in given direction, with coneAngle width in radians.
 // All angles in radians
