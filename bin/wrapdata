@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+const process = require('process')
+
+let data = ''
+process.stdin.on('readable', () => {
+    while ((chunk = process.stdin.read()) !== null) {
+        data += chunk
+    }
+})
+
+process.stdin.on('end', () => {
+    process.stdout.write(processData(data))
+})
+
+function processData(data) {
+    data = `export default \`${data}\``
+    return data
+}

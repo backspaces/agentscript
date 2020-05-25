@@ -28,7 +28,7 @@
     "bugs": {
         "url": "https://github.com/backspaces/agentscript/issues"
     },
-    "mkdirs": "dist",
+    "mkdirs": "dist vendor",
     "scripts comments": {
         "name": "@redfish/agentscript",
         "ava": "0.25.0",
@@ -39,10 +39,11 @@
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "build": "npm-run-all clean build-scripts build-dist build-vendor",
-        "build-dist": "rollup -c && cp -R src dist",
+        "build": "npm-run-all clean build-scripts build-dist build-vendor build-css",
+        "build-dist": "rollup -c workflow/rollup.config.js && cp -R src dist",
         "build-scripts": "node bin/models2scripts",
-        "build-vendor": "rollup -c rollup.vendor.js",
+        "build-vendor": "rollup -c workflow/rollup.vendor.js",
+        "build-css": "bin/wrapcss < 'node_modules/mapbox-gl/dist/mapbox-gl.css' > vendor/mapboxgl.css.js",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
@@ -56,7 +57,7 @@
         "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",
         "start": "live-server &",
-        "temp": "bin/testsafari"
+        "temp": "rollup -c workflow/rollup.config.js"
     },
     "@pika/web": {
         "webDependencies": [
@@ -66,8 +67,10 @@
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
+        "@turf/turf": "^5.1.6",
         "chart.js": "^2.8.0",
         "dat.gui": "^0.7.6",
+        "mapbox-gl": "^1.10.1",
         "three": "0.108.0"
     },
     "devDependencies": {
@@ -83,6 +86,7 @@
         "rollup-plugin-copy": "^3.1.0",
         "rollup-plugin-terser": "^5.0.0",
         "shx": "0.3",
+        "snowpack": "^1.7.1",
         "terser": "^3.10.11"
     }
 }

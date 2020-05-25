@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>MBox</title>
+        <meta
+            name="viewport"
+            content="initial-scale=1,maximum-scale=1,user-scalable=no"
+        />
+        <style>
+            body {
+                margin: 10;
+                padding: 10;
+            }
+            #map {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                /* height: 800px; */
+                width: 95%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <script type="module">
+            // import mapboxcss from '../vendor/mapboxglcss.js'
+            import '../vendor/mapboxgl.css.js'
+            import mapboxgl from '../vendor/mapbox-gl.esm.js'
+            import * as turf from '../vendor/turf.esm.js'
+
+            import util from '../src/util.js'
+            import TwoView from '../src/TwoView.js'
+            import ColorMap from '../src/ColorMap.js'
+            import {
+                mapLoadPromise,
+                importModel,
+                bboxCenter,
+                bboxCoords,
+            } from '../src/mbtools.js'
+            // document.head.innerHTML += mapboxcss
+
+            const basicMap = ColorMap.Basic16
+
+            mapboxgl.accessToken =
+                'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
+
+            async function run() {
+                const counties = await util.xhrPromise(
+                    '../data/nmcounties.geojson',
+                    'json'
+                )
+                const bbox = turf.bbox(counties)
+                util.toWindow({ counties, bbox })
+
+                const model = await importModel(
+                    '../models/HelloModel.js',
+                    100,
+                    bbox
+                )
+                const xfm = model.world.bboxTransform(...bbox)
+                model.patches.ask(p => {
+                    const pt = xfm.toBBox([p.x, p.y])
+                    ;[p.geoX, p.geoY] = pt
+                    util.forLoop(counties.features, (f, i) => {
+                        if (turf.booleanPointInPolygon(pt, f)) {
+                            if (p.feature)
+                                console.log('p.feature exists', p.feature, f)
+                            p.feature = f
+                        }
+                    })
+                })
+                const nullFeature = {}
+                model.turtles.ask(t => (t.feature = t.patch.feature))
+
+                const view = new TwoView(model.world, {
+                    div: util.createCanvas(0, 0), // not offscreen}
+                })
+                util.toWindow({ model, view, util, xfm })
+
+                const map = new mapboxgl.Map({
+                    container: 'map', // container id
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: bboxCenter(bbox),
+                    zoom: 5.5,
+                    renderWorldCopies: false,
+                })
+                await mapLoadPromise(map)
+
+                map.addLayer(
+                    {
+                        id: 'nmcounties',
+                        type: 'line',
+                        source: {
+                            type: 'geojson',
+                            data: counties,
+                        },
+                        paint: {
+                            'line-color': 'blue',
+                            'line-width': 3,
+                        },
+                    },
+                    'settlement-label'
+                )
+
+                map.addLayer({
+                    id: 'BBox',
+                    type: 'line',
+                    source: {
+                        type: 'geojson',
+                        data: turf.featureCollection([turf.bboxPolygon(bbox)]),
+                    },
+                    paint: {
+                        'line-color': 'red',
+                    },
+                })
+
+                map.addSource('canvas', {
+                    type: 'canvas',
+                    canvas: view.canvas,
+                    animate: true,
+                    coordinates: bboxCoords(bbox), // 4 [lon,lat] arrays
+                })
+                map.addLayer({
+                    id: 'canvas',
+                    type: 'raster',
+                    source: 'canvas',
+                })
+
+                util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick()
+
+                        view.clear()
+                        // view.drawPatches()
+                        view.drawLinks(model.links, {
+                            color: 'gray',
+                            width: 1,
+                        })
+                        view.drawTurtles(model.turtles, t => ({
+                            shape: 'dart',
+                            color: basicMap.atIndex(t.id).css,
+                            size: 3,
+                        }))
+
+                        model.turtles.ask(t => {
+                            if (t.feature !== t.patch.feature) {
+                                t.feature = t.patch.feature
+                                const name = t.feature
+                                    ? t.feature.properties.NAME
+                                    : 'No Where'
+                                const population = t.feature
+                                    ? t.feature.properties.population
+                                    : 0
+                                console.log(
+                                    'new feature: turtle: ' + t.id + ',',
+                                    'county: ' + name + ',',
+                                    'population: ' + population
+                                )
+                            }
+                        })
+                    },
+                    -1,
+                    33
+                )
+            }
+            run()
+        </script>
+    </body>
+</html>

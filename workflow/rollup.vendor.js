@@ -4,7 +4,7 @@ import copy from 'rollup-plugin-copy'
 
 export default [
     {
-        input: 'three.index.js',
+        input: 'workflow/three.index.js',
         output: {
             file: 'vendor/three.esm.min.js',
             format: 'es',
@@ -13,7 +13,7 @@ export default [
         plugins: [terser()],
     },
     {
-        input: 'three.index.js',
+        input: 'workflow/three.index.js',
         output: {
             file: 'vendor/three.esm.js',
             format: 'es',
@@ -55,5 +55,41 @@ export default [
             format: 'esm',
         },
         plugins: [commonjs()],
+    },
+    {
+        input: 'node_modules/mapbox-gl/dist/mapbox-gl-unminified.js',
+        output: {
+            file: 'vendor/mapbox-gl.esm.js',
+            format: 'esm',
+        },
+        plugins: [commonjs()],
+    },
+    {
+        input: 'node_modules/mapbox-gl/dist/mapbox-gl-unminified.js',
+        output: {
+            file: 'vendor/mapbox-gl.esm.min.js',
+            format: 'esm',
+        },
+        plugins: [terser(), commonjs()],
+    },
+    {
+        input: 'node_modules/@turf/turf/turf.es.js',
+        output: {
+            file: 'vendor/turf.esm.min.js',
+            format: 'es',
+            banner: '/* eslint-disable */',
+        },
+        plugins: [
+            terser(),
+            copy({
+                targets: [
+                    {
+                        src: 'node_modules/@turf/turf/turf.es.js',
+                        dest: 'vendor',
+                        rename: 'turf.esm.js',
+                    },
+                ],
+            }),
+        ],
     },
 ]
