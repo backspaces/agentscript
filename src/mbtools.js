@@ -4,31 +4,16 @@ export function mapLoadPromise(map) {
     })
 }
 
-// export async function importModel(url, width, bbox) {
-//     const [west, south, east, north] = bbox
-//     const aspect = (east - west) / (north - south)
-
-//     const Model = (await import(url)).default
-//     const worldOptions = {
-//         minX: 0,
-//         minY: 0,
-//         maxX: width,
-//         maxY: Math.round(width / aspect),
-//     }
-//     const model = new Model(worldOptions)
-//     await model.startup()
-//     model.setup()
-
-//     util.toWindow({ Model, model, width, aspect, worldOptions })
-//     return model
-// }
-export async function importModel(url, width, bbox) {
+export async function importModel(url) {
     const Model = (await import(url)).default
+    return Model
+}
+export function modelFromBBox(Model, width, bbox) {
+    // const Model = (await import(url)).default
     const worldOptions = worldFromBBox(width, bbox)
     const model = new Model(worldOptions)
-    await model.startup()
-    model.setup()
-
+    // await model.startup()
+    // model.setup()
     return model
 }
 
@@ -64,6 +49,7 @@ export default {
     mapLoadPromise,
     worldFromBBox,
     importModel,
+    modelFromBBox,
     bboxCenter,
     bboxCoords,
 }

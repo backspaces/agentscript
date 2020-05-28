@@ -38,6 +38,13 @@ export function xhrPromise(url, type = 'text', method = 'GET') {
     })
 }
 
+// Hopefully tempory: promise for MapBox map loaded callback
+export function mapLoadPromise(map) {
+    return new Promise((resolve, reject) => {
+        map.on('load', () => resolve())
+    })
+}
+
 // Return promise for pause of ms. Use:
 // timeoutPromise(2000).then(()=>console.log('foo'))
 export function timeoutPromise(ms = 1000) {

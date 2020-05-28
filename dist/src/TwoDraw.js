@@ -2,7 +2,8 @@ import util from '../src/util.js'
 import TwoView from '../src/TwoView.js'
 import ColorMap from '../src/ColorMap.js'
 
-export default class TwoDraw {
+// export default class TwoDraw {
+export default class TwoDraw extends TwoView {
     static defaultOptions() {
         return {
             patchColor: 'random',
@@ -23,8 +24,10 @@ export default class TwoDraw {
     // ======================
 
     constructor(model, twoViewOptions = {}) {
+        super(model.world, twoViewOptions)
         this.model = model
-        this.view = new TwoView(model.world, twoViewOptions)
+        this.view = this
+        // this.view = new TwoView(model.world, twoViewOptions)
     }
 
     // The parameters are easily mistaken: check they are all in the defaults.
@@ -32,8 +35,13 @@ export default class TwoDraw {
         const keys = Object.keys(params)
         const defaults = TwoDraw.defaultOptions()
         keys.forEach(k => {
-            if (defaults[k] === undefined)
+            if (defaults[k] === undefined) {
+                console.log(
+                    'Legal TwoDraw parameters',
+                    Object.keys(TwoDraw.defaultOptions())
+                )
                 throw Error('Unknown TwoDraw parameter: ' + k)
+            }
         })
     }
     // The simple default draw() function.

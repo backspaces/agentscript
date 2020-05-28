@@ -39,6 +39,13 @@ function xhrPromise(url, type = 'text', method = 'GET') {
     })
 }
 
+// Hopefully tempory: promise for MapBox map loaded callback
+function mapLoadPromise(map) {
+    return new Promise((resolve, reject) => {
+        map.on('load', () => resolve());
+    })
+}
+
 // Return promise for pause of ms. Use:
 // timeoutPromise(2000).then(()=>console.log('foo'))
 function timeoutPromise(ms = 1000) {
@@ -95,6 +102,7 @@ var async = /*#__PURE__*/Object.freeze({
     imageBitmapPromise: imageBitmapPromise,
     canvasBlobPromise: canvasBlobPromise,
     xhrPromise: xhrPromise,
+    mapLoadPromise: mapLoadPromise,
     timeoutPromise: timeoutPromise,
     timeoutLoop: timeoutLoop,
     yieldLoop: yieldLoop,

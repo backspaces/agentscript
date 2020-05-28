@@ -24,23 +24,16 @@
     <body>
         <div id="map"></div>
         <script type="module">
-            // import mapboxcss from '../vendor/mapboxglcss.js'
             import '../vendor/mapboxgl.css.js'
             import mapboxgl from '../vendor/mapbox-gl.esm.js'
             import * as turf from '../vendor/turf.esm.js'
 
             import util from '../src/util.js'
-            import TwoView from '../src/TwoView.js'
+            import GeoWorld from '../src/GeoWorld.js'
+            import Model from '../models/HelloModel.js'
+            import TwoDraw from '../src/TwoDraw.js'
             import ColorMap from '../src/ColorMap.js'
-            import {
-                mapLoadPromise,
-                importModel,
-                bboxCenter,
-                bboxCoords,
-            } from '../src/mbtools.js'
-            // document.head.innerHTML += mapboxcss
-
-            const basicMap = ColorMap.Basic16
+            // import * as mbox from '../src/mbtools.js'
 
             mapboxgl.accessToken =
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
@@ -53,14 +46,15 @@
                 const bbox = turf.bbox(counties)
                 util.toWindow({ counties, bbox })
 
-                const model = await importModel(
-                    '../models/HelloModel.js',
-                    100,
-                    bbox
-                )
-                const xfm = model.world.bboxTransform(...bbox)
+                const world = new GeoWorld(bbox, 100)
+                const model = new Model(world)
+                await model.startup()
+                model.setup()
+                util.toWindow({ world, model })
+
+                // const xfm = model.world.bboxTransform(...bbox)
                 model.patches.ask(p => {
-                    const pt = xfm.toBBox([p.x, p.y])
+                    const pt = world.toGeo(p.x, p.y)
                     ;[p.geoX, p.geoY] = pt
                     util.forLoop(counties.features, (f, i) => {
                         if (turf.booleanPointInPolygon(pt, f)) {
@@ -70,22 +64,22 @@
                         }
                     })
                 })
-                const nullFeature = {}
                 model.turtles.ask(t => (t.feature = t.patch.feature))
 
-                const view = new TwoView(model.world, {
-                    div: util.createCanvas(0, 0), // not offscreen}
+                const draw = new TwoDraw(model, {
+                    div: util.createCanvas(0, 0),
                 })
-                util.toWindow({ model, view, util, xfm })
+                util.toWindow({ model, draw, util })
 
                 const map = new mapboxgl.Map({
                     container: 'map', // container id
                     style: 'mapbox://styles/mapbox/streets-v11',
-                    center: bboxCenter(bbox),
+                    center: world.bboxCenter(),
                     zoom: 5.5,
                     renderWorldCopies: false,
                 })
-                await mapLoadPromise(map)
+                await util.mapLoadPromise(map)
+                // await mbox.mapLoadPromise(map)
 
                 map.addLayer(
                     {
@@ -117,9 +111,9 @@
 
                 map.addSource('canvas', {
                     type: 'canvas',
-                    canvas: view.canvas,
+                    canvas: draw.view.canvas,
                     animate: true,
-                    coordinates: bboxCoords(bbox), // 4 [lon,lat] arrays
+                    coordinates: world.bboxCoords(), // 4 [lon,lat] arrays
                 })
                 map.addLayer({
                     id: 'canvas',
@@ -132,17 +126,11 @@
                         model.step()
                         model.tick()
 
-                        view.clear()
-                        // view.drawPatches()
-                        view.drawLinks(model.links, {
-                            color: 'gray',
-                            width: 1,
+                        draw.draw({
+                            patchColor: 'transparent',
+                            linkColor: 'gray',
+                            turtleSize: 3,
                         })
-                        view.drawTurtles(model.turtles, t => ({
-                            shape: 'dart',
-                            color: basicMap.atIndex(t.id).css,
-                            size: 3,
-                        }))
 
                         model.turtles.ask(t => {
                             if (t.feature !== t.patch.feature) {

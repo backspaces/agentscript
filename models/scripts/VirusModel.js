@@ -41,7 +41,7 @@ class VirusModel extends Model {
     setupNetwork() {
         // REMIND
         const numLinks = (this.averageNodeDegree * this.population) / 2
-        console.log(numLinks)
+        // console.log(numLinks)
 
         while (this.links.length < numLinks) {
             const t1 = this.turtles.oneOf()
