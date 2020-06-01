@@ -7,7 +7,7 @@
             name="viewport"
             content="initial-scale=1,maximum-scale=1,user-scalable=no"
         />
-        <style>
+        <!-- <style>
             body {
                 margin: 10;
                 padding: 10;
@@ -19,24 +19,62 @@
                 /* height: 800px; */
                 width: 95%;
             }
-        </style>
+        </style> -->
     </head>
     <body>
-        <div id="map"></div>
+        <!-- <div id="map"></div> -->
         <script type="module">
             import '../vendor/mapboxgl.css.js'
             import mapboxgl from '../vendor/mapbox-gl.esm.js'
             import * as turf from '../vendor/turf.esm.js'
+            import * as mbox from '../src/mbtools.js'
 
             import util from '../src/util.js'
             import GeoWorld from '../src/GeoWorld.js'
-            import Model from '../models/HelloModel.js'
+            import HelloModel from '../models/HelloModel.js'
             import TwoDraw from '../src/TwoDraw.js'
             import ColorMap from '../src/ColorMap.js'
-            // import * as mbox from '../src/mbtools.js'
 
             mapboxgl.accessToken =
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
+            mbox.setDefaultDivs()
+
+            class GeoModel extends HelloModel {
+                setup() {
+                    super.setup()
+                    this.patches.ask(p => {
+                        const pt = this.world.toGeo(p.x, p.y)
+                        ;[p.geoX, p.geoY] = pt
+                        util.forLoop(counties.features, (f, i) => {
+                            if (turf.booleanPointInPolygon(pt, f)) {
+                                if (p.feature)
+                                    console.log('p.feature exists', p)
+                                p.feature = f
+                            }
+                        })
+                    })
+                    this.turtles.ask(t => (t.feature = t.patch.feature))
+                }
+                step() {
+                    super.step()
+                    this.turtles.ask(t => {
+                        if (t.feature !== t.patch.feature) {
+                            t.feature = t.patch.feature
+                            const name = t.feature
+                                ? t.feature.properties.NAME
+                                : 'No Where'
+                            const population = t.feature
+                                ? t.feature.properties.population
+                                : 0
+                            console.log(
+                                'new feature: turtle: ' + t.id + ',',
+                                'county: ' + name + ',',
+                                'population: ' + population
+                            )
+                        }
+                    })
+                }
+            }
 
             async function run() {
                 const counties = await util.xhrPromise(
@@ -44,109 +82,84 @@
                     'json'
                 )
                 const bbox = turf.bbox(counties)
-                util.toWindow({ counties, bbox })
 
                 const world = new GeoWorld(bbox, 100)
-                const model = new Model(world)
+                const model = new GeoModel(world)
+                util.toWindow({ counties, bbox, world, model })
+
                 await model.startup()
                 model.setup()
-                util.toWindow({ world, model })
 
-                // const xfm = model.world.bboxTransform(...bbox)
-                model.patches.ask(p => {
-                    const pt = world.toGeo(p.x, p.y)
-                    ;[p.geoX, p.geoY] = pt
-                    util.forLoop(counties.features, (f, i) => {
-                        if (turf.booleanPointInPolygon(pt, f)) {
-                            if (p.feature)
-                                console.log('p.feature exists', p.feature, f)
-                            p.feature = f
-                        }
-                    })
-                })
-                model.turtles.ask(t => (t.feature = t.patch.feature))
-
-                const draw = new TwoDraw(model, {
+                const view = new TwoDraw(model, {
                     div: util.createCanvas(0, 0),
                 })
-                util.toWindow({ model, draw, util })
+                util.toWindow({ view, util })
 
-                const map = new mapboxgl.Map({
-                    container: 'map', // container id
-                    style: 'mapbox://styles/mapbox/streets-v11',
-                    center: world.bboxCenter(),
+                // const map = new mapboxgl.Map({
+                //     container: 'map', // container id
+                //     style: 'mapbox://styles/mapbox/streets-v11',
+                //     center: world.bboxCenter(),
+                //     zoom: 5.5,
+                //     renderWorldCopies: false,
+                // })
+                const map = mbox.newMap(mapboxgl, {
                     zoom: 5.5,
-                    renderWorldCopies: false,
+                    center: world.bboxCenter(),
                 })
                 await util.mapLoadPromise(map)
-                // await mbox.mapLoadPromise(map)
 
-                map.addLayer(
-                    {
-                        id: 'nmcounties',
-                        type: 'line',
-                        source: {
-                            type: 'geojson',
-                            data: counties,
-                        },
-                        paint: {
-                            'line-color': 'blue',
-                            'line-width': 3,
-                        },
-                    },
-                    'settlement-label'
-                )
+                // map.addLayer(
+                //     {
+                //         id: 'nmcounties',
+                //         type: 'line',
+                //         source: {
+                //             type: 'geojson',
+                //             data: counties,
+                //         },
+                //         paint: {
+                //             'line-color': 'blue',
+                //             'line-width': 3,
+                //         },
+                //     },
+                //     'settlement-label'
+                // )
+                mbox.addGeoLines(map, 'counties', counties, 'red', 3)
 
-                map.addLayer({
-                    id: 'BBox',
-                    type: 'line',
-                    source: {
-                        type: 'geojson',
-                        data: turf.featureCollection([turf.bboxPolygon(bbox)]),
-                    },
-                    paint: {
-                        'line-color': 'red',
-                    },
-                })
+                // map.addLayer({
+                //     id: 'BBox',
+                //     type: 'line',
+                //     source: {
+                //         type: 'geojson',
+                //         data: turf.featureCollection([turf.bboxPolygon(bbox)]),
+                //     },
+                //     paint: {
+                //         'line-color': 'red',
+                //     },
+                // })
+                mbox.addBBoxLayer(map, 'bbox', bbox, 'red')
 
-                map.addSource('canvas', {
-                    type: 'canvas',
-                    canvas: draw.view.canvas,
-                    animate: true,
-                    coordinates: world.bboxCoords(), // 4 [lon,lat] arrays
-                })
-                map.addLayer({
-                    id: 'canvas',
-                    type: 'raster',
-                    source: 'canvas',
-                })
+                // map.addSource('canvas', {
+                //     type: 'canvas',
+                //     canvas: view.canvas,
+                //     animate: true,
+                //     coordinates: world.bboxCoords(), // 4 [lon,lat] arrays
+                // })
+                // map.addLayer({
+                //     id: 'canvas',
+                //     type: 'raster',
+                //     source: 'canvas',
+                // })
+                mbox.addCanvasLayer(map, 'canvas', model, view)
 
                 util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
 
-                        draw.draw({
+                        view.draw({
                             patchColor: 'transparent',
                             linkColor: 'gray',
                             turtleSize: 3,
-                        })
-
-                        model.turtles.ask(t => {
-                            if (t.feature !== t.patch.feature) {
-                                t.feature = t.patch.feature
-                                const name = t.feature
-                                    ? t.feature.properties.NAME
-                                    : 'No Where'
-                                const population = t.feature
-                                    ? t.feature.properties.population
-                                    : 0
-                                console.log(
-                                    'new feature: turtle: ' + t.id + ',',
-                                    'county: ' + name + ',',
-                                    'population: ' + population
-                                )
-                            }
                         })
                     },
                     -1,

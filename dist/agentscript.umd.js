@@ -2645,6 +2645,10 @@
             //     [lon1, lat1],
             // ]
         },
+        lonLat2bbox(lon, lat, z) {
+            const [x, y] = this.lonlat2xy(lon, lat, z);
+            return this.xy2bbox(x, y, z)
+        },
 
         // Create a url for OSM json data.
         // https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
@@ -3706,7 +3710,10 @@ out;`;
                 this[name] = new AgentsetClass(this, AgentClass, name);
             };
             this.ticks = 0;
-            this.world = new World(worldOptions);
+            this.world =
+                worldOptions.maxXcor === undefined
+                    ? new World(worldOptions)
+                    : worldOptions;
             // Base AgentSets setup here. Breeds handled by setup
             initAgentSet('patches', Patches, Patch);
             initAgentSet('turtles', Turtles, Turtle);
@@ -3746,8 +3753,12 @@ out;`;
         }
     }
 
-    // Based on the mapbox elevation formula:
+    // The mapbox elevation formula:
     // https://blog.mapbox.com/global-elevation-data-6689f1d0ba65
+    // height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
+    //      min = -10000; scale = 0.1
+    // Amazon/Terrarium: (red * 256 + green + blue / 256) - 32768
+    //      min = -32768; scale = 1/256
 
     class RGBDataSet extends DataSet {
         static scaleFromMinMax(min, max) {
@@ -3765,6 +3776,7 @@ out;`;
                 const r = imgData.data[4 * i];
                 const g = imgData.data[4 * i + 1];
                 const b = imgData.data[4 * i + 2];
+                // Height = min + RgbInt24 * scale
                 convertedData[i] = min + (r * 256 * 256 + g * 256 + b) * scale;
             }
             // this.src = img.src // Might be useful? Flags as image data set.

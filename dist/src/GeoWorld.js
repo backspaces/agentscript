@@ -1,24 +1,11 @@
 import World from './World.js'
 
 // class World defines the coordinate system for the model.
-// It will be upgraded with methods converting from other
-// transforms like GIS and DataSets.
+// It has been upgraded with methods converting from other
+// transforms like GIS and DataSets/Canvas transforms.
+// This is an example World object for geojson worlds.
 
 export default class GeoWorld extends World {
-    // static defaultOptions(maxX = 16, maxY = maxX) {
-    //     return {
-    //         minX: -maxX,
-    //         maxX: maxX,
-    //         minY: -maxY,
-    //         maxY: maxY,
-    //     }
-    // }
-    // static defaultWorld(maxX = 16, maxY = maxX) {
-    //     return new World(World.defaultOptions(maxX, maxY))
-    // }
-
-    // ======================
-
     // Use the geojson object's bbox & width to create a World object
     // bbox: [west, south, east, north]
     constructor(bbox, width) {

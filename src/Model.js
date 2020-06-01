@@ -19,7 +19,10 @@ class Model {
             this[name] = new AgentsetClass(this, AgentClass, name)
         }
         this.ticks = 0
-        this.world = new World(worldOptions)
+        this.world =
+            worldOptions.maxXcor === undefined
+                ? new World(worldOptions)
+                : worldOptions
         // Base AgentSets setup here. Breeds handled by setup
         initAgentSet('patches', Patches, Patch)
         initAgentSet('turtles', Turtles, Turtle)

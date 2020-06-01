@@ -52,6 +52,10 @@ const gis = {
         //     [lon1, lat1],
         // ]
     },
+    lonLat2bbox(lon, lat, z) {
+        const [x, y] = this.lonlat2xy(lon, lat, z)
+        return this.xy2bbox(x, y, z)
+    },
 
     // Create a url for OSM json data.
     // https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
