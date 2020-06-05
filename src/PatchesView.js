@@ -55,7 +55,7 @@ export default class PatchesView {
     }
 
     // Return promise for an ImageBitmap of the current ctx
-    // Note safari does not support createImageBitmap as of 4/20
+    // Note safari does not support createImageBitmap as of 4/20/19
     // REMIND: See if imagebitmaps can avoid img alpha premultiply etc
     getImageBitmap(options = {}) {
         return createImageBitmap(this.imageData, options)

@@ -46,11 +46,11 @@
     }
 
     // Hopefully tempory: promise for MapBox map loaded callback
-    function mapLoadPromise(map) {
-        return new Promise((resolve, reject) => {
-            map.on('load', () => resolve());
-        })
-    }
+    // export function mapLoadPromise(map) {
+    //     return new Promise((resolve, reject) => {
+    //         map.on('load', () => resolve())
+    //     })
+    // }
 
     // Return promise for pause of ms. Use:
     // timeoutPromise(2000).then(()=>console.log('foo'))
@@ -108,7 +108,6 @@
         imageBitmapPromise: imageBitmapPromise,
         canvasBlobPromise: canvasBlobPromise,
         xhrPromise: xhrPromise,
-        mapLoadPromise: mapLoadPromise,
         timeoutPromise: timeoutPromise,
         timeoutLoop: timeoutLoop,
         yieldLoop: yieldLoop,
@@ -2650,6 +2649,20 @@
             return this.xy2bbox(x, y, z)
         },
 
+        bboxCenter(bbox) {
+            const [west, south, east, north] = bbox;
+            return [(west + east) / 2, (south + north) / 2]
+        },
+        bboxCoords(bbox) {
+            const [west, south, east, north] = bbox;
+            return [
+                [west, north],
+                [east, north],
+                [east, south],
+                [west, south],
+            ]
+        },
+
         // Create a url for OSM json data.
         // https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
         // south, west, north, east = minLat, minLon, maxLat, maxLon
@@ -3755,7 +3768,7 @@ out;`;
 
     // The mapbox elevation formula:
     // https://blog.mapbox.com/global-elevation-data-6689f1d0ba65
-    // height = -10000 + ((R * 256 * 256 + G * 256 + B) * 0.1)
+    // mapbox: ((red * 256 * 256 + green * 256 + blue) * 0.1)  -10000
     //      min = -10000; scale = 0.1
     // Amazon/Terrarium: (red * 256 + green + blue / 256) - 32768
     //      min = -32768; scale = 1/256
@@ -3765,8 +3778,27 @@ out;`;
             // 255*256*256 + 255*256 + 255 === 2 ** 24 - 1 i.e. 16777215
             return (max - min) / (2 ** 24 - 1)
         }
+        static redfishRGBFcn(r, g, b) {
+            // From RGB2DeciMeters()
+            let negative = 1;
+            if (r > 63) {
+                negative = -1;
+                r = 0;
+            }
+            return (negative * (r * 256 * 256 + g * 256 + b)) / 10
+        }
 
+        // Default ctor uses scale like above.
+        // If min is a function, ctor is: (img, fcn, ArrayType)
+        // where fcn(r,g,b) returns a number for the dataset.
+        // For Redfish tiles, use
+        //   new RGBDataSet(img, RGBDataSet.redfishRGBFcn, ArrayType = Float32Array)
         constructor(img, min = 0, scale = 1, ArrayType = Float32Array) {
+            let fcn;
+            if (typeof min === 'function') {
+                ArrayType = scale === 1 ? Float32Array : scale;
+                fcn = min;
+            }
             super(img.width, img.height, new ArrayType(img.width * img.height));
             const ctx = util.createCtx(img.width, img.height);
             util.fillCtxWithImage(ctx, img);
@@ -3776,10 +3808,11 @@ out;`;
                 const r = imgData.data[4 * i];
                 const g = imgData.data[4 * i + 1];
                 const b = imgData.data[4 * i + 2];
-                // Height = min + RgbInt24 * scale
-                convertedData[i] = min + (r * 256 * 256 + g * 256 + b) * scale;
+                // value = min + int24 * scale
+                convertedData[i] = fcn
+                    ? fcn(r, g, b)
+                    : min + (r * 256 * 256 + g * 256 + b) * scale;
             }
-            // this.src = img.src // Might be useful? Flags as image data set.
         }
     }
 

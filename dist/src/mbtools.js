@@ -1,4 +1,5 @@
 import * as turf from '../vendor/turf.esm.js'
+import gis from '../src/gis.js'
 
 export function mapLoadPromise(map) {
     return new Promise((resolve, reject) => {
@@ -29,31 +30,63 @@ export function worldFromBBox(width, bbox) {
     return worldOptions
 }
 
-export function bboxCenter(bbox) {
-    const [west, south, east, north] = bbox
-    return [(west + east) / 2, (south + north) / 2]
-}
+// Moved to src/gis.js module
+// export function bboxCenter(bbox) {
+//     const [west, south, east, north] = bbox
+//     return [(west + east) / 2, (south + north) / 2]
+// }
+// export function bboxCoords(bbox) {
+//     const [west, south, east, north] = bbox
+//     return [
+//         [west, north],
+//         [east, north],
+//         [east, south],
+//         [west, south],
+//     ]
+// }
 
-export function bboxCoords(bbox) {
-    const [west, south, east, north] = bbox
-    return [
-        [west, north],
-        [east, north],
-        [east, south],
-        [west, south],
-    ]
+// BBox of a tile, rounding to smaller integer zxy
+export function tileBBox(map, lon, lat) {
+    const z = Math.ceil(map.getZoom())
+    return gis.lonLat2bbox(lon, lat, z)
+}
+export function tileZxy(map, lon, lat) {
+    const z = Math.ceil(map.getZoom())
+    const [x, y] = gis.lonlat2xy(lon, lat, z)
+    return [z, x, y]
+}
+export function mapCenter(map) {
+    const bbox = mapBBox(map)
+    return gis.bboxCenter(bbox)
+}
+export function mapBBox(map) {
+    const bounds = map.getBounds().toArray()
+    const [west, south] = bounds[0]
+    const [east, north] = bounds[1]
+    return [west, south, east, north]
+}
+export function bboxToGeoJson(bbox) {
+    return turf.featureCollection([turf.bboxPolygon(bbox)])
 }
 
 // Create new mapboxgl.Map w/ defaults:
-export function setDefaultDivs() {
+// Add viewport too?
+/* <meta
+    name="viewport"
+    content="initial-scale=1,maximum-scale=1,user-scalable=no"
+/> */
+export function setDefaultStyle(id = 'map') {
     const style = document.createElement('style')
     style.innerHTML = `
-<style>
-    body { margin: 0; padding: 0; }
-    #map { position: absolute; top: 0; bottom: 0; width: 95%; }
-</style>
-`
-    document.head.appendChild(style)
+        body { margin: 0; padding: 0; }
+        #${id} { position: absolute; top: 0; bottom: 0; width: 100%; }
+    `
+    document.head.append(style)
+
+    const meta = document.createElement('meta')
+    meta.setAttribute('name', 'viewport')
+    meta.content = 'initial-scale=1,maximum-scale=1,user-scalable=no'
+    document.head.append(meta)
 }
 
 const defaultMapOptions = {
@@ -77,48 +110,6 @@ export function newMap(mapboxgl, options = {}) {
     return new mapboxgl.Map(options)
 }
 
-export function mapCenter(map) {
-    const bbox = mapBBox(map)
-    return bboxCenter(bbox)
-}
-
-export function mapBBox(map) {
-    const bounds = map.getBounds().toArray()
-    const [west, south] = bounds[0]
-    const [east, north] = bounds[1]
-    return [west, south, east, north]
-}
-
-export function addBBoxLayer(map, id, bbox, color, width = 1) {
-    map.addLayer({
-        id: id,
-        type: 'line',
-        source: {
-            type: 'geojson',
-            data: turf.featureCollection([turf.bboxPolygon(bbox)]),
-        },
-        paint: {
-            'line-color': color,
-            'line-width': width,
-        },
-    })
-}
-export function updateBBoxLayer(map, id, bbox) {
-    const data = turf.featureCollection([turf.bboxPolygon(bbox)])
-    map.getSource(id).setData(data)
-}
-
-export function addDemLayer(map, id) {
-    map.addLayer({
-        id: id,
-        type: 'hillshade', // only layer type for raster-dem
-        source: {
-            type: 'raster-dem',
-            url: 'mapbox://mapbox.terrain-rgb',
-        },
-    })
-}
-
 export function addGeoLines(map, id, geojson, color, width) {
     map.addLayer(
         {
@@ -136,7 +127,60 @@ export function addGeoLines(map, id, geojson, color, width) {
         'settlement-label'
     )
 }
-export function addCanvasLayer(map, id, model, view) {
+export function updateGeojsonSource(map, id, geojson) {
+    map.getSource(id).setData(geojson)
+}
+export function addBBoxLayer(map, id, bbox, color, width = 1) {
+    map.addLayer({
+        id: id,
+        type: 'line',
+        source: {
+            type: 'geojson',
+            data: bboxToGeoJson(bbox),
+        },
+        paint: {
+            'line-color': color,
+            'line-width': width,
+        },
+    })
+}
+export function updateBBoxSource(map, id, bbox) {
+    const data = bboxToGeoJson(bbox)
+    updateGeojsonSource(map, id, data)
+}
+
+export function addDemLayer(map, id) {
+    map.addLayer({
+        id: id,
+        type: 'hillshade', // only layer type for raster-dem
+        source: {
+            type: 'raster-dem',
+            url: 'mapbox://mapbox.terrain-rgb',
+        },
+    })
+}
+
+export function addImageLayer(map, id, bbox, imageUrl) {
+    map.addSource(id, {
+        type: 'image',
+        url: imageUrl,
+        coordinates: gis.bboxCoords(bbox), // 4 [lon,lat] arrays
+    })
+    map.addLayer({
+        id: id,
+        type: 'raster',
+        source: id,
+    })
+}
+export function updateImageSource(map, id, bbox, imageUrl) {
+    // map.getSource(id).setCoordinates(gis.bboxCoords(bbox))
+    map.getSource(id).updateImage({
+        url: imageUrl,
+        coordinates: gis.bboxCoords(bbox),
+    })
+}
+
+export function addModelViewLayer(map, id, model, view) {
     map.addSource(id, {
         type: 'canvas',
         canvas: view.canvas,
@@ -146,7 +190,7 @@ export function addCanvasLayer(map, id, model, view) {
     map.addLayer({
         id: id,
         type: 'raster',
-        source: 'canvas',
+        source: id,
     })
 }
 

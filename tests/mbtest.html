@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8" />
         <title>Test</title>
-        <meta
-            name="viewport"
-            content="initial-scale=1,maximum-scale=1,user-scalable=no"
-        />
+        <meta charset="utf-8" />
     </head>
     <body>
-        <div id="map"></div>
+        <!-- <div id="map"></div> -->
         <script type="module">
             import '../vendor/mapboxgl.css.js'
             import mapboxgl from '../vendor/mapbox-gl.esm.js'
@@ -20,65 +16,87 @@
 
             mapboxgl.accessToken =
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
-            mbox.setDefaultDivs()
 
-            // const map = new mapboxgl.Map({
-            //     container: 'map', // container id
-            //     style: 'mapbox://styles/mapbox/streets-v11',
-            //     center: [-105.941109, 35.68222],
-            //     zoom: 9,
-            //     renderWorldCopies: false,
-            // })
+            mbox.setDefaultStyle()
+            // const map = mbox.newMap(mapboxgl)
             const map = mbox.newMap(mapboxgl, {
-                // zoom: 9,
-                // center: [-105.941109, 35.68222],
+                // Santa Fe:
+                zoom: 10,
+                center: [-105.9328154405269, 35.67745581409039],
             })
-            util.toWindow({ mbox, gis, turf, util, map })
+
+            util.toWindow({ mapboxgl, mbox, gis, turf, util, map })
+
+            let bbox = []
 
             async function run() {
-                await util.mapLoadPromise(map)
+                await mbox.mapLoadPromise(map)
+                // logCenterTile()
 
-                // map.addLayer({
-                //     id: 'raster',
-                //     type: 'hillshade', // only layer type for raster-dem
-                //     source: {
-                //         type: 'raster-dem',
-                //         url: 'mapbox://mapbox.terrain-rgb',
-                //     },
-                // })
                 mbox.addDemLayer(map, 'raster')
 
-                function centerTileBBox() {
-                    const [lon, lat] = mbox.mapCenter(map)
-                    const z = map.getZoom()
-                    return gis.lonLat2bbox(lon, lat, z)
-                }
-                console.log('center tile:', centerTileBBox())
                 mbox.addBBoxLayer(map, 'bbox', centerTileBBox(), 'red', 3)
+                mbox.addImageLayer(
+                    map,
+                    'tile',
+                    centerTileBBox(),
+                    centerTileUrl()
+                )
 
-                function report(eventType) {
-                    // const bounds = map.getBounds().toArray()
-                    // const [west, south] = bounds[0]
-                    // const [east, north] = bounds[1]
-                    // const bbox = [west, south, east, north]
-                    const zoom = Math.round(map.getZoom())
-                    map.setZoom(zoom)
-                    const center = mbox.mapCenter(map)
-                    const [x, y] = gis.lonlat2xy(...center, zoom)
-                    const bbox = centerTileBBox()
-                    // const [west, south, east, north] = bbox
-                    // console.log(eventType, center, bbox, zoom)
-                    console.log(eventType, zoom, x, y, center) //, bbox, zoom)
-                    mbox.updateBBoxLayer(map, 'bbox', bbox)
+                function update() {
+                    const tileBBox = centerTileBBox()
+                    if (!util.arraysEqual(bbox, tileBBox)) {
+                        bbox = tileBBox
+                        logCenterTile()
+                        mbox.updateBBoxSource(map, 'bbox', bbox)
+                        mbox.updateImageSource(
+                            map,
+                            'tile',
+                            centerTileBBox(),
+                            centerTileUrl()
+                        )
+                    }
                 }
                 map.on('dragend', function (e) {
-                    report('dragend')
+                    update()
                 })
                 map.on('zoomend', function (e) {
-                    report('zoomend')
+                    update()
                 })
             }
             run()
+
+            function centerTileBBox() {
+                const [lon, lat] = mbox.mapCenter(map)
+                return mbox.tileBBox(map, lon, lat)
+            }
+            function centerTileZxy() {
+                const [lon, lat] = mbox.mapCenter(map)
+                return mbox.tileZxy(map, lon, lat)
+            }
+            function logCenterTile() {
+                console.log('center tile:', ...centerTileZxy())
+            }
+            function centerTileUrl() {
+                const [z, x, y] = centerTileZxy()
+                // return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}/png`
+
+                // const url = `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/{x}/{y}.png`
+                // const url = `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}/png`
+                // const url = `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}/png`
+                const url = `https://api.mapbox.com/v4/mapbox.terrain-rgb/${z}/${x}/${y}.pngraw?access_token=${mapboxgl.accessToken}`
+
+                // const url = './santafe.png'
+                console.log(url)
+                return url
+            }
+
+            // elevationTileServer_backup1:
+            //   'https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/{z}/{x}/{y}.png',
+            // elevationTileServer:
+            //   'https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/{z}/{x}/{y}.png',
+            // so the bottom one is US only, but higher resolution.
+            // the top one is the whole globe but 30m resolution
         </script>
     </body>
 </html>

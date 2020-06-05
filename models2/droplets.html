@@ -19,12 +19,16 @@
                     const elevation = model.patches.exportDataSet('elevation')
                     const grays = elevation.scale(0, 255).data
                     const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
+                    const localMinColor = Color.typedColor(255, 0, 0)
                     model.localMins.forEach(p => {
-                        colors[p.id] = Color.typedColor(255, 0, 0)
+                        colors[p.id] = localMinColor
                     })
                     return colors
                 },
             }
+
+            const tile =
+                'https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/13/1594/3339.png'
 
             async function run() {
                 const model = new Model()

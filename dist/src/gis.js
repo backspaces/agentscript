@@ -57,6 +57,20 @@ const gis = {
         return this.xy2bbox(x, y, z)
     },
 
+    bboxCenter(bbox) {
+        const [west, south, east, north] = bbox
+        return [(west + east) / 2, (south + north) / 2]
+    },
+    bboxCoords(bbox) {
+        const [west, south, east, north] = bbox
+        return [
+            [west, north],
+            [east, north],
+            [east, south],
+            [west, south],
+        ]
+    },
+
     // Create a url for OSM json data.
     // https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
     // south, west, north, east = minLat, minLon, maxLat, maxLon
