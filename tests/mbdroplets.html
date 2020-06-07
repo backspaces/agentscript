@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Test</title>
+        <title>Droplets</title>
         <meta charset="utf-8" />
     </head>
     <body>
@@ -18,53 +18,74 @@
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
 
             mbox.setDefaultStyle()
+            // const map = mbox.newMap(mapboxgl)
             const map = mbox.newMap(mapboxgl, {
                 // Santa Fe:
                 zoom: 10,
                 center: [-105.9328154405269, 35.67745581409039],
             })
-            map.on('error', e => console.log('oops', e))
+
             util.toWindow({ mapboxgl, mbox, gis, turf, util, map })
 
             let bbox = []
+            // let bboxTileUrl
+            // let bboxTile
 
             async function run() {
                 await mbox.mapLoadPromise(map)
+                logCenterTile()
 
-                mbox.addDemLayer(map, 'raster')
+                // mbox.addDemLayer(map, 'raster')
 
                 mbox.addBBoxLayer(map, 'bbox', centerTileBBox(), 'red', 3)
-                mbox.addImageLayer(
-                    map,
-                    'tile',
-                    centerTileBBox(),
-                    centerTileUrl()
-                )
+                // mbox.addImageLayer(
+                //     map,
+                //     'tile',
+                //     centerTileBBox(),
+                //     centerTileUrl()
+                // )
 
-                function update() {
-                    const tileBBox = centerTileBBox()
-                    if (!util.arraysEqual(bbox, tileBBox)) {
-                        bbox = tileBBox
-                        logCenterTile()
-                        mbox.updateBBoxSource(map, 'bbox', bbox)
-                        mbox.updateImageSource(
-                            map,
-                            'tile',
-                            centerTileBBox(),
-                            centerTileUrl()
-                        )
-                    }
-                }
-                update()
-                map.on('dragend', function (e) {
-                    update()
+                map.on('dragend', async function (e) {
+                    await update().catch(e => console.log('heck'))
                 })
-                map.on('zoomend', function (e) {
-                    update()
+                map.on('zoomend', async function (e) {
+                    await update().catch(e => console.log('heck'))
                 })
             }
             run()
 
+            async function update() {
+                const tileBBox = centerTileBBox()
+                if (!util.arraysEqual(bbox, tileBBox)) {
+                    bbox = tileBBox
+                    const url = centerTileUrl()
+                    // let tile
+                    // try {
+                    //     // const tile = await util.xhrPromise(url)
+                    //     const tile = await fetch(url)
+                    // } catch (error) {
+                    //     console.log('oops', error)
+                    // }
+                    const tile = await fetch(url).catch(err => {
+                        console.log('oops', err)
+                    })
+
+                    // const tile = await util.xhrPromise(url)
+
+                    mbox.updateBBoxSource(map, 'bbox', bbox)
+
+                    // mbox.updateImageSource(
+                    //     map,
+                    //     'tile',
+                    //     centerTileBBox(),
+                    //     bboxTileUrl
+                    // )
+                    logCenterTile()
+                }
+            }
+            function centerTileLonLat() {
+                return gis.bboxCenter(centerTileBBox())
+            }
             function centerTileBBox() {
                 const [lon, lat] = mbox.mapCenter(map)
                 return mbox.tileBBox(map, lon, lat)
@@ -74,10 +95,15 @@
                 return mbox.tileZxy(map, lon, lat)
             }
             function logCenterTile() {
-                console.log('center tile:', ...centerTileZxy())
+                console.log(
+                    'center tile:',
+                    ...centerTileZxy(),
+                    centerTileLonLat()
+                )
             }
             function centerTileUrl() {
                 const [z, x, y] = centerTileZxy()
+
                 // simtable world dems
                 // const url = `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/${x}/${y}.png`
                 // simtable us dems
@@ -87,6 +113,7 @@
                 // mapbox:
                 // const url = `https://api.mapbox.com/v4/mapbox.terrain-rgb/${z}/${x}/${y}.pngraw?access_token=${mapboxgl.accessToken}`
 
+                // const url = './santafe.png'
                 console.log(url)
                 return url
             }
