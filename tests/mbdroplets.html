@@ -12,74 +12,107 @@
             import * as turf from '../vendor/turf.esm.js'
             import * as mbox from '../src/mbtools.js'
             import gis from '../src/gis.js'
+            import TwoDraw from '../src/TwoDraw.js'
             import util from '../src/util.js'
+            import Model from '../models/DropletsModel.js'
 
             mapboxgl.accessToken =
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
 
             mbox.setDefaultStyle()
-            // const map = mbox.newMap(mapboxgl)
             const map = mbox.newMap(mapboxgl, {
-                // Santa Fe:
-                zoom: 10,
+                zoom: 10, // Santa Fe:
                 center: [-105.9328154405269, 35.67745581409039],
             })
-
             util.toWindow({ mapboxgl, mbox, gis, turf, util, map })
 
             let bbox = []
-            // let bboxTileUrl
-            // let bboxTile
+            let bboxTile
+            let bboxModel
+            let bboxView
+            let bboxUrl
+            let bboxDecoder
 
-            async function run() {
+            async function initMapbox() {
                 await mbox.mapLoadPromise(map)
-                logCenterTile()
-
-                // mbox.addDemLayer(map, 'raster')
-
-                mbox.addBBoxLayer(map, 'bbox', centerTileBBox(), 'red', 3)
-                // mbox.addImageLayer(
-                //     map,
-                //     'tile',
-                //     centerTileBBox(),
-                //     centerTileUrl()
-                // )
+                mbox.addDemLayer(map, 'raster')
+                mbox.addBBoxLayer(map, 'bbox', centerTileBBox(), 'gray', 3)
+                await update()
 
                 map.on('dragend', async function (e) {
-                    await update().catch(e => console.log('heck'))
+                    await update()
                 })
                 map.on('zoomend', async function (e) {
-                    await update().catch(e => console.log('heck'))
+                    await update()
+                })
+                map.on('click', function (e) {
+                    // console.log('A click event has occurred at ' + e.lngLat)
+                    // console.log(
+                    //     'Click is in bbox',
+                    //     mbox.isInBBox(e.lngLat, bbox)
+                    // )
+                    if (bboxTile && mbox.isInBBox(e.lngLat, bbox)) {
+                        runModel()
+                    }
                 })
             }
-            run()
+            initMapbox()
 
+            async function runModel() {
+                const firstTime = bboxModel == null
+                if (firstTime) bboxModel = new Model()
+                Object.assign(bboxModel, {
+                    tile: bboxTile,
+                    tileDecoder: bboxDecoder,
+                })
+                if (!firstTime) bboxModel.reset()
+                await bboxModel.startup()
+                bboxModel.setup()
+
+                if (!bboxView) {
+                    bboxView = new TwoDraw(bboxModel, {
+                        div: util.createCanvas(0, 0),
+                    })
+                    mbox.addViewLayer(map, 'model', bbox, bboxView)
+                } else {
+                    mbox.updateViewSource(map, 'model', bbox)
+                }
+
+                if (!firstTime) return
+                util.timeoutLoop(
+                    () => {
+                        if (bboxModel.ticks >= 500) return
+
+                        bboxModel.step()
+                        bboxModel.tick()
+                        bboxView.draw({
+                            patchColor: 'transparent',
+                            turtleShape: 'circle',
+                            turtleColor: 'blue',
+                            turtleSize: 0.5,
+                        })
+
+                        if (bboxModel.ticks === 500)
+                            console.log('500 steps done; coasting')
+                    },
+                    -1, // 500,
+                    33
+                )
+            }
             async function update() {
                 const tileBBox = centerTileBBox()
                 if (!util.arraysEqual(bbox, tileBBox)) {
                     bbox = tileBBox
-                    const url = centerTileUrl()
-                    // let tile
-                    // try {
-                    //     // const tile = await util.xhrPromise(url)
-                    //     const tile = await fetch(url)
-                    // } catch (error) {
-                    //     console.log('oops', error)
-                    // }
-                    const tile = await fetch(url).catch(err => {
-                        console.log('oops', err)
+                    ;[bboxUrl, bboxDecoder] = centerTileUrl()
+
+                    bboxTile = await util.imagePromise(bboxUrl).catch(err => {
+                        console.log('oops, tile not available:', bboxUrl)
                     })
 
-                    // const tile = await util.xhrPromise(url)
-
                     mbox.updateBBoxSource(map, 'bbox', bbox)
+                    const bboxColor = bboxTile ? 'gray' : 'red'
+                    mbox.updateGeojsonPaint(map, 'bbox', bboxColor)
 
-                    // mbox.updateImageSource(
-                    //     map,
-                    //     'tile',
-                    //     centerTileBBox(),
-                    //     bboxTileUrl
-                    // )
                     logCenterTile()
                 }
             }
@@ -107,15 +140,16 @@
                 // simtable world dems
                 // const url = `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/${x}/${y}.png`
                 // simtable us dems
-                const url = `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
+                // const url = `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
+                const url = Model.tileUrl(z, x, y)
+                const decoder = Model.tileDecoder()
                 // amazon/mapzen: https://registry.opendata.aws/tag/elevation/
                 // const url = `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`
                 // mapbox:
                 // const url = `https://api.mapbox.com/v4/mapbox.terrain-rgb/${z}/${x}/${y}.pngraw?access_token=${mapboxgl.accessToken}`
 
-                // const url = './santafe.png'
                 console.log(url)
-                return url
+                return [url, decoder]
             }
         </script>
     </body>

@@ -132,7 +132,8 @@
                 //     type: 'raster',
                 //     source: 'canvas',
                 // })
-                mbox.addModelViewLayer(map, 'model', model, view)
+                // mbox.addModelViewLayer(map, 'model', model, view)
+                mbox.addViewLayer(map, 'model', bbox, view)
 
                 util.timeoutLoop(
                     () => {

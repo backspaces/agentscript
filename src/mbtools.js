@@ -68,7 +68,16 @@ export function mapBBox(map) {
 export function bboxToGeoJson(bbox) {
     return turf.featureCollection([turf.bboxPolygon(bbox)])
 }
+export function isInBBox(pt, bbox) {
+    if (!Array.isArray(pt)) {
+        const { lng, lat } = pt
+        pt = [lng, lat]
+    }
+    const feature = turf.bboxPolygon(bbox)
+    return turf.booleanPointInPolygon(pt, feature)
+}
 
+// =============== Initalize map ===============
 // Create new mapboxgl.Map w/ defaults:
 // Add viewport too?
 /* <meta
@@ -110,13 +119,32 @@ export function newMap(mapboxgl, options = {}) {
     return new mapboxgl.Map(options)
 }
 
+// =============== Layers & Sources ===============
+
+export function addGeoFill(map, id, geojson, fill, stroke) {
+    map.addLayer(
+        {
+            id: id,
+            type: 'fill',
+            source: {
+                type: 'geojson',
+                data: geojson, // url or json
+            },
+            paint: {
+                'fill-color': fill,
+                'fill-outline-color': stroke,
+            },
+        },
+        'settlement-label'
+    )
+}
 export function addGeoLines(map, id, geojson, color, width) {
     map.addLayer(
         {
             id: id,
             type: 'line',
             source: {
-                type: 'geojson',
+                type: 'geojson', // url or json
                 data: geojson,
             },
             paint: {
@@ -128,7 +156,23 @@ export function addGeoLines(map, id, geojson, color, width) {
     )
 }
 export function updateGeojsonSource(map, id, geojson) {
-    map.getSource(id).setData(geojson)
+    map.getSource(id).setData(geojson) // url or json
+}
+// export function pointInGeojsonSource(map, id, pt) {
+//     const json = map.getSource(id).getData()
+//     console.log('json', json)
+// }
+export function updateGeojsonPaint(map, id, color, stroke) {
+    const layerType = map.getLayer(id).type
+    if (layerType === 'line') {
+        if (color) map.setPaintProperty(id, 'line-color', color)
+        if (stroke) map.setPaintProperty(id, 'line-width', stroke)
+    } else if (layerType === 'fill') {
+        if (color) map.setPaintProperty(id, 'fill-color', color)
+        if (stroke) map.setPaintProperty(id, 'fill-outline-color', stroke)
+    } else {
+        console.log('bad layer type:', layerType)
+    }
 }
 export function addBBoxLayer(map, id, bbox, color, width = 1) {
     map.addLayer({
@@ -180,18 +224,35 @@ export function updateImageSource(map, id, bbox, imageUrl) {
     })
 }
 
-export function addModelViewLayer(map, id, model, view) {
+// export function addModelViewLayer(map, id, model, view) {
+//     map.addSource(id, {
+//         type: 'canvas',
+//         canvas: view.canvas,
+//         animate: true,
+//         coordinates: model.world.bboxCoords(), // 4 [lon,lat] arrays
+//     })
+//     map.addLayer({
+//         id: id,
+//         type: 'raster',
+//         source: id,
+//     })
+// }
+export function addViewLayer(map, id, bbox, view) {
     map.addSource(id, {
         type: 'canvas',
         canvas: view.canvas,
         animate: true,
-        coordinates: model.world.bboxCoords(), // 4 [lon,lat] arrays
+        coordinates: gis.bboxCoords(bbox),
     })
     map.addLayer({
         id: id,
         type: 'raster',
         source: id,
     })
+}
+export function updateViewSource(map, id, bbox) {
+    // map.getSource(id).setCoordinates(gis.bboxCoords(bbox))
+    map.getSource(id).setCoordinates(gis.bboxCoords(bbox))
 }
 
 // style: 'streets-v11',

@@ -6,7 +6,7 @@ buttons:
 diffuse:
     '{"ticks":500,"model":["ticks","world","patches","turtles","links","population","speed","wiggle","radius","diffuseRate","seedDelta","seedMax"],"patches":80601,"patch":{"id":45451,"ran":0.5300913129775815,"_diffuseNext":0,"neighbors":[45049,45050,45051,45452,45853,45852,45851,45450]},"turtles":2,"turtle":{"id":1,"theta":3.629027286903738,"x":141.86152785070743,"y":77.14560949853987},"links":0}',
 droplets:
-    '{"ticks":500,"model":["ticks","world","patches","turtles","links","stepType","killOffworld","tile","speed","elevation","dzdx","dzdy","slope","aspect","localMins"],"patches":10201,"patch":{"id":5057,"elevation":1715.3,"aspect":4.224171647403569,"neighbors":[4955,4956,4957,5058,5159,5158,5157,5056]},"turtles":10201,"turtle":{"id":7694,"theta":5.705993093306085,"x":-3.1517003662656746,"y":-21.30078782952432},"links":0}',
+    '{"ticks":500,"model":["ticks","world","patches","turtles","links","stepType","killOffworld","speed","tileDecoder","tile","elevation","dzdx","dzdy","slope","aspect","localMins"],"patches":10201,"patch":{"id":5057,"elevation":1715.3,"aspect":4.224171647403569,"neighbors":[4955,4956,4957,5058,5159,5158,5157,5056]},"turtles":10201,"turtle":{"id":7694,"theta":5.705993093306085,"x":-3.1517003662656746,"y":-21.30078782952432},"links":0}',
 exit:
     '{"ticks":500,"model":["ticks","world","patches","turtles","links","numExits","population","exits","inside","wall"],"patches":5041,"patch":{"id":4012,"neighbors4":[3941,4013,4083,4011],"turtles":[],"neighbors":[3940,3941,3942,4013,4084,4083,4082,4011]},"turtles":9,"turtle":{"id":1039,"theta":-0.7853981633974483,"x":15,"y":-22,"exit":{"id":4313,"exitNumber":0,"turtles":[]}},"links":0}',
 fire:

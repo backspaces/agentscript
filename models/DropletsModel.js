@@ -5,7 +5,14 @@ import AgentArray from '../src/AgentArray.js'
 import RGBDataSet from '../src/RGBDataSet.js'
 
 export default class DropletsModel extends Model {
+    static tileUrl(z, x, y) {
+        return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
+    }
+    static tileDecoder() {
+        return RGBDataSet.redfishElevation
+    }
     static defaultOptions() {
+        const [z, x, y] = [13, 1594, 3339]
         return {
             // stepType choices:
             //    'minNeighbor',
@@ -14,12 +21,16 @@ export default class DropletsModel extends Model {
             //    'dataSetAspectBilinear',
             stepType: 'dataSetAspectNearest',
             killOffworld: false, // Kill vs clamp turtles when offworld.
-            // tile: './dropletstile.png',
-            // tile:
-            //     'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1594/3339.png',
-            tile:
-                'https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/13/1594/3339.png',
             speed: 0.2,
+
+            // can be a function(r,g,b) or [min, scale] array
+            tileDecoder: this.tileDecoder(),
+            // tile: `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`,
+            tile: this.tileUrl(z, x, y),
+            // tileDecoder: RGBDataSet.redfishElevation,
+            // tile: `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/${x}/${y}.png`,
+            // tileDecoder: RGBDataSet.newMapzenElevation(),
+            // tile: `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`,
         }
     }
     // ======================
@@ -30,14 +41,28 @@ export default class DropletsModel extends Model {
     }
 
     async startup() {
+        const { tile, tileDecoder } = this
         // const png = await util.imagePromise(this.tile)
-        const png = self.ImageBitmap
-            ? await util.imageBitmapPromise(this.tile)
-            : await util.imagePromise(this.tile)
-        console.log('png', png)
-        const elevation = this.tile.includes('simtable-elevation-tiles')
-            ? new RGBDataSet(png, RGBDataSet.redfishRGBFcn, AgentArray)
-            : new RGBDataSet(png, -32768, 1 / 256, AgentArray)
+        const png = util.isImageable(tile)
+            ? tile
+            : self.ImageBitmap
+            ? await util.imageBitmapPromise(tile)
+            : await util.imagePromise(tile)
+        // if (typeof tile === 'string') {
+        //     const png = self.ImageBitmap
+        //         ? await util.imageBitmapPromise(tile)
+        //         : await util.imagePromise(tile)
+        // } else {
+        //     png = tile
+        // }
+        console.log('RGBDataSet: png', png)
+        // const elevation = tile.includes('simtable-elevation-tiles')
+        //     ? new RGBDataSet(png, RGBDataSet.redfishElevation, AgentArray)
+        //     : new RGBDataSet(png, -32768, 1 / 256, AgentArray)
+        const elevation = new RGBDataSet(png, tileDecoder, AgentArray)
+        // typeof tileDecoder === 'function'
+        //     ? new RGBDataSet(png, tileDecoder, AgentArray)
+        //     : new RGBDataSet(png, ...tileDecoder, AgentArray)
         this.installDataSets(elevation)
 
         // const slopeAndAspect = elevation.slopeAndAspect()

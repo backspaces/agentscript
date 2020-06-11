@@ -4,7 +4,7 @@
 const esmImport = require('esm')(module)
 const gis = esmImport('../src/gis.js').default
 
-const https = require('https')
+// const https = require('https')
 
 const zxy = process.argv[2]
 

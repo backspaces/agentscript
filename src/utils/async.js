@@ -7,7 +7,8 @@ export function imagePromise(url) {
         const img = new Image()
         img.crossOrigin = 'Anonymous'
         img.onload = () => resolve(img)
-        img.onerror = () => reject(Error(`Could not load image ${url}`))
+        // img.onerror = () => reject(Error(`Could not load image ${url}`))
+        img.onerror = () => reject(`Could not load image ${url}`)
         img.src = url
     })
 }
@@ -58,7 +59,8 @@ export function timeoutPromise(ms = 1000) {
 export async function timeoutLoop(fcn, steps = -1, ms = 0) {
     let i = 0
     while (i++ !== steps) {
-        fcn(i - 1)
+        let state = fcn(i - 1)
+        if (state === 'cancel') break
         await timeoutPromise(ms)
     }
 }

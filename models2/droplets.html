@@ -27,8 +27,8 @@
                 },
             }
 
-            const tile =
-                'https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/13/1594/3339.png'
+            // const tile =
+            //     'https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/13/1594/3339.png'
 
             async function run() {
                 const model = new Model()
@@ -40,7 +40,7 @@
                     useSprites: true,
                 })
 
-                await util.timeoutLoop(
+                util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
