@@ -10,27 +10,32 @@
             import ColorMap from '../src/ColorMap.js'
             import Model from '../models/DiffuseModel.js'
 
+            const drawOptions = {
+                patchColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1).pixel,
+                turtleColor: 'red',
+                turtleSize: 8,
+            }
+
             async function run() {
                 const model = new Model()
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    useSprites: true,
-                    patchSize: 3,
-                })
+                const view = new TwoDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        useSprites: true,
+                        patchSize: 3,
+                    },
+                    drawOptions
+                )
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw({
-                            patchColor: p =>
-                                ColorMap.Rgb256.scaleColor(p.ran, 0, 1).pixel,
-                            turtleColor: 'red',
-                            turtleSize: 8,
-                        })
+                        view.draw()
                     },
                     500,
                     33

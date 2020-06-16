@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>MBox</title>
+        <title>Hello</title>
     </head>
     <body>
         <!-- <div id="map"></div> -->
@@ -60,7 +60,7 @@
 
             async function run() {
                 const counties = await util.xhrPromise(
-                    '../data/nmcounties.geojson',
+                    './data/nmcounties.geojson',
                     'json'
                 )
                 const bbox = turf.bbox(counties)

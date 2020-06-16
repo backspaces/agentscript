@@ -25,12 +25,7 @@ export default class DropletsModel extends Model {
 
             // can be a function(r,g,b) or [min, scale] array
             tileDecoder: this.tileDecoder(),
-            // tile: `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`,
             tile: this.tileUrl(z, x, y),
-            // tileDecoder: RGBDataSet.redfishElevation,
-            // tile: `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/${x}/${y}.png`,
-            // tileDecoder: RGBDataSet.newMapzenElevation(),
-            // tile: `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`,
         }
     }
     // ======================
@@ -48,29 +43,9 @@ export default class DropletsModel extends Model {
             : self.ImageBitmap
             ? await util.imageBitmapPromise(tile)
             : await util.imagePromise(tile)
-        // if (typeof tile === 'string') {
-        //     const png = self.ImageBitmap
-        //         ? await util.imageBitmapPromise(tile)
-        //         : await util.imagePromise(tile)
-        // } else {
-        //     png = tile
-        // }
         console.log('RGBDataSet: png', png)
-        // const elevation = tile.includes('simtable-elevation-tiles')
-        //     ? new RGBDataSet(png, RGBDataSet.redfishElevation, AgentArray)
-        //     : new RGBDataSet(png, -32768, 1 / 256, AgentArray)
         const elevation = new RGBDataSet(png, tileDecoder, AgentArray)
-        // typeof tileDecoder === 'function'
-        //     ? new RGBDataSet(png, tileDecoder, AgentArray)
-        //     : new RGBDataSet(png, ...tileDecoder, AgentArray)
         this.installDataSets(elevation)
-
-        // const slopeAndAspect = elevation.slopeAndAspect()
-        // const { dzdx, dzdy, slope, aspect } = slopeAndAspect
-        // Object.assign(this, { elevation, dzdx, dzdy, slope, aspect })
-
-        // this.patches.importDataSet(elevation, 'elevation', true)
-        // this.patches.importDataSet(aspect, 'aspect', true)
     }
     installDataSets(elevation) {
         const slopeAndAspect = elevation.slopeAndAspect()

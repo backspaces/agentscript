@@ -22,6 +22,7 @@
                 'black',
                 foodColor.css,
             ])
+
             // We put the draw options object here, too crowded below!
             const drawOptions = {
                 patchColor: p => {
@@ -43,16 +44,20 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    useSprites: true,
-                })
+                const view = new TwoDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        useSprites: true,
+                    },
+                    drawOptions
+                )
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw(drawOptions)
+                        view.draw()
                     },
                     500,
                     33

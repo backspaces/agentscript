@@ -1,4 +1,4 @@
-import gis from '../src/gis.js'
+import * as gis from '../src/gis.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
 import util from '../src/util.js'

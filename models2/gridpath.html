@@ -9,15 +9,30 @@
             import TwoDraw from '../src/TwoDraw.js'
             import Model from '../models/GridPathModel.js'
 
+            const drawOptions = {
+                turtleShape: 'circle',
+                turtleColor: 'red',
+                turtleSize: 0.5,
+                linkColor: 'red',
+                patchesMap: 'LightGray',
+                textProperty: 'choices',
+                textColor: 'white',
+                textSize: 0.3,
+            }
+
             async function run() {
                 const model = new Model()
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    patchSize: 50,
-                })
+                const view = new TwoDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        patchSize: 50,
+                    },
+                    drawOptions
+                )
 
                 util.toWindow({ model, view, util })
 

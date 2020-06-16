@@ -11,7 +11,6 @@
             import mapboxgl from '../vendor/mapbox-gl.esm.js'
             import * as turf from '../vendor/turf.esm.js'
             import * as mbox from '../src/mbtools.js'
-            import gis from '../src/gis.js'
             import TwoDraw from '../src/TwoDraw.js'
             import util from '../src/util.js'
             import Model from '../models/DropletsModel.js'
@@ -24,7 +23,7 @@
                 zoom: 10, // Santa Fe:
                 center: [-105.9328154405269, 35.67745581409039],
             })
-            util.toWindow({ mapboxgl, mbox, gis, turf, util, map })
+            util.toWindow({ mapboxgl, mbox, turf, util, map })
 
             let bbox = []
             let bboxTile
@@ -116,9 +115,6 @@
                     logCenterTile()
                 }
             }
-            function centerTileLonLat() {
-                return gis.bboxCenter(centerTileBBox())
-            }
             function centerTileBBox() {
                 const [lon, lat] = mbox.mapCenter(map)
                 return mbox.tileBBox(map, lon, lat)
@@ -131,22 +127,14 @@
                 console.log(
                     'center tile:',
                     ...centerTileZxy(),
-                    centerTileLonLat()
+                    centerTileBBox()
                 )
             }
             function centerTileUrl() {
                 const [z, x, y] = centerTileZxy()
 
-                // simtable world dems
-                // const url = `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/${x}/${y}.png`
-                // simtable us dems
-                // const url = `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
                 const url = Model.tileUrl(z, x, y)
                 const decoder = Model.tileDecoder()
-                // amazon/mapzen: https://registry.opendata.aws/tag/elevation/
-                // const url = `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`
-                // mapbox:
-                // const url = `https://api.mapbox.com/v4/mapbox.terrain-rgb/${z}/${x}/${y}.pngraw?access_token=${mapboxgl.accessToken}`
 
                 console.log(url)
                 return [url, decoder]

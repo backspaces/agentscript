@@ -20,24 +20,29 @@
                 ember1: Color.rgbaToPixel(255 - 100, 0, 0),
                 ember0: Color.rgbaToPixel(255 - 125, 0, 0),
             }
+            const drawOptions = {
+                patchColor: p => typeColors[p.type],
+            }
 
             async function run() {
                 const model = new Model()
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    patchSize: 4,
-                })
+                const view = new TwoDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        patchSize: 4,
+                    },
+                    drawOptions
+                )
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw({
-                            patchColor: p => typeColors[p.type],
-                        })
+                        view.draw()
                     },
                     500,
                     33

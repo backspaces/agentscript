@@ -9,32 +9,38 @@
             import TwoDraw from '../src/TwoDraw.js'
             import Model from '../models/VirusModel.js'
 
+            const turtleColors = {
+                infected: 'red',
+                susceptible: 'blue',
+                resistant: 'gray',
+            }
+            const drawOptions = {
+                patchColor: 'black',
+                turtleShape: 'circle',
+                turtleSize: 1.5,
+                turtleColor: t => turtleColors[t.state],
+                linkColor: 'rgba(255, 255, 255, 0.50',
+            }
+
             async function run() {
                 const model = new Model()
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    patchSize: 10,
-                })
+                const view = new TwoDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        patchSize: 10,
+                    },
+                    drawOptions
+                )
 
-                const turtleColors = {
-                    infected: 'red',
-                    susceptible: 'blue',
-                    resistant: 'gray',
-                }
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw({
-                            patchColor: 'black',
-                            turtleShape: 'circle',
-                            turtleSize: 1.5,
-                            turtleColor: t => turtleColors[t.state],
-                            linkColor: 'rgba(255, 255, 255, 0.50',
-                        })
+                        view.draw()
                     },
                     500,
                     33

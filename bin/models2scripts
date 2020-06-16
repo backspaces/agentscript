@@ -20,6 +20,8 @@ models.forEach(model => {
     shell.sed('-i', 'export default ', '', script)
     shell.sed('-i', 'export ', '', script)
     shell.sed('-i', /^import (\w+) .*$/, 'var $1 = AS.$1', script)
+    // import * as gis from '../src/gis.js'
+    shell.sed('-i', /^import \* as (\w+) .*$/, 'var $1 = AS.$1', script)
 
     if (defaultName) {
         shell.echo(`const defaultModel = ${defaultName}`).toEnd(script)

@@ -11,7 +11,6 @@
             import mapboxgl from '../vendor/mapbox-gl.esm.js'
             import * as turf from '../vendor/turf.esm.js'
             import * as mbox from '../src/mbtools.js'
-            import gis from '../src/gis.js'
             import util from '../src/util.js'
 
             mapboxgl.accessToken =
@@ -24,7 +23,7 @@
                 center: [-105.9328154405269, 35.67745581409039],
             })
             map.on('error', e => console.log('oops', e))
-            util.toWindow({ mapboxgl, mbox, gis, turf, util, map })
+            util.toWindow({ mapboxgl, mbox, turf, util, map })
 
             let bbox = []
 
@@ -76,6 +75,7 @@
             function logCenterTile() {
                 console.log('center tile:', ...centerTileZxy())
             }
+            // REMIND: Use RGBDataSet or better, move to gis or similar
             function centerTileUrl() {
                 const [z, x, y] = centerTileZxy()
                 // simtable world dems

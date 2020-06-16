@@ -23,11 +23,11 @@ export default class TwoDraw extends TwoView {
 
     // ======================
 
-    constructor(model, twoViewOptions = {}) {
+    constructor(model, twoViewOptions = {}, drawOptions = {}) {
         super(model.world, twoViewOptions)
         this.model = model
         this.view = this
-        // this.view = new TwoView(model.world, twoViewOptions)
+        this.drawOptions = drawOptions
     }
 
     // The parameters are easily mistaken: check they are all in the defaults.
@@ -44,10 +44,18 @@ export default class TwoDraw extends TwoView {
             }
         })
     }
+
+    // setup(fcn = (model, view) => {}) {
+    //     // default to no-op
+    //     // This used to be the initPatches() in drawOptions
+    //     // supply the function with this.model, this.view as args
+    //     fcn(this.model, this.view)
+    // }
+
     // The simple default draw() function.
     // The params object overrides the default options.
     // randomTurtle(t) {return turtlesMap.atIndex(l.id).css}
-    draw(params = {}) {
+    draw(params = this.drawOptions) {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)
         let {
             patchColor,
@@ -81,10 +89,13 @@ export default class TwoDraw extends TwoView {
             } else if (patchColor === 'random') {
                 view.createPatchPixels(i => patchesMap.randomColor().pixel)
             }
+            // if (patchColor === 'random') {
+            //     view.createPatchPixels(i => patchesMap.randomColor().pixel)
+            // }
         }
 
         if (patchColor === 'random' || patchColor === 'static' || initPatches) {
-            view.drawPatches() // redraw cached patches colors
+            view.drawPatches() // redraw cached patches colors below
         } else if (typeof patchColor === 'function') {
             view.drawPatches(model.patches, p => patchColor(p))
         } else if (util.isImageable(patchColor)) {

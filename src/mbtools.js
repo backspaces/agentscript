@@ -1,5 +1,5 @@
 import * as turf from '../vendor/turf.esm.js'
-import gis from '../src/gis.js'
+import * as gis from '../src/gis.js'
 
 export function mapLoadPromise(map) {
     return new Promise((resolve, reject) => {

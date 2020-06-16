@@ -59,8 +59,9 @@ export function timeoutPromise(ms = 1000) {
 export async function timeoutLoop(fcn, steps = -1, ms = 0) {
     let i = 0
     while (i++ !== steps) {
-        let state = fcn(i - 1)
-        if (state === 'cancel') break
+        // let state = fcn(i - 1)
+        // if (state === 'cancel') break // 'done' too?
+        fcn(i - 1)
         await timeoutPromise(ms)
     }
 }

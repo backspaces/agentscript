@@ -14,23 +14,28 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    useSprites: true,
-                    patchSize: 20,
-                })
+                const drawOptions = {
+                    turtleColor: t => (model.cluster.has(t) ? 'red' : 'random'),
+                    turtleShape: 'circle',
+                    turtleSize: 2,
+                    linkColor: 'rgba(255, 255, 255, 0.50',
+                }
+
+                const view = new TwoDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        useSprites: true,
+                        patchSize: 20,
+                    },
+                    drawOptions
+                )
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw({
-                            turtleColor: t =>
-                                model.cluster.has(t) ? 'red' : 'random',
-                            turtleShape: 'circle',
-                            turtleSize: 2,
-                            linkColor: 'rgba(255, 255, 255, 0.50',
-                        })
+                        view.draw()
                     },
                     500,
                     33

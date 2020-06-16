@@ -1,4 +1,135 @@
 /* eslint-disable */
+// import util from '../src/util.js'
+const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan } = Math;
+const radians = degrees => (degrees * PI) / 180;
+const degrees = radians => (radians * 180) / PI;
+
+// Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
+function lon2x(lon, z) {
+    return floor(((lon + 180) / 360) * pow(2, z))
+}
+function lat2y(lat, z) {
+    const latRads = radians(lat);
+    return floor(
+        (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
+    )
+}
+function lonlat2xy(lon, lat, z) {
+    return [this.lon2x(lon, z), this.lat2y(lat, z)]
+}
+
+function x2lon(x, z) {
+    return (x / pow(2, z)) * 360 - 180
+}
+function y2lat(y, z) {
+    const rads = atan(sinh(PI - (2 * PI * y) / pow(2, z)));
+    return degrees(rads)
+}
+function xy2lonlat(x, y, z) {
+    return [this.x2lon(x, z), this.y2lat(y, z)]
+}
+// Return two lon/lat points for bbox of tile
+// We use the usual convention of
+//   [minX, minY, maxX, maxY] or [west, south, east, north]
+function xy2bbox(x, y, z) {
+    // REMIND: error check at 180, 0 etc
+    // const [lon0, lat0] = this.xy2lonlat(x, y, z)
+    const [west, north] = this.xy2lonlat(x, y, z);
+    // console.log('west, north', west, north)
+    // tile Y increases "down" like pixel coords
+    // const [lon1, lat1] = this.xy2lonlat(x + 1, y + 1, z)
+    const [east, south] = this.xy2lonlat(x + 1, y + 1, z);
+    // console.log('south, east', south, east)
+    // west, south, east, north
+    // lon0, lat1, lon1, lat0
+    return [west, south, east, north]
+    // return [
+    //     [lon0, lat0],
+    //     [lon1, lat1],
+    // ]
+}
+function lonLat2bbox(lon, lat, z) {
+    const [x, y] = this.lonlat2xy(lon, lat, z);
+    return this.xy2bbox(x, y, z)
+}
+
+function bboxCenter(bbox) {
+    const [west, south, east, north] = bbox;
+    return [(west + east) / 2, (south + north) / 2]
+}
+function bboxCoords(bbox) {
+    const [west, south, east, north] = bbox;
+    return [
+        [west, north],
+        [east, north],
+        [east, south],
+        [west, south],
+    ]
+}
+
+// Create a url for OSM json data.
+// https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
+// south, west, north, east = minLat, minLon, maxLat, maxLon
+function getOsmURL(south, west, north, east) {
+    const url = 'https://overpass-api.de/api/interpreter?data=';
+    const params = `\
+[out:json][timeout:180][bbox:${south}${west}${north}${east}];
+way[highway];
+(._;>;);
+out;`;
+    return url + encodeURIComponent(params)
+}
+
+// https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
+// Explanation: https://en.wikipedia.org/wiki/Haversine_formula
+function lonLat2meters(pt1, pt2) {
+    const [lon1, lat1] = pt1.map(val => radians(val)); // lon/lat radians
+    const [lon2, lat2] = pt2.map(val => radians(val));
+
+    // generally used geo measurement function
+    const R = 6378.137; // Radius of earth in KM
+    const dLat = lat2 - lat1;
+    const dLon = lon2 - lon1;
+    const a = sin(dLat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dLon / 2) ** 2;
+    // pow(sin(dLat / 2), 2) +
+    // cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2)
+    const c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    const d = R * c;
+    return d * 1000 // meters
+}
+
+// geojson utilities
+function cloneJson(json) {
+    return JSON.parse(JSON.stringify(json))
+}
+function areEqual(json0, json1) {
+    return JSON.stringify(json0) === JSON.stringify(json1)
+}
+// bin/minifyjson
+function minify(json) {
+    const str = JSON.stringify(json); // compact form
+    // newline for each feature
+    return str.replace(/,{"type":"Feature"/g, '\n,\n{"type":"Feature"')
+}
+
+var gis = /*#__PURE__*/Object.freeze({
+    lon2x: lon2x,
+    lat2y: lat2y,
+    lonlat2xy: lonlat2xy,
+    x2lon: x2lon,
+    y2lat: y2lat,
+    xy2lonlat: xy2lonlat,
+    xy2bbox: xy2bbox,
+    lonLat2bbox: lonLat2bbox,
+    bboxCenter: bboxCenter,
+    bboxCoords: bboxCoords,
+    getOsmURL: getOsmURL,
+    lonLat2meters: lonLat2meters,
+    cloneJson: cloneJson,
+    areEqual: areEqual,
+    minify: minify
+});
+
 // ### Async
 
 // Return Promise for getting an image.
@@ -60,8 +191,9 @@ function timeoutPromise(ms = 1000) {
 async function timeoutLoop(fcn, steps = -1, ms = 0) {
     let i = 0;
     while (i++ !== steps) {
-        let state = fcn(i - 1);
-        if (state === 'cancel') break
+        // let state = fcn(i - 1)
+        // if (state === 'cancel') break // 'done' too?
+        fcn(i - 1);
         await timeoutPromise(ms);
     }
 }
@@ -639,21 +771,21 @@ function lerpScale(number, lo, hi) {
 
 // Degrees & Radians
 // Note: quantity, not coord system xfm
-const radians = degrees => (degrees * Math.PI) / 180;
-const degrees = radians => (radians * 180) / Math.PI;
+const radians$1 = degrees => (degrees * Math.PI) / 180;
+const degrees$1 = radians => (radians * 180) / Math.PI;
 
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
 // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
 function heading(radians) {
     // angleToHeading?
-    const deg = degrees(radians);
+    const deg = degrees$1(radians);
     return mod(90 - deg, 360)
 }
 function angle(heading) {
     // headingToAngle?
     const deg = mod(90 - heading, 360);
-    return radians(deg)
+    return radians$1(deg)
 }
 function headingToDegrees(heading) {
     return mod(90 - heading, 360)
@@ -715,8 +847,8 @@ var math = /*#__PURE__*/Object.freeze({
     between: between,
     lerp: lerp$1,
     lerpScale: lerpScale,
-    radians: radians,
-    degrees: degrees,
+    radians: radians$1,
+    degrees: degrees$1,
     heading: heading,
     angle: angle,
     headingToDegrees: headingToDegrees,
@@ -2586,224 +2718,6 @@ class Links extends AgentSet {
     }
 }
 
-// import util from '../src/util.js'
-const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan } = Math;
-const radians$1 = degrees => (degrees * PI) / 180;
-const degrees$1 = radians => (radians * 180) / PI;
-function nestedProperty$1(obj, path) {
-    if (typeof path === 'string') path = path.split('.');
-    return path.reduce((obj, param) => obj[param], obj)
-}
-
-const gis = {
-    // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
-    lon2x(lon, z) {
-        return floor(((lon + 180) / 360) * pow(2, z))
-    },
-    lat2y(lat, z) {
-        const latRads = radians$1(lat);
-        return floor(
-            (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
-        )
-    },
-    lonlat2xy(lon, lat, z) {
-        return [this.lon2x(lon, z), this.lat2y(lat, z)]
-    },
-
-    x2lon(x, z) {
-        return (x / pow(2, z)) * 360 - 180
-    },
-    y2lat(y, z) {
-        const rads = atan(sinh(PI - (2 * PI * y) / pow(2, z)));
-        return degrees$1(rads)
-    },
-    xy2lonlat(x, y, z) {
-        return [this.x2lon(x, z), this.y2lat(y, z)]
-    },
-    // Return two lon/lat points for bbox of tile
-    // We use the usual convention of
-    //   [minX, minY, maxX, maxY] or [west, south, east, north]
-    xy2bbox(x, y, z) {
-        // REMIND: error check at 180, 0 etc
-        // const [lon0, lat0] = this.xy2lonlat(x, y, z)
-        const [west, north] = this.xy2lonlat(x, y, z);
-        // console.log('west, north', west, north)
-        // tile Y increases "down" like pixel coords
-        // const [lon1, lat1] = this.xy2lonlat(x + 1, y + 1, z)
-        const [east, south] = this.xy2lonlat(x + 1, y + 1, z);
-        // console.log('south, east', south, east)
-        // west, south, east, north
-        // lon0, lat1, lon1, lat0
-        return [west, south, east, north]
-        // return [
-        //     [lon0, lat0],
-        //     [lon1, lat1],
-        // ]
-    },
-    lonLat2bbox(lon, lat, z) {
-        const [x, y] = this.lonlat2xy(lon, lat, z);
-        return this.xy2bbox(x, y, z)
-    },
-
-    bboxCenter(bbox) {
-        const [west, south, east, north] = bbox;
-        return [(west + east) / 2, (south + north) / 2]
-    },
-    bboxCoords(bbox) {
-        const [west, south, east, north] = bbox;
-        return [
-            [west, north],
-            [east, north],
-            [east, south],
-            [west, south],
-        ]
-    },
-
-    // Create a url for OSM json data.
-    // https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
-    // south, west, north, east = minLat, minLon, maxLat, maxLon
-    getOsmURL(south, west, north, east) {
-        const url = 'https://overpass-api.de/api/interpreter?data=';
-        const params = `\
-[out:json][timeout:180][bbox:${south},${west},${north},${east}];
-way[highway];
-(._;>;);
-out;`;
-        return url + encodeURIComponent(params)
-    },
-
-    // https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
-    // Explanation: https://en.wikipedia.org/wiki/Haversine_formula
-    lonLat2meters(pt1, pt2) {
-        const [lon1, lat1] = pt1.map(val => radians$1(val)); // lon/lat radians
-        const [lon2, lat2] = pt2.map(val => radians$1(val));
-
-        // generally used geo measurement function
-        const R = 6378.137; // Radius of earth in KM
-        const dLat = lat2 - lat1;
-        const dLon = lon2 - lon1;
-        const a =
-            sin(dLat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dLon / 2) ** 2;
-        // pow(sin(dLat / 2), 2) +
-        // cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2)
-        const c = 2 * atan2(sqrt(a), sqrt(1 - a));
-        const d = R * c;
-        return d * 1000 // meters
-    },
-
-    // geojson utilities
-    cloneJson(json) {
-        return JSON.parse(JSON.stringify(json))
-    },
-    areEqual(json0, json1) {
-        return JSON.stringify(json0) === JSON.stringify(json1)
-    },
-
-    // The filters modify the input json. Use cloneJson to preserve original.
-
-    flattenMultiLineStrings(json) {
-        const features = [];
-        json.features.forEach(feature => {
-            if (feature.geometry.type === 'MultiLineString') {
-                feature.geometry.coordinates.forEach(coords => {
-                    const copy = Object.assign({}, feature);
-                    copy.geometry.type = 'LineString';
-                    copy.geometry.coordinates = coords;
-                    features.push(copy);
-                });
-            } else {
-                features.push(feature);
-            }
-        });
-        json.features = features;
-        return json
-    },
-
-    // The most general filter: keeps a feature only if
-    // filterFcn(feature, i, features) returns true.
-    // The filterFcn can also modify feature properties.
-    // json is mutated, equals the return value (sugar)
-    featureFilter(json, filterFcn) {
-        json.features = json.features.filter(filterFcn);
-        return json
-    },
-
-    // Filter by a property (path) matching one of values array.
-    pathFilter(json, featurePath, values) {
-        if (typeof values === 'string') values = values.split(' ');
-        this.featureFilter(json, feature => {
-            const value = nestedProperty$1(feature, featurePath);
-            return values.includes(value)
-        });
-        return json
-    },
-    // The above specific to geometry (Point, Polygon, LineString)
-    geometryFilter(json, values) {
-        return this.pathFilter(json, 'geometry.type', values)
-    },
-
-    // Reduces the feature properties to only those in the properties array.
-    propertiesFilter(json, properties) {
-        if (typeof properties === 'string') properties = properties.split(' ');
-        json.features.forEach(feature => {
-            const obj = {};
-            properties.forEach(prop => {
-                if (feature.properties[prop] !== undefined) {
-                    obj[prop] = feature.properties[prop];
-                }
-            });
-            feature.properties = obj;
-        });
-        return json
-    },
-
-    // service highways could be of interest too, esp fire/emergency
-    //     "highway": "service",
-    //     "service": "xxx" where service is (in santafe zoom 10)
-    //    6     "service": "emergency_access"
-    //  120     "service": "alley"
-    //  141     "service": "drive-through"
-    // 1300     "service": "driveway"
-    // 1506     "service": "parking_aisle"
-    streetTypes: [
-        'motorway',
-        'trunk',
-        'residential',
-        'primary',
-        'secondary',
-        'tertiary',
-        'motorway_link',
-        'trunk_link',
-        'primary_link',
-        'secondary_link',
-        'tertiary_link',
-    ],
-    streetProperties: ['highway', 'oneway', 'name', 'tiger:name_base'],
-    // A simple filter for streets.
-    // Filters for:
-    //   - LineString geometry
-    //   - highways matching streetTypes array, defaulted to above
-    //   - properties reduced to streetProperties, defaulted to above
-    streetsFilter(
-        json,
-        streetTypes = this.streetTypes,
-        streetProperties = this.streetProperties
-    ) {
-        this.geometryFilter(json, 'LineString');
-        // see https://wiki.openstreetmap.org/wiki/Highways
-        // note motorway_junction's are Point geometries
-        this.pathFilter(json, 'properties.highway', streetTypes);
-        this.propertiesFilter(json, streetProperties);
-        return json
-    },
-
-    minify(json) {
-        const str = JSON.stringify(json); // compact form
-        // newline for each feature
-        return str.replace(/,{"type":"Feature"/g, '\n,\n{"type":"Feature"')
-    },
-};
-
 // class World defines the coordinate system for the model.
 // It will be upgraded with methods converting from other
 // transforms like GIS and DataSets.
@@ -3770,23 +3684,25 @@ class Model {
 //      min = -32768; scale = 1/256
 
 class RGBDataSet extends DataSet {
-    // static scaleFromMinMax(min, max) {
-    //     // 255*256*256 + 255*256 + 255 === 2 ** 24 - 1 i.e. 16777215
-    //     return (max - min) / (2 ** 24 - 1)
-    // }
     static newRgbDataFunction(min, scale) {
         return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
     }
+
+    // amazon/mapzen: https://registry.opendata.aws/tag/elevation/
     static newMapzenElevation() {
         return this.newRgbDataFunction(-32768, 1 / 256)
     }
+    static mapzenUrl(z, x, y) {
+        return `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`
+    }
+    // https://docs.mapbox.com/help/troubleshooting/access-elevation-data/
     static newMapboxElevation() {
         return this.newRgbDataFunction(-10000, 0.1)
     }
-
-    static rgbToInt24(r, g, b) {
-        return r * 256 * 256 + g * 256 + b
+    static mapboxUrl(z, x, y, token) {
+        return `https://api.mapbox.com/v4/mapbox.terrain-rgb/${z}/${x}/${y}.pngraw?access_token=${token}`
     }
+
     static redfishElevation(r, g, b) {
         let negative = 1; // From RGB2DeciMeters()
         if (r > 63) {
@@ -3795,6 +3711,17 @@ class RGBDataSet extends DataSet {
         }
         return (negative * (r * 256 * 256 + g * 256 + b)) / 10
     }
+    static redfishUSAUrl(z, x, y) {
+        return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
+    }
+    static redfishWorldUrl(z, x, y) {
+        return `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/${x}/${y}.png`
+    }
+
+    static rgbToInt24(r, g, b) {
+        return r * 256 * 256 + g * 256 + b
+    }
+
     // Constructor args: (img, rgbToData, ArrayType)
     // where rgbToData(r,g,b) returns a number for the dataset.
     // For Redfish tiles, use
@@ -3802,31 +3729,27 @@ class RGBDataSet extends DataSet {
     // For Mapzen use
     //   new RGBDataSet(img, RGBDataSet.newMapzenElevation())
     // which constructs the r,g,b function from the mapzen min, scale values.
+    // Similarly for mapbox using a min, scale function.
     constructor(
         img,
         rgbToData = RGBDataSet.rgbToInt24,
         ArrayType = Float32Array
     ) {
         super(img.width, img.height, new ArrayType(img.width * img.height));
-        // if (typeof min === 'function') {
-        //     ArrayType = scale === 1 ? Float32Array : scale
-        //     fcn = min
-        // }
+
         if (Array.isArray(rgbToData))
             rgbToData = RGBDataSet.newRgbDataFunction(rgbToData);
+
         const ctx = util.createCtx(img.width, img.height);
         util.fillCtxWithImage(ctx, img);
         const imgData = util.ctxImageData(ctx);
+
         const convertedData = this.data;
         for (var i = 0; i < convertedData.length; i++) {
             const r = imgData.data[4 * i];
             const g = imgData.data[4 * i + 1];
             const b = imgData.data[4 * i + 2];
-            // value = min + int24 * scale
             convertedData[i] = rgbToData(r, g, b);
-            // convertedData[i] = min
-            //     ? min + (r * 256 * 256 + g * 256 + b) * scale
-            //     : rgbToData(r, g, b)
         }
     }
 }

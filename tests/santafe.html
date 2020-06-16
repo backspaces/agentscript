@@ -9,20 +9,20 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.1.0/leaflet.js"></script>
     </head>
     <body>
-        <div id="map" style="height:800px"></div>
+        <div id="map" style="height: 800px;"></div>
         <!-- <script src="play0.js"></script> -->
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
-            import gis from '../src/gis.js'
             const world = World.defaultWorld(10, 20)
-            util.toWindow({ util, World, gis, world })
+            util.toWindow({ util, World, world })
 
             async function run() {
                 const geojson = await util.xhrPromise(
                     '../models/roads14vt.json'
                 )
                 window.json = JSON.parse(geojson)
+                // Could use external json filtered by bin/geofilters.js
                 const roadTypes = [
                     'primary',
                     'secondary',
