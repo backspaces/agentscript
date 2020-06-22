@@ -55,7 +55,7 @@
                 },
             }
             function draw(model, view) {
-                if (view.steps === 0) {
+                if (view.ticks === 0) {
                     if (view.options.patches.meshClass === 'PatchesMesh')
                         view.createPatchPixels(
                             i => patchesMap.randomColor().pixel

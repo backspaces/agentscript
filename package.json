@@ -56,7 +56,7 @@
         "run3w": "bin/runmodels workers3",
         "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",
-        "start": "live-server &",
+        "start": "./node_modules/.bin/live-server &",
         "temp": "rollup -c workflow/rollup.config.js"
     },
     "@pika/web": {

@@ -1,9 +1,8 @@
 import util from '../src/util.js'
-import TwoView from '../src/TwoView.js'
+import ThreeView from '../src/ThreeView.js'
 import ColorMap from '../src/ColorMap.js'
 
-// export default class TwoDraw {
-export default class TwoDraw extends TwoView {
+export default class ThreeDraw extends ThreeView {
     static defaultOptions() {
         return {
             patchColor: 'random',
@@ -14,17 +13,17 @@ export default class TwoDraw extends TwoView {
             linkWidth: 1,
             patchesMap: ColorMap.DarkGray,
             turtlesMap: ColorMap.Basic16,
-            textProperty: null,
-            textSize: 0.5,
-            textColor: 'black',
+            // textProperty: null,
+            // textSize: 0.5,
+            // textColor: 'black',
             initPatches: null,
         }
     }
 
     // ======================
 
-    constructor(model, twoViewOptions = {}, drawOptions = {}) {
-        super(model.world, twoViewOptions)
+    constructor(model, threeViewOptions = {}, drawOptions = {}) {
+        super(model.world, threeViewOptions)
         this.model = model
         this.view = this
         this.drawOptions = drawOptions
@@ -33,14 +32,14 @@ export default class TwoDraw extends TwoView {
     // The parameters are easily mistaken: check they are all in the defaults.
     checkParams(params) {
         const keys = Object.keys(params)
-        const defaults = TwoDraw.defaultOptions()
+        const defaults = ThreeDraw.defaultOptions()
         keys.forEach(k => {
             if (defaults[k] === undefined) {
                 console.log(
-                    'Legal TwoDraw parameters',
-                    Object.keys(TwoDraw.defaultOptions())
+                    'Legal ThreeDraw parameters',
+                    Object.keys(ThreeDraw.defaultOptions())
                 )
-                throw Error('Unknown TwoDraw parameter: ' + k)
+                throw Error('Unknown ThreeDraw parameter: ' + k)
             }
         })
     }
@@ -56,7 +55,6 @@ export default class TwoDraw extends TwoView {
     // The params object overrides the default options.
     // randomTurtle(t) {return turtlesMap.atIndex(l.id).css}
     draw(params = this.drawOptions) {
-        // params = Object.assign({}, TwoDraw.defaultOptions(), params)
         let {
             patchColor,
             turtleColor,
@@ -66,11 +64,11 @@ export default class TwoDraw extends TwoView {
             linkWidth,
             patchesMap,
             turtlesMap,
-            textProperty,
-            textSize,
-            textColor,
+            // textProperty,
+            // textSize,
+            // textColor,
             initPatches,
-        } = Object.assign({}, TwoDraw.defaultOptions(), params)
+        } = Object.assign({}, ThreeDraw.defaultOptions(), params)
         const { model, view } = this
 
         if (view.ticks === 0) {
@@ -81,7 +79,7 @@ export default class TwoDraw extends TwoView {
 
             this.checkParams(params)
 
-            if (textProperty) view.setTextProperties(textSize)
+            // if (textProperty) view.setTextProperties(textSize)
 
             if (initPatches) {
                 const colors = initPatches(model, view)
@@ -92,7 +90,8 @@ export default class TwoDraw extends TwoView {
         }
 
         if (patchColor === 'random' || patchColor === 'static' || initPatches) {
-            view.drawPatches() // redraw cached patches colors below
+            // Already in gpu
+            // view.drawPatches() // redraw cached patches colors below
         } else if (typeof patchColor === 'function') {
             view.drawPatches(model.patches, p => patchColor(p))
         } else if (util.isImageable(patchColor)) {
@@ -128,12 +127,12 @@ export default class TwoDraw extends TwoView {
             size: typeof turtleSize === 'function' ? turtleSize(t) : turtleSize,
         }))
 
-        if (textProperty) {
-            model.turtles.ask(t => {
-                if (t[textProperty] != null)
-                    view.drawText(t[textProperty], t.x, t.y, textColor)
-            })
-        }
+        // if (textProperty) {
+        //     model.turtles.ask(t => {
+        //         if (t[textProperty] != null)
+        //             view.drawText(t[textProperty], t.x, t.y, textColor)
+        //     })
+        // }
 
         view.tick()
     }

@@ -60,7 +60,7 @@ export default class ThreeView {
 
         this.world = new World(world.world || world) // world can be model
         this.options = options
-        this.steps = 0
+        this.ticks = 0
 
         if (this.options.spriteSize !== 0) {
             const isPOT = util.isPowerOf2(this.options.spriteSize)
@@ -248,7 +248,7 @@ export default class ThreeView {
     render() {
         // REMIND: generalize.
         this.renderer.render(this.scene, this.camera)
-        this.steps++
+        this.ticks++
         // if (this.view.stats) this.view.stats.update()
     }
 
@@ -271,22 +271,22 @@ export default class ThreeView {
     createPatchPixels(pixelFcn) {
         this.patchesView.createPixels(pixelFcn)
         const data = this.patchesView.pixels
-        this.meshes.patches.update(data, d => d, this.steps)
+        this.meshes.patches.update(data, d => d)
     }
     drawPatches(data, viewFcn) {
         // REMIND: may not be needed, patchesView does this check too.
         if (util.isOofA(data)) data = util.toAofO(data)
-        this.meshes.patches.update(data, viewFcn, this.steps)
+        this.meshes.patches.update(data, viewFcn)
     }
     drawTurtles(data, viewFcn) {
         if (util.isOofA(data)) data = util.toAofO(data)
         viewFcn = this.checkViewFcn(viewFcn)
-        this.meshes.turtles.update(data, viewFcn, this.steps)
+        this.meshes.turtles.update(data, viewFcn)
     }
     drawLinks(data, viewFcn) {
         if (util.isOofA(data)) data = util.toAofO(data)
         viewFcn = this.checkViewFcn(viewFcn)
-        this.meshes.links.update(data, viewFcn, this.steps)
+        this.meshes.links.update(data, viewFcn)
     }
 }
 

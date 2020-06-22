@@ -89,9 +89,6 @@ export default class TwoDraw extends TwoView {
             } else if (patchColor === 'random') {
                 view.createPatchPixels(i => patchesMap.randomColor().pixel)
             }
-            // if (patchColor === 'random') {
-            //     view.createPatchPixels(i => patchesMap.randomColor().pixel)
-            // }
         }
 
         if (patchColor === 'random' || patchColor === 'static' || initPatches) {
