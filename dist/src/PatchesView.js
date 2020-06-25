@@ -4,11 +4,17 @@ export default class PatchesView {
     // Ctor: create a 2D context and imageData for this View
     constructor(width, height) {
         this.ctx = util.createCtx(width, height)
-        // this.canvas = this.ctx.canvas
+        this.resetImageData()
+        // this.imageData = util.ctxImageData(this.ctx)
+        // this.pixels = new Uint32Array(this.imageData.data.buffer)
+        // this.length = this.pixels.length
+        this.useImageSmoothing = false
+    }
+    // Set the imageData and pixels values from the pixel's canvas ctx
+    resetImageData() {
         this.imageData = util.ctxImageData(this.ctx)
         this.pixels = new Uint32Array(this.imageData.data.buffer)
-        this.length = this.pixels.length
-        this.useImageSmoothing = false
+        // this.length = this.pixels.length
     }
     setPatchesSmoothing(smoothting) {
         this.useImageSmoothing = smoothting
@@ -34,7 +40,7 @@ export default class PatchesView {
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
     }
     createPixels(pixelFcn) {
-        util.repeat(this.length, i => (this.pixels[i] = pixelFcn(i)))
+        util.repeat(this.pixels.length, i => (this.pixels[i] = pixelFcn(i)))
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
     }
     // Used to be: setPixel(x, y, pixel) {
@@ -52,6 +58,22 @@ export default class PatchesView {
         // this.updateCanvas()
         util.fillCtxWithImage(ctx, this.ctx.canvas)
         ctx.imageSmoothingEnabled = smoothing
+    }
+    clear(color) {
+        if (!color) {
+            util.clearCtx(this.ctx)
+        } else if (typeof color === 'string') {
+            util.fillCtx(this.ctx, color)
+        } else if (typeof color === 'number') {
+            this.createPixels(() => color)
+        } else {
+            throw Error('patchesView: illegal color ' + color)
+        }
+        if (typeof color !== 'number') {
+            this.resetImageData()
+        } else {
+            this.updateCanvas()
+        }
     }
 
     // Return promise for an ImageBitmap of the current ctx

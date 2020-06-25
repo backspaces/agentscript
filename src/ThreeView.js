@@ -260,6 +260,13 @@ export default class ThreeView {
     checkViewFcn(viewFcn) {
         return util.isObject(viewFcn) ? () => viewFcn : viewFcn
     }
+
+    clearPatches(color) {
+        // color can be pixel, css, or undefined (clear to transparent)
+        this.patchesView.clear(color)
+        // no args: just merge pixels into canvas, set mesh needsUpdate true
+        this.meshes.patches.update()
+    }
     // drawPatchesImage(img) {
     drawPatchesImage(img) {
         this.meshes.patches.options.textureOptions = {

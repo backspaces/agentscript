@@ -1,5 +1,5 @@
 import Color from '../src/Color.js'
-import ThreeView from '../src/ThreeView.js'
+import ThreeDraw from '../src/ThreeDraw.js'
 
 const typeColors = {
     dirt: Color.cssToPixel('yellow'),
@@ -12,15 +12,10 @@ const typeColors = {
     ember0: Color.rgbaToPixel(255 - 125, 0, 0),
 }
 
-const viewOptions = {} // use defaults, div = document.body
+export default function newView(model, viewOptions = {}) {
+    const drawOptions = {
+        patchColor: p => typeColors[p.type],
+    }
 
-function newView(model, options = {}) {
-    return new ThreeView(model.world, Object.assign(viewOptions, options))
+    return new ThreeDraw(model, viewOptions, drawOptions)
 }
-
-function drawView(model, view) {
-    view.drawPatches(model.patches, p => typeColors[p.type])
-    view.render()
-}
-
-export default { newView, drawView }

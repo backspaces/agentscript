@@ -460,7 +460,7 @@ out;`;
     function ctxImageData(ctx) {
         return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
     }
-    // Fill this context with the given css color string.
+    // Clear this context (transparent)
     function clearCtx(ctx) {
         setIdentity(ctx);
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);

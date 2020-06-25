@@ -6,26 +6,45 @@ export default class ThreeDraw extends ThreeView {
     static defaultOptions() {
         return {
             patchColor: 'random',
+
             turtleColor: 'random',
             turtleShape: 'dart',
             turtleSize: 1,
+
             linkColor: 'random',
             linkWidth: 1,
+
             patchesMap: ColorMap.DarkGray,
             turtlesMap: ColorMap.Basic16,
+
             // textProperty: null,
             // textSize: 0.5,
             // textColor: 'black',
+
             initPatches: null,
         }
     }
 
     // ======================
 
-    constructor(model, threeViewOptions = {}, drawOptions = {}) {
-        super(model.world, threeViewOptions)
+    constructor(model, viewOptions = {}, drawOptions = {}) {
+        drawOptions = Object.assign({}, ThreeDraw.defaultOptions(), drawOptions)
+        if (drawOptions.turtleShape === 'point') {
+            viewOptions.turtles = {
+                meshClass: 'PointsMesh',
+                options: { pointSize: drawOptions.turtleSize, z: 1.5 },
+            }
+            // if(typeof drawOptions.turtleColor !== 'function' )
+            if (Array.isArray(drawOptions.turtleColor)) {
+                viewOptions.turtles.color = drawOptions.turtleColor
+            }
+        }
+
+        super(model.world, viewOptions)
+
         this.model = model
         this.view = this
+        this.checkParams(drawOptions)
         this.drawOptions = drawOptions
     }
 
@@ -44,43 +63,27 @@ export default class ThreeDraw extends ThreeView {
         })
     }
 
-    // setup(fcn = (model, view) => {}) {
-    //     // default to no-op
-    //     // This used to be the initPatches() in drawOptions
-    //     // supply the function with this.model, this.view as args
-    //     fcn(this.model, this.view)
-    // }
-
-    // The simple default draw() function.
-    // The params object overrides the default options.
-    // randomTurtle(t) {return turtlesMap.atIndex(l.id).css}
-    draw(params = this.drawOptions) {
+    draw() {
         let {
             patchColor,
+
             turtleColor,
             turtleShape,
             turtleSize,
+
             linkColor,
             linkWidth,
+
             patchesMap,
             turtlesMap,
             // textProperty,
             // textSize,
             // textColor,
             initPatches,
-        } = Object.assign({}, ThreeDraw.defaultOptions(), params)
+        } = this.drawOptions
         const { model, view } = this
 
         if (view.ticks === 0) {
-            if (typeof turtlesMap === 'string')
-                turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
-            if (typeof patchesMap === 'string')
-                patchesMap = params.patchesMap = ColorMap[patchesMap]
-
-            this.checkParams(params)
-
-            // if (textProperty) view.setTextProperties(textSize)
-
             if (initPatches) {
                 const colors = initPatches(model, view)
                 view.createPatchPixels(i => colors[i].pixel)
@@ -89,17 +92,27 @@ export default class ThreeDraw extends ThreeView {
             }
         }
 
-        if (patchColor === 'random' || patchColor === 'static' || initPatches) {
+        let lastImage, lastClearColor
+        // if (patchColor === 'random' || patchColor === 'static' || initPatches) {
+        if (patchColor === 'random' || initPatches) {
             // Already in gpu
             // view.drawPatches() // redraw cached patches colors below
         } else if (typeof patchColor === 'function') {
             view.drawPatches(model.patches, p => patchColor(p))
         } else if (util.isImageable(patchColor)) {
-            view.drawPatchesImage(patchColor)
+            // Already in gpu?
+            if (patchColor !== lastImage) {
+                view.drawPatchesImage(patchColor)
+                lastImage = patchColor
+            }
         } else {
-            view.clear(patchColor)
+            if (patchColor !== lastClearColor) {
+                view.clearPatches(patchColor)
+                lastClearColor = patchColor
+            }
         }
 
+        // Return a cmap color if "random", or the color unchanged
         const checkColor = (agent, color) =>
             color === 'random' ? turtlesMap.atIndex(agent.id).css : color
 
@@ -113,17 +126,22 @@ export default class ThreeDraw extends ThreeView {
             width: linkWidth,
         }))
 
+        const turtleClass = view.options.turtles.meshClass
         view.drawTurtles(model.turtles, t => ({
+            // ignored for 'point' shape
             shape:
                 typeof turtleShape === 'function'
                     ? turtleShape(t)
                     : turtleShape,
             color:
                 turtleColor === 'random'
-                    ? turtlesMap.atIndex(t.id).css
+                    ? turtleClass === 'QuadSpritesMesh'
+                        ? turtlesMap.atIndex(t.id).css
+                        : turtlesMap.atIndex(t.id).webgl
                     : typeof turtleColor === 'function'
                     ? checkColor(t, turtleColor(t))
                     : turtleColor,
+            // ignored for 'point' shape
             size: typeof turtleSize === 'function' ? turtleSize(t) : turtleSize,
         }))
 
@@ -134,6 +152,6 @@ export default class ThreeDraw extends ThreeView {
         //     })
         // }
 
-        view.tick()
+        view.render() // calls three.render() & view.tick()
     }
 }

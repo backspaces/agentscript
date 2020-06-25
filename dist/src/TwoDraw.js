@@ -74,10 +74,10 @@ export default class TwoDraw extends TwoView {
         const { model, view } = this
 
         if (view.ticks === 0) {
-            if (typeof turtlesMap === 'string')
-                turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
-            if (typeof patchesMap === 'string')
-                patchesMap = params.patchesMap = ColorMap[patchesMap]
+            // if (typeof turtlesMap === 'string')
+            //     turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
+            // if (typeof patchesMap === 'string')
+            //     patchesMap = params.patchesMap = ColorMap[patchesMap]
 
             this.checkParams(params)
 
@@ -91,7 +91,8 @@ export default class TwoDraw extends TwoView {
             }
         }
 
-        if (patchColor === 'random' || patchColor === 'static' || initPatches) {
+        // if (patchColor === 'random' || patchColor === 'static' || initPatches) {
+        if (patchColor === 'random' || initPatches) {
             view.drawPatches() // redraw cached patches colors below
         } else if (typeof patchColor === 'function') {
             view.drawPatches(model.patches, p => patchColor(p))

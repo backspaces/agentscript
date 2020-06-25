@@ -90,7 +90,7 @@ export function drawText(ctx, string, x, y, color, useIdentity = true) {
 export function ctxImageData(ctx) {
     return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
 }
-// Fill this context with the given css color string.
+// Clear this context (transparent)
 export function clearCtx(ctx) {
     setIdentity(ctx)
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)

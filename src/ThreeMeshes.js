@@ -150,7 +150,7 @@ export class PatchesMesh extends CanvasMesh {
         super.init(canvas)
     }
     update(data, viewFcn = d => d) {
-        this.view.patchesView.setPixels(data, viewFcn)
+        if (data) this.view.patchesView.setPixels(data, viewFcn)
         this.view.patchesView.updateCanvas()
         super.update()
     }
