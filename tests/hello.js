@@ -89,7 +89,7 @@ function setupView() {
                 width: params.linkWidth,
             }
         }
-        util.fillCtx(view.ctx, 'lightgray')
+        util.clearCtx(view.ctx, 'lightgray')
         if (!params.noLinks) {
             view.drawLinks(
                 data.links,

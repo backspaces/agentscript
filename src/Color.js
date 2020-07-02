@@ -148,21 +148,35 @@ const Color = {
     // pixels: `toTypedColor(4294945280)` !! Little Endian !!
     // JavaScript Arrays: `toTypedColor([255,0,0])`
     // ```
+
+    // isWebglArray(array) {
+    //     array.length === 3 && util.arrayMax(array) <= 1
+    // },
+
     toTypedColor(any) {
         if (this.isTypedColor(any)) return any
+
         const tc = this.typedColor(0, 0, 0, 0) // "empty" typed color
-        if (util.isInteger(any)) {
-            tc.setPixel(any)
-        } else if (typeof any === 'string') {
-            tc.setCss(any)
-        } else if (Array.isArray(any) || util.isUintArray(any)) {
-            tc.setColor(...any)
-        } else if (util.isFloatArray(any)) {
-            tc.setWebgl(any)
-        } else {
-            throw Error('toTypedColor: invalid argument', any)
-        }
+
+        // const type = this.colorType(any)
+        tc[this.colorType(any)] = any
+
+        // if (util.isInteger(any)) tc.setPixel(any)
+        // else if (util.isString(any)) tc.setCss(any)
+        // else if (util.isWebglArray(any)) tc.setWebgl(any)
+        // else if (Array.isArray(any)) tc.setColor(...any)
+        // else throw Error('Color.toTypedColor: invalid argument', any)
+
         return tc
+    },
+    colorType(any) {
+        if (this.isTypedColor(any)) return 'typed'
+        if (util.isString(any)) return 'css'
+        if (util.isInteger(any)) return 'pixel'
+        if (util.isWebglArray(any)) return 'webgl'
+        if (Array.isArray(any)) return 'rgb'
+
+        throw Error('Color.colorType: invalid argument', any)
     },
     // Return a random rgb Color, a=255
     randomTypedColor() {
@@ -250,30 +264,32 @@ const TypedColorProto = {
         this.setCss(string)
     },
 
-    // Note: webgl colors are 3 RGB floats (no A) if A is 255.
-    setWebgl(floatArray) {
+    // Note: webgl colors are 3 RGB floats (no A)
+    setWebgl(array) {
+        if (array.length !== 3)
+            throw Error(
+                'setWebgl array length must be 3, length:',
+                array.length
+            )
         this.setColor(
             // OK if float * 255 non-int, setColor stores into uint8 array
-            floatArray[0] * 255,
-            floatArray[1] * 255,
-            floatArray[2] * 255,
-            floatArray.length === 4 ? floatArray[3] * 255 : undefined
+            array[0] * 255,
+            array[1] * 255,
+            array[2] * 255
         )
     },
     getWebgl() {
-        if (this.floatArray == null) {
-            const floats = [this[0] / 255, this[1] / 255, this[2] / 255]
-            if (this[3] !== 255) floats.push(this[3] / 255)
-            this.floatArray = new Float32Array(floats)
-        }
-        return this.floatArray
+        return [this[0] / 255, this[1] / 255, this[2] / 255]
     },
     get webgl() {
         return this.getWebgl()
     },
-    set webgl(floatArray) {
-        this.setWebgl(floatArray)
+    set webgl(array) {
+        this.setWebgl(array)
     },
+    // set webgl(floatArray) {
+    //     this.setWebgl(floatArray)
+    // },
 
     // Housekeeping when the color is modified.
     checkColorChange() {

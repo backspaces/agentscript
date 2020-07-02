@@ -69,11 +69,17 @@ export default class TwoView {
     // Clear the view.canvas.
     // If no color, or 'transparent', make transparent via clearCtx.
     clear(cssColor) {
-        if (cssColor && cssColor !== 'transparent') {
-            util.fillCtx(this.ctx, cssColor)
-        } else {
-            util.clearCtx(this.ctx)
-        }
+        // if (cssColor && cssColor !== 'transparent') {
+        //   util.fillCtx(this.ctx, cssColor)
+        // } else {
+        //     util.clearCtx(this.ctx)
+        // }
+
+        // Now handles color undefined & 'transparent'
+        util.clearCtx(this.ctx, cssColor)
+
+        // REMIND: Clear the pixels?
+        // this.patchesView.clear(cssColor)
     }
 
     createPatchPixels(pixelFcn) {

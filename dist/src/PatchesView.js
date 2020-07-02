@@ -1,5 +1,7 @@
 import util from './util.js'
 
+const getPixel = color => color.pixel || color
+
 export default class PatchesView {
     // Ctor: create a 2D context and imageData for this View
     constructor(width, height) {
@@ -34,20 +36,22 @@ export default class PatchesView {
             )
         }
         util.forLoop(data, (d, i) => {
-            this.pixels[i] = pixelFcn(d)
+            this.pixels[i] = getPixel(pixelFcn(d))
         })
 
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
     }
     createPixels(pixelFcn) {
-        util.repeat(this.pixels.length, i => (this.pixels[i] = pixelFcn(i)))
+        util.repeat(this.pixels.length, i => {
+            this.pixels[i] = getPixel(pixelFcn(i))
+        })
         // if (updateCanvas) this.ctx.putImageData(this.imageData, 0, 0)
     }
     // Used to be: setPixel(x, y, pixel) {
     // but best to be purely independent of world object
     setPixel(index, pixel) {
         // const index = world.xyToPatchIndex(x, y)
-        this.pixels[index] = pixel
+        this.pixels[index] = getPixel(pixel)
     }
 
     // Draw this pixel canvas onto a View 2D canvas ctx.
@@ -60,15 +64,29 @@ export default class PatchesView {
         ctx.imageSmoothingEnabled = smoothing
     }
     clear(color) {
-        if (!color) {
-            util.clearCtx(this.ctx)
-        } else if (typeof color === 'string') {
-            util.fillCtx(this.ctx, color)
+        // typedColor -> css
+        color = color.css || color
+
+        // if (!color) {
+        //     // clear to transparent
+        //     util.clearCtx(this.ctx)
+        // } else if (typeof color === 'string') {
+        //     // handles 'transparent'
+        //     util.fillCtx(this.ctx, color)
+        // } else if (typeof color === 'number') {
+        //     this.createPixels(() => color)
+        // } else {
+        //     throw Error('patchesView: illegal color ' + color)
+        // }
+
+        if (!color || typeof color === 'string') {
+            util.clearCtx(this.ctx, color)
         } else if (typeof color === 'number') {
             this.createPixels(() => color)
         } else {
             throw Error('patchesView: illegal color ' + color)
         }
+
         if (typeof color !== 'number') {
             this.resetImageData()
         } else {

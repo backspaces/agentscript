@@ -6,7 +6,7 @@ const maxZ = 10
 
 export default function newView(model, viewOptions = {}) {
     const drawOptions = {
-        patchColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ).pixel,
+        patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ).pixel,
     }
 
     const view = new ThreeDraw(model, viewOptions, drawOptions)

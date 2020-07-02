@@ -9,7 +9,7 @@ export default async function newView(model, viewOptions = {}) {
 
     const isIntersection = t => t.breed.name === 'intersections'
     const drawOptions = {
-        patchColor: baseMapTile,
+        patchesColor: baseMapTile,
         turtleShape: 'circle',
         turtleColor: t => (isIntersection(t) ? 'blue' : 'red'),
         turtleSize: t => (isIntersection(t) ? 2 : 1),

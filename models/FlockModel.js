@@ -30,9 +30,6 @@ export default class FlockModel extends Model {
         // this.turtles.setDefault('size', 1)
         this.turtles.setDefault('speed', this.speed)
 
-        // const cmap = ColorMap.grayColorMap(0, 100)
-        // this.patches.ask(p => { p.setColor(cmap.randomColor()) })
-
         // this.setMaxTurn(this.maxTurnDegrees)
         // this.setVision(3)
         this.patches.cacheRect(this.vision)

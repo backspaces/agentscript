@@ -5,7 +5,7 @@ export default function newView(model, viewOptions = {}) {
     return new ThreeDraw(model, viewOptions, {
         turtleShape: 'point',
         turtleSize: 2,
-        // linkColor: 'white',
+        linkColor: 'red',
         // turtleColor: [1, 0, 0],
     }) // use default drawOptions
 }

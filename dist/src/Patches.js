@@ -26,18 +26,20 @@ class Patches extends AgentSet {
         })
     }
 
-    setDefault(name, value) {
-        if (name === 'color') {
-            this.ask(p => {
-                p.setColor(value)
-            })
-            util.logOnce(
-                'patches.setDefault(color, value): color default not supported. Clearing to value'
-            )
-        } else {
-            super.setDefault(name, value)
-        }
-    }
+    // Oops, color is a view property
+    // setDefault(name, value) {
+    //     if (name === 'color') {
+    //         this.ask(p => {
+    //             p.setColor(value)
+    //         })
+    //         util.logOnce(
+    //             'patches.setDefault(color, value): color default not supported. Clearing to value'
+    //         )
+    //     } else {
+    //         super.setDefault(name, value)
+    //     }
+    // }
+
     // Get/Set label. REMIND: not implemented.
     // Set removes label if label is null or undefined.
     // Get returns undefined if no label.

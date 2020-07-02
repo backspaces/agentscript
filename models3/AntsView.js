@@ -9,7 +9,7 @@ export default function newView(model, viewOptions = {}) {
     const foodColorMap = ColorMap.gradientColorMap(20, ['black', foodColor.css])
 
     const drawOptions = {
-        patchColor: p => {
+        patchesColor: p => {
             if (p.isNest) return nestColor.pixel
             if (p.isFood) return foodColor.pixel
             return p.foodPheromone > p.nestPheromone

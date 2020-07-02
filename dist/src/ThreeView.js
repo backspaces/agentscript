@@ -262,7 +262,7 @@ export default class ThreeView {
     }
 
     clearPatches(color) {
-        // color can be pixel, css, or undefined (clear to transparent)
+        // color can be typed, pixel, css, or undefined (clear to transparent)
         this.patchesView.clear(color)
         // no args: just merge pixels into canvas, set mesh needsUpdate true
         this.meshes.patches.update()

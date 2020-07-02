@@ -10,6 +10,9 @@ function createQuad(r, z = 0) {
     return { vertices, indices }
 }
 const unitQuad = createQuad(0.5, 0)
+// Return typedColor[meshColorType] or color which must be correct type
+const meshColor = (color, mesh) => color[mesh.options.colorType] || color
+// const getPixel = color => color.pixel || color
 
 // Utility classes meant to be subclassed:
 // ============= BaseMesh =============
@@ -67,6 +70,7 @@ export class CanvasMesh extends BaseMesh {
             z: 1.0,
             useSegments: false,
             canvas: null, // fill in w/ BaseMesh ctor options
+            // colorType: undefined
         }
     }
     init(canvas = this.options.canvas) {
@@ -142,6 +146,7 @@ export class PatchesMesh extends CanvasMesh {
             },
             z: 1.0,
             useSegments: false,
+            colorType: 'pixel',
         }
     }
     init(canvas = this.view.patchesView.ctx.canvas) {
@@ -162,6 +167,7 @@ export class QuadSpritesMesh extends BaseMesh {
     static options() {
         return {
             z: 2.0,
+            colorType: 'css',
         }
     }
     init() {
@@ -206,7 +212,10 @@ export class QuadSpritesMesh extends BaseMesh {
             const viewData = viewFcn(turtle, i)
             let { size, sprite } = viewData
             if (!sprite)
-                sprite = this.view.getSprite(viewData.shape, viewData.color)
+                sprite = this.view.getSprite(
+                    viewData.shape,
+                    meshColor(viewData.color, this)
+                )
 
             // const { size, sprite } = viewFcn(turtle, i)
 
@@ -245,13 +254,14 @@ export class PointsMesh extends BaseMesh {
             pointSize: 1,
             color: null,
             z: 2.0,
+            colorType: 'webgl',
         }
     }
     init() {
         if (this.mesh) this.dispose()
         const pointSize = this.options.pointSize // REMIND: variable or fixed?
         this.fixedColor = this.options.color
-            ? this.options.color //new  THREE.Color(this.options.color)
+            ? new THREE.Color(...meshColor(this.options.color, this))
             : null
 
         const geometry = new THREE.BufferGeometry()
@@ -292,7 +302,8 @@ export class PointsMesh extends BaseMesh {
             let { x, y, z } = turtle
             if (!z) z = 0
             vertices.push(x, y, z)
-            if (colors) colors.push(...viewFcn(turtle, i).color)
+            if (colors)
+                colors.push(...meshColor(viewFcn(turtle, i).color, this))
         })
         const positionAttrib = this.mesh.geometry.getAttribute('position')
         positionAttrib.setArray(new Float32Array(vertices))
@@ -312,6 +323,7 @@ export class LinksMesh extends BaseMesh {
         return {
             color: null,
             z: 1.5,
+            colorType: 'css',
         }
     }
     init() {

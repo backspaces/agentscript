@@ -34,7 +34,7 @@
 
             // world.setEuclideanTransform(ctx, patchSize)
             // shapes.resetCtx(ctx, patchSize, width, height, x0, y0) // util?
-            util.fillCtx(ctx, 'lightgray')
+            util.clearCtx(ctx, 'lightgray')
 
             async function addImages() {
                 await shapes.imagePathPromise('tweet', './data/twitter.png')

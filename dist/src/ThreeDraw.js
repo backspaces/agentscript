@@ -1,11 +1,29 @@
 import util from '../src/util.js'
 import ThreeView from '../src/ThreeView.js'
 import ColorMap from '../src/ColorMap.js'
+import Color from './Color.js'
+
+function isStaticColor(color) {
+    return !isDynamicColor(color)
+}
+function isDynamicColor(color) {
+    return (
+        color === 'random' || util.isImageable(color) || util.isFunction(color)
+    )
+}
+// function meshColorType(mesh) {
+//     return mesh.options.colorType
+// }
+// function meshColor(color, mesh) {
+//     const type = mesh.options.colorType
+//     if (Color.isTypedColor() || Color.colorType(color) === type) return color
+//     return Color.toTypedColor(color)
+// }
 
 export default class ThreeDraw extends ThreeView {
     static defaultOptions() {
         return {
-            patchColor: 'random',
+            patchesColor: 'random',
 
             turtleColor: 'random',
             turtleShape: 'dart',
@@ -29,14 +47,24 @@ export default class ThreeDraw extends ThreeView {
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
         drawOptions = Object.assign({}, ThreeDraw.defaultOptions(), drawOptions)
+
+        // Convert static colors to typedColor, works for all meshes.
+        for (const color of ['patchesColor', 'turtleColor', 'linkColor']) {
+            if (isStaticColor(drawOptions[color])) {
+                drawOptions[color] = Color.toTypedColor(drawOptions[color])
+            }
+        }
+
+        // Convert viewOptions.patches from Patches to Points if shape == 'point'
+        // REMIND: Currently just turtles can be points. Patches too?
         if (drawOptions.turtleShape === 'point') {
             viewOptions.turtles = {
                 meshClass: 'PointsMesh',
-                options: { pointSize: drawOptions.turtleSize, z: 1.5 },
+                options: { pointSize: drawOptions.turtleSize }, // , z: 1.5
             }
-            // if(typeof drawOptions.turtleColor !== 'function' )
-            if (Array.isArray(drawOptions.turtleColor)) {
-                viewOptions.turtles.color = drawOptions.turtleColor
+            // If color static, set the mesh's color option, avoiding color buffer.
+            if (isStaticColor(drawOptions.turtleColor)) {
+                viewOptions.turtles.options.color = drawOptions.turtleColor
             }
         }
 
@@ -62,10 +90,20 @@ export default class ThreeDraw extends ThreeView {
             }
         })
     }
+    // colorType(agentSetName) {
+    //     return this.meshes[agentSetName].options.colorType
+    // }
 
     draw() {
+        // Return a cmap color if "random", or the color as is.
+        // Note this checks the return of color fcn, not whether the
+        // color was 'random' initally. Fcn can also return 'random'
+        const checkFcnColor = (agent, color, map = turtlesMap) =>
+            color === 'random' ? map.atIndex(agent.id) : color
+
         let {
-            patchColor,
+            patchesColor,
+            initPatches,
 
             turtleColor,
             turtleShape,
@@ -79,69 +117,67 @@ export default class ThreeDraw extends ThreeView {
             // textProperty,
             // textSize,
             // textColor,
-            initPatches,
         } = this.drawOptions
         const { model, view } = this
 
         if (view.ticks === 0) {
             if (initPatches) {
+                // REMIND: If Points allowed, need webgl color type.
+                //   should check mesh.options.colorType
                 const colors = initPatches(model, view)
-                view.createPatchPixels(i => colors[i].pixel)
-            } else if (patchColor === 'random') {
+                // colors is an array of typedColors or pixels:
+                view.createPatchPixels(i => colors[i].pixel || colors[i])
+            } else if (patchesColor === 'random') {
+                // NOTE: random colors only done once for patches.
                 view.createPatchPixels(i => patchesMap.randomColor().pixel)
             }
         }
 
         let lastImage, lastClearColor
-        // if (patchColor === 'random' || patchColor === 'static' || initPatches) {
-        if (patchColor === 'random' || initPatches) {
+        if (patchesColor === 'random' || initPatches) {
             // Already in gpu
-            // view.drawPatches() // redraw cached patches colors below
-        } else if (typeof patchColor === 'function') {
-            view.drawPatches(model.patches, p => patchColor(p))
-        } else if (util.isImageable(patchColor)) {
+        } else if (typeof patchesColor === 'function') {
+            view.drawPatches(model.patches, p => patchesColor(p))
+        } else if (util.isImageable(patchesColor)) {
             // Already in gpu?
-            if (patchColor !== lastImage) {
-                view.drawPatchesImage(patchColor)
-                lastImage = patchColor
+            if (patchesColor !== lastImage) {
+                view.drawPatchesImage(patchesColor)
+                lastImage = patchesColor
             }
         } else {
-            if (patchColor !== lastClearColor) {
-                view.clearPatches(patchColor)
-                lastClearColor = patchColor
+            // Should be static color for clear() call
+            // Already in gpu?
+            if (patchesColor !== lastClearColor) {
+                view.clearPatches(patchesColor)
+                lastClearColor = patchesColor
             }
         }
-
-        // Return a cmap color if "random", or the color unchanged
-        const checkColor = (agent, color) =>
-            color === 'random' ? turtlesMap.atIndex(agent.id).css : color
 
         view.drawLinks(model.links, l => ({
             color:
                 linkColor === 'random'
-                    ? turtlesMap.atIndex(l.id).css
+                    ? turtlesMap.atIndex(l.id)
                     : typeof linkColor === 'function'
-                    ? checkColor(l, linkColor(t))
+                    ? checkFcnColor(l, linkColor(t))
                     : linkColor,
             width: linkWidth,
         }))
 
-        const turtleClass = view.options.turtles.meshClass
+        // REMIND: adjust for PointMesh
         view.drawTurtles(model.turtles, t => ({
-            // ignored for 'point' shape
+            // shape ignored for 'point' shape
             shape:
                 typeof turtleShape === 'function'
                     ? turtleShape(t)
                     : turtleShape,
+            // color ignored for static 'point' shape
             color:
                 turtleColor === 'random'
-                    ? turtleClass === 'QuadSpritesMesh'
-                        ? turtlesMap.atIndex(t.id).css
-                        : turtlesMap.atIndex(t.id).webgl
+                    ? turtlesMap.atIndex(t.id)
                     : typeof turtleColor === 'function'
-                    ? checkColor(t, turtleColor(t))
+                    ? checkFcnColor(t, turtleColor(t))
                     : turtleColor,
-            // ignored for 'point' shape
+            // size ignored for 'point' shape
             size: typeof turtleSize === 'function' ? turtleSize(t) : turtleSize,
         }))
 

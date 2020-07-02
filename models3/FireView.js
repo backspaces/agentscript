@@ -14,7 +14,7 @@ const typeColors = {
 
 export default function newView(model, viewOptions = {}) {
     const drawOptions = {
-        patchColor: p => typeColors[p.type],
+        patchesColor: p => typeColors[p.type],
     }
 
     return new ThreeDraw(model, viewOptions, drawOptions)

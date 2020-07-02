@@ -11,7 +11,8 @@ export const isOneOfTypes = (obj, array) => array.includes(typeOf(obj))
 
 export const isString = obj => isType(obj, 'string')
 export const isObject = obj => isType(obj, 'object')
-export const isArray = obj => isType(obj, 'array')
+// export const isArray = obj => isType(obj, 'array')
+export const isArray = obj => Array.isArray(obj)
 export const isNumber = obj => isType(obj, 'number')
 export const isFunction = obj => isType(obj, 'function')
 
@@ -35,6 +36,8 @@ export const isTypedArray = obj => typeOf(obj.buffer) === 'arraybuffer'
 export const isUintArray = obj => /^uint.*array$/.test(typeOf(obj))
 export const isIntArray = obj => /^int.*array$/.test(typeOf(obj))
 export const isFloatArray = obj => /^float.*array$/.test(typeOf(obj))
+export const isWebglArray = obj =>
+    Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
 
 export function isLittleEndian() {
     const d32 = new Uint32Array([0x01020304])

@@ -461,17 +461,30 @@ out;`;
         return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
     }
     // Clear this context (transparent)
-    function clearCtx(ctx) {
+    function clearCtx(ctx, cssColor) {
+        const { width, height } = ctx.canvas;
+
         setIdentity(ctx);
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        if (!cssColor || cssColor === 'transparent') {
+            ctx.clearRect(0, 0, width, height);
+        } else {
+            ctx.fillStyle = cssColor;
+            ctx.fillRect(0, 0, width, height);
+        }
         ctx.restore();
     }
     // Fill this context with the given css color string.
+    // Call clearCtx if color undefined or 'transparent'
     function fillCtx(ctx, cssColor) {
-        setIdentity(ctx);
-        ctx.fillStyle = cssColor;
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.restore();
+        // if (!cssColor || cssColor === 'transparent') {
+        //     clearCtx(ctx)
+        // } else {
+        //     setIdentity(ctx)
+        //     ctx.fillStyle = cssColor
+        //     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        //     ctx.restore()
+        // }
+        clearCtx(ctx, cssColor); // REMIND: Remove after testing
     }
     // These image functions use "imagable" objects: Image, ImageBitmap, Canvas ...
     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
@@ -1296,7 +1309,8 @@ out;`;
 
     const isString = obj => isType(obj, 'string');
     const isObject = obj => isType(obj, 'object');
-    const isArray = obj => isType(obj, 'array');
+    // export const isArray = obj => isType(obj, 'array')
+    const isArray = obj => Array.isArray(obj);
     const isNumber = obj => isType(obj, 'number');
     const isFunction = obj => isType(obj, 'function');
 
@@ -1320,6 +1334,8 @@ out;`;
     const isUintArray = obj => /^uint.*array$/.test(typeOf(obj));
     const isIntArray = obj => /^int.*array$/.test(typeOf(obj));
     const isFloatArray = obj => /^float.*array$/.test(typeOf(obj));
+    const isWebglArray = obj =>
+        Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1;
 
     function isLittleEndian() {
         const d32 = new Uint32Array([0x01020304]);
@@ -1360,6 +1376,7 @@ out;`;
         isUintArray: isUintArray,
         isIntArray: isIntArray,
         isFloatArray: isFloatArray,
+        isWebglArray: isWebglArray,
         isLittleEndian: isLittleEndian,
         convertArrayType: convertArrayType$1
     });
@@ -1414,10 +1431,10 @@ out;`;
 
     // A set of useful misc utils which will eventually move to individual files.
 
-    const util = {};
+    const util$1 = {};
 
     Object.assign(
-        util,
+        util$1,
 
         async,
         canvas,
@@ -1495,7 +1512,7 @@ out;`;
         typedSample(obj) {
             // const length = this.length
             const result = {};
-            util.forLoop(obj, (val, key) => {
+            util$1.forLoop(obj, (val, key) => {
                 result[key] = this.props(key, val);
             });
             return result
@@ -1545,7 +1562,7 @@ out;`;
             if (length != this.length) {
                 const name = this.name || this.constructor.name;
                 const direction = this.length < length ? 'decreasing' : 'increasing';
-                util.warn(`AgentArray.ask array mutation: ${name}: ${direction}`);
+                util$1.warn(`AgentArray.ask array mutation: ${name}: ${direction}`);
             }
             // return this
         }
@@ -1588,7 +1605,7 @@ out;`;
             this.ask(a => {
                 const val = key ? a[key] : a;
                 if (val < min || val > max) {
-                    util.warn(`histogram bounds error: ${val}: ${min}-${max}`);
+                    util$1.warn(`histogram bounds error: ${val}: ${min}-${max}`);
                 } else {
                     let bin = Math.floor((val - min) / binSize);
                     if (bin === bins) bin--; // val is max, round down
@@ -1613,13 +1630,13 @@ out;`;
         // Randomize the AgentArray in place. Use clone first if new AgentArray needed.
         // Return "this" for chaining.
         shuffle() {
-            return util.shuffle(this)
+            return util$1.shuffle(this)
         }
         // Return this AgentArray sorted by the reporter in ascending/descending order.
         // If reporter is a string, convert to a fcn returning that property.
         // Use clone if you don't want to mutate this array.
         sortBy(reporter, ascending = true) {
-            util.sortObjs(this, reporter, ascending);
+            util$1.sortObjs(this, reporter, ascending);
             return this
         }
 
@@ -1628,7 +1645,7 @@ out;`;
         remove(o, f) {
             const i = this.agentIndex(o, f);
             if (i !== -1) this.splice(i, 1);
-            else util.warn(`remove: ${o} not in AgentArray`);
+            else util$1.warn(`remove: ${o} not in AgentArray`);
             return this // chaining
         }
         insert(o, f) {
@@ -1643,8 +1660,8 @@ out;`;
         // f is used to return an integer for sorting, defaults to identity.
         // If f is a string, it is the object property to sort by.
         // Adapted from underscore's _.sortedIndex.
-        sortedIndex(item, f = util.identityFcn) {
-            if (util.isString(f)) f = util.propFcn(f);
+        sortedIndex(item, f = util$1.identityFcn) {
+            if (util$1.isString(f)) f = util$1.propFcn(f);
             const value = f(item);
             // Why not array.length - 1? Because we can insert 1 after end of array.
             // let [low, high] = [0, array.length]
@@ -1676,11 +1693,11 @@ out;`;
 
         // Return a random agent. Return undefined if empty.
         oneOf() {
-            return util.oneOf(this)
+            return util$1.oneOf(this)
         }
         // Return a random agent, not equal to agent
         otherOneOf(agent) {
-            return util.otherOneOf(this, agent)
+            return util$1.otherOneOf(this, agent)
         }
         // Return n other random agents from this array
         // otherNOf (n, agent) { return util.otherNOf(n, this, agent) }
@@ -1693,7 +1710,7 @@ out;`;
         // If reporter is a string, convert to a fcn returning that property
         minOrMaxOf(min, reporter, valueToo = false) {
             if (this.isEmpty()) throw Error('min/max OneOf: empty array')
-            if (typeof reporter === 'string') reporter = util.propFcn(reporter);
+            if (typeof reporter === 'string') reporter = util$1.propFcn(reporter);
             let o = null;
             let val = min ? Infinity : -Infinity;
             for (let i = 0; i < this.length; i++) {
@@ -1780,7 +1797,7 @@ out;`;
             const agents = new AgentArray();
             // const {x, y} = o // perf?
             const d2 = radius * radius;
-            const sqDistance = util.sqDistance; // Local function 2-3x faster, inlined?
+            const sqDistance = util$1.sqDistance; // Local function 2-3x faster, inlined?
             this.ask(a => {
                 if (sqDistance(o.x, o.y, a.x, a.y) <= d2) {
                     if (meToo || o !== a) agents.push(a);
@@ -1794,7 +1811,7 @@ out;`;
         inCone(o, radius, coneAngle, direction, meToo = false) {
             const agents = new AgentArray();
             this.ask(a => {
-                if (util.inCone(a.x, a.y, radius, coneAngle, direction, o.x, o.y)) {
+                if (util$1.inCone(a.x, a.y, radius, coneAngle, direction, o.x, o.y)) {
                     if (meToo || o !== a) agents.push(a);
                 }
             });
@@ -2186,7 +2203,7 @@ out;`;
         }
         makeName() {
             const { width, height } = this;
-            const sum = util.arraySum(this.data).toFixed(2);
+            const sum = util$1.arraySum(this.data).toFixed(2);
             return `${this.dataType().name}-${width}-${height}-${sum}`
         }
 
@@ -2199,8 +2216,8 @@ out;`;
         // true if x,y in dataset bounds
         inBounds(x, y) {
             return (
-                util.between(x, 0, this.width - 1) &&
-                util.between(y, 0, this.height - 1)
+                util$1.between(x, 0, this.width - 1) &&
+                util$1.between(y, 0, this.height - 1)
             )
         }
 
@@ -2283,7 +2300,7 @@ out;`;
 
         // Return a copy of this, with new data array
         copy() {
-            return new DataSet(this.width, this.height, util.clone(this.data))
+            return new DataSet(this.width, this.height, util$1.clone(this.data))
         }
 
         // Return new (empty) dataset, defaulting to this type
@@ -2382,7 +2399,7 @@ out;`;
         // Convert this dataset's data to new type. Precision may be lost.
         // Does nothing if current data is already of this Type.
         convertType(type) {
-            this.data = util.convertArrayType(this.data, type);
+            this.data = util$1.convertArrayType(this.data, type);
         }
 
         // Concatinate a dataset of equal height to my right to my east.
@@ -2418,7 +2435,7 @@ out;`;
             if (w !== dataset.width) {
                 throw Error(`concatSouth: widths not equal ${w}, ${dataset.width}`)
             }
-            const data1 = util.concatArrays(data, dataset.data);
+            const data1 = util$1.concatArrays(data, dataset.data);
             return new DataSet(w, h + dataset.height, data1)
         }
 
@@ -2448,8 +2465,8 @@ out;`;
                     let x0 = x + dx;
                     let y0 = y + dy;
                     if (clampNeeded) {
-                        x0 = util.clamp(x0, 0, this.width - 1);
-                        y0 = util.clamp(y0, 0, this.height - 1);
+                        x0 = util$1.clamp(x0, 0, this.width - 1);
+                        y0 = util$1.clamp(y0, 0, this.height - 1);
                     }
                     array.push(this.data[this.toIndex(x0, y0)]);
                 }
@@ -2524,7 +2541,7 @@ out;`;
                 for (let x = 0; x < w; x++) {
                     const [gx, gy] = [dzdx.getXY(x, y), dzdy.getXY(x, y)];
                     // slope.push(Math.atan(util.distance(gx, gy)) / cellSize) // radians
-                    slope.push(Math.atan(util.distance(0, 0, gx, gy)) / cellSize);
+                    slope.push(Math.atan(util$1.distance(0, 0, gx, gy)) / cellSize);
                     // if (noNaNs)
                     //   while (gx === gy) {
                     //     gx += util.randomNormal(0, 0.0001)
@@ -2600,10 +2617,10 @@ out;`;
 
         // Return max/min of data
         max() {
-            return util.arrayMax(this.data)
+            return util$1.arrayMax(this.data)
         }
         min() {
-            return util.arrayMin(this.data)
+            return util$1.arrayMin(this.data)
         }
         // Test that this has same width, height, data as dataset.
         // Note: does not require equal array type (Array or TypedArray)
@@ -2611,7 +2628,7 @@ out;`;
             return (
                 this.width === dataset.width &&
                 this.height === dataset.height &&
-                util.arraysEqual(this.data, dataset.data)
+                util$1.arraysEqual(this.data, dataset.data)
             )
         }
     }
@@ -2645,8 +2662,8 @@ out;`;
         // Remove this link from its agentset
         die() {
             this.agentSet.removeAgent(this);
-            util.removeArrayItem(this.end0.links, this);
-            util.removeArrayItem(this.end1.links, this);
+            util$1.removeArrayItem(this.end0.links, this);
+            util$1.removeArrayItem(this.end1.links, this);
             // Set id to -1, indicates that I've died.
             this.id = -1;
         }
@@ -2766,15 +2783,15 @@ out;`;
         }
         randomPoint() {
             return [
-                util.randomFloat2(this.minXcor, this.maxXcor),
-                util.randomFloat2(this.minYcor, this.maxYcor),
+                util$1.randomFloat2(this.minXcor, this.maxXcor),
+                util$1.randomFloat2(this.minYcor, this.maxYcor),
             ]
         }
         randomPatchPoint() {
             return [
                 // REMIND: can maxX/Y be in the result?
-                util.randomInt2(this.minX, this.maxX),
-                util.randomInt2(this.minY, this.maxY),
+                util$1.randomInt2(this.minX, this.maxX),
+                util$1.randomInt2(this.minY, this.maxY),
             ]
         }
         // Test x,y for being on-world.
@@ -2827,7 +2844,7 @@ out;`;
         // Does not change size if already the same, preserving the ctx content.
         setCanvasSize(canvas, patchSize) {
             const [width, height] = this.getWorldSize(patchSize);
-            util.setCanvasSize(canvas, width, height);
+            util$1.setCanvasSize(canvas, width, height);
         }
 
         // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)
@@ -2919,23 +2936,25 @@ out;`;
         }
         // Set up all the patches.
         populate() {
-            util.repeat(this.model.world.numX * this.model.world.numY, i => {
+            util$1.repeat(this.model.world.numX * this.model.world.numY, i => {
                 this.addAgent(); // Object.create(this.agentProto))
             });
         }
 
-        setDefault(name, value) {
-            if (name === 'color') {
-                this.ask(p => {
-                    p.setColor(value);
-                });
-                util.logOnce(
-                    'patches.setDefault(color, value): color default not supported. Clearing to value'
-                );
-            } else {
-                super.setDefault(name, value);
-            }
-        }
+        // Oops, color is a view property
+        // setDefault(name, value) {
+        //     if (name === 'color') {
+        //         this.ask(p => {
+        //             p.setColor(value)
+        //         })
+        //         util.logOnce(
+        //             'patches.setDefault(color, value): color default not supported. Clearing to value'
+        //         )
+        //     } else {
+        //         super.setDefault(name, value)
+        //     }
+        // }
+
         // Get/Set label. REMIND: not implemented.
         // Set removes label if label is null or undefined.
         // Get returns undefined if no label.
@@ -3011,7 +3030,7 @@ out;`;
         importDataSet(dataSet, patchVar, useNearest = false) {
             if (this.isBreedSet()) {
                 // REMIND: error
-                util.warn('Patches: exportDataSet called with breed, using patches');
+                util$1.warn('Patches: exportDataSet called with breed, using patches');
                 this.baseSet.importDataSet(dataSet, patchVar, useNearest);
                 return
             }
@@ -3023,13 +3042,13 @@ out;`;
         }
         exportDataSet(patchVar, Type = Array) {
             if (this.isBreedSet()) {
-                util.warn('Patches: exportDataSet called with breed, using patches');
+                util$1.warn('Patches: exportDataSet called with breed, using patches');
                 return this.baseSet.exportDataSet(patchVar, Type)
             }
             const { numX, numY } = this.model.world;
             // let data = util.arrayProps(this, patchVar)
             let data = this.props(patchVar);
-            data = util.convertArrayType(data, Type);
+            data = util$1.convertArrayType(data, Type);
             return new DataSet(numX, numY, data)
         }
 
@@ -3270,7 +3289,7 @@ out;`;
         // 6 methods in both Patch & Turtle modules
         // Distance from me to x, y. REMIND: No off-world test done
         distanceXY(x, y) {
-            return util.distance(this.x, this.y, x, y)
+            return util$1.distance(this.x, this.y, x, y)
         }
         // Return distance from me to object having an x,y pair (turtle, patch, ...)
         distance(agent) {
@@ -3282,7 +3301,7 @@ out;`;
             return this.towardsXY(agent.x, agent.y)
         }
         towardsXY(x, y) {
-            return util.radiansToward(this.x, this.y, x, y)
+            return util$1.radiansToward(this.x, this.y, x, y)
         }
         // Return patch w/ given parameters. Return undefined if off-world.
         // Return patch dx, dy from my position.
@@ -3312,7 +3331,7 @@ out;`;
         // Return a single turtle
         createOne(initFcn = turtle => {}) {
             const turtle = this.addAgent();
-            turtle.theta = util.randomFloat(Math.PI * 2);
+            turtle.theta = util$1.randomFloat(Math.PI * 2);
             initFcn(turtle);
             return turtle
         }
@@ -3320,7 +3339,7 @@ out;`;
         // If num == 1, return array with single turtle
         create(num, initFcn = turtle => {}) {
             // if (num === 1) return this.createOne(initFcn)
-            return util.repeat(num, (i, a) => {
+            return util$1.repeat(num, (i, a) => {
                 a.push(this.createOne(initFcn));
             })
         }
@@ -3352,7 +3371,7 @@ out;`;
             // const agents = this.inPatches(patches)
             const agents = this.inPatchRectXY(turtle.x, turtle.y, dx, dy);
             // don't use agents.removeAgent: breeds
-            if (!meToo) util.removeArrayItem(agents, turtle);
+            if (!meToo) util$1.removeArrayItem(agents, turtle);
             // if (!meToo) util.removeItem(agents, turtle)
             return agents // this.inPatches(patches)
             // return this.inPatchRect(turtle.x, turtle.y, dx, dy, meToo)
@@ -3435,7 +3454,7 @@ out;`;
             }
             // Remove me from patch.turtles cache if patch.turtles array exists
             if (this.patch.turtles != null) {
-                util.removeArrayItem(this.patch.turtles, this);
+                util$1.removeArrayItem(this.patch.turtles, this);
             }
             // Set id to -1, indicates that I've died.
             this.id = -1;
@@ -3471,10 +3490,10 @@ out;`;
 
         // Heading vs Euclidean Angles. Direction for clarity when ambiguity.
         get heading() {
-            return util.heading(this.theta)
+            return util$1.heading(this.theta)
         }
         set heading(heading) {
-            this.theta = util.angle(heading);
+            this.theta = util$1.angle(heading);
         }
         get direction() {
             return this.theta
@@ -3497,20 +3516,20 @@ out;`;
             const p = this.patch;
             if (p && p.turtles != null && p !== p0) {
                 // util.removeItem(p0.turtles, this)
-                if (p0) util.removeArrayItem(p0.turtles, this);
+                if (p0) util$1.removeArrayItem(p0.turtles, this);
                 p.turtles.push(this);
             }
         }
         // Handle turtle if x,y off-world
         handleEdge(x, y) {
-            if (util.isString(this.atEdge)) {
+            if (util$1.isString(this.atEdge)) {
                 const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world;
                 if (this.atEdge === 'wrap') {
-                    this.x = util.wrap(x, minXcor, maxXcor);
-                    this.y = util.wrap(y, minYcor, maxYcor);
+                    this.x = util$1.wrap(x, minXcor, maxXcor);
+                    this.y = util$1.wrap(y, minYcor, maxYcor);
                 } else if (this.atEdge === 'clamp' || this.atEdge === 'bounce') {
-                    this.x = util.clamp(x, minXcor, maxXcor);
-                    this.y = util.clamp(y, minYcor, maxYcor);
+                    this.x = util$1.clamp(x, minXcor, maxXcor);
+                    this.y = util$1.clamp(y, minYcor, maxYcor);
                     if (this.atEdge === 'bounce') {
                         if (this.x === minXcor || this.x === maxXcor) {
                             this.theta = Math.PI - this.theta;
@@ -3538,7 +3557,7 @@ out;`;
         }
         // Change current direction by rad radians which can be + (left) or - (right).
         rotate(rad) {
-            this.theta = util.mod(this.theta + rad, Math.PI * 2);
+            this.theta = util$1.mod(this.theta + rad, Math.PI * 2);
         }
         right(rad) {
             this.rotate(-rad);
@@ -3575,15 +3594,15 @@ out;`;
         // 6 methods in both Patch & Turtle modules
         // Distance from me to x, y. REMIND: No off-world test done
         distanceXY(x, y) {
-            return util.distance(this.x, this.y, x, y)
+            return util$1.distance(this.x, this.y, x, y)
         }
         // Return distance from me to object having an x,y pair (turtle, patch, ...)
         // distance (agent) { this.distanceXY(agent.x, agent.y) }
         distance(agent) {
-            return util.distance(this.x, this.y, agent.x, agent.y)
+            return util$1.distance(this.x, this.y, agent.x, agent.y)
         }
         sqDistance(agent) {
-            return util.sqDistance(this.x, this.y, agent.x, agent.y)
+            return util$1.sqDistance(this.x, this.y, agent.x, agent.y)
         }
         // Return angle towards agent/x,y
         // Use util.heading to convert to heading
@@ -3591,7 +3610,7 @@ out;`;
             return this.towardsXY(agent.x, agent.y)
         }
         towardsXY(x, y) {
-            return util.radiansToward(this.x, this.y, x, y)
+            return util$1.radiansToward(this.x, this.y, x, y)
         }
         // Return patch w/ given parameters. Return undefined if off-world.
         // Return patch dx, dy from my position.
@@ -3746,9 +3765,9 @@ out;`;
             if (Array.isArray(rgbToData))
                 rgbToData = RGBDataSet.newRgbDataFunction(rgbToData);
 
-            const ctx = util.createCtx(img.width, img.height);
-            util.fillCtxWithImage(ctx, img);
-            const imgData = util.ctxImageData(ctx);
+            const ctx = util$1.createCtx(img.width, img.height);
+            util$1.fillCtxWithImage(ctx, img);
+            const imgData = util$1.ctxImageData(ctx);
 
             const convertedData = this.data;
             for (var i = 0; i < convertedData.length; i++) {
@@ -3773,7 +3792,7 @@ out;`;
     exports.Turtles = Turtles;
     exports.World = World;
     exports.gis = gis;
-    exports.util = util;
+    exports.util = util$1;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

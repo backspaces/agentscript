@@ -69,9 +69,18 @@
                 bboxModel.setup()
 
                 if (!bboxView) {
-                    bboxView = new TwoDraw(bboxModel, {
-                        div: util.createCanvas(0, 0),
-                    })
+                    bboxView = new TwoDraw(
+                        bboxModel,
+                        {
+                            div: util.createCanvas(0, 0),
+                        },
+                        {
+                            patchColor: 'transparent',
+                            turtleShape: 'circle',
+                            turtleColor: 'blue',
+                            turtleSize: 0.5,
+                        }
+                    )
                     mbox.addViewLayer(map, 'model', bbox, bboxView)
                 } else {
                     mbox.updateViewSource(map, 'model', bbox)
@@ -84,12 +93,7 @@
 
                         bboxModel.step()
                         bboxModel.tick()
-                        bboxView.draw({
-                            patchColor: 'transparent',
-                            turtleShape: 'circle',
-                            turtleColor: 'blue',
-                            turtleSize: 0.5,
-                        })
+                        bboxView.draw()
 
                         if (bboxModel.ticks === 500)
                             console.log('500 steps done; coasting')

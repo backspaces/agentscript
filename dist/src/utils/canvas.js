@@ -91,17 +91,30 @@ export function ctxImageData(ctx) {
     return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
 }
 // Clear this context (transparent)
-export function clearCtx(ctx) {
+export function clearCtx(ctx, cssColor) {
+    const { width, height } = ctx.canvas
+
     setIdentity(ctx)
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    if (!cssColor || cssColor === 'transparent') {
+        ctx.clearRect(0, 0, width, height)
+    } else {
+        ctx.fillStyle = cssColor
+        ctx.fillRect(0, 0, width, height)
+    }
     ctx.restore()
 }
 // Fill this context with the given css color string.
+// Call clearCtx if color undefined or 'transparent'
 export function fillCtx(ctx, cssColor) {
-    setIdentity(ctx)
-    ctx.fillStyle = cssColor
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    ctx.restore()
+    // if (!cssColor || cssColor === 'transparent') {
+    //     clearCtx(ctx)
+    // } else {
+    //     setIdentity(ctx)
+    //     ctx.fillStyle = cssColor
+    //     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    //     ctx.restore()
+    // }
+    clearCtx(ctx, cssColor) // REMIND: Remove after testing
 }
 // These image functions use "imagable" objects: Image, ImageBitmap, Canvas ...
 // https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
