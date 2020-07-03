@@ -24,7 +24,7 @@ const params = util.RESTapi({
     useSprites: false,
 
     // This model's View parameters
-    linkColor: 'white', // css
+    linksColor: 'white', // css
     shape: 'dart',
     shapeSize: 2,
 
@@ -59,7 +59,7 @@ util.timeoutLoop(() => {
     view.clear()
     view.drawPatches() // redraw patches colors
 
-    view.drawLinks(model.links, { color: params.linkColor, width: 1 })
+    view.drawLinks(model.links, { color: params.linksColor, width: 1 })
     view.drawTurtles(model.turtles, t => ({
         shape: params.shape,
         color: colors.atIndex(t.id).css, // atIndex wraps to stay w/in map

@@ -34,11 +34,11 @@ export default class VirusMVC extends TwoMVC {
 
     draw() {
         super.defaultDraw({
-            patchColor: 'black',
-            turtleColor: t => this.turtleColors[t.state],
+            patchesColor: 'black',
+            turtlesColor: t => this.turtleColors[t.state],
             shape: this.shape,
             shapeSize: this.shapeSize,
-            linkColor: 'white',
+            linksColor: 'white',
         })
 
         // Draw data to the gui:

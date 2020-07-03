@@ -25,12 +25,12 @@ export default class ThreeDraw extends ThreeView {
         return {
             patchesColor: 'random',
 
-            turtleColor: 'random',
+            turtlesColor: 'random',
             turtleShape: 'dart',
-            turtleSize: 1,
+            turtlesSize: 1,
 
-            linkColor: 'random',
-            linkWidth: 1,
+            linksColor: 'random',
+            linksWidth: 1,
 
             patchesMap: ColorMap.DarkGray,
             turtlesMap: ColorMap.Basic16,
@@ -49,7 +49,7 @@ export default class ThreeDraw extends ThreeView {
         drawOptions = Object.assign({}, ThreeDraw.defaultOptions(), drawOptions)
 
         // Convert static colors to typedColor, works for all meshes.
-        for (const color of ['patchesColor', 'turtleColor', 'linkColor']) {
+        for (const color of ['patchesColor', 'turtlesColor', 'linksColor']) {
             if (isStaticColor(drawOptions[color])) {
                 drawOptions[color] = Color.toTypedColor(drawOptions[color])
             }
@@ -60,11 +60,11 @@ export default class ThreeDraw extends ThreeView {
         if (drawOptions.turtleShape === 'point') {
             viewOptions.turtles = {
                 meshClass: 'PointsMesh',
-                options: { pointSize: drawOptions.turtleSize }, // , z: 1.5
+                options: { pointSize: drawOptions.turtlesSize }, // , z: 1.5
             }
             // If color static, set the mesh's color option, avoiding color buffer.
-            if (isStaticColor(drawOptions.turtleColor)) {
-                viewOptions.turtles.options.color = drawOptions.turtleColor
+            if (isStaticColor(drawOptions.turtlesColor)) {
+                viewOptions.turtles.options.color = drawOptions.turtlesColor
             }
         }
 
@@ -105,12 +105,12 @@ export default class ThreeDraw extends ThreeView {
             patchesColor,
             initPatches,
 
-            turtleColor,
+            turtlesColor,
             turtleShape,
-            turtleSize,
+            turtlesSize,
 
-            linkColor,
-            linkWidth,
+            linksColor,
+            linksWidth,
 
             patchesMap,
             turtlesMap,
@@ -121,6 +121,11 @@ export default class ThreeDraw extends ThreeView {
         const { model, view } = this
 
         if (view.ticks === 0) {
+            if (typeof turtlesMap === 'string')
+                turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
+            if (typeof patchesMap === 'string')
+                patchesMap = params.patchesMap = ColorMap[patchesMap]
+
             if (initPatches) {
                 // REMIND: If Points allowed, need webgl color type.
                 //   should check mesh.options.colorType
@@ -155,12 +160,12 @@ export default class ThreeDraw extends ThreeView {
 
         view.drawLinks(model.links, l => ({
             color:
-                linkColor === 'random'
+                linksColor === 'random'
                     ? turtlesMap.atIndex(l.id)
-                    : typeof linkColor === 'function'
-                    ? checkFcnColor(l, linkColor(t))
-                    : linkColor,
-            width: linkWidth,
+                    : typeof linksColor === 'function'
+                    ? checkFcnColor(l, linksColor(t))
+                    : linksColor,
+            width: linksWidth,
         }))
 
         // REMIND: adjust for PointMesh
@@ -172,13 +177,16 @@ export default class ThreeDraw extends ThreeView {
                     : turtleShape,
             // color ignored for static 'point' shape
             color:
-                turtleColor === 'random'
+                turtlesColor === 'random'
                     ? turtlesMap.atIndex(t.id)
-                    : typeof turtleColor === 'function'
-                    ? checkFcnColor(t, turtleColor(t))
-                    : turtleColor,
+                    : typeof turtlesColor === 'function'
+                    ? checkFcnColor(t, turtlesColor(t))
+                    : turtlesColor,
             // size ignored for 'point' shape
-            size: typeof turtleSize === 'function' ? turtleSize(t) : turtleSize,
+            size:
+                typeof turtlesSize === 'function'
+                    ? turtlesSize(t)
+                    : turtlesSize,
         }))
 
         // if (textProperty) {

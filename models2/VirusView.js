@@ -6,7 +6,7 @@ const turtleColors = {
     susceptible: 'blue',
     resistant: 'gray',
 }
-const linkColor = 'rgba(255, 255, 255, 0.50'
+const linksColor = 'rgba(255, 255, 255, 0.50'
 const shape = 'circle'
 const shapeSize = 1.5
 
@@ -19,7 +19,7 @@ function newView(model, options = {}) {
 function drawView(model, view) {
     view.clear('black')
 
-    view.drawLinks(model.links, { color: linkColor, width: 1 })
+    view.drawLinks(model.links, { color: linksColor, width: 1 })
     view.drawTurtles(model.turtles, t => ({
         shape: shape,
         color: turtleColors[t.state],

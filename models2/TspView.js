@@ -4,8 +4,8 @@ import TwoView from '../src/TwoView.js'
 const nodeShape = 'circle'
 const nodeSize = 1.25
 const nodeColor = 'yellow'
-const linkColor = 'red'
-const linkWidth = 1
+const linksColor = 'red'
+const linksWidth = 1
 
 const viewOptions = { patchSize: 5 }
 
@@ -18,8 +18,8 @@ function drawView(model, view) {
 
     // Note these both use constant values, thus are an object, not function.
     view.drawLinks(model.links, {
-        color: linkColor,
-        width: linkWidth,
+        color: linksColor,
+        width: linksWidth,
     })
     // turtleBreeds('nodes travelers')
     // Draw just the nodes, the rest are invisible Genetic Algorithm "travelers"

@@ -3,7 +3,7 @@ import TwoView from '../src/TwoView.js'
 
 const patchesColors = ColorMap.DarkGray
 const turtleColors = ColorMap.Basic16
-const linkColor = 'rgba(255, 255, 255, 0.50'
+const linksColor = 'rgba(255, 255, 255, 0.50'
 const shape = 'dart'
 const shapeSize = 2
 
@@ -19,7 +19,7 @@ function newView(model, options = {}) {
 function drawView(model, view) {
     view.drawPatches() // redraw cached patches colors
 
-    view.drawLinks(model.links, { color: linkColor, width: 1 })
+    view.drawLinks(model.links, { color: linksColor, width: 1 })
     view.drawTurtles(model.turtles, t => ({
         shape: shape,
         color: turtleColors.atIndex(t.id).css,

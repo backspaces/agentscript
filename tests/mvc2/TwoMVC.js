@@ -127,49 +127,49 @@ export default class TwoMVC {
     // A paramitized NL default draw
     defaultDraw(params = {}) {
         const defaults = {
-            patchColor: undefined,
-            turtleColor: undefined,
-            linkColor: 'rgba(255,255,255,0.25',
-            linkWidth: 1,
+            patchesColor: undefined,
+            turtlesColor: undefined,
+            linksColor: 'rgba(255,255,255,0.25',
+            linksWidth: 1,
             shape: 'dart',
             shapeSize: 1,
         }
         params = Object.assign({}, defaults, params)
         const {
-            patchColor,
-            turtleColor,
-            linkColor,
-            linkWidth,
+            patchesColor,
+            turtlesColor,
+            linksColor,
+            linksWidth,
             shape,
             shapeSize,
         } = params
         const { model, view, animator } = this
 
         // Just draw patches once, results cached in view.patchesView
-        if (animator.draws === 0 && !patchColor) {
+        if (animator.draws === 0 && !patchesColor) {
             view.createPatchPixels(i => this.defaultGrayMap.randomColor().pixel)
         }
 
-        if (typeof patchColor === 'undefined') {
+        if (typeof patchesColor === 'undefined') {
             view.drawPatches() // redraw cached patches colors
-        } else if (typeof patchColor === 'function') {
-            view.drawPatches(model.patches, p => patchColor(p))
-        } else if (util.isImageable(patchColor)) {
-            view.drawPatchesImage(patchColor)
+        } else if (typeof patchesColor === 'function') {
+            view.drawPatches(model.patches, p => patchesColor(p))
+        } else if (util.isImageable(patchesColor)) {
+            view.drawPatchesImage(patchesColor)
         } else {
-            view.clear(patchColor)
+            view.clear(patchesColor)
         }
 
-        view.drawLinks(model.links, { color: linkColor, width: linkWidth })
+        view.drawLinks(model.links, { color: linksColor, width: linksWidth })
 
         view.drawTurtles(model.turtles, t => ({
             shape: shape,
             color:
-                typeof turtleColor === 'undefined'
+                typeof turtlesColor === 'undefined'
                     ? this.defaultColorMap.atIndex(t.id).css
-                    : typeof turtleColor === 'function'
-                    ? turtleColor(t)
-                    : turtleColor,
+                    : typeof turtlesColor === 'function'
+                    ? turtlesColor(t)
+                    : turtlesColor,
             size: shapeSize,
         }))
     }

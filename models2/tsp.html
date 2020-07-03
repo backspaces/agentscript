@@ -10,13 +10,13 @@
             import Model from '../models/TspModel.js'
 
             const drawOptions = {
-                patchColor: 'black',
+                patchesColor: 'black',
                 turtleShape: 'circle',
-                // turtleSize of 0 will skip drawing this turle
+                // turtlesSize of 0 will skip drawing this turle
                 // here "travelers" are skipped
-                turtleSize: t => (t.breed.name === 'nodes' ? 1.25 : 0),
-                turtleColor: 'yellow',
-                linkColor: 'red',
+                turtlesSize: t => (t.breed.name === 'nodes' ? 1.25 : 0),
+                turtlesColor: 'yellow',
+                linksColor: 'red',
             }
 
             async function run() {

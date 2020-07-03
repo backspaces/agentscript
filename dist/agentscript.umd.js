@@ -460,7 +460,8 @@ out;`;
     function ctxImageData(ctx) {
         return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
     }
-    // Clear this context (transparent)
+    // Clear this context using the cssColor.
+    // If no color or if color === 'transparent', clear to transparent.
     function clearCtx(ctx, cssColor) {
         const { width, height } = ctx.canvas;
 
@@ -473,19 +474,7 @@ out;`;
         }
         ctx.restore();
     }
-    // Fill this context with the given css color string.
-    // Call clearCtx if color undefined or 'transparent'
-    function fillCtx(ctx, cssColor) {
-        // if (!cssColor || cssColor === 'transparent') {
-        //     clearCtx(ctx)
-        // } else {
-        //     setIdentity(ctx)
-        //     ctx.fillStyle = cssColor
-        //     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-        //     ctx.restore()
-        // }
-        clearCtx(ctx, cssColor); // REMIND: Remove after testing
-    }
+
     // These image functions use "imagable" objects: Image, ImageBitmap, Canvas ...
     // https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
 
@@ -578,7 +567,6 @@ out;`;
         drawText: drawText,
         ctxImageData: ctxImageData,
         clearCtx: clearCtx,
-        fillCtx: fillCtx,
         fillCtxWithImage: fillCtxWithImage,
         setCtxImage: setCtxImage,
         imageToBytes: imageToBytes

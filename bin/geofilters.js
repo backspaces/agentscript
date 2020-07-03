@@ -81,7 +81,7 @@ export function propertiesFilter(json, properties) {
 //  141     "service": "drive-through"
 // 1300     "service": "driveway"
 // 1506     "service": "parking_aisle"
-const streetTypes = [
+export const osmStreetTypes = [
     'motorway',
     'trunk',
     'residential',
@@ -94,7 +94,12 @@ const streetTypes = [
     'secondary_link',
     'tertiary_link',
 ]
-const streetProperties = ['highway', 'oneway', 'name', 'tiger:name_base']
+export const osmStreetProperties = [
+    'highway',
+    'oneway',
+    'name',
+    'tiger:name_base',
+]
 // A simple filter for streets.
 // Filters for:
 //   - LineString geometry
@@ -102,8 +107,8 @@ const streetProperties = ['highway', 'oneway', 'name', 'tiger:name_base']
 //   - properties reduced to streetProperties, defaulted to above
 export function streetsFilter(
     json,
-    streetTypes = streetTypes,
-    streetProperties = streetProperties
+    streetTypes = osmStreetTypes,
+    streetProperties = osmStreetProperties
 ) {
     geometryFilter(json, 'LineString')
     // see https://wiki.openstreetmap.org/wiki/Highways

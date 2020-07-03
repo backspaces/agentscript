@@ -3,7 +3,7 @@ import TwoView from '../src/TwoView.js'
 
 const patchesColors = ColorMap.DarkGray
 const turtleColors = ColorMap.Basic16
-const linkColor = 'rgba(255, 255, 255, 0.50'
+const linksColor = 'rgba(255, 255, 255, 0.50'
 const shape = 'circle'
 const shapeSize = 2
 const clusterColor = 'red'
@@ -20,7 +20,7 @@ function newView(model, options = {}) {
 function drawView(model, view) {
     view.drawPatches() // redraw cached patches colors
 
-    view.drawLinks(model.links, { color: linkColor, width: 1 })
+    view.drawLinks(model.links, { color: linksColor, width: 1 })
 
     // Draw all the turtles a constant color (from t.id)
     const set = model.cluster

@@ -67,30 +67,18 @@ export default class PatchesView {
         // typedColor -> css
         color = color.css || color
 
-        // if (!color) {
-        //     // clear to transparent
-        //     util.clearCtx(this.ctx)
-        // } else if (typeof color === 'string') {
-        //     // handles 'transparent'
-        //     util.fillCtx(this.ctx, color)
-        // } else if (typeof color === 'number') {
-        //     this.createPixels(() => color)
-        // } else {
-        //     throw Error('patchesView: illegal color ' + color)
-        // }
-
         if (!color || typeof color === 'string') {
             util.clearCtx(this.ctx, color)
         } else if (typeof color === 'number') {
             this.createPixels(() => color)
         } else {
-            throw Error('patchesView: illegal color ' + color)
+            throw Error('patchesView.clear(): illegal color ' + color)
         }
 
-        if (typeof color !== 'number') {
-            this.resetImageData()
-        } else {
+        if (typeof color === 'number') {
             this.updateCanvas()
+        } else {
+            this.resetImageData()
         }
     }
 

@@ -15,10 +15,11 @@
                 model.setup()
 
                 const drawOptions = {
-                    turtleColor: t => (model.cluster.has(t) ? 'red' : 'random'),
+                    turtlesColor: t =>
+                        model.cluster.has(t) ? 'red' : 'random',
                     turtleShape: 'circle',
-                    turtleSize: 2,
-                    linkColor: 'rgba(255, 255, 255, 0.50',
+                    turtlesSize: 2,
+                    linksColor: 'rgba(255, 255, 255, 0.50',
                 }
 
                 const view = new TwoDraw(

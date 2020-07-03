@@ -17,7 +17,7 @@ if (params.seed) util.randomSeed()
 params.world = World.defaultWorld(params.maxX, params.maxY)
 
 const colors = ColorMap.Basic16
-const linkColor = Color.typedColor('white')
+const linksColor = Color.typedColor('white')
 
 const worker = new Worker('./helloWorker.js', { type: 'module' })
 worker.postMessage({ cmd: 'init', params: params })
@@ -26,7 +26,7 @@ const view = new ThreeView(params.world)
 // Just draw patches once:
 view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
 
-util.toWindow({ view, worker, params, colors, linkColor, Color, util })
+util.toWindow({ view, worker, params, colors, linksColor, Color, util })
 
 const perf = util.fps() // Just for testing, not needed for production.
 worker.onmessage = e => {
@@ -38,7 +38,7 @@ worker.onmessage = e => {
             sprite: view.getSprite('dart', colors.atIndex(i).css),
             size: params.shapeSize,
         }))
-        view.drawLinks(e.data.links, { color: linkColor })
+        view.drawLinks(e.data.links, { color: linksColor })
         view.render()
         worker.postMessage({ cmd: 'step' })
         perf()

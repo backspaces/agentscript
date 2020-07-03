@@ -41,8 +41,8 @@
                         model.tick()
                         view.draw({
                             turtleShape: 'circle',
-                            turtleColor: t => patchColors[t.exit.id].css,
-                            turtleSize: 1,
+                            turtlesColor: t => patchColors[t.exit.id].css,
+                            turtlesSize: 1,
                             initPatches: (model, view) => patchColors,
                         })
                     },

@@ -4,15 +4,15 @@ import ThreeDraw from '../src/ThreeDraw.js'
 export default function newView(model, viewOptions = {}) {
     return new ThreeDraw(model, viewOptions, {
         turtleShape: 'point',
-        turtleSize: 2,
-        linkColor: 'red',
-        // turtleColor: [1, 0, 0],
+        turtlesSize: 2,
+        linksColor: 'red',
+        // turtlesColor: [1, 0, 0],
     }) // use default drawOptions
 }
 
 // const patchesColors = ColorMap.DarkGray
 // const turtleColors = ColorMap.Basic16
-// const linkColor = 'rgba(255, 255, 255, 0.50'
+// const linksColor = 'rgba(255, 255, 255, 0.50'
 // const shape = 'dart'
 // const shapeSize = 2
 
@@ -41,7 +41,7 @@ export default function newView(model, viewOptions = {}) {
 // function drawView(model, view) {
 //     // view.drawPatches() // redraw cached patches colors
 
-//     view.drawLinks(model.links, { color: linkColor, width: 1 })
+//     view.drawLinks(model.links, { color: linksColor, width: 1 })
 //     view.drawTurtles(model.turtles, t => ({
 //         shape: shape,
 //         color:

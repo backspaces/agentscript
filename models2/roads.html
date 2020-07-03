@@ -19,11 +19,11 @@
                 const baseMapTile = await util.imagePromise(baseUrl)
                 const isIntersection = t => t.breed.name === 'intersections'
                 const drawOptions = {
-                    patchColor: baseMapTile,
+                    patchesColor: baseMapTile,
                     turtleShape: 'circle',
-                    turtleColor: t => (isIntersection(t) ? 'blue' : 'red'),
-                    turtleSize: t => (isIntersection(t) ? 2 : 1),
-                    linkColor: 'black',
+                    turtlesColor: t => (isIntersection(t) ? 'blue' : 'red'),
+                    turtlesSize: t => (isIntersection(t) ? 2 : 1),
+                    linksColor: 'black',
                 }
 
                 const view = new TwoDraw(

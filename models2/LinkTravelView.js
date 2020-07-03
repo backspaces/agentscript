@@ -6,7 +6,7 @@ const driverShape = 'dart'
 const nodeShape = 'circle'
 const driverSize = 1.25
 const nodeSize = 0.5
-const linkWidth = 1
+const linksWidth = 1
 
 const viewOptions = { patchSize: 20 }
 
@@ -19,7 +19,7 @@ function drawView(model, view) {
 
     view.drawLinks(model.links, t => ({
         color: Bright16.atIndex(t.id).css,
-        width: linkWidth,
+        width: linksWidth,
     }))
     // Draw nodes first to not obscure drivers
     view.drawTurtles(model.nodes, t => ({

@@ -9,7 +9,8 @@ const gis = esmImport('../src/gis.js')
 
 const zxy = process.argv[2]
 
-const [, z, x, y] = zxy.match(/(\d+)\/(\d+)\/(\d+)/)
+// const [, z, x, y] = zxy.match(/(\d+)\/(\d+)\/(\d+)/)
+const [z, x, y] = zxy.split('/').map(Number)
 
 // Our bbox is minX, minY, maxX, maxY
 const [west, south, east, north] = gis.xy2bbox(+x, +y, +z)

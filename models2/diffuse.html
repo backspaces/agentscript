@@ -11,9 +11,10 @@
             import Model from '../models/DiffuseModel.js'
 
             const drawOptions = {
-                patchColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1).pixel,
-                turtleColor: 'red',
-                turtleSize: 8,
+                patchesColor: p =>
+                    ColorMap.Rgb256.scaleColor(p.ran, 0, 1).pixel,
+                turtlesColor: 'red',
+                turtlesSize: 8,
             }
 
             async function run() {

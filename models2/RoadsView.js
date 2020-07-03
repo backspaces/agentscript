@@ -1,7 +1,7 @@
 import util from '../src/util.js'
 import TwoView from '../src/TwoView.js'
 
-const linkColor = 'black'
+const linksColor = 'black'
 // const tripColor = 'green'
 const shape = 'circle'
 // const shapeSize = 1
@@ -32,8 +32,8 @@ function drawView(model, view) {
     view.drawPatchesImage(baseMapTile)
 
     view.drawLinks(model.links, l => ({
-        // color: isTrip(l) ? tripColor : linkColor,
-        color: linkColor,
+        // color: isTrip(l) ? tripColor : linksColor,
+        color: linksColor,
     }))
     view.drawTurtles(model.turtles, t => ({
         shape: shape,

@@ -11,7 +11,7 @@ export default class HelloMVC extends MVC {
             // wiggle: 0.1,
 
             // Draw defaults
-            linkColor: 'white',
+            linksColor: 'white',
             shape: 'dart',
             shapeSize: 2,
             colorMap: ColorMap.Basic16,
@@ -37,7 +37,7 @@ export default class HelloMVC extends MVC {
         view.clear()
         view.drawPatches() // redraw cached patches colors
 
-        view.drawLinks(model.links, { color: this.linkColor, width: 1 })
+        view.drawLinks(model.links, { color: this.linksColor, width: 1 })
         view.drawTurtles(model.turtles, p => ({
             shape: this.shape,
             color: this.colorMap.atIndex(p.id).css,

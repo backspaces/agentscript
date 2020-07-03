@@ -90,7 +90,8 @@ export function drawText(ctx, string, x, y, color, useIdentity = true) {
 export function ctxImageData(ctx) {
     return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
 }
-// Clear this context (transparent)
+// Clear this context using the cssColor.
+// If no color or if color === 'transparent', clear to transparent.
 export function clearCtx(ctx, cssColor) {
     const { width, height } = ctx.canvas
 
@@ -103,19 +104,7 @@ export function clearCtx(ctx, cssColor) {
     }
     ctx.restore()
 }
-// Fill this context with the given css color string.
-// Call clearCtx if color undefined or 'transparent'
-export function fillCtx(ctx, cssColor) {
-    // if (!cssColor || cssColor === 'transparent') {
-    //     clearCtx(ctx)
-    // } else {
-    //     setIdentity(ctx)
-    //     ctx.fillStyle = cssColor
-    //     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    //     ctx.restore()
-    // }
-    clearCtx(ctx, cssColor) // REMIND: Remove after testing
-}
+
 // These image functions use "imagable" objects: Image, ImageBitmap, Canvas ...
 // https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
 

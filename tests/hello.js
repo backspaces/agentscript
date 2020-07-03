@@ -86,7 +86,7 @@ function setupView() {
         function linkViewValues(link, i, links) {
             return {
                 color: params.colors25[i % 25],
-                width: params.linkWidth,
+                width: params.linksWidth,
             }
         }
         util.clearCtx(view.ctx, 'lightgray')

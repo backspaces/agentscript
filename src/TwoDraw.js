@@ -6,12 +6,12 @@ import ColorMap from '../src/ColorMap.js'
 export default class TwoDraw extends TwoView {
     static defaultOptions() {
         return {
-            patchColor: 'random',
-            turtleColor: 'random',
+            patchesColor: 'random',
+            turtlesColor: 'random',
             turtleShape: 'dart',
-            turtleSize: 1,
-            linkColor: 'random',
-            linkWidth: 1,
+            turtlesSize: 1,
+            linksColor: 'random',
+            linksWidth: 1,
             patchesMap: ColorMap.DarkGray,
             turtlesMap: ColorMap.Basic16,
             textProperty: null,
@@ -58,12 +58,12 @@ export default class TwoDraw extends TwoView {
     draw(params = this.drawOptions) {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)
         let {
-            patchColor,
-            turtleColor,
+            patchesColor,
+            turtlesColor,
             turtleShape,
-            turtleSize,
-            linkColor,
-            linkWidth,
+            turtlesSize,
+            linksColor,
+            linksWidth,
             patchesMap,
             turtlesMap,
             textProperty,
@@ -74,10 +74,11 @@ export default class TwoDraw extends TwoView {
         const { model, view } = this
 
         if (view.ticks === 0) {
-            // if (typeof turtlesMap === 'string')
-            //     turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
-            // if (typeof patchesMap === 'string')
-            //     patchesMap = params.patchesMap = ColorMap[patchesMap]
+            // REMIND: if moved to ctor, do this there?
+            if (typeof turtlesMap === 'string')
+                turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
+            if (typeof patchesMap === 'string')
+                patchesMap = params.patchesMap = ColorMap[patchesMap]
 
             this.checkParams(params)
 
@@ -86,20 +87,20 @@ export default class TwoDraw extends TwoView {
             if (initPatches) {
                 const colors = initPatches(model, view)
                 view.createPatchPixels(i => colors[i].pixel)
-            } else if (patchColor === 'random') {
+            } else if (patchesColor === 'random') {
                 view.createPatchPixels(i => patchesMap.randomColor().pixel)
             }
         }
 
-        // if (patchColor === 'random' || patchColor === 'static' || initPatches) {
-        if (patchColor === 'random' || initPatches) {
+        // if (patchesColor === 'random' || patchesColor === 'static' || initPatches) {
+        if (patchesColor === 'random' || initPatches) {
             view.drawPatches() // redraw cached patches colors below
-        } else if (typeof patchColor === 'function') {
-            view.drawPatches(model.patches, p => patchColor(p))
-        } else if (util.isImageable(patchColor)) {
-            view.drawPatchesImage(patchColor)
+        } else if (typeof patchesColor === 'function') {
+            view.drawPatches(model.patches, p => patchesColor(p))
+        } else if (util.isImageable(patchesColor)) {
+            view.drawPatchesImage(patchesColor)
         } else {
-            view.clear(patchColor)
+            view.clear(patchesColor)
         }
 
         const checkColor = (agent, color) =>
@@ -107,12 +108,12 @@ export default class TwoDraw extends TwoView {
 
         view.drawLinks(model.links, l => ({
             color:
-                linkColor === 'random'
+                linksColor === 'random'
                     ? turtlesMap.atIndex(l.id).css
-                    : typeof linkColor === 'function'
-                    ? checkColor(l, linkColor(t))
-                    : linkColor,
-            width: linkWidth,
+                    : typeof linksColor === 'function'
+                    ? checkColor(l, linksColor(t))
+                    : linksColor,
+            width: linksWidth,
         }))
 
         view.drawTurtles(model.turtles, t => ({
@@ -121,12 +122,15 @@ export default class TwoDraw extends TwoView {
                     ? turtleShape(t)
                     : turtleShape,
             color:
-                turtleColor === 'random'
+                turtlesColor === 'random'
                     ? turtlesMap.atIndex(t.id).css
-                    : typeof turtleColor === 'function'
-                    ? checkColor(t, turtleColor(t))
-                    : turtleColor,
-            size: typeof turtleSize === 'function' ? turtleSize(t) : turtleSize,
+                    : typeof turtlesColor === 'function'
+                    ? checkColor(t, turtlesColor(t))
+                    : turtlesColor,
+            size:
+                typeof turtlesSize === 'function'
+                    ? turtlesSize(t)
+                    : turtlesSize,
         }))
 
         if (textProperty) {

@@ -17,8 +17,8 @@ export default function newView(model, viewOptions = {}) {
                 : nestColorMap.scaleColor(p.nestPheromone, 0, 1).pixel
         },
         turtleShape: 'bug',
-        turtleSize: 3,
-        turtleColor: t => (t.carryingFood ? nestColor.css : foodColor.css),
+        turtlesSize: 3,
+        turtlesColor: t => (t.carryingFood ? nestColor.css : foodColor.css),
     }
 
     const view = new ThreeDraw(model, viewOptions, drawOptions)

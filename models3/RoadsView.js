@@ -11,9 +11,9 @@ export default async function newView(model, viewOptions = {}) {
     const drawOptions = {
         patchesColor: baseMapTile,
         turtleShape: 'circle',
-        turtleColor: t => (isIntersection(t) ? 'blue' : 'red'),
-        turtleSize: t => (isIntersection(t) ? 2 : 1),
-        linkColor: 'black',
+        turtlesColor: t => (isIntersection(t) ? 'blue' : 'red'),
+        turtlesSize: t => (isIntersection(t) ? 2 : 1),
+        linksColor: 'black',
     }
 
     return new ThreeDraw(model, viewOptions, drawOptions)

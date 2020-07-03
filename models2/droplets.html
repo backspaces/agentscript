@@ -13,8 +13,8 @@
 
             const drawOptions = {
                 turtleShape: 'circle',
-                turtleColor: 'yellow',
-                turtleSize: 0.5,
+                turtlesColor: 'yellow',
+                turtlesSize: 0.5,
                 initPatches: (model, view) => {
                     const elevation = model.patches.exportDataSet('elevation')
                     const grays = elevation.scale(0, 255).data

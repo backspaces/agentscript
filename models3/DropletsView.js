@@ -15,8 +15,8 @@ function getPatchColors(model) {
 export default function newView(model, viewOptions = {}) {
     const drawOptions = {
         turtleShape: 'circle',
-        turtleColor: 'yellow',
-        turtleSize: 0.5,
+        turtlesColor: 'yellow',
+        turtlesSize: 0.5,
         initPatches: (model, view) => getPatchColors(model),
     }
 

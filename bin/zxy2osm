@@ -9,7 +9,8 @@ const https = require('https')
 
 const zxy = process.argv[2]
 
-const [, z, x, y] = zxy.match(/(\d+)\/(\d+)\/(\d+)/)
+// const [, z, x, y] = zxy.match(/(\d+)\/(\d+)\/(\d+)/)
+const [z, x, y] = zxy.split('/').map(Number)
 
 // convert to numbers!
 // const [topleft, bottomright] = gis.xy2bbox(+x, +y, +z)
