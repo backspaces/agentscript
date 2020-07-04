@@ -22,8 +22,6 @@
                 'black',
                 foodColor.css,
             ])
-
-            // We put the draw options object here, too crowded below!
             const drawOptions = {
                 patchesColor: p => {
                     if (p.isNest) return nestColor.pixel
@@ -48,7 +46,7 @@
                     model,
                     {
                         div: 'modelDiv',
-                        useSprites: true,
+                        useSprites: true, // ant shape difficult to draw
                     },
                     drawOptions
                 )

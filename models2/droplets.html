@@ -27,24 +27,25 @@
                 },
             }
 
-            // const tile =
-            //     'https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/13/1594/3339.png'
-
             async function run() {
                 const model = new Model()
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    useSprites: true,
-                })
+                const view = new TwoDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        useSprites: true,
+                    },
+                    drawOptions
+                )
 
                 util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw(drawOptions)
+                        view.draw()
                     },
                     500,
                     33

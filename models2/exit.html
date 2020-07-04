@@ -11,17 +11,19 @@
             import ColorMap from '../src/ColorMap.js'
             import Model from '../models/ExitModel.js'
 
+            const drawOptions = {
+                turtleShape: 'circle',
+                turtlesColor: t => patchColors[t.exit.id].css,
+                turtlesSize: 1,
+                initPatches: (model, view) => patchColors(model),
+            }
+
             async function run() {
                 const model = new Model()
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    useSprites: true,
-                    patchSize: 8,
-                })
-
+                // DrawOptions here due to using model
                 const patchColors = model.patches.map(p => {
                     switch (p.breed.name) {
                         case 'exits':
@@ -34,17 +36,27 @@
                             return ColorMap.LightGray.randomColor()
                     }
                 })
+                const drawOptions = {
+                    turtleShape: 'circle',
+                    turtlesColor: t => patchColors[t.exit.id].css,
+                    turtlesSize: 1,
+                    initPatches: (model, view) => patchColors,
+                }
+
+                const view = new TwoDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        patchSize: 8,
+                    },
+                    drawOptions
+                )
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw({
-                            turtleShape: 'circle',
-                            turtlesColor: t => patchColors[t.exit.id].css,
-                            turtlesSize: 1,
-                            initPatches: (model, view) => patchColors,
-                        })
+                        view.draw()
                     },
                     500,
                     33

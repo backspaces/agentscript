@@ -17,13 +17,13 @@
                 const view = new TwoDraw(model, {
                     div: 'modelDiv',
                     patchSize: 20,
-                })
+                }) // defalt drawOptions!
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         model.tick()
-                        view.draw() // defalt draw!
+                        view.draw()
                     },
                     500,
                     33

@@ -14,6 +14,7 @@
                 await model.startup()
                 model.setup()
 
+                // drawOptions here due to use of model
                 const drawOptions = {
                     turtlesColor: t =>
                         model.cluster.has(t) ? 'red' : 'random',
@@ -26,7 +27,6 @@
                     model,
                     {
                         div: 'modelDiv',
-                        useSprites: true,
                         patchSize: 20,
                     },
                     drawOptions
