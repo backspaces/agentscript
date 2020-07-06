@@ -145,7 +145,7 @@ export default class TurtlesView {
         const ctx = this.ctx
         util.setIdentity(this.ctx)
         if (uniformLinks) {
-            ctx.strokeStyle = viewFcn.color
+            ctx.strokeStyle = cssColor(viewFcn.color)
             ctx.lineWidth = viewFcn.width || 1
             ctx.beginPath()
         }
@@ -175,7 +175,7 @@ export default class TurtlesView {
         ;[x1, y1] = this.world.patchXYtoPixelXY(x1, y1, this.patchSize)
 
         if (stroke) {
-            ctx.strokeStyle = stroke
+            ctx.strokeStyle = cssColor(stroke)
             ctx.lineWidth = width
             ctx.beginPath()
         }
