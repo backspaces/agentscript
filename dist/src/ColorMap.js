@@ -7,6 +7,11 @@
 import util from './util.js'
 import Color from './Color.js'
 
+function cssColor(color) {
+    if (color) return color.css || color
+    return color
+}
+
 const ColorMap = {
     // ### Color Array Utilities
     // Several utilities for creating color arrays
@@ -25,9 +30,7 @@ const ColorMap = {
     // Locs are floats from 0-1, default is equally spaced.
     gradientImageData(nColors, stops, locs) {
         // Convert the color stops to css strings
-        stops = stops.map(c =>
-            Array.isArray(c) ? Color.rgbaCssColor(...c) : c
-        )
+        stops = stops.map(c => cssColor(c))
         const ctx = util.createCtx(nColors, 1)
         // Install default locs if none provide
         if (!locs) locs = util.floatRamp(0, 1, stops.length)

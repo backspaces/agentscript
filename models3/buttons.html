@@ -1,33 +1,30 @@
 <html>
     <head>
-        <title>diffuse</title>
+        <title>buttons</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/DiffuseModel.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/ButtonsModel.js'
 
+            let model // declare model here so can be used in drawOptions
             const drawOptions = {
-                patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
-                turtlesColor: 'red',
-                turtlesSize: 8,
+                turtlesColor: t => (model.cluster.has(t) ? 'red' : 'random'),
+                turtleShape: 'circle',
+                turtlesSize: 2,
+                linksColor: 'rgba(255, 255, 255, 0.50',
             }
 
             async function run() {
-                const model = new Model()
+                model = new Model() // define model here.
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
+                const view = new ThreeDraw(
                     model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true,
-                        patchSize: 3,
-                    },
+                    { div: 'modelDiv' },
                     drawOptions
                 )
 
@@ -40,6 +37,8 @@
                     500,
                     33
                 )
+
+                view.idle()
             }
             run()
         </script>

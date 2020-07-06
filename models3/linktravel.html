@@ -1,19 +1,20 @@
 <html>
     <head>
-        <title>diffuse</title>
+        <title>linkTravel</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/DiffuseModel.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/LinkTravelModel.js'
 
+            const isNode = t => t.breed.name === 'nodes'
             const drawOptions = {
-                patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
-                turtlesColor: 'red',
-                turtlesSize: 8,
+                patchesColor: 'black',
+                turtlesColor: t => (isNode(t) ? 'red' : 'random'),
+                turtleShape: t => (isNode(t) ? 'circle' : 'dart'),
+                turtlesSize: t => (isNode(t) ? 0.5 : 1.25),
             }
 
             async function run() {
@@ -21,13 +22,9 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
+                const view = new ThreeDraw(
                     model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true,
-                        patchSize: 3,
-                    },
+                    { div: 'modelDiv' },
                     drawOptions
                 )
 
@@ -40,6 +37,8 @@
                     500,
                     33
                 )
+
+                view.idle()
             }
             run()
         </script>

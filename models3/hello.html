@@ -1,35 +1,21 @@
 <html>
     <head>
-        <title>diffuse</title>
+        <title>hello</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/DiffuseModel.js'
-
-            const drawOptions = {
-                patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
-                turtlesColor: 'red',
-                turtlesSize: 8,
-            }
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/HelloModel.js'
 
             async function run() {
                 const model = new Model()
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
-                    model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true,
-                        patchSize: 3,
-                    },
-                    drawOptions
-                )
+                // defalt drawOptions!
+                const view = new ThreeDraw(model, { div: 'modelDiv' })
 
                 await util.timeoutLoop(
                     () => {
@@ -40,6 +26,8 @@
                     500,
                     33
                 )
+
+                view.idle()
             }
             run()
         </script>

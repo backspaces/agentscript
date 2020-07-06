@@ -7,26 +7,33 @@ export default class TwoDraw extends TwoView {
     static defaultOptions() {
         return {
             patchesColor: 'random',
+            initPatches: null,
+
             turtlesColor: 'random',
             turtleShape: 'dart',
             turtlesSize: 1,
+
             linksColor: 'random',
             linksWidth: 1,
-            patchesMap: ColorMap.DarkGray,
-            turtlesMap: ColorMap.Basic16,
+
             textProperty: null,
             textSize: 0.5,
             textColor: 'black',
-            initPatches: null,
+
+            patchesMap: ColorMap.DarkGray,
+            turtlesMap: ColorMap.Basic16,
         }
     }
 
     // ======================
 
-    constructor(model, twoViewOptions = {}, drawOptions = {}) {
-        super(model.world, twoViewOptions)
+    constructor(model, viewOptions = {}, drawOptions = {}) {
+        drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
+
+        super(model.world, viewOptions)
         this.model = model
         this.view = this
+        this.checkParams(drawOptions)
         this.drawOptions = drawOptions
     }
 
@@ -45,54 +52,47 @@ export default class TwoDraw extends TwoView {
         })
     }
 
-    // setup(fcn = (model, view) => {}) {
-    //     // default to no-op
-    //     // This used to be the initPatches() in drawOptions
-    //     // supply the function with this.model, this.view as args
-    //     fcn(this.model, this.view)
-    // }
-
-    // The simple default draw() function.
-    // The params object overrides the default options.
-    // randomTurtle(t) {return turtlesMap.atIndex(l.id).css}
-    draw(params = this.drawOptions) {
+    draw() {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)
         let {
             patchesColor,
+            initPatches,
+
             turtlesColor,
             turtleShape,
             turtlesSize,
+
             linksColor,
             linksWidth,
-            patchesMap,
-            turtlesMap,
+
             textProperty,
             textSize,
             textColor,
-            initPatches,
-        } = Object.assign({}, TwoDraw.defaultOptions(), params)
+
+            patchesMap,
+            turtlesMap,
+        } = this.drawOptions
         const { model, view } = this
 
         if (view.ticks === 0) {
             // REMIND: if moved to ctor, do this there?
             if (typeof turtlesMap === 'string')
-                turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
+                turtlesMap = ColorMap[turtlesMap]
             if (typeof patchesMap === 'string')
-                patchesMap = params.patchesMap = ColorMap[patchesMap]
-
-            this.checkParams(params)
+                patchesMap = ColorMap[patchesMap]
 
             if (textProperty) view.setTextProperties(textSize)
 
             if (initPatches) {
+                // colors is an array of typedColors or pixels:
                 const colors = initPatches(model, view)
-                view.createPatchPixels(i => colors[i].pixel)
+                view.createPatchPixels(i => colors[i])
             } else if (patchesColor === 'random') {
-                view.createPatchPixels(i => patchesMap.randomColor().pixel)
+                // NOTE: random colors only done once for patches.
+                view.createPatchPixels(i => patchesMap.randomColor())
             }
         }
 
-        // if (patchesColor === 'random' || patchesColor === 'static' || initPatches) {
         if (patchesColor === 'random' || initPatches) {
             view.drawPatches() // redraw cached patches colors below
         } else if (typeof patchesColor === 'function') {
@@ -109,7 +109,7 @@ export default class TwoDraw extends TwoView {
         view.drawLinks(model.links, l => ({
             color:
                 linksColor === 'random'
-                    ? turtlesMap.atIndex(l.id).css
+                    ? turtlesMap.atIndex(l.id)
                     : typeof linksColor === 'function'
                     ? checkColor(l, linksColor(t))
                     : linksColor,

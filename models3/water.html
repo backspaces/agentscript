@@ -1,19 +1,20 @@
 <html>
     <head>
-        <title>diffuse</title>
+        <title>water</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import TwoDraw from '../src/TwoDraw.js'
             import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/DiffuseModel.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/WaterModel.js'
 
+            const patchColors = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
+            const maxZ = 10
             const drawOptions = {
-                patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
-                turtlesColor: 'red',
-                turtlesSize: 8,
+                // Patches only model:
+                patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
             }
 
             async function run() {
@@ -21,15 +22,12 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
+                const view = new ThreeDraw(
                     model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true,
-                        patchSize: 3,
-                    },
+                    { div: 'modelDiv' },
                     drawOptions
                 )
+                view.setPatchesSmoothing(true) // make water smoother
 
                 await util.timeoutLoop(
                     () => {
@@ -40,6 +38,8 @@
                     500,
                     33
                 )
+
+                view.idle()
             }
             run()
         </script>

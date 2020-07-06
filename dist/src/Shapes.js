@@ -1,5 +1,10 @@
 import util from './util.js'
 
+function cssColor(color) {
+    if (color) return color.css || color
+    return color
+}
+
 // Shapes are Canvas2D drawings in -0.5 to +0.5, unit squares
 // They are drawn on a Canvas2D using transforms for x, y, theta
 class Shapes {
@@ -72,8 +77,8 @@ class Shapes {
         if (this.cache && this.cache[imgName]) return this.cache[imgName]
 
         const ctx = util.createCtx(pixels, pixels)
-        ctx.fillStyle = fill
-        ctx.strokeStyle = stroke
+        ctx.fillStyle = cssColor(fill)
+        ctx.strokeStyle = cssColor(stroke)
         ctx.scale(pixels, -pixels)
         ctx.translate(0.5, -0.5)
         ctx.beginPath()

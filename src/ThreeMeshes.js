@@ -10,8 +10,13 @@ function createQuad(r, z = 0) {
     return { vertices, indices }
 }
 const unitQuad = createQuad(0.5, 0)
+
 // Return typedColor[meshColorType] or color which must be correct type
-const meshColor = (color, mesh) => color[mesh.options.colorType] || color
+function meshColor(color, mesh) {
+    if (color) return color[mesh.options.colorType] || color
+    return color
+}
+
 // const getPixel = color => color.pixel || color
 
 // Utility classes meant to be subclassed:
@@ -323,13 +328,13 @@ export class LinksMesh extends BaseMesh {
         return {
             color: null,
             z: 1.5,
-            colorType: 'css',
+            colorType: 'webgl',
         }
     }
     init() {
         if (this.mesh) this.dispose()
         this.fixedColor = this.options.color
-            ? new THREE.Color(this.options.color)
+            ? new THREE.Color(...meshColor(this.options.color, this))
             : null
 
         const geometry = new THREE.BufferGeometry()
@@ -363,7 +368,7 @@ export class LinksMesh extends BaseMesh {
             if (!z1) z1 = 0
             vertices.push(x0, y0, z0, x1, y1, z1)
             if (colors) {
-                const color = viewFcn(link, i).color
+                const color = meshColor(viewFcn(link, i).color, this)
                 colors.push(...color, ...color)
             }
         })

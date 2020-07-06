@@ -1,6 +1,11 @@
 import util from './util.js'
 import Shapes from './Shapes.js'
 
+function cssColor(color) {
+    if (color) return color.css || color
+    return color
+}
+
 export default class TurtlesView {
     static defaultOptions() {
         return {
@@ -103,8 +108,8 @@ export default class TurtlesView {
         ctx.save()
 
         // note: neither may be needed! image needs none, no-stroke only fill.
-        ctx.fillStyle = fill
-        ctx.strokeStyle = stroke
+        ctx.fillStyle = cssColor(fill) // fill.css || fill
+        ctx.strokeStyle = cssColor(stroke) // stroke.css || stroke
 
         ctx.translate(x, y)
         ctx.scale(size, size)

@@ -49,6 +49,7 @@ export default class ThreeDraw extends ThreeView {
         drawOptions = Object.assign({}, ThreeDraw.defaultOptions(), drawOptions)
 
         // Convert static colors to typedColor, works for all meshes.
+        // TwoDraw simpler, doesn't (yet) need this.
         for (const color of ['patchesColor', 'turtlesColor', 'linksColor']) {
             if (isStaticColor(drawOptions[color])) {
                 drawOptions[color] = Color.toTypedColor(drawOptions[color])
@@ -90,17 +91,8 @@ export default class ThreeDraw extends ThreeView {
             }
         })
     }
-    // colorType(agentSetName) {
-    //     return this.meshes[agentSetName].options.colorType
-    // }
 
     draw() {
-        // Return a cmap color if "random", or the color as is.
-        // Note this checks the return of color fcn, not whether the
-        // color was 'random' initally. Fcn can also return 'random'
-        const checkFcnColor = (agent, color, map = turtlesMap) =>
-            color === 'random' ? map.atIndex(agent.id) : color
-
         let {
             patchesColor,
             initPatches,
@@ -114,6 +106,7 @@ export default class ThreeDraw extends ThreeView {
 
             patchesMap,
             turtlesMap,
+
             // textProperty,
             // textSize,
             // textColor,
@@ -122,19 +115,17 @@ export default class ThreeDraw extends ThreeView {
 
         if (view.ticks === 0) {
             if (typeof turtlesMap === 'string')
-                turtlesMap = params.turtlesMap = ColorMap[turtlesMap]
+                turtlesMap = ColorMap[turtlesMap]
             if (typeof patchesMap === 'string')
-                patchesMap = params.patchesMap = ColorMap[patchesMap]
+                patchesMap = ColorMap[patchesMap]
 
             if (initPatches) {
-                // REMIND: If Points allowed, need webgl color type.
-                //   should check mesh.options.colorType
-                const colors = initPatches(model, view)
                 // colors is an array of typedColors or pixels:
-                view.createPatchPixels(i => colors[i].pixel || colors[i])
+                const colors = initPatches(model, view)
+                view.createPatchPixels(i => colors[i])
             } else if (patchesColor === 'random') {
                 // NOTE: random colors only done once for patches.
-                view.createPatchPixels(i => patchesMap.randomColor().pixel)
+                view.createPatchPixels(i => patchesMap.randomColor())
             }
         }
 
@@ -158,12 +149,15 @@ export default class ThreeDraw extends ThreeView {
             }
         }
 
+        const checkColor = (agent, color) =>
+            color === 'random' ? turtlesMap.atIndex(agent.id).css : color
+
         view.drawLinks(model.links, l => ({
             color:
                 linksColor === 'random'
                     ? turtlesMap.atIndex(l.id)
                     : typeof linksColor === 'function'
-                    ? checkFcnColor(l, linksColor(t))
+                    ? checkColor(l, linksColor(t))
                     : linksColor,
             width: linksWidth,
         }))
@@ -180,7 +174,7 @@ export default class ThreeDraw extends ThreeView {
                 turtlesColor === 'random'
                     ? turtlesMap.atIndex(t.id)
                     : typeof turtlesColor === 'function'
-                    ? checkFcnColor(t, turtlesColor(t))
+                    ? checkColor(t, turtlesColor(t))
                     : turtlesColor,
             // size ignored for 'point' shape
             size:

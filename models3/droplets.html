@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>droplets</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Color from '../src/Color.js'
+            import ColorMap from '../src/ColorMap.js'
+            import Model from '../models/DropletsModel.js'
+
+            const drawOptions = {
+                turtleShape: 'circle',
+                turtlesColor: 'yellow',
+                turtlesSize: 0.5,
+                initPatches: (model, view) => {
+                    const elevation = model.patches.exportDataSet('elevation')
+                    const grays = elevation.scale(0, 255).data
+                    const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
+                    const localMinColor = Color.typedColor(255, 0, 0)
+                    model.localMins.forEach(p => {
+                        colors[p.id] = localMinColor
+                    })
+                    return colors
+                },
+            }
+
+            async function run() {
+                const model = new Model()
+                await model.startup()
+                model.setup()
+
+                const view = new ThreeDraw(
+                    model,
+                    { div: 'modelDiv' },
+                    drawOptions
+                )
+
+                util.timeoutLoop(
+                    () => {
+                        model.step()
+                        model.tick()
+                        view.draw()
+                    },
+                    500,
+                    33
+                )
+
+                view.idle()
+            }
+            run()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

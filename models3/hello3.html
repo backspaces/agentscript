@@ -1,19 +1,18 @@
 <html>
     <head>
-        <title>diffuse</title>
+        <title>hello</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/DiffuseModel.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/Hello3Model.js'
 
             const drawOptions = {
-                patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
-                turtlesColor: 'red',
-                turtlesSize: 8,
+                turtleShape: 'point',
+                turtlesSize: 2,
+                linksColor: 'red',
             }
 
             async function run() {
@@ -21,13 +20,9 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
+                const view = new ThreeDraw(
                     model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true,
-                        patchSize: 3,
-                    },
+                    { div: 'modelDiv' },
                     drawOptions
                 )
 
@@ -40,6 +35,8 @@
                     500,
                     33
                 )
+
+                view.idle()
             }
             run()
         </script>

@@ -6,7 +6,7 @@
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import TwoDraw from '../src/TwoDraw.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
             import ColorMap from '../src/ColorMap.js'
             import Model from '../models/DiffuseModel.js'
 
@@ -21,13 +21,9 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
+                const view = new ThreeDraw(
                     model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true,
-                        patchSize: 3,
-                    },
+                    { div: 'modelDiv' },
                     drawOptions
                 )
 
@@ -40,6 +36,8 @@
                     500,
                     33
                 )
+
+                view.idle()
             }
             run()
         </script>

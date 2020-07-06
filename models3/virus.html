@@ -1,19 +1,25 @@
 <html>
     <head>
-        <title>diffuse</title>
+        <title>virus</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/DiffuseModel.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/VirusModel.js'
 
+            const turtleColors = {
+                infected: 'red',
+                susceptible: 'blue',
+                resistant: 'gray',
+            }
             const drawOptions = {
-                patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
-                turtlesColor: 'red',
-                turtlesSize: 8,
+                patchesColor: 'black',
+                turtleShape: 'circle',
+                turtlesSize: 1.5,
+                turtlesColor: t => turtleColors[t.state],
+                linksColor: 'rgba(255, 255, 255, 0.50',
             }
 
             async function run() {
@@ -21,13 +27,9 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
+                const view = new ThreeDraw(
                     model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true,
-                        patchSize: 3,
-                    },
+                    { div: 'modelDiv' },
                     drawOptions
                 )
 
@@ -40,6 +42,8 @@
                     500,
                     33
                 )
+
+                view.idle()
             }
             run()
         </script>

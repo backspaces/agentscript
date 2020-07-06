@@ -9,19 +9,18 @@
             import TwoDraw from '../src/TwoDraw.js'
             import Model from '../models/ButtonsModel.js'
 
+            let model // declare model here so can be used in drawOptions
+            const drawOptions = {
+                turtlesColor: t => (model.cluster.has(t) ? 'red' : 'random'),
+                turtleShape: 'circle',
+                turtlesSize: 2,
+                linksColor: 'rgba(255, 255, 255, 0.50',
+            }
+
             async function run() {
-                const model = new Model()
+                model = new Model() // define model here.
                 await model.startup()
                 model.setup()
-
-                // drawOptions here due to use of model
-                const drawOptions = {
-                    turtlesColor: t =>
-                        model.cluster.has(t) ? 'red' : 'random',
-                    turtleShape: 'circle',
-                    turtlesSize: 2,
-                    linksColor: 'rgba(255, 255, 255, 0.50',
-                }
 
                 const view = new TwoDraw(
                     model,

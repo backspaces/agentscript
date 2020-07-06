@@ -1,19 +1,23 @@
 <html>
     <head>
-        <title>diffuse</title>
+        <title>gridpath</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/DiffuseModel.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/GridPathModel.js'
 
             const drawOptions = {
-                patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
+                turtleShape: 'circle',
                 turtlesColor: 'red',
-                turtlesSize: 8,
+                turtlesSize: 0.5,
+                linksColor: 'red',
+                patchesMap: 'LightGray',
+                // textProperty: 'choices',
+                // textColor: 'white',
+                // textSize: 0.3,
             }
 
             async function run() {
@@ -21,15 +25,13 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
+                const view = new ThreeDraw(
                     model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true,
-                        patchSize: 3,
-                    },
+                    { div: 'modelDiv' },
                     drawOptions
                 )
+
+                util.toWindow({ model, view, util })
 
                 await util.timeoutLoop(
                     () => {
@@ -38,8 +40,10 @@
                         view.draw()
                     },
                     500,
-                    33
+                    100 // 10fps, 30fps way too fast!
                 )
+
+                view.idle()
             }
             run()
         </script>
