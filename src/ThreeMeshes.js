@@ -2,6 +2,7 @@
 
 import { THREE } from '../vendor/three.esm.min.js'
 import util from './util.js'
+// import { Vector3 } from 'THREE'
 
 function createQuad(r, z = 0) {
     // r is radius of xy quad: [-r,+r], z is quad z
@@ -16,6 +17,14 @@ function meshColor(color, mesh) {
     if (color) return color[mesh.options.colorType] || color
     return color
 }
+
+// function centerMesh(obj) {
+//     // const {centerX, centerY} = obj.world
+//     // obj.mesn.position.set(-centerX, -centerY, obj.options.z)
+//     const { centerX, centerY, width, height } = obj.world
+//     const z = obj.options.z //  / 100 // Math.max(width, height)
+//     obj.mesh.position.set(-centerX, -centerY, z)
+// }
 
 // const getPixel = color => color.pixel || color
 
@@ -44,6 +53,15 @@ export class BaseMesh {
         this.mesh.material.dispose()
         if (this.mesh.material.map) this.mesh.material.map.dispose()
     }
+    centerMesh() {
+        let { centerX, centerY, width, height } = this.world
+        if (this.canvas) [centerX, centerY] = [0, 0]
+        const z = this.options.z / 100 //  Math.max(width, height)
+        console.log('centerMesh', centerX, centerY, width, height, z)
+
+        this.mesh.position.set(-centerX, -centerY, z)
+    }
+
     init() {
         throw Error('init is abstract, must be overriden')
     }
@@ -72,7 +90,7 @@ export class CanvasMesh extends BaseMesh {
                 minFilter: THREE.LinearFilter,
                 magFilter: THREE.LinearFilter,
             },
-            z: 1.0,
+            z: 0.0,
             useSegments: false,
             canvas: null, // fill in w/ BaseMesh ctor options
             // colorType: undefined
@@ -94,7 +112,7 @@ export class CanvasMesh extends BaseMesh {
             useSegments ? height : 1
         )
         // not needed for centered world
-        geometry.translate(centerX, centerY, 0)
+        // geometry.translate(-centerX, -centerY, 0)
 
         const material = new THREE.MeshBasicMaterial({
             map: texture,
@@ -106,7 +124,7 @@ export class CanvasMesh extends BaseMesh {
         })
 
         this.mesh = new THREE.Mesh(geometry, material)
-        this.mesh.position.z = z
+        // this.mesh.position.z = z
         this.scene.add(this.mesh)
     }
     update() {
@@ -149,7 +167,7 @@ export class PatchesMesh extends CanvasMesh {
                 minFilter: THREE.NearestFilter,
                 magFilter: THREE.NearestFilter,
             },
-            z: 1.0,
+            z: 0.0,
             useSegments: false,
             colorType: 'pixel',
         }
@@ -158,6 +176,7 @@ export class PatchesMesh extends CanvasMesh {
         // init() {
         // super.init(canvas, this.options.useSegments)
         super.init(canvas)
+        this.centerMesh()
     }
     update(data, viewFcn = d => d) {
         if (data) this.view.patchesView.setPixels(data, viewFcn)
@@ -183,6 +202,9 @@ export class QuadSpritesMesh extends BaseMesh {
         const uvs = new Float32Array()
         const indices = new Uint32Array()
         const geometry = new THREE.BufferGeometry()
+
+        // geometry.translate(-this.world.centerX, -this.world.centerY, 0)
+
         geometry.addAttribute(
             'position',
             new THREE.BufferAttribute(vertices, 3)
@@ -197,7 +219,9 @@ export class QuadSpritesMesh extends BaseMesh {
         })
 
         this.mesh = new THREE.Mesh(geometry, material)
-        this.mesh.position.z = this.options.z
+        // this.mesh.position.z = this.options.z
+        this.centerMesh()
+
         this.scene.add(this.mesh)
     }
     // update takes any array of objects with x,y,z,size,sprite .. position & uvs
@@ -258,7 +282,7 @@ export class PointsMesh extends BaseMesh {
         return {
             pointSize: 1,
             color: null,
-            z: 2.0,
+            z: 2.5,
             colorType: 'webgl',
         }
     }
@@ -292,7 +316,9 @@ export class PointsMesh extends BaseMesh {
               })
 
         this.mesh = new THREE.Points(geometry, material)
-        this.mesh.position.z = this.options.z
+        // this.mesh.position.z = this.options.z
+        this.centerMesh()
+
         this.scene.add(this.mesh)
     }
     // update takes any array of objects with x,y,z,color .. position & color
@@ -327,7 +353,7 @@ export class LinksMesh extends BaseMesh {
     static options() {
         return {
             color: null,
-            z: 1.5,
+            z: 1,
             colorType: 'webgl',
         }
     }
@@ -348,13 +374,14 @@ export class LinksMesh extends BaseMesh {
                 new THREE.BufferAttribute(new Float32Array(), 3)
             )
         }
+        // geometry.translate(-this.world.centerX, -this.world.centerX, 0)
 
         const material = this.fixedColor
             ? new THREE.LineBasicMaterial({ color: this.fixedColor })
             : new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors })
 
         this.mesh = new THREE.LineSegments(geometry, material)
-        this.mesh.position.z = this.options.z
+        this.centerMesh()
         this.scene.add(this.mesh)
     }
     // update takes any array of objects with color & end0, end1 having x,y,z
