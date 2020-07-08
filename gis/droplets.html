@@ -57,6 +57,13 @@
             }
             initMapbox()
 
+            const drawOptions = {
+                patchesColor: 'transparent',
+                turtleShape: 'circle',
+                turtlesColor: 'blue',
+                turtlesSize: 0.5,
+            }
+
             async function runModel() {
                 const firstTime = bboxModel == null
                 if (firstTime) bboxModel = new Model()
@@ -71,15 +78,8 @@
                 if (!bboxView) {
                     bboxView = new TwoDraw(
                         bboxModel,
-                        {
-                            div: util.createCanvas(0, 0),
-                        },
-                        {
-                            patchesColor: 'transparent',
-                            turtleShape: 'circle',
-                            turtlesColor: 'blue',
-                            turtlesSize: 0.5,
-                        }
+                        { div: util.createCanvas(0, 0) },
+                        drawOptions
                     )
                     mbox.addViewLayer(map, 'model', bbox, bboxView)
                 } else {
@@ -98,7 +98,7 @@
                         if (bboxModel.ticks === 500)
                             console.log('500 steps done; coasting')
                     },
-                    -1, // 500,
+                    -1, // forever
                     33
                 )
             }

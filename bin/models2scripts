@@ -2,6 +2,9 @@
 const shell = require('shelljs')
 
 shell.cd('./models')
+
+shell.cp('./roads14vt.json', 'scripts/')
+
 // shell.mkdir('scripts')
 shell.rm('scripts/*Model.js')
 

@@ -58,6 +58,12 @@
                 }
             }
 
+            const drawOptions = {
+                patchesColor: 'transparent',
+                linksColor: 'gray',
+                turtlesSize: 5,
+            }
+
             async function run() {
                 const counties = await util.xhrPromise(
                     './data/nmcounties.geojson',
@@ -73,66 +79,23 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: util.createCanvas(0, 0),
-                })
+                const view = new TwoDraw(
+                    model,
+                    { div: util.createCanvas(0, 0) },
+                    drawOptions
+                )
                 util.toWindow({ view, util })
 
-                // const map = new mapboxgl.Map({
-                //     container: 'map', // container id
-                //     style: 'mapbox://styles/mapbox/streets-v11',
-                //     center: world.bboxCenter(),
-                //     zoom: 5.5,
-                //     renderWorldCopies: false,
-                // })
                 const map = mbox.newMap(mapboxgl, {
                     zoom: 5.5,
                     center: world.bboxCenter(),
                 })
                 await mbox.mapLoadPromise(map)
 
-                // map.addLayer(
-                //     {
-                //         id: 'nmcounties',
-                //         type: 'line',
-                //         source: {
-                //             type: 'geojson',
-                //             data: counties,
-                //         },
-                //         paint: {
-                //             'line-color': 'blue',
-                //             'line-width': 3,
-                //         },
-                //     },
-                //     'settlement-label'
-                // )
                 mbox.addGeoLines(map, 'counties', counties, 'red', 3)
 
-                // map.addLayer({
-                //     id: 'BBox',
-                //     type: 'line',
-                //     source: {
-                //         type: 'geojson',
-                //         data: turf.featureCollection([turf.bboxPolygon(bbox)]),
-                //     },
-                //     paint: {
-                //         'line-color': 'red',
-                //     },
-                // })
                 mbox.addBBoxLayer(map, 'bbox', bbox, 'red')
 
-                // map.addSource('canvas', {
-                //     type: 'canvas',
-                //     canvas: view.canvas,
-                //     animate: true,
-                //     coordinates: world.bboxCoords(), // 4 [lon,lat] arrays
-                // })
-                // map.addLayer({
-                //     id: 'canvas',
-                //     type: 'raster',
-                //     source: 'canvas',
-                // })
-                // mbox.addModelViewLayer(map, 'model', model, view)
                 mbox.addViewLayer(map, 'model', bbox, view)
 
                 util.timeoutLoop(
@@ -140,11 +103,7 @@
                         model.step()
                         model.tick()
 
-                        view.draw({
-                            patchesColor: 'transparent',
-                            linksColor: 'gray',
-                            turtlesSize: 3,
-                        })
+                        view.draw()
                     },
                     -1,
                     33

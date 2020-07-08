@@ -9,7 +9,8 @@ class RoadsModel extends Model {
         const { Z, X, Y } = { Z: 14, X: 3370, Y: 6451 }
         return {
             zxy: { Z, X, Y },
-            jsonUrl: `https://backspaces.github.io/agentscript/models/roads${Z}vt.json`,
+            // jsonUrl: `https://backspaces.github.io/agentscript/models/roads${Z}vt.json`,
+            jsonUrl: `./roads${Z}vt.json`,
         }
     }
 

@@ -3,11 +3,14 @@ const liveServer = require('live-server')
 const puppeteer = require('puppeteer')
 const shell = require('shelljs')
 
+const port = 9008
+const workers = true
+
 liveServer.start({
     open: false,
     logLevel: 0,
     ignore: '*',
-    port: 9008,
+    port: port,
 })
 
 // Store model samples here:
@@ -24,7 +27,6 @@ const models = shell
     .split('\n')
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
-const workers = true
 shell.echo(models)
 to('const testSamples = {')
 
@@ -32,8 +34,8 @@ models.forEach(async model => {
     await test.serial(model, async t => {
         // ? `http://127.0.0.1:8080/models/scripts/?${model}&seed&testing`
         const url = workers
-            ? `http://127.0.0.1:9008/models/scripts/?${model}`
-            : `http://127.0.0.1:9008/models/test.html?${model}`
+            ? `http://127.0.0.1:${port}/models/scripts/?${model}`
+            : `http://127.0.0.1:${port}/models/test.html?${model}`
 
         const browser = await puppeteer.launch({
             args: [
