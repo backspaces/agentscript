@@ -10,7 +10,9 @@ export default class RoadsModel extends Model {
         return {
             zxy: { Z, X, Y },
             // jsonUrl: `https://backspaces.github.io/agentscript/models/roads${Z}vt.json`,
-            jsonUrl: `./roads${Z}vt.json`,
+            // Absolute urls have CORS issues: '../models' ok for
+            //   test/, views2/, views3/, gis/, workers3/
+            jsonUrl: `../models/roads${Z}vt.json`,
         }
     }
 
