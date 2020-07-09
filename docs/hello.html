@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Hello</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from 'http://agentscript.org/src/util.js'
+            import Model from 'http://agentscript.org/src/Model.js'
+
+            // A really simple "random walker" hello world model
+            class HelloModel extends Model {
+                static defaultOptions() {
+                    return {
+                        population: 10,
+                        speed: 0.1,
+                        wiggle: 0.1,
+                    }
+                }
+                constructor() {
+                    super() // use default world options
+                    Object.assign(this, HelloModel.defaultOptions())
+                }
+                setup() {
+                    this.turtles.setDefault('atEdge', 'bounce')
+
+                    this.turtles.create(this.population, t => {
+                        const patch = this.patches.oneOf()
+                        t.setxy(patch.x, patch.y)
+                    })
+
+                    this.turtles.ask(t => {
+                        this.links.create(t, this.turtles.otherOneOf(t))
+                    })
+                }
+                step() {
+                    this.turtles.ask(t => {
+                        t.direction += util.randomCentered(this.wiggle)
+                        t.forward(this.speed)
+                    })
+                }
+            }
+
+            // Now create and run and instance of the model 500 steps
+            const model = new HelloModel()
+            model.setup()
+            util.timeoutLoop(() => {
+                model.step()
+            }, 500).then(() => {
+                // When we're done, print out a sample of the model's variables.
+                const sample = util.sampleModel(model)
+                util.printToPage(sample)
+            })
+            // That's it!
+        </script>
+    </body>
+</html>

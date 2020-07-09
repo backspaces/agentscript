@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Module</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from 'http://agentscript.org/src/util.js'
+            import HelloModel from './HelloModel.js'
+
+            // Now create and run and instance of the model 500 steps
+            const model = new HelloModel()
+            model.setup()
+            util.timeoutLoop(() => {
+                model.step()
+            }, 500).then(() => {
+                // When we're done, print out a sample of the model's variables.
+                const sample = util.sampleModel(model)
+                util.printToPage(sample)
+            })
+            // That's it!
+        </script>
+    </body>
+</html>

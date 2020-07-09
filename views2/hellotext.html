@@ -1,23 +1,18 @@
 <html>
     <head>
-        <title>wallFollower</title>
+        <title>hello</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
-            import Color from '../src/Color.js'
             import TwoDraw from '../src/TwoDraw.js'
-            import Model from '../models/WallFollowerModel.js'
+            import Model from '../models/HelloModel.js'
 
-            const wallsColor = Color.typedColor(222, 184, 135)
-            const backgroundColor = Color.typedColor('black')
             const drawOptions = {
-                patchesColor: p =>
-                    p.breed.name === 'walls' ? wallsColor : backgroundColor,
-                turtleShape: 'dart',
-                turtlesSize: 2,
-                turtlesColor: t => (t.breed.name === 'lefty' ? 'green' : 'red'),
+                turtlesSize: 2, // turtle size in patches
+                textProperty: 'id',
+                textSize: 0.8, // text size in patches
             }
 
             async function run() {
@@ -27,7 +22,7 @@
 
                 const view = new TwoDraw(
                     model,
-                    { div: 'modelDiv' },
+                    { div: 'modelDiv', patchSize: 20 },
                     drawOptions
                 )
 
@@ -38,7 +33,7 @@
                         view.draw()
                     },
                     500,
-                    100 // 10fps, 30fps way too fast!
+                    33
                 )
             }
             run()

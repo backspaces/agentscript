@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>Module</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from 'http://agentscript.org/src/util.js'
+            import TwoDraw from 'http://agentscript.org/src/TwoDraw.js'
+            import HelloModel from './HelloModel.js'
+
+            // Now create and run and instance of the model
+            const model = new HelloModel()
+            model.setup()
+
+            const view = new TwoDraw(model, {
+                patchSize: 20,
+            }) // defalt drawOptions!
+
+            // Now create and run and instance of the model 500 steps
+            util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                33 // 33 ms per step .. roughly 30 fps
+            ).then(() => {
+                // When we're done, log a sample of the model's variables.
+                const sample = util.sampleModel(model)
+                console.log('sample:', sample)
+            })
+            // That's it!
+        </script>
+    </body>
+</html>
