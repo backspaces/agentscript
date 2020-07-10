@@ -8,11 +8,11 @@ It has a Model/View/Control (MVC) architecture which cleanly separates the three
 -   **View**: Use the Model properties to create a view. There can be many Views. We provide a [2D Canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) view and a [Three.js](https://threejs.org/) 3D view. There is also GIS support via a general [gis module](https://github.com/backspaces/agentscript/blob/master/src/gis.js), as well as [MapBox GL GS support](https://github.com/backspaces/agentscript/blob/master/src/mbtools.js). Plot views are also available.
 -   **Controls**: We use [dat.gui](https://github.com/dataarts/dat.gui) for a menu UI, a [Mouse module](https://github.com/backspaces/agentscript/blob/master/src/Mouse.js) for selecting Model objects (Patches, Turtles and Links), an [Animator](https://github.com/backspaces/agentscript/blob/master/src/Animator.js) for fine control over the Model/Draw steps.
 
-## ES6 Modules
+## Modern JavaScript
 
 AgentScript is entirely ES6 Module based with [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) and [export](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export) statements.
 
-This allows direct access to individual modules which will automatically load only the module and its dependencies. It also allows you to create bundles which are single module versions of your code.
+This allows direct access to individual modules which will automatically load only the module and its dependencies.
 
 Example: to import Class Model for building your own model, use:
 
@@ -21,8 +21,7 @@ Example: to import Class Model for building your own model, use:
 .. where path/to/agentscript is a local file system path or a url to a server:
 
 -   agentscript.org: [http://agentscript.org/src/Model.js](http://agentscript.org/src/Model.js)
--   github.io: [https://backspaces.github.io/agentscript/src/Model.js](https://backspaces.github.io/agentscript/models/HelloModel.js)
--   unpkg.com: [https://unpkg.com/agentscript/dist/src/Model.js](https://unpkg.com/agentscript/dist/src/Model.js)
+-   unpkg.com: [https://unpkg.com/agentscript/src/Model.js](https://unpkg.com/agentscript/src/Model.js)
 
 ## Dual Build
 

@@ -18,6 +18,8 @@ function meshColor(color, mesh) {
     return color
 }
 
+const zMultiplier = 0.25
+
 // function centerMesh(obj) {
 //     // const {centerX, centerY} = obj.world
 //     // obj.mesn.position.set(-centerX, -centerY, obj.options.z)
@@ -56,7 +58,7 @@ export class BaseMesh {
     centerMesh() {
         let { centerX, centerY, width, height } = this.world
         if (this.canvas) [centerX, centerY] = [0, 0]
-        const z = this.options.z / 100 //  Math.max(width, height)
+        const z = this.options.z * zMultiplier //  Math.max(width, height)
         console.log('centerMesh', centerX, centerY, width, height, z)
 
         this.mesh.position.set(-centerX, -centerY, z)

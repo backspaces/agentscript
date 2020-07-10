@@ -8,9 +8,13 @@
     "module": "dist/agentscript.esm.min.js",
     "files": [
         "/dist/",
+        "/vendor/",
+        "/src/",
+        "/docs/",
         "/models/",
         "/views2/",
-        "/views3/"
+        "/views3/",
+        "/gis/"
     ],
     "repository": {
         "type": "git",
@@ -25,7 +29,7 @@
     "bugs": {
         "url": "https://github.com/backspaces/agentscript/issues"
     },
-    "mkdirs": "dist vendor",
+    "mkdirs": "dist",
     "scripts comments": {
         "name": "@redfish/agentscript",
         "ava": "0.25.0",
@@ -37,10 +41,10 @@
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "build": "npm-run-all clean build-scripts build-dist build-vendor build-css",
+        "build": "npm-run-all clean build-scripts build-dist ",
         "build-dist": "rollup -c workflow/rollup.config.js && cp -R src dist",
         "build-scripts": "node bin/models2scripts",
-        "build-vendor": "rollup -c workflow/rollup.vendor.js",
+        "build-vendor": "rm vendor/* && rollup -c workflow/rollup.vendor.js && npm run build-css",
         "build-css": "bin/wrapcss < 'node_modules/mapbox-gl/dist/mapbox-gl.css' > vendor/mapboxgl.css.js",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
