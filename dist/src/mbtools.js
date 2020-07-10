@@ -105,7 +105,7 @@ const defaultMapOptions = {
     // center: [-95.712891, 37.090240], // "USA" in https://www.latlong.net/
     center: [-100.334228, 40.236557], // clicking in https://www.latlong.net/
     zoom: 3,
-    renderWorldCopies: false,
+    renderWorldCopies: true,
 }
 export function newMap(mapboxgl, options = {}) {
     options = Object.assign({}, defaultMapOptions, options)

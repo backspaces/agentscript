@@ -14,7 +14,7 @@
 
             import util from '../src/util.js'
             import GeoWorld from '../src/GeoWorld.js'
-            import HelloModel from '../models/HelloModel.js'
+            import Model from '../models/VirusModel.js'
             import TwoDraw from '../src/TwoDraw.js'
             import ColorMap from '../src/ColorMap.js'
 
@@ -22,46 +22,53 @@
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
             mbox.setDefaultStyle()
 
-            class GeoModel extends HelloModel {
-                setup() {
-                    super.setup()
-                    this.patches.ask(p => {
-                        const pt = this.world.toGeo(p.x, p.y)
-                        util.forLoop(counties.features, (f, i) => {
-                            if (turf.booleanPointInPolygon(pt, f)) {
-                                if (p.feature)
-                                    console.log('p.feature exists', p)
-                                p.feature = f
-                            }
-                        })
-                    })
-                    this.turtles.ask(t => (t.feature = t.patch.feature))
-                }
-                step() {
-                    super.step()
-                    this.turtles.ask(t => {
-                        if (t.feature !== t.patch.feature) {
-                            t.feature = t.patch.feature
-                            const name = t.feature
-                                ? t.feature.properties.NAME
-                                : 'No Where'
-                            const population = t.feature
-                                ? t.feature.properties.population
-                                : 0
-                            console.log(
-                                'new feature: turtle: ' + t.id + ',',
-                                'county: ' + name + ',',
-                                'population: ' + population
-                            )
-                        }
-                    })
-                }
-            }
+            // class GeoModel extends HelloModel {
+            //     setup() {
+            //         super.setup()
+            //         this.patches.ask(p => {
+            //             const pt = this.world.toGeo(p.x, p.y)
+            //             util.forLoop(counties.features, (f, i) => {
+            //                 if (turf.booleanPointInPolygon(pt, f)) {
+            //                     if (p.feature)
+            //                         console.log('p.feature exists', p)
+            //                     p.feature = f
+            //                 }
+            //             })
+            //         })
+            //         this.turtles.ask(t => (t.feature = t.patch.feature))
+            //     }
+            //     step() {
+            //         super.step()
+            //         this.turtles.ask(t => {
+            //             if (t.feature !== t.patch.feature) {
+            //                 t.feature = t.patch.feature
+            //                 const name = t.feature
+            //                     ? t.feature.properties.NAME
+            //                     : 'No Where'
+            //                 const population = t.feature
+            //                     ? t.feature.properties.population
+            //                     : 0
+            //                 console.log(
+            //                     'new feature: turtle: ' + t.id + ',',
+            //                     'county: ' + name + ',',
+            //                     'population: ' + population
+            //                 )
+            //             }
+            //         })
+            //     }
+            // }
 
+            const turtleColors = {
+                infected: 'red',
+                susceptible: 'blue',
+                resistant: 'gray',
+            }
             const drawOptions = {
                 patchesColor: 'transparent',
-                linksColor: 'gray',
-                turtlesSize: 5,
+                turtleShape: 'circle',
+                turtlesSize: 3,
+                turtlesColor: t => turtleColors[t.state],
+                linksColor: 'red',
             }
 
             async function run() {
@@ -73,7 +80,7 @@
                 console.log('bbox', bbox)
 
                 const world = new GeoWorld(bbox, 100)
-                const model = new GeoModel(world)
+                const model = new Model(world)
                 util.toWindow({ counties, bbox, world, model })
 
                 await model.startup()
