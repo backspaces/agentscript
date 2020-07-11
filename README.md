@@ -24,35 +24,44 @@ Example: to import Class Model for building your own model, use:
 -   agentscript.org: [http://agentscript.org/src/Model.js](http://agentscript.org/src/Model.js)
 -   unpkg.com: [https://unpkg.com/agentscript/src/Model.js](https://unpkg.com/agentscript/src/Model.js)
 
-## Dual Build
+To create your own local agentscript files:
 
-AgentScript is based on es6 Modules (ESM) which are delivered as two [Rollup](https://rollupjs.org/) bundles:
+-   Go to: https://github.com/backspaces/agentscript
+-   Click on the large green `Code` button
+-   Click on `Download ZIP`. The creates the file agentscript-master.zip
+-   Unzip this. Creates agentscript-master/
+-   Rename/Move to where you want it.
 
-```
-* UMD: agentscript.umd.js
-* ESM: agentscript.esm.js
-```
+## Files
 
-The UMD can be used in the browser as a `<script>` tag, and in Node using `require()`
+Our directory layout is:
 
-The ESM is used in es6 import statements.
+### The core agentscript directories:
 
-Both are available in minified form. All are in the project's `dist/` directory.
+-   [models/](https://github.com/backspaces/agentscript/tree/master/models): simple sample/demo models. All are es6 modules used in onepagers below
+-   [src/](https://github.com/backspaces/agentscript/tree/master/src): all the agentscript source code. All are es6 modules
 
-The UMD's global name is `AS`
+### Use of the models in one-page html demos, called "onepagers"
 
-## NPM Package
+-   [docs/](https://github.com/backspaces/agentscript/tree/master/docs): tutorial examples
+-   [gis/](https://github.com/backspaces/agentscript/tree/master/gis): Sample gis examples, inserting models into maps
+-   [views2/](https://github.com/backspaces/agentscript/tree/master/views2): 2D Canvas views of all the models/
+-   [views3/](https://github.com/backspaces/agentscript/tree/master/views3): Three.js views of all the models/
 
-AgentScript is available as a npm package: agentscript.
+### Developer directories:
 
-To install the package, `yarn add agentscript`. This places the bundles in `node_modules/agentscript/dist`
+-   [bin/](https://github.com/backspaces/agentscript/tree/master/bin): workflow scripts
+-   [dist/](https://github.com/backspaces/agentscript/tree/master/dist): the umd and esm bundles with their min.js versions and src/.
+-   [models/scripts/](https://github.com/backspaces/agentscript/tree/master/models/scripts): `<script>` versions of models/.<br>
+    Used by legacy models, test/, and workers. test/ uses workers for speed.
+-   [test/](https://github.com/backspaces/agentscript/tree/master/test): testing in browser for all models/ using [Puppeteer](https://github.com/puppeteer/puppeteer#puppeteer)
+-   [vendor/](https://github.com/backspaces/agentscript/tree/master/vendor): es6 versions of third party libraries used by onepagers.
+-   [workflow/](https://github.com/backspaces/agentscript/tree/master/workflow): tools for creating "bundles".<br>
+    Note that many of these will be removed as es6 modules fully supported by our dependencies. For example models/scripts will be removed when workers can use import statements in all browsers. Safari, we're talking about you! Ditto for vendor/ as all dependencies offer es6 modules.
 
-To use the package as a CDN, use [unpkg.com](https://unpkg.com/).
+Click on the directory name to see it on github. Click on the individual file names to see them nicely formatted.
 
--   UMD: [https://unpkg.com/agentscript](https://unpkg.com/agentscript)
--   ESM: [https://unpkg.com/agentscript?module](https://unpkg.com/agentscript?module)
-
-View the unpkg.dashboard: [https://unpkg.com/agentscript/](https://unpkg.com/agentscript/)
+[Test](./views2/README.md)
 
 ## Developer Information
 
@@ -61,42 +70,16 @@ To clone the github repo:
 -   cd to where you want the agentscript/ dir to appear.
 -   git clone https://github.com/backspaces/agentscript
 -   cd agentscript # go to new repo
--   yarn install # install all dev dependencies
--   yarn build # complete the install
+-   yarn install # install all dev dependencies.
+-   yarn build # complete the install.
+-   yarn run build-vendor # build depend<br>
+    Note: Fine to use npm rather than yarn.
 
-All workflow is npm run scripts. See package.json's scripts, or use `yarn run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.eslintrc.json).
-
-## Github Pages
-
-The [github repo](https://github.com/backspaces/agentscript) is also a [github-page](), thus is a server for all the files in the repo. [gh-page](http://backspaces.github.io/agentscript/) is used for the site. It contains the dist/ dir and a models/ dir with sample models also used for testing.
-
-It uses [the docs/ simplification](https://help.github.com/articles/user-organization-and-project-pages/#project-pages) for gh-page creation.
-
-The gh-page hosts our sample models. The fire model can be run with:
-
-> http://backspaces.github.io/agentscript/models?fire
-
-The Github page can be used as a CDN for experimental use:
-
--   UMD: [https://backspaces.github.io/agentscript/dist/agentscript.umd.js](https://backspaces.github.io/agentscript/dist/agentscript.umd.js)
--   ESM: [https://backspaces.github.io/agentscript/dist/agentscript.esm.js](https://backspaces.github.io/agentscript/dist/agentscript.esm.js)
-
-## Files
-
-Our directory layout is:
-
-```
-bin: workflow scripts
-dist: the umd and esm bundles with their min.js versions.
-docs: gh-page
-models: sample models used for tests and demos
-src: individual agentscript es6 modules
-test: test files
-```
+All workflow is npm run scripts. See package.json's scripts, or use `yarn/npm run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.prettierrc.js).
 
 ## License
 
-Copyright Owen Densmore, RedfishGroup LLC, 2012-2018<br>
+Copyright Owen Densmore, RedfishGroup LLC, 2012-2020<br>
 AgentScript may be freely distributed under the GPLv3 license:
 
 AgentScript is free software: you can redistribute it and/or modify
