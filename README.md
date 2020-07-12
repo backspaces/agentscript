@@ -75,7 +75,7 @@ The Models directory contains the individual Models JavaScript files exporting a
 
 [gis](./gis/)
 
-[docs](./docs/
+[docs](./docs/)
 
 ## Developer Information
 

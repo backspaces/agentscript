@@ -41,7 +41,7 @@
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "build": "npm-run-all clean build-scripts build-dist ",
+        "build": "npm-run-all clean build-scripts build-dist build-md",
         "build-dist": "rollup -c workflow/rollup.config.js && cp -R src dist",
         "build-scripts": "node bin/models2scripts",
         "build-vendor": "rm vendor/* && rollup -c workflow/rollup.vendor.js && npm run build-css",

@@ -29,7 +29,9 @@ dirs.forEach(dir => {
             url = `${urlRoot}${file}`
         }
         const srcUrl = `[${name}](${srcRoot}${file}#L1)`
-        shell.echo(`${srcUrl} | ${url}`).toEnd('README.md')
+        const linkUrl = `[${url}](${url})`
+        // shell.echo(`${srcUrl} | ${url}`).toEnd('README.md')
+        shell.echo(`${srcUrl} | ${linkUrl}`).toEnd('README.md')
         // shell.echo(`${name} | ${url}`).toEnd('README.md')
     })
 
