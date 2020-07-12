@@ -67,7 +67,7 @@ The Models directory contains the individual Models JavaScript files exporting a
 
 <!-- [models](./models/README.md) -->
 
-[models](./models/README.md)
+[models](https://github.com/backspaces/agentscript/blob/master/models/README.md)
 
 [views2](./views2/)
 
