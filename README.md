@@ -61,7 +61,19 @@ Our directory layout is:
 
 Click on the directory name to see it on github. Click on the individual file names to see them nicely formatted.
 
-[Test](./views2/README.md)
+## Run the demos in the directories mentioned above.
+
+The Models directory contains the individual Models JavaScript files exporting a Model. It is the only directory with .js files, the rest are "onepagers" .html files. Notice the links use "query parameters" that the index.html file uses to run the model. The output is a random sample of the model's results.
+
+[models](./models/README.md)
+
+[views2](./views2/README.md)
+
+[views3](./views3/README.md)
+
+[gis](./gis/README.md)
+
+[docs](./docs/README.md)
 
 ## Developer Information
 

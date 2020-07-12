@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+
+const shell = require('shelljs')
+// shell.config.silent = true
+
+let dirs = process.argv[2]
+
+if (!dirs) throw Error('Needs dirs argument')
+// console.log(dir)
+// dir = process.argv[2].replace(/\/$/, '') // remove optional final "/"
+dirs = dirs.split(' ')
+
+dirs.forEach(dir => {
+    shell.cd(dir)
+
+    const files = dir === 'models' ? shell.ls('*Model.js') : shell.ls('*html')
+    const urlRoot = `https://agentscript.org/${dir}/`
+    const srcRoot = `https://github.com/backspaces/agentscript/tree/master/${dir}/`
+    shell.echo('name    | link').to('README.md')
+    shell.echo('------- | ------').toEnd('README.md')
+
+    files.forEach(file => {
+        let name = file.replace(/.html$/, '').replace(/Model.js$/, '')
+        let url
+        if (dir === 'models') {
+            name = name[0].toLowerCase() + name.slice(1)
+            url = `${urlRoot}?${name}`
+        } else {
+            url = `${urlRoot}${file}`
+        }
+        const srcUrl = `[${name}](${srcRoot}${file})`
+        shell.echo(`${srcUrl} | ${url}`).toEnd('README.md')
+        // shell.echo(`${name} | ${url}`).toEnd('README.md')
+    })
+
+    shell.cd('..')
+})

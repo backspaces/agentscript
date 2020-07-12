@@ -1,0 +1,5 @@
+name    | link
+------- | ------
+[hello](https://github.com/backspaces/agentscript/tree/master/docs/hello.html) | https://agentscript.org/docs/hello.html
+[hellomodule](https://github.com/backspaces/agentscript/tree/master/docs/hellomodule.html) | https://agentscript.org/docs/hellomodule.html
+[helloview](https://github.com/backspaces/agentscript/tree/master/docs/helloview.html) | https://agentscript.org/docs/helloview.html

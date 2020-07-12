@@ -46,6 +46,7 @@
         "build-scripts": "node bin/models2scripts",
         "build-vendor": "rm vendor/* && rollup -c workflow/rollup.vendor.js && npm run build-css",
         "build-css": "bin/wrapcss < 'node_modules/mapbox-gl/dist/mapbox-gl.css' > vendor/mapboxgl.css.js",
+        "build-md": "bin/src2md 'models views2 views3 docs gis' > /dev/null",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
