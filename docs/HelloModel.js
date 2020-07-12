@@ -1,5 +1,5 @@
-import util from 'http://agentscript.org/src/util.js'
-import Model from 'http://agentscript.org/src/Model.js'
+import util from 'https://agentscript.org/src/util.js'
+import Model from 'https://agentscript.org/src/Model.js'
 
 // A really simple "random walker" hello world model
 export default class HelloModel extends Model {

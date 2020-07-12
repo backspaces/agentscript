@@ -21,7 +21,7 @@ Example: to import Class Model for building your own model, use:
 .. where path/to/agentscript is a local file system path or a url to a server:
 
 -   local: [./src/Model.js](./src/Model.js)
--   agentscript.org: [http://agentscript.org/src/Model.js](http://agentscript.org/src/Model.js)
+-   agentscript.org: [https://agentscript.org/src/Model.js](https://agentscript.org/src/Model.js)
 -   unpkg.com: [https://unpkg.com/agentscript/src/Model.js](https://unpkg.com/agentscript/src/Model.js)
 
 To create your own local agentscript files:
