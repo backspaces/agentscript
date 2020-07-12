@@ -65,15 +65,17 @@ Click on the directory name to see it on github. Click on the individual file na
 
 The Models directory contains the individual Models JavaScript files exporting a Model. It is the only directory with .js files, the rest are "onepagers" .html files. Notice the links use "query parameters" that the index.html file uses to run the model. The output is a random sample of the model's results.
 
+<!-- [models](./models/README.md) -->
+
 [models](./models/README.md)
 
-[views2](./views2/README.md)
+[views2](./views2/)
 
-[views3](./views3/README.md)
+[views3](./views3/)
 
-[gis](./gis/README.md)
+[gis](./gis/)
 
-[docs](./docs/README.md)
+[docs](./docs/
 
 ## Developer Information
 

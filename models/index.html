@@ -20,7 +20,9 @@
             // Run the model. async used for importing the model and startup()
             async function run() {
                 // Let user know this is working:
-                util.printToPage(`Running ${className} for 500 steps.`)
+                util.printToPage(
+                    `Running ${className} for 500 steps. Takes a while!`
+                )
 
                 // Dynamically import the model:
                 const module = await import(`./${className}.js`)
