@@ -26,8 +26,7 @@ dirs.forEach(dir => {
             name = name[0].toLowerCase() + name.slice(1)
             url = `${urlRoot}?${name}`
         } else {
-            // url = `${urlRoot}${file}`
-            url = urlRoot
+            url = `${urlRoot}${file}`
         }
         const srcUrl = `[${name}](${srcRoot}${file}#L1)`
         shell.echo(`${srcUrl} | ${url}`).toEnd('README.md')
