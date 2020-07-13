@@ -104,15 +104,15 @@ Relative URL to READMEs
 Absolute URL to Dir
 <hr>
 
-[models](https://agentscript.org/models/README.md)
+[models](https://agentscript.org/models/)
 
-[views2](https://agentscript.org/views2/README.md)
+[views2](https://agentscript.org/views2/)
 
-[views3](https://agentscript.org/views3/README.md)
+[views3](https://agentscript.org/views3/)
 
-[gis](https://agentscript.org/gis/README.md)
+[gis](https://agentscript.org/gis/)
 
-[docs](https://agentscript.org/docs/README.md)
+[docs](https://agentscript.org/docs/)
 
 <hr>
 Relative URL to Dir
