@@ -24,7 +24,7 @@ dirs.forEach(dir => {
         let url
         if (dir === 'models') {
             name = name[0].toLowerCase() + name.slice(1)
-            url = `${urlRoot}?${name}`
+            url = `${urlRoot}run.html?${name}`
         } else {
             url = `${urlRoot}${file}`
         }

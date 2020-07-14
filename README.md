@@ -63,23 +63,29 @@ Click on the directory name to see it on github. Click on the individual file na
 
 ## Run demos
 
-The Models directory contains the individual Models JavaScript files exporting a Model. It is the only directory with .js files, the rest are "onepagers" .html files. Notice the links use "query parameters" that the index.html file uses to run the model. The output is a random sample of the model's results.
-
-<!-- [models](./models/README.md) -->
-
-<!-- [models](https://github.com/backspaces/agentscript/blob/master/models/README.md) -->
+The models directory contains the individual Models JavaScript files. I.e. HelloModel.js exports the HelloModel. It is the only demo directory with .js files, the rest are "onepagers" .html files. Notice the links use "query parameters" that the index.html file uses to run the model. The output is a random sample of the model's results.
 
 [models](./models/README.md)
 
+The views2 onepagers import models from the models/ dir and add a 2D Canvas view.
+
 [views2](./views2/README.md)
+
+The views3 onepagers import models from the models/ dir and add a Three.js webgl 3D view.
 
 [views3](./views3/README.md)
 
+The gis onepagers use gis & mapbox utilities to create and view models running on maps with geojson data.
+
 [gis](./gis/README.md)
+
+The docs onepagers are a series of tutorials, showing how to build, view and control simple models.
 
 [docs](./docs/README.md)
 
 ## Developer Information
+
+Most users need not worry about this, you can access all the AgentScript code as described above using local files or servers. This is for those wishing to build the AgentScript system itself.
 
 To clone the github repo:
 

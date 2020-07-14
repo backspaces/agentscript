@@ -20,7 +20,7 @@ wait().then(() => {
         model = model.replace('Model.js', '').replace('models/', '')
         model = model.charAt(0).toLowerCase() + model.slice(1)
         // const url = `http://localhost/src/agentscript/models/?${model}`
-        const url = `http://127.0.0.1:8080/models/?${model}`
+        const url = `http://127.0.0.1:8080/models/run.html?${model}`
         const cmd = `open -a Safari ${url}`
         shell.echo(cmd)
         shell.exec(cmd)
