@@ -1,4 +1,4 @@
-name    | link
+Code    | Run demo
 ------- | ------
 [ants](https://github.com/backspaces/agentscript/tree/master/views2/ants.html#L1) | [https://agentscript.org/views2/ants.html](https://agentscript.org/views2/ants.html)
 [buttons](https://github.com/backspaces/agentscript/tree/master/views2/buttons.html#L1) | [https://agentscript.org/views2/buttons.html](https://agentscript.org/views2/buttons.html)
