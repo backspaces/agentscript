@@ -90,7 +90,7 @@ Absolute URL to READMEs
 Relative URL to READMEs
 <hr>
 
-[models](models/README.md)
+[models](./models/README.html)
 
 [views2](./views2/README.md)
 
