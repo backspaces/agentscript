@@ -61,34 +61,13 @@ Our directory layout is:
 
 Click on the directory name to see it on github. Click on the individual file names to see them nicely formatted.
 
-## Run the demos in the directories mentioned above.
+## Run demos
 
 The Models directory contains the individual Models JavaScript files exporting a Model. It is the only directory with .js files, the rest are "onepagers" .html files. Notice the links use "query parameters" that the index.html file uses to run the model. The output is a random sample of the model's results.
 
 <!-- [models](./models/README.md) -->
 
 <!-- [models](https://github.com/backspaces/agentscript/blob/master/models/README.md) -->
-
-<hr>
-Several tests for accessing README's. Note models also has an index.html so will run the hello model when pointing at a dir. For that case, this works.
-[models](https://github.com/backspaces/agentscript/blob/master/models/README.md)
-<hr>
-Absolute URL to READMEs
-<hr>
-
-[models](https://agentscript.org/models/README.md)
-
-[views2](https://agentscript.org/views2/README.md)
-
-[views3](https://agentscript.org/views3/README.md)
-
-[gis](https://agentscript.org/gis/README.md)
-
-[docs](https://agentscript.org/docs/README.md)
-
-<hr>
-Relative URL to READMEs
-<hr>
 
 [models](./models/README.md)
 
@@ -99,48 +78,6 @@ Relative URL to READMEs
 [gis](./gis/README.md)
 
 [docs](./docs/README.md)
-
-<hr>
-Absolute URL to Dir
-<hr>
-
-[models](https://agentscript.org/models/)
-
-[views2](https://agentscript.org/views2/)
-
-[views3](https://agentscript.org/views3/)
-
-[gis](https://agentscript.org/gis/)
-
-[docs](https://agentscript.org/docs/)
-
-<hr>
-Relative URL to Dir
-<hr>
-
-[models](./models/)
-
-[views2](./views2/)
-
-[views3](./views3/)
-
-[gis](./gis/)
-
-[docs](./docs/)
-
-<hr>
-Absolute URL to Github Repo
-<hr>
-
-[models](https://github.com/backspaces/agentscript/blob/master/models/README.md)
-
-[views2](https://github.com/backspaces/agentscript/blob/master/views2/README.md)
-
-[views3](https://github.com/backspaces/agentscript/blob/master/views3/README.md)
-
-[gis](https://github.com/backspaces/agentscript/blob/master/gis/README.md)
-
-[docs](https://github.com/backspaces/agentscript/blob/master/docs/README.md)
 
 ## Developer Information
 
