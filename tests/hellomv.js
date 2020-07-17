@@ -54,7 +54,6 @@ view.createPatchPixels(i => Color.randomGrayPixel(0, 100))
 const perf = util.fps() // Just for testing, not needed for production.
 util.timeoutLoop(() => {
     model.step()
-    model.tick()
 
     view.clear()
     view.drawPatches() // redraw patches colors

@@ -28,7 +28,6 @@
                     model.setup()
                     util.repeat(params.steps, () => {
                         model.step()
-                        model.tick()
                     })
                     console.log('worker: done')
                     postMessage(util.sampleModel(model, true))

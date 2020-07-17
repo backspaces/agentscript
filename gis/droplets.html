@@ -88,15 +88,13 @@
 
                 if (!firstTime) return
                 util.timeoutLoop(
-                    () => {
-                        if (bboxModel.ticks >= 500) return
+                    step => {
+                        if (step === 500)
+                            console.log('500 steps done; coasting')
+                        if (step >= 500) return
 
                         bboxModel.step()
-                        bboxModel.tick()
                         bboxView.draw()
-
-                        if (bboxModel.ticks === 500)
-                            console.log('500 steps done; coasting')
                     },
                     -1, // forever
                     33

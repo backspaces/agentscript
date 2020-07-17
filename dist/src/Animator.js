@@ -48,16 +48,11 @@ export default class Animator {
     }
     // Two handlers used by animation loop
     step() {
-        // this.model.tick()
-        // this.ticks++
         this.model.step()
-        this.model.tick()
         this.ticks++
     }
     draw() {
-        // this.draws++
         this.view.draw(this.model)
-        this.view.tick()
         this.draws++
     }
     // step and draw the model once

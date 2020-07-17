@@ -13,16 +13,19 @@ if (dir === 'models' || dir === 'models/scripts') {
         .ls(`${dir}/*Model.js`)
         // OK if first char is capitolized, index.html will just recap
         .sed(/Model/, '')
-} else if (dir === 'models2' || dir === 'models3') {
-    models = shell.ls(`${dir}/*View.js`).sed(/View/, '')
-} else if (dir === 'mvc2') {
-    models = shell.ls(`${dir}/*MVC.js`).sed(/MVC/, '')
 } else {
-    models = shell
-        .ls(`${dir}/*.js`)
-        // Avoid FooModel.js, fooWorker.js, just foo.js
-        .grep('-v', '[A-Z]')
+    models = shell.ls(`${dir}/*.html`)
 }
+// } else if (dir === 'models2' || dir === 'models3') {
+//     models = shell.ls(`${dir}/*View.js`).sed(/View/, '')
+// } else if (dir === 'mvc2') {
+//     models = shell.ls(`${dir}/*MVC.js`).sed(/MVC/, '')
+// } else {
+//     models = shell
+//         .ls(`${dir}/*.js`)
+//         // Avoid FooModel.js, fooWorker.js, just foo.js
+//         .grep('-v', '[A-Z]')
+// }
 
 models = models
     .sed(/^.*\//, '')

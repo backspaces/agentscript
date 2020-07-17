@@ -76,10 +76,6 @@ export default class TwoMVC {
     step() {
         this.model.step()
     }
-    // Called by animator. Add to step? Use local in animator?
-    tick() {
-        this.model.tick()
-    }
 
     // MVC View must override draw:
     draw() {

@@ -48,7 +48,6 @@
                     color: colors25[p.id % 25],
                     size: p.id % 10 === 0 ? 4 : 2,
                 }))
-                model.tick()
                 perf()
             }, steps).then(() =>
                 console.log(`Done: steps: ${perf.steps}, fps: ${perf.fps}`)

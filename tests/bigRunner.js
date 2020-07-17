@@ -50,13 +50,11 @@ export default async function run(params) {
     if (inWorker || inNode) {
         util.repeat(params.steps, () => {
             model.step()
-            model.tick()
             perf()
         })
     } else {
         await util.timeoutLoop(() => {
             model.step()
-            model.tick()
             perf()
         }, params.steps)
     }

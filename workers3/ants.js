@@ -55,7 +55,6 @@ worker.onmessage = e => {
 
 // util.timeoutLoop(() => {
 //     model.step()
-//     model.tick()
 
 //     view.drawPatches(model.patches, p => {
 //         if (p.isNest) return nestColor.pixel

@@ -19,7 +19,7 @@ function postData() {
         }),
     }
     postMessage(data, util.oofaBuffers(data))
-    model.tick()
+    // model.tick()
 }
 
 onmessage = e => {

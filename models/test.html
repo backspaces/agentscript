@@ -24,7 +24,6 @@
                 model.setup()
                 await util.timeoutLoop(() => {
                     model.step()
-                    model.tick()
                 }, 500)
 
                 const sample = util.sampleModel(model)

@@ -15,7 +15,6 @@ async function run() {
     model.setup()
     await util.timeoutLoop(() => {
         model.step()
-        model.tick()
     }, 500)
     const sample = util.sampleModel(model)
     console.log(sample)
@@ -29,7 +28,6 @@ run().catch(e => {
 //         model.setup()
 //         util.repeat(500, () => {
 //             model.step()
-//             model.tick()
 //         })
 //     })
 //     const sample = util.sampleModel(model)

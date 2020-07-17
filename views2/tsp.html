@@ -33,7 +33,6 @@
                 await util.timeoutLoop(
                     () => {
                         model.step()
-                        model.tick()
                         view.draw()
                     },
                     500,

@@ -2,21 +2,15 @@
 const puppeteer = require('puppeteer')
 const shell = require('shelljs')
 
-// const path = process.argv[2]
-// if (!path) throw Error('Needs path argument')
-
-// const dir = process.argv[2]
 const dir = process.argv[2].replace(/\/$/, '') // remove optional final "/"
 
 const model = process.argv[3]
 if (!dir || !model) throw Error(`Needs dir & model arguments: ${dir} ${model}`)
 
-// const [dir, model] = path.split('/')
-// console.log('path:', path, 'dir:', dir, 'model:', model)
-// if (!dir || !model) throw Error('Needs dir/model argument')
-
-const indexFile = dir === 'models' ? 'test.html' : ''
-const url = `http://127.0.0.1:9009/${dir}/${indexFile}?${model}`
+const url =
+    dir === 'models' || dir === 'models/scripts'
+        ? `http://127.0.0.1:9009/models/test.html?${model}`
+        : `http://127.0.0.1:9009/${dir}/${model}`
 console.log('url:', url)
 
 const child = shell.exec(
@@ -25,8 +19,6 @@ const child = shell.exec(
         async: true,
     }
 )
-
-// const waitSecs = model === 'flock' ? 15 : 5
 
 const waitFinish = dir === 'models' || dir === 'models/scripts' ? true : false
 const waitSecs = waitFinish ? 2 : 5
@@ -50,11 +42,8 @@ async function run() {
         headless: false,
         // devtools: true,
     })
-    // console.log('browser')
     const page = await browser.newPage()
     await page.setViewport({ width, height })
-
-    // console.log('page')
     await page.goto(url)
 
     if (waitFinish) {
@@ -76,8 +65,6 @@ async function run() {
     console.log(`waiting ${waitSecs} seconds`)
     await wait(waitSecs)
     console.log('done waiting')
-
-    // await page.screenshot({ path: `test/${model}.png` })
     await browser.close()
 
     child.kill()

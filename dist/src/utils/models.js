@@ -65,12 +65,10 @@ export async function runModel(params) {
     if (worker) {
         repeat(params.steps, () => {
             model.step()
-            model.tick()
         })
     } else {
         await timeoutLoop(() => {
             model.step()
-            model.tick()
         }, params.steps)
     }
     console.log(prefix + 'done, model', model)

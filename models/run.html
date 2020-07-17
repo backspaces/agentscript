@@ -41,7 +41,6 @@
                 model.setup()
                 await util.timeoutLoop(() => {
                     model.step()
-                    model.tick() // Not needed if you don't need the tick count.
                 }, 500)
                 // That's it!
 

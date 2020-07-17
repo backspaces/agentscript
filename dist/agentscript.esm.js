@@ -1260,12 +1260,10 @@ async function runModel(params) {
     if (worker) {
         repeat(params.steps, () => {
             model.step();
-            model.tick();
         });
     } else {
         await timeoutLoop(() => {
             model.step();
-            model.tick();
         }, params.steps);
     }
     console.log(prefix + 'done, model', model);
@@ -3633,6 +3631,7 @@ class Model {
     // The Model constructor takes a World or WorldOptions object.
     constructor(worldOptions = World.defaultOptions()) {
         this.resetModel(worldOptions);
+        this.autoTick();
     }
 
     resetModel(worldOptions) {
@@ -3664,6 +3663,16 @@ class Model {
     async startup() {} // One-time async data fetching goes here.
     setup() {} // Your initialization code goes here
     step() {} // Called each step of the model
+
+    // A trick to auto advance ticks every step
+    stepAndTick() {
+        this.step0();
+        this.tick();
+    }
+    autoTick() {
+        this.step0 = this.step;
+        this.step = this.stepAndTick;
+    }
 
     // Breeds: create breeds/subarrays of Patches, Agents, Links
     patchBreeds(breedNames) {

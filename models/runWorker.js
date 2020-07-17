@@ -20,7 +20,6 @@ onmessage = e => {
             model.setup()
             util.repeat(params.steps, () => {
                 model.step()
-                model.tick()
             })
             console.log('worker: done, model', model)
 
