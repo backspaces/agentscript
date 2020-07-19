@@ -10,6 +10,7 @@ Code    | Run demo
 [gridpath](https://github.com/backspaces/agentscript/tree/master/views3/gridpath.html#L1) | [https://agentscript.org/views3/gridpath.html](https://agentscript.org/views3/gridpath.html)
 [hello](https://github.com/backspaces/agentscript/tree/master/views3/hello.html#L1) | [https://agentscript.org/views3/hello.html](https://agentscript.org/views3/hello.html)
 [hello3](https://github.com/backspaces/agentscript/tree/master/views3/hello3.html#L1) | [https://agentscript.org/views3/hello3.html](https://agentscript.org/views3/hello3.html)
+[helloplus](https://github.com/backspaces/agentscript/tree/master/views3/helloplus.html#L1) | [https://agentscript.org/views3/helloplus.html](https://agentscript.org/views3/helloplus.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views3/linktravel.html#L1) | [https://agentscript.org/views3/linktravel.html](https://agentscript.org/views3/linktravel.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views3/roads.html#L1) | [https://agentscript.org/views3/roads.html](https://agentscript.org/views3/roads.html)
 [tsp](https://github.com/backspaces/agentscript/tree/master/views3/tsp.html#L1) | [https://agentscript.org/views3/tsp.html](https://agentscript.org/views3/tsp.html)

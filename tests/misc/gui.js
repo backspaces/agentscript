@@ -1,7 +1,7 @@
 import Animator from '../src/Animator.js'
 import GUI from '../src/GUI.js'
 import Mouse from '../src/Mouse.js'
-import { HelloModelPlus as Model } from '../models/HelloModel.js'
+import { HelloPlusModel as Model } from '../models/HelloPlusModel.js'
 import View from '../models2/HelloView.js'
 import util from '../src/util.js'
 // util.toWindow({ Animator, GUI, Mouse, Model, View, util })

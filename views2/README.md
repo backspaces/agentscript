@@ -9,6 +9,7 @@ Code    | Run demo
 [flock](https://github.com/backspaces/agentscript/tree/master/views2/flock.html#L1) | [https://agentscript.org/views2/flock.html](https://agentscript.org/views2/flock.html)
 [gridpath](https://github.com/backspaces/agentscript/tree/master/views2/gridpath.html#L1) | [https://agentscript.org/views2/gridpath.html](https://agentscript.org/views2/gridpath.html)
 [hello](https://github.com/backspaces/agentscript/tree/master/views2/hello.html#L1) | [https://agentscript.org/views2/hello.html](https://agentscript.org/views2/hello.html)
+[helloplus](https://github.com/backspaces/agentscript/tree/master/views2/helloplus.html#L1) | [https://agentscript.org/views2/helloplus.html](https://agentscript.org/views2/helloplus.html)
 [hellotext](https://github.com/backspaces/agentscript/tree/master/views2/hellotext.html#L1) | [https://agentscript.org/views2/hellotext.html](https://agentscript.org/views2/hellotext.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views2/linktravel.html#L1) | [https://agentscript.org/views2/linktravel.html](https://agentscript.org/views2/linktravel.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views2/roads.html#L1) | [https://agentscript.org/views2/roads.html](https://agentscript.org/views2/roads.html)

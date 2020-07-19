@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>hello</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            import Model from '../models/HelloPlusModel.js'
+
+            async function run() {
+                const model = new Model()
+                await model.startup()
+                model.setup()
+
+                const view = new TwoDraw(model, {
+                    div: 'modelDiv',
+                    patchSize: 20,
+                }) // defalt drawOptions!
+
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        view.draw()
+                    },
+                    500,
+                    33
+                )
+            }
+            run()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

@@ -33,8 +33,9 @@ to('const testSamples = {')
 models.forEach(async model => {
     await test.serial(model, async t => {
         // ? `http://127.0.0.1:8080/models/scripts/?${model}&seed&testing`
-        const url = workers
-            ? `http://127.0.0.1:${port}/models/scripts/?${model}`
+        const url = workers // && model !== 'helloPlus'
+            ? // ? `http://127.0.0.1:${port}/models/scripts/?${model}`
+              `http://127.0.0.1:${port}/models/worker.html?${model}`
             : `http://127.0.0.1:${port}/models/test.html?${model}`
 
         const browser = await puppeteer.launch({
@@ -102,6 +103,8 @@ const testSamples = {
         '{"ticks":500,"model":["ticks","world","patches","turtles","links","step0","step","radius","population","speed","wiggle"],"patches":1089,"patch":{"id":762},"turtles":100,"turtle":{"id":46,"theta":11.492609791790887,"x":-2.7383511487161725,"y":-0.3886820454633696,"z":13.315793602104954,"links":[46,50,56]},"links":100,"link":{"id":0,"end0":{"id":0,"theta":14.20933841905284,"x":11.972205280358923,"y":0.9944382230298927,"z":6.374746531864861,"links":[0,55]},"end1":{"id":82,"theta":8.905512997133032,"x":-1.2302718353373023,"y":1.3744033854891413,"z":13.474325457889599,"links":[0,5,14,68,73,82]}}}',
     hello:
         '{"ticks":500,"model":["ticks","world","patches","turtles","links","step0","step","population","speed","wiggle"],"patches":1089,"patch":{"id":927},"turtles":10,"turtle":{"id":3,"theta":2.7061032805170213,"x":-11.510946140955705,"y":-5.2732108535965985,"links":[3,4]},"links":10,"link":{"id":9,"end0":{"id":9,"theta":-3.3554230749809055,"x":-11.573610523130423,"y":2.336477979400482,"links":[3,9]},"end1":{"id":5,"theta":-0.44541933510977116,"x":15.22704526570047,"y":-16.193063366898038,"links":[5,9]}}}',
+    helloPlus:
+        '{"ticks":500,"model":["ticks","world","patches","turtles","links","step0","step","population","speed","wiggle","minPopulation","maxPopulation","changeTick"],"patches":1089,"patch":{"id":502},"turtles":495,"turtle":{"id":303,"theta":-0.9181102070374625,"x":-2.5951687568997635,"y":-13.590776907297146,"links":[295,443,448]},"links":415,"link":{"id":536,"end0":{"id":527,"theta":4.621968257140095,"x":2.644901765549661,"y":-3.9627683109195426,"links":[536,565]},"end1":{"id":476,"theta":0.4186828609403746,"x":-7.953762369120633,"y":13.62230471775486,"links":[488,536]}}}',
     linkTravel:
         '{"ticks":500,"model":["ticks","world","patches","turtles","links","step0","step","layoutCircle","numNodes","numDrivers","speed","speedDelta","nodes","drivers"],"patches":1089,"patch":{"id":822},"turtles":130,"turtle":{"id":13,"theta":-1.1519173063162573,"x":6.101049646137006,"y":-13.703181864639014,"links":[22,23,27,36]},"links":56,"link":{"id":48,"end0":{"id":26,"theta":-3.874630939427411,"x":-11.147172382160917,"y":10.03695909538287,"links":[48,49]},"end1":{"id":19,"theta":-2.4085543677521746,"x":-11.147172382160912,"y":-10.036959095382874,"links":[34,35,48]}}}',
     roads:

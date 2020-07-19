@@ -10,6 +10,7 @@ Code    | Run demo
 [gridPath](https://github.com/backspaces/agentscript/tree/master/models/GridPathModel.js#L1) | [https://agentscript.org/models/run.html?gridPath](https://agentscript.org/models/run.html?gridPath)
 [hello3](https://github.com/backspaces/agentscript/tree/master/models/Hello3Model.js#L1) | [https://agentscript.org/models/run.html?hello3](https://agentscript.org/models/run.html?hello3)
 [hello](https://github.com/backspaces/agentscript/tree/master/models/HelloModel.js#L1) | [https://agentscript.org/models/run.html?hello](https://agentscript.org/models/run.html?hello)
+[helloPlus](https://github.com/backspaces/agentscript/tree/master/models/HelloPlusModel.js#L1) | [https://agentscript.org/models/run.html?helloPlus](https://agentscript.org/models/run.html?helloPlus)
 [linkTravel](https://github.com/backspaces/agentscript/tree/master/models/LinkTravelModel.js#L1) | [https://agentscript.org/models/run.html?linkTravel](https://agentscript.org/models/run.html?linkTravel)
 [roads](https://github.com/backspaces/agentscript/tree/master/models/RoadsModel.js#L1) | [https://agentscript.org/models/run.html?roads](https://agentscript.org/models/run.html?roads)
 [tsp](https://github.com/backspaces/agentscript/tree/master/models/TspModel.js#L1) | [https://agentscript.org/models/run.html?tsp](https://agentscript.org/models/run.html?tsp)
