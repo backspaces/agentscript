@@ -1,5 +1,8 @@
 // ### Math
 
+// const { PI, floor, cos, sin, atan2, log, log2, sqrt } = Math
+const { PI } = Math
+
 // Return random int/float in [0,max) or [min,max) or [-r/2,r/2)
 export const randomInt = max => Math.floor(Math.random() * max)
 export const randomInt2 = (min, max) =>
@@ -12,12 +15,12 @@ export const randomCentered = r => randomFloat2(-r / 2, r / 2)
 export function randomNormal(mean = 0.0, sigma = 1.0) {
     // Box-Muller
     const [u1, u2] = [1.0 - Math.random(), Math.random()] // ui in 0,1
-    const norm = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2)
+    const norm = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * PI * u2)
     return norm * sigma + mean
 }
 
 // Two seedable random number generators
-export function randomSeedSin(seed = Math.PI / 4) {
+export function randomSeedSin(seed = PI / 4) {
     // ~3.4 million b4 repeat.
     // https://stackoverflow.com/a/19303725/1791917
     return () => {
@@ -47,9 +50,9 @@ export const isPowerOf2 = num => (num & (num - 1)) === 0 // twgl library
 // [Stack Overflow](https://goo.gl/zvD78e)
 export const nextPowerOf2 = num => Math.pow(2, Math.ceil(Math.log2(num)))
 
-// A [modulus](http://mathjs.org/docs/reference/functions/mod.html)
-// function rather than %, the remainder function.
-// [`((v % n) + n) % n`](http://goo.gl/spr24) also works.
+// A [modulus](http://mathjs.org/docs/reference/functions/mod.html) function.
+// The modulus is defined as: x - y * floor(x / y)
+// It is not %, the remainder function.
 export const mod = (v, n) => ((v % n) + n) % n // v - n * Math.floor(v / n)
 // Wrap v around min, max values if v outside min, max
 export const wrap = (v, min, max) => min + mod(v - min, max - min)
@@ -81,8 +84,10 @@ export function lerpScale(number, lo, hi) {
 
 // Degrees & Radians
 // Note: quantity, not coord system xfm
-export const radians = degrees => (degrees * Math.PI) / 180
-export const degrees = radians => (radians * 180) / Math.PI
+const toDegrees = 180 / PI
+const toRadians = PI / 180
+export const radians = degrees => degrees * toRadians
+export const degrees = radians => radians * toDegrees
 
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
@@ -97,25 +102,42 @@ export function angle(heading) {
     const deg = mod(90 - heading, 360)
     return radians(deg)
 }
-export function headingToDegrees(heading) {
-    return mod(90 - heading, 360)
+
+export function modHeading(heading) {
+    return mod(heading, 360)
 }
-export function degreesToHeading(degrees) {
-    return mod(90 - degrees, 360)
+export function modAngle(angle) {
+    return mod(angle, 2 * PI)
 }
+
+export function headingsEqual(heading1, heading2) {
+    return modHeading(heading1) === modHeading(heading2)
+}
+export function anglesEqual(angle1, angle2) {
+    return modAngle(angle1) === modAngle(angle2)
+}
+// export function headingToDegrees(heading) {
+//     return mod(90 - heading, 360)
+// }
+// export function degreesToHeading(degrees) {
+//     return mod(90 - degrees, 360)
+// }
+
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
 export function subtractRadians(rad1, rad0) {
-    let dr = mod(rad1 - rad0, 2 * Math.PI)
-    if (dr > Math.PI) dr = dr - 2 * Math.PI
+    // let dr = mod(rad1 - rad0, 2 * PI)
+    let dr = modAngle(rad1 - rad0)
+    if (dr > PI) dr = dr - 2 * PI
     return dr
 }
 // Above using headings (degrees) returning degrees in (-180, 180]
 export function subtractHeadings(deg1, deg0) {
-    let dAngle = mod(deg1 - deg0, 360)
+    let dAngle = modHeading(deg1 - deg0)
     if (dAngle > 180) dAngle = dAngle - 360
     return dAngle
 }
+
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
 // [See: Math.atan2](http://goo.gl/JS8DF)
 export const radiansToward = (x, y, x1, y1) => Math.atan2(y1 - y, x1 - x)
