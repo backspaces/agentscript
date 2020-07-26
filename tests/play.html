@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>play</title>
+    </head>
+    <style>
+        body {
+            margin: 0;
+        }
+        #c {
+            width: 100vw; /* let our container decide our size */
+            height: 100vw;
+            display: block;
+        }
+    </style>
+
+    <body>
+        <canvas id="c"></canvas>
+    </body>
+    <script type="module">
+        // import * as THREE from '../../threefund/threejs/resources/threejs/r115/build/three.module.js'
+        // import { OrbitControls } from '../../threefund/threejs/resources/threejs/r113/examples/jsm/controls/OrbitControls.js'
+        import { THREE, OrbitControls } from '../vendor/three.esm.js'
+
+        console.log(THREE, OrbitControls)
+
+        function main() {
+            const canvas = document.querySelector('#c')
+            const renderer = new THREE.WebGLRenderer({ canvas })
+
+            const fov = 75
+            const aspect = 2 // the canvas default
+            const near = 0.1
+            const far = 5
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+            camera.position.z = 2
+
+            const scene = new THREE.Scene()
+
+            {
+                // isolates vars from rest of long fcn. Cool!
+                const color = 0xffffff
+                const intensity = 1
+                const light = new THREE.DirectionalLight(color, intensity)
+                light.position.set(-1, 2, 4)
+                scene.add(light)
+            }
+
+            const boxWidth = 1
+            const boxHeight = 1
+            const boxDepth = 1
+            const geometry = new THREE.BoxGeometry(
+                boxWidth,
+                boxHeight,
+                boxDepth
+            )
+
+            // const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 })
+            const material = new THREE.MeshPhongMaterial({ color: 0x44aa88 })
+
+            const cube = new THREE.Mesh(geometry, material)
+            scene.add(cube)
+
+            //   renderer.render(scene, camera)
+            // function render(time) {
+            //   time *= 0.001 // convert time to seconds
+
+            //   cube.rotation.x = time
+            //   cube.rotation.y = time
+
+            //   renderer.render(scene, camera)
+
+            //   requestAnimationFrame(render)
+            // }
+            // requestAnimationFrame(render)
+            renderer.render(scene, camera)
+
+            function resize() {
+                const { clientWidth, clientHeight } = canvas
+                camera.aspect = clientWidth / clientHeight
+                camera.updateProjectionMatrix()
+                renderer.setSize(clientWidth, clientHeight)
+            }
+            window.addEventListener('resize', resize)
+        }
+        main()
+    </script>
+</html>

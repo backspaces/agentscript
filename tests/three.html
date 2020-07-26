@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Three</title>
+    </head>
+    <!-- <style>
+        body {
+            margin: 0;
+        }
+        #c {
+            width: 100vw; /* let our container decide our size */
+            height: 100vw;
+            display: block;
+        }
+    </style> -->
+
+    <body>
+        <canvas id="c"></canvas>
+    </body>
+    <script type="module">
+        import util from '../src/util.js'
+        import { THREE, OrbitControls } from '../vendor/three.esm.js'
+        util.toWindow({ util, THREE, OrbitControls })
+
+        const canvas = document.getElementById('c')
+        const renderer = new THREE.WebGLRenderer(canvas)
+        const [fov, aspect, near, far] = [75, 2, 0.1, 5]
+        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+        camera.position.z = 2
+
+        const scene = new THREE.Scene()
+        util.toWindow({ renderer, camera, scene })
+
+        {
+            // isolates vars from rest of long fcn. Cool!
+            const color = 0xffffff
+            const intensity = 1
+            const light = new THREE.DirectionalLight(color, intensity)
+            light.position.set(-1, 2, 4)
+            scene.add(light)
+        }
+
+        const geometry = new THREE.BoxGeometry(1, 1, 1)
+        // const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 })
+        const material = new THREE.MeshPhongMaterial({ color: 0x44aa88 })
+        const cube = new THREE.Mesh(geometry, material)
+
+        scene.add(cube)
+
+        renderer.render(scene, camera)
+
+        // function render(time) {
+        //     time *= 0.001 // convert time to seconds
+
+        //     cube.rotation.x = time
+        //     cube.rotation.y = time
+
+        //     renderer.render(scene, camera)
+        //     requestAnimationFrame(render)
+        // }
+        // requestAnimationFrame(render)
+    </script>
+</html>

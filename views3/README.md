@@ -13,6 +13,7 @@ Code    | Run demo
 [helloplus](https://github.com/backspaces/agentscript/tree/master/views3/helloplus.html#L1) | [https://agentscript.org/views3/helloplus.html](https://agentscript.org/views3/helloplus.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views3/linktravel.html#L1) | [https://agentscript.org/views3/linktravel.html](https://agentscript.org/views3/linktravel.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views3/roads.html#L1) | [https://agentscript.org/views3/roads.html](https://agentscript.org/views3/roads.html)
+[shapes](https://github.com/backspaces/agentscript/tree/master/views3/shapes.html#L1) | [https://agentscript.org/views3/shapes.html](https://agentscript.org/views3/shapes.html)
 [tsp](https://github.com/backspaces/agentscript/tree/master/views3/tsp.html#L1) | [https://agentscript.org/views3/tsp.html](https://agentscript.org/views3/tsp.html)
 [virus](https://github.com/backspaces/agentscript/tree/master/views3/virus.html#L1) | [https://agentscript.org/views3/virus.html](https://agentscript.org/views3/virus.html)
 [wallfollower](https://github.com/backspaces/agentscript/tree/master/views3/wallfollower.html#L1) | [https://agentscript.org/views3/wallfollower.html](https://agentscript.org/views3/wallfollower.html)

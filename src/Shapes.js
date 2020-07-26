@@ -37,6 +37,17 @@ class Shapes {
         return util.oneValOf(paths)
     }
 
+    // Return the name/path at index of path array.
+    // Wrap the index to be within the array.
+    nameAtIndex(index) {
+        const names = this.getPathNames()
+        return names[util.mod(index, names.length)]
+    }
+    atIndex(index) {
+        const name = this.nameAtIndex(index)
+        return paths[name]
+    }
+
     imagePathPromise(name, imgURL) {
         return util.imagePromise(imgURL).then(img => {
             this.createImagePath(name, img)

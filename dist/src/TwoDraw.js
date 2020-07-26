@@ -10,7 +10,8 @@ export default class TwoDraw extends TwoView {
             initPatches: null,
 
             turtlesColor: 'random',
-            turtleShape: 'dart',
+            turtlesStrokeColor: 'random',
+            turtlesShape: 'dart',
             turtlesSize: 1,
 
             linksColor: 'random',
@@ -59,7 +60,8 @@ export default class TwoDraw extends TwoView {
             initPatches,
 
             turtlesColor,
-            turtleShape,
+            turtlesStrokeColor,
+            turtlesShape,
             turtlesSize,
 
             linksColor,
@@ -118,12 +120,18 @@ export default class TwoDraw extends TwoView {
 
         view.drawTurtles(model.turtles, t => ({
             shape:
-                typeof turtleShape === 'function'
-                    ? turtleShape(t)
-                    : turtleShape,
+                typeof turtlesShape === 'function'
+                    ? turtlesShape(t)
+                    : turtlesShape,
             color:
                 turtlesColor === 'random'
                     ? turtlesMap.atIndex(t.id).css
+                    : typeof turtlesColor === 'function'
+                    ? checkColor(t, turtlesColor(t))
+                    : turtlesColor,
+            strokeColor:
+                turtlesStrokeColor === 'random'
+                    ? turtlesMap.atIndex(t.id + 4).css
                     : typeof turtlesColor === 'function'
                     ? checkColor(t, turtlesColor(t))
                     : turtlesColor,

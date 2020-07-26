@@ -26,7 +26,7 @@ export default class ThreeDraw extends ThreeView {
             patchesColor: 'random',
 
             turtlesColor: 'random',
-            turtleShape: 'dart',
+            turtlesShape: 'dart',
             turtlesSize: 1,
 
             linksColor: 'random',
@@ -58,7 +58,7 @@ export default class ThreeDraw extends ThreeView {
 
         // Convert viewOptions.patches from Patches to Points if shape == 'point'
         // REMIND: Currently just turtles can be points. Patches too?
-        if (drawOptions.turtleShape === 'point') {
+        if (drawOptions.turtlesShape === 'point') {
             viewOptions.turtles = {
                 meshClass: 'PointsMesh',
                 options: { pointSize: drawOptions.turtlesSize }, // , z: 1.5
@@ -98,7 +98,7 @@ export default class ThreeDraw extends ThreeView {
             initPatches,
 
             turtlesColor,
-            turtleShape,
+            turtlesShape,
             turtlesSize,
 
             linksColor,
@@ -166,9 +166,9 @@ export default class ThreeDraw extends ThreeView {
         view.drawTurtles(model.turtles, t => ({
             // shape ignored for 'point' shape
             shape:
-                typeof turtleShape === 'function'
-                    ? turtleShape(t)
-                    : turtleShape,
+                typeof turtlesShape === 'function'
+                    ? turtlesShape(t)
+                    : turtlesShape,
             // color ignored for static 'point' shape
             color:
                 turtlesColor === 'random'
