@@ -1,6 +1,8 @@
 // Meshes used by the Three.js view module
 
-import { THREE } from '../vendor/three.esm.min.js'
+import { THREE } from '../vendor/three.esm.js'
+// import * as THREE from 'https://unpkg.com/three@0.118.3/build/three.module.js'
+
 import util from './util.js'
 // import { Vector3 } from 'THREE'
 
@@ -207,11 +209,11 @@ export class QuadSpritesMesh extends BaseMesh {
 
         // geometry.translate(-this.world.centerX, -this.world.centerY, 0)
 
-        geometry.addAttribute(
+        geometry.setAttribute(
             'position',
             new THREE.BufferAttribute(vertices, 3)
         )
-        geometry.addAttribute('uv', new THREE.BufferAttribute(uvs, 2))
+        geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
         geometry.setIndex(new THREE.BufferAttribute(indices, 1))
         const material = new THREE.MeshBasicMaterial({
             map: texture,
@@ -264,16 +266,18 @@ export class QuadSpritesMesh extends BaseMesh {
             indexes.push(...indices.map(ix => ix + i * 4)) // 4
             uvs.push(...sprite.uvs)
         })
-        // const mesh = this.mesh
-        const positionAttrib = this.mesh.geometry.getAttribute('position')
-        const uvAttrib = this.mesh.geometry.getAttribute('uv')
-        const indexAttrib = this.mesh.geometry.getIndex()
-        positionAttrib.setArray(positions)
-        positionAttrib.needsUpdate = true
-        uvAttrib.setArray(new Float32Array(uvs))
-        uvAttrib.needsUpdate = true
-        indexAttrib.setArray(new Uint32Array(indexes))
-        indexAttrib.needsUpdate = true
+
+        this.mesh.geometry.setAttribute(
+            'position',
+            new THREE.BufferAttribute(new Float32Array(positions), 3)
+        )
+        this.mesh.geometry.setAttribute(
+            'uv',
+            new THREE.BufferAttribute(new Float32Array(uvs), 2)
+        )
+        this.mesh.geometry.setIndex(
+            new THREE.BufferAttribute(new Uint32Array(indexes), 1)
+        )
     }
 }
 
@@ -296,12 +300,12 @@ export class PointsMesh extends BaseMesh {
             : null
 
         const geometry = new THREE.BufferGeometry()
-        geometry.addAttribute(
+        geometry.setAttribute(
             'position',
             new THREE.BufferAttribute(new Float32Array(), 3)
         )
         if (!this.fixedColor) {
-            geometry.addAttribute(
+            geometry.setAttribute(
                 'color',
                 new THREE.BufferAttribute(new Float32Array(), 3)
             )
@@ -338,13 +342,16 @@ export class PointsMesh extends BaseMesh {
             if (colors)
                 colors.push(...meshColor(viewFcn(turtle, i).color, this))
         })
-        const positionAttrib = this.mesh.geometry.getAttribute('position')
-        positionAttrib.setArray(new Float32Array(vertices))
-        positionAttrib.needsUpdate = true
+        this.mesh.geometry.setAttribute(
+            'position',
+            new THREE.BufferAttribute(new Float32Array(vertices), 3)
+        )
+
         if (colors) {
-            const colorAttrib = this.mesh.geometry.getAttribute('color')
-            colorAttrib.setArray(new Float32Array(colors))
-            colorAttrib.needsUpdate = true
+            this.mesh.geometry.setAttribute(
+                'color',
+                new THREE.BufferAttribute(new Float32Array(colors), 3)
+            )
         }
     }
 }
@@ -366,12 +373,12 @@ export class LinksMesh extends BaseMesh {
             : null
 
         const geometry = new THREE.BufferGeometry()
-        geometry.addAttribute(
+        geometry.setAttribute(
             'position',
             new THREE.BufferAttribute(new Float32Array(), 3)
         )
         if (!this.fixedColor) {
-            geometry.addAttribute(
+            geometry.setAttribute(
                 'color',
                 new THREE.BufferAttribute(new Float32Array(), 3)
             )
@@ -401,13 +408,16 @@ export class LinksMesh extends BaseMesh {
                 colors.push(...color, ...color)
             }
         })
-        const positionAttrib = this.mesh.geometry.getAttribute('position')
-        positionAttrib.setArray(new Float32Array(vertices))
-        positionAttrib.needsUpdate = true
+        this.mesh.geometry.setAttribute(
+            'position',
+            new THREE.BufferAttribute(new Float32Array(vertices), 3)
+        )
+
         if (colors) {
-            const colorAttrib = this.mesh.geometry.getAttribute('color')
-            colorAttrib.setArray(new Float32Array(colors))
-            colorAttrib.needsUpdate = true
+            this.mesh.geometry.setAttribute(
+                'color',
+                new THREE.BufferAttribute(new Float32Array(colors), 3)
+            )
         }
     }
 }

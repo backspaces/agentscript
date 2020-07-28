@@ -6,12 +6,14 @@
         <title>play</title>
     </head>
     <style>
+        html,
         body {
             margin: 0;
+            height: 100%;
         }
         #c {
-            width: 100vw; /* let our container decide our size */
-            height: 100vw;
+            width: 100%;
+            height: 100%;
             display: block;
         }
     </style>
@@ -26,64 +28,64 @@
 
         console.log(THREE, OrbitControls)
 
+        const useLight = true
+
         function main() {
             const canvas = document.querySelector('#c')
             const renderer = new THREE.WebGLRenderer({ canvas })
 
-            const fov = 75
-            const aspect = 2 // the canvas default
-            const near = 0.1
-            const far = 5
+            const [fov, aspect, near, far] = [75, 2, 0.1, 5]
             const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
             camera.position.z = 2
 
             const scene = new THREE.Scene()
 
-            {
-                // isolates vars from rest of long fcn. Cool!
-                const color = 0xffffff
-                const intensity = 1
+            if (useLight) {
+                const [color, intensity] = [0xffffff, 1]
                 const light = new THREE.DirectionalLight(color, intensity)
                 light.position.set(-1, 2, 4)
                 scene.add(light)
             }
 
-            const boxWidth = 1
-            const boxHeight = 1
-            const boxDepth = 1
-            const geometry = new THREE.BoxGeometry(
-                boxWidth,
-                boxHeight,
-                boxDepth
-            )
-
-            // const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 })
-            const material = new THREE.MeshPhongMaterial({ color: 0x44aa88 })
+            const geometry = new THREE.BoxGeometry(1, 1, 1)
+            const material = useLight
+                ? new THREE.MeshPhongMaterial({ color: 0x44aa88 })
+                : new THREE.MeshBasicMaterial({ color: 0x44aa88 })
 
             const cube = new THREE.Mesh(geometry, material)
             scene.add(cube)
 
-            //   renderer.render(scene, camera)
-            // function render(time) {
-            //   time *= 0.001 // convert time to seconds
+            function render(time) {
+                time *= 0.001 // convert time to seconds
 
-            //   cube.rotation.x = time
-            //   cube.rotation.y = time
+                checkResize()
 
-            //   renderer.render(scene, camera)
+                cube.rotation.x = time
+                cube.rotation.y = time
 
-            //   requestAnimationFrame(render)
-            // }
-            // requestAnimationFrame(render)
-            renderer.render(scene, camera)
+                renderer.render(scene, camera)
 
-            function resize() {
-                const { clientWidth, clientHeight } = canvas
-                camera.aspect = clientWidth / clientHeight
-                camera.updateProjectionMatrix()
-                renderer.setSize(clientWidth, clientHeight)
+                requestAnimationFrame(render)
             }
-            window.addEventListener('resize', resize)
+            requestAnimationFrame(render)
+
+            // https://threejsfundamentals.org/threejs/lessons/threejs-responsive.html
+            function checkResize() {
+                const canvas = renderer.domElement
+                const pixelRatio = window.devicePixelRatio
+
+                const width = (canvas.clientWidth * pixelRatio) | 0 // | round down
+                const height = (canvas.clientHeight * pixelRatio) | 0
+
+                const needResize =
+                    canvas.width !== width || canvas.height !== height
+
+                if (needResize) {
+                    renderer.setSize(width, height, false)
+                    camera.aspect = canvas.clientWidth / canvas.clientHeight
+                    camera.updateProjectionMatrix()
+                }
+            }
         }
         main()
     </script>
