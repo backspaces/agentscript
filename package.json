@@ -44,7 +44,7 @@
         "build": "npm-run-all clean build-scripts build-dist build-md",
         "build-dist": "rollup -c workflow/rollup.config.js && cp -R src dist",
         "build-scripts": "node bin/models2scripts",
-        "build-vendor": "yarn && rm vendor/* && rollup -c workflow/rollup.vendor.js && npm run build-css",
+        "build-vendor": "yarn && rm -f vendor/* && rollup -c workflow/rollup.vendor.js && npm run build-css",
         "build-css": "bin/wrapcss < 'node_modules/mapbox-gl/dist/mapbox-gl.css' > vendor/mapboxgl.css.js",
         "build-md": "bin/src2md 'models views2 views3 docs gis' > /dev/null",
         "test": "ava test/*.js",
