@@ -15,7 +15,7 @@
         import util from '../src/util.js'
         import {
             animate,
-            directionalLight,
+            modelLight,
             setDefaultStyle,
             modelCamera,
             addModelHelpers,
@@ -27,7 +27,7 @@
         const useLight = true
 
         const model = new Model()
-        model.population = 250
+        model.population = 2000
         model.setup()
         util.toWindow({ THREE, util, model })
 
@@ -36,7 +36,7 @@
             const renderer = new THREE.WebGLRenderer({ canvas })
             const scene = new THREE.Scene()
 
-            if (useLight) directionalLight(scene, model)
+            if (useLight) modelLight(scene, model)
 
             const camera = modelCamera(renderer, model)
             util.toWindow({ renderer, camera, scene })

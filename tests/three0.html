@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>three</title>
+    </head>
+
+    <body>
+        <canvas id="can"></canvas>
+    </body>
+    <!-- Greggman sez put scripts after body -->
+    <script type="module">
+        import { THREE, OrbitControls } from '../vendor/three.esm.js'
+        import util from '../src/util.js'
+        import {
+            animate,
+            directionalLight,
+            setDefaultStyle,
+        } from './threeUtils.js'
+        util.toWindow({ THREE, util })
+
+        setDefaultStyle('can')
+
+        const useLight = true
+
+        function main() {
+            const canvas = document.querySelector('#can')
+            const renderer = new THREE.WebGLRenderer({ canvas })
+            const scene = new THREE.Scene()
+
+            const [fov, aspect, near, far] = [75, 2, 1, 100]
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+            camera.position.set(4, 4, 4)
+
+            util.toWindow({ renderer, camera, scene })
+
+            scene.add(new THREE.AxesHelper(5))
+            scene.add(new THREE.GridHelper(5, 10))
+            const orbitControl = new OrbitControls(camera, renderer.domElement)
+
+            if (useLight) directionalLight(scene, [-1, 2, 4])
+
+            const geometry = new THREE.BoxBufferGeometry(0.5, 0.5, 0.5)
+            const material = useLight
+                ? new THREE.MeshPhongMaterial({ color: 0x44aa88 })
+                : new THREE.MeshBasicMaterial({ color: 0x44aa88 })
+
+            const cube = new THREE.Mesh(geometry, material)
+            scene.add(cube)
+
+            util.toWindow({ geometry, material, cube })
+
+            animate(renderer, scene, camera, time => {
+                time *= 0.001 // convert time to seconds
+                cube.rotation.x = time
+                cube.rotation.y = time
+            })
+        }
+        main()
+    </script>
+</html>

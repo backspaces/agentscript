@@ -77,6 +77,10 @@ export function renderOnce(renderer, scene, camera, fcn) {
 }
 export function animate(renderer, scene, camera, fcn) {
     function render(time) {
+        if (!stats) {
+            stats = new Stats()
+            document.body.appendChild(stats.dom)
+        }
         stats.begin()
 
         checkResize(renderer, camera)
@@ -91,10 +95,16 @@ export function animate(renderer, scene, camera, fcn) {
 
 export function directionalLight(
     scene,
-    model,
+    position,
     color = 0xffffff,
     intensity = 1
 ) {
+    const light = new THREE.DirectionalLight(color, intensity)
+    light.position.set(...position)
+    scene.add(light)
+}
+
+export function modelLight(scene, model, color = 0xffffff, intensity = 1) {
     const width = model.world.width
     const light = new THREE.DirectionalLight(color, intensity)
     light.position.set(width, width, width)
