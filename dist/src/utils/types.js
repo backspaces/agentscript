@@ -36,8 +36,9 @@ export const isTypedArray = obj => typeOf(obj.buffer) === 'arraybuffer'
 export const isUintArray = obj => /^uint.*array$/.test(typeOf(obj))
 export const isIntArray = obj => /^int.*array$/.test(typeOf(obj))
 export const isFloatArray = obj => /^float.*array$/.test(typeOf(obj))
-export const isWebglArray = obj =>
-    Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
+
+// export const isWebglArray = obj =>
+//     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
 
 export function isLittleEndian() {
     const d32 = new Uint32Array([0x01020304])

@@ -7,9 +7,9 @@
 import util from './util.js'
 import Color from './Color.js'
 
-function cssColor(color) {
-    return util.isString(color) ? color : Color.toTypedColor(color).css
-}
+// function cssColor(color) {
+//     return util.isString(color) ? color : Color.toTypedColor(color).css
+// }
 
 const ColorMap = {
     // ### Color Array Utilities
@@ -25,11 +25,11 @@ const ColorMap = {
     // This is a powerful browser feature, can be
     // used to create all the MatLab colormaps.
     //
-    // Stops are css strings or rgba arrays.
+    // Stops are css strings.
     // Locs are floats from 0-1, default is equally spaced.
     gradientImageData(nColors, stops, locs) {
         // Convert the color stops to css strings
-        stops = stops.map(c => cssColor(c))
+        // stops = stops.map(c => cssColor(c))
         const ctx = util.createCtx(nColors, 1)
         // Install default locs if none provide
         if (!locs) locs = util.floatRamp(0, 1, stops.length)
@@ -268,15 +268,15 @@ const ColorMap = {
     },
     // The most popular MatLab gradient, "jet":
     jetColors: [
-        [0, 0, 127],
-        [0, 0, 255],
-        [0, 127, 255],
-        [0, 255, 255],
-        [127, 255, 127],
-        [255, 255, 0],
-        [255, 127, 0],
-        [255, 0, 0],
-        [127, 0, 0],
+        Color.cssColor(0, 0, 127),
+        Color.cssColor(0, 0, 255),
+        Color.cssColor(0, 127, 255),
+        Color.cssColor(0, 255, 255),
+        Color.cssColor(127, 255, 127),
+        Color.cssColor(255, 255, 0),
+        Color.cssColor(255, 127, 0),
+        Color.cssColor(255, 0, 0),
+        Color.cssColor(127, 0, 0),
     ],
     // Two other popular MatLab 'ramp' gradients are:
     // * One color: from black/white to color, optionally back to white/black.

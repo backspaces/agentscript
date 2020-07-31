@@ -173,7 +173,7 @@ const Color = {
         if (this.isTypedColor(any)) return 'typed'
         if (util.isString(any)) return 'css'
         if (util.isInteger(any)) return 'pixel'
-        if (util.isWebglArray(any)) return 'webgl'
+        // if (util.isWebglArray(any)) return 'webgl'
         if (Array.isArray(any)) return 'rgb'
 
         throw Error('Color.colorType: invalid argument', any)
