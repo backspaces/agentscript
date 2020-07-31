@@ -8,8 +8,7 @@ import util from './util.js'
 import Color from './Color.js'
 
 function cssColor(color) {
-    if (color) return color.css || color
-    return color
+    return util.isString(color) ? color : Color.toTypedColor(color).css
 }
 
 const ColorMap = {
