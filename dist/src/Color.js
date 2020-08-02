@@ -117,16 +117,13 @@ const Color = {
     },
 
     // ### Typed Color
-    // A Color is a 4 element Uint8ClampedArray, with two properties:
+    // A TypedColor is a 4 element ArrayBuffer, with two views:
     //
-    // * pixelArray: A single element Uint32Array view on the Uint8ClampedArray
-    // * string: an optional, lazy evaluated, css color string.
+    // * pixelArray: A single element Uint32Array view
+    // * u8array: A 4 element r,g,b,a Uint8ClampedArray view
     //
-    // This provides a universal color, good for canvas2d pixels, webgl & image
-    // TypedArrays, and css/canvas2d strings.
-
-    // Create Color from r,g,b,a.
-    // This uses prototypal inheritance and does not need the new keyword.
+    // getters/setters are provided for multiple other color types:
+    //  'css', 'pixel', 'rgb', 'webgl'
     // If g is undefinec, returns toTypedColor(g)
     typedColor(r, g, b, a = 255) {
         if (g === undefined) return this.toTypedColor(r)
@@ -139,46 +136,28 @@ const Color = {
     isTypedColor(any) {
         return any && any.constructor === Uint8ClampedArray && any.pixelArray
     },
-    // Create a Color from a css string, pixel, JavaScript or Typed Array.
-    // Returns `any` if is Color already. Useful for
-    // ```
-    // css: `toTypedColor('#ff0a00')`
-    // hsl: `toTypedColor('hsl(200,100%,50%)')`
-    // named colors: `toTypedColor('CadetBlue')`
-    // pixels: `toTypedColor(4294945280)` !! Little Endian !!
-    // JavaScript Arrays: `toTypedColor([255,0,0])`
-    // ```
 
-    // isWebglArray(array) {
-    //     array.length === 3 && util.arrayMax(array) <= 1
-    // },
-
-    toTypedColor(any) {
-        if (this.isTypedColor(any)) return any
+    // Return a typedColor given a value and optional colorType
+    // If the value already is a typedColor, simply return it
+    // If colorType not defined, assume css (string) or pixel (number)
+    // The colorType can be: 'css', 'pixel', 'rgb', 'webgl'
+    // Note rgb and webgl are int arrays & float arrays respectively.
+    toTypedColor(value, colorType) {
+        if (this.isTypedColor(value)) return value
 
         const tc = this.typedColor(0, 0, 0, 0) // "empty" typed color
-
-        // const type = this.colorType(any)
-        tc[this.colorType(any)] = any
-
-        // if (util.isInteger(any)) tc.setPixel(any)
-        // else if (util.isString(any)) tc.setCss(any)
-        // else if (util.isWebglArray(any)) tc.setWebgl(any)
-        // else if (Array.isArray(any)) tc.setColor(...any)
-        // else throw Error('Color.toTypedColor: invalid argument', any)
-
+        if (colorType == null) {
+            if (typeof value === 'string') tc.css = value
+            else if (typeof value === 'number') tc.pixel = value
+            else throw Error(`toTypedColor: illegal value ${value}`)
+        } else {
+            // REMIND: type check value & colorType?
+            tc[colorType] = value
+        }
         return tc
     },
-    colorType(any) {
-        if (this.isTypedColor(any)) return 'typed'
-        if (util.isString(any)) return 'css'
-        if (util.isInteger(any)) return 'pixel'
-        // if (util.isWebglArray(any)) return 'webgl'
-        if (Array.isArray(any)) return 'rgb'
 
-        throw Error('Color.colorType: invalid argument', any)
-    },
-    // Return a random rgb Color, a=255
+    // Random typedColor, rgb or gray, alpha = 255 for both:
     randomTypedColor() {
         const r255 = () => util.randomInt(256) // random int in [0,255]
         return this.typedColor(r255(), r255(), r255())
@@ -188,8 +167,6 @@ const Color = {
         const gray = util.randomInt2(min, max) // random int in [min,max]
         return this.typedColor(gray, gray, gray)
     },
-    // A static transparent color, set at end of file
-    // transparent: null
 }
 
 // Prototype for Color. Getters/setters for usability, may be slower.

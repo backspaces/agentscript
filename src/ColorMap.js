@@ -7,10 +7,6 @@
 import util from './util.js'
 import Color from './Color.js'
 
-// function cssColor(color) {
-//     return util.isString(color) ? color : Color.toTypedColor(color).css
-// }
-
 const ColorMap = {
     // ### Color Array Utilities
     // Several utilities for creating color arrays
@@ -256,11 +252,13 @@ const ColorMap = {
     },
 
     // Use gradient to build an rgba array, then convert to colormap.
-    // Stops are css strings or rgba arrays.
+    // Stops are css strings or typedColors.
     // locs defaults to evenly spaced, probably what you want.
     //
     // This easily creates all the MatLab colormaps like "jet" below.
     gradientColorMap(nColors, stops, locs) {
+        // Convert the color stops to css strings
+        stops = stops.map(c => c.css || c)
         const uint8arrays = this.gradientImageData(nColors, stops, locs)
         const typedColors = this.typedArraytoColors(uint8arrays)
         Object.setPrototypeOf(typedColors, this.ColorMapProto)
@@ -343,6 +341,7 @@ const ColorMap = {
         return this.LazyMap('DarkGray', this.grayColorMap(0, 100))
     },
     get Jet() {
+        console.log('jet', this.jetColors)
         return this.LazyMap('Jet', this.gradientColorMap(256, this.jetColors))
     },
     get Rgb256() {
