@@ -264,9 +264,6 @@ const TypedColorProto = {
     set webgl(array) {
         this.setWebgl(array)
     },
-    // set webgl(floatArray) {
-    //     this.setWebgl(floatArray)
-    // },
 
     // Housekeeping when the color is modified.
     checkColorChange() {

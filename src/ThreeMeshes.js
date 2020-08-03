@@ -16,8 +16,9 @@ const unitQuad = createQuad(0.5, 0)
 
 // Return typedColor[meshColorType] or color which must be correct type
 function meshColor(color, mesh) {
-    if (color) return color[mesh.options.colorType] || color
-    return color
+    return color[mesh.options.colorType] || color
+    // if (color) return color[mesh.options.colorType] || color
+    // return color
 }
 
 const zMultiplier = 0.25
@@ -61,7 +62,7 @@ export class BaseMesh {
         let { centerX, centerY, width, height } = this.world
         if (this.canvas) [centerX, centerY] = [0, 0]
         const z = this.options.z * zMultiplier //  Math.max(width, height)
-        console.log('centerMesh', centerX, centerY, width, height, z)
+        // console.log('centerMesh', centerX, centerY, width, height, z)
 
         this.mesh.position.set(-centerX, -centerY, z)
     }
@@ -202,19 +203,19 @@ export class QuadSpritesMesh extends BaseMesh {
         if (this.mesh) this.dispose()
         const texture = this.spriteSheetTexture
 
-        const vertices = new Float32Array()
-        const uvs = new Float32Array()
-        const indices = new Uint32Array()
+        // const vertices = new Float32Array()
+        // const uvs = new Float32Array()
+        // const indices = new Uint32Array()
         const geometry = new THREE.BufferGeometry()
 
         // geometry.translate(-this.world.centerX, -this.world.centerY, 0)
 
         geometry.setAttribute(
             'position',
-            new THREE.BufferAttribute(vertices, 3)
+            new THREE.Float32BufferAttribute([], 3)
         )
-        geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
-        geometry.setIndex(new THREE.BufferAttribute(indices, 1))
+        geometry.setAttribute('uv', new THREE.Float32BufferAttribute([], 2))
+        geometry.setIndex(new THREE.Uint32BufferAttribute([], 1))
         const material = new THREE.MeshBasicMaterial({
             map: texture,
             alphaTest: 0.5,
@@ -240,7 +241,7 @@ export class QuadSpritesMesh extends BaseMesh {
         util.forLoop(turtles, (turtle, i) => {
             // const turtle = turtles[i]
             let { x, y, z, theta } = turtle
-            if (!z) z = 0
+            // if (!z) z = 0
 
             const viewData = viewFcn(turtle, i)
             let { size, sprite } = viewData
@@ -269,15 +270,14 @@ export class QuadSpritesMesh extends BaseMesh {
 
         this.mesh.geometry.setAttribute(
             'position',
-            new THREE.BufferAttribute(new Float32Array(positions), 3)
+            new THREE.BufferAttribute(positions, 3)
+            // new THREE.Float32BufferAttribute(positions, 3)
         )
         this.mesh.geometry.setAttribute(
             'uv',
-            new THREE.BufferAttribute(new Float32Array(uvs), 2)
+            new THREE.Float32BufferAttribute(uvs, 2)
         )
-        this.mesh.geometry.setIndex(
-            new THREE.BufferAttribute(new Uint32Array(indexes), 1)
-        )
+        this.mesh.geometry.setIndex(new THREE.Uint32BufferAttribute(indexes, 1))
     }
 }
 
@@ -302,12 +302,12 @@ export class PointsMesh extends BaseMesh {
         const geometry = new THREE.BufferGeometry()
         geometry.setAttribute(
             'position',
-            new THREE.BufferAttribute(new Float32Array(), 3)
+            new THREE.Float32BufferAttribute([], 3)
         )
         if (!this.fixedColor) {
             geometry.setAttribute(
                 'color',
-                new THREE.BufferAttribute(new Float32Array(), 3)
+                new THREE.Float32BufferAttribute([], 3)
             )
         }
 
@@ -337,20 +337,20 @@ export class PointsMesh extends BaseMesh {
 
         util.forLoop(turtles, (turtle, i) => {
             let { x, y, z } = turtle
-            if (!z) z = 0
+            // if (!z) z = 0
             vertices.push(x, y, z)
             if (colors)
                 colors.push(...meshColor(viewFcn(turtle, i).color, this))
         })
         this.mesh.geometry.setAttribute(
             'position',
-            new THREE.BufferAttribute(new Float32Array(vertices), 3)
+            new THREE.Float32BufferAttribute(vertices, 3)
         )
 
         if (colors) {
             this.mesh.geometry.setAttribute(
                 'color',
-                new THREE.BufferAttribute(new Float32Array(colors), 3)
+                new THREE.Float32BufferAttribute(colors, 3)
             )
         }
     }
@@ -375,12 +375,12 @@ export class LinksMesh extends BaseMesh {
         const geometry = new THREE.BufferGeometry()
         geometry.setAttribute(
             'position',
-            new THREE.BufferAttribute(new Float32Array(), 3)
+            new THREE.Float32BufferAttribute([], 3)
         )
         if (!this.fixedColor) {
             geometry.setAttribute(
                 'color',
-                new THREE.BufferAttribute(new Float32Array(), 3)
+                new THREE.Float32BufferAttribute([], 3)
             )
         }
         // geometry.translate(-this.world.centerX, -this.world.centerX, 0)
@@ -410,13 +410,13 @@ export class LinksMesh extends BaseMesh {
         })
         this.mesh.geometry.setAttribute(
             'position',
-            new THREE.BufferAttribute(new Float32Array(vertices), 3)
+            new THREE.Float32BufferAttribute(vertices, 3)
         )
 
         if (colors) {
             this.mesh.geometry.setAttribute(
                 'color',
-                new THREE.BufferAttribute(new Float32Array(colors), 3)
+                new THREE.Float32BufferAttribute(colors, 3)
             )
         }
     }

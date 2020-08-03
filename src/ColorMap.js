@@ -266,15 +266,15 @@ const ColorMap = {
     },
     // The most popular MatLab gradient, "jet":
     jetColors: [
-        Color.cssColor(0, 0, 127),
-        Color.cssColor(0, 0, 255),
-        Color.cssColor(0, 127, 255),
-        Color.cssColor(0, 255, 255),
-        Color.cssColor(127, 255, 127),
-        Color.cssColor(255, 255, 0),
-        Color.cssColor(255, 127, 0),
-        Color.cssColor(255, 0, 0),
-        Color.cssColor(127, 0, 0),
+        'rgb(0, 0, 127)',
+        'rgb(0, 0, 255)',
+        'rgb(0, 127, 255)',
+        'rgb(0, 255, 255)',
+        'rgb(127, 255, 127)',
+        'rgb(255, 255, 0)',
+        'rgb(255, 127, 0)',
+        'rgb(255, 0, 0)',
+        'rgb(127, 0, 0)',
     ],
     // Two other popular MatLab 'ramp' gradients are:
     // * One color: from black/white to color, optionally back to white/black.
@@ -287,6 +287,7 @@ const ColorMap = {
     // Aqua == Cyan and Fuchsia == Magenta, 19 total color names.
     // These sorted by hue/saturation/light, hue in 0-300 degrees.
     // See [Mozilla Color Docs](https://goo.gl/tolSnS) for *lots* more!
+
     basicColorNames: 'white silver gray black red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
         ' '
     ),
@@ -341,7 +342,6 @@ const ColorMap = {
         return this.LazyMap('DarkGray', this.grayColorMap(0, 100))
     },
     get Jet() {
-        console.log('jet', this.jetColors)
         return this.LazyMap('Jet', this.gradientColorMap(256, this.jetColors))
     },
     get Rgb256() {

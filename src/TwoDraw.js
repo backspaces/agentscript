@@ -21,8 +21,10 @@ export default class TwoDraw extends TwoView {
             textSize: 0.5,
             textColor: 'black',
 
-            patchesMap: ColorMap.DarkGray,
-            turtlesMap: ColorMap.Basic16,
+            // patchesMap: ColorMap.DarkGray,
+            // turtlesMap: ColorMap.Basic16,
+            patchesMap: 'DarkGray',
+            turtlesMap: 'Basic16',
         }
     }
 
@@ -79,9 +81,9 @@ export default class TwoDraw extends TwoView {
         if (view.ticks === 0) {
             // REMIND: if moved to ctor, do this there?
             if (typeof turtlesMap === 'string')
-                turtlesMap = ColorMap[turtlesMap]
+                this.drawOptions.turtlesMap = turtlesMap = ColorMap[turtlesMap]
             if (typeof patchesMap === 'string')
-                patchesMap = ColorMap[patchesMap]
+                this.drawOptions.patchesMap = patchesMap = ColorMap[patchesMap]
 
             if (textProperty) view.setTextProperties(textSize)
 
@@ -107,6 +109,10 @@ export default class TwoDraw extends TwoView {
 
         const checkColor = (agent, color) =>
             color === 'random' ? turtlesMap.atIndex(agent.id).css : color
+        // const checkColor = (agent, color) => {
+        //     if (!turtlesMap) debugger
+        //     color === 'random' ? turtlesMap.atIndex(agent.id).css : color
+        // }
 
         view.drawLinks(model.links, l => ({
             color:

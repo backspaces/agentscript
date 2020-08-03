@@ -81,14 +81,15 @@ export function animate(renderer, scene, camera, fcn) {
             stats = new Stats()
             document.body.appendChild(stats.dom)
         }
-        stats.begin()
+        // stats.begin()
 
         checkResize(renderer, camera)
         fcn(time)
         renderer.render(scene, camera)
         requestAnimationFrame(render)
 
-        stats.end()
+        // stats.end()
+        stats.update()
     }
     requestAnimationFrame(render)
 }
