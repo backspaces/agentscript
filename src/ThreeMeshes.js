@@ -318,7 +318,7 @@ export class PointsMesh extends BaseMesh {
               })
             : new THREE.PointsMaterial({
                   size: pointSize,
-                  vertexColors: THREE.VertexColors,
+                  vertexColors: true,
               })
 
         this.mesh = new THREE.Points(geometry, material)
@@ -387,7 +387,7 @@ export class LinksMesh extends BaseMesh {
 
         const material = this.fixedColor
             ? new THREE.LineBasicMaterial({ color: this.fixedColor })
-            : new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors })
+            : new THREE.LineBasicMaterial({ vertexColors: true })
 
         this.mesh = new THREE.LineSegments(geometry, material)
         this.centerMesh()

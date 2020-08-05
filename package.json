@@ -75,7 +75,7 @@
         "chart.js": "^2.8.0",
         "dat.gui": "^0.7.6",
         "mapbox-gl": "^1.10.1",
-        "three": "0.118.3"
+        "three": "^0.119.0"
     },
     "devDependencies": {
         "@pika/web": "^0.4.3",

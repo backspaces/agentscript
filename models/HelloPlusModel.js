@@ -9,7 +9,7 @@ export default class HelloPlusModel extends HelloModel {
             population: 200, // override HelloModel
             minPopulation: 10,
             maxPopulation: 500,
-            changeTick: 100,
+            changeTick: 100, // set to null to avoid auto population changes
         }
     }
 
@@ -21,7 +21,10 @@ export default class HelloPlusModel extends HelloModel {
     }
 
     step() {
-        if (this.ticks !== 0 && util.mod(this.ticks, this.changeTick) === 0) {
+        if (
+            this.changeTick & (this.ticks !== 0) &&
+            util.mod(this.ticks, this.changeTick) === 0
+        ) {
             this.population = util.randomInt2(
                 this.minPopulation,
                 this.maxPopulation

@@ -1,4 +1,5 @@
 import { THREE, OrbitControls, Stats } from '../vendor/three.esm.js'
+import util from '../src/util.js'
 
 let stats
 
@@ -110,4 +111,40 @@ export function modelLight(scene, model, color = 0xffffff, intensity = 1) {
     const light = new THREE.DirectionalLight(color, intensity)
     light.position.set(width, width, width)
     scene.add(light)
+}
+
+const primitiveNames = [
+    'Box',
+    'Circle',
+    'Cone',
+    'Cylinder',
+    'Dodecahedron',
+    // 'Extrude',
+    'Icosahedron',
+    // 'Lathe',
+    'Octahedron',
+    // 'Parametric',
+    'Plane',
+    // 'Polyhedron',
+    'Ring',
+    // 'Shape',
+    'Sphere',
+    'Tetrahedron',
+    // 'Text',
+    'Torus',
+    // 'TorusKnot',
+    // 'Tube',
+]
+export function primitiveGeometry(name, params = []) {
+    if (!name) name = util.oneOf(primitiveNames)
+    name = name[0].toUpperCase() + name.slice(1)
+    const geometryName = name + 'BufferGeometry'
+    return new THREE[geometryName](...params)
+}
+
+export function disposeMesh(mesh, scene) {
+    mesh.geometry.dispose()
+    mesh.material.dispose()
+    mesh.material = mesh.geometry = null
+    scene.remove(mesh)
 }
