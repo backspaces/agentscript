@@ -25,7 +25,8 @@ class HelloModel extends Model {
         })
 
         this.turtles.ask(t => {
-            this.links.create(t, this.turtles.otherOneOf(t))
+            if (this.population > 1)
+                this.links.create(t, this.turtles.otherOneOf(t))
         })
     }
 

@@ -50,7 +50,7 @@ export default class HelloPlusModel extends HelloModel {
         }
         // make sure all turtles have at least one link
         this.turtles.ask(t => {
-            if (t.links.length === 0) {
+            if (t.population > 1 && t.links.length === 0) {
                 this.links.create(t, this.turtles.otherOneOf(t))
             }
         })

@@ -106,11 +106,16 @@ export function directionalLight(
     scene.add(light)
 }
 
-export function modelLight(scene, model, color = 0xffffff, intensity = 1) {
+export function modelLight(scene, model, intensity = 1, color = 0xffffff) {
     const width = model.world.width
+
     const light = new THREE.DirectionalLight(color, intensity)
     light.position.set(width, width, width)
     scene.add(light)
+
+    const light1 = new THREE.DirectionalLight(color, intensity)
+    light1.position.set(width, width, -width)
+    scene.add(light1)
 }
 
 const primitiveNames = [
@@ -142,9 +147,52 @@ export function primitiveGeometry(name, params = []) {
     return new THREE[geometryName](...params)
 }
 
+export function turtleGeometry() {
+    const ax = 0.5
+    const bx = -0.5
+    const by = -0.5
+    const cx = -0.3
+    const top = 0.35
+    const bot = 0
+
+    const geometry = new THREE.Geometry()
+    geometry.vertices.push(
+        new THREE.Vector3(ax, 0, bot), //   A 0
+        new THREE.Vector3(bx, by, bot), //  B 1
+        new THREE.Vector3(cx, 0, top), //   C 2
+        new THREE.Vector3(bx, -by, bot), // D 3
+        new THREE.Vector3(cx, 0, bot) //    E 4
+    )
+
+    const [A, B, C, D, E] = [0, 1, 2, 3, 4]
+    geometry.faces.push(
+        new THREE.Face3(A, D, C),
+        new THREE.Face3(A, C, B),
+        new THREE.Face3(A, B, E),
+        new THREE.Face3(A, E, D),
+        new THREE.Face3(C, D, E),
+        new THREE.Face3(C, E, B)
+    )
+
+    geometry.computeFaceNormals()
+    return geometry
+}
+
 export function disposeMesh(mesh, scene) {
     mesh.geometry.dispose()
     mesh.material.dispose()
-    mesh.material = mesh.geometry = null
+    // mesh.material = mesh.geometry = null
     scene.remove(mesh)
+}
+
+export function matrixToString(matrix) {
+    const mat = matrix.map(num => Math.round(num * 100) / 100)
+    const r0 = mat.slice(0, 4).toString()
+    const r1 = mat.slice(4, 8).toString()
+    const r2 = mat.slice(8, 12).toString()
+    const r3 = mat.slice(12, 16).toString()
+    return `${r0}
+${r1}
+${r2}
+${r3}`.replace(/,/g, ', ')
 }

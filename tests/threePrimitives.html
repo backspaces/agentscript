@@ -28,7 +28,10 @@
         const colorMap = ColorMap.Basic16
         const gui = new GUI()
 
-        const useLight = true
+        const controls = { useLight: true }
+        gui.add(controls, 'useLight')
+
+        // const useLight = true
 
         const model = new Model()
         model.changeTick = null
@@ -41,7 +44,7 @@
             const renderer = new THREE.WebGLRenderer({ canvas })
             const scene = new THREE.Scene()
 
-            if (useLight) modelLight(scene, model)
+            if (controls.useLight) modelLight(scene, model)
 
             const camera = modelCamera(renderer, model)
             util.toWindow({ renderer, camera, scene })
@@ -59,7 +62,7 @@
                         ...colorMap.atIndex(t.id).webgl
                     )
                     const geometry = primitiveGeometry()
-                    const material = useLight
+                    const material = controls.useLight
                         ? new THREE.MeshPhongMaterial({ color })
                         : new THREE.MeshBasicMaterial({ color })
                     const mesh = new THREE.Mesh(geometry, material)

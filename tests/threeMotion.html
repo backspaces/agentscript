@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Motion</title>
+    </head>
+
+    <body>
+        <canvas id="can"></canvas>
+    </body>
+    <!-- Greggman sez put scripts after body -->
+    <script type="module">
+        import { THREE, OrbitControls } from '../vendor/three.esm.js'
+        import ColorMap from '../src/ColorMap.js'
+        import Model from '../models/HelloModel.js'
+        import util from '../src/util.js'
+        import {
+            animate,
+            modelLight,
+            setDefaultStyle,
+            modelCamera,
+            addModelHelpers,
+            turtleGeometry,
+        } from './threeUtils.js'
+
+        setDefaultStyle('can')
+        const colorMap = ColorMap.Bright16
+        const useLight = true
+        const population = 20
+        const turtlesSize = 2
+
+        const model = new Model()
+        model.population = population
+        model.setup()
+        util.toWindow({ THREE, colorMap, util, model })
+
+        function main() {
+            const canvas = document.querySelector('#can')
+            const renderer = new THREE.WebGLRenderer({ canvas })
+            const scene = new THREE.Scene()
+
+            if (useLight) modelLight(scene, model, 1)
+            const camera = modelCamera(renderer, model)
+            util.toWindow({ renderer, camera, scene })
+            addModelHelpers(renderer, scene, camera, model)
+
+            const geometry = turtleGeometry()
+            geometry.scale(turtlesSize, turtlesSize, turtlesSize)
+            model.turtles.ask(t => {
+                const color = new THREE.Color(...colorMap.atIndex(t.id).webgl)
+                const material = useLight
+                    ? new THREE.MeshPhongMaterial({ color })
+                    : new THREE.MeshBasicMaterial({ color })
+                const mesh = new THREE.Mesh(geometry, material)
+                scene.add(mesh)
+                t.mesh = mesh
+            })
+
+            animate(renderer, scene, camera, () => {
+                // if (model.ticks > 3) return
+                model.step()
+                model.turtles.ask(t => {
+                    const mesh = t.mesh
+                    if (t.id === 0) {
+                        // if (model.ticks === 0) t.rotateY
+                        mesh.translateX(0.1)
+                        mesh.rotateY(-util.radians(1))
+                        // } else if (t.id === 2) {
+                        //     if (model.ticks === 0)
+                        //         // mesh.rotateZ(util.radians(90))
+                        //         mesh.rotation.z = util.radians(90)
+                        //     mesh.translateY(0.1)
+                        //     mesh.rotateX(util.radians(1))
+                    } else {
+                        mesh.rotation.z = t.theta
+                        mesh.position.set(t.x, t.y, t.z + 0.5 * t.id + 2)
+                    }
+                })
+            })
+        }
+        main()
+    </script>
+</html>
