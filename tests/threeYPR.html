@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Motion</title>
+    </head>
+
+    <body>
+        <canvas id="can"></canvas>
+    </body>
+    <!-- Greggman sez put scripts after body -->
+    <script type="module">
+        import { THREE, OrbitControls } from '../vendor/three.esm.js'
+        import Model from '../models/HelloModel.js'
+        import util from '../src/util.js'
+        import {
+            animate,
+            modelLight,
+            setDefaultStyle,
+            modelCamera,
+            addModelHelpers,
+            turtleGeometry,
+        } from './threeUtils.js'
+
+        setDefaultStyle('can')
+        const useLight = true
+        const turtlesSize = 2
+        const color = 'red'
+
+        const model = new Model()
+        model.population = 1
+        model.setup()
+        util.toWindow({ THREE, util, model })
+
+        function main() {
+            const canvas = document.querySelector('#can')
+            const renderer = new THREE.WebGLRenderer({ canvas })
+            const scene = new THREE.Scene()
+
+            if (useLight) modelLight(scene, model)
+            const camera = modelCamera(renderer, model)
+            addModelHelpers(renderer, scene, camera, model)
+
+            const geometry = turtleGeometry()
+            // geometry.scale(turtlesSize, turtlesSize, turtlesSize)
+            const material = useLight
+                ? new THREE.MeshPhongMaterial({ color })
+                : new THREE.MeshBasicMaterial({ color })
+            const mesh = new THREE.Mesh(geometry, material)
+            scene.add(mesh)
+            util.toWindow({ renderer, camera, scene, mesh })
+
+            window.rad = util.radians
+
+            animate(renderer, scene, camera, () => {
+                //
+            })
+        }
+        main()
+    </script>
+</html>
