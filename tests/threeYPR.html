@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Motion</title>
+        <title>YPR</title>
     </head>
 
     <body>
@@ -9,7 +9,7 @@
     </body>
     <!-- Greggman sez put scripts after body -->
     <script type="module">
-        import { THREE, OrbitControls } from '../vendor/three.esm.js'
+        import { THREE, OrbitControls, GUI } from '../vendor/three.esm.js'
         import Model from '../models/HelloModel.js'
         import util from '../src/util.js'
         import {
@@ -31,30 +31,99 @@
         model.setup()
         util.toWindow({ THREE, util, model })
 
-        function main() {
-            const canvas = document.querySelector('#can')
-            const renderer = new THREE.WebGLRenderer({ canvas })
-            const scene = new THREE.Scene()
+        // function main() {
 
-            if (useLight) modelLight(scene, model)
-            const camera = modelCamera(renderer, model)
-            addModelHelpers(renderer, scene, camera, model)
+        const canvas = document.querySelector('#can')
+        const renderer = new THREE.WebGLRenderer({ canvas })
+        const scene = new THREE.Scene()
+        THREE.Object3D.DefaultUp.set(0, 0, 1)
 
-            const geometry = turtleGeometry()
-            // geometry.scale(turtlesSize, turtlesSize, turtlesSize)
-            const material = useLight
-                ? new THREE.MeshPhongMaterial({ color })
-                : new THREE.MeshBasicMaterial({ color })
-            const mesh = new THREE.Mesh(geometry, material)
-            scene.add(mesh)
-            util.toWindow({ renderer, camera, scene, mesh })
+        if (useLight) modelLight(scene, model)
+        const camera = modelCamera(renderer, model)
+        addModelHelpers(renderer, scene, camera, model)
 
-            window.rad = util.radians
+        const geometry = turtleGeometry()
+        geometry.scale(turtlesSize, turtlesSize, turtlesSize)
+        const material = useLight
+            ? new THREE.MeshPhongMaterial({ color })
+            : new THREE.MeshBasicMaterial({ color })
+        const mesh = new THREE.Mesh(geometry, material)
+        mesh.scale.set(4, 4, 4)
+        scene.add(mesh)
+        util.toWindow({ renderer, camera, scene, mesh })
 
-            animate(renderer, scene, camera, () => {
-                //
-            })
+        window.rad = util.radians
+
+        animate(renderer, scene, camera, () => {
+            // Just idle, showing update to turtle
+            controls.YawPitchRoll = ypr()
+        })
+
+        const gui = new GUI()
+        const right = () => mesh.rotateZ(util.radians(controls.angle))
+        const left = () => mesh.rotateZ(util.radians(-controls.angle))
+        const tiltRight = () => mesh.rotateY(util.radians(controls.angle))
+        const tiltLeft = () => mesh.rotateY(util.radians(-controls.angle))
+        const rollRight = () => mesh.rotateX(util.radians(controls.angle))
+        const rollLeft = () => mesh.rotateX(util.radians(-controls.angle))
+        const forward = () => mesh.translateX(controls.speed)
+        const controls = {
+            YawPitchRoll: '0, 0, 0',
+            angle: 45,
+            speed: 5,
+
+            forward: forward,
+
+            headingRight: right,
+            headingLeft: left,
+
+            tiltRight: tiltRight,
+            tiltLeft: tiltLeft,
+
+            rollRight: rollRight,
+            rollLeft: rollLeft,
         }
-        main()
+        util.toWindow({ gui, controls })
+        gui.add(controls, 'YawPitchRoll').listen()
+        gui.add(controls, 'angle', 0, 90, 5)
+        gui.add(controls, 'speed', 0, 20, 5)
+
+        gui.add(controls, 'forward')
+        // const ypr = () => mesh.rotation
+        const rot = mesh.rotation
+        const p2 = num => util.precision(num, 2)
+        const deg = rad => p2(util.degrees(rad))
+        const ypr = () => `${deg(rot._z)}, ${deg(rot._y)}, ${deg(rot._x)}`
+
+        const pitchFolder = gui.addFolder('Pitch')
+        pitchFolder.open()
+        pitchFolder.add(controls, 'headingRight')
+        pitchFolder.add(controls, 'headingLeft')
+
+        const tiltFolder = gui.addFolder('Tilt')
+        tiltFolder.open()
+        tiltFolder.add(controls, 'tiltRight')
+        tiltFolder.add(controls, 'tiltLeft')
+
+        const rollFolder = gui.addFolder('Roll')
+        rollFolder.open()
+        rollFolder.add(controls, 'rollRight')
+        rollFolder.add(controls, 'rollLeft')
+
+        // const pitchFolder = gui.addFolder('Pitch')
+        // pitchFolder.open()
+        // pitchFolder.add(controls, 'headingRight')
+        // pitchFolder.add(controls, 'headingLeft')
+
+        // gui.add(controls, 'heading', -90, 90, 5).onFinishChange(left)
+
+        // gui.add(mesh)
+
+        // const controls = {}
+        // gui.add(mesh, property, [min], [max], [step])
+
+        //     }
+        //     main()
+        //
     </script>
 </html>

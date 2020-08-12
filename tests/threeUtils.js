@@ -113,9 +113,12 @@ export function modelLight(scene, model, intensity = 1, color = 0xffffff) {
     light.position.set(width, width, width)
     scene.add(light)
 
-    const light1 = new THREE.DirectionalLight(color, intensity)
-    light1.position.set(width, width, -width)
-    scene.add(light1)
+    // const light1 = new THREE.DirectionalLight(color, intensity)
+    // light1.position.set(width, width, -width)
+    // scene.add(light1)
+
+    var diffuse = new THREE.AmbientLight(0x404040) // soft white light
+    scene.add(diffuse)
 }
 
 const primitiveNames = [

@@ -735,6 +735,11 @@ function randomSeed(seed, useParkMiller = true) {
         : randomSeedSin(seed);
 }
 
+function precision(num, digits = 4) {
+    const mult = 10 ** digits;
+    return Math.round(num * mult) / mult
+}
+
 // Return whether num is [Power of Two](http://goo.gl/tCfg5). Very clever!
 const isPowerOf2 = num => (num & (num - 1)) === 0; // twgl library
 // Return next greater power of two. There are faster, see:
@@ -862,6 +867,7 @@ var math = /*#__PURE__*/Object.freeze({
     randomSeedSin: randomSeedSin,
     randomSeedParkMiller: randomSeedParkMiller,
     randomSeed: randomSeed,
+    precision: precision,
     isPowerOf2: isPowerOf2,
     nextPowerOf2: nextPowerOf2,
     mod: mod,

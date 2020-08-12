@@ -61,7 +61,7 @@
         "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",
         "start": "./node_modules/.bin/live-server &",
-        "temp": "rollup -c workflow/rollup.config.js"
+        "temp": "rollup --format=esm --file=vendor/object3D.esm.js --input node_modules/three/src/core/Object3D.js"
     },
     "@pika/web": {
         "webDependencies": [
