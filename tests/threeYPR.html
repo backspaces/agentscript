@@ -23,7 +23,7 @@
 
         setDefaultStyle('can')
         const useLight = true
-        const turtlesSize = 2
+        const turtlesSize = 4
         const color = 'red'
 
         const model = new Model()
@@ -43,13 +43,14 @@
         addModelHelpers(renderer, scene, camera, model)
 
         const geometry = turtleGeometry()
-        geometry.scale(turtlesSize, turtlesSize, turtlesSize)
+        // geometry.scale(turtlesSize, turtlesSize, turtlesSize)
         const material = useLight
             ? new THREE.MeshPhongMaterial({ color })
             : new THREE.MeshBasicMaterial({ color })
         const mesh = new THREE.Mesh(geometry, material)
-        mesh.scale.set(4, 4, 4)
+        mesh.scale.set(turtlesSize, turtlesSize, turtlesSize)
         scene.add(mesh)
+        mesh.add(new THREE.AxesHelper(turtlesSize / 2))
         util.toWindow({ renderer, camera, scene, mesh })
 
         window.rad = util.radians
@@ -57,63 +58,71 @@
         animate(renderer, scene, camera, () => {
             // Just idle, showing update to turtle
             controls.YawPitchRoll = ypr()
+            controls.Position = xyz()
         })
 
         const gui = new GUI()
-        const right = () => mesh.rotateZ(util.radians(controls.angle))
-        const left = () => mesh.rotateZ(util.radians(-controls.angle))
-        const tiltRight = () => mesh.rotateY(util.radians(controls.angle))
-        const tiltLeft = () => mesh.rotateY(util.radians(-controls.angle))
+        const right = () => mesh.rotateZ(util.radians(-controls.angle))
+        const left = () => mesh.rotateZ(util.radians(controls.angle))
+        const tiltUp = () => mesh.rotateY(util.radians(-controls.angle))
+        const tiltDown = () => mesh.rotateY(util.radians(controls.angle))
         const rollRight = () => mesh.rotateX(util.radians(controls.angle))
         const rollLeft = () => mesh.rotateX(util.radians(-controls.angle))
         const forward = () => mesh.translateX(controls.speed)
+        const backward = () => mesh.translateX(-controls.speed)
         const controls = {
             YawPitchRoll: '0, 0, 0',
+            Position: '0, 0, 0',
             angle: 45,
             speed: 5,
 
             forward: forward,
+            backward: backward,
 
-            headingRight: right,
-            headingLeft: left,
+            right: right,
+            left: left,
 
-            tiltRight: tiltRight,
-            tiltLeft: tiltLeft,
+            tiltUp: tiltUp,
+            tiltDown: tiltDown,
 
             rollRight: rollRight,
             rollLeft: rollLeft,
         }
         util.toWindow({ gui, controls })
         gui.add(controls, 'YawPitchRoll').listen()
+        gui.add(controls, 'Position').listen()
         gui.add(controls, 'angle', 0, 90, 5)
         gui.add(controls, 'speed', 0, 20, 5)
 
         gui.add(controls, 'forward')
+        gui.add(controls, 'backward')
         // const ypr = () => mesh.rotation
         const rot = mesh.rotation
         const p2 = num => util.precision(num, 2)
         const deg = rad => p2(util.degrees(rad))
         const ypr = () => `${deg(rot._z)}, ${deg(rot._y)}, ${deg(rot._x)}`
+        const pos = mesh.position
+        const xyz = () => `${p2(pos.x)}, ${p2(pos.y)}, ${p2(pos.z)}`
 
-        const pitchFolder = gui.addFolder('Pitch')
+        const pitchFolder = gui.addFolder('Z Rotation')
         pitchFolder.open()
-        pitchFolder.add(controls, 'headingRight')
-        pitchFolder.add(controls, 'headingLeft')
+        pitchFolder.add(controls, 'right')
+        pitchFolder.add(controls, 'left')
 
-        const tiltFolder = gui.addFolder('Tilt')
+        const tiltFolder = gui.addFolder('Y Rotation')
         tiltFolder.open()
-        tiltFolder.add(controls, 'tiltRight')
-        tiltFolder.add(controls, 'tiltLeft')
+        tiltFolder.add(controls, 'tiltUp')
+        tiltFolder.add(controls, 'tiltDown')
 
-        const rollFolder = gui.addFolder('Roll')
+        const rollFolder = gui.addFolder('X Rotation')
         rollFolder.open()
         rollFolder.add(controls, 'rollRight')
         rollFolder.add(controls, 'rollLeft')
 
         // const pitchFolder = gui.addFolder('Pitch')
         // pitchFolder.open()
-        // pitchFolder.add(controls, 'headingRight')
-        // pitchFolder.add(controls, 'headingLeft')
+        // pitchFolder.add(controls, 'right')
+        // pitchFolder.add(controls, 'left')
 
         // gui.add(controls, 'heading', -90, 90, 5).onFinishChange(left)
 
