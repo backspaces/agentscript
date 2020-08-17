@@ -1,5 +1,7 @@
 import { THREE, OrbitControls, Stats } from '../vendor/three.esm.js'
 import util from '../src/util.js'
+const radians = util.radians
+const degrees = util.degrees
 
 let stats
 
@@ -43,7 +45,8 @@ export function addModelHelpers(renderer, scene, camera, model) {
 
     const axes = new THREE.AxesHelper((1.5 * width) / 2)
     const grid = new THREE.GridHelper(1.25 * width, 10)
-    grid.rotation.x = THREE.Math.degToRad(90)
+    // grid.rotation.x = THREE.Math.degToRad(90)
+    grid.rotation.x = radians(90)
 
     const orbitControl = new OrbitControls(camera, renderer.domElement)
 
@@ -52,6 +55,46 @@ export function addModelHelpers(renderer, scene, camera, model) {
 
     scene.add(axes)
     scene.add(grid)
+}
+
+export function addMesh(
+    scene,
+    name,
+    material = 'Phong',
+    color = 'red',
+    params = []
+) {
+    name = name + 'Geometry'
+    material = 'Mesh' + material + 'Material'
+    const geometry = new THREE[name](...params)
+    material = new THREE[material]({ color })
+    const mesh = new THREE.Mesh(geometry, material)
+    scene.add(mesh)
+    return mesh
+}
+
+export function meshAngles(mesh, order = 'XYZ') {
+    const euler = mesh.rotation
+    const { x, y, z } = euler
+    return [x, y, z].map(rad => util.precision(degrees(rad)))
+}
+
+export function angleTowards(mesh, target) {
+    const { x, y, z } = mesh.position
+    const { x: tx, y: ty, z: tz } = target.position
+    const [dx, dy, dz] = [tx - x, ty - y, tz - z]
+    const xyhypot = Math.hypot(dx, dy)
+    const headingTowards = Math.atan2(dy, dx)
+    const pitchTowards = Math.atan2(dz, xyhypot)
+
+    mesh.rotation.set(0, 0, 0)
+    mesh.rotateZ(headingTowards)
+    mesh.rotateY(-pitchTowards)
+
+    const dist = Math.hypot(dx, dy, dz)
+    console.log(x, y, z, tx, ty, tz)
+    console.log(dx, dy, dz)
+    console.log(degrees(headingTowards), degrees(pitchTowards), dist)
 }
 
 // https://threejsfundamentals.org/threejs/lessons/threejs-responsive.html
@@ -188,12 +231,22 @@ export function disposeMesh(mesh, scene) {
     scene.remove(mesh)
 }
 
-export function matrixToString(matrix) {
-    const mat = matrix.map(num => Math.round(num * 100) / 100)
-    const r0 = mat.slice(0, 4).toString()
-    const r1 = mat.slice(4, 8).toString()
-    const r2 = mat.slice(8, 12).toString()
-    const r3 = mat.slice(12, 16).toString()
+export function matrixToString(matrix, toDegrees = true, precision = 2) {
+    if (matrix.isMesh) matrix = matrix.matrix.elements
+    if (matrix.elements) matrix = matrix.elements
+    const isScale = idx => [0, 5, 10].includes(idx)
+    // const isPosition = idx => util.mod(idx, 4) === 3
+    const isPosition = idx => idx >= 12
+    if (toDegrees)
+        matrix = matrix.map((el, i) =>
+            isScale(i) || isPosition(i) ? el : degrees(el)
+        )
+    matrix = matrix.map(num => util.precision(num, precision))
+    matrix = matrix.map(num => ('' + num).padStart(10, ' '))
+    const r0 = matrix.slice(0, 4) //.toString().padStart(10, ' ')
+    const r1 = matrix.slice(4, 8) //.toString().padStart(10, ' ')
+    const r2 = matrix.slice(8, 12) //.toString().padStart(10, ' ')
+    const r3 = matrix.slice(12, 16) //.toString().padStart(10, ' ')
     return `${r0}
 ${r1}
 ${r2}

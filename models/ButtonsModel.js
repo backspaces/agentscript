@@ -15,7 +15,8 @@ export default class ButtonsModel extends Model {
     }
 
     setup() {
-        this.turtles.setDefault('heading', 0) // override promotion to random angle
+        // this.turtles.setDefault('heading', 0) // override promotion to random angle
+        this.turtles.setDefault('theta', 0) // override promotion to random angle
 
         this.cluster = new Set()
         this.done = false

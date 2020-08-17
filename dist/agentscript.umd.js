@@ -3347,7 +3347,8 @@ out;`;
         // Return a single turtle
         createOne(initFcn = turtle => {}) {
             const turtle = this.addAgent();
-            turtle.theta = util.randomFloat(Math.PI * 2);
+            if (this.getDefault('theta') == null)
+                turtle.theta = util.randomFloat(Math.PI * 2);
             initFcn(turtle);
             return turtle
         }
@@ -3451,7 +3452,7 @@ out;`;
                 y: 0,
                 z: 0,
                 // my euclidean direction, radians from x axis, counter-clockwise
-                theta: 0,
+                theta: null, // set to random if default not set by modeler
                 // What to do if I wander off world. Can be 'clamp', 'wrap'
                 // 'bounce', or a function, see handleEdge() method
                 atEdge: 'clamp',

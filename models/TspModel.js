@@ -29,7 +29,8 @@ export default class TSPModel extends Model {
         this.bestTourLength = 0
         this.bestTourTick = 0
 
-        this.nodes.setDefault('heading', 0) // override promotion to random angle
+        // this.nodes.setDefault('heading', 0) // override promotion to random angle
+        this.nodes.setDefault('theta', 0) // override promotion to random angle
         // this.travelers.setDefault('hidden', true) // REMIND
 
         this.nodes.create(this.nodeCount, node => {

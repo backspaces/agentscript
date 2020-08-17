@@ -13,7 +13,8 @@ class Turtles extends AgentSet {
     // Return a single turtle
     createOne(initFcn = turtle => {}) {
         const turtle = this.addAgent()
-        turtle.theta = util.randomFloat(Math.PI * 2)
+        if (this.getDefault('theta') == null)
+            turtle.theta = util.randomFloat(Math.PI * 2)
         initFcn(turtle)
         return turtle
     }

@@ -18,7 +18,7 @@ class Turtle {
             y: 0,
             z: 0,
             // my euclidean direction, radians from x axis, counter-clockwise
-            theta: 0,
+            theta: null, // set to random if default not set by modeler
             // What to do if I wander off world. Can be 'clamp', 'wrap'
             // 'bounce', or a function, see handleEdge() method
             atEdge: 'clamp',

@@ -12,16 +12,9 @@
         import { THREE, OrbitControls, GUI } from '../vendor/three.esm.js'
         import Model from '../models/HelloModel.js'
         import util from '../src/util.js'
-        import {
-            animate,
-            modelLight,
-            setDefaultStyle,
-            modelCamera,
-            addModelHelpers,
-            turtleGeometry,
-        } from './threeUtils.js'
+        import * as utils3 from './threeUtils.js'
 
-        setDefaultStyle('can')
+        utils3.setDefaultStyle('can')
         const useLight = true
         const turtlesSize = 4
         const color = 'red'
@@ -29,7 +22,7 @@
         const model = new Model()
         model.population = 1
         model.setup()
-        util.toWindow({ THREE, util, model })
+        util.toWindow({ THREE, util, model, utils3, rad: util.radians })
 
         // function main() {
 
@@ -38,46 +31,58 @@
         const scene = new THREE.Scene()
         THREE.Object3D.DefaultUp.set(0, 0, 1)
 
-        if (useLight) modelLight(scene, model)
-        const camera = modelCamera(renderer, model)
-        addModelHelpers(renderer, scene, camera, model)
+        if (useLight) utils3.modelLight(scene, model)
+        const camera = utils3.modelCamera(renderer, model)
+        utils3.addModelHelpers(renderer, scene, camera, model)
 
-        const geometry = turtleGeometry()
-        // geometry.scale(turtlesSize, turtlesSize, turtlesSize)
+        const geometry = utils3.turtleGeometry()
+        geometry.scale(turtlesSize, turtlesSize, turtlesSize)
         const material = useLight
             ? new THREE.MeshPhongMaterial({ color })
             : new THREE.MeshBasicMaterial({ color })
         const mesh = new THREE.Mesh(geometry, material)
-        mesh.scale.set(turtlesSize, turtlesSize, turtlesSize)
+        // mesh.scale.set(turtlesSize, turtlesSize, turtlesSize)
         scene.add(mesh)
         mesh.add(new THREE.AxesHelper(turtlesSize / 2))
-        util.toWindow({ renderer, camera, scene, mesh })
+        const target = utils3.addMesh(scene, 'Sphere')
+        target.position.set(10, -10, 10)
+        util.toWindow({ renderer, camera, scene, mesh, target })
 
-        window.rad = util.radians
-
-        animate(renderer, scene, camera, () => {
+        utils3.animate(renderer, scene, camera, () => {
             // Just idle, showing update to turtle
-            controls.YawPitchRoll = ypr()
+            controls.Rotation = ypr()
             controls.Position = xyz()
         })
 
         const gui = new GUI()
-        const right = () => mesh.rotateZ(util.radians(-controls.angle))
-        const left = () => mesh.rotateZ(util.radians(controls.angle))
-        const tiltUp = () => mesh.rotateY(util.radians(-controls.angle))
-        const tiltDown = () => mesh.rotateY(util.radians(controls.angle))
-        const rollRight = () => mesh.rotateX(util.radians(controls.angle))
-        const rollLeft = () => mesh.rotateX(util.radians(-controls.angle))
+        const rotx = deg => mesh.rotateX(util.radians(deg))
+        const roty = deg => mesh.rotateY(util.radians(deg))
+        const rotz = deg => mesh.rotateZ(util.radians(deg))
+
+        const right = () => rotz(-controls.angle)
+        const left = () => rotz(controls.angle)
+        const tiltUp = () => roty(-controls.angle)
+        const tiltDown = () => roty(controls.angle)
+        const rollRight = () => rotx(controls.angle)
+        const rollLeft = () => rotx(-controls.angle)
+
+        const reset = () => {
+            mesh.position.set(0, 0, 0)
+            mesh.rotation.set(0, 0, 0)
+        }
         const forward = () => mesh.translateX(controls.speed)
         const backward = () => mesh.translateX(-controls.speed)
+        const lookAt = () => utils3.angleTowards(mesh, target)
         const controls = {
-            YawPitchRoll: '0, 0, 0',
+            Rotation: '0, 0, 0',
             Position: '0, 0, 0',
             angle: 45,
             speed: 5,
 
+            reset: reset,
             forward: forward,
             backward: backward,
+            lookAt: lookAt,
 
             right: right,
             left: left,
@@ -88,19 +93,23 @@
             rollRight: rollRight,
             rollLeft: rollLeft,
         }
-        util.toWindow({ gui, controls })
-        gui.add(controls, 'YawPitchRoll').listen()
+        util.toWindow({ right, left, tiltUp, tiltDown, rollRight, rollLeft })
+        util.toWindow({ forward, backward, rotx, roty, rotz, gui, controls })
+
+        gui.add(controls, 'Rotation').listen()
         gui.add(controls, 'Position').listen()
         gui.add(controls, 'angle', 0, 90, 5)
         gui.add(controls, 'speed', 0, 20, 5)
 
+        gui.add(controls, 'reset')
         gui.add(controls, 'forward')
         gui.add(controls, 'backward')
-        // const ypr = () => mesh.rotation
+        gui.add(controls, 'lookAt')
+
         const rot = mesh.rotation
         const p2 = num => util.precision(num, 2)
         const deg = rad => p2(util.degrees(rad))
-        const ypr = () => `${deg(rot._z)}, ${deg(rot._y)}, ${deg(rot._x)}`
+        const ypr = () => `${deg(rot.z)}, ${deg(rot.y)}, ${deg(rot.x)}`
         const pos = mesh.position
         const xyz = () => `${p2(pos.x)}, ${p2(pos.y)}, ${p2(pos.z)}`
 
@@ -118,18 +127,6 @@
         rollFolder.open()
         rollFolder.add(controls, 'rollRight')
         rollFolder.add(controls, 'rollLeft')
-
-        // const pitchFolder = gui.addFolder('Pitch')
-        // pitchFolder.open()
-        // pitchFolder.add(controls, 'right')
-        // pitchFolder.add(controls, 'left')
-
-        // gui.add(controls, 'heading', -90, 90, 5).onFinishChange(left)
-
-        // gui.add(mesh)
-
-        // const controls = {}
-        // gui.add(mesh, property, [min], [max], [step])
 
         //     }
         //     main()
