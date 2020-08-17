@@ -106,7 +106,7 @@
         gui.add(controls, 'backward')
         gui.add(controls, 'lookAt')
 
-        const rot = mesh.rotation
+        const rot = mesh.rotation.reorder('ZYX')
         const p2 = num => util.precision(num, 2)
         const deg = rad => p2(util.degrees(rad))
         const ypr = () => `${deg(rot.z)}, ${deg(rot.y)}, ${deg(rot.x)}`
