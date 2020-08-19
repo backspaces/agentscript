@@ -21,6 +21,23 @@ export default [
         },
     },
     {
+        input: 'node_modules/three/src/core/Object3D.js',
+        output: {
+            file: 'vendor/Object3D.esm.min.js',
+            format: 'es',
+            banner: '/* eslint-disable */',
+        },
+        plugins: [terser()],
+    },
+    {
+        input: 'node_modules/three/src/core/Object3D.js',
+        output: {
+            file: 'vendor/Object3D.esm.js',
+            format: 'es',
+            banner: '/* eslint-disable */',
+        },
+    },
+    {
         input: 'node_modules/dat.gui/build/dat.gui.module.js',
         output: {
             file: 'vendor/dat.gui.esm.min.js',

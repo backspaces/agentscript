@@ -24,12 +24,10 @@
         model.setup()
         util.toWindow({ THREE, util, model, utils3, rad: util.radians })
 
-        // function main() {
-
         const canvas = document.querySelector('#can')
         const renderer = new THREE.WebGLRenderer({ canvas })
         const scene = new THREE.Scene()
-        THREE.Object3D.DefaultUp.set(0, 0, 1)
+        // THREE.Object3D.DefaultUp.set(0, 0, 1)
 
         if (useLight) utils3.modelLight(scene, model)
         const camera = utils3.modelCamera(renderer, model)
@@ -41,7 +39,6 @@
             ? new THREE.MeshPhongMaterial({ color })
             : new THREE.MeshBasicMaterial({ color })
         const mesh = new THREE.Mesh(geometry, material)
-        // mesh.scale.set(turtlesSize, turtlesSize, turtlesSize)
         scene.add(mesh)
         mesh.add(new THREE.AxesHelper(turtlesSize / 2))
         const target = utils3.addMesh(scene, 'Sphere')
@@ -59,42 +56,31 @@
         const roty = deg => mesh.rotateY(util.radians(deg))
         const rotz = deg => mesh.rotateZ(util.radians(deg))
 
-        const right = () => rotz(-controls.angle)
-        const left = () => rotz(controls.angle)
-        const tiltUp = () => roty(-controls.angle)
-        const tiltDown = () => roty(controls.angle)
-        const rollRight = () => rotx(controls.angle)
-        const rollLeft = () => rotx(-controls.angle)
-
         const reset = () => {
             mesh.position.set(0, 0, 0)
             mesh.rotation.set(0, 0, 0)
         }
-        const forward = () => mesh.translateX(controls.speed)
-        const backward = () => mesh.translateX(-controls.speed)
-        const lookAt = () => utils3.angleTowards(mesh, target)
         const controls = {
             Rotation: '0, 0, 0',
             Position: '0, 0, 0',
             angle: 45,
             speed: 5,
 
-            reset: reset,
-            forward: forward,
-            backward: backward,
-            lookAt: lookAt,
+            reset: () => reset(),
+            forward: () => mesh.translateX(controls.speed),
+            backward: () => mesh.translateX(-controls.speed),
+            lookAt: () => utils3.angleTowards(mesh, target),
 
-            right: right,
-            left: left,
+            right: () => rotz(-controls.angle),
+            left: () => rotz(controls.angle),
 
-            tiltUp: tiltUp,
-            tiltDown: tiltDown,
+            tiltUp: () => roty(-controls.angle),
+            tiltDown: () => roty(controls.angle),
 
-            rollRight: rollRight,
-            rollLeft: rollLeft,
+            rollRight: () => rotx(controls.angle),
+            rollLeft: () => rotx(-controls.angle),
         }
-        util.toWindow({ right, left, tiltUp, tiltDown, rollRight, rollLeft })
-        util.toWindow({ forward, backward, rotx, roty, rotz, gui, controls })
+        util.toWindow({ gui, controls })
 
         gui.add(controls, 'Rotation').listen()
         gui.add(controls, 'Position').listen()
@@ -127,9 +113,5 @@
         rollFolder.open()
         rollFolder.add(controls, 'rollRight')
         rollFolder.add(controls, 'rollLeft')
-
-        //     }
-        //     main()
-        //
     </script>
 </html>
