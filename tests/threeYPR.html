@@ -39,15 +39,17 @@
             ? new THREE.MeshPhongMaterial({ color })
             : new THREE.MeshBasicMaterial({ color })
         const mesh = new THREE.Mesh(geometry, material)
+        mesh.rotation.order = 'ZYX'
         scene.add(mesh)
         mesh.add(new THREE.AxesHelper(turtlesSize / 2))
+
         const target = utils3.addMesh(scene, 'Sphere')
         target.position.set(10, -10, 10)
         util.toWindow({ renderer, camera, scene, mesh, target })
 
         utils3.animate(renderer, scene, camera, () => {
             // Just idle, showing update to turtle
-            controls.Rotation = ypr()
+            controls.YawPitchRoll = ypr()
             controls.Position = xyz()
         })
 
@@ -61,7 +63,7 @@
             mesh.rotation.set(0, 0, 0)
         }
         const controls = {
-            Rotation: '0, 0, 0',
+            YawPitchRoll: '0, 0, 0',
             Position: '0, 0, 0',
             angle: 45,
             speed: 5,
@@ -82,7 +84,7 @@
         }
         util.toWindow({ gui, controls })
 
-        gui.add(controls, 'Rotation').listen()
+        gui.add(controls, 'YawPitchRoll').listen()
         gui.add(controls, 'Position').listen()
         gui.add(controls, 'angle', 0, 90, 5)
         gui.add(controls, 'speed', 0, 20, 5)
@@ -92,7 +94,7 @@
         gui.add(controls, 'backward')
         gui.add(controls, 'lookAt')
 
-        const rot = mesh.rotation.reorder('ZYX')
+        const rot = mesh.rotation //.reorder('ZYX')
         const p2 = num => util.precision(num, 2)
         const deg = rad => p2(util.degrees(rad))
         const ypr = () => `${deg(rot.z)}, ${deg(rot.y)}, ${deg(rot.x)}`

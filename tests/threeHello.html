@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Hello3</title>
+    </head>
+
+    <body>
+        <canvas id="can"></canvas>
+    </body>
+    <!-- Greggman sez put scripts after body -->
+    <script type="module">
+        import { THREE, OrbitControls } from '../vendor/three.esm.js'
+        // import ThreeDraw from '../src/ThreeDraw.js'
+        import ColorMap from '../src/ColorMap.js'
+        import Model from './ThreeHelloModel.js'
+        import util from '../src/util.js'
+        import * as utils3 from './threeUtils.js'
+
+        utils3.setDefaultStyle('can')
+        const colorMap = ColorMap.Bright16
+        const turtlesSize = 3
+
+        const model = new Model()
+        model.setup()
+        const meshes = []
+        util.toWindow({ THREE, colorMap, util, model, meshes })
+
+        const canvas = document.querySelector('#can')
+        const renderer = new THREE.WebGLRenderer({ canvas })
+        const scene = new THREE.Scene()
+
+        utils3.modelLight(scene, model)
+        const camera = utils3.modelCamera(renderer, model)
+        util.toWindow({ renderer, camera, scene })
+        utils3.addModelHelpers(renderer, scene, camera, model)
+
+        const geometry = utils3.turtleGeometry()
+        geometry.scale(turtlesSize, turtlesSize, turtlesSize)
+        model.turtles.ask(t => {
+            const color = new THREE.Color(...colorMap.atIndex(t.id).webgl)
+            const material = new THREE.MeshPhongMaterial({ color })
+            const mesh = new THREE.Mesh(geometry, material)
+            scene.add(mesh)
+            meshes.push(mesh)
+        })
+
+        utils3.animate(renderer, scene, camera, () => {
+            // if (model.ticks > 3) return
+            model.step()
+            model.turtles.ask(t => {
+                const mesh = meshes[t.id]
+                mesh.position.set(...t.ypr.position())
+                mesh.rotation.set(...t.ypr.rotation())
+            })
+        })
+    </script>
+</html>

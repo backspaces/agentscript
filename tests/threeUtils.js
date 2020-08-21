@@ -31,9 +31,7 @@ export function modelCamera(renderer, model) {
     )
 
     const width = model.world.width
-    // perspectiveCam.position.set(width + centerX, -width - centerY, width)
     camera.position.set(width, width, width)
-    // perspectiveCam.lookAt(new THREE.Vector3(centerX, centerY, 0))
     camera.up.set(0, 0, 1)
 
     checkResize(renderer, camera)
@@ -45,7 +43,6 @@ export function addModelHelpers(renderer, scene, camera, model) {
 
     const axes = new THREE.AxesHelper((1.5 * width) / 2)
     const grid = new THREE.GridHelper(1.25 * width, 10)
-    // grid.rotation.x = THREE.Math.degToRad(90)
     grid.rotation.x = radians(90)
 
     const orbitControl = new OrbitControls(camera, renderer.domElement)
@@ -90,11 +87,6 @@ export function angleTowards(mesh, target) {
     mesh.rotation.set(0, 0, 0)
     mesh.rotateZ(headingTowards)
     mesh.rotateY(-pitchTowards)
-
-    const dist = Math.hypot(dx, dy, dz)
-    console.log(x, y, z, tx, ty, tz)
-    console.log(dx, dy, dz)
-    console.log(degrees(headingTowards), degrees(pitchTowards), dist)
 }
 
 // https://threejsfundamentals.org/threejs/lessons/threejs-responsive.html

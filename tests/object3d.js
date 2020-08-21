@@ -1,19 +1,12 @@
 import { Object3D } from '../vendor/Object3D.esm.js'
-export { Object3D }
 
-const PI = Math.PI
-const radians = degrees => degrees * (PI / 180)
-const degrees = radians => radians * (180 / PI)
-function precision(num, digits = 4) {
-    const mult = 10 ** digits
-    return Math.round(num * mult) / mult
-}
-const p2 = num => precision(num, 2)
-const p4 = num => precision(num, 4)
+const degToRad = degrees => degrees * (Math.PI / 180)
+const radToDeg = radians => radians * (180 / Math.PI)
 
-export class YPR {
+export default class YPR {
     constructor() {
         this.obj3d = new Object3D()
+        this.obj3d.rotation.order = 'ZYX'
     }
     obj3d() {
         return this.obj3d
@@ -23,79 +16,70 @@ export class YPR {
         this.obj3d.rotation.set(0, 0, 0)
     }
 
+    // Reporters
+    // x,y,z position in world coords
     position() {
-        return this.obj3d.position.toArray().map(p => p2(p))
+        return this.obj3d.position.toArray()
     }
-    rotation() {
-        return this.eulerDegrees().map(p => p2(p))
+    setPosition(x, y, z) {
+        this.obj3d.position.set(x, y, z)
     }
-    ypr() {
-        return this.rotation().reverse()
+    // obj3d.rotation in 'ZYX' order. Defaults to radians, pass true for degrees
+    rotation(degrees = false) {
+        const { x, y, z } = this.obj3d.rotation // .reorder('ZYX')
+        const rot = [x, y, z]
+        return degrees ? rot.map(rad => radToDeg(rad)) : rot
     }
-
-    // ypr() {
-    //     return this.eulerDegrees()
-    //         .reverse()
-    //         .map(deg => p2(deg))
-    // }
-
-    euler() {
-        const { x, y, z } = this.obj3d.rotation.reorder('ZYX')
-        return [x, y, z]
-    }
-    eulerDegrees() {
-        const rads = this.euler()
-        return rads.map(r => degrees(r))
+    // rotation in degrees, in z,y,x (ypr) order
+    yawPitchRoll() {
+        return this.rotation(true).reverse()
     }
 
-    rotx(deg) {
-        this.obj3d.rotateX(radians(deg))
-    }
-    roty(deg) {
-        this.obj3d.rotateY(radians(deg))
-    }
-    rotz(deg) {
-        this.obj3d.rotateZ(radians(deg))
-    }
-
-    right(deg) {
-        this.rotz(-deg)
-    }
-    left(deg) {
-        this.rotz(deg)
-    }
-    tiltUp(deg) {
-        this.roty(-deg)
-    }
-    tiltDown(deg) {
-        this.roty(deg)
-    }
-    rollRight(deg) {
-        this.rotx(deg)
-    }
-    rollLeft(deg) {
-        this.rotx(-deg)
-    }
-
+    // NL reporters, yaw ~ heading, in degrees rather than radians.
     yaw() {
-        return this.eulerDegrees()[2]
+        return radToDeg(this.obj3d.rotation.z)
     }
     pitch() {
-        return this.eulerDegrees()[1]
+        return radToDeg(this.obj3d.rotation.y)
     }
     roll() {
-        return this.eulerDegrees()[0]
+        return radToDeg(this.obj3d.rotation.x)
     }
 
-    forward(d) {
-        this.obj3d.translateX(d)
+    // Transformations: Rotations in degrees around x,y,z axes
+    // Equvalent to obj3d.rotateX/Y/Z but with degrees converted to radians
+    // Use obj3d.rotateX/Y/Z(rads) to work in trig, see "facexyz" below
+    rotateX(deg) {
+        this.obj3d.rotateX(degToRad(deg))
     }
-    backward(d) {
-        this.obj3d.translateX(-d)
+    rotateY(deg) {
+        this.obj3d.rotateY(degToRad(deg))
     }
-    face(tx, ty, tz) {
+    rotateZ(deg) {
+        this.obj3d.rotateZ(degToRad(deg))
+    }
+    // Rotations using NL names
+    right(deg) {
+        this.rotateZ(-deg)
+    }
+    left(deg) {
+        this.rotateZ(deg)
+    }
+    tiltUp(deg) {
+        this.rotateY(-deg)
+    }
+    tiltDown(deg) {
+        this.rotateY(deg)
+    }
+    rollRight(deg) {
+        this.rotateX(deg)
+    }
+    rollLeft(deg) {
+        this.rotateX(-deg)
+    }
+    // Rotation toward a point
+    facexyz(tx, ty, tz) {
         const [x, y, z] = this.position()
-        // const { x: tx, y: ty, z: tz } = target.position
         const [dx, dy, dz] = [tx - x, ty - y, tz - z]
         const xyhypot = Math.hypot(dx, dy)
         const headingTowards = Math.atan2(dy, dx)
@@ -104,5 +88,26 @@ export class YPR {
         this.obj3d.rotation.set(0, 0, 0)
         this.obj3d.rotateZ(headingTowards)
         this.obj3d.rotateY(-pitchTowards)
+    }
+    face(agent) {
+        const { x, y, z } = agent
+        this.face(x, y, z)
+    }
+
+    // Move along the X axis
+    forward(d) {
+        this.obj3d.translateX(d)
+    }
+    backward(d) {
+        this.obj3d.translateX(-d)
+    }
+
+    // Utils
+    // Round num or array of nums to a fractional precision of digits
+    precision(num, digits = 4) {
+        if (Array.isArray(num))
+            return num.map(val => this.precision(val, digits))
+        const mult = 10 ** digits
+        return Math.round(num * mult) / mult
     }
 }
