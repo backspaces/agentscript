@@ -45,9 +45,15 @@ export function randomSeed(seed, useParkMiller = true) {
 }
 
 export function precision(num, digits = 4) {
+    if (Array.isArray(num)) return num.map(val => this.precision(val, digits))
     const mult = 10 ** digits
     return Math.round(num * mult) / mult
 }
+
+// export function precision(num, digits = 4) {
+//     const mult = 10 ** digits
+//     return Math.round(num * mult) / mult
+// }
 
 // Return whether num is [Power of Two](http://goo.gl/tCfg5). Very clever!
 export const isPowerOf2 = num => (num & (num - 1)) === 0 // twgl library
@@ -93,6 +99,17 @@ const toDegrees = 180 / PI
 const toRadians = PI / 180
 export const radians = degrees => degrees * toRadians
 export const degrees = radians => radians * toDegrees
+
+// Better names and format for arrays. Change above?
+export const degToRad = degrees =>
+    Array.isArray(degrees)
+        ? degrees.map(deg => degToRad(deg))
+        : degrees * (Math.PI / 180)
+
+export const radToDeg = radians =>
+    Array.isArray(radians)
+        ? radians.map(rad => radToDeg(rad))
+        : radians * (180 / Math.PI)
 
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.

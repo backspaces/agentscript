@@ -742,9 +742,15 @@ out;`;
     }
 
     function precision(num, digits = 4) {
+        if (Array.isArray(num)) return num.map(val => this.precision(val, digits))
         const mult = 10 ** digits;
         return Math.round(num * mult) / mult
     }
+
+    // export function precision(num, digits = 4) {
+    //     const mult = 10 ** digits
+    //     return Math.round(num * mult) / mult
+    // }
 
     // Return whether num is [Power of Two](http://goo.gl/tCfg5). Very clever!
     const isPowerOf2 = num => (num & (num - 1)) === 0; // twgl library
@@ -790,6 +796,17 @@ out;`;
     const toRadians = PI$1 / 180;
     const radians$1 = degrees => degrees * toRadians;
     const degrees$1 = radians => radians * toDegrees;
+
+    // Better names and format for arrays. Change above?
+    const degToRad = degrees =>
+        Array.isArray(degrees)
+            ? degrees.map(deg => degToRad(deg))
+            : degrees * (Math.PI / 180);
+
+    const radToDeg = radians =>
+        Array.isArray(radians)
+            ? radians.map(rad => radToDeg(rad))
+            : radians * (180 / Math.PI);
 
     // Heading & Angles: coord system
     // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
@@ -884,6 +901,8 @@ out;`;
         lerpScale: lerpScale,
         radians: radians$1,
         degrees: degrees$1,
+        degToRad: degToRad,
+        radToDeg: radToDeg,
         heading: heading,
         angle: angle,
         modHeading: modHeading,
@@ -2761,17 +2780,21 @@ out;`;
     // It will be upgraded with methods converting from other
     // transforms like GIS and DataSets.
 
+    const defaultZ = (maxX, maxY) => Math.max(maxX, maxY);
+
     class World {
-        static defaultOptions(maxX = 16, maxY = maxX) {
+        static defaultOptions(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
             return {
                 minX: -maxX,
                 maxX: maxX,
                 minY: -maxY,
                 maxY: maxY,
+                minZ: 0,
+                maxZ: maxZ,
             }
         }
-        static defaultWorld(maxX = 16, maxY = maxX) {
-            return new World(World.defaultOptions(maxX, maxY))
+        static defaultWorld(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+            return new World(World.defaultOptions(maxX, maxY, maxZ))
         }
 
         // ======================
@@ -2785,16 +2808,24 @@ out;`;
         }
         // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
         setWorld() {
-            this.numX = this.width = this.maxX - this.minX + 1;
-            this.numY = this.height = this.maxY - this.minY + 1;
-            this.minXcor = this.minX - 0.5;
-            this.maxXcor = this.maxX + 0.5;
-            this.minYcor = this.minY - 0.5;
-            this.maxYcor = this.maxY + 0.5;
+            let { minX, maxX, minY, maxY, minZ, maxZ } = this;
+            this.numX = this.width = maxX - minX + 1;
+            this.numY = this.height = maxY - minY + 1;
+            // if (maxZ == null) maxZ = this.maxZ = Math.max(this.width, this.height)
+            this.numZ = this.depth = maxZ - minZ + 1;
+
+            this.minXcor = minX - 0.5;
+            this.maxXcor = maxX + 0.5;
+            this.minYcor = minY - 0.5;
+            this.maxYcor = maxY + 0.5;
+            this.minZcor = minZ - 0.5;
+            this.maxZcor = maxZ + 0.5;
+
             // The midpoints of the world, in world coords.
-            // (0, 0) for the centered default worlds. REMIND: remove?
-            this.centerX = (this.minX + this.maxX) / 2;
-            this.centerY = (this.minY + this.maxY) / 2;
+            this.centerX = (minX + maxX) / 2;
+            this.centerY = (minY + maxY) / 2;
+            this.centerZ = (minZ + maxZ) / 2;
+
             this.numPatches = this.width * this.height;
         }
         randomPoint() {
@@ -2802,6 +2833,16 @@ out;`;
                 util.randomFloat2(this.minXcor, this.maxXcor),
                 util.randomFloat2(this.minYcor, this.maxYcor),
             ]
+        }
+        random3DPoint() {
+            const pt = this.randomPoint();
+            pt.push(util.randomFloat2(this.minZcor, this.maxZcor));
+            return pt
+            // return [
+            //     util.randomFloat2(this.minXcor, this.maxXcor),
+            //     util.randomFloat2(this.minYcor, this.maxYcor),
+            //     util.randomFloat2(this.minZcor, this.maxZcor),
+            // ]
         }
         randomPatchPoint() {
             return [
@@ -3671,19 +3712,21 @@ out;`;
             this.autoTick();
         }
 
+        // Intercepted by Model3D to use Turtle3D AgentClass
+        initAgentSet(name, AgentsetClass, AgentClass) {
+            this[name] = new AgentsetClass(this, AgentClass, name);
+        }
+
         resetModel(worldOptions) {
-            const initAgentSet = (name, AgentsetClass, AgentClass) => {
-                this[name] = new AgentsetClass(this, AgentClass, name);
-            };
             this.ticks = 0;
             this.world =
                 worldOptions.maxXcor === undefined
                     ? new World(worldOptions)
                     : worldOptions;
             // Base AgentSets setup here. Breeds handled by setup
-            initAgentSet('patches', Patches, Patch);
-            initAgentSet('turtles', Turtles, Turtle);
-            initAgentSet('links', Links, Link);
+            this.initAgentSet('patches', Patches, Patch);
+            this.initAgentSet('turtles', Turtles, Turtle);
+            this.initAgentSet('links', Links, Link);
         }
 
         reset(worldOptions = this.world) {

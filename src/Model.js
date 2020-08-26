@@ -8,26 +8,28 @@ import Link from './Link.js'
 
 // Class Model is the primary interface for modelers, integrating
 // all the parts of a model. It also contains NetLogo's `observer` methods.
-class Model {
+export default class Model {
     // The Model constructor takes a World or WorldOptions object.
     constructor(worldOptions = World.defaultOptions()) {
         this.resetModel(worldOptions)
         this.autoTick()
     }
 
+    // Intercepted by Model3D to use Turtle3D AgentClass
+    initAgentSet(name, AgentsetClass, AgentClass) {
+        this[name] = new AgentsetClass(this, AgentClass, name)
+    }
+
     resetModel(worldOptions) {
-        const initAgentSet = (name, AgentsetClass, AgentClass) => {
-            this[name] = new AgentsetClass(this, AgentClass, name)
-        }
         this.ticks = 0
         this.world =
             worldOptions.maxXcor === undefined
                 ? new World(worldOptions)
                 : worldOptions
         // Base AgentSets setup here. Breeds handled by setup
-        initAgentSet('patches', Patches, Patch)
-        initAgentSet('turtles', Turtles, Turtle)
-        initAgentSet('links', Links, Link)
+        this.initAgentSet('patches', Patches, Patch)
+        this.initAgentSet('turtles', Turtles, Turtle)
+        this.initAgentSet('links', Links, Link)
     }
 
     reset(worldOptions = this.world) {
@@ -72,5 +74,3 @@ class Model {
         }
     }
 }
-
-export default Model

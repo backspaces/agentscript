@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>helloz</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/Hello3ZModel.js'
+
+            const drawOptions = {
+                turtlesShape: 'point',
+                turtlesSize: 2,
+            }
+
+            async function run() {
+                const model = new Model()
+                await model.startup()
+                model.setup()
+
+                const view = new ThreeDraw(
+                    model,
+                    { div: 'modelDiv' },
+                    drawOptions
+                )
+
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        view.draw()
+                    },
+                    500,
+                    33
+                )
+
+                view.idle()
+            }
+            run()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

@@ -4,17 +4,21 @@ import util from './util.js'
 // It will be upgraded with methods converting from other
 // transforms like GIS and DataSets.
 
+const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
+
 export default class World {
-    static defaultOptions(maxX = 16, maxY = maxX) {
+    static defaultOptions(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
         return {
             minX: -maxX,
             maxX: maxX,
             minY: -maxY,
             maxY: maxY,
+            minZ: 0,
+            maxZ: maxZ,
         }
     }
-    static defaultWorld(maxX = 16, maxY = maxX) {
-        return new World(World.defaultOptions(maxX, maxY))
+    static defaultWorld(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+        return new World(World.defaultOptions(maxX, maxY, maxZ))
     }
 
     // ======================
@@ -28,16 +32,24 @@ export default class World {
     }
     // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
     setWorld() {
-        this.numX = this.width = this.maxX - this.minX + 1
-        this.numY = this.height = this.maxY - this.minY + 1
-        this.minXcor = this.minX - 0.5
-        this.maxXcor = this.maxX + 0.5
-        this.minYcor = this.minY - 0.5
-        this.maxYcor = this.maxY + 0.5
+        let { minX, maxX, minY, maxY, minZ, maxZ } = this
+        this.numX = this.width = maxX - minX + 1
+        this.numY = this.height = maxY - minY + 1
+        // if (maxZ == null) maxZ = this.maxZ = Math.max(this.width, this.height)
+        this.numZ = this.depth = maxZ - minZ + 1
+
+        this.minXcor = minX - 0.5
+        this.maxXcor = maxX + 0.5
+        this.minYcor = minY - 0.5
+        this.maxYcor = maxY + 0.5
+        this.minZcor = minZ - 0.5
+        this.maxZcor = maxZ + 0.5
+
         // The midpoints of the world, in world coords.
-        // (0, 0) for the centered default worlds. REMIND: remove?
-        this.centerX = (this.minX + this.maxX) / 2
-        this.centerY = (this.minY + this.maxY) / 2
+        this.centerX = (minX + maxX) / 2
+        this.centerY = (minY + maxY) / 2
+        this.centerZ = (minZ + maxZ) / 2
+
         this.numPatches = this.width * this.height
     }
     randomPoint() {
@@ -45,6 +57,16 @@ export default class World {
             util.randomFloat2(this.minXcor, this.maxXcor),
             util.randomFloat2(this.minYcor, this.maxYcor),
         ]
+    }
+    random3DPoint() {
+        const pt = this.randomPoint()
+        pt.push(util.randomFloat2(this.minZcor, this.maxZcor))
+        return pt
+        // return [
+        //     util.randomFloat2(this.minXcor, this.maxXcor),
+        //     util.randomFloat2(this.minYcor, this.maxYcor),
+        //     util.randomFloat2(this.minZcor, this.maxZcor),
+        // ]
     }
     randomPatchPoint() {
         return [

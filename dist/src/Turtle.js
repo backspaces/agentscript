@@ -8,7 +8,7 @@ import util from './util.js'
 // Each turtle knows the patch it is on, and interacts with that and other
 // patches, as well as other turtles.
 
-class Turtle {
+export default class Turtle {
     static defaultVariables() {
         return {
             // Core variables for turtles.
@@ -227,5 +227,3 @@ class Turtle {
         return t in this.linkNeighbors()
     }
 }
-
-export default Turtle
