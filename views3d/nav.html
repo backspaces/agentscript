@@ -90,17 +90,17 @@
         gui.add(controls, 'backward')
         gui.add(controls, 'lookAt')
 
-        const pitchFolder = gui.addFolder('RotationZ')
+        const pitchFolder = gui.addFolder('rotateZ')
         pitchFolder.open()
         pitchFolder.add(controls, 'right')
         pitchFolder.add(controls, 'left')
 
-        const tiltFolder = gui.addFolder('RotationY')
+        const tiltFolder = gui.addFolder('rotateY')
         tiltFolder.open()
         tiltFolder.add(controls, 'tiltUp')
         tiltFolder.add(controls, 'tiltDown')
 
-        const rollFolder = gui.addFolder('RotationX')
+        const rollFolder = gui.addFolder('rotateX')
         rollFolder.open()
         rollFolder.add(controls, 'rollRight')
         rollFolder.add(controls, 'rollLeft')
