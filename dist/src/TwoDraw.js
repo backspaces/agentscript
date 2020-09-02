@@ -31,7 +31,8 @@ export default class TwoDraw extends TwoView {
     // ======================
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
-        drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
+        // drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
+        drawOptions = Object.assign(TwoDraw.defaultOptions(), drawOptions)
 
         super(model.world, viewOptions)
         this.model = model

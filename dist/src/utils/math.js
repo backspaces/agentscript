@@ -101,26 +101,20 @@ export const radians = degrees => degrees * toRadians
 export const degrees = radians => radians * toDegrees
 
 // Better names and format for arrays. Change above?
-export const degToRad = degrees =>
-    Array.isArray(degrees)
-        ? degrees.map(deg => degToRad(deg))
-        : degrees * (Math.PI / 180)
+export const degToRad = degrees => degrees * toRadians
+export const degToRadAll = array => array.map(deg => degToRad(deg))
 
-export const radToDeg = radians =>
-    Array.isArray(radians)
-        ? radians.map(rad => radToDeg(rad))
-        : radians * (180 / Math.PI)
+export const radToDeg = radians => radians * toDegrees
+export const radToDegAll = array => array.map(rad => radToDeg(rad))
 
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
 // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
-export function heading(radians) {
-    // angleToHeading?
+export function angleToHeading(radians) {
     const deg = degrees(radians)
     return mod(90 - deg, 360)
 }
-export function angle(heading) {
-    // headingToAngle?
+export function headingToAngle(heading) {
     const deg = mod(90 - heading, 360)
     return radians(deg)
 }
@@ -138,12 +132,6 @@ export function headingsEqual(heading1, heading2) {
 export function anglesEqual(angle1, angle2) {
     return modAngle(angle1) === modAngle(angle2)
 }
-// export function headingToDegrees(heading) {
-//     return mod(90 - heading, 360)
-// }
-// export function degreesToHeading(degrees) {
-//     return mod(90 - degrees, 360)
-// }
 
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
@@ -175,10 +163,10 @@ export const sqDistance = (x, y, x1, y1) =>
     (x - x1) * (x - x1) + (y - y1) * (y - y1)
 
 // Return true if x,y is within cone.
-// Cone: origin x0,y0 in given direction, with coneAngle width in radians.
+// Cone: origin x0,y0 in direction angle, with coneAngle width in radians.
 // All angles in radians
-export function inCone(x, y, radius, coneAngle, direction, x0, y0) {
+export function inCone(x, y, radius, coneAngle, angle, x0, y0) {
     if (sqDistance(x0, y0, x, y) > radius * radius) return false
     const angle12 = radiansToward(x0, y0, x, y) // angle from 1 to 2
-    return coneAngle / 2 >= Math.abs(subtractRadians(direction, angle12))
+    return coneAngle / 2 >= Math.abs(subtractRadians(angle, angle12))
 }

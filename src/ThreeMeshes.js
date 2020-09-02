@@ -2,7 +2,6 @@
 
 import { THREE } from '../vendor/three.esm.js'
 // import * as THREE from 'https://unpkg.com/three@0.118.3/build/three.module.js'
-
 import util from './util.js'
 // import { Vector3 } from 'THREE'
 
@@ -19,6 +18,17 @@ function meshColor(color, mesh) {
     return color[mesh.options.colorType] || color
     // if (color) return color[mesh.options.colorType] || color
     // return color
+}
+
+function disposeMesh(mesh) {
+    // if (!this.mesh) return
+    // if (mesh.parent !== this.scene) {
+    //     console.log('mesh parent not scene:', mesh)
+    // }
+    mesh.parent.remove(mesh)
+    mesh.geometry.dispose()
+    mesh.material.dispose()
+    if (mesh.material.map) mesh.material.map.dispose()
 }
 
 const zMultiplier = 0.25
@@ -48,16 +58,16 @@ export class BaseMesh {
         this.name = this.constructor.name
         // this.useSprites = this.name.match(/sprites/i) != null
     }
-    dispose() {
-        if (!this.mesh) return
-        if (this.mesh.parent !== this.scene) {
-            console.log('mesh parent not scene')
-        }
-        this.mesh.parent.remove(this.mesh)
-        this.mesh.geometry.dispose()
-        this.mesh.material.dispose()
-        if (this.mesh.material.map) this.mesh.material.map.dispose()
-    }
+    // dispose() {
+    //     if (!this.mesh) return
+    //     if (this.mesh.parent !== this.scene) {
+    //         console.log('mesh parent not scene')
+    //     }
+    //     this.mesh.parent.remove(this.mesh)
+    //     this.mesh.geometry.dispose()
+    //     this.mesh.material.dispose()
+    //     if (this.mesh.material.map) this.mesh.material.map.dispose()
+    // }
     centerMesh() {
         let { centerX, centerY, width, height } = this.world
         if (this.canvas) [centerX, centerY] = [0, 0]
@@ -102,7 +112,7 @@ export class CanvasMesh extends BaseMesh {
         }
     }
     init(canvas = this.options.canvas) {
-        if (this.mesh) this.dispose()
+        if (this.mesh) disposeMesh(this.mesh)
         const { textureOptions, useSegments, z } = this.options
         Object.assign(this, { canvas, z, textureOptions })
         const { width, height, centerX, centerY } = this.world
@@ -200,7 +210,7 @@ export class QuadSpritesMesh extends BaseMesh {
         }
     }
     init() {
-        if (this.mesh) this.dispose()
+        if (this.mesh) disposeMesh(this.mesh)
         const texture = this.spriteSheetTexture
 
         // const vertices = new Float32Array()
@@ -293,7 +303,7 @@ export class PointsMesh extends BaseMesh {
         }
     }
     init() {
-        if (this.mesh) this.dispose()
+        if (this.mesh) disposeMesh(this.mesh)
         const pointSize = this.options.pointSize // REMIND: variable or fixed?
         this.fixedColor = this.options.color
             ? new THREE.Color(...meshColor(this.options.color, this))
@@ -367,7 +377,7 @@ export class LinksMesh extends BaseMesh {
         }
     }
     init() {
-        if (this.mesh) this.dispose()
+        if (this.mesh) disposeMesh(this.mesh)
         this.fixedColor = this.options.color
             ? new THREE.Color(...meshColor(this.options.color, this))
             : null
@@ -422,6 +432,118 @@ export class LinksMesh extends BaseMesh {
     }
 }
 
+// ============= Obj3DMesh =============
+
+export class Obj3DMesh extends BaseMesh {
+    static options() {
+        return {
+            // color: null,
+            // REMIND: Move to ThreeView? Alow user meshes.
+            // REMIND: use functions .. allows geo scale/rotate etc
+            geometries: {
+                Default: turtleGeometry(),
+                Dart3D: turtleGeometry(),
+                Cone: new THREE.ConeBufferGeometry(0.5),
+                Cube: new THREE.BoxBufferGeometry(),
+                Cylinder: new THREE.CylinderBufferGeometry(0.5, 0.5, 1),
+                Sphere: new THREE.SphereBufferGeometry(0.5),
+            },
+            z: 2.0,
+            colorType: 'webgl',
+            size: 2,
+        }
+    }
+    init() {
+        // if (this.meshes) for (mesh of this.meshes) mesh.dispose()
+        if (this.meshes) util.forLoop(this.meshes, mesh => disposeMesh(mesh))
+        this.meshes = []
+    }
+    newMesh(geometryName = 'Default', color = 'red', size = 1) {
+        let geometry = this.options.geometries[geometryName]
+        if (!geometry) {
+            console.log('Geometry not found: ', geometryName, '..using Default')
+            geometryName = 'Default'
+            geometry = this.options.geometries[geometryName]
+        }
+
+        // const size = this.options.size
+        // geometry.scale(size, size, size)
+
+        color = new THREE.Color(...meshColor(color, this))
+        const material = new THREE.MeshBasicMaterial({ color })
+        const mesh = new THREE.Mesh(geometry, material)
+
+        // const size = this.options.size
+        if (size !== 1) mesh.scale.set(size, size, size)
+
+        this.scene.add(mesh)
+        return mesh
+    }
+    update(agents, viewFcn) {
+        util.forLoop(agents, (agent, i) => {
+            let mesh = this.meshes[agent.id]
+            if (!mesh) {
+                const view = viewFcn(agent, i)
+                mesh = this.newMesh(view.shape, view.color, view.size)
+                mesh.position.order = 'ZYX'
+                this.meshes[agent.id] = mesh
+            }
+            // const { x, y, z, obj3d } = agent
+            const obj3d = agent.obj3d
+            const pos = obj3d.position
+            mesh.position.set(pos.x, pos.y, pos.z)
+            const rot = obj3d.rotation
+            mesh.rotation.set(rot.x, rot.y, rot.z)
+            // if (colors) {
+            //     const color = meshColor(viewFcn(agent, i).color, this)
+            //     colors.push(...color, ...color)
+            // }
+        })
+        // this.mesh.geometry.setAttribute(
+        //     'position',
+        //     new THREE.Float32BufferAttribute(vertices, 3)
+        // )
+
+        // if (colors) {
+        //     this.mesh.geometry.setAttribute(
+        //         'color',
+        //         new THREE.Float32BufferAttribute(colors, 3)
+        //     )
+        // }
+    }
+}
+
+export function turtleGeometry() {
+    const ax = 0.5
+    const bx = -0.5
+    const by = -0.5
+    const cx = -0.3
+    const top = 0.35
+    const bot = 0
+
+    const geometry = new THREE.Geometry()
+    geometry.vertices.push(
+        new THREE.Vector3(ax, 0, bot), //   A 0
+        new THREE.Vector3(bx, by, bot), //  B 1
+        new THREE.Vector3(cx, 0, top), //   C 2
+        new THREE.Vector3(bx, -by, bot), // D 3
+        new THREE.Vector3(cx, 0, bot) //    E 4
+    )
+
+    const [A, B, C, D, E] = [0, 1, 2, 3, 4]
+    geometry.faces.push(
+        new THREE.Face3(A, D, C),
+        new THREE.Face3(A, C, B),
+        new THREE.Face3(A, B, E),
+        new THREE.Face3(A, E, D),
+        new THREE.Face3(C, D, E),
+        new THREE.Face3(C, E, B)
+    )
+
+    geometry.computeFaceNormals()
+    return geometry
+}
+
 export default {
     BaseMesh,
     CanvasMesh,
@@ -429,4 +551,5 @@ export default {
     QuadSpritesMesh,
     PointsMesh,
     LinksMesh,
+    Obj3DMesh,
 }

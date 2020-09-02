@@ -1,6 +1,8 @@
 import Model3D from '../src/Model3D.js'
 import util from '../src/util.js'
 
+const p2 = num => util.precision(num, 2)
+
 export default class Hello3DModel extends Model3D {
     static defaultOptions() {
         return {
@@ -18,6 +20,7 @@ export default class Hello3DModel extends Model3D {
         Object.assign(this, Hello3DModel.defaultOptions())
     }
     setup() {
+        // this.turtles.setDefault('atEdge', 'bounce')
         this.turtles.setDefault('atEdge', 'wrap')
 
         this.turtles.create(this.population, t => {
@@ -32,12 +35,10 @@ export default class Hello3DModel extends Model3D {
 
     step() {
         this.turtles.ask(t => {
-            // t.direction += util.randomCentered(this.wiggle)
             t.left(util.randomCentered(this.wiggle))
             t.tiltUp(util.randomCentered(this.wiggle))
             t.rollLeft(util.randomCentered(this.wiggle))
             t.forward(this.speed)
-            // this.moveToSphere(t)
         })
     }
 }

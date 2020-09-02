@@ -31,6 +31,7 @@ class AgentSet extends AgentArray {
             this.baseSet.breeds[name] = this
         }
         // Keep a list of this set's variables; see `own` below
+        // REMIND: not really used. Remove? Create after setup()?
         this.ownVariables = []
         // Create a proto for our agents by having a defaults and instance layer
         // this.AgentClass = AgentClass
@@ -66,7 +67,7 @@ class AgentSet extends AgentArray {
                 },
             })
             Object.defineProperty(AgentClass.prototype, 'breed', {
-                get: function() {
+                get: function () {
                     return this.agentSet
                 },
             })
@@ -104,8 +105,12 @@ class AgentSet extends AgentArray {
     addAgent(o) {
         // o only for breeds adding themselves to their baseSet
         o = o || Object.create(this.agentProto) // REMIND: Simplify! Too slick.
-        if (this.isBreedSet()) this.baseSet.addAgent(o)
-        else o.id = this.ID++
+        if (this.isBreedSet()) {
+            this.baseSet.addAgent(o)
+        } else {
+            o.id = this.ID++
+            if (o.agentConstructor) o.agentConstructor()
+        }
         this.push(o)
         return o
     }

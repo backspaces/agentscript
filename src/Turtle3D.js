@@ -1,15 +1,6 @@
 import Turtle from './Turtle.js'
+// import { radToDeg, degToRad } from './utils/math.js'
 import { Object3D } from '../vendor/Object3D.esm.js'
-
-const degToRad = degrees =>
-    Array.isArray(degrees)
-        ? degrees.map(deg => degToRad(deg))
-        : degrees * (Math.PI / 180)
-
-const radToDeg = radians =>
-    Array.isArray(radians)
-        ? radians.map(rad => radToDeg(rad))
-        : radians * (180 / Math.PI)
 
 export default class Turtle3D extends Turtle {
     static defaultVariables() {
@@ -25,12 +16,20 @@ export default class Turtle3D extends Turtle {
             // // What to do if I wander off world. Can be 'clamp', 'wrap'
             // // 'bounce', or a function, see handleEdge() method
             atEdge: 'wrap',
+            // obj3d: null,
         }
     }
     // Initialize a Turtle given its Turtles AgentSet.
     constructor() {
         super()
         Object.assign(this, Turtle3D.defaultVariables())
+        // this.obj3d = new Object3D()
+        // this.obj3d.rotation.order = 'ZYX'
+        // this.reset()
+    }
+    // Called by ctor factory for each new agent.
+    // constructor above called only once per agentset due to two-headed agents.
+    agentConstructor() {
         this.obj3d = new Object3D()
         this.obj3d.rotation.order = 'ZYX'
         this.reset()
@@ -40,15 +39,8 @@ export default class Turtle3D extends Turtle {
         this.obj3d.rotation.set(0, 0, 0)
     }
 
-    // set x(x) {
-    //     this.obj3d.position.x = x
-    // }
-    // get x() {
-    //     return this.obj3d.position.x
-    // }
-
     setxyz(x, y, z) {
-        Object.assign(this, { x, y, z })
+        super.setxy(x, y, z)
         this.obj3d.position.set(x, y, z)
     }
     getxyz() {
@@ -56,41 +48,100 @@ export default class Turtle3D extends Turtle {
     }
     setRotation(x, y, z) {
         this.obj3d.rotation.set(x, y, z)
+        this.theta = this.obj3d.rotation.z
     }
     getRotation() {
         const { x, y, z } = this.obj3d.rotation // .reorder('ZYX')
         return [x, y, z]
     }
-    thetaPhiPsi() {
+    getThetaPhiPsi() {
         return this.getRotation().reverse()
+    }
+    // REMIND: temporary.
+    handleEdge(x, y, z) {
+        // if (this.atEdge === 'bounce') {
+        //     // const { minZcor, maxZcor } = this.model.world
+        //     // if (z < minZcor)
+        // }
+        // console.log('phi', util.radToDeg(this.phi))
+        super.handleEdge(x, y, z)
+        this.setxyz(this.x, this.y, this.z)
+    }
+
+    // get x() {
+    //     return this.obj3d.position.x
+    // }
+    // set x(d) {
+    //     this.obj3d.position.x = d
+    // }
+    // get y() {
+    //     return this.obj3d.position.y
+    // }
+    // set y(d) {
+    //     this.obj3d.position.y = d
+    // }
+    // get z() {
+    //     return this.obj3d.position.z
+    // }
+    // set z(d) {
+    //     this.obj3d.position.z = d
+    // }
+
+    // get theta() {
+    //     return this.obj3d.rotation.z
+    // }
+    // set theta(rad) {
+    //     this.obj3d.rotation.z = rad
+    // }
+    // get direction() {
+    //     return this.obj3d.rotation.z
+    // }
+    // set direction(rad) {
+    //     this.obj3d.rotation.z = rad
+    // }
+    get phi() {
+        return this.obj3d.rotation.y
+    }
+    set phi(rad) {
+        this.obj3d.rotation.y = rad
     }
 
     // Move along the turtle's X axis
     forward(d) {
         this.obj3d.translateX(d)
+        let [x, y, z] = this.getxyz()
+        // Object.assign(this, { x, y, z })
+        super.setxy(x, y, z)
     }
-    // backward(d) {
-    //     this.obj3d.translateX(-d)
-    // }
+
+    // Also used by turtles.create()
+    setTheta(rad) {
+        this.obj3d.rotateZ(rad)
+    }
 
     // Incremental rotation around given axis
     right(rad) {
         this.obj3d.rotateZ(-rad)
+        this.theta = this.obj3d.rotation.z
     }
     left(rad) {
-        this.obj3d.rotateZ(rad)
+        this.right(-rad)
+        // this.obj3d.rotateZ(rad)
+        // this.theta = this.obj3d.rotation.z
     }
     tiltUp(rad) {
         this.obj3d.rotateY(-rad)
     }
     tiltDown(rad) {
-        this.obj3d.rotateY(rad)
+        // this.obj3d.rotateY(rad)
+        this.tiltUp(-rad)
     }
     rollRight(rad) {
         this.obj3d.rotateX(rad)
     }
     rollLeft(rad) {
-        this.obj3d.rotateX(-rad)
+        // this.obj3d.rotateX(-rad)
+        this.rollRight(-rad)
     }
 
     facexyz(tx, ty, tz) {
@@ -108,203 +159,4 @@ export default class Turtle3D extends Turtle {
         const { x, y, z } = agent
         this.facexyz(x, y, z)
     }
-
-    // die() {
-    //     this.agentSet.removeAgent(this) // remove me from my baseSet and breed
-    //     // Remove my links if any exist.
-    //     // Careful: don't promote links
-    //     if (this.hasOwnProperty('links')) {
-    //         while (this.links.length > 0) this.links[0].die()
-    //     }
-    //     // Remove me from patch.turtles cache if patch.turtles array exists
-    //     if (this.patch.turtles != null) {
-    //         util.removeArrayItem(this.patch.turtles, this)
-    //     }
-    //     // Set id to -1, indicates that I've died.
-    //     this.id = -1
-    // }
-
-    // // Factory: create num new turtles at this turtle's location. The optional init
-    // // proc is called on the new turtle after inserting in its agentSet.
-    // hatch(num = 1, breed = this.agentSet, init = turtle => {}) {
-    //     return breed.create(num, turtle => {
-    //         turtle.setxy(this.x, this.y)
-    //         // hatched turtle inherits parents' ownVariables
-    //         for (const key of breed.ownVariables) {
-    //             if (turtle[key] == null) turtle[key] = this[key]
-    //         }
-    //         init(turtle)
-    //     })
-    // }
-    // // Getter for links for this turtle. REMIND: use new AgentSet(0)?
-    // // Uses lazy evaluation to promote links to instance variables.
-    // // REMIND: Let links create the array as needed, less "tricky"
-    // get links() {
-    //     // lazy promote links from getter to instance prop.
-    //     Object.defineProperty(this, 'links', {
-    //         value: new AgentArray(0),
-    //         enumerable: true,
-    //     })
-    //     return this.links
-    // }
-    // // Getter for the patch I'm on. Return null if off-world.
-    // get patch() {
-    //     return this.model.patches.patch(this.x, this.y)
-    // }
-
-    // // Heading vs Euclidean Angles. Direction for clarity when ambiguity.
-    // get heading() {
-    //     return util.heading(this.theta)
-    // }
-    // set heading(heading) {
-    //     this.theta = util.angle(heading)
-    // }
-    // get direction() {
-    //     return this.theta
-    // }
-    // set direction(theta) {
-    //     this.theta = theta
-    // }
-
-    // // Set x, y position. If z given, override default z.
-    // // Call handleEdge(x, y) if x, y off-world.
-    // setxy(x, y, z = null) {
-    //     const p0 = this.patch
-    //     if (z != null) this.z = z // don't promote z if null, use default z instead.
-    //     if (this.model.world.isOnWorld(x, y) || this.atEdge === 'OK') {
-    //         this.x = x
-    //         this.y = y
-    //     } else {
-    //         this.handleEdge(x, y)
-    //     }
-    //     const p = this.patch
-    //     if (p && p.turtles != null && p !== p0) {
-    //         // util.removeItem(p0.turtles, this)
-    //         if (p0) util.removeArrayItem(p0.turtles, this)
-    //         p.turtles.push(this)
-    //     }
-    // }
-    // // Handle turtle if x,y off-world
-    // handleEdge(x, y) {
-    //     if (util.isString(this.atEdge)) {
-    //         const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world
-    //         if (this.atEdge === 'wrap') {
-    //             this.x = util.wrap(x, minXcor, maxXcor)
-    //             this.y = util.wrap(y, minYcor, maxYcor)
-    //         } else if (this.atEdge === 'clamp' || this.atEdge === 'bounce') {
-    //             this.x = util.clamp(x, minXcor, maxXcor)
-    //             this.y = util.clamp(y, minYcor, maxYcor)
-    //             if (this.atEdge === 'bounce') {
-    //                 if (this.x === minXcor || this.x === maxXcor) {
-    //                     this.theta = Math.PI - this.theta
-    //                 } else {
-    //                     this.theta = -this.theta
-    //                 }
-    //             }
-    //         } else {
-    //             throw Error(`turtle.handleEdge: bad atEdge: ${this.atEdge}`)
-    //         }
-    //     } else {
-    //         this.atEdge(this)
-    //     }
-    // }
-    // // Place the turtle at the given patch/turtle location
-    // moveTo(agent) {
-    //     this.setxy(agent.x, agent.y)
-    // }
-    // // Move forward (along theta) d units (patch coords),
-    // forward(d) {
-    //     this.setxy(
-    //         this.x + d * Math.cos(this.theta),
-    //         this.y + d * Math.sin(this.theta)
-    //     )
-    // }
-    // // Change current direction by rad radians which can be + (left) or - (right).
-    // rotate(rad) {
-    //     this.theta = util.mod(this.theta + rad, Math.PI * 2)
-    // }
-    // right(rad) {
-    //     this.rotate(-rad)
-    // }
-    // left(rad) {
-    //     this.rotate(rad)
-    // }
-
-    // // Set my direction towards turtle/patch or x,y.
-    // // "direction" is euclidean radians.
-    // face(agent) {
-    //     this.theta = this.towards(agent)
-    // }
-    // faceXY(x, y) {
-    //     this.theta = this.towardsXY(x, y)
-    // }
-
-    // // Return the patch ahead of this turtle by distance (patchSize units).
-    // // Return undefined if off-world.
-    // patchAhead(distance) {
-    //     return this.patchAtAngleAndDistance(this.theta, distance)
-    // }
-    // // Use patchAhead to determine if this turtle can move forward by distance.
-    // canMove(distance) {
-    //     return this.patchAhead(distance) != null
-    // } // null / undefined
-    // patchLeftAndAhead(angle, distance) {
-    //     return this.patchAtAngleAndDistance(angle + this.theta, distance)
-    // }
-    // patchRightAndAhead(angle, distance) {
-    //     return this.patchAtAngleAndDistance(angle - this.theta, distance)
-    // }
-
-    // // 6 methods in both Patch & Turtle modules
-    // // Distance from me to x, y. REMIND: No off-world test done
-    // distanceXY(x, y) {
-    //     return util.distance(this.x, this.y, x, y)
-    // }
-    // // Return distance from me to object having an x,y pair (turtle, patch, ...)
-    // // distance (agent) { this.distanceXY(agent.x, agent.y) }
-    // distance(agent) {
-    //     return util.distance(this.x, this.y, agent.x, agent.y)
-    // }
-    // sqDistance(agent) {
-    //     return util.sqDistance(this.x, this.y, agent.x, agent.y)
-    // }
-    // // Return angle towards agent/x,y
-    // // Use util.heading to convert to heading
-    // towards(agent) {
-    //     return this.towardsXY(agent.x, agent.y)
-    // }
-    // towardsXY(x, y) {
-    //     return util.radiansToward(this.x, this.y, x, y)
-    // }
-    // // Return patch w/ given parameters. Return undefined if off-world.
-    // // Return patch dx, dy from my position.
-    // patchAt(dx, dy) {
-    //     return this.model.patches.patch(this.x + dx, this.y + dy)
-    // }
-    // // Note: angle is absolute, w/o regard to existing angle of turtle.
-    // // Use Left/Right versions for angle-relative.
-    // patchAtAngleAndDistance(direction, distance) {
-    //     return this.model.patches.patchAtAngleAndDistance(
-    //         this,
-    //         direction,
-    //         distance
-    //     )
-    // }
-
-    // // Link methods. Note: this.links returns all links linked to me.
-    // // See links getter above.
-
-    // // Return other end of link from me. Link must include me!
-    // otherEnd(l) {
-    //     return l.end0 === this ? l.end1 : l.end0
-    // }
-    // // Return all turtles linked to me
-    // linkNeighbors() {
-    //     return this.links.map(l => this.otherEnd(l))
-    // }
-
-    // isLinkNeighbor(t) {
-    //     // const linkNeighbors = this.linkNeighbors()
-    //     return t in this.linkNeighbors()
-    // }
 }

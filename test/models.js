@@ -28,6 +28,8 @@ let models = shell
     .split('\n')
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
+// models = ['hello3D'] // debug. Also headless below
+
 shell.echo(models)
 
 // models = [models[0], models[1]] // debugging

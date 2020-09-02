@@ -360,11 +360,11 @@ class AgentArray extends Array {
     }
 
     // As above, but also limited to the angle `coneAngle` around
-    // a `direction` from object `o`.
-    inCone(o, radius, coneAngle, direction, meToo = false) {
+    // a `angle` from object `o`.
+    inCone(o, radius, coneAngle, angle, meToo = false) {
         const agents = new AgentArray()
         this.ask(a => {
-            if (util.inCone(a.x, a.y, radius, coneAngle, direction, o.x, o.y)) {
+            if (util.inCone(a.x, a.y, radius, coneAngle, angle, o.x, o.y)) {
                 if (meToo || o !== a) agents.push(a)
             }
         })

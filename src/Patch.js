@@ -83,8 +83,8 @@ class Patch {
     distance(agent) {
         return this.distanceXY(agent.x, agent.y)
     }
-    // Return angle towards agent/x,y
-    // Use util.heading to convert to heading
+    // Return angle in radians towards agent/x,y
+    // Use util.angleToHeading to convert to heading
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
@@ -96,8 +96,8 @@ class Patch {
     patchAt(dx, dy) {
         return this.patches.patch(this.x + dx, this.y + dy)
     }
-    patchAtAngleAndDistance(direction, distance) {
-        return this.patches.patchAtAngleAndDistance(this, direction, distance)
+    patchAtAngleAndDistance(angle, distance) {
+        return this.patches.patchAtAngleAndDistance(this, angle, distance)
     }
 
     sprout(num = 1, breed = this.model.turtles, initFcn = turtle => {}) {

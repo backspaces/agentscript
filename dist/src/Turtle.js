@@ -72,30 +72,34 @@ export default class Turtle {
     }
 
     // Heading vs Euclidean Angles. Direction for clarity when ambiguity.
-    get heading() {
-        return util.heading(this.theta)
-    }
-    set heading(heading) {
-        this.theta = util.angle(heading)
-    }
-    get direction() {
-        return this.theta
-    }
-    set direction(theta) {
-        this.theta = theta
-    }
+    // get heading() {
+    //     return util.angleToHeading(this.theta)
+    // }
+    // set heading(heading) {
+    //     this.theta = util.headingToAngle(heading)
+    // }
+    // get direction() {
+    //     return this.theta
+    // }
+    // set direction(theta) {
+    //     this.theta = theta
+    // }
 
     // Set x, y position. If z given, override default z.
     // Call handleEdge(x, y) if x, y off-world.
-    setxy(x, y, z = null) {
+    setxy(x, y, z = undefined) {
         const p0 = this.patch
-        if (z != null) this.z = z // don't promote z if null, use default z instead.
-        if (this.model.world.isOnWorld(x, y) || this.atEdge === 'OK') {
+        // if (z != null) this.z = z // don't promote z if null, use default z instead.
+
+        if (this.model.world.isOnWorld(x, y, z) || this.atEdge === 'OK') {
             this.x = x
             this.y = y
+            // don't promote z if null, use default z instead.
+            if (z != null) this.z = z
         } else {
-            this.handleEdge(x, y)
+            this.handleEdge(x, y, z)
         }
+
         const p = this.patch
         if (p && p.turtles != null && p !== p0) {
             // util.removeItem(p0.turtles, this)
@@ -104,27 +108,39 @@ export default class Turtle {
         }
     }
     // Handle turtle if x,y off-world
-    handleEdge(x, y) {
-        if (util.isString(this.atEdge)) {
+    handleEdge(x, y, z = undefined) {
+        let atEdge = this.atEdge
+
+        if (util.isString(atEdge)) {
             const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world
-            if (this.atEdge === 'wrap') {
+            const { minZcor, maxZcor } = this.model.world
+
+            if (this.z != null && atEdge === 'bounce') {
+                util.warn('handleEdge z can only be wrap or clamp, wrapping')
+                atEdge = 'wrap'
+            }
+
+            if (atEdge === 'wrap') {
                 this.x = util.wrap(x, minXcor, maxXcor)
                 this.y = util.wrap(y, minYcor, maxYcor)
-            } else if (this.atEdge === 'clamp' || this.atEdge === 'bounce') {
+                if (z != null) this.z = util.wrap(z, minZcor, maxZcor)
+            } else if (atEdge === 'clamp' || atEdge === 'bounce') {
                 this.x = util.clamp(x, minXcor, maxXcor)
                 this.y = util.clamp(y, minYcor, maxYcor)
-                if (this.atEdge === 'bounce') {
+                if (z != null) this.z = util.clamp(z, minZcor, maxZcor)
+
+                if (atEdge === 'bounce') {
                     if (this.x === minXcor || this.x === maxXcor) {
                         this.theta = Math.PI - this.theta
-                    } else {
+                    } else if (this.y === minYcor || this.y === maxYcor) {
                         this.theta = -this.theta
                     }
                 }
             } else {
-                throw Error(`turtle.handleEdge: bad atEdge: ${this.atEdge}`)
+                throw Error(`turtle.handleEdge: bad atEdge: ${atEdge}`)
             }
         } else {
-            this.atEdge(this)
+            atEdge(this)
         }
     }
     // Place the turtle at the given patch/turtle location
@@ -137,6 +153,11 @@ export default class Turtle {
             this.x + d * Math.cos(this.theta),
             this.y + d * Math.sin(this.theta)
         )
+    }
+
+    // Also used by turtles.create()
+    setTheta(rad) {
+        this.theta = util.mod(rad, Math.PI * 2)
     }
     // Change current direction by rad radians which can be + (left) or - (right).
     rotate(rad) {
@@ -188,7 +209,7 @@ export default class Turtle {
         return util.sqDistance(this.x, this.y, agent.x, agent.y)
     }
     // Return angle towards agent/x,y
-    // Use util.heading to convert to heading
+    // Use util.angleToHeading to convert to heading
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
@@ -202,12 +223,8 @@ export default class Turtle {
     }
     // Note: angle is absolute, w/o regard to existing angle of turtle.
     // Use Left/Right versions for angle-relative.
-    patchAtAngleAndDistance(direction, distance) {
-        return this.model.patches.patchAtAngleAndDistance(
-            this,
-            direction,
-            distance
-        )
+    patchAtAngleAndDistance(angle, distance) {
+        return this.model.patches.patchAtAngleAndDistance(this, angle, distance)
     }
 
     // Link methods. Note: this.links returns all links linked to me.

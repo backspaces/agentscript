@@ -792,26 +792,20 @@ const radians$1 = degrees => degrees * toRadians;
 const degrees$1 = radians => radians * toDegrees;
 
 // Better names and format for arrays. Change above?
-const degToRad = degrees =>
-    Array.isArray(degrees)
-        ? degrees.map(deg => degToRad(deg))
-        : degrees * (Math.PI / 180);
+const degToRad = degrees => degrees * toRadians;
+const degToRadAll = array => array.map(deg => degToRad(deg));
 
-const radToDeg = radians =>
-    Array.isArray(radians)
-        ? radians.map(rad => radToDeg(rad))
-        : radians * (180 / Math.PI);
+const radToDeg = radians => radians * toDegrees;
+const radToDegAll = array => array.map(rad => radToDeg(rad));
 
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
 // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
-function heading(radians) {
-    // angleToHeading?
+function angleToHeading(radians) {
     const deg = degrees$1(radians);
     return mod(90 - deg, 360)
 }
-function angle(heading) {
-    // headingToAngle?
+function headingToAngle(heading) {
     const deg = mod(90 - heading, 360);
     return radians$1(deg)
 }
@@ -829,12 +823,6 @@ function headingsEqual(heading1, heading2) {
 function anglesEqual(angle1, angle2) {
     return modAngle(angle1) === modAngle(angle2)
 }
-// export function headingToDegrees(heading) {
-//     return mod(90 - heading, 360)
-// }
-// export function degreesToHeading(degrees) {
-//     return mod(90 - degrees, 360)
-// }
 
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
@@ -866,12 +854,12 @@ const sqDistance = (x, y, x1, y1) =>
     (x - x1) * (x - x1) + (y - y1) * (y - y1);
 
 // Return true if x,y is within cone.
-// Cone: origin x0,y0 in given direction, with coneAngle width in radians.
+// Cone: origin x0,y0 in direction angle, with coneAngle width in radians.
 // All angles in radians
-function inCone(x, y, radius, coneAngle, direction, x0, y0) {
+function inCone(x, y, radius, coneAngle, angle, x0, y0) {
     if (sqDistance(x0, y0, x, y) > radius * radius) return false
     const angle12 = radiansToward(x0, y0, x, y); // angle from 1 to 2
-    return coneAngle / 2 >= Math.abs(subtractRadians(direction, angle12))
+    return coneAngle / 2 >= Math.abs(subtractRadians(angle, angle12))
 }
 
 var math = /*#__PURE__*/Object.freeze({
@@ -896,9 +884,11 @@ var math = /*#__PURE__*/Object.freeze({
     radians: radians$1,
     degrees: degrees$1,
     degToRad: degToRad,
+    degToRadAll: degToRadAll,
     radToDeg: radToDeg,
-    heading: heading,
-    angle: angle,
+    radToDegAll: radToDegAll,
+    angleToHeading: angleToHeading,
+    headingToAngle: headingToAngle,
     modHeading: modHeading,
     modAngle: modAngle,
     headingsEqual: headingsEqual,
@@ -1836,11 +1826,11 @@ class AgentArray extends Array {
     }
 
     // As above, but also limited to the angle `coneAngle` around
-    // a `direction` from object `o`.
-    inCone(o, radius, coneAngle, direction, meToo = false) {
+    // a `angle` from object `o`.
+    inCone(o, radius, coneAngle, angle, meToo = false) {
         const agents = new AgentArray();
         this.ask(a => {
-            if (util.inCone(a.x, a.y, radius, coneAngle, direction, o.x, o.y)) {
+            if (util.inCone(a.x, a.y, radius, coneAngle, angle, o.x, o.y)) {
                 if (meToo || o !== a) agents.push(a);
             }
         });
@@ -1880,6 +1870,7 @@ class AgentSet extends AgentArray {
             this.baseSet.breeds[name] = this;
         }
         // Keep a list of this set's variables; see `own` below
+        // REMIND: not really used. Remove? Create after setup()?
         this.ownVariables = [];
         // Create a proto for our agents by having a defaults and instance layer
         // this.AgentClass = AgentClass
@@ -1915,7 +1906,7 @@ class AgentSet extends AgentArray {
                 },
             });
             Object.defineProperty(AgentClass.prototype, 'breed', {
-                get: function() {
+                get: function () {
                     return this.agentSet
                 },
             });
@@ -1953,8 +1944,12 @@ class AgentSet extends AgentArray {
     addAgent(o) {
         // o only for breeds adding themselves to their baseSet
         o = o || Object.create(this.agentProto); // REMIND: Simplify! Too slick.
-        if (this.isBreedSet()) this.baseSet.addAgent(o);
-        else o.id = this.ID++;
+        if (this.isBreedSet()) {
+            this.baseSet.addAgent(o);
+        } else {
+            o.id = this.ID++;
+            if (o.agentConstructor) o.agentConstructor();
+        }
         this.push(o);
         return o
     }
@@ -2783,7 +2778,7 @@ class World {
             maxX: maxX,
             minY: -maxY,
             maxY: maxY,
-            minZ: 0,
+            minZ: 0, // minZ must be 0 for now
             maxZ: maxZ,
         }
     }
@@ -2797,7 +2792,10 @@ class World {
     constructor(options = World.defaultOptions()) {
         // Object.assign(this, World.defaultOptions()) // initial this w/ defaults
         // Object.assign(this, options) // override defaults with options
-        Object.assign(this, options); // set the 4 option values
+
+        // override defaults with the given options
+        options = Object.assign(World.defaultOptions(), options);
+        Object.assign(this, options); // set the option values
         this.setWorld(); // convert these to rest of world parameters
     }
     // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
@@ -2829,14 +2827,14 @@ class World {
         ]
     }
     random3DPoint() {
-        const pt = this.randomPoint();
-        pt.push(util.randomFloat2(this.minZcor, this.maxZcor));
-        return pt
-        // return [
-        //     util.randomFloat2(this.minXcor, this.maxXcor),
-        //     util.randomFloat2(this.minYcor, this.maxYcor),
-        //     util.randomFloat2(this.minZcor, this.maxZcor),
-        // ]
+        // const pt = this.randomPoint()
+        // pt.push(util.randomFloat2(this.minZcor, this.maxZcor))
+        // return pt
+        return [
+            util.randomFloat2(this.minXcor, this.maxXcor),
+            util.randomFloat2(this.minYcor, this.maxYcor),
+            util.randomFloat2(this.minZcor, this.maxZcor),
+        ]
     }
     randomPatchPoint() {
         return [
@@ -2846,12 +2844,16 @@ class World {
         ]
     }
     // Test x,y for being on-world.
-    isOnWorld(x, y) {
+    isOnWorld(x, y, z = this.centerZ) {
         return (
             this.minXcor <= x &&
             x <= this.maxXcor &&
+            //
             this.minYcor <= y &&
-            y <= this.maxYcor
+            y <= this.maxYcor &&
+            //
+            this.minZcor <= z &&
+            z <= this.maxZcor
         )
     }
     // cropToWorld(x, y) {}
@@ -3187,15 +3189,16 @@ class Patches extends AgentSet {
     }
     // Patches in cone from p in direction `angle`,
     // with `coneAngle` and float `radius`
-    inCone(patch, radius, coneAngle, direction, meToo = true) {
+    inCone(patch, radius, coneAngle, angle, meToo = true) {
         const dxy = Math.ceil(radius);
         const pRect = this.inRect(patch, dxy, dxy, meToo);
-        return pRect.inCone(patch, radius, coneAngle, direction, meToo)
+        return pRect.inCone(patch, radius, coneAngle, angle, meToo)
     }
 
     // Return patch at distance and angle from obj's (patch or turtle)
     // x, y (floats). If off world, return undefined.
-    // To use heading: patchAtAngleAndDistance(obj, util.angle(heading), distance)
+    // To use heading:
+    //   patchAtAngleAndDistance(obj, util.headingToAngle(heading), distance)
     // Does not take into account the angle of the obj .. turtle.theta for example.
     patchAtAngleAndDistance(obj, angle, distance) {
         let { x, y } = obj;
@@ -3346,8 +3349,8 @@ class Patch {
     distance(agent) {
         return this.distanceXY(agent.x, agent.y)
     }
-    // Return angle towards agent/x,y
-    // Use util.heading to convert to heading
+    // Return angle in radians towards agent/x,y
+    // Use util.angleToHeading to convert to heading
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
@@ -3359,8 +3362,8 @@ class Patch {
     patchAt(dx, dy) {
         return this.patches.patch(this.x + dx, this.y + dy)
     }
-    patchAtAngleAndDistance(direction, distance) {
-        return this.patches.patchAtAngleAndDistance(this, direction, distance)
+    patchAtAngleAndDistance(angle, distance) {
+        return this.patches.patchAtAngleAndDistance(this, angle, distance)
     }
 
     sprout(num = 1, breed = this.model.turtles, initFcn = turtle => {}) {
@@ -3383,7 +3386,8 @@ class Turtles extends AgentSet {
     createOne(initFcn = turtle => {}) {
         const turtle = this.addAgent();
         if (this.getDefault('theta') == null)
-            turtle.theta = util.randomFloat(Math.PI * 2);
+            // turtle.theta = util.randomFloat(Math.PI * 2)
+            turtle.setTheta(util.randomFloat(Math.PI * 2));
         initFcn(turtle);
         return turtle
     }
@@ -3541,30 +3545,34 @@ class Turtle {
     }
 
     // Heading vs Euclidean Angles. Direction for clarity when ambiguity.
-    get heading() {
-        return util.heading(this.theta)
-    }
-    set heading(heading) {
-        this.theta = util.angle(heading);
-    }
-    get direction() {
-        return this.theta
-    }
-    set direction(theta) {
-        this.theta = theta;
-    }
+    // get heading() {
+    //     return util.angleToHeading(this.theta)
+    // }
+    // set heading(heading) {
+    //     this.theta = util.headingToAngle(heading)
+    // }
+    // get direction() {
+    //     return this.theta
+    // }
+    // set direction(theta) {
+    //     this.theta = theta
+    // }
 
     // Set x, y position. If z given, override default z.
     // Call handleEdge(x, y) if x, y off-world.
-    setxy(x, y, z = null) {
+    setxy(x, y, z = undefined) {
         const p0 = this.patch;
-        if (z != null) this.z = z; // don't promote z if null, use default z instead.
-        if (this.model.world.isOnWorld(x, y) || this.atEdge === 'OK') {
+        // if (z != null) this.z = z // don't promote z if null, use default z instead.
+
+        if (this.model.world.isOnWorld(x, y, z) || this.atEdge === 'OK') {
             this.x = x;
             this.y = y;
+            // don't promote z if null, use default z instead.
+            if (z != null) this.z = z;
         } else {
-            this.handleEdge(x, y);
+            this.handleEdge(x, y, z);
         }
+
         const p = this.patch;
         if (p && p.turtles != null && p !== p0) {
             // util.removeItem(p0.turtles, this)
@@ -3573,27 +3581,39 @@ class Turtle {
         }
     }
     // Handle turtle if x,y off-world
-    handleEdge(x, y) {
-        if (util.isString(this.atEdge)) {
+    handleEdge(x, y, z = undefined) {
+        let atEdge = this.atEdge;
+
+        if (util.isString(atEdge)) {
             const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world;
-            if (this.atEdge === 'wrap') {
+            const { minZcor, maxZcor } = this.model.world;
+
+            if (this.z != null && atEdge === 'bounce') {
+                util.warn('handleEdge z can only be wrap or clamp, wrapping');
+                atEdge = 'wrap';
+            }
+
+            if (atEdge === 'wrap') {
                 this.x = util.wrap(x, minXcor, maxXcor);
                 this.y = util.wrap(y, minYcor, maxYcor);
-            } else if (this.atEdge === 'clamp' || this.atEdge === 'bounce') {
+                if (z != null) this.z = util.wrap(z, minZcor, maxZcor);
+            } else if (atEdge === 'clamp' || atEdge === 'bounce') {
                 this.x = util.clamp(x, minXcor, maxXcor);
                 this.y = util.clamp(y, minYcor, maxYcor);
-                if (this.atEdge === 'bounce') {
+                if (z != null) this.z = util.clamp(z, minZcor, maxZcor);
+
+                if (atEdge === 'bounce') {
                     if (this.x === minXcor || this.x === maxXcor) {
                         this.theta = Math.PI - this.theta;
-                    } else {
+                    } else if (this.y === minYcor || this.y === maxYcor) {
                         this.theta = -this.theta;
                     }
                 }
             } else {
-                throw Error(`turtle.handleEdge: bad atEdge: ${this.atEdge}`)
+                throw Error(`turtle.handleEdge: bad atEdge: ${atEdge}`)
             }
         } else {
-            this.atEdge(this);
+            atEdge(this);
         }
     }
     // Place the turtle at the given patch/turtle location
@@ -3606,6 +3626,11 @@ class Turtle {
             this.x + d * Math.cos(this.theta),
             this.y + d * Math.sin(this.theta)
         );
+    }
+
+    // Also used by turtles.create()
+    setTheta(rad) {
+        this.theta = util.mod(rad, Math.PI * 2);
     }
     // Change current direction by rad radians which can be + (left) or - (right).
     rotate(rad) {
@@ -3657,7 +3682,7 @@ class Turtle {
         return util.sqDistance(this.x, this.y, agent.x, agent.y)
     }
     // Return angle towards agent/x,y
-    // Use util.heading to convert to heading
+    // Use util.angleToHeading to convert to heading
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
@@ -3671,12 +3696,8 @@ class Turtle {
     }
     // Note: angle is absolute, w/o regard to existing angle of turtle.
     // Use Left/Right versions for angle-relative.
-    patchAtAngleAndDistance(direction, distance) {
-        return this.model.patches.patchAtAngleAndDistance(
-            this,
-            direction,
-            distance
-        )
+    patchAtAngleAndDistance(angle, distance) {
+        return this.model.patches.patchAtAngleAndDistance(this, angle, distance)
     }
 
     // Link methods. Note: this.links returns all links linked to me.

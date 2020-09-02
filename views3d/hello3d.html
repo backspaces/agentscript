@@ -10,28 +10,44 @@
             import Model from '../models/Hello3DModel.js'
 
             const drawOptions = {
-                turtlesShape: 'point',
+                // turtlesShape: 'dart',
+                // turtlesShape: 'point',
+                turtlesShape: 'Dart3D',
+                // turtlesShape: 'Sphere',
+
+                turtlesColor: 'random',
+                // turtlesColor: 'red',
                 turtlesSize: 2,
+
+                turtlesMap: 'Bright16',
             }
 
             async function run() {
                 const model = new Model()
+                // model.population = 4
+                // util.toWindow({ util, model })
                 await model.startup()
                 model.setup()
+                const t = model.turtles[0]
 
                 const view = new ThreeDraw(
                     model,
                     { div: 'modelDiv' },
                     drawOptions
                 )
+                util.toWindow({ util, t, model, view })
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
+
+                        // const phi = model.turtles[0].phi
+                        // console.log('phi', util.radToDeg(phi))
+
                         view.draw()
                     },
-                    500,
-                    33
+                    -1, //500,
+                    33 // 33
                 )
 
                 view.idle()

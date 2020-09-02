@@ -7,7 +7,7 @@ class FlockModel extends Model {
             population: 1000,
             vision: 3,
             speed: 0.25,
-            maxTurn: util.radians(3.0),
+            maxTurn: util.degToRad(3.0),
             minSeparation: 0.75,
         }
     }
@@ -20,7 +20,7 @@ class FlockModel extends Model {
     }
 
     // setMaxTurn(maxTurnDegrees) {
-    //     this.maxTurn = util.radians(maxTurnDegrees)
+    //     this.maxTurn = util.degToRad(maxTurnDegrees)
     // }
     setup() {
         Object.assign(this, this.UI)

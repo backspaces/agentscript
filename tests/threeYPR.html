@@ -54,9 +54,9 @@
         })
 
         const gui = new GUI()
-        const rotx = deg => mesh.rotateX(util.radians(deg))
-        const roty = deg => mesh.rotateY(util.radians(deg))
-        const rotz = deg => mesh.rotateZ(util.radians(deg))
+        const rotx = deg => mesh.rotateX(util.degToRad(deg))
+        const roty = deg => mesh.rotateY(util.degToRad(deg))
+        const rotz = deg => mesh.rotateZ(util.degToRad(deg))
 
         const reset = () => {
             mesh.position.set(0, 0, 0)
@@ -96,7 +96,7 @@
 
         const rot = mesh.rotation //.reorder('ZYX')
         const p2 = num => util.precision(num, 2)
-        const deg = rad => p2(util.degrees(rad))
+        const deg = rad => p2(util.radToDeg(rad))
         const ypr = () => `${deg(rot.z)}, ${deg(rot.y)}, ${deg(rot.x)}`
         const pos = mesh.position
         const xyz = () => `${p2(pos.x)}, ${p2(pos.y)}, ${p2(pos.z)}`

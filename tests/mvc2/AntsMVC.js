@@ -13,7 +13,7 @@ export default class AntsMVC extends TwoMVC {
             // maxPheromone: 35,
             // diffusionRate: 0.3,
             // evaporationRate: 0.01,
-            // wiggleAngle: util.radians(30),
+            // wiggleAngle: util.degToRad(30),
 
             // TwoMVC defaults, you can override here:
             // div: document.body,

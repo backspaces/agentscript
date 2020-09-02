@@ -50,7 +50,9 @@
                 array = util.precision(array, 2)
                 return array.toString().replace(/,/g, ', ')
             }
-            controls.ThetaPhiPsi = fmt(util.radToDeg(turtle.thetaPhiPsi()))
+            controls.ThetaPhiPsi = fmt(
+                util.radToDegAll(turtle.getThetaPhiPsi())
+            )
             controls.Position = fmt(turtle.getxyz())
 
             mesh.position.set(...turtle.getxyz())

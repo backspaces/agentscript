@@ -1,7 +1,7 @@
 import { THREE, OrbitControls, Stats } from '../vendor/three.esm.js'
 import util from '../src/util.js'
-const radians = util.radians
-const degrees = util.degrees
+const degToRad = util.degToRad
+const radToDeg = util.radToDeg
 
 let stats
 
@@ -43,7 +43,7 @@ export function addModelHelpers(renderer, scene, camera, model) {
 
     const axes = new THREE.AxesHelper((1.5 * width) / 2)
     const grid = new THREE.GridHelper(1.25 * width, 10)
-    grid.rotation.x = radians(90)
+    grid.rotation.x = degToRad(90)
 
     const orbitControl = new OrbitControls(camera, renderer.domElement)
 
@@ -73,7 +73,7 @@ export function addMesh(
 export function meshAngles(mesh, order = 'XYZ') {
     const euler = mesh.rotation
     const { x, y, z } = euler
-    return [x, y, z].map(rad => util.precision(degrees(rad)))
+    return [x, y, z].map(rad => util.precision(radToDeg(rad)))
 }
 
 export function angleTowards(mesh, target) {
@@ -231,7 +231,7 @@ export function matrixToString(matrix, toDegrees = true, precision = 2) {
     const isPosition = idx => idx >= 12
     if (toDegrees)
         matrix = matrix.map((el, i) =>
-            isScale(i) || isPosition(i) ? el : degrees(el)
+            isScale(i) || isPosition(i) ? el : radToDeg(el)
         )
     matrix = matrix.map(num => util.precision(num, precision))
     matrix = matrix.map(num => ('' + num).padStart(10, ' '))

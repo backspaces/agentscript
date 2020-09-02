@@ -13,7 +13,7 @@ export default class World {
             maxX: maxX,
             minY: -maxY,
             maxY: maxY,
-            minZ: 0,
+            minZ: 0, // minZ must be 0 for now
             maxZ: maxZ,
         }
     }
@@ -27,7 +27,10 @@ export default class World {
     constructor(options = World.defaultOptions()) {
         // Object.assign(this, World.defaultOptions()) // initial this w/ defaults
         // Object.assign(this, options) // override defaults with options
-        Object.assign(this, options) // set the 4 option values
+
+        // override defaults with the given options
+        options = Object.assign(World.defaultOptions(), options)
+        Object.assign(this, options) // set the option values
         this.setWorld() // convert these to rest of world parameters
     }
     // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
@@ -59,14 +62,14 @@ export default class World {
         ]
     }
     random3DPoint() {
-        const pt = this.randomPoint()
-        pt.push(util.randomFloat2(this.minZcor, this.maxZcor))
-        return pt
-        // return [
-        //     util.randomFloat2(this.minXcor, this.maxXcor),
-        //     util.randomFloat2(this.minYcor, this.maxYcor),
-        //     util.randomFloat2(this.minZcor, this.maxZcor),
-        // ]
+        // const pt = this.randomPoint()
+        // pt.push(util.randomFloat2(this.minZcor, this.maxZcor))
+        // return pt
+        return [
+            util.randomFloat2(this.minXcor, this.maxXcor),
+            util.randomFloat2(this.minYcor, this.maxYcor),
+            util.randomFloat2(this.minZcor, this.maxZcor),
+        ]
     }
     randomPatchPoint() {
         return [
@@ -76,12 +79,16 @@ export default class World {
         ]
     }
     // Test x,y for being on-world.
-    isOnWorld(x, y) {
+    isOnWorld(x, y, z = this.centerZ) {
         return (
             this.minXcor <= x &&
             x <= this.maxXcor &&
+            //
             this.minYcor <= y &&
-            y <= this.maxYcor
+            y <= this.maxYcor &&
+            //
+            this.minZcor <= z &&
+            z <= this.maxZcor
         )
     }
     // cropToWorld(x, y) {}

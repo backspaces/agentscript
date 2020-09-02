@@ -63,13 +63,13 @@
                     if (t.id === 0) {
                         // if (model.ticks === 0) t.rotateY
                         mesh.translateX(0.1)
-                        mesh.rotateY(-util.radians(1))
+                        mesh.rotateY(-util.degToRad(1))
                         // } else if (t.id === 2) {
                         //     if (model.ticks === 0)
-                        //         // mesh.rotateZ(util.radians(90))
-                        //         mesh.rotation.z = util.radians(90)
+                        //         // mesh.rotateZ(util.degToRad(90))
+                        //         mesh.rotation.z = util.degToRad(90)
                         //     mesh.translateY(0.1)
-                        //     mesh.rotateX(util.radians(1))
+                        //     mesh.rotateX(util.degToRad(1))
                     } else {
                         mesh.rotation.z = t.theta
                         mesh.position.set(t.x, t.y, t.z + 0.5 * t.id + 2)

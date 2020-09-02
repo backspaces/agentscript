@@ -10,7 +10,7 @@ export default class AntsModel extends Model {
             maxPheromone: 35,
             diffusionRate: 0.3,
             evaporationRate: 0.01,
-            wiggleAngle: util.radians(30),
+            wiggleAngle: util.degToRad(30),
         }
     }
 

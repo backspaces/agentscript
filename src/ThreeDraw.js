@@ -32,8 +32,10 @@ export default class ThreeDraw extends ThreeView {
             linksColor: 'random',
             linksWidth: 1,
 
-            patchesMap: ColorMap.DarkGray,
-            turtlesMap: ColorMap.Basic16,
+            // patchesMap: ColorMap.DarkGray,
+            // turtlesMap: ColorMap.Basic16,
+            patchesMap: 'DarkGray',
+            turtlesMap: 'Basic16',
 
             // textProperty: null,
             // textSize: 0.5,
@@ -46,7 +48,8 @@ export default class ThreeDraw extends ThreeView {
     // ======================
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
-        drawOptions = Object.assign({}, ThreeDraw.defaultOptions(), drawOptions)
+        // drawOptions = Object.assign({}, ThreeDraw.defaultOptions(), drawOptions)
+        drawOptions = Object.assign(ThreeDraw.defaultOptions(), drawOptions)
 
         // Convert static colors to typedColor, works for all meshes.
         // TwoDraw simpler, doesn't (yet) need this.
@@ -67,6 +70,17 @@ export default class ThreeDraw extends ThreeView {
             if (isStaticColor(drawOptions.turtlesColor)) {
                 viewOptions.turtles.options.color = drawOptions.turtlesColor
             }
+        }
+        const meshShapes = ['Dart3D', 'Cone', 'Cube', 'Cylinder', 'Sphere']
+        if (meshShapes.includes(drawOptions.turtlesShape)) {
+            viewOptions.turtles = {
+                meshClass: 'Obj3DMesh',
+                options: { pointSize: drawOptions.turtlesSize }, // , z: 1.5
+            }
+            // If color static, set the mesh's color option, avoiding color buffer.
+            // if (isStaticColor(drawOptions.turtlesColor)) {
+            //     viewOptions.turtles.options.color = drawOptions.turtlesColor
+            // }
         }
 
         super(model.world, viewOptions)
@@ -115,9 +129,9 @@ export default class ThreeDraw extends ThreeView {
 
         if (view.ticks === 0) {
             if (typeof turtlesMap === 'string')
-                turtlesMap = ColorMap[turtlesMap]
+                this.drawOptions.turtlesMap = turtlesMap = ColorMap[turtlesMap]
             if (typeof patchesMap === 'string')
-                patchesMap = ColorMap[patchesMap]
+                this.drawOptions.patchesMap = patchesMap = ColorMap[patchesMap]
 
             if (initPatches) {
                 // colors is an array of typedColors or pixels:
