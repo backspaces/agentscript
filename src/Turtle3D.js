@@ -112,6 +112,7 @@ export default class Turtle3D extends Turtle {
         let [x, y, z] = this.getxyz()
         // Object.assign(this, { x, y, z })
         super.setxy(x, y, z)
+        // this.obj3d.translateX(d)
     }
 
     // Also used by turtles.create()

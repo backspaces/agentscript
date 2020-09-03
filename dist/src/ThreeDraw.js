@@ -64,24 +64,26 @@ export default class ThreeDraw extends ThreeView {
         if (drawOptions.turtlesShape === 'point') {
             viewOptions.turtles = {
                 meshClass: 'PointsMesh',
-                options: { pointSize: drawOptions.turtlesSize }, // , z: 1.5
+                // options: { pointSize: drawOptions.turtlesSize }, // , z: 1.5
+                pointSize: drawOptions.turtlesSize, // , z: 1.5
             }
             // If color static, set the mesh's color option, avoiding color buffer.
             if (isStaticColor(drawOptions.turtlesColor)) {
-                viewOptions.turtles.options.color = drawOptions.turtlesColor
+                // viewOptions.turtles.options.color = drawOptions.turtlesColor
+                viewOptions.turtles.color = drawOptions.turtlesColor
             }
         }
-        const meshShapes = ['Dart3D', 'Cone', 'Cube', 'Cylinder', 'Sphere']
-        if (meshShapes.includes(drawOptions.turtlesShape)) {
-            viewOptions.turtles = {
-                meshClass: 'Obj3DMesh',
-                options: { pointSize: drawOptions.turtlesSize }, // , z: 1.5
-            }
-            // If color static, set the mesh's color option, avoiding color buffer.
-            // if (isStaticColor(drawOptions.turtlesColor)) {
-            //     viewOptions.turtles.options.color = drawOptions.turtlesColor
-            // }
-        }
+        // const meshShapes = ['Dart3D', 'Cone', 'Cube', 'Cylinder', 'Sphere']
+        // if (meshShapes.includes(drawOptions.turtlesShape)) {
+        //     viewOptions.turtles = {
+        //         meshClass: 'Obj3DMesh',
+        //         // options: { pointSize: drawOptions.turtlesSize }, // , z: 1.5
+        //     }
+        //     // If color static, set the mesh's color option, avoiding color buffer.
+        //     // if (isStaticColor(drawOptions.turtlesColor)) {
+        //     //     viewOptions.turtles.options.color = drawOptions.turtlesColor
+        //     // }
+        // }
 
         super(model.world, viewOptions)
 

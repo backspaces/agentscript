@@ -4,7 +4,7 @@ import SpriteSheet from './SpriteSheet.js'
 import PatchesView from './PatchesView.js'
 import ThreeMeshes from './ThreeMeshes.js'
 
-import { THREE, OrbitControls } from '../vendor/three.esm.js'
+import { THREE, OrbitControls, Stats } from '../vendor/three.esm.js'
 // import * as THREE from 'https://unpkg.com/three@0.118.3/build/three.module.js'
 // import { OrbitControls } from 'https://unpkg.com/three@0.118.3/examples/jsm/controls/OrbitControls.js'
 
@@ -20,6 +20,8 @@ export default class ThreeView {
             useAxes: useThreeHelpers, // show x,y,z axes
             useGrid: useThreeHelpers, // show x,y plane
             useControls: useThreeHelpers, // navigation. REMIND: control name?
+            useStats: useThreeHelpers, // stats fps ui
+            useLights: false, // maybe should be mesh option? not view?
             // REMIND: put in quadsprite options, defaulting to 64
             spriteSize: 64,
             patches: {
@@ -44,10 +46,12 @@ export default class ThreeView {
     constructor(
         // div = document.body,
         world = World.defaultOptions(),
-        options = {} // ThreeView.defaultOptions()
+        options = {} // overrides of defaultOptions
     ) {
         // options: override defaults:
         options = Object.assign(ThreeView.defaultOptions(), options)
+        options.useLights =
+            options.useLights || options.turtles.meshClass === 'Obj3DMesh'
 
         // this.div = options.div
         // if (util.isString(this.div))
@@ -116,7 +120,8 @@ export default class ThreeView {
             10000
         )
         // perspectiveCam.position.set(width + centerX, -width - centerY, width)
-        perspectiveCam.position.set(width, -width, width)
+        // perspectiveCam.position.set(width, -width, width)
+        perspectiveCam.position.set(width, width, width)
         // perspectiveCam.lookAt(new THREE.Vector3(centerX, centerY, 0))
         perspectiveCam.up.set(0, 0, 1)
 
@@ -199,9 +204,15 @@ export default class ThreeView {
         return durl
     }
     initThreeHelpers() {
-        const { scene, renderer, camera } = this
+        const { scene, renderer, camera, world } = this
         // const {useAxes, useGrid, useControls, useStats, useGUI} = this
-        const { useAxes, useGrid, useControls } = this.options
+        const {
+            useAxes,
+            useGrid,
+            useControls,
+            useStats,
+            useLights,
+        } = this.options
         const { width } = this.world
         const helpers = {}
 
@@ -218,8 +229,23 @@ export default class ThreeView {
             // helpers.controls = new THREE.OrbitControls(
             helpers.controls = new OrbitControls(camera, renderer.domElement)
         }
+        if (useStats) {
+            helpers.stats = new Stats()
+            document.body.appendChild(helpers.stats.dom)
+        }
+        if (useLights) {
+            const width = world.width
 
-        Object.assign(this, helpers)
+            helpers.directionalLight = new THREE.DirectionalLight(0xffffff, 1)
+            helpers.directionalLight.position.set(width, width, width)
+            scene.add(helpers.directionalLight)
+
+            helpers.diffuseLight = new THREE.AmbientLight(0x404040) // soft white light
+            scene.add(helpers.diffuseLight)
+        }
+
+        this.helpers = helpers
+        // Object.assign(this, helpers)
     }
 
     initMeshes() {
@@ -227,7 +253,7 @@ export default class ThreeView {
         util.forLoop(this.options, (val, key) => {
             if (val.meshClass) {
                 const Mesh = ThreeMeshes[val.meshClass]
-                const options = val.options // null ok
+                const options = val // val.options // null ok
                 // const options = Mesh.options() // default options
                 // // override by user's
                 // if (val.options) Object.assign(options, val.options)
@@ -251,6 +277,7 @@ export default class ThreeView {
         // REMIND: generalize.
         this.renderer.render(this.scene, this.camera)
         this.ticks++
+        if (this.helpers.stats) this.helpers.stats.update()
         // if (this.view.stats) this.view.stats.update()
     }
 
@@ -271,7 +298,8 @@ export default class ThreeView {
     }
     // drawPatchesImage(img) {
     drawPatchesImage(img) {
-        this.meshes.patches.options.textureOptions = {
+        // this.meshes.patches.options.textureOptions = {
+        this.meshes.patches.textureOptions = {
             minFilter: THREE.NearestFilter,
             magFilter: THREE.LinearFilter,
         }

@@ -7,7 +7,20 @@
         <script type="module">
             import util from '../src/util.js'
             import ThreeDraw from '../src/ThreeDraw.js'
-            import Model from '../models/HelloModel.js'
+            import Model from '../models/Hello3DModel.js'
+
+            const drawOptions = {
+                // turtlesShape: 'dart',
+                // turtlesShape: 'point',
+                turtlesShape: 'Dart3D',
+                // turtlesShape: 'Sphere',
+
+                turtlesColor: 'random',
+                // turtlesColor: 'red',
+                turtlesSize: 3,
+
+                turtlesMap: 'Bright16',
+            }
 
             async function run() {
                 const model = new Model()

@@ -450,7 +450,8 @@ export class Obj3DMesh extends BaseMesh {
             },
             z: 2.0,
             colorType: 'webgl',
-            size: 2,
+            // size: 2,
+            useAxes: false,
         }
     }
     init() {
@@ -470,10 +471,13 @@ export class Obj3DMesh extends BaseMesh {
         // geometry.scale(size, size, size)
 
         color = new THREE.Color(...meshColor(color, this))
-        const material = new THREE.MeshBasicMaterial({ color })
+        // const material = new THREE.MeshBasicMaterial({ color })
+        const material = this.view.options.useLights
+            ? new THREE.MeshPhongMaterial({ color })
+            : new THREE.MeshBasicMaterial({ color })
         const mesh = new THREE.Mesh(geometry, material)
+        // if (this.view.useTurtleAxes) mesh.add(new THREE.AxesHelper(1))
 
-        // const size = this.options.size
         if (size !== 1) mesh.scale.set(size, size, size)
 
         this.scene.add(mesh)
@@ -485,6 +489,7 @@ export class Obj3DMesh extends BaseMesh {
             if (!mesh) {
                 const view = viewFcn(agent, i)
                 mesh = this.newMesh(view.shape, view.color, view.size)
+                if (this.options.useAxes) mesh.add(new THREE.AxesHelper(1))
                 mesh.position.order = 'ZYX'
                 this.meshes[agent.id] = mesh
             }
