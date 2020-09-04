@@ -62,6 +62,12 @@
         })
 
         const gui = new GUI()
+        const reset = () => {
+            // setup for NL
+            turtle.reset()
+            turtle.left(util.degToRad(90))
+        }
+        reset()
         const controls = {
             ThetaPhiPsi: '0, 0, 0',
             HeadingPitchRoll: '0, 0, 0',
@@ -69,7 +75,7 @@
             angle: 45,
             speed: 5,
 
-            reset: () => turtle.reset(),
+            reset: () => reset(),
             forward: () => turtle.forward(controls.speed),
             backward: () => turtle.forward(-controls.speed),
             lookAt: () => turtle.face(target.position),

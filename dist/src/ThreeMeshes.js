@@ -460,7 +460,7 @@ export class Obj3DMesh extends BaseMesh {
         if (this.meshes) util.forLoop(this.meshes, mesh => disposeMesh(mesh))
         this.meshes = []
     }
-    newMesh(geometryName = 'Default', color = 'red', size = 1) {
+    newMesh(geometryName = 'Dart3D', color = 'red', size = 1) {
         // let geometry = this.options.geometries[geometryName]
         if (geometryName === 'random') geometryName = util.oneKeyOf(geometries)
         let geometry = geometries[geometryName]

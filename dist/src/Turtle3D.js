@@ -37,7 +37,7 @@ export default class Turtle3D extends Turtle {
     reset() {
         this.obj3d.position.set(0, 0, 0)
         this.obj3d.rotation.set(0, 0, 0)
-        this.left(degToRad(90))
+        // this.left(degToRad(90)) // moved to nav.html
     }
 
     setxyz(x, y, z) {
