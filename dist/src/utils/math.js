@@ -97,53 +97,53 @@ export function lerpScale(number, lo, hi) {
 // Note: quantity, not coord system xfm
 const toDegrees = 180 / PI
 const toRadians = PI / 180
-export const radians = degrees => degrees * toRadians
-export const degrees = radians => radians * toDegrees
+export const radians = degrees => mod2pi(degrees * toRadians)
+export const degrees = radians => mod360(radians * toDegrees)
 
 // Better names and format for arrays. Change above?
-export const degToRad = degrees => degrees * toRadians
+export const degToRad = degrees => mod2pi(degrees * toRadians)
 export const degToRadAll = array => array.map(deg => degToRad(deg))
 
-export const radToDeg = radians => radians * toDegrees
+export const radToDeg = radians => mod360(radians * toDegrees)
 export const radToDegAll = array => array.map(rad => radToDeg(rad))
 
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
 // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
 export function angleToHeading(radians) {
-    const deg = degrees(radians)
+    const deg = radians * toDegrees
     return mod(90 - deg, 360)
 }
 export function headingToAngle(heading) {
     const deg = mod(90 - heading, 360)
-    return radians(deg)
+    return deg * toRadians
 }
 
-export function modHeading(heading) {
-    return mod(heading, 360)
+export function mod360(degrees) {
+    return mod(degrees, 360)
 }
-export function modAngle(angle) {
+export function mod2pi(angle) {
     return mod(angle, 2 * PI)
 }
 
 export function headingsEqual(heading1, heading2) {
-    return modHeading(heading1) === modHeading(heading2)
+    return mod360(heading1) === mod360(heading2)
 }
 export function anglesEqual(angle1, angle2) {
-    return modAngle(angle1) === modAngle(angle2)
+    return mod2pi(angle1) === mod2pi(angle2)
 }
 
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
 export function subtractRadians(rad1, rad0) {
     // let dr = mod(rad1 - rad0, 2 * PI)
-    let dr = modAngle(rad1 - rad0)
+    let dr = mod2pi(rad1 - rad0)
     if (dr > PI) dr = dr - 2 * PI
     return dr
 }
 // Above using headings (degrees) returning degrees in (-180, 180]
 export function subtractHeadings(deg1, deg0) {
-    let dAngle = modHeading(deg1 - deg0)
+    let dAngle = mod360(deg1 - deg0)
     if (dAngle > 180) dAngle = dAngle - 360
     return dAngle
 }
@@ -157,10 +157,13 @@ export function headingToward(x, y, x1, y1) {
 }
 
 // Return distance between (x, y), (x1, y1)
+export const sqDistance = (x, y, x1, y1) => (x - x1) ** 2 + (y - y1) ** 2
 export const distance = (x, y, x1, y1) => Math.sqrt(sqDistance(x, y, x1, y1))
-// Return squared distance .. i.e. avoid Math.sqrt. Faster comparisons
-export const sqDistance = (x, y, x1, y1) =>
-    (x - x1) * (x - x1) + (y - y1) * (y - y1)
+
+export const sqDistance3 = (x, y, z, x1, y1, z1) =>
+    (x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2
+export const distance3 = (x, y, z, x1, y1, z1) =>
+    Math.sqrt(sqDistance(x, y, z, x1, y1, z1))
 
 // Return true if x,y is within cone.
 // Cone: origin x0,y0 in direction angle, with coneAngle width in radians.

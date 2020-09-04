@@ -50,6 +50,8 @@
                 array = util.precision(array, 2)
                 return array.toString().replace(/,/g, ', ')
             }
+
+            controls.HeadingPitchRoll = fmt(turtle.getHeadingPitchRoll())
             controls.ThetaPhiPsi = fmt(
                 util.radToDegAll(turtle.getThetaPhiPsi())
             )
@@ -62,6 +64,7 @@
         const gui = new GUI()
         const controls = {
             ThetaPhiPsi: '0, 0, 0',
+            HeadingPitchRoll: '0, 0, 0',
             Position: '0, 0, 0',
             angle: 45,
             speed: 5,
@@ -83,6 +86,7 @@
         util.toWindow({ gui, controls })
 
         gui.add(controls, 'ThetaPhiPsi').listen()
+        gui.add(controls, 'HeadingPitchRoll').listen()
         gui.add(controls, 'Position').listen()
         gui.add(controls, 'angle', 0, 90, 5)
         gui.add(controls, 'speed', 0, 20, 5)

@@ -34,12 +34,17 @@
         util.toWindow({ renderer, camera, scene })
         utils3.addModelHelpers(renderer, scene, camera, model)
 
-        const geometry = utils3.turtleGeometry()
+        // const geometry = utils3.turtleGeometry()
+        const geometry = new THREE.ConeBufferGeometry(0.5)
         geometry.scale(turtlesSize, turtlesSize, turtlesSize)
+        geometry.rotateZ(util.degToRad(-90))
+
         model.turtles.ask(t => {
             const color = new THREE.Color(...colorMap.atIndex(t.id).webgl)
             const material = new THREE.MeshPhongMaterial({ color })
             const mesh = new THREE.Mesh(geometry, material)
+
+            mesh.add(new THREE.AxesHelper(turtlesSize))
             scene.add(mesh)
             meshes.push(mesh)
         })

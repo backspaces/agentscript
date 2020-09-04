@@ -6,7 +6,7 @@ import util from './util.js'
 // The data array can be a TypedArray or a javascript Array
 // Notice that it is very much like an ImageData object!
 
-class DataSet {
+export default class DataSet {
     // **Static methods:** called via DataSet.foo(), similar to Math.foo().
     // Generally useful utilities for use with TypedArrays & JS Arrays
 
@@ -468,4 +468,4 @@ class DataSet {
     }
 }
 
-export default DataSet
+// export default DataSet

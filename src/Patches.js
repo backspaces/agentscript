@@ -5,7 +5,7 @@ import DataSet from './DataSet.js'
 
 // Patches are the world other agentsets live on. They create a coord system
 // from Model's world values: minX, maxX, minY, maxY
-class Patches extends AgentSet {
+export default class Patches extends AgentSet {
     constructor(model, AgentClass, name) {
         // AgentSet sets these variables:
         // model, name, baseSet, world: model.world, agentProto: new AgentClass
@@ -299,4 +299,4 @@ class Patches extends AgentSet {
     }
 }
 
-export default Patches
+// export default Patches

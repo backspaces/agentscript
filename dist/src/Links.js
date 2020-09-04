@@ -1,7 +1,7 @@
 import AgentSet from './AgentSet.js'
 
 // Links are a collection of all the Link objects between turtles.
-class Links extends AgentSet {
+export default class Links extends AgentSet {
     // Use AgentSeet ctor: constructor (model, AgentClass, name)
 
     // Factories:
@@ -34,4 +34,4 @@ class Links extends AgentSet {
     }
 }
 
-export default Links
+// export default Links

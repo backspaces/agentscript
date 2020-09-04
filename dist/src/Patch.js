@@ -12,7 +12,7 @@ import AgentArray from './AgentArray.js'
 // The flyweight Patch objects are created via Object.create(protoObject),
 // This lets the new Patch(agentset) object be "defaults".
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
-class Patch {
+export default class Patch {
     static defaultVariables() {
         // Core variables for patches.
         return {
@@ -108,4 +108,4 @@ class Patch {
     }
 }
 
-export default Patch
+// export default Patch

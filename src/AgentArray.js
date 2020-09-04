@@ -4,7 +4,7 @@ import util from './util.js'
 // Tipically the items in the array are Objects, NetLogo Agents,
 // but generally useful as an ArrayPlus
 
-class AgentArray extends Array {
+export default class AgentArray extends Array {
     // Convert an Array to an AgentArray "in place".
     // Use array.slice() if a new array is wanted
     static fromArray(array) {
@@ -372,4 +372,4 @@ class AgentArray extends Array {
     }
 }
 
-export default AgentArray
+// export default AgentArray

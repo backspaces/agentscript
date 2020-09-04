@@ -32,6 +32,7 @@ function disposeMesh(mesh) {
 }
 
 const zMultiplier = 0.25
+const PI = Math.PI
 
 // function centerMesh(obj) {
 //     // const {centerX, centerY} = obj.world
@@ -433,21 +434,21 @@ export class LinksMesh extends BaseMesh {
 }
 
 // ============= Obj3DMesh =============
+const geometries = {
+    // Use functions .. allows geo scale/rotate etc
+    // Default: () => turtleGeometry(),
+    Dart3D: () => turtleGeometry(),
+    Cone: () => new THREE.ConeBufferGeometry(0.5).rotateZ(-PI / 2),
+    Cube: () => new THREE.BoxBufferGeometry(),
+    Cylinder: () =>
+        new THREE.CylinderBufferGeometry(0.5, 0.5, 1).rotateZ(-PI / 2),
+    Sphere: () => new THREE.SphereBufferGeometry(0.5),
+}
 
 export class Obj3DMesh extends BaseMesh {
     static options() {
         return {
-            // color: null,
-            // REMIND: Move to ThreeView? Alow user meshes.
-            // REMIND: use functions .. allows geo scale/rotate etc
-            geometries: {
-                Default: turtleGeometry(),
-                Dart3D: turtleGeometry(),
-                Cone: new THREE.ConeBufferGeometry(0.5),
-                Cube: new THREE.BoxBufferGeometry(),
-                Cylinder: new THREE.CylinderBufferGeometry(0.5, 0.5, 1),
-                Sphere: new THREE.SphereBufferGeometry(0.5),
-            },
+            // color: null, // if const color, can share materials
             z: 2.0,
             colorType: 'webgl',
             // size: 2,
@@ -459,26 +460,31 @@ export class Obj3DMesh extends BaseMesh {
         if (this.meshes) util.forLoop(this.meshes, mesh => disposeMesh(mesh))
         this.meshes = []
     }
-    newMesh(geometryName = 'Default', color = 'red', size = 1) {
-        let geometry = this.options.geometries[geometryName]
+    newMesh(geometryName = 'Dart3D', color = 'red', size = 1) {
+        // let geometry = this.options.geometries[geometryName]
+        if (geometryName === 'random') geometryName = util.oneKeyOf(geometries)
+        let geometry = geometries[geometryName]
         if (!geometry) {
             console.log('Geometry not found: ', geometryName, '..using Default')
-            geometryName = 'Default'
-            geometry = this.options.geometries[geometryName]
+            geometryName = 'Dart3D'
+            // geometry = this.options.geometries[geometryName]
+            geometry = geometries[geometryName]
         }
-
-        // const size = this.options.size
-        // geometry.scale(size, size, size)
+        geometry = geometry()
+        if (size !== 1) geometry.scale(size, size, size)
+        // geometry.scale(turtlesSize, turtlesSize, turtlesSize)
+        // if (['Cone', 'Cylinder']) geometry.rotateZ(util.degToRad(-90))
+        // geometry.rotateZ(-PI / 2)
 
         color = new THREE.Color(...meshColor(color, this))
-        // const material = new THREE.MeshBasicMaterial({ color })
         const material = this.view.options.useLights
             ? new THREE.MeshPhongMaterial({ color })
             : new THREE.MeshBasicMaterial({ color })
-        const mesh = new THREE.Mesh(geometry, material)
-        // if (this.view.useTurtleAxes) mesh.add(new THREE.AxesHelper(1))
 
-        if (size !== 1) mesh.scale.set(size, size, size)
+        const mesh = new THREE.Mesh(geometry, material)
+        mesh.rotation.order = 'ZYX'
+        // if (size !== 1) mesh.scale.set(size, size, size)
+        if (this.options.useAxes) mesh.add(new THREE.AxesHelper(size))
 
         this.scene.add(mesh)
         return mesh
@@ -489,8 +495,6 @@ export class Obj3DMesh extends BaseMesh {
             if (!mesh) {
                 const view = viewFcn(agent, i)
                 mesh = this.newMesh(view.shape, view.color, view.size)
-                if (this.options.useAxes) mesh.add(new THREE.AxesHelper(1))
-                mesh.position.order = 'ZYX'
                 this.meshes[agent.id] = mesh
             }
             // const { x, y, z, obj3d } = agent
@@ -499,22 +503,7 @@ export class Obj3DMesh extends BaseMesh {
             mesh.position.set(pos.x, pos.y, pos.z)
             const rot = obj3d.rotation
             mesh.rotation.set(rot.x, rot.y, rot.z)
-            // if (colors) {
-            //     const color = meshColor(viewFcn(agent, i).color, this)
-            //     colors.push(...color, ...color)
-            // }
         })
-        // this.mesh.geometry.setAttribute(
-        //     'position',
-        //     new THREE.Float32BufferAttribute(vertices, 3)
-        // )
-
-        // if (colors) {
-        //     this.mesh.geometry.setAttribute(
-        //         'color',
-        //         new THREE.Float32BufferAttribute(colors, 3)
-        //     )
-        // }
     }
 }
 

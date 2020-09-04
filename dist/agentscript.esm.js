@@ -788,53 +788,53 @@ function lerpScale(number, lo, hi) {
 // Note: quantity, not coord system xfm
 const toDegrees = 180 / PI$1;
 const toRadians = PI$1 / 180;
-const radians$1 = degrees => degrees * toRadians;
-const degrees$1 = radians => radians * toDegrees;
+const radians$1 = degrees => mod2pi(degrees * toRadians);
+const degrees$1 = radians => mod360(radians * toDegrees);
 
 // Better names and format for arrays. Change above?
-const degToRad = degrees => degrees * toRadians;
+const degToRad = degrees => mod2pi(degrees * toRadians);
 const degToRadAll = array => array.map(deg => degToRad(deg));
 
-const radToDeg = radians => radians * toDegrees;
+const radToDeg = radians => mod360(radians * toDegrees);
 const radToDegAll = array => array.map(rad => radToDeg(rad));
 
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
 // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
 function angleToHeading(radians) {
-    const deg = degrees$1(radians);
+    const deg = radians * toDegrees;
     return mod(90 - deg, 360)
 }
 function headingToAngle(heading) {
     const deg = mod(90 - heading, 360);
-    return radians$1(deg)
+    return deg * toRadians
 }
 
-function modHeading(heading) {
-    return mod(heading, 360)
+function mod360(degrees) {
+    return mod(degrees, 360)
 }
-function modAngle(angle) {
+function mod2pi(angle) {
     return mod(angle, 2 * PI$1)
 }
 
 function headingsEqual(heading1, heading2) {
-    return modHeading(heading1) === modHeading(heading2)
+    return mod360(heading1) === mod360(heading2)
 }
 function anglesEqual(angle1, angle2) {
-    return modAngle(angle1) === modAngle(angle2)
+    return mod2pi(angle1) === mod2pi(angle2)
 }
 
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
 function subtractRadians(rad1, rad0) {
     // let dr = mod(rad1 - rad0, 2 * PI)
-    let dr = modAngle(rad1 - rad0);
+    let dr = mod2pi(rad1 - rad0);
     if (dr > PI$1) dr = dr - 2 * PI$1;
     return dr
 }
 // Above using headings (degrees) returning degrees in (-180, 180]
 function subtractHeadings(deg1, deg0) {
-    let dAngle = modHeading(deg1 - deg0);
+    let dAngle = mod360(deg1 - deg0);
     if (dAngle > 180) dAngle = dAngle - 360;
     return dAngle
 }
@@ -848,10 +848,13 @@ function headingToward(x, y, x1, y1) {
 }
 
 // Return distance between (x, y), (x1, y1)
+const sqDistance = (x, y, x1, y1) => (x - x1) ** 2 + (y - y1) ** 2;
 const distance = (x, y, x1, y1) => Math.sqrt(sqDistance(x, y, x1, y1));
-// Return squared distance .. i.e. avoid Math.sqrt. Faster comparisons
-const sqDistance = (x, y, x1, y1) =>
-    (x - x1) * (x - x1) + (y - y1) * (y - y1);
+
+const sqDistance3 = (x, y, z, x1, y1, z1) =>
+    (x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2;
+const distance3 = (x, y, z, x1, y1, z1) =>
+    Math.sqrt(sqDistance(x, y, z, x1));
 
 // Return true if x,y is within cone.
 // Cone: origin x0,y0 in direction angle, with coneAngle width in radians.
@@ -889,16 +892,18 @@ var math = /*#__PURE__*/Object.freeze({
     radToDegAll: radToDegAll,
     angleToHeading: angleToHeading,
     headingToAngle: headingToAngle,
-    modHeading: modHeading,
-    modAngle: modAngle,
+    mod360: mod360,
+    mod2pi: mod2pi,
     headingsEqual: headingsEqual,
     anglesEqual: anglesEqual,
     subtractRadians: subtractRadians,
     subtractHeadings: subtractHeadings,
     radiansToward: radiansToward,
     headingToward: headingToward,
-    distance: distance,
     sqDistance: sqDistance,
+    distance: distance,
+    sqDistance3: sqDistance3,
+    distance3: distance3,
     inCone: inCone
 });
 
@@ -1838,6 +1843,8 @@ class AgentArray extends Array {
     }
 }
 
+// export default AgentArray
+
 // import util from './util.js'
 
 // AgentSets are arrays that are factories for their own agents/objects.
@@ -2188,6 +2195,8 @@ class AgentSet extends AgentArray {
     //     return result
     // }
 }
+
+// export default AgentSet
 
 // A **DataSet** is an object with width/height and an array
 // whose length = width * height
@@ -2657,6 +2666,8 @@ class DataSet {
     }
 }
 
+// export default DataSet
+
 // Class Link instances form a link between two turtles, forming a graph.
 // Flyweight object creation, see Patch/Patches.
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
@@ -2731,6 +2742,8 @@ class Link {
     }
 }
 
+// export default Link
+
 // Links are a collection of all the Link objects between turtles.
 class Links extends AgentSet {
     // Use AgentSeet ctor: constructor (model, AgentClass, name)
@@ -2764,6 +2777,8 @@ class Links extends AgentSet {
         }) // REMIND: return single link if to not an array?
     }
 }
+
+// export default Links
 
 // class World defines the coordinate system for the model.
 // It will be upgraded with methods converting from other
@@ -3267,6 +3282,8 @@ class Patches extends AgentSet {
     }
 }
 
+// export default Patches
+
 // Class Patch instances represent a rectangle on a grid.  They hold variables
 // that are in the patches the turtles live on.  The set of all patches
 // is the world on which the turtles live and the model runs.
@@ -3374,6 +3391,8 @@ class Patch {
     }
 }
 
+// export default Patch
+
 // Turtles are the world other agentsets live on. They create a coord system
 // from Model's world values: size, minX, maxX, minY, maxY
 class Turtles extends AgentSet {
@@ -3472,6 +3491,8 @@ class Turtles extends AgentSet {
         });
     }
 }
+
+// export default Turtles
 
 // import Color from './Color.js'
 
@@ -3864,5 +3885,7 @@ class RGBDataSet extends DataSet {
         }
     }
 }
+
+// export default RGBDataSet
 
 export { AgentArray, AgentSet, DataSet, Link, Links, Model, Patch, Patches, RGBDataSet, Turtle, Turtles, World, gis, util };

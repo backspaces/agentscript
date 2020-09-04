@@ -7,7 +7,7 @@ import AgentArray from './AgentArray.js'
 // Names: AgentSets are NetLogo collections: Patches, Turtles, and Links.
 // Agent is an object in an AgentSet: Patch, Turtle, Link.
 
-class AgentSet extends AgentArray {
+export default class AgentSet extends AgentArray {
     // Magic to return AgentArray's rather than AgentSets
     // Symbol.species: https://goo.gl/Zsxwxd
     static get [Symbol.species]() {
@@ -350,4 +350,4 @@ class AgentSet extends AgentArray {
     // }
 }
 
-export default AgentSet
+// export default AgentSet

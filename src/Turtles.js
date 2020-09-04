@@ -4,7 +4,7 @@ import AgentSet from './AgentSet.js'
 
 // Turtles are the world other agentsets live on. They create a coord system
 // from Model's world values: size, minX, maxX, minY, maxY
-class Turtles extends AgentSet {
+export default class Turtles extends AgentSet {
     // Factories:
     // Add 1 or more turtles.
     // Can be a single turtle or an array of turtles. The optional init
@@ -101,4 +101,4 @@ class Turtles extends AgentSet {
     }
 }
 
-export default Turtles
+// export default Turtles

@@ -5,6 +5,7 @@
 import util from './util.js'
 
 const Color = {
+    // export default Color = {
     // ### CSS Color Strings.
 
     // CSS colors in HTML are strings, see [Mozillas Color Reference](

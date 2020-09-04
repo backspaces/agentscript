@@ -1,5 +1,5 @@
 import Turtle from './Turtle.js'
-// import { radToDeg, degToRad } from './utils/math.js'
+import { radToDeg, degToRad, mod } from './utils/math.js'
 import { Object3D } from '../vendor/Object3D.esm.js'
 
 export default class Turtle3D extends Turtle {
@@ -37,6 +37,7 @@ export default class Turtle3D extends Turtle {
     reset() {
         this.obj3d.position.set(0, 0, 0)
         this.obj3d.rotation.set(0, 0, 0)
+        this.left(degToRad(90))
     }
 
     setxyz(x, y, z) {
@@ -56,6 +57,13 @@ export default class Turtle3D extends Turtle {
     }
     getThetaPhiPsi() {
         return this.getRotation().reverse()
+    }
+    getHeadingPitchRoll() {
+        const [psi, phi, theta] = this.getRotation()
+        const heading = util.angleToHeading(theta)
+        const pitch = util.radToDeg(-phi)
+        const roll = util.radToDeg(psi)
+        return [heading, pitch, roll]
     }
     // REMIND: temporary.
     handleEdge(x, y, z) {

@@ -56,8 +56,8 @@ export default class ThreeHelloModel extends Model {
             }
 
             t.ypr.left(util.randomCentered(this.wiggle))
-            t.ypr.tiltUp(util.randomCentered(this.wiggle / 5))
-            t.ypr.rollLeft(util.randomCentered(this.wiggle / 5))
+            // t.ypr.tiltUp(util.randomCentered(this.wiggle / 5))
+            // t.ypr.rollLeft(util.randomCentered(this.wiggle / 5))
             t.ypr.forward(this.speed)
 
             t.theta = t.ypr.obj3d.rotation.z

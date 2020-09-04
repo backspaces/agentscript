@@ -8,7 +8,7 @@ import DataSet from './DataSet.js'
 // mapzen/amazon: (red * 256 + green + blue / 256) - 32768
 //      min = -32768; scale = 1/256
 
-class RGBDataSet extends DataSet {
+export default class RGBDataSet extends DataSet {
     static newRgbDataFunction(min, scale) {
         return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
     }
@@ -79,4 +79,4 @@ class RGBDataSet extends DataSet {
     }
 }
 
-export default RGBDataSet
+// export default RGBDataSet

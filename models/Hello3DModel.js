@@ -32,8 +32,6 @@ export default class Hello3DModel extends Model3D {
     step() {
         this.turtles.ask(t => {
             t.left(util.randomCentered(this.wiggle))
-            // t.tiltUp(util.randomCentered(this.wiggle))
-            // t.rollLeft(util.randomCentered(this.wiggle))
             t.forward(this.speed)
         })
     }

@@ -1,25 +1,18 @@
 <html>
     <head>
-        <title>hello</title>
+        <title>test</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
             import ThreeDraw from '../src/ThreeDraw.js'
-            import Model from '../models/Hello3DModel.js'
+            import Model from './TestModel.js'
 
             const drawOptions = {
-                // turtlesShape: 'dart',
-                // turtlesShape: 'point',
-                turtlesShape: 'Dart3D',
-                // turtlesShape: 'Sphere',
-
+                turtlesShape: 'random',
                 turtlesColor: 'random',
-                // turtlesColor: 'red',
-                turtlesSize: 3,
-
-                turtlesMap: 'Bright16',
+                turtlesSize: 2.5,
             }
 
             async function run() {
@@ -27,15 +20,23 @@
                 await model.startup()
                 model.setup()
 
-                // defalt drawOptions!
-                const view = new ThreeDraw(model, { div: 'modelDiv' })
+                const view = new ThreeDraw(
+                    model,
+                    {
+                        div: 'modelDiv',
+                        turtles: { meshClass: 'Obj3DMesh', useAxes: true },
+                    },
+                    drawOptions
+                )
+
+                util.toWindow({ util, model, view })
 
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         view.draw()
                     },
-                    500,
+                    -1, //500,
                     33
                 )
 
