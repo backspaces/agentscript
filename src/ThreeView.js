@@ -20,6 +20,7 @@ export default class ThreeView {
             useAxes: useThreeHelpers, // show x,y,z axes
             useGrid: useThreeHelpers, // show x,y plane
             useControls: useThreeHelpers, // navigation. REMIND: control name?
+            useWorldOutline: useThreeHelpers,
             useStats: useThreeHelpers, // stats fps ui
             useLights: false, // maybe should be mesh option? not view?
             // REMIND: put in quadsprite options, defaulting to 64
@@ -212,8 +213,9 @@ export default class ThreeView {
             useControls,
             useStats,
             useLights,
+            useWorldOutline,
         } = this.options
-        const { width } = this.world
+        const { width, height, depth, minZ } = this.world
         const helpers = {}
 
         if (useAxes) {
@@ -223,6 +225,7 @@ export default class ThreeView {
         if (useGrid) {
             helpers.grid = new THREE.GridHelper(1.25 * width, 10)
             helpers.grid.rotation.x = THREE.Math.degToRad(90)
+            helpers.grid.position.z = minZ
             scene.add(helpers.grid)
         }
         if (useControls) {
@@ -242,6 +245,15 @@ export default class ThreeView {
 
             helpers.diffuseLight = new THREE.AmbientLight(0x404040) // soft white light
             scene.add(helpers.diffuseLight)
+        }
+        if (useWorldOutline) {
+            const geometry = new THREE.BoxBufferGeometry(width, height, depth)
+            const edges = new THREE.EdgesGeometry(geometry)
+            helpers.outline = new THREE.LineSegments(
+                edges,
+                new THREE.LineBasicMaterial({ color: 0x80808080 })
+            )
+            scene.add(helpers.outline)
         }
 
         this.helpers = helpers

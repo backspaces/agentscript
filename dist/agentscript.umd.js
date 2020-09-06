@@ -2786,24 +2786,20 @@ out;`;
 
     // export default Links
 
-    // class World defines the coordinate system for the model.
-    // It will be upgraded with methods converting from other
-    // transforms like GIS and DataSets.
-
-    const defaultZ = (maxX, maxY) => Math.max(maxX, maxY);
-
     class World {
-        static defaultOptions(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+        static defaultOptions(maxX = 16, maxY = maxX, maxZ = maxX) {
             return {
                 minX: -maxX,
                 maxX: maxX,
                 minY: -maxY,
                 maxY: maxY,
-                minZ: 0, // minZ must be 0 for now
+                // minZ: 0, // minZ must be 0 for now
+                minZ: -maxZ, // minZ must be 0 for now
                 maxZ: maxZ,
             }
         }
-        static defaultWorld(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+        // static defaultWorld(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+        static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
             return new World(World.defaultOptions(maxX, maxY, maxZ))
         }
 

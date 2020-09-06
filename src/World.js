@@ -7,17 +7,19 @@ import util from './util.js'
 const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
 
 export default class World {
-    static defaultOptions(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+    static defaultOptions(maxX = 16, maxY = maxX, maxZ = maxX) {
         return {
             minX: -maxX,
             maxX: maxX,
             minY: -maxY,
             maxY: maxY,
-            minZ: 0, // minZ must be 0 for now
+            // minZ: 0, // minZ must be 0 for now
+            minZ: -maxZ, // minZ must be 0 for now
             maxZ: maxZ,
         }
     }
-    static defaultWorld(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+    // static defaultWorld(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+    static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
         return new World(World.defaultOptions(maxX, maxY, maxZ))
     }
 
