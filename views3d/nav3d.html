@@ -1,0 +1,131 @@
+<html>
+    <head>
+        <title>nav3d</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Model from '../models/Hello3DModel.js'
+            import dat from 'https://unpkg.com/dat.gui/build/dat.gui.module.js'
+
+            const degToRad = util.degToRad
+
+            const drawOptions = {
+                turtlesShape: 'Dart3D',
+                turtlesColor: 'red',
+                turtlesSize: 3,
+            }
+
+            async function run() {
+                const model = new Model()
+                model.population = 1
+                await model.startup()
+                model.setup()
+                const turtle = model.turtles[0]
+
+                const view = new ThreeDraw(
+                    model,
+                    {
+                        div: document.body, //'modelDiv',
+                        turtles: { meshClass: 'Obj3DMesh', useAxes: true },
+                    },
+                    drawOptions
+                )
+                view.perspectiveCam.position.set(0, 0, 1.5 * model.world.width)
+                view.helpers.controls.update()
+
+                util.toWindow({ util, model, view })
+
+                const step = runGui(turtle)
+
+                await util.timeoutLoop(
+                    () => {
+                        step()
+                        view.draw()
+                    },
+                    -1, //500,
+                    33 // 33
+                )
+            }
+            run()
+
+            function runGui(turtle) {
+                // const gui = new GUI()
+                const gui = new dat.GUI()
+                const reset = () => {
+                    turtle.reset()
+                    turtle.left(degToRad(90))
+                }
+
+                reset()
+                const controls = {
+                    ThetaPhiPsi: '0, 0, 0',
+                    HeadingPitchRoll: '0, 0, 0',
+                    Position: '0, 0, 0',
+                    angle: 45,
+                    speed: 5,
+
+                    reset: () => reset(),
+                    forward: () => turtle.forward(controls.speed),
+                    backward: () => turtle.forward(-controls.speed),
+                    lookAt: () => turtle.face(target.position),
+
+                    right: () => turtle.right(degToRad(controls.angle)),
+                    left: () => turtle.left(degToRad(controls.angle)),
+
+                    tiltUp: () => turtle.tiltUp(degToRad(controls.angle)),
+                    tiltDown: () => turtle.tiltDown(degToRad(controls.angle)),
+
+                    rollRight: () => turtle.rollRight(degToRad(controls.angle)),
+                    rollLeft: () => turtle.rollLeft(degToRad(controls.angle)),
+                }
+                util.toWindow({ gui, controls })
+
+                gui.add(controls, 'ThetaPhiPsi').listen()
+                gui.add(controls, 'HeadingPitchRoll').listen()
+                gui.add(controls, 'Position').listen()
+                gui.add(controls, 'angle', 0, 90, 5)
+                gui.add(controls, 'speed', 0, 20, 5)
+
+                gui.add(controls, 'reset')
+                gui.add(controls, 'forward')
+                gui.add(controls, 'backward')
+                gui.add(controls, 'lookAt')
+
+                const pitchFolder = gui.addFolder('rotateZ')
+                pitchFolder.open()
+                pitchFolder.add(controls, 'right')
+                pitchFolder.add(controls, 'left')
+
+                const tiltFolder = gui.addFolder('rotateY')
+                tiltFolder.open()
+                tiltFolder.add(controls, 'tiltUp')
+                tiltFolder.add(controls, 'tiltDown')
+
+                const rollFolder = gui.addFolder('rotateX')
+                rollFolder.open()
+                rollFolder.add(controls, 'rollRight')
+                rollFolder.add(controls, 'rollLeft')
+
+                function step() {
+                    function fmt(array) {
+                        array = util.precision(array, 2)
+                        return array.toString().replace(/,/g, ', ')
+                    }
+
+                    controls.HeadingPitchRoll = fmt(
+                        turtle.getHeadingPitchRoll()
+                    )
+                    controls.ThetaPhiPsi = fmt(
+                        util.radToDegAll(turtle.getThetaPhiPsi())
+                    )
+                    controls.Position = fmt(turtle.getxyz())
+                }
+                return step
+            }
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

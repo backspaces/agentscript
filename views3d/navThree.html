@@ -22,7 +22,8 @@
         model.population = 1
         model.setup()
         const turtle = model.turtles[0]
-        turtle.reset()
+        // turtle.reset()
+
         util.toWindow({ THREE, util, model, utils3, turtle })
 
         const canvas = document.querySelector('#can')
@@ -43,6 +44,7 @@
 
         const target = utils3.addMesh(scene, 'Sphere')
         target.position.set(10, -10, 10)
+
         util.toWindow({ renderer, camera, scene, mesh, target })
 
         utils3.animate(renderer, scene, camera, () => {
