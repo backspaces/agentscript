@@ -8,6 +8,7 @@
             import util from '../src/util.js'
             import ThreeDraw from '../src/ThreeDraw.js'
             import Model from '../models/Hello3DModel.js'
+            import * as utils3 from './threeUtils.js'
             import dat from 'https://unpkg.com/dat.gui/build/dat.gui.module.js'
 
             const degToRad = util.degToRad
@@ -52,12 +53,13 @@
             run()
 
             function runGui(turtle) {
-                // const gui = new GUI()
                 const gui = new dat.GUI()
                 const reset = () => {
                     turtle.reset()
                     turtle.left(degToRad(90))
                 }
+                const target = utils3.addMesh(view.scene, 'Sphere')
+                target.position.set(10, -10, 10)
 
                 reset()
                 const controls = {
