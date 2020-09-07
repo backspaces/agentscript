@@ -47,6 +47,7 @@ Our directory layout is:
 -   [gis/](https://github.com/backspaces/agentscript/tree/master/gis): Sample gis examples, inserting models into maps
 -   [views2/](https://github.com/backspaces/agentscript/tree/master/views2): 2D Canvas views of all the models/
 -   [views3/](https://github.com/backspaces/agentscript/tree/master/views3): Three.js views of all the models/
+-   [views3d/](https://github.com/backspaces/agentscript/tree/master/views3d): Three.js views of all the models/ using true 3D methods and Three 3D meshes.
 
 ### Developer directories:
 
@@ -75,13 +76,19 @@ The views3 onepagers import models from the models/ dir and add a Three.js webgl
 
 [views3](./views3/README.md)
 
-The gis onepagers use gis & mapbox utilities to create and view models running on maps with geojson data.
+The views3d onepagers import models from the models/ dir and add a Three.js webgl 3D view.
+
+[views3d](./views3d/README.md)
+
+The views3d onepagers are similar to the views3 onepagers. It differs from views3 in that these use true 3D via [src/Model3D.js](https://github.com/backspaces/agentscript/blob/master/src/Model3D.js) and [src/Turtle3D.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle3D.js) subclasses.
 
 [gis](./gis/README.md)
 
-The docs onepagers are a series of tutorials, showing how to build, view and control simple models.
+The gis onepagers use gis & mapbox utilities to create and view models running on maps with geojson data.
 
 [docs](./docs/README.md)
+
+The docs onepagers are a series of tutorials, showing how to build, view and control simple models.
 
 ## Developer Information
 

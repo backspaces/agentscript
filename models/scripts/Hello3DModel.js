@@ -7,6 +7,7 @@ class Hello3DModel extends Model3D {
             population: 100,
             speed: 0.1, // patches per step
             wiggle: 0.1, // radians
+            linksToo: true, // handy to show just turtles if false
         }
     }
 
@@ -24,7 +25,7 @@ class Hello3DModel extends Model3D {
         })
 
         this.turtles.ask(t => {
-            if (this.population > 1)
+            if (this.linksToo && this.population > 1)
                 this.links.create(t, this.turtles.otherOneOf(t))
         })
     }

@@ -1,18 +1,18 @@
 <html>
     <head>
-        <title>test</title>
+        <title>wander3d</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import util from '../src/util.js'
             import ThreeDraw from '../src/ThreeDraw.js'
-            import Model from './TestModel.js'
+            import Model from '../models/Wander3DModel.js'
 
             const drawOptions = {
-                turtlesShape: 'random',
+                turtlesShape: 'Dart3D',
                 turtlesColor: 'random',
-                turtlesSize: 2.5,
+                turtlesSize: 3,
             }
 
             async function run() {
@@ -37,7 +37,7 @@
                         view.draw()
                     },
                     -1, //500,
-                    33
+                    33 // 33
                 )
 
                 view.idle()

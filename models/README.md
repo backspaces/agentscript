@@ -17,4 +17,5 @@ Code    | Run demo
 [tsp](https://github.com/backspaces/agentscript/tree/master/models/TspModel.js#L1) | [https://agentscript.org/models/run.html?tsp](https://agentscript.org/models/run.html?tsp)
 [virus](https://github.com/backspaces/agentscript/tree/master/models/VirusModel.js#L1) | [https://agentscript.org/models/run.html?virus](https://agentscript.org/models/run.html?virus)
 [wallFollower](https://github.com/backspaces/agentscript/tree/master/models/WallFollowerModel.js#L1) | [https://agentscript.org/models/run.html?wallFollower](https://agentscript.org/models/run.html?wallFollower)
+[wander3D](https://github.com/backspaces/agentscript/tree/master/models/Wander3DModel.js#L1) | [https://agentscript.org/models/run.html?wander3D](https://agentscript.org/models/run.html?wander3D)
 [water](https://github.com/backspaces/agentscript/tree/master/models/WaterModel.js#L1) | [https://agentscript.org/models/run.html?water](https://agentscript.org/models/run.html?water)
