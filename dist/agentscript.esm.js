@@ -2787,8 +2787,7 @@ class World {
             maxX: maxX,
             minY: -maxY,
             maxY: maxY,
-            // minZ: 0, // minZ must be 0 for now
-            minZ: -maxZ, // minZ must be 0 for now
+            minZ: -maxZ,
             maxZ: maxZ,
         }
     }

@@ -6,7 +6,8 @@ export default class Wander3DModel extends Model3D {
         return {
             population: 25,
             speed: 0.1, // patches per step
-            wiggle: 0.1, // radians
+            wiggle: 0.5, // radians, more than the usual 0.1, too chaotic!
+            rotateEvery: 15,
         }
     }
 
@@ -25,10 +26,13 @@ export default class Wander3DModel extends Model3D {
     }
 
     step() {
+        const doRotations = this.ticks % this.rotateEvery === 0
         this.turtles.ask(t => {
-            t.right(util.randomCentered(this.wiggle))
-            t.tiltUp(util.randomCentered(this.wiggle))
-            t.rollRight(util.randomCentered(this.wiggle))
+            if (doRotations) {
+                t.right(util.randomCentered(this.wiggle))
+                t.tiltUp(util.randomCentered(this.wiggle))
+                t.rollRight(util.randomCentered(this.wiggle))
+            }
             t.forward(this.speed)
         })
     }
