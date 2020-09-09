@@ -5,11 +5,23 @@
     </head>
 
     <body>
-        <canvas id="model" style="border: 1px solid;"></canvas>
+        <canvas id="model" style="border: 1px solid"></canvas>
         <script type="module">
+            import Model from '../models/HelloModel.js'
             import util from '../src/util.js'
 
-            util.toWindow({ util })
+            const model = new Model()
+            model.setup()
+            const { patches: ps, turtles: ts, links: ls } = model
+            const [p, t, l] = [ps[0], ts[0], ls[0]]
+
+            util.toWindow({ util, model, ps, ts, ls, p, t, l })
+
+            // let d = () => ts.ask(t => t.distance(p))
+            // let ds = () => ts.ask(t => t.sqDistance(p))
+
+            // util.timeit(d, 1e6)
+            // util.timeit(ds, 1e6)
         </script>
     </body>
 </html>

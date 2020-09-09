@@ -122,8 +122,8 @@ export function headingToAngle(heading) {
 export function mod360(degrees) {
     return mod(degrees, 360)
 }
-export function mod2pi(angle) {
-    return mod(angle, 2 * PI)
+export function mod2pi(radians) {
+    return mod(radians, 2 * PI)
 }
 
 export function headingsEqual(heading1, heading2) {

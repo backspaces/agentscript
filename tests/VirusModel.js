@@ -59,7 +59,8 @@ export default class VirusModel extends Model {
                 //     t => t != t1 && !t.linkNeighbors().includes(t1)
                 // )
                 const others = this.turtles.with(t => okNeighbor(t1, t))
-                const choice = others.minOneOf(t => t1.sqDistance(t))
+                // const choice = others.minOneOf(t => t1.sqDistance(t))
+                const choice = others.minOneOf(t => t1.distance(t))
                 this.links.createOne(t1, choice)
             }
         }

@@ -14,11 +14,11 @@ export default class Turtle {
             // Core variables for turtles.
             // turtle's position: x, y, z.
             // Generally z set to constant via turtles.setDefault('z', num)
-            x: 0,
-            y: 0,
-            z: 0,
+            // x: 0,
+            // y: 0,
+            // z: 0,
             // my euclidean direction, radians from x axis, counter-clockwise
-            theta: null, // set to random if default not set by modeler
+            // theta: null, // set to random if default not set by modeler
             // What to do if I wander off world. Can be 'clamp', 'wrap'
             // 'bounce', or a function, see handleEdge() method
             atEdge: 'clamp',
@@ -28,6 +28,13 @@ export default class Turtle {
     constructor() {
         Object.assign(this, Turtle.defaultVariables())
     }
+    agentConstructor() {
+        this.theta = null
+        this.x = 0
+        this.y = 0
+        this.agentSet.setDefault('z', null)
+    }
+
     die() {
         this.agentSet.removeAgent(this) // remove me from my baseSet and breed
         // Remove my links if any exist.
@@ -47,7 +54,8 @@ export default class Turtle {
     // proc is called on the new turtle after inserting in its agentSet.
     hatch(num = 1, breed = this.agentSet, init = turtle => {}) {
         return breed.create(num, turtle => {
-            turtle.setxy(this.x, this.y)
+            // turtle.setxy(this.x, this.y)
+            turtle.setxy(this.x, this.y, this.z)
             // hatched turtle inherits parents' ownVariables
             for (const key of breed.ownVariables) {
                 if (turtle[key] == null) turtle[key] = this[key]
@@ -115,7 +123,7 @@ export default class Turtle {
             const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world
             const { minZcor, maxZcor } = this.model.world
 
-            if (this.z != null && atEdge === 'bounce') {
+            if (this.z != null && z != null && atEdge === 'bounce') {
                 util.warn('handleEdge z can only be wrap or clamp, wrapping')
                 atEdge = 'wrap'
             }
@@ -145,7 +153,8 @@ export default class Turtle {
     }
     // Place the turtle at the given patch/turtle location
     moveTo(agent) {
-        this.setxy(agent.x, agent.y)
+        // this.setxy(agent.x, agent.y)
+        this.setxy(agent.x, agent.y, agent.z)
     }
     // Move forward (along theta) d units (patch coords),
     forward(d) {
@@ -156,12 +165,13 @@ export default class Turtle {
     }
 
     // Also used by turtles.create()
-    setTheta(rad) {
-        this.theta = util.mod(rad, Math.PI * 2)
-    }
+    // setTheta(rad) {
+    //     this.theta = util.mod(rad, Math.PI * 2)
+    // }
     // Change current direction by rad radians which can be + (left) or - (right).
     rotate(rad) {
-        this.theta = util.mod(this.theta + rad, Math.PI * 2)
+        // this.theta = util.mod(this.theta + rad, Math.PI * 2)
+        this.theta = util.mod2pi(this.theta + rad)
     }
     right(rad) {
         this.rotate(-rad)
@@ -171,11 +181,10 @@ export default class Turtle {
     }
 
     // Set my direction towards turtle/patch or x,y.
-    // "direction" is euclidean radians.
     face(agent) {
         this.theta = this.towards(agent)
     }
-    faceXY(x, y) {
+    facexy(x, y) {
         this.theta = this.towardsXY(x, y)
     }
 
@@ -196,18 +205,32 @@ export default class Turtle {
     }
 
     // 6 methods in both Patch & Turtle modules
-    // Distance from me to x, y. REMIND: No off-world test done
-    distanceXY(x, y) {
-        return util.distance(this.x, this.y, x, y)
+    // Distance from me to x, y.
+    // 2.5D: use z too if both z & this.z exist.
+    // REMIND: No off-world test done
+    distanceXY(x, y, z = null) {
+        const useZ = z != null && this.z != null
+        return useZ
+            ? util.distance3(this.x, this.y, this.z, x, y, z)
+            : util.distance(this.x, this.y, x, y)
     }
     // Return distance from me to object having an x,y pair (turtle, patch, ...)
+    // 2.5D: use z too if both agent.z and this.z exist
     // distance (agent) { this.distanceXY(agent.x, agent.y) }
     distance(agent) {
-        return util.distance(this.x, this.y, agent.x, agent.y)
+        const { x, y, z } = agent
+        return this.distanceXY(x, y, z)
     }
-    sqDistance(agent) {
-        return util.sqDistance(this.x, this.y, agent.x, agent.y)
+    // sqDistance(agent) {
+    //     return util.sqDistance(this.x, this.y, agent.x, agent.y)
+    // }
+    get dx() {
+        return Math.cos(this.theta)
     }
+    get dy() {
+        return Math.sin(this.theta)
+    }
+
     // Return angle towards agent/x,y
     // Use util.angleToHeading to convert to heading
     towards(agent) {

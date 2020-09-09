@@ -4,7 +4,7 @@ import util from './util.js'
 // It will be upgraded with methods converting from other
 // transforms like GIS and DataSets.
 
-const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
+// const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
 
 export default class World {
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = maxX) {

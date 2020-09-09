@@ -1,22 +1,12 @@
 import Turtle from './Turtle.js'
 import { radToDeg, degToRad, mod } from './utils/math.js'
 import { Object3D } from '../vendor/Object3D.esm.js'
+import util from './util.js'
 
 export default class Turtle3D extends Turtle {
     static defaultVariables() {
         return {
-            // // Core variables for turtles.
-            // // turtle's position: x, y, z.
-            // // Generally z set to constant via turtles.setDefault('z', num)
-            // x: 0,
-            // y: 0,
-            // z: 0,
-            // // my euclidean direction, radians from x axis, counter-clockwise
-            // theta: null, // set to random if default not set by modeler
-            // // What to do if I wander off world. Can be 'clamp', 'wrap'
-            // // 'bounce', or a function, see handleEdge() method
             atEdge: 'wrap',
-            // obj3d: null,
         }
     }
     // Initialize a Turtle given its Turtles AgentSet.
@@ -37,7 +27,6 @@ export default class Turtle3D extends Turtle {
     reset() {
         this.obj3d.position.set(0, 0, 0)
         this.obj3d.rotation.set(0, 0, 0)
-        // this.left(degToRad(90)) // moved to nav.html
     }
 
     setxyz(x, y, z) {
@@ -67,51 +56,46 @@ export default class Turtle3D extends Turtle {
     }
     // REMIND: temporary.
     handleEdge(x, y, z) {
-        // if (this.atEdge === 'bounce') {
-        //     // const { minZcor, maxZcor } = this.model.world
-        //     // if (z < minZcor)
-        // }
-        // console.log('phi', util.radToDeg(this.phi))
         super.handleEdge(x, y, z)
         this.setxyz(this.x, this.y, this.z)
     }
 
-    // get x() {
-    //     return this.obj3d.position.x
-    // }
-    // set x(d) {
-    //     this.obj3d.position.x = d
-    // }
-    // get y() {
-    //     return this.obj3d.position.y
-    // }
-    // set y(d) {
-    //     this.obj3d.position.y = d
-    // }
-    // get z() {
-    //     return this.obj3d.position.z
-    // }
-    // set z(d) {
-    //     this.obj3d.position.z = d
-    // }
+    get x() {
+        return this.obj3d.position.x
+    }
+    set x(d) {
+        this.obj3d.position.x = d
+    }
+    get y() {
+        return this.obj3d.position.y
+    }
+    set y(d) {
+        this.obj3d.position.y = d
+    }
+    get z() {
+        return this.obj3d.position.z
+    }
+    set z(d) {
+        this.obj3d.position.z = d
+    }
 
-    // get theta() {
-    //     return this.obj3d.rotation.z
-    // }
-    // set theta(rad) {
-    //     this.obj3d.rotation.z = rad
-    // }
-    // get direction() {
-    //     return this.obj3d.rotation.z
-    // }
-    // set direction(rad) {
-    //     this.obj3d.rotation.z = rad
-    // }
-    get phi() {
+    get theta() {
+        return this.obj3d.rotation.z
+    }
+    set theta(rad) {
+        this.obj3d.rotation.z = rad
+    }
+    get pitch() {
         return this.obj3d.rotation.y
     }
-    set phi(rad) {
+    set pitch(rad) {
         this.obj3d.rotation.y = rad
+    }
+    get roll() {
+        return this.obj3d.rotation.x
+    }
+    set roll(rad) {
+        this.obj3d.rotation.x = rad
     }
 
     // Move along the turtle's X axis
@@ -124,32 +108,28 @@ export default class Turtle3D extends Turtle {
     }
 
     // Also used by turtles.create()
-    setTheta(rad) {
-        this.obj3d.rotateZ(rad)
-    }
+    // setTheta(rad) {
+    //     this.obj3d.rotateZ(rad)
+    // }
 
     // Incremental rotation around given axis
     right(rad) {
         this.obj3d.rotateZ(-rad)
-        this.theta = this.obj3d.rotation.z
+        // this.theta = this.obj3d.rotation.z
     }
     left(rad) {
         this.right(-rad)
-        // this.obj3d.rotateZ(rad)
-        // this.theta = this.obj3d.rotation.z
     }
     tiltUp(rad) {
         this.obj3d.rotateY(-rad)
     }
     tiltDown(rad) {
-        // this.obj3d.rotateY(rad)
         this.tiltUp(-rad)
     }
     rollRight(rad) {
         this.obj3d.rotateX(rad)
     }
     rollLeft(rad) {
-        // this.obj3d.rotateX(-rad)
         this.rollRight(-rad)
     }
 
@@ -167,5 +147,31 @@ export default class Turtle3D extends Turtle {
     face(agent) {
         const { x, y, z } = agent
         this.facexyz(x, y, z)
+    }
+
+    distance(agent) {
+        const { x, y, z } = agent
+        this.distanceXYZ(x, y, z)
+    }
+    distanceXYZ(x1, y1, z1) {
+        const { x, y, z } = this
+        util.distance3(x, y, z, x1, y1, z1)
+    }
+
+    // From https://ccl.northwestern.edu/netlogo/docs/
+    // Note: dx is simply the sine of the turtle's heading, and dy is simply the cosine. (If this is the reverse of what you expected, it's because in NetLogo a heading of 0 is north and 90 is east, which is the reverse of how angles are usually defined in geometry.)
+    // Note: In earlier versions of NetLogo, these primitives were used in many situations where the new patch-ahead primitive is now more appropriate.
+    // NOTE: dz is simply the sine of the turtle's pitch. Both dx and dy have changed in this case. So, dx = cos(pitch) * sin(heading) and dy = cos(pitch) * cos(heading).
+
+    get dx() {
+        const { pitch, theta } = this
+        return Math.cos(pitch) * Math.cos(theta)
+    }
+    get dy() {
+        const { pitch, theta } = this
+        return Math.cos(pitch) * Math.sin(theta)
+    }
+    get dz() {
+        return Math.sin(this.pitch)
     }
 }

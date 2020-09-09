@@ -75,14 +75,31 @@ export default class Patch {
     }
 
     // 6 methods in both Patch & Turtle modules
-    // Distance from me to x, y. REMIND: No off-world test done
-    distanceXY(x, y) {
-        return util.distance(this.x, this.y, x, y)
+    // Distance from me to x, y.
+    // 2.5D: use z too if both z & this.z exist.
+    // REMIND: No off-world test done
+    distanceXY(x, y, z = null) {
+        const useZ = z != null && this.z != null
+        return useZ
+            ? util.distance3(this.x, this.y, this.z, x, y, z)
+            : util.distance(this.x, this.y, x, y)
     }
     // Return distance from me to object having an x,y pair (turtle, patch, ...)
+    // 2.5D: use z too if both agent.z and this.z exist
+    // distance (agent) { this.distanceXY(agent.x, agent.y) }
     distance(agent) {
-        return this.distanceXY(agent.x, agent.y)
+        const { x, y, z } = agent
+        return this.distanceXY(x, y, z)
     }
+
+    // distanceXY(x, y) {
+    //     return util.distance(this.x, this.y, x, y)
+    // }
+    // // Return distance from me to object having an x,y pair (turtle, patch, ...)
+    // distance(agent) {
+    //     return this.distanceXY(agent.x, agent.y)
+    // }
+
     // Return angle in radians towards agent/x,y
     // Use util.angleToHeading to convert to heading
     towards(agent) {
