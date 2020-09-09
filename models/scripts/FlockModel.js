@@ -25,27 +25,13 @@ class FlockModel extends Model {
     setup() {
         Object.assign(this, this.UI)
 
-        this.turtles.setDefault('atEdge', 'wrap')
-        // this.turtles.setDefault('z', 0.1)
-        // this.turtles.setDefault('size', 1)
         this.turtles.setDefault('speed', this.speed)
-
-        // this.setMaxTurn(this.maxTurnDegrees)
-        // this.setVision(3)
         this.patches.cacheRect(this.vision)
-        // this.minSeparation = 0.75
-        // // this.anim.setRate(30)
-        // this.population = 1000 // 300 // 1e4 this.patches.length
 
         util.repeat(this.population, () => {
             this.patches.oneOf().sprout()
         })
     }
-
-    // setVision(vision) {
-    //     this.vision = vision
-    //     this.patches.cacheRect(vision)
-    // }
 
     step() {
         this.turtles.ask(t => {

@@ -18,16 +18,17 @@ export default class Hello3DModel extends Model3D {
         Object.assign(this, Hello3DModel.defaultOptions())
     }
     setup() {
-        this.turtles.setDefault('atEdge', 'wrap')
+        this.turtles.setDefault('atEdge', 'bounce')
 
         this.turtles.create(this.population, t => {
             t.setxyz(...this.world.random3DPoint())
         })
 
-        this.turtles.ask(t => {
-            if (this.linksToo && this.population > 1)
-                this.links.create(t, this.turtles.otherOneOf(t))
-        })
+        if (this.linksToo)
+            this.turtles.ask(t => {
+                if (this.population > 1)
+                    this.links.create(t, this.turtles.otherOneOf(t))
+            })
     }
 
     step() {

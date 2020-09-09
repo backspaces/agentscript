@@ -24,10 +24,7 @@ class DiffuseModel extends Model {
     }
 
     setup() {
-        // this.patches.own('ran ds')
         this.turtles.setDefault('speed', this.speed)
-        this.turtles.setDefault('atEdge', 'wrap')
-        // this.turtles.setDefault('size', 5)
 
         this.patches.ask(p => {
             p.ran = util.randomFloat(1.0)

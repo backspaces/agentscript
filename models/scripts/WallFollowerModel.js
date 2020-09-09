@@ -43,16 +43,8 @@ class WallFollowerModel extends Model {
 
         // righty turtles follow the right hand rule, lefty the left.
         // righty turn right, a negative angle. lefty positive.
-        this.righty
-            // .setDefault('color', 'red')
-            // .setDefault('size', 2)
-            .setDefault('turn', -1) // -90 degrees
-            .setDefault('atEdge', 'wrap')
-        this.lefty
-            // .setDefault('color', 'green')
-            // .setDefault('size', 2)
-            .setDefault('turn', +1) // 90 degrees
-            .setDefault('atEdge', 'wrap')
+        this.righty.setDefault('turn', -1) // -90 degrees
+        this.lefty.setDefault('turn', +1) // 90 degrees
 
         // Have random disks become walls
         this.patches.ask(p => {
@@ -71,11 +63,6 @@ class WallFollowerModel extends Model {
             .filter(p => !p.isBreed(this.walls))
             .filter(p => p.neighbors4.every(n => n.isBreed(this.walls)))
             .ask(p => p.setBreed(this.walls))
-
-        // Set the wall patch colors after all walls defined.
-        // this.walls.ask(p => {
-        //     p.color = [222, 184, 135]
-        // })
 
         // Sprout this.population agents on the non-wall patches.
         this.patches

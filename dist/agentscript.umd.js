@@ -3428,9 +3428,8 @@ out;`;
         // Return a single turtle
         createOne(initFcn = turtle => {}) {
             const turtle = this.addAgent();
-            // if (this.getDefault('theta') == null)
-            //     // turtle.theta = util.randomFloat(Math.PI * 2)
-            //     turtle.setTheta(util.randomFloat(Math.PI * 2))
+            // NetLogo docs: Creates number new turtles at the origin.
+            // New turtles have random integer headings
             turtle.theta = util.randomFloat(Math.PI * 2);
             initFcn(turtle);
             return turtle
@@ -3438,7 +3437,6 @@ out;`;
         // Create num turtles, returning an array.
         // If num == 1, return array with single turtle
         create(num, initFcn = turtle => {}) {
-            // if (num === 1) return this.createOne(initFcn)
             return util.repeat(num, (i, a) => {
                 a.push(this.createOne(initFcn));
             })
@@ -3540,7 +3538,7 @@ out;`;
                 // theta: null, // set to random if default not set by modeler
                 // What to do if I wander off world. Can be 'clamp', 'wrap'
                 // 'bounce', or a function, see handleEdge() method
-                atEdge: 'clamp',
+                atEdge: 'wrap',
             }
         }
         // Initialize a Turtle given its Turtles AgentSet.
@@ -3642,11 +3640,6 @@ out;`;
                 const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world;
                 const { minZcor, maxZcor } = this.model.world;
 
-                if (this.z != null && z != null && atEdge === 'bounce') {
-                    util.warn('handleEdge z can only be wrap or clamp, wrapping');
-                    atEdge = 'wrap';
-                }
-
                 if (atEdge === 'wrap') {
                     this.x = util.wrap(x, minXcor, maxXcor);
                     this.y = util.wrap(y, minYcor, maxYcor);
@@ -3661,6 +3654,9 @@ out;`;
                             this.theta = Math.PI - this.theta;
                         } else if (this.y === minYcor || this.y === maxYcor) {
                             this.theta = -this.theta;
+                        } else if (this.z === minZcor || this.z === maxZcor) {
+                            if (this.pitch) this.pitch = -this.pitch;
+                            else this.z = util.wrap(z, minZcor, maxZcor);
                         }
                     }
                 } else {

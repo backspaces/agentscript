@@ -13,9 +13,8 @@ export default class Turtles extends AgentSet {
     // Return a single turtle
     createOne(initFcn = turtle => {}) {
         const turtle = this.addAgent()
-        // if (this.getDefault('theta') == null)
-        //     // turtle.theta = util.randomFloat(Math.PI * 2)
-        //     turtle.setTheta(util.randomFloat(Math.PI * 2))
+        // NetLogo docs: Creates number new turtles at the origin.
+        // New turtles have random integer headings
         turtle.theta = util.randomFloat(Math.PI * 2)
         initFcn(turtle)
         return turtle
@@ -23,7 +22,6 @@ export default class Turtles extends AgentSet {
     // Create num turtles, returning an array.
     // If num == 1, return array with single turtle
     create(num, initFcn = turtle => {}) {
-        // if (num === 1) return this.createOne(initFcn)
         return util.repeat(num, (i, a) => {
             a.push(this.createOne(initFcn))
         })

@@ -18,7 +18,7 @@ class Wander3DModel extends Model3D {
         Object.assign(this, Wander3DModel.defaultOptions())
     }
     setup() {
-        this.turtles.setDefault('atEdge', 'wrap')
+        this.turtles.setDefault('atEdge', 'bounce')
 
         this.turtles.create(this.population, t => {
             t.setxyz(...this.world.random3DPoint())

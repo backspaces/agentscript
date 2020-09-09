@@ -57,11 +57,10 @@ export default class DropletsModel extends Model {
     }
     setup() {
         // Kill if droplet moves off world/tile.
-        // Otherwise default 'clamp' (bunch up on edge)
+        // Otherwise use 'clamp' (bunch up on edge)
         if (this.killOffworld) {
             this.turtles.setDefault('atEdge', turtle => turtle.die())
         }
-        // this.speed = 0.2
 
         this.localMins = [] // new AgentArray()
         this.patches.ask(p => {
