@@ -13,6 +13,7 @@
             import dat from '../vendor/dat.gui.esm.min.js'
 
             const degToRad = util.degToRad
+            const radToDegAll = util.radToDegAll
 
             const drawOptions = {
                 turtlesShape: 'Dart3D',
@@ -38,7 +39,7 @@
                 view.perspectiveCam.position.set(0, 0, 1.5 * model.world.width)
                 view.helpers.controls.update()
 
-                util.toWindow({ util, model, view })
+                util.toWindow({ util, model, view, turtle })
 
                 const step = runGui(turtle)
 
@@ -67,6 +68,7 @@
                     ThetaPhiPsi: '0, 0, 0',
                     HeadingPitchRoll: '0, 0, 0',
                     Position: '0, 0, 0',
+                    DxDyDz: '0, 0, 0',
                     angle: 45,
                     speed: 5,
 
@@ -84,11 +86,12 @@
                     rollRight: () => turtle.rollRight(degToRad(controls.angle)),
                     rollLeft: () => turtle.rollLeft(degToRad(controls.angle)),
                 }
-                util.toWindow({ gui, controls })
+                util.toWindow({ target, gui, controls })
 
                 gui.add(controls, 'ThetaPhiPsi').listen()
                 gui.add(controls, 'HeadingPitchRoll').listen()
                 gui.add(controls, 'Position').listen()
+                gui.add(controls, 'DxDyDz').listen()
                 gui.add(controls, 'angle', 0, 90, 5)
                 gui.add(controls, 'speed', 0, 20, 5)
 
@@ -122,9 +125,11 @@
                         turtle.getHeadingPitchRoll()
                     )
                     controls.ThetaPhiPsi = fmt(
-                        util.radToDegAll(turtle.getThetaPhiPsi())
+                        radToDegAll(turtle.getThetaPhiPsi())
                     )
                     controls.Position = fmt(turtle.getxyz())
+                    // controls.DxDyDz = fmt(radToDegAll(turtle.getDxDyDz()))
+                    controls.DxDyDz = fmt(turtle.getDxDyDz())
                 }
                 return step
             }

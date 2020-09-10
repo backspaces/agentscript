@@ -31,7 +31,7 @@ export default class Turtle3D extends Turtle {
 
     setxyz(x, y, z) {
         super.setxy(x, y, z)
-        this.obj3d.position.set(x, y, z)
+        // this.obj3d.position.set(x, y, z)
     }
     getxyz() {
         return this.obj3d.position.toArray()
@@ -54,11 +54,14 @@ export default class Turtle3D extends Turtle {
         const roll = util.radToDeg(psi)
         return [heading, pitch, roll]
     }
-    // REMIND: temporary.
-    handleEdge(x, y, z) {
-        super.handleEdge(x, y, z)
-        this.setxyz(this.x, this.y, this.z)
+    getDxDyDz() {
+        return [this.dx, this.dy, this.dz]
     }
+    // REMIND: temporary.
+    // handleEdge(x, y, z) {
+    //     super.handleEdge(x, y, z)
+    //     this.setxyz(this.x, this.y, this.z)
+    // }
 
     get x() {
         return this.obj3d.position.x
@@ -86,10 +89,10 @@ export default class Turtle3D extends Turtle {
         this.obj3d.rotation.z = rad
     }
     get pitch() {
-        return this.obj3d.rotation.y
+        return -this.obj3d.rotation.y
     }
     set pitch(rad) {
-        this.obj3d.rotation.y = rad
+        this.obj3d.rotation.y = -rad
     }
     get roll() {
         return this.obj3d.rotation.x
@@ -100,11 +103,11 @@ export default class Turtle3D extends Turtle {
 
     // Move along the turtle's X axis
     forward(d) {
+        const p0 = this.patch
         this.obj3d.translateX(d)
-        let [x, y, z] = this.getxyz()
-        // Object.assign(this, { x, y, z })
-        super.setxy(x, y, z)
-        // this.obj3d.translateX(d)
+        super.checkXYZ(p0)
+        // let [x, y, z] = this.getxyz()
+        // super.setxy(x, y, z)
     }
 
     // Also used by turtles.create()
@@ -133,20 +136,31 @@ export default class Turtle3D extends Turtle {
         this.rollRight(-rad)
     }
 
-    facexyz(tx, ty, tz) {
-        const [x, y, z] = this.getxyz()
-        const [dx, dy, dz] = [tx - x, ty - y, tz - z]
-        const xyhypot = Math.hypot(dx, dy)
-        const headingTowards = Math.atan2(dy, dx)
-        const pitchTowards = Math.atan2(dz, xyhypot)
+    facexyz(x1, y1, z1) {
+        const headingTowards = this.towardsXY(x1, y1)
+        const pitchTowards = this.towardsPitchXYZ(x1, y1, z1)
 
-        this.obj3d.rotation.set(0, 0, 0)
-        this.obj3d.rotateZ(headingTowards)
-        this.obj3d.rotateY(-pitchTowards)
+        // const roll = this.roll
+        // this.obj3d.rotation.set(0, 0, 0)
+        this.theta = headingTowards
+        this.pitch = pitchTowards
+        // this.roll = roll
     }
     face(agent) {
         const { x, y, z } = agent
         this.facexyz(x, y, z)
+    }
+    towardsPitchXYZ(x1, y1, z1) {
+        const [x, y, z] = this.getxyz()
+        const [dx, dy, dz] = [x1 - x, y1 - y, z1 - z]
+        const xyhypot = Math.hypot(dx, dy)
+        // const headingTowards = Math.atan2(dy, dx)
+        // const pitchTowards = Math.atan2(dz, xyhypot)
+        return Math.atan2(dz, xyhypot)
+    }
+    towardsPitch(agent) {
+        const { x, y, z } = agent
+        this.towardsPitchXYZ(x, y, z)
     }
 
     distance(agent) {

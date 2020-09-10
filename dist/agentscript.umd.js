@@ -3560,9 +3560,12 @@ out;`;
                 while (this.links.length > 0) this.links[0].die();
             }
             // Remove me from patch.turtles cache if patch.turtles array exists
-            if (this.patch.turtles != null) {
-                util.removeArrayItem(this.patch.turtles, this);
-            }
+            // if (this.patch.turtles != null) {
+            //     util.removeArrayItem(this.patch.turtles, this)
+            // }
+            if (this.patch && this.patch.turtles)
+                util.removeArrayItem(p0.turtles, this);
+
             // Set id to -1, indicates that I've died.
             this.id = -1;
         }
@@ -3614,31 +3617,50 @@ out;`;
         // Call handleEdge(x, y) if x, y off-world.
         setxy(x, y, z = undefined) {
             const p0 = this.patch;
-            // if (z != null) this.z = z // don't promote z if null, use default z instead.
 
-            if (this.model.world.isOnWorld(x, y, z) || this.atEdge === 'OK') {
-                this.x = x;
-                this.y = y;
-                // don't promote z if null, use default z instead.
-                if (z != null) this.z = z;
-            } else {
+            this.x = x;
+            this.y = y;
+            if (z != null) this.z = z;
+
+            this.checkXYZ(p0);
+        }
+        checkXYZ(p0) {
+            this.checkEdge();
+            this.checkPatch(p0);
+        }
+        checkEdge() {
+            const { x, y, z } = this;
+            // if (!(this.model.world.isOnWorld(x, y, z) || this.atEdge === 'OK')) {
+            if (!this.model.world.isOnWorld(x, y, z) && this.atEdge !== 'OK') {
                 this.handleEdge(x, y, z);
             }
-
-            const p = this.patch;
-            if (p && p.turtles != null && p !== p0) {
-                // util.removeItem(p0.turtles, this)
-                if (p0) util.removeArrayItem(p0.turtles, this);
-                p.turtles.push(this);
-            }
         }
-        // Handle turtle if x,y off-world
+        checkPatch(p0) {
+            const p = this.patch;
+
+            if (p != p0) {
+                if (p0 && p0.turtles) util.removeArrayItem(p0.turtles, this);
+                if (p && p.turtles) p.turtles.push(this);
+            }
+            // if (p && p.turtles != null && p !== p0) {
+            //     // util.removeItem(p0.turtles, this)
+            //     if (p0) util.removeArrayItem(p0.turtles, this)
+            //     p.turtles.push(this)
+            // }
+        }
+        // Handle turtle x,y,z if turtle off-world
         handleEdge(x, y, z = undefined) {
             let atEdge = this.atEdge;
 
             if (util.isString(atEdge)) {
-                const { minXcor, maxXcor, minYcor, maxYcor } = this.model.world;
-                const { minZcor, maxZcor } = this.model.world;
+                const {
+                    minXcor,
+                    maxXcor,
+                    minYcor,
+                    maxYcor,
+                    minZcor,
+                    maxZcor,
+                } = this.model.world;
 
                 if (atEdge === 'wrap') {
                     this.x = util.wrap(x, minXcor, maxXcor);
@@ -3655,8 +3677,11 @@ out;`;
                         } else if (this.y === minYcor || this.y === maxYcor) {
                             this.theta = -this.theta;
                         } else if (this.z === minZcor || this.z === maxZcor) {
-                            if (this.pitch) this.pitch = -this.pitch;
-                            else this.z = util.wrap(z, minZcor, maxZcor);
+                            if (this.pitch) {
+                                this.pitch = -this.pitch;
+                            } else {
+                                this.z = util.wrap(z, minZcor, maxZcor);
+                            }
                         }
                     }
                 } else {

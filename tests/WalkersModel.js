@@ -18,8 +18,6 @@ export default class WalkersModel extends Model {
         Object.assign(this, WalkersModel.defaultOptions())
     }
     setup() {
-        this.turtles.setDefault('atEdge', 'wrap')
-
         this.turtles.create(this.population, t => {
             t.speed = this.speed + util.randomCentered(this.speedDelta)
             t.setxy(...this.world.randomPoint())
