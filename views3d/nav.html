@@ -18,7 +18,7 @@
             const drawOptions = {
                 turtlesShape: 'Dart3D',
                 turtlesColor: 'red',
-                turtlesSize: 3,
+                turtlesSize: 5,
             }
 
             async function run() {
@@ -36,6 +36,7 @@
                     },
                     drawOptions
                 )
+                // REMIND: Move to ThreeView as a general helper.
                 view.perspectiveCam.position.set(0, 0, 1.5 * model.world.width)
                 view.helpers.controls.update()
 

@@ -1,10 +1,9 @@
 // Meshes used by the Three.js view module
 
 import { THREE } from '../vendor/three.esm.js'
-// import * as THREE from 'https://unpkg.com/three@0.118.3/build/three.module.js'
 import util from './util.js'
-// import { Vector3 } from 'THREE'
 
+// ========== global utilities ==========
 function createQuad(r, z = 0) {
     // r is radius of xy quad: [-r,+r], z is quad z
     const vertices = [-r, -r, z, r, -r, z, r, r, z, -r, r, z]
@@ -12,63 +11,31 @@ function createQuad(r, z = 0) {
     return { vertices, indices }
 }
 const unitQuad = createQuad(0.5, 0)
-
-// Return typedColor[meshColorType] or color which must be correct type
 function meshColor(color, mesh) {
     return color[mesh.options.colorType] || color
-    // if (color) return color[mesh.options.colorType] || color
-    // return color
 }
-
 function disposeMesh(mesh) {
-    // if (!this.mesh) return
-    // if (mesh.parent !== this.scene) {
-    //     console.log('mesh parent not scene:', mesh)
-    // }
     mesh.parent.remove(mesh)
     mesh.geometry.dispose()
     mesh.material.dispose()
     if (mesh.material.map) mesh.material.map.dispose()
 }
-
 const zMultiplier = 0.25
 const PI = Math.PI
 
-// function centerMesh(obj) {
-//     // const {centerX, centerY} = obj.world
-//     // obj.mesn.position.set(-centerX, -centerY, obj.options.z)
-//     const { centerX, centerY, width, height } = obj.world
-//     const z = obj.options.z //  / 100 // Math.max(width, height)
-//     obj.mesh.position.set(-centerX, -centerY, z)
-// }
-
-// const getPixel = color => color.pixel || color
-
-// Utility classes meant to be subclassed:
 // ============= BaseMesh =============
-// An abstract class for all Meshes.
+
 export class BaseMesh {
-    // static options(): https://goo.gl/sKdxoY
+    // An abstract class for all Meshes. Assume all classes have options:
+    // static options() {..}
     constructor(view, options = {}) {
-        // this.view = view
         // Overide default options
         options = Object.assign(this.constructor.options(), options)
         const { scene, world } = view
         Object.assign(this, { scene, world, view, options })
         this.mesh = null
         this.name = this.constructor.name
-        // this.useSprites = this.name.match(/sprites/i) != null
     }
-    // dispose() {
-    //     if (!this.mesh) return
-    //     if (this.mesh.parent !== this.scene) {
-    //         console.log('mesh parent not scene')
-    //     }
-    //     this.mesh.parent.remove(this.mesh)
-    //     this.mesh.geometry.dispose()
-    //     this.mesh.material.dispose()
-    //     if (this.mesh.material.map) this.mesh.material.map.dispose()
-    // }
     centerMesh() {
         let { centerX, centerY, width, height } = this.world
         if (this.canvas) [centerX, centerY] = [0, 0]
@@ -77,8 +44,6 @@ export class BaseMesh {
             this.view.options.turtles.meshClass === 'Obj3DMesh'
                 ? this.world.minZ
                 : this.options.z * zMultiplier //  Math.max(width, height)
-        // console.log('centerMesh', centerX, centerY, width, height, z)
-
         this.mesh.position.set(-centerX, -centerY, z)
     }
 
@@ -87,6 +52,19 @@ export class BaseMesh {
     }
     update() {
         throw Error('update is abstract, must be overriden')
+    }
+    clear() {
+        if (this.mesh) {
+            disposeMesh(this.mesh)
+            this.mesh = null
+            this.init()
+        } else if (this.meshes) {
+            this.meshes.forEach(mesh => disposeMesh(mesh))
+            this.meshes = null
+            this.init()
+        } else {
+            throw Error('BaseMesh.clear: no meshes available')
+        }
     }
 
     get spriteSheetTexture() {
@@ -179,8 +157,8 @@ export class CanvasMesh extends BaseMesh {
 
 // Patch meshes are a form of Canvas Mesh
 export class PatchesMesh extends CanvasMesh {
-    // REMIND: use CanvasMesh options?
     static options() {
+        // REMIND: use CanvasMesh options?
         return {
             // https://threejs.org/docs/#api/en/textures/Texture
             textureOptions: {

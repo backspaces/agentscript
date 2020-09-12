@@ -117,7 +117,7 @@ export default class ThreeView {
         const perspectiveCam = new THREE.PerspectiveCamera(
             45,
             clientWidth / clientHeight,
-            1,
+            0.1,
             10000
         )
         // perspectiveCam.position.set(width + centerX, -width - centerY, width)

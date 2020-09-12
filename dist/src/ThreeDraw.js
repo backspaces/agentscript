@@ -173,7 +173,7 @@ export default class ThreeDraw extends ThreeView {
                 linksColor === 'random'
                     ? turtlesMap.atIndex(l.id)
                     : typeof linksColor === 'function'
-                    ? checkColor(l, linksColor(t))
+                    ? checkColor(l, linksColor(l))
                     : linksColor,
             width: linksWidth,
         }))
