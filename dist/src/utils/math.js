@@ -163,7 +163,7 @@ export const distance = (x, y, x1, y1) => Math.sqrt(sqDistance(x, y, x1, y1))
 export const sqDistance3 = (x, y, z, x1, y1, z1) =>
     (x - x1) ** 2 + (y - y1) ** 2 + (z - z1) ** 2
 export const distance3 = (x, y, z, x1, y1, z1) =>
-    Math.sqrt(sqDistance(x, y, z, x1, y1, z1))
+    Math.sqrt(sqDistance3(x, y, z, x1, y1, z1))
 
 // Return true if x,y is within cone.
 // Cone: origin x0,y0 in direction angle, with coneAngle width in radians.

@@ -8,7 +8,7 @@
             import util from '../src/util.js'
             import ColorMap from '../src/ColorMap.js'
             import ThreeView from '../src/ThreeView.js'
-            import Model from '../models/Hello3Model.js'
+            import Model from '../models/Hello3zModel.js'
 
             // const patchesMap = ColorMap.LightGray
             const patchesMap = ColorMap.DarkGray
@@ -18,39 +18,39 @@
                 patches: {
                     points: {
                         meshClass: 'PointsMesh',
-                        options: { pointSize: 2, z: 1.5 },
+                        size: 2,
+                        z: 1.5,
                     },
                     canvas: {
                         meshClass: 'CanvasMesh',
-                        options: { canvas: null },
+                        canvas: null,
                     },
                     patches: {
                         meshClass: 'PatchesMesh',
-                        options: {},
                     },
                 },
                 links: {
                     mono: {
                         meshClass: 'LinksMesh',
-                        options: { color: 'red' },
+                        color: 'red',
                     },
                     color: {
                         meshClass: 'LinksMesh',
-                        options: {},
                     },
                 },
                 turtles: {
                     monoPoints: {
                         meshClass: 'PointsMesh',
-                        options: { color: 'blue', pointSize: 2, z: 1.5 },
+                        options: { color: 'blue', size: 2, z: 1.5 },
                     },
                     colorPoints: {
                         meshClass: 'PointsMesh',
-                        options: { pointSize: 2, z: 1.5 },
+                        size: 2,
+                        z: 1.5,
                     },
                     sprites: {
                         meshClass: 'QuadSpritesMesh',
-                        options: { pointSize: 3 },
+                        size: 3,
                     },
                 },
             }
@@ -67,7 +67,7 @@
                 }
 
                 view.drawLinks(model.links, l => ({
-                    color: !view.options.links.options.color
+                    color: !view.options.links.color
                         ? turtlesMap.atIndex(l.id).webgl
                         : null,
                 }))
@@ -91,7 +91,7 @@
                     // '../tests/santafe.png'
                 )
                 console.log(image)
-                options.patches.canvas.options.canvas = image
+                options.patches.canvas = image
 
                 const model = new Model()
                 await model.startup()

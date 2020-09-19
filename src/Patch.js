@@ -32,6 +32,9 @@ export default class Patch {
             this.model.world.maxY - Math.floor(this.id / this.model.world.numX)
         )
     }
+    get z() {
+        return 0
+    }
     isOnEdge() {
         return this.patches.isOnEdge(this)
     }

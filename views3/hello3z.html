@@ -10,8 +10,21 @@
             import Model from '../models/Hello3ZModel.js'
 
             const drawOptions = {
+                turtlesMesh: 'PointsMesh',
                 turtlesShape: 'point',
                 turtlesSize: 2,
+                turtlesColor: 'red',
+
+                // patchesMesh: 'PointsMesh',
+                // patchesColor: 'orange',
+                // patchesSize: 2,
+
+                patchesMesh: 'Obj3DMesh',
+                patchesColor: 'orange',
+                // patchesShape: 'Cone0',
+                // patchesShape: 'Cylinder0',
+                patchesShape: 'Cube',
+                patchesSize: 0.75,
             }
 
             async function run() {

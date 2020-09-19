@@ -1,15 +1,27 @@
 <html>
     <head>
-        <title>camera3d</title>
+        <title>plot</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+        <!-- <style>
+            #modelDiv {
+                height: 400px;
+            }
+        </style> -->
     </head>
     <body>
+        <div id="modelDiv"></div>
+        <canvas id="plotCanvas"></canvas>
+
         <script type="module">
             import util from '../src/util.js'
             import Color from '../src/Color.js'
             import ThreeDraw from '../src/ThreeDraw.js'
+            // import PlotXY from './PlotXY.js'
+            import Chart from '../vendor/chart.esm.js'
             import Model from './Camera3DModel.js'
             import dat from '../vendor/dat.gui.esm.min.js'
+
+            const toDeg = 180 / Math.PI
 
             const isPixel = t => t.breed.name === 'pixels'
             const uvToColor = t => {
@@ -34,15 +46,16 @@
                 const view = new ThreeDraw(
                     model,
                     {
-                        div: document.body,
-                        // turtles: { meshClass: 'Obj3DMesh' },
+                        div: 'modelDiv',
                     },
                     drawOptions
                 )
 
-                const gui = runGui(model, view)
+                const chart = initPlot()
+                const gui = runGui(model, view, chart)
+                plot(chart, model)
 
-                util.toWindow({ util, model, view, gui })
+                util.toWindow({ util, model, view, gui, chart })
 
                 await util.timeoutLoop(
                     () => {
@@ -55,7 +68,7 @@
             }
             run()
 
-            function runGui(model, view) {
+            function runGui(model, view, chart) {
                 const gui = new dat.GUI()
 
                 // Helper for adding variables to gui.
@@ -66,6 +79,7 @@
                         .listen()
                         .onChange(val => {
                             model.moveCamera()
+                            plot(chart, model)
                         })
                 }
 
@@ -76,11 +90,41 @@
                 guiAddVal(model, 'fieldOfView', 1, 180, 1)
 
                 gui.add(model, 'toggleLinks')
-                gui.add(model, 'reset')
+                gui.add(model, 'reset').onChange(() => {
+                    plot(chart, model)
+                })
 
                 return gui
             }
+
+            function initPlot() {
+                const canvas = document.getElementById('plotCanvas')
+                const chart = new Chart(canvas, {
+                    type: 'scatter',
+                    data: {
+                        // labels: ticks,
+                        datasets: [
+                            {
+                                data: [],
+                                label: 'PhiTheta',
+                                backgroundColor: 'red',
+                                borderColor: 'red',
+                            },
+                        ],
+                    },
+                })
+                return chart
+            }
+
+            function plot(chart, model) {
+                chart.clear()
+                const points = model.pixels.map(t => ({
+                    x: t.theta * toDeg,
+                    y: t.pitch * toDeg,
+                }))
+                chart.data.datasets[0].data = points
+                chart.update()
+            }
         </script>
-        <div id="modelDiv"></div>
     </body>
 </html>

@@ -22,7 +22,7 @@ export default class ThreeView {
             useControls: useThreeHelpers, // navigation. REMIND: control name?
             useWorldOutline: useThreeHelpers,
             useStats: useThreeHelpers, // stats fps ui
-            useLights: false, // maybe should be mesh option? not view?
+            useLights: true, // maybe should be mesh option? not view?
             // REMIND: put in quadsprite options, defaulting to 64
             spriteSize: 64,
             patches: {
@@ -263,7 +263,8 @@ export default class ThreeView {
     initMeshes() {
         this.meshes = {}
         util.forLoop(this.options, (val, key) => {
-            if (val.meshClass) {
+            if (val.meshClass && val.meshClass !== 'NullMesh') {
+                // if (val.meshClass === 'NullMesh')
                 const Mesh = ThreeMeshes[val.meshClass]
                 const options = val // val.options // null ok
                 // const options = Mesh.options() // default options

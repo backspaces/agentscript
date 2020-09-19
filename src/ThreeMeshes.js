@@ -78,6 +78,15 @@ export class BaseMesh {
     }
 }
 
+// ============= NullMesh =============
+// A no-op mesh
+export class NullMesh {
+    constructor() {
+        this.options = {}
+    }
+    init() {}
+    update() {}
+}
 // ============= CanvasMesh =============
 
 export class CanvasMesh extends BaseMesh {
@@ -279,7 +288,9 @@ export class QuadSpritesMesh extends BaseMesh {
 export class PointsMesh extends BaseMesh {
     static options() {
         return {
-            pointSize: 1,
+            // Points are fixed size (in material). Variable requires shader.
+            // https://discourse.threejs.org/t/how-to-display-points-of-different-sizes-using-three-points/4751/7
+            size: 1,
             color: null,
             z: 2.5,
             colorType: 'webgl',
@@ -287,7 +298,7 @@ export class PointsMesh extends BaseMesh {
     }
     init() {
         if (this.mesh) disposeMesh(this.mesh)
-        const pointSize = this.options.pointSize // REMIND: variable or fixed?
+        const size = this.options.size
         this.fixedColor = this.options.color
             ? new THREE.Color(...meshColor(this.options.color, this))
             : null
@@ -306,11 +317,11 @@ export class PointsMesh extends BaseMesh {
 
         const material = this.fixedColor
             ? new THREE.PointsMaterial({
-                  size: pointSize,
+                  size: size,
                   color: this.fixedColor,
               })
             : new THREE.PointsMaterial({
-                  size: pointSize,
+                  size: size,
                   vertexColors: true,
               })
 
@@ -323,12 +334,12 @@ export class PointsMesh extends BaseMesh {
     // update takes any array of objects with x,y,z,color .. position & color
     // If non-null color passed to init, only x,y,z .. position used
     // REMIND: optimize by flags for position/uvs need updates
-    update(turtles, viewFcn) {
+    update(agents, viewFcn) {
         // const positionBuff = positionAttrib.array
         const vertices = []
         const colors = this.fixedColor ? null : []
 
-        util.forLoop(turtles, (turtle, i) => {
+        util.forLoop(agents, (turtle, i) => {
             let { x, y, z } = turtle
             // if (!z) z = 0
             vertices.push(x, y, z)
@@ -420,8 +431,11 @@ const geometries = {
     // Use functions .. allows geo scale/rotate etc
     // Default: () => turtleGeometry(),
     Dart3D: () => turtleGeometry(),
+    Cone0: () => new THREE.ConeBufferGeometry(0.5).rotateX(PI / 2),
     Cone: () => new THREE.ConeBufferGeometry(0.5).rotateZ(-PI / 2),
     Cube: () => new THREE.BoxBufferGeometry(),
+    Cylinder0: () =>
+        new THREE.CylinderBufferGeometry(0.5, 0.5, 1).rotateX(PI / 2),
     Cylinder: () =>
         new THREE.CylinderBufferGeometry(0.5, 0.5, 1).rotateZ(-PI / 2),
     Sphere: () => new THREE.SphereBufferGeometry(0.5),
@@ -481,10 +495,15 @@ export class Obj3DMesh extends BaseMesh {
             }
             // const { x, y, z, obj3d } = agent
             const obj3d = agent.obj3d
-            const pos = obj3d.position
-            mesh.position.set(pos.x, pos.y, pos.z)
-            const rot = obj3d.rotation
-            mesh.rotation.set(rot.x, rot.y, rot.z)
+            if (obj3d) {
+                const pos = obj3d.position
+                mesh.position.set(pos.x, pos.y, pos.z)
+                const rot = obj3d.rotation
+                mesh.rotation.set(rot.x, rot.y, rot.z)
+            } else {
+                mesh.position.set(agent.x, agent.y, agent.z)
+                mesh.rotation.set(0, 0, 0)
+            }
         })
     }
 }
@@ -522,6 +541,7 @@ export function turtleGeometry() {
 
 export default {
     BaseMesh,
+    NullMesh,
     CanvasMesh,
     PatchesMesh,
     QuadSpritesMesh,
