@@ -50,6 +50,7 @@ export default class Turtle {
             util.removeArrayItem(p0.turtles, this)
 
         // Set id to -1, indicates that I've died.
+        // Useful when other JS objects contain turtles. Views for example.
         this.id = -1
     }
 

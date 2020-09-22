@@ -51,11 +51,11 @@
                     drawOptions
                 )
 
+                util.toWindow({ util, model, view })
+
                 const chart = initPlot()
                 const gui = runGui(model, view, chart)
                 plot(chart, model)
-
-                util.toWindow({ util, model, view, gui, chart })
 
                 await util.timeoutLoop(
                     () => {
@@ -90,7 +90,7 @@
                 guiAddVal(model, 'fieldOfView', 1, 180, 1)
 
                 gui.add(model, 'toggleLinks')
-                gui.add(model, 'reset').onChange(() => {
+                gui.add(model, 'reset').onFinishChange(() => {
                     plot(chart, model)
                 })
 

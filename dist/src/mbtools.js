@@ -26,6 +26,8 @@ export function worldFromBBox(width, bbox) {
         minY: 0,
         maxX: width,
         maxY: Math.round(width / aspect),
+        minZ: 0,
+        maxZ: 0,
     }
     return worldOptions
 }

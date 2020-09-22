@@ -453,8 +453,13 @@ export class Obj3DMesh extends BaseMesh {
     }
     init() {
         // if (this.meshes) for (mesh of this.meshes) mesh.dispose()
-        if (this.meshes) util.forLoop(this.meshes, mesh => disposeMesh(mesh))
-        this.meshes = []
+        // if (this.meshes) util.forLoop(this.meshes, mesh => disposeMesh(mesh))
+        if (this.meshes) this.meshes.forEach(mesh => disposeMesh(mesh))
+        // this.meshes = []
+        this.meshes = new Map()
+        // Used to manage agents who have died
+        this.lastAgentsLength = null
+        this.lastAgentsMaxID = null
     }
     newMesh(geometryName = 'Dart3D', color = 'red', size = 1) {
         // let geometry = this.options.geometries[geometryName]
@@ -468,9 +473,6 @@ export class Obj3DMesh extends BaseMesh {
         }
         geometry = geometry()
         if (size !== 1) geometry.scale(size, size, size)
-        // geometry.scale(turtlesSize, turtlesSize, turtlesSize)
-        // if (['Cone', 'Cylinder']) geometry.rotateZ(util.degToRad(-90))
-        // geometry.rotateZ(-PI / 2)
 
         color = new THREE.Color(...meshColor(color, this))
         const material = this.view.options.useLights
@@ -479,19 +481,45 @@ export class Obj3DMesh extends BaseMesh {
 
         const mesh = new THREE.Mesh(geometry, material)
         mesh.rotation.order = 'ZYX'
-        // if (size !== 1) mesh.scale.set(size, size, size)
         if (this.options.useAxes) mesh.add(new THREE.AxesHelper(size))
 
         this.scene.add(mesh)
         return mesh
     }
+    checkDeadAgents(agents) {
+        const lastLen = this.lastAgentsLength
+        const lastID = this.lastAgentsMaxID
+        if (lastLen === 0) return
+        if (
+            lastLen != null && // first time through
+            (lastLen > agents.length || agents[lastLen - 1].id !== lastID)
+        ) {
+            // remove dead agents
+            console.log('look for dead agents')
+            this.meshes.forEach((mesh, agent) => {
+                if (mesh.userData.agent.id === -1) {
+                    disposeMesh(mesh)
+                    this.meshes.delete(agent)
+                    console.log(mesh, agent)
+                }
+            })
+        }
+        this.lastAgentsLength = agents.length
+        this.lastAgentsMaxID = agents.length === 0 ? null : agents.last().id
+    }
     update(agents, viewFcn) {
+        this.checkDeadAgents(agents)
+
+        // util.forLoop(agents, (agent, i) => {
         util.forLoop(agents, (agent, i) => {
-            let mesh = this.meshes[agent.id]
+            // let mesh = this.meshes[agent.id]
+            let mesh = this.meshes.get(agent)
             if (!mesh) {
                 const view = viewFcn(agent, i)
                 mesh = this.newMesh(view.shape, view.color, view.size)
-                this.meshes[agent.id] = mesh
+                // this.meshes[agent.id] = mesh
+                this.meshes.set(agent, mesh)
+                mesh.userData.agent = agent
             }
             // const { x, y, z, obj3d } = agent
             const obj3d = agent.obj3d

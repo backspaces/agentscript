@@ -47,6 +47,8 @@
                     drawOptions
                 )
 
+                util.toWindow({ util, model, view })
+
                 await util.timeoutLoop(
                     () => {
                         model.step()

@@ -27,6 +27,8 @@
                     { div: 'modelDiv' },
                     drawOptions
                 )
+
+                util.toWindow({ util, model, view })
                 view.setPatchesSmoothing(true) // make water smoother
 
                 await util.timeoutLoop(

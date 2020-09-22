@@ -40,9 +40,9 @@
                     drawOptions
                 )
 
-                const gui = runGui(model, view)
+                util.toWindow({ util, model, view })
 
-                util.toWindow({ util, model, view, gui })
+                const gui = runGui(model, view)
 
                 await util.timeoutLoop(
                     () => {

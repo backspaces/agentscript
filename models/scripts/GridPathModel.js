@@ -16,6 +16,8 @@ class GridPathModel extends Model {
             minY: 0,
             maxX: 9,
             maxY: 9,
+            minZ: 0,
+            maxZ: 2,
         }
     ) {
         super(worldOptions) // default world options if "undefined"

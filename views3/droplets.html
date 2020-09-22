@@ -38,6 +38,8 @@
                     drawOptions
                 )
 
+                util.toWindow({ util, model, view })
+
                 util.timeoutLoop(
                     () => {
                         model.step()

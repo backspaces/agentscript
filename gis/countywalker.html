@@ -27,7 +27,7 @@
                     super.setup()
                     this.patches.ask(p => {
                         const pt = this.world.toGeo(p.x, p.y)
-                        util.forLoop(counties.features, (f, i) => {
+                        util.forLoop(this.counties.features, (f, i) => {
                             if (turf.booleanPointInPolygon(pt, f)) {
                                 if (p.feature)
                                     console.log('p.feature exists', p)
@@ -74,7 +74,8 @@
 
                 const world = new GeoWorld(bbox, 100)
                 const model = new GeoModel(world)
-                util.toWindow({ counties, bbox, world, model })
+                model.counties = counties
+                // util.toWindow({ counties, bbox, world, model })
 
                 await model.startup()
                 model.setup()
@@ -84,7 +85,8 @@
                     { div: util.createCanvas(0, 0) },
                     drawOptions
                 )
-                util.toWindow({ view, util })
+
+                util.toWindow({ util, model, view })
 
                 const map = mbox.newMap(mapboxgl, {
                     zoom: 5.5,

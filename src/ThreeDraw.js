@@ -49,8 +49,6 @@ export default class ThreeDraw extends ThreeView {
         if (typeof drawOptions.patchesMap === 'string')
             drawOptions.patchesMap = ColorMap[drawOptions.patchesMap]
 
-        // const { patchesMesh, turtlesMesh, linksMesh } = drawOptions
-        // for ()
         const { patches, turtles, links } = Object.assign(
             ThreeView.defaultOptions(),
             viewOptions
