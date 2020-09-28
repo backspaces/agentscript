@@ -165,11 +165,11 @@ export default class Turtle3D extends Turtle {
 
     distance(agent) {
         const { x, y, z } = agent
-        this.distanceXYZ(x, y, z)
+        return this.distanceXYZ(x, y, z)
     }
     distanceXYZ(x1, y1, z1) {
         const { x, y, z } = this
-        util.distance3(x, y, z, x1, y1, z1)
+        return util.distance3(x, y, z, x1, y1, z1)
     }
 
     // From https://ccl.northwestern.edu/netlogo/docs/

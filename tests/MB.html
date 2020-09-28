@@ -48,7 +48,7 @@
 
             const data =
                 type === 'geojson'
-                    ? 'https://backspaces.net/temp/santafe7roads.json'
+                    ? './data/santafe7roads.json'
                     : 'mapbox://backspaces.04kiyweb'
             // ? 'http://backspaces.net/temp/santafe7roads.json'
             // : '../../tiles/santafe7.mbtiles'
@@ -57,7 +57,7 @@
             const id = 'santaFe'
             console.log({ type, data, id })
 
-            map.on('load', function() {
+            map.on('load', function () {
                 if (type === 'vector') {
                     map.addLayer({
                         id: id,

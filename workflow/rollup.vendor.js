@@ -1,13 +1,38 @@
 import commonjs from 'rollup-plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import copy from 'rollup-plugin-copy'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 export default [
+    // {
+    //     input: 'node_modules/@firebase/app/dist/index.esm.js',
+    //     output: {
+    //         file: 'vendor/firebase-app.esm.js',
+    //         format: 'esm',
+    //     },
+    //     plugins: [nodeResolve()],
+    // },
+    // {
+    //     input: 'node_modules/@firebase/database/dist/index.esm.js',
+    //     output: {
+    //         file: 'vendor/firebase-database.esm.js',
+    //         format: 'esm',
+    //     },
+    //     plugins: [nodeResolve()],
+    // },
+    // {
+    //     input: 'node_modules/@firebase/database/dist/index.esm.js',
+    //     output: {
+    //         file: 'vendor/firebase-database.min.js',
+    //         format: 'esm',
+    //     },
+    //     plugins: [terser(), nodeResolve()],
+    // },
     {
         input: 'workflow/three.index.js',
         output: {
             file: 'vendor/three.esm.min.js',
-            format: 'es',
+            format: 'esm',
             banner: '/* eslint-disable */',
         },
         plugins: [terser()],
@@ -16,7 +41,7 @@ export default [
         input: 'workflow/three.index.js',
         output: {
             file: 'vendor/three.esm.js',
-            format: 'es',
+            format: 'esm',
             banner: '/* eslint-disable */',
         },
     },
@@ -24,7 +49,7 @@ export default [
         input: 'node_modules/three/src/core/Object3D.js',
         output: {
             file: 'vendor/Object3D.esm.min.js',
-            format: 'es',
+            format: 'esm',
             banner: '/* eslint-disable */',
         },
         plugins: [terser()],
@@ -33,7 +58,7 @@ export default [
         input: 'node_modules/three/src/core/Object3D.js',
         output: {
             file: 'vendor/Object3D.esm.js',
-            format: 'es',
+            format: 'esm',
             banner: '/* eslint-disable */',
         },
     },
@@ -41,7 +66,7 @@ export default [
         input: 'node_modules/dat.gui/build/dat.gui.module.js',
         output: {
             file: 'vendor/dat.gui.esm.min.js',
-            format: 'es',
+            format: 'esm',
             banner: '/* eslint-disable */',
         },
         plugins: [
@@ -93,7 +118,7 @@ export default [
         input: 'node_modules/@turf/turf/turf.es.js',
         output: {
             file: 'vendor/turf.esm.min.js',
-            format: 'es',
+            format: 'esm',
             banner: '/* eslint-disable */',
         },
         plugins: [

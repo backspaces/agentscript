@@ -62,13 +62,12 @@
         "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",
         "start": "./node_modules/.bin/live-server &",
-        "temp": "rollup --format=esm --file=vendor/object3D.esm.js --input node_modules/three/src/core/Object3D.js"
+        "temp": "snowpack  --polyfill-node"
     },
-    "@pika/web": {
-        "webDependencies": [
-            "three",
-            "three/examples/jsm/controls/OrbitControls.js"
-        ]
+    "snowpack": {
+        "installOptions": {
+            "polyfillNode": true
+        }
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
@@ -79,7 +78,7 @@
         "three": "^0.119.0"
     },
     "devDependencies": {
-        "@pika/web": "^0.4.3",
+        "@rollup/plugin-node-resolve": "^9.0.0",
         "ava": "^2.1.0",
         "chokidar-cli": "^1.2.1",
         "esm": "^3.2.25",
@@ -91,7 +90,7 @@
         "rollup-plugin-copy": "^3.1.0",
         "rollup-plugin-terser": "^5.0.0",
         "shx": "0.3",
-        "snowpack": "^1.7.1",
+        "snowpack": "^2.12.1",
         "terser": "^3.10.11"
     }
 }

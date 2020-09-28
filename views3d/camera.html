@@ -19,7 +19,7 @@
             }
             const drawOptions = {
                 turtlesMesh: 'Obj3DMesh',
-                turtlesShape: t => (isPixel(t) ? 'Cube' : 'Dart3D'),
+                turtlesShape: t => (isPixel(t) ? 'Cube' : 'Dart'),
                 turtlesColor: t =>
                     isPixel(t) ? uvToColor(t) : Color.toTypedColor('red'),
                 turtlesSize: t => (isPixel(t) ? 0.35 : 3),

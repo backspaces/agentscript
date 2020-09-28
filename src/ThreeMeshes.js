@@ -430,7 +430,7 @@ export class LinksMesh extends BaseMesh {
 const geometries = {
     // Use functions .. allows geo scale/rotate etc
     // Default: () => turtleGeometry(),
-    Dart3D: () => turtleGeometry(),
+    Dart: () => turtleGeometry(),
     Cone0: () => new THREE.ConeBufferGeometry(0.5).rotateX(PI / 2),
     Cone: () => new THREE.ConeBufferGeometry(0.5).rotateZ(-PI / 2),
     Cube: () => new THREE.BoxBufferGeometry(),
@@ -461,13 +461,13 @@ export class Obj3DMesh extends BaseMesh {
         this.lastAgentsLength = null
         this.lastAgentsMaxID = null
     }
-    newMesh(geometryName = 'Dart3D', color = 'red', size = 1) {
+    newMesh(geometryName = 'Dart', color = 'red', size = 1) {
         // let geometry = this.options.geometries[geometryName]
         if (geometryName === 'random') geometryName = util.oneKeyOf(geometries)
         let geometry = geometries[geometryName]
         if (!geometry) {
             console.log('Geometry not found: ', geometryName, '..using Default')
-            geometryName = 'Dart3D'
+            geometryName = 'Dart'
             // geometry = this.options.geometries[geometryName]
             geometry = geometries[geometryName]
         }
@@ -495,12 +495,12 @@ export class Obj3DMesh extends BaseMesh {
             (lastLen > agents.length || agents[lastLen - 1].id !== lastID)
         ) {
             // remove dead agents
-            console.log('look for dead agents')
+            // console.log('look for dead agents')
             this.meshes.forEach((mesh, agent) => {
                 if (mesh.userData.agent.id === -1) {
                     disposeMesh(mesh)
                     this.meshes.delete(agent)
-                    console.log(mesh, agent)
+                    // console.log(mesh, agent)
                 }
             })
         }
