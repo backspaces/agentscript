@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Convergence</title>
+    </head>
+    <body>
+        <script type="module">
+            import DefineTransform from './DefineTransform'
+
+            const transform = new DefineTransform()
+
+            const onValue = transform.defineTransform(
+                'flock',
+                'convergence',
+                `return  model.flockVectorSize()`
+            ) // (value => console.log('hello', 'density', value))
+
+            onValue(value => console.log('flock', 'convergence', value))
+        </script>
+    </body>
+</html>

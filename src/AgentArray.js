@@ -65,6 +65,7 @@ export default class AgentArray extends Array {
     typedSample(obj) {
         // const length = this.length
         const result = {}
+        // note: use util's forLoop, does not iterate over this agent array.
         util.forLoop(obj, (val, key) => {
             result[key] = this.props(key, val)
         })
@@ -140,16 +141,13 @@ export default class AgentArray extends Array {
         return this.sum(key) / this.length
     }
     min(key) {
-        return this.reduce(
-            (prev, o) => Math.min(prev, key ? o[key] : o),
-            Infinity
-        )
+        return this.reduce((prev, o) => Math.min(prev, key ? o[key] : o))
     }
     max(key) {
-        return this.reduce(
-            (prev, o) => Math.max(prev, key ? o[key] : o),
-            -Infinity
-        )
+        return this.reduce((prev, o) => Math.max(prev, key ? o[key] : o))
+    }
+    extent(key) {
+        return [this.min(key), this.max(key)]
     }
     histogram(key, bins = 10, min = this.min(key), max = this.max(key)) {
         const binSize = (max - min) / bins

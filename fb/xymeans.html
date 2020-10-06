@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Means0</title>
+    </head>
+    <body>
+        <script type="module">
+            import DefineTransform from './DefineTransform'
+
+            const transform = new DefineTransform()
+
+            const onValue = transform.defineTransform(
+                'hello',
+                'xymeans',
+                // Note: returning an obj converts it to a string!
+                `return [ model.turtles.avg('x'), model.turtles.avg('y') ].toString()`
+            )(value => console.log('hello', 'xymeans', value))
+
+            // onValue(value => console.log('hello', 'xymeans', value))
+        </script>
+    </body>
+</html>

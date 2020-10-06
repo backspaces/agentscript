@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <title>test</title>
+    </head>
+    <body>
+        <!-- <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-database.js"></script> -->
+
+        <!-- <script src="https://www.gstatic.com/firebasejs/7.13.2/firebase-analytics.js"></script> -->
+
+        <script type="module">
+            import firebase from 'https://cdn.skypack.dev/@firebase/app'
+            import 'https://cdn.skypack.dev/@firebase/database'
+            // // import * as fbdb from 'https://cdn.skypack.dev/@firebase/database'
+
+            // // import firebase from 'https://jspm.dev/@firebase/app' // fails
+            // import { fireßbase } from 'https://jspm.dev/@firebase/app'
+            // import 'https://jspm.dev/@firebase/database'
+
+            // fails .. cant get the right permutation to work.
+            // import firebase from 'https://unpkg.com/@firebase/app?module'
+            // import * as fbdb from 'https://jspm.dev/@firebase/database?module'
+
+            //fails, needs app
+            // import firebase from './vendor/firebase-app.esm.js'
+            // import * as fbdb from './vendor/firebase-database.esm.js'
+
+            // import * as FB from 'https://cdn.skypack.dev/@firebase/database'
+            // import * as FB from 'https://cdn.skypack.dev/@firebase/database'
+            // // import * as DB from 'https://jspm.dev/@firebase/database'
+            // // // AS works as well, using the npm package
+            // // import * as AS from 'https://cdn.skypack.dev/agentscript/'
+            // // console.log(AS)
+            // console.log(firebase)
+            // console.log(FB)
+            // // console.log(DB)
+            // // import('//jspm.dev/@firebase/database').then(module => console.log(module))
+
+            const config = {
+                apiKey: 'AIzaSyDZiLOsrcCeYsDe1kGyORPpExVNBwzpmqY',
+                projectId: 'acequia',
+                databaseURL: 'https://acequia.firebaseio.com/',
+
+                // authDomain: 'agentscript.firebaseapp.com',
+                // storageBucket: 'firebase-agentscript.appspot.com',
+                // messagingSenderId: '263611724738',
+                // appId: '1:263611724738:web:aa68ebf876b18412aadc5b',
+            }
+            firebase.initializeApp(config)
+            const db = firebase.database()
+            const aGoodPlace = db.ref().child('agentscript')
+            //
+            aGoodPlace.on('value', ev => {
+                console.log('It worked', ev.val())
+            })
+            aGoodPlace.update({ count: 0 })
+
+            // firebase.initializeApp(config)
+            // const database = firebase.database()
+            // const flock = database.ref('/agentscript/flock/')
+            // flock.on('value', snapshot => {
+            //     console.log('Child added !')
+            // })
+
+            // const config = {
+            //     apiKey: 'AIzaSyDZiLOsrcCeYsDe1kGyORPpExVNBwzpmqY',
+            //     projectId: 'acequia',
+            //     databaseURL: 'https://acequia.firebaseio.com/',
+            // }
+            // firebase.initializeApp(config)
+            // const db = firebase.database()
+        </script>
+    </body>
+</html>

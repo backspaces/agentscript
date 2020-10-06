@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Flock</title>
+    </head>
+    <body>
+        <script type="module">
+            import Model from '../models/FlockModel.js'
+            import util from '../src/util.js'
+            import Transforms from './Transforms.js'
+
+            const transforms = new Transforms('flock')
+
+            async function run() {
+                const model = new Model()
+                await model.startup()
+                model.setup()
+
+                await util.timeoutLoop(
+                    () => {
+                        model.step()
+                        transforms.step(model)
+                    },
+                    -1, // 500,
+                    33
+                )
+            }
+            run()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

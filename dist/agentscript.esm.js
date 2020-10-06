@@ -1199,6 +1199,34 @@ function normalizeInt(array, lo, hi) {
     return normalize(array, lo, hi).map(n => Math.round(n))
 }
 
+// Function <> String for Cap F functions
+function functionToStrings(fcn, simplify = true) {
+    const str = fcn.toString();
+    const args = str.replace(/.*\(/, '').replace(/\).*/s, '');
+    let body = str.replace(/.*\) {/, '').replace(/}$/, '');
+    if (simplify) body = simplifyFunctionString(body);
+    return [args, body]
+}
+function stringsToFunction(args, body) {
+    return new Function(args, body)
+}
+function simplifyFunctionString(str) {
+    // str = str.replace(/\n/g, ' ')
+    // str = str.replace(/^ */, '')
+    // str = str.replace(/ *$/g, '')
+    // str = str.replace(/  */g, ' ')
+
+    // str = str.replace(/^ */gm, '')
+    // str = str.replace(/ *$/gm, '')
+    // str = str.replace(/  */g, ' ')
+
+    str = str.replace(/^ */gm, '');
+    str = str.replace(/^\n/, '');
+    str = str.replace(/\n$/, '');
+
+    return str
+}
+
 var objects = /*#__PURE__*/Object.freeze({
     identityFcn: identityFcn,
     noopFcn: noopFcn,
@@ -1239,7 +1267,10 @@ var objects = /*#__PURE__*/Object.freeze({
     integerRamp: integerRamp,
     normalize: normalize,
     normalize8: normalize8,
-    normalizeInt: normalizeInt
+    normalizeInt: normalizeInt,
+    functionToStrings: functionToStrings,
+    stringsToFunction: stringsToFunction,
+    simplifyFunctionString: simplifyFunctionString
 });
 
 function toJSON(obj, indent = 0, topLevelArrayOK = true) {
@@ -1536,6 +1567,7 @@ class AgentArray extends Array {
     typedSample(obj) {
         // const length = this.length
         const result = {};
+        // note: use util's forLoop, does not iterate over this agent array.
         util.forLoop(obj, (val, key) => {
             result[key] = this.props(key, val);
         });
@@ -1611,16 +1643,13 @@ class AgentArray extends Array {
         return this.sum(key) / this.length
     }
     min(key) {
-        return this.reduce(
-            (prev, o) => Math.min(prev, key ? o[key] : o),
-            Infinity
-        )
+        return this.reduce((prev, o) => Math.min(prev, key ? o[key] : o))
     }
     max(key) {
-        return this.reduce(
-            (prev, o) => Math.max(prev, key ? o[key] : o),
-            -Infinity
-        )
+        return this.reduce((prev, o) => Math.max(prev, key ? o[key] : o))
+    }
+    extent(key) {
+        return [this.min(key), this.max(key)]
     }
     histogram(key, bins = 10, min = this.min(key), max = this.max(key)) {
         const binSize = (max - min) / bins;

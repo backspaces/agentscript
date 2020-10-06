@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Density0</title>
+    </head>
+    <body>
+        <script type="module">
+            import firebase from 'https://cdn.skypack.dev/@firebase/app'
+            import 'https://cdn.skypack.dev/@firebase/database'
+            import util from '../src/util.js'
+            import * as fbutils from './fbutils.js'
+
+            firebase.initializeApp(fbutils.config)
+            const db = firebase.database()
+
+            const resultsRef = fbutils.resultsRef(db, 'hello', 'density')
+            resultsRef.on('value', ev => {
+                const val = ev.val()
+                if (val) console.log('density: ', val)
+            })
+
+            fbutils.createTransform(
+                db,
+                'hello',
+                'density',
+                // Note: returning an obj converts it to a string!
+                // Returning a large array also a looser, better:
+                //   Return array.toString(), Parse: str.split()
+                `return model.patches.map(p => p.turtlesHere().length).toString()`
+            )
+        </script>
+    </body>
+</html>

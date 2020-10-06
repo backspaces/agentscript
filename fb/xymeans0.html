@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Means0</title>
+    </head>
+    <body>
+        <script type="module">
+            import firebase from 'https://cdn.skypack.dev/@firebase/app'
+            import 'https://cdn.skypack.dev/@firebase/database'
+            import util from '../src/util.js'
+            import * as fbutils from './fbutils.js'
+
+            firebase.initializeApp(fbutils.config)
+            const db = firebase.database()
+
+            const resultsRef = fbutils.resultsRef(db, 'hello', 'xymeans')
+            resultsRef.on('value', ev => {
+                const val = ev.val()
+                if (val) console.log('xymeans: ', val)
+            })
+
+            fbutils.createTransform(
+                db,
+                'hello',
+                'xymeans',
+                // Note: returning an obj converts it to a string!
+                `return [ model.turtles.avg('x'), model.turtles.avg('y') ].toString()`
+            )
+        </script>
+    </body>
+</html>

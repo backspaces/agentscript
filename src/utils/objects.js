@@ -290,3 +290,31 @@ export function normalize8(array) {
 export function normalizeInt(array, lo, hi) {
     return normalize(array, lo, hi).map(n => Math.round(n))
 }
+
+// Function <> String for Cap F functions
+export function functionToStrings(fcn, simplify = true) {
+    const str = fcn.toString()
+    const args = str.replace(/.*\(/, '').replace(/\).*/s, '')
+    let body = str.replace(/.*\) {/, '').replace(/}$/, '')
+    if (simplify) body = simplifyFunctionString(body)
+    return [args, body]
+}
+export function stringsToFunction(args, body) {
+    return new Function(args, body)
+}
+export function simplifyFunctionString(str) {
+    // str = str.replace(/\n/g, ' ')
+    // str = str.replace(/^ */, '')
+    // str = str.replace(/ *$/g, '')
+    // str = str.replace(/  */g, ' ')
+
+    // str = str.replace(/^ */gm, '')
+    // str = str.replace(/ *$/gm, '')
+    // str = str.replace(/  */g, ' ')
+
+    str = str.replace(/^ */gm, '')
+    str = str.replace(/^\n/, '')
+    str = str.replace(/\n$/, '')
+
+    return str
+}

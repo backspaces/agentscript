@@ -7,6 +7,7 @@ class HelloModel extends Model {
             population: 10,
             speed: 0.1,
             wiggle: 0.1,
+            linksToo: true,
         }
     }
 
@@ -25,7 +26,7 @@ class HelloModel extends Model {
         })
 
         this.turtles.ask(t => {
-            if (this.population > 1)
+            if (this.population > 1 && this.linksToo)
                 this.links.create(t, this.turtles.otherOneOf(t))
         })
     }
