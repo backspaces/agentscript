@@ -8,13 +8,13 @@
 
             const transform = new DefineTransform()
 
-            const onDensityValue = transform.defineTransform(
+            const onValue = transform.defineTransform(
                 'hello',
                 'density',
                 `return model.patches.map(p => p.turtlesHere().length).toString()`
             ) // (value => console.log('hello', 'density', value))
 
-            onDensityValue(value => console.log('hello', 'density', value))
+            onValue(value => console.log('hello', 'density', value))
         </script>
     </body>
 </html>

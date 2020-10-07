@@ -90,6 +90,10 @@ The gis onepagers use gis & mapbox utilities to create and view models running o
 
 The docs onepagers are a series of tutorials, showing how to build, view and control simple models.
 
+[fb](./fb/README.md)
+
+An experimental distributed framework for running models in one page while listening & getting results in another. We call these Model Transforms. They currently show their results in the browser console.
+
 ## Developer Information
 
 Most users need not worry about this, you can access all the AgentScript code as described above using local files or servers. This is for those wishing to build the AgentScript system itself.

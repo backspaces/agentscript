@@ -19,10 +19,11 @@ export default class Transforms {
     constructor(modelName, root = '') {
         firebase.initializeApp(config)
         this.database = firebase.database()
+        const modelsRoot = `${root}/agentscript/models`
 
         this.transforms = {}
         this.transformsRef = this.database.ref(
-            `${root}agentscript/models/${modelName}/transforms`
+            `${modelsRoot}/${modelName}/transforms`
         )
         this.transformsRef.once('value', ev => {
             const initialDB = util.objectToString(ev.val())
@@ -59,7 +60,12 @@ export default class Transforms {
             const result = fcn(model, util)
             // If result is a object, this turns it into a string!
             // Need ref.child() ?
-            ref.set(result)
+            try {
+                ref.set(result)
+            } catch (error) {
+                console.log(name, fcn, ref, result)
+                throw Error('ref.set error')
+            }
         })
     }
 }

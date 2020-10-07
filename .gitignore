@@ -11,6 +11,8 @@ test.html
 # src/SpriteSheet.js
 **/.DS_Store
 
+Attic
+
 # package-lock.json
 # yarn.lock
 web_modules/
