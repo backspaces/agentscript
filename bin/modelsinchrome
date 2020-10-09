@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+if [ "$1" == "" ]; then echo "This program requires arguments"; exit; fi
+
+dir=$1
+# root='http://localhost/src/agentscript/'
+root='https://agentscript.org/'
+
+cd ~/src/agentscript
+
+#  Create new browser window first! Wait a bit before running models.
+open -na "Google Chrome" --args --new-window
+sleep 2
+
+models=`ls $dir/*html | grep -v index.html`
+for model in $models; do
+	url=$root$model
+	echo $url
+	open $url
+done
