@@ -118,12 +118,31 @@ export function headingToAngle(heading) {
     const deg = mod(90 - heading, 360)
     return deg * toRadians
 }
+// AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
+// We choose Phi radians from xy plane, "math" is often from Z axis
+// REMIND: some prefer -90, 90
+export function altAzToAnglePhi(alt, az) {
+    const angle = headingToAngle(az)
+    const phi = modpipi(alt * toRadians)
+    return [angle, phi]
+}
+export function anglePhiToAltAz(angle, phi) {
+    const az = angleToHeading(angle)
+    const alt = mod180180(phi * toDegrees)
+    return [alt, az]
+}
 
 export function mod360(degrees) {
     return mod(degrees, 360)
 }
 export function mod2pi(radians) {
     return mod(radians, 2 * PI)
+}
+export function mod180180(degrees) {
+    return mod360(degrees) - 180
+}
+export function modpipi(radians) {
+    return mod2pi(radians) - PI
 }
 
 export function headingsEqual(heading1, heading2) {

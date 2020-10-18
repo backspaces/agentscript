@@ -1,5 +1,5 @@
 import { randomInt } from './math.js'
-// import { isString } from './types.js'
+import { convertArrayType } from './types.js'
 
 // ### Arrays, Objects and Iteration
 

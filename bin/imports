@@ -1,0 +1,46 @@
+#!/usr/bin/env node --require esm
+import { install, printStats } from 'esinstall'
+import nodePolyfills from 'rollup-plugin-node-polyfills'
+
+async function run() {
+    const foo = await install(
+        [
+            'mapbox-gl',
+            'three',
+            'three/examples/jsm/controls/OrbitControls.js',
+            'three/src/core/Object3D.js',
+            'chart.js',
+            'dat.gui',
+            'fflate',
+            '@turf/turf',
+            'stats.js',
+            '@firebase/app',
+            '@firebase/database',
+        ],
+        {
+            rollup: {
+                plugins: [nodePolyfills()],
+            },
+        }
+    )
+}
+run()
+
+/*
+
+turf.bbox                   @turf/bbox
+turf.bboxPolygon            @turf/bbox-polygon
+turf.booleanPointInPolygon  @turf/boolean-point-in-polygon
+turf.featureCollection      @turf/helpers
+
+MB
+turf.point          @turf/helpers
+turf.centroid       @turf/centroid
+notes:
+turf.distance       @turf/distance
+
+https://github.com/Turfjs/turf
+npm install @turf/helpers @turf/buffer
+
+
+*/

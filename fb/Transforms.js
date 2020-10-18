@@ -14,7 +14,6 @@ export function setConfig(cfg) {
 export function getConfig() {
     return config
 }
-
 export default class Transforms {
     constructor(modelName, root = '') {
         firebase.initializeApp(config)
@@ -40,7 +39,6 @@ export default class Transforms {
             // delete this.transforms[ev.key]
         })
     }
-
     addTransform(name, fcnBody) {
         const xfm = {}
         xfm.function = new Function('model, util', fcnBody)

@@ -809,12 +809,31 @@ function headingToAngle(heading) {
     const deg = mod(90 - heading, 360);
     return deg * toRadians
 }
+// AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
+// We choose Phi radians from xy plane, "math" is often from Z axis
+// REMIND: some prefer -90, 90
+function altAzToAnglePhi(alt, az) {
+    const angle = headingToAngle(az);
+    const phi = modpipi(alt * toRadians);
+    return [angle, phi]
+}
+function anglePhiToAltAz(angle, phi) {
+    const az = angleToHeading(angle);
+    const alt = mod180180(phi * toDegrees);
+    return [alt, az]
+}
 
 function mod360(degrees) {
     return mod(degrees, 360)
 }
 function mod2pi(radians) {
     return mod(radians, 2 * PI$1)
+}
+function mod180180(degrees) {
+    return mod360(degrees) - 180
+}
+function modpipi(radians) {
+    return mod2pi(radians) - PI$1
 }
 
 function headingsEqual(heading1, heading2) {
@@ -892,8 +911,12 @@ var math = /*#__PURE__*/Object.freeze({
     radToDegAll: radToDegAll,
     angleToHeading: angleToHeading,
     headingToAngle: headingToAngle,
+    altAzToAnglePhi: altAzToAnglePhi,
+    anglePhiToAltAz: anglePhiToAltAz,
     mod360: mod360,
     mod2pi: mod2pi,
+    mod180180: mod180180,
+    modpipi: modpipi,
     headingsEqual: headingsEqual,
     anglesEqual: anglesEqual,
     subtractRadians: subtractRadians,
@@ -907,7 +930,90 @@ var math = /*#__PURE__*/Object.freeze({
     inCone: inCone
 });
 
-// import { isString } from './types.js'
+// ### Types
+
+// Fix the javascript typeof operator https://goo.gl/Efdzk5
+const typeOf = obj =>
+    ({}.toString
+        .call(obj)
+        .match(/\s(\w+)/)[1]
+        .toLowerCase());
+const isType = (obj, string) => typeOf(obj) === string;
+const isOneOfTypes = (obj, array) => array.includes(typeOf(obj));
+
+const isString = obj => isType(obj, 'string');
+const isObject = obj => isType(obj, 'object');
+// export const isArray = obj => isType(obj, 'array')
+const isArray = obj => Array.isArray(obj);
+const isNumber = obj => isType(obj, 'number');
+const isFunction = obj => isType(obj, 'function');
+
+// Is a number an integer (rather than a float w/ non-zero fractional part)
+const isInteger = n => Number.isInteger(n); // assume es6, babel otherwise.
+const isFloat = n => isNumber(n) && n % 1 !== 0; // https://goo.gl/6MS0Tm
+const isCanvas = obj =>
+    isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']);
+
+const isImageable = obj =>
+    isOneOfTypes(obj, [
+        'image',
+        'htmlimageelement',
+        'htmlcanvaselement',
+        'offscreencanvas',
+        'imagebitmap',
+    ]);
+
+// Typed Arrays:
+const isTypedArray = obj => typeOf(obj.buffer) === 'arraybuffer';
+const isUintArray = obj => /^uint.*array$/.test(typeOf(obj));
+const isIntArray = obj => /^int.*array$/.test(typeOf(obj));
+const isFloatArray = obj => /^float.*array$/.test(typeOf(obj));
+
+// export const isWebglArray = obj =>
+//     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
+
+function isLittleEndian() {
+    const d32 = new Uint32Array([0x01020304]);
+    return new Uint8ClampedArray(d32.buffer)[0] === 4
+}
+
+// Convert Array or TypedArray to given Type (Array or TypedArray).
+// Result same length as array, precision may be lost.
+function convertArrayType(array, Type) {
+    const Type0 = array.constructor;
+    if (Type0 === Type) return array // return array if already same Type
+    return Type.from(array) // Use .from (both TypedArrays and Arrays)
+}
+
+// Unused:
+// isHtmlElement: obj => /^html.*element$/.test(typeOf(obj))
+// isImage: obj => isType(obj, 'image')
+// isImageBitmap: obj => isType(obj, 'imagebitmap')
+// // Is undefined, null, bool, number, string, symbol
+// isPrimitive: obj => obj == null || 'object' != typeof obj
+// Return array's type (Array or TypedArray variant)
+// typeName: obj => obj.constructor.name
+
+var types = /*#__PURE__*/Object.freeze({
+    typeOf: typeOf,
+    isType: isType,
+    isOneOfTypes: isOneOfTypes,
+    isString: isString,
+    isObject: isObject,
+    isArray: isArray,
+    isNumber: isNumber,
+    isFunction: isFunction,
+    isInteger: isInteger,
+    isFloat: isFloat,
+    isCanvas: isCanvas,
+    isImageable: isImageable,
+    isTypedArray: isTypedArray,
+    isUintArray: isUintArray,
+    isIntArray: isIntArray,
+    isFloatArray: isFloatArray,
+    isLittleEndian: isLittleEndian,
+    convertArrayType: convertArrayType
+});
 
 // ### Arrays, Objects and Iteration
 
@@ -1349,91 +1455,6 @@ async function runModel(params) {
 var models = /*#__PURE__*/Object.freeze({
     sampleModel: sampleModel,
     runModel: runModel
-});
-
-// ### Types
-
-// Fix the javascript typeof operator https://goo.gl/Efdzk5
-const typeOf = obj =>
-    ({}.toString
-        .call(obj)
-        .match(/\s(\w+)/)[1]
-        .toLowerCase());
-const isType = (obj, string) => typeOf(obj) === string;
-const isOneOfTypes = (obj, array) => array.includes(typeOf(obj));
-
-const isString = obj => isType(obj, 'string');
-const isObject = obj => isType(obj, 'object');
-// export const isArray = obj => isType(obj, 'array')
-const isArray = obj => Array.isArray(obj);
-const isNumber = obj => isType(obj, 'number');
-const isFunction = obj => isType(obj, 'function');
-
-// Is a number an integer (rather than a float w/ non-zero fractional part)
-const isInteger = n => Number.isInteger(n); // assume es6, babel otherwise.
-const isFloat = n => isNumber(n) && n % 1 !== 0; // https://goo.gl/6MS0Tm
-const isCanvas = obj =>
-    isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']);
-
-const isImageable = obj =>
-    isOneOfTypes(obj, [
-        'image',
-        'htmlimageelement',
-        'htmlcanvaselement',
-        'offscreencanvas',
-        'imagebitmap',
-    ]);
-
-// Typed Arrays:
-const isTypedArray = obj => typeOf(obj.buffer) === 'arraybuffer';
-const isUintArray = obj => /^uint.*array$/.test(typeOf(obj));
-const isIntArray = obj => /^int.*array$/.test(typeOf(obj));
-const isFloatArray = obj => /^float.*array$/.test(typeOf(obj));
-
-// export const isWebglArray = obj =>
-//     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
-
-function isLittleEndian() {
-    const d32 = new Uint32Array([0x01020304]);
-    return new Uint8ClampedArray(d32.buffer)[0] === 4
-}
-
-// Convert Array or TypedArray to given Type (Array or TypedArray).
-// Result same length as array, precision may be lost.
-function convertArrayType$1(array, Type) {
-    const Type0 = array.constructor;
-    if (Type0 === Type) return array // return array if already same Type
-    return Type.from(array) // Use .from (both TypedArrays and Arrays)
-}
-
-// Unused:
-// isHtmlElement: obj => /^html.*element$/.test(typeOf(obj))
-// isImage: obj => isType(obj, 'image')
-// isImageBitmap: obj => isType(obj, 'imagebitmap')
-// // Is undefined, null, bool, number, string, symbol
-// isPrimitive: obj => obj == null || 'object' != typeof obj
-// Return array's type (Array or TypedArray variant)
-// typeName: obj => obj.constructor.name
-
-var types = /*#__PURE__*/Object.freeze({
-    typeOf: typeOf,
-    isType: isType,
-    isOneOfTypes: isOneOfTypes,
-    isString: isString,
-    isObject: isObject,
-    isArray: isArray,
-    isNumber: isNumber,
-    isFunction: isFunction,
-    isInteger: isInteger,
-    isFloat: isFloat,
-    isCanvas: isCanvas,
-    isImageable: isImageable,
-    isTypedArray: isTypedArray,
-    isUintArray: isUintArray,
-    isIntArray: isIntArray,
-    isFloatArray: isFloatArray,
-    isLittleEndian: isLittleEndian,
-    convertArrayType: convertArrayType$1
 });
 
 // ### OofA/AofO

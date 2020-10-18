@@ -65,6 +65,7 @@
         "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",
         "start": "./node_modules/.bin/live-server &",
+        "foo": "./node_modules/.bin/live-server &",
         "temp": "snowpack  --polyfill-node"
     },
     "snowpack": {
@@ -74,16 +75,21 @@
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
+        "@firebase/app": "^0.6.11",
+        "@firebase/database": "^0.6.13",
         "@turf/turf": "^5.1.6",
         "chart.js": "^2.8.0",
         "dat.gui": "^0.7.6",
+        "fflate": "^0.2.3",
         "mapbox-gl": "^1.10.1",
+        "stats.js": "^0.17.0",
         "three": "^0.119.0"
     },
     "devDependencies": {
         "@rollup/plugin-node-resolve": "^9.0.0",
         "ava": "^2.1.0",
         "chokidar-cli": "^1.2.1",
+        "esinstall": "^0.3.3",
         "esm": "^3.2.25",
         "live-server": "latest",
         "npm-run-all": "4.1.2",

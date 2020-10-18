@@ -52,11 +52,4 @@ export default class DefineTransform {
         }
         return onValue
     }
-
-    // onValue(fcn) {
-    //     this.resultsRef.on('value', ev => {
-    //         const val = ev.val()
-    //         if (val) fcn(val)
-    //     })
-    // }
 }
