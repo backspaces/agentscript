@@ -1,4 +1,32 @@
-import util from './util.js'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: AgentArray.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: AgentArray.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import util from './util.js'
 
 // An Array superclass with convenience methods used by NetLogo.
 // Tipically the items in the array are Objects, NetLogo Agents,
@@ -103,7 +131,7 @@ class AgentArray extends Array {
      */
     props(key, type = AgentArray) {
         const result = new type(this.length)
-        for (let i = 0; i < this.length; i++) {
+        for (let i = 0; i &lt; this.length; i++) {
             result[i] = this[i][key]
         }
         return result
@@ -134,7 +162,7 @@ class AgentArray extends Array {
     // Odd: as.props('type') twice as fast as as.results(p => p.type)?
     // results(fcn) {
     //     const result = new AgentArray(this.length)
-    //     for (let i = 0; i < this.length; i++) {
+    //     for (let i = 0; i &lt; this.length; i++) {
     //         result[i] = fcn(this[i])
     //     }
     //     return result
@@ -152,7 +180,7 @@ class AgentArray extends Array {
     }
 
     // Returns AgentArray of unique elements in this *sorted* AgentArray.
-    // Use sortBy or clone & sortBy if needed.
+    // Use sortBy or clone &amp; sortBy if needed.
     // uniq(f = util.identityFcn) {
     //     if (util.isString(f)) f = o => o[f]
     //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
@@ -163,7 +191,7 @@ class AgentArray extends Array {
     // Note: 5x+ faster than this.forEach(fcn) !!
     /**
      * Call fcn(agent, index, array) for each item in AgentArray.
-     * Index & array optional.
+     * Index &amp; array optional.
      * Array assumed not mutable.
      * Note: 5x+ faster than this.forEach(fcn)
      *
@@ -172,7 +200,7 @@ class AgentArray extends Array {
      * @return {this} Return this for chaining.
      */
     forLoop(fcn) {
-        for (let i = 0, len = this.length; i < len; i++) {
+        for (let i = 0, len = this.length; i &lt; len; i++) {
             fcn(this[i], i, this)
         }
         return this
@@ -182,7 +210,7 @@ class AgentArray extends Array {
     // Array can shrink. If it grows, will not visit beyond original length
     /**
      * Call fcn(agent, index, array) for each item in AgentArray.
-     * Index & array optional.
+     * Index &amp; array optional.
      * Array can shrink. If it grows, will not visit beyond original length.
      * "ask" is NetLogo term.
      *
@@ -191,13 +219,13 @@ class AgentArray extends Array {
      */
     ask(fcn) {
         const length = this.length
-        // for (let i = 0; i < length || i < this.length; i++) {
-        for (let i = 0; i < Math.min(length, this.length); i++) {
+        // for (let i = 0; i &lt; length || i &lt; this.length; i++) {
+        for (let i = 0; i &lt; Math.min(length, this.length); i++) {
             fcn(this[i], i, this)
         }
         if (length != this.length) {
             const name = this.name || this.constructor.name
-            const direction = this.length < length ? 'decreasing' : 'increasing'
+            const direction = this.length &lt; length ? 'decreasing' : 'increasing'
             util.warn(`AgentArray.ask array mutation: ${name}: ${direction}`)
         }
         // return this
@@ -247,7 +275,7 @@ class AgentArray extends Array {
         aa.fill(0)
         this.ask(a => {
             const val = key ? a[key] : a
-            if (val < min || val > max) {
+            if (val &lt; min || val > max) {
                 util.warn(`histogram bounds error: ${val}: ${min}-${max}`)
             } else {
                 let bin = Math.floor((val - min) / binSize)
@@ -310,9 +338,9 @@ class AgentArray extends Array {
         // let [low, high] = [0, array.length]
         let low = 0
         let high = this.length
-        while (low < high) {
+        while (low &lt; high) {
             const mid = (low + high) >>> 1 // floor (low+high)/2
-            if (f(this[mid]) < value) {
+            if (f(this[mid]) &lt; value) {
                 low = mid + 1
             } else {
                 high = mid
@@ -345,7 +373,7 @@ class AgentArray extends Array {
     // Return n other random agents from this array
     // otherNOf (n, agent) { return util.otherNOf(n, this, agent) }
     otherNOf(n, item) {
-        if (this.length < n) throw Error('AgentArray: otherNOf: length < N')
+        if (this.length &lt; n) throw Error('AgentArray: otherNOf: length &lt; N')
         return this.clone().remove(item).shuffle().slice(0, n)
     }
 
@@ -356,10 +384,10 @@ class AgentArray extends Array {
         if (typeof reporter === 'string') reporter = util.propFcn(reporter)
         let o = null
         let val = min ? Infinity : -Infinity
-        for (let i = 0; i < this.length; i++) {
+        for (let i = 0; i &lt; this.length; i++) {
             const a = this[i]
             const aval = reporter(a)
-            if ((min && aval < val) || (!min && aval > val)) {
+            if ((min &amp;&amp; aval &lt; val) || (!min &amp;&amp; aval > val)) {
                 ;[o, val] = [a, aval]
             }
         }
@@ -389,7 +417,7 @@ class AgentArray extends Array {
         if (n > this.length) throw Error('nOf: n larger than AgentArray')
         if (n === this.length) return this
         const result = new AgentArray()
-        while (result.length < n) {
+        while (result.length &lt; n) {
             const o = this.oneOf()
             if (!(o in result)) result.push(o)
         }
@@ -420,7 +448,7 @@ class AgentArray extends Array {
     // the size, then uses these inRect, inRadius or inCone methods
 
     // Return all agents within rectangle from given agent o.
-    // dx & dy are (float) half width/height of rect
+    // dx &amp; dy are (float) half width/height of rect
     inRect(o, dx, dy = dx, meToo = false) {
         const agents = new AgentArray()
         const minX = o.x - dx // ok if max/min off-world, o, a are in-world
@@ -428,7 +456,7 @@ class AgentArray extends Array {
         const minY = o.y - dy
         const maxY = o.y + dy
         this.ask(a => {
-            if (minX <= a.x && a.x <= maxX && minY <= a.y && a.y <= maxY) {
+            if (minX &lt;= a.x &amp;&amp; a.x &lt;= maxX &amp;&amp; minY &lt;= a.y &amp;&amp; a.y &lt;= maxY) {
                 if (meToo || o !== a) agents.push(a)
             }
         })
@@ -442,7 +470,7 @@ class AgentArray extends Array {
         const d2 = radius * radius
         const sqDistance = util.sqDistance // Local function 2-3x faster, inlined?
         this.ask(a => {
-            if (sqDistance(o.x, o.y, a.x, a.y) <= d2) {
+            if (sqDistance(o.x, o.y, a.x, a.y) &lt;= d2) {
                 if (meToo || o !== a) agents.push(a)
             }
         })
@@ -463,3 +491,26 @@ class AgentArray extends Array {
 }
 
 export default AgentArray
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Oct 22 2020 11:16:35 GMT-0600 (Mountain Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

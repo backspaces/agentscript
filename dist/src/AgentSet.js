@@ -1,13 +1,18 @@
 import AgentArray from './AgentArray.js'
-// import util from './util.js'
 
-// AgentSets are arrays that are factories for their own agents/objects.
-// They are the base for Patches, Turtles and Links.
-
-// Names: AgentSets are NetLogo collections: Patches, Turtles, and Links.
-// Agent is an object in an AgentSet: Patch, Turtle, Link.
-
-export default class AgentSet extends AgentArray {
+/**
+ * Subclass of AgentArray, used for Model Patches, Turtles, Links & Breeds.
+ * @class
+ * @description
+ * AgentSets are AgentArrays that are factories for their own Agents.
+ *
+ * Thus the Turtles AgentSet is a factory for class Turtle instances
+ * using the create() or addAgent() factory methods.
+ *
+ * AgentSets are not created directly by modelers, only other
+ * AgentSet subclasses: Patches, Turtles, Links & Breeds.
+ */
+class AgentSet extends AgentArray {
     // Magic to return AgentArray's rather than AgentSets
     // Symbol.species: https://goo.gl/Zsxwxd
     static get [Symbol.species]() {
@@ -17,6 +22,13 @@ export default class AgentSet extends AgentArray {
     // Create an empty `AgentSet` and initialize the `ID` counter for add().
     // If baseSet is supplied, the new agentset is a subarray of baseSet.
     // This sub-array feature is how breeds are managed, see class `Model`
+    /**
+     * @param {Object} model Instance of Class Model to which I belong
+     * @param {Class} AgentClass Class of items stored in this AgentSet
+     * @param {String} name Name of this AgentSet. Ex: Patches
+     * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet
+     * @memberof AgentSet
+     */
     constructor(model, AgentClass, name, baseSet = null) {
         super() // create empty AgentArray
         baseSet = baseSet || this // if not a breed, set baseSet to this
@@ -44,6 +56,17 @@ export default class AgentSet extends AgentArray {
     //   baseSet by name: turtles/patches/links
     // methods: setBreed, getBreed, isBreed
     // getter/setter: breed
+    /**
+     * Add common variables to an Agent being added to this AgentSet.
+     *
+     * Each Agent has it's AgentSet and the Model instance.
+     *
+     * The Agent also has three methods added: setBreed, getBreed, isBreed.
+     *
+     * @param {Object} agentProto A new instance of the Agent being added
+     * @param {Class} AgentClass It's Class
+     * @memberof AgentSet
+     */
     protoMixin(agentProto, AgentClass) {
         Object.assign(agentProto, {
             agentSet: this,
@@ -74,22 +97,44 @@ export default class AgentSet extends AgentArray {
         }
     }
 
-    // Create a subarray of this AgentSet. Example: create a people breed of turtles:
-    // `people = turtles.newBreed('people')`
+    /**
+     * Create a subarray of this AgentSet.
+     * Example: create a people breed of Turtles:
+     *
+     * `people = turtles.newBreed('people')`
+     *
+     * @param {String} name The name of the new breed AgentSet
+     * @return {AgentSet} A subarray of me
+     * @memberof AgentSet
+     */
     newBreed(name) {
         return new AgentSet(this.model, this.AgentClass, name, this)
     }
 
-    // Is this a baseSet or a derived "breed"
+    /**
+     * @return {Boolean} true if I am a baseSet subarray
+     * @memberof AgentSet
+     */
     isBreedSet() {
         return this.baseSet !== this
     }
+    /**
+     * @return {Boolean} true if I am a Patches, Turtles or Links AgentSet
+     * @memberof AgentSet
+     */
     isBaseSet() {
         return this.baseSet === this
     }
 
-    // Return breeds in a subset of an AgentSet.
-    // Ex: patches.inRect(5).withBreed(houses)
+    /**
+     * Return breeds in a subset of an AgentSet
+     *
+     * Ex: patches.inRect(5).withBreed(houses)
+     *
+     * @param {AgentSet} breed A breed AgentSet
+     * @return {AgentSet}
+     * @memberof AgentSet
+     */
     withBreed(breed) {
         return this.filter(a => a.agentSet === breed)
     }
@@ -157,7 +202,13 @@ export default class AgentSet extends AgentArray {
         }
     }
 
-    // Move an agent from its AgentSet/breed to be in this AgentSet/breed.
+    /**
+     * Move an agent from its AgentSet/breed to be in this AgentSet/breed
+     *
+     * @param {Agent} a An agent, a member of another AgentSet
+     * @return {Agent} The updated agent
+     * @memberof AgentSet
+     */
     setBreed(a) {
         // change agent a to be in this breed
         // Return if `a` is already of my breed
@@ -350,4 +401,4 @@ export default class AgentSet extends AgentArray {
     // }
 }
 
-// export default AgentSet
+export default AgentSet

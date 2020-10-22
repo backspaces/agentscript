@@ -1,7 +1,35 @@
-import AgentArray from './AgentArray.js'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: AgentSet.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: AgentSet.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import AgentArray from './AgentArray.js'
 
 /**
- * Subclass of AgentArray, used for Model Patches, Turtles, Links & Breeds.
+ * Subclass of AgentArray, used for Model Patches, Turtles, Links &amp; Breeds.
  * @class
  * @description
  * AgentSets are AgentArrays that are factories for their own Agents.
@@ -10,7 +38,7 @@ import AgentArray from './AgentArray.js'
  * using the create() or addAgent() factory methods.
  *
  * AgentSets are not created directly by modelers, only other
- * AgentSet subclasses: Patches, Turtles, Links & Breeds.
+ * AgentSet subclasses: Patches, Turtles, Links &amp; Breeds.
  */
 class AgentSet extends AgentArray {
     // Magic to return AgentArray's rather than AgentSets
@@ -236,8 +264,8 @@ class AgentSet extends AgentArray {
     ask(fcn) {
         if (this.length === 0) return
         const lastID = this.last().id // would fail w/o 0 check above
-        // for (let i = 0; this[i].id <= lastID; i++) { // nope.
-        for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
+        // for (let i = 0; this[i].id &lt;= lastID; i++) { // nope.
+        for (let i = 0; i &lt; this.length &amp;&amp; this[i].id &lt;= lastID; i++) {
             fcn(this[i], i, this)
         }
     }
@@ -272,15 +300,15 @@ class AgentSet extends AgentArray {
         // - For loop tricky:
         //   - i can become negative w/in loop:
         //   - i can become bigger than current AgentSet
-        //   - Guard w/ i<len & i>=0
-        for (let i = 0; i < this.length; i++) {
+        //   - Guard w/ i&lt;len &amp; i>=0
+        for (let i = 0; i &lt; this.length; i++) {
             const obj = this[i]
             const id = obj.id
             if (id > lastID) break
             fcn(obj, i, this)
             if (i >= this.length) break
             if (this[i].id > id) {
-                while (i >= 0 && this[i].id > id) i-- // ok if -1
+                while (i >= 0 &amp;&amp; this[i].id > id) i-- // ok if -1
             }
         }
     }
@@ -295,11 +323,11 @@ class AgentSet extends AgentArray {
     //     // - While loop tricky:
     //     //   - i can beocme negative w/in while loop:
     //     //   - i can beocme bigger than current AgentSet:
-    //     //   - Guard w/ i<len & i>=0
-    //     for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
+    //     //   - Guard w/ i&lt;len &amp; i>=0
+    //     for (let i = 0; i &lt; this.length &amp;&amp; this[i].id &lt;= lastID; i++) {
     //         const id = this[i].id
     //         fcn(this[i], i, this)
-    //         while (i < this.length && i >= 0 && this[i].id > id) {
+    //         while (i &lt; this.length &amp;&amp; i >= 0 &amp;&amp; this[i].id > id) {
     //             i--
     //         }
     //     }
@@ -312,10 +340,10 @@ class AgentSet extends AgentArray {
     // of the agents themselves.
     cloneAsk(fcn) {
         const clone = this.clone()
-        for (let i = 0; i < clone.length; i++) {
+        for (let i = 0; i &lt; clone.length; i++) {
             const obj = clone[i]
             // obj.id > 0: obj.die() sets id to -1
-            if (obj.breed == this && obj.id > 0) {
+            if (obj.breed == this &amp;&amp; obj.id > 0) {
                 fcn(obj, i, clone)
             }
         }
@@ -327,10 +355,10 @@ class AgentSet extends AgentArray {
     // propsArrays(keys, indexed = true) {
     //     const result = indexed ? {} : new AgentArray(this.length)
     //     if (util.isString(keys)) keys = keys.split(' ')
-    //     for (let i = 0; i < this.length; i++) {
+    //     for (let i = 0; i &lt; this.length; i++) {
     //         const vals = []
     //         const agent = this[i]
-    //         for (let j = 0; j < keys.length; j++) {
+    //         for (let j = 0; j &lt; keys.length; j++) {
     //             vals.push(agent[keys[j]])
     //         }
     //         result[indexed ? agent.id : i] = vals
@@ -341,10 +369,10 @@ class AgentSet extends AgentArray {
     //     const result = indexed ? {} : new AgentArray(this.length)
     //     // if (util.isString(keys)) keys = keys.split(' ')
     //     if (util.isString(keys)) keys = keys.split(/,*  */)
-    //     for (let i = 0; i < this.length; i++) {
+    //     for (let i = 0; i &lt; this.length; i++) {
     //         const vals = {}
     //         const agent = this[i]
-    //         for (let j = 0; j < keys.length; j++) {
+    //         for (let j = 0; j &lt; keys.length; j++) {
     //             // Parse key/val pair for nested objects
     //             let key = keys[j],
     //                 val
@@ -364,7 +392,7 @@ class AgentSet extends AgentArray {
     //             // If function, val is result of calling it w/ no args
     //             if (util.typeOf(val) === 'function') val = agent[val.name]()
 
-    //             // Do id substitution for arrays & objects
+    //             // Do id substitution for arrays &amp; objects
     //             if (util.isArray(val)) {
     //                 if (util.isInteger(val[0].id)) {
     //                     if (val.ID) {
@@ -402,3 +430,26 @@ class AgentSet extends AgentArray {
 }
 
 export default AgentSet
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Oct 22 2020 11:16:35 GMT-0600 (Mountain Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

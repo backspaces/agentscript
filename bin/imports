@@ -1,7 +1,6 @@
 #!/usr/bin/env node --require esm
-import { install, printStats } from 'esinstall'
+import { install } from 'esinstall'
 import nodePolyfills from 'rollup-plugin-node-polyfills'
-
 async function run() {
     const foo = await install(
         [

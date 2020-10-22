@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: AgentArray</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: AgentArray</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>AgentArray<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Subclass of Array used by AgentScript, enspired by NetLogo</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="AgentArray"><span class="type-signature"></span>new AgentArray<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>Array</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".fromArray"><span class="type-signature">(static) </span>fromArray<span class="signature">(array)</span><span class="type-signature"> &rarr; {<a href="AgentArray.html">AgentArray</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Convert an existing Array to an AgentArray &quot;in place&quot;.
+Use array.slice() if a new array is wanted</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>array</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array to convert to AgentArray</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="AgentArray.html">AgentArray</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="all"><span class="type-signature"></span>all<span class="signature">(fcn)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Return true if fcn(element) returns true for each element in array.
+Same as Array.every, using NetLogo's name</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fcn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Return boolean</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line91">line 91</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>true if fcn returns true for all elements</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ask"><span class="type-signature"></span>ask<span class="signature">(fcn)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Call fcn(agent, index, array) for each item in AgentArray.
+Index &amp; array optional.
+Array can shrink. If it grows, will not visit beyond original length.
+&quot;ask&quot; is NetLogo term.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fcn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>fcn(agent, index?, array?)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line192">line 192</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="first"><span class="type-signature"></span>first<span class="signature">()</span><span class="type-signature"> &rarr; {any}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Return first item in this array. Returns undefined if empty.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">any</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="forLoop"><span class="type-signature"></span>forLoop<span class="signature">(fcn)</span><span class="type-signature"> &rarr; {this}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Call fcn(agent, index, array) for each item in AgentArray.
+Index &amp; array optional.
+Array assumed not mutable.
+Note: 5x+ faster than this.forEach(fcn)</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fcn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>fcn(agent, index?, array?)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line174">line 174</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Return this for chaining.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">this</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isEmpty"><span class="type-signature"></span>isEmpty<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Return true if there are no items in this Array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="last"><span class="type-signature"></span>last<span class="signature">()</span><span class="type-signature"> &rarr; {any}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Return last item in this array. Returns undefined if empty.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line79">line 79</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">any</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="props"><span class="type-signature"></span>props<span class="signature">(key, type<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Return array of property values from this array's objects.
+Array type is specified, defaults to AgentArray</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Property name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ArrayType</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    AgentArray
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line104">line 104</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Array of given type</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="toArray"><span class="type-signature"></span>toArray<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Convert this AgentArray to Array in-place</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This AgentArray converted to Array</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="typedSample"><span class="type-signature"></span>typedSample<span class="signature">(obj)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Creates an Object of Arrays, one Array per property.
+Obj is key, arrayType pairs: x: Float32Array</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Object of prop, array type pairs</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line122">line 122</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="uniq"><span class="type-signature"></span>uniq<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="AgentArray.html">AgentArray</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Return new AgentArray of the unique values of this array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line149">line 149</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="AgentArray.html">AgentArray</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="with"><span class="type-signature"></span>with<span class="signature">(fcn)</span><span class="type-signature"> &rarr; {<a href="AgentArray.html">AgentArray</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Use: turtles.with(t =&gt; t.foo &gt; 20).ask(t =&gt; t.bar = true)</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fcn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>fcn(agent, index?, array?)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line216">line 216</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="AgentArray.html">AgentArray</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Oct 22 2020 11:16:35 GMT-0600 (Mountain Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

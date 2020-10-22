@@ -4,18 +4,41 @@ import util from './util.js'
 // Tipically the items in the array are Objects, NetLogo Agents,
 // but generally useful as an ArrayPlus
 
-export default class AgentArray extends Array {
-    // Convert an Array to an AgentArray "in place".
-    // Use array.slice() if a new array is wanted
+/**
+ * Subclass of Array used by AgentScript, enspired by NetLogo
+ * @class
+ * @extends Array
+ */
+class AgentArray extends Array {
+    /**
+     * Convert an existing Array to an AgentArray "in place".
+     * Use array.slice() if a new array is wanted
+     *
+     * @static
+     * @param {Array} array Array to convert to AgentArray
+     * @return {AgentArray}
+     * @memberof AgentArray
+     */
     static fromArray(array) {
         Object.setPrototypeOf(array, AgentArray.prototype)
         return array
     }
 
-    // constructor not needed, JS passes on if ctor same as super's
-    // constructor () { super() }
+    // /**
+    //  * Creates an instance of AgentArray. Simply calls super()
+    //  *
+    //  * @memberof AgentArray
+    //  */
+    // constructor() {
+    //     super()
+    // }
 
-    // Convert between AgentArrays and Arrays
+    /**
+     * Convert this AgentArray to Array in-place
+     *
+     * @return {Array} This AgentArray converted to Array
+     * @memberof AgentArray
+     */
     toArray() {
         Object.setPrototypeOf(this, Array.prototype)
         return this
@@ -29,29 +52,55 @@ export default class AgentArray extends Array {
     // NL: Return AgentArray with reporter(agent) true. Use Array.filter()
     // with (reporter) { return this.filter(reporter) }
 
-    // Return true if there are no items in this set, false if not empty.
-    // NL: uses "empty", confusing. Also uses any() .. use !isEmpty()
+    /**
+     * Return true if there are no items in this Array
+     *
+     * @return {boolean}
+     * @memberof AgentArray
+     */
     isEmpty() {
         return this.length === 0
     }
-    // Return first item in this array. Returns undefined if empty.
+    /**
+     * Return first item in this array. Returns undefined if empty.
+     *
+     * @return {any}
+     * @memberof AgentArray
+     */
     first() {
         return this[0]
     }
-    // Return last item in this array. Returns undefined if empty.
+    /**
+     * Return last item in this array. Returns undefined if empty.
+     *
+     * @return {any}
+     * @memberof AgentArray
+     */
     last() {
         return this[this.length - 1]
     }
 
-    // every(fcn) Array built-in: same as NetLogo all? operator
-    // fcn(obj, index, array)
+    /**
+     * Return true if fcn(element) returns true for each element in array.
+     * Same as Array.every, using NetLogo's name
+     *
+     * @param {Function} fcn Return boolean
+     * @return {boolean} true if fcn returns true for all elements
+     * @memberof AgentArray
+     */
     all(fcn) {
         return this.every(fcn)
     }
 
-    // Return array of property values for key from this array's objects.
-    // Array type is specified, defaulted to AgentArray
-    // Note: forEach & map WAY slower than for loop
+    /**
+     * Return array of property values from this array's objects.
+     * Array type is specified, defaults to AgentArray
+     *
+     * @param {String} key Property name
+     * @param {ArrayType} [type=AgentArray]
+     * @return {Array} Array of given type
+     * @memberof AgentArray
+     */
     props(key, type = AgentArray) {
         const result = new type(this.length)
         for (let i = 0; i < this.length; i++) {
@@ -62,6 +111,14 @@ export default class AgentArray extends Array {
     // Creates an OofA for several sets of props.
     // Obj is key, arrayType pairs: x: Float32Array
     // Result is this.props(key, arrayType) for each key
+    /**
+     * Creates an Object of Arrays, one Array per property.
+     * Obj is key, arrayType pairs: x: Float32Array
+     *
+     * @param {Object} obj Object of prop, array type pairs
+     * @return {Object}
+     * @memberof AgentArray
+     */
     typedSample(obj) {
         // const length = this.length
         const result = {}
@@ -83,6 +140,12 @@ export default class AgentArray extends Array {
     //     return result
     // }
 
+    /**
+     * Return new AgentArray of the unique values of this array
+     *
+     * @return {AgentArray}
+     * @memberof AgentArray
+     */
     uniq() {
         // return AgentArray.fromArray(Array.from(new Set(this)))
         return AgentArray.from(new Set(this))
@@ -98,15 +161,34 @@ export default class AgentArray extends Array {
     // Call fcn(agent, index, array) for each agent in AgentArray.
     // Array assumed not mutable
     // Note: 5x+ faster than this.forEach(fcn) !!
+    /**
+     * Call fcn(agent, index, array) for each item in AgentArray.
+     * Index & array optional.
+     * Array assumed not mutable.
+     * Note: 5x+ faster than this.forEach(fcn)
+     *
+     * @param {Function} fcn fcn(agent, index?, array?)
+     * @memberof AgentArray
+     * @return {this} Return this for chaining.
+     */
     forLoop(fcn) {
         for (let i = 0, len = this.length; i < len; i++) {
             fcn(this[i], i, this)
         }
-        // return this
+        return this
     }
 
     // Call fcn(agent, index, array) for each item in AgentArray.
     // Array can shrink. If it grows, will not visit beyond original length
+    /**
+     * Call fcn(agent, index, array) for each item in AgentArray.
+     * Index & array optional.
+     * Array can shrink. If it grows, will not visit beyond original length.
+     * "ask" is NetLogo term.
+     *
+     * @param {Function} fcn fcn(agent, index?, array?)
+     * @memberof AgentArray
+     */
     ask(fcn) {
         const length = this.length
         // for (let i = 0; i < length || i < this.length; i++) {
@@ -121,6 +203,16 @@ export default class AgentArray extends Array {
         // return this
     }
     // Return all elements returning f(obj, index, array) true
+    /**
+     * Return all elements returning f(obj, index, array) true.
+     * NetLogo term, simply calls this.filter(fcn)
+     *
+     * @param {Function} fcn fcn(agent, index?, array?)
+     * @return {AgentArray}
+     * @memberof AgentArray
+     * @description
+     * Use: turtles.with(t => t.foo > 20).ask(t => t.bar = true)
+     */
     with(fcn) {
         return this.filter(fcn)
     }
@@ -370,4 +462,4 @@ export default class AgentArray extends Array {
     }
 }
 
-// export default AgentArray
+export default AgentArray

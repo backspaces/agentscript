@@ -46,10 +46,12 @@
         "build-scripts": "node bin/models2scripts",
         "build-vendor": "yarn && rm -f vendor/* && rollup -c workflow/rollup.vendor.js && npm run build-css",
         "build-css": "bin/wrapcss < 'node_modules/mapbox-gl/dist/mapbox-gl.css' > vendor/mapboxgl.css.js",
-        "build-md": "bin/src2md 'models views2 views3 views3d docs gis fb' > /dev/null",
+        "build-md": "bin/src2md 'models views2 views3 views3d tutorial gis fb' > /dev/null",
+        "build-docs": "jsdoc src/*js -c jsdoc.config.js",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
+        "watch-docs": "chokidar 'src/*.js' -c 'npm run build-docs' &",
         "watch": "npm-run-all watch-src watch-models",
         "run1": "bin/runmodels models",
         "run1s": "bin/runmodels models/scripts",
@@ -67,11 +69,6 @@
         "start": "./node_modules/.bin/live-server &",
         "foo": "./node_modules/.bin/live-server &",
         "temp": "snowpack  --polyfill-node"
-    },
-    "snowpack": {
-        "installOptions": {
-            "polyfillNode": true
-        }
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
@@ -91,6 +88,7 @@
         "chokidar-cli": "^1.2.1",
         "esinstall": "^0.3.3",
         "esm": "^3.2.25",
+        "jsdoc": "^3.6.6",
         "live-server": "latest",
         "npm-run-all": "4.1.2",
         "puppeteer": "2.1.1",
@@ -99,7 +97,7 @@
         "rollup-plugin-copy": "^3.1.0",
         "rollup-plugin-terser": "^5.0.0",
         "shx": "0.3",
-        "snowpack": "^2.12.1",
+        "snowpack": "latest",
         "terser": "^3.10.11"
     }
 }

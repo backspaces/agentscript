@@ -6,6 +6,7 @@ const shell = require('shelljs')
 
 const port = 9008
 const useWorkers = true
+// const useWorkers = false // debug
 const compareSamples = true
 
 liveServer.start({
@@ -28,11 +29,12 @@ let models = shell
     .split('\n')
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
-// models = ['hello3D'] // debug. Also headless below
+// models = ['droplets'] // debug. Also headless below
+// models = models.filter(m => m !== 'droplets')
+// models = models.filter(m => !['droplets', 'gridPath'].includes(m))
 
 shell.echo(models)
 
-// models = [models[0], models[1]] // debugging
 async function runModels() {
     for (const model of models) {
         await test.serial(model, async t => {
@@ -77,6 +79,7 @@ async function runModel(model) {
             // '--disable-setuid-sandbox',
         ],
         headless: true, // use false for useful debugging!
+        // headless: false, // use false for useful debugging!
     })
     const page = await browser.newPage()
     await page.setDefaultNavigationTimeout(200000)

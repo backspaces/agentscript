@@ -1533,18 +1533,41 @@ out;`;
     // Tipically the items in the array are Objects, NetLogo Agents,
     // but generally useful as an ArrayPlus
 
+    /**
+     * Subclass of Array used by AgentScript, enspired by NetLogo
+     * @class
+     * @extends Array
+     */
     class AgentArray extends Array {
-        // Convert an Array to an AgentArray "in place".
-        // Use array.slice() if a new array is wanted
+        /**
+         * Convert an existing Array to an AgentArray "in place".
+         * Use array.slice() if a new array is wanted
+         *
+         * @static
+         * @param {Array} array Array to convert to AgentArray
+         * @return {AgentArray}
+         * @memberof AgentArray
+         */
         static fromArray(array) {
             Object.setPrototypeOf(array, AgentArray.prototype);
             return array
         }
 
-        // constructor not needed, JS passes on if ctor same as super's
-        // constructor () { super() }
+        // /**
+        //  * Creates an instance of AgentArray. Simply calls super()
+        //  *
+        //  * @memberof AgentArray
+        //  */
+        // constructor() {
+        //     super()
+        // }
 
-        // Convert between AgentArrays and Arrays
+        /**
+         * Convert this AgentArray to Array in-place
+         *
+         * @return {Array} This AgentArray converted to Array
+         * @memberof AgentArray
+         */
         toArray() {
             Object.setPrototypeOf(this, Array.prototype);
             return this
@@ -1558,29 +1581,55 @@ out;`;
         // NL: Return AgentArray with reporter(agent) true. Use Array.filter()
         // with (reporter) { return this.filter(reporter) }
 
-        // Return true if there are no items in this set, false if not empty.
-        // NL: uses "empty", confusing. Also uses any() .. use !isEmpty()
+        /**
+         * Return true if there are no items in this Array
+         *
+         * @return {boolean}
+         * @memberof AgentArray
+         */
         isEmpty() {
             return this.length === 0
         }
-        // Return first item in this array. Returns undefined if empty.
+        /**
+         * Return first item in this array. Returns undefined if empty.
+         *
+         * @return {any}
+         * @memberof AgentArray
+         */
         first() {
             return this[0]
         }
-        // Return last item in this array. Returns undefined if empty.
+        /**
+         * Return last item in this array. Returns undefined if empty.
+         *
+         * @return {any}
+         * @memberof AgentArray
+         */
         last() {
             return this[this.length - 1]
         }
 
-        // every(fcn) Array built-in: same as NetLogo all? operator
-        // fcn(obj, index, array)
+        /**
+         * Return true if fcn(element) returns true for each element in array.
+         * Same as Array.every, using NetLogo's name
+         *
+         * @param {Function} fcn Return boolean
+         * @return {boolean} true if fcn returns true for all elements
+         * @memberof AgentArray
+         */
         all(fcn) {
             return this.every(fcn)
         }
 
-        // Return array of property values for key from this array's objects.
-        // Array type is specified, defaulted to AgentArray
-        // Note: forEach & map WAY slower than for loop
+        /**
+         * Return array of property values from this array's objects.
+         * Array type is specified, defaults to AgentArray
+         *
+         * @param {String} key Property name
+         * @param {ArrayType} [type=AgentArray]
+         * @return {Array} Array of given type
+         * @memberof AgentArray
+         */
         props(key, type = AgentArray) {
             const result = new type(this.length);
             for (let i = 0; i < this.length; i++) {
@@ -1591,6 +1640,14 @@ out;`;
         // Creates an OofA for several sets of props.
         // Obj is key, arrayType pairs: x: Float32Array
         // Result is this.props(key, arrayType) for each key
+        /**
+         * Creates an Object of Arrays, one Array per property.
+         * Obj is key, arrayType pairs: x: Float32Array
+         *
+         * @param {Object} obj Object of prop, array type pairs
+         * @return {Object}
+         * @memberof AgentArray
+         */
         typedSample(obj) {
             // const length = this.length
             const result = {};
@@ -1612,6 +1669,12 @@ out;`;
         //     return result
         // }
 
+        /**
+         * Return new AgentArray of the unique values of this array
+         *
+         * @return {AgentArray}
+         * @memberof AgentArray
+         */
         uniq() {
             // return AgentArray.fromArray(Array.from(new Set(this)))
             return AgentArray.from(new Set(this))
@@ -1627,15 +1690,34 @@ out;`;
         // Call fcn(agent, index, array) for each agent in AgentArray.
         // Array assumed not mutable
         // Note: 5x+ faster than this.forEach(fcn) !!
+        /**
+         * Call fcn(agent, index, array) for each item in AgentArray.
+         * Index & array optional.
+         * Array assumed not mutable.
+         * Note: 5x+ faster than this.forEach(fcn)
+         *
+         * @param {Function} fcn fcn(agent, index?, array?)
+         * @memberof AgentArray
+         * @return {this} Return this for chaining.
+         */
         forLoop(fcn) {
             for (let i = 0, len = this.length; i < len; i++) {
                 fcn(this[i], i, this);
             }
-            // return this
+            return this
         }
 
         // Call fcn(agent, index, array) for each item in AgentArray.
         // Array can shrink. If it grows, will not visit beyond original length
+        /**
+         * Call fcn(agent, index, array) for each item in AgentArray.
+         * Index & array optional.
+         * Array can shrink. If it grows, will not visit beyond original length.
+         * "ask" is NetLogo term.
+         *
+         * @param {Function} fcn fcn(agent, index?, array?)
+         * @memberof AgentArray
+         */
         ask(fcn) {
             const length = this.length;
             // for (let i = 0; i < length || i < this.length; i++) {
@@ -1650,6 +1732,16 @@ out;`;
             // return this
         }
         // Return all elements returning f(obj, index, array) true
+        /**
+         * Return all elements returning f(obj, index, array) true.
+         * NetLogo term, simply calls this.filter(fcn)
+         *
+         * @param {Function} fcn fcn(agent, index?, array?)
+         * @return {AgentArray}
+         * @memberof AgentArray
+         * @description
+         * Use: turtles.with(t => t.foo > 20).ask(t => t.bar = true)
+         */
         with(fcn) {
             return this.filter(fcn)
         }
@@ -1899,16 +1991,18 @@ out;`;
         }
     }
 
-    // export default AgentArray
-
-    // import util from './util.js'
-
-    // AgentSets are arrays that are factories for their own agents/objects.
-    // They are the base for Patches, Turtles and Links.
-
-    // Names: AgentSets are NetLogo collections: Patches, Turtles, and Links.
-    // Agent is an object in an AgentSet: Patch, Turtle, Link.
-
+    /**
+     * Subclass of AgentArray, used for Model Patches, Turtles, Links & Breeds.
+     * @class
+     * @description
+     * AgentSets are AgentArrays that are factories for their own Agents.
+     *
+     * Thus the Turtles AgentSet is a factory for class Turtle instances
+     * using the create() or addAgent() factory methods.
+     *
+     * AgentSets are not created directly by modelers, only other
+     * AgentSet subclasses: Patches, Turtles, Links & Breeds.
+     */
     class AgentSet extends AgentArray {
         // Magic to return AgentArray's rather than AgentSets
         // Symbol.species: https://goo.gl/Zsxwxd
@@ -1919,6 +2013,13 @@ out;`;
         // Create an empty `AgentSet` and initialize the `ID` counter for add().
         // If baseSet is supplied, the new agentset is a subarray of baseSet.
         // This sub-array feature is how breeds are managed, see class `Model`
+        /**
+         * @param {Object} model Instance of Class Model to which I belong
+         * @param {Class} AgentClass Class of items stored in this AgentSet
+         * @param {String} name Name of this AgentSet. Ex: Patches
+         * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet
+         * @memberof AgentSet
+         */
         constructor(model, AgentClass, name, baseSet = null) {
             super(); // create empty AgentArray
             baseSet = baseSet || this; // if not a breed, set baseSet to this
@@ -1946,6 +2047,17 @@ out;`;
         //   baseSet by name: turtles/patches/links
         // methods: setBreed, getBreed, isBreed
         // getter/setter: breed
+        /**
+         * Add common variables to an Agent being added to this AgentSet.
+         *
+         * Each Agent has it's AgentSet and the Model instance.
+         *
+         * The Agent also has three methods added: setBreed, getBreed, isBreed.
+         *
+         * @param {Object} agentProto A new instance of the Agent being added
+         * @param {Class} AgentClass It's Class
+         * @memberof AgentSet
+         */
         protoMixin(agentProto, AgentClass) {
             Object.assign(agentProto, {
                 agentSet: this,
@@ -1976,22 +2088,44 @@ out;`;
             }
         }
 
-        // Create a subarray of this AgentSet. Example: create a people breed of turtles:
-        // `people = turtles.newBreed('people')`
+        /**
+         * Create a subarray of this AgentSet.
+         * Example: create a people breed of Turtles:
+         *
+         * `people = turtles.newBreed('people')`
+         *
+         * @param {String} name The name of the new breed AgentSet
+         * @return {AgentSet} A subarray of me
+         * @memberof AgentSet
+         */
         newBreed(name) {
             return new AgentSet(this.model, this.AgentClass, name, this)
         }
 
-        // Is this a baseSet or a derived "breed"
+        /**
+         * @return {Boolean} true if I am a baseSet subarray
+         * @memberof AgentSet
+         */
         isBreedSet() {
             return this.baseSet !== this
         }
+        /**
+         * @return {Boolean} true if I am a Patches, Turtles or Links AgentSet
+         * @memberof AgentSet
+         */
         isBaseSet() {
             return this.baseSet === this
         }
 
-        // Return breeds in a subset of an AgentSet.
-        // Ex: patches.inRect(5).withBreed(houses)
+        /**
+         * Return breeds in a subset of an AgentSet
+         *
+         * Ex: patches.inRect(5).withBreed(houses)
+         *
+         * @param {AgentSet} breed A breed AgentSet
+         * @return {AgentSet}
+         * @memberof AgentSet
+         */
         withBreed(breed) {
             return this.filter(a => a.agentSet === breed)
         }
@@ -2059,7 +2193,13 @@ out;`;
             }
         }
 
-        // Move an agent from its AgentSet/breed to be in this AgentSet/breed.
+        /**
+         * Move an agent from its AgentSet/breed to be in this AgentSet/breed
+         *
+         * @param {Agent} a An agent, a member of another AgentSet
+         * @return {Agent} The updated agent
+         * @memberof AgentSet
+         */
         setBreed(a) {
             // change agent a to be in this breed
             // Return if `a` is already of my breed
@@ -2251,8 +2391,6 @@ out;`;
         //     return result
         // }
     }
-
-    // export default AgentSet
 
     // A **DataSet** is an object with width/height and an array
     // whose length = width * height
