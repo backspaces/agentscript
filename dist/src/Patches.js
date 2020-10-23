@@ -152,6 +152,14 @@ class Patches extends AgentSet {
     }
 
     // Return id/index given valid x,y integers
+    /**
+     * Return index into Patches given valid x,y integers
+     *
+     * @param {number} x Integer X value
+     * @param {number} y Integer Y value
+     * @return {number} Integer index into Patches array
+     * @memberof Patches
+     */
     patchIndex(x, y) {
         const { minX, maxY, numX } = this.model.world
         return x - minX + numX * (maxY - y)

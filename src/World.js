@@ -14,12 +14,12 @@ const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
  */
 class World {
     /**
-     * Return a default options object.
+     * Return a default options object, origin at center.
      *
      * @static
-     * @param {number} [maxX=16]
-     * @param {number} [maxY=maxX]
-     * @param {number} [maxZ=Math.max(maxX, maxY)]
+     * @param {number} [maxX=16] Integer max X value
+     * @param {number} [maxY=maxX] Integer max Y value
+     * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
      * @return {Object}
      * @memberof World
      */
@@ -37,9 +37,9 @@ class World {
      * Factory to create a default World instance.
      *
      * @static
-     * @param {number} [maxX=16]
-     * @param {number} [maxY=maxX]
-     * @param {number} [maxZ=maxX]
+     * @param {number} [maxX=16] Integer max X value
+     * @param {number} [maxY=maxX] Integer max Y value
+     * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
      * @return {World}
      * @memberof World
      */
@@ -56,7 +56,7 @@ class World {
      *
      * Defaults to World.defaultOptions()
      *
-     * @param {Object} [options=World.defaultOptions()] Object with min/max X,Y,Z
+     * @param {Object} [options=World.defaultOptions()] Object with Integer min/max X,Y,Z
      * @memberof World
      */
     constructor(options = World.defaultOptions()) {

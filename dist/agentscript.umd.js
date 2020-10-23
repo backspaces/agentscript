@@ -2020,7 +2020,7 @@ out;`;
         // If baseSet is supplied, the new agentset is a subarray of baseSet.
         // This sub-array feature is how breeds are managed, see class `Model`
         /**
-         * @param {Object} model Instance of Class Model to which I belong
+         * @param {Object} model Instance of Class {@link ./Model.js} to which I belong
          * @param {Class} AgentClass Class of items stored in this AgentSet
          * @param {String} name Name of this AgentSet. Ex: Patches
          * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet
@@ -2355,7 +2355,7 @@ out;`;
          * @static
          * @param {number} width The integer width of the array
          * @param {number} height The integer height of the array
-         * @param {ArrayType} Type Array or one of the typed array types
+         * @param {Object} Type Array or one of the typed array types
          * @return {DataSet} The resulting DataSet with no values assigned
          * @memberof DataSet
          */
@@ -2941,12 +2941,12 @@ out;`;
      */
     class World {
         /**
-         * Return a default options object.
+         * Return a default options object, origin at center.
          *
          * @static
-         * @param {number} [maxX=16]
-         * @param {number} [maxY=maxX]
-         * @param {number} [maxZ=Math.max(maxX, maxY)]
+         * @param {number} [maxX=16] Integer max X value
+         * @param {number} [maxY=maxX] Integer max Y value
+         * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
          * @return {Object}
          * @memberof World
          */
@@ -2964,9 +2964,9 @@ out;`;
          * Factory to create a default World instance.
          *
          * @static
-         * @param {number} [maxX=16]
-         * @param {number} [maxY=maxX]
-         * @param {number} [maxZ=maxX]
+         * @param {number} [maxX=16] Integer max X value
+         * @param {number} [maxY=maxX] Integer max Y value
+         * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
          * @return {World}
          * @memberof World
          */
@@ -2983,7 +2983,7 @@ out;`;
          *
          * Defaults to World.defaultOptions()
          *
-         * @param {Object} [options=World.defaultOptions()] Object with min/max X,Y,Z
+         * @param {Object} [options=World.defaultOptions()] Object with Integer min/max X,Y,Z
          * @memberof World
          */
         constructor(options = World.defaultOptions()) {
@@ -3383,6 +3383,14 @@ out;`;
         }
 
         // Return id/index given valid x,y integers
+        /**
+         * Return index into Patches given valid x,y integers
+         *
+         * @param {number} x Integer X value
+         * @param {number} y Integer Y value
+         * @return {number} Integer index into Patches array
+         * @memberof Patches
+         */
         patchIndex(x, y) {
             const { minX, maxY, numX } = this.model.world;
             return x - minX + numX * (maxY - y)
@@ -4065,13 +4073,27 @@ out;`;
         }
     }
 
-    // Class Model is the primary interface for modelers, integrating
-    // all the parts of a model. It also contains NetLogo's `observer` methods.
+    /**
+     * Class Model is the primary interface for modelers, integrating
+     * the Patches/Patch Turtles/Turtle and Links/Link AgentSets.
+     *
+     * Convention: Three abstract methods are provided by the modeler
+     * * Startup(): (Optional) Called once to import images, data etc
+     * * Setup(): Called to initialize the model state. Can be called multiple times, see reset()
+     * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
+     *
+     * @class
+     */
     class Model {
-        // The Model constructor takes a World or WorldOptions object.
-        constructor(worldOptions = World.defaultOptions()) {
+        /**
+         * Creates an instance of Model.
+         * @param {Object|World} [worldOptions=World.defaultOptions()] Can be Object of min/max X,Y,Z values or an instance of World
+         * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
+         * @memberof Model
+         */
+        constructor(worldOptions = World.defaultOptions(), autoTick = true) {
             this.resetModel(worldOptions);
-            this.autoTick();
+            if (autoTick) this.autoTick();
         }
 
         // Intercepted by Model3D to use Turtle3D AgentClass
@@ -4091,19 +4113,51 @@ out;`;
             this.initAgentSet('links', Links, Link);
         }
 
+        /**
+         * Resets model to initial state w/ new Patches, Turtles, Links.
+         * The worldOptions will default to initial values but can be
+         * changed by modeler.
+         *
+         * @param {Object|World} [worldOptions=this.world] World object
+         * @memberof Model
+         */
         reset(worldOptions = this.world) {
             this.resetModel(worldOptions);
         }
+
+        /**
+         * Increment the tick cound. Generally not needed if autoTick true
+         *
+         * @memberof Model
+         */
         tick() {
             this.ticks++;
         }
 
         // ### User Model Creation
 
-        // A user's model is made by subclassing Model and over-riding these
-        // 3 abstract methods. `super` should not be called.
-        async startup() {} // One-time async data fetching goes here.
+        /**
+         * A method to perform one-time initialization
+         *
+         * @memberof Model
+         */
+        async startup() {}
+        /**
+         * A method for initializing the model
+         *
+         * Note: can be used with reset(). This will reinitialize
+         * the Patches, Turtles, Links for re-running the model
+         *  * reset()
+         *  * setup()
+         *
+         * @memberof Model
+         */
         setup() {} // Your initialization code goes here
+        /**
+         * Run the model one step.
+         *
+         * @memberof Model
+         */
         step() {} // Called each step of the model
 
         // A trick to auto advance ticks every step
@@ -4117,16 +4171,37 @@ out;`;
         }
 
         // Breeds: create breeds/subarrays of Patches, Agents, Links
+        /**
+         * Create breeds (sub-arrays) of Patches. Used in the Exit model:
+         * * this.patchBreeds('exits inside wall')
+         *
+         * @param {string} breedNames A string of space separated breeds names
+         * @memberof Model
+         */
         patchBreeds(breedNames) {
             for (const breedName of breedNames.split(' ')) {
                 this[breedName] = this.patches.newBreed(breedName);
             }
         }
+        /**
+         * Create breeds (sub-arrays) of Turtles. Used in Wallfollower model:
+         * * this.turtleBreeds('lefty righty')
+         *
+         * @param {string} breedNames A string of space separated breeds names
+         * @memberof Model
+         */
         turtleBreeds(breedNames) {
             for (const breedName of breedNames.split(' ')) {
                 this[breedName] = this.turtles.newBreed(breedName);
             }
         }
+        /**
+         * Create breeds (sub-arrays) of Links. Used in Roads model:
+         * * this.linkBreeds('trips')
+         *
+         * @param {string} breedNames A string of space separated breeds names
+         * @memberof Model
+         */
         linkBreeds(breedNames) {
             for (const breedName of breedNames.split(' ')) {
                 this[breedName] = this.links.newBreed(breedName);

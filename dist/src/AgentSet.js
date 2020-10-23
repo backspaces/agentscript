@@ -29,7 +29,7 @@ class AgentSet extends AgentArray {
     // If baseSet is supplied, the new agentset is a subarray of baseSet.
     // This sub-array feature is how breeds are managed, see class `Model`
     /**
-     * @param {Object} model Instance of Class Model to which I belong
+     * @param {Object} model Instance of Class {@link ./Model.js} to which I belong
      * @param {Class} AgentClass Class of items stored in this AgentSet
      * @param {String} name Name of this AgentSet. Ex: Patches
      * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet

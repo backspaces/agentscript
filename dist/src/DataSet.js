@@ -21,7 +21,7 @@ class DataSet {
      * @static
      * @param {number} width The integer width of the array
      * @param {number} height The integer height of the array
-     * @param {ArrayType} Type Array or one of the typed array types
+     * @param {Object} Type Array or one of the typed array types
      * @return {DataSet} The resulting DataSet with no values assigned
      * @memberof DataSet
      */
