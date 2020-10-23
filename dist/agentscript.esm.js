@@ -1987,8 +1987,7 @@ class AgentArray extends Array {
 
 /**
  * Subclass of AgentArray, used for Model Patches, Turtles, Links & Breeds.
- * @class
- * @description
+ *
  * AgentSets are AgentArrays that are factories for their own Agents.
  *
  * Thus the Turtles AgentSet is a factory for class Turtle instances
@@ -1996,10 +1995,17 @@ class AgentArray extends Array {
  *
  * AgentSets are not created directly by modelers, only other
  * AgentSet subclasses: Patches, Turtles, Links & Breeds.
+ * @class
  */
 class AgentSet extends AgentArray {
-    // Magic to return AgentArray's rather than AgentSets
-    // Symbol.species: https://goo.gl/Zsxwxd
+    /**
+     * Magic to return AgentArrays rather than AgentSets
+     * [Symbol.species](https://goo.gl/Zsxwxd)
+     *
+     * @readonly
+     * @static
+     * @memberof AgentSet
+     */
     static get [Symbol.species]() {
         return AgentArray
     }
@@ -2045,6 +2051,7 @@ class AgentSet extends AgentArray {
      * Add common variables to an Agent being added to this AgentSet.
      *
      * Each Agent has it's AgentSet and the Model instance.
+     * It also has an id, set by the AgentSet's global ID.
      *
      * The Agent also has three methods added: setBreed, getBreed, isBreed.
      *
@@ -2097,14 +2104,14 @@ class AgentSet extends AgentArray {
     }
 
     /**
-     * @return {Boolean} true if I am a baseSet subarray
+     * @return {boolean} true if I am a baseSet subarray
      * @memberof AgentSet
      */
     isBreedSet() {
         return this.baseSet !== this
     }
     /**
-     * @return {Boolean} true if I am a Patches, Turtles or Links AgentSet
+     * @return {boolean} true if I am a Patches, Turtles or Links AgentSet
      * @memberof AgentSet
      */
     isBaseSet() {
@@ -2129,9 +2136,14 @@ class AgentSet extends AgentArray {
         console.log(`AgentSet: Abstract method called: ${this}`);
     }
 
-    // Add an agent to the list.  Only used by agentset factory methods.
-    // Adds the `id` property to all agents. Increment `ID`.
-    // Returns the object for chaining. The set will be sorted by `id`.
+    /**
+     * @param {Object} o An Agent to be added to this AgentSet
+     * @return {Object} The input Agent, bound to this AgentSet.
+     * @memberof AgentSet
+     * @description
+     * Add an Agent to this AgentSet.  Only used by factory methods.
+     * Adds the `id` property to Agent. Increment AgentSet `ID`.
+     */
     addAgent(o) {
         // o only for breeds adding themselves to their baseSet
         o = o || Object.create(this.agentProto); // REMIND: Simplify! Too slick.
@@ -2144,14 +2156,26 @@ class AgentSet extends AgentArray {
         this.push(o);
         return o
     }
+    /**
+     * Remove all Agents from this AgentSet using agent.die() for each agent.
+     *
+     * @memberof AgentSet
+     */
     clear() {
         // die() is an agent method. sets it's id to -1
         while (!this.isEmpty()) this.last().die();
     }
-    // Remove an agent from the agentset, returning the agentset for chaining.
-    // Note removeAgent(agent) different than remove(agent) which simply removes
-    // the agent from it's array
+    /**
+     * Remove an Agent from this AgentSet
+     *
+     * @param {Object} o The Agent to be removed
+     * @return {AgentSet} This AgentSet with the Agent removed
+     * @memberof AgentSet
+     */
     removeAgent(o) {
+        // Note removeAgent(agent) different than remove(agent) which
+        // simply removes the agent from it's array
+
         // Remove me from my baseSet
         if (this.isBreedSet()) this.baseSet.remove(o, 'id');
         // Remove me from my set.
@@ -2159,33 +2183,43 @@ class AgentSet extends AgentArray {
         return this
     }
 
-    // AgentSets often need a random color. We use a standard shared ColorMap map.
-    // randomColor () { return ColorMap.Basic16.randomColor() }
-
-    // Get/Set default values for this agentset's agents.
-    // Return this for chaining
+    /**
+     * Set a default value shared by all Agents in this AgentSet
+     *
+     * @param {String} name The name of the shared value
+     * @param {any} value
+     * @return {AgentSet} This AgentSet
+     * @memberof AgentSet
+     */
     setDefault(name, value) {
         this.agentProto[name] = value;
         return this
     }
+    /**
+     * Return a default, shared value
+     *
+     * @param {String} name The name of the default
+     * @return {any} The default value
+     * @memberof AgentSet
+     */
     getDefault(name) {
         return this.agentProto[name]
     }
     // Used when getter/setter's need to know if get/set default
-    settingDefault(agent) {
-        return agent.id == null
-    }
+    // settingDefault(agent) {
+    //     return agent.id == null
+    // }
 
     // Declare variables of an agent class. May deprecate if not needed.
     // `varnames` is a string of space separated names
-    own(varnames) {
-        // if (this.isBreedSet())
-        //   this.ownVariables = util.clone(this.baseSet.ownVariables)
-        for (const name of varnames.split(' ')) {
-            this.setDefault(name, null);
-            this.ownVariables.push(name);
-        }
-    }
+    // own(varnames) {
+    //     // if (this.isBreedSet())
+    //     //   this.ownVariables = util.clone(this.baseSet.ownVariables)
+    //     for (const name of varnames.split(' ')) {
+    //         this.setDefault(name, null)
+    //         this.ownVariables.push(name)
+    //     }
+    // }
 
     /**
      * Move an agent from its AgentSet/breed to be in this AgentSet/breed
@@ -2218,6 +2252,14 @@ class AgentSet extends AgentArray {
         return Object.setPrototypeOf(a, this.agentProto)
     }
 
+    /**
+     * Call fcn(agent, index, array) for each item in AgentArray.
+     * Index & array optional. Overrides AgentArray's ask with
+     * additional guards for modifications in AgentSet's array.
+     *
+     * @param {Function} fcn fcn(agent, index?, array?)
+     * @memberof AgentSet
+     */
     ask(fcn) {
         if (this.length === 0) return
         const lastID = this.last().id; // would fail w/o 0 check above
@@ -2226,22 +2268,21 @@ class AgentSet extends AgentArray {
             fcn(this[i], i, this);
         }
     }
-    // Manages immutability reasonably well.
+
+    /**
+     * A much stronger version of ask(fcn) with stronger mutability guards.
+     *
+     * @param {Function} fcn fcn(agent, index?, array?)
+     * @memberof AgentSet
+     */
     askSet(fcn) {
+        // Manages immutability reasonably well.
         if (this.length === 0) return
         // Patches are static
         if (this.name === 'patches') super.forLoop(fcn);
         else if (this.isBaseSet()) this.baseSetAsk(fcn);
         else if (this.isBreedSet()) this.cloneAsk(fcn);
     }
-    // // Above, returning array for chaining
-    // askSet(fcn) {
-    //     if (this.length === 0) return this
-    //     // Patches are static
-    //     if (this.name === 'patches') return super.each(fcn)
-    //     if (this.isBaseSet()) return this.baseSetAsk(fcn)
-    //     if (this.isBreedSet()) return this.cloneAsk(fcn)
-    // }
 
     // An ask function for mutable baseSets.
     // BaseSets can only add past the end of the array.
@@ -2269,26 +2310,6 @@ class AgentSet extends AgentArray {
             }
         }
     }
-    // baseSetAsk(fcn) {
-    //     if (this.length === 0) return
-    //     // const length = this.length
-    //     const lastID = this.last().id
-
-    //     // Added obj's have id > lastID. Just check for deletions.
-    //     // There Be Dragons:
-    //     // - AgentSet can become length 0 if all deleted
-    //     // - While loop tricky:
-    //     //   - i can beocme negative w/in while loop:
-    //     //   - i can beocme bigger than current AgentSet:
-    //     //   - Guard w/ i<len & i>=0
-    //     for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
-    //         const id = this[i].id
-    //         fcn(this[i], i, this)
-    //         while (i < this.length && i >= 0 && this[i].id > id) {
-    //             i--
-    //         }
-    //     }
-    // }
 
     // For breeds, mutations can occur in many ways.
     // This solves this by cloning the initial array and
@@ -2304,107 +2325,47 @@ class AgentSet extends AgentArray {
                 fcn(obj, i, clone);
             }
         }
-        // return this
     }
-
-    // // Temp: data transfer. May not use if AgentArray.typedSample
-    // // (OofA) is sufficient.
-    // propsArrays(keys, indexed = true) {
-    //     const result = indexed ? {} : new AgentArray(this.length)
-    //     if (util.isString(keys)) keys = keys.split(' ')
-    //     for (let i = 0; i < this.length; i++) {
-    //         const vals = []
-    //         const agent = this[i]
-    //         for (let j = 0; j < keys.length; j++) {
-    //             vals.push(agent[keys[j]])
-    //         }
-    //         result[indexed ? agent.id : i] = vals
-    //     }
-    //     return result
-    // }
-    // propsObjects(keys, indexed = true) {
-    //     const result = indexed ? {} : new AgentArray(this.length)
-    //     // if (util.isString(keys)) keys = keys.split(' ')
-    //     if (util.isString(keys)) keys = keys.split(/,*  */)
-    //     for (let i = 0; i < this.length; i++) {
-    //         const vals = {}
-    //         const agent = this[i]
-    //         for (let j = 0; j < keys.length; j++) {
-    //             // Parse key/val pair for nested objects
-    //             let key = keys[j],
-    //                 val
-    //             if (key.includes(':')) {
-    //                 [key, val] = key.split(':')
-    //                 val = util.getNestedObject(agent, val)
-    //             } else {
-    //                 if (key.includes('.')) {
-    //                     throw Error(
-    //                         'propsObjects: dot notation requires name:val: ' +
-    //                             key
-    //                     )
-    //                 }
-    //                 val = agent[key]
-    //             }
-
-    //             // If function, val is result of calling it w/ no args
-    //             if (util.typeOf(val) === 'function') val = agent[val.name]()
-
-    //             // Do id substitution for arrays & objects
-    //             if (util.isArray(val)) {
-    //                 if (util.isInteger(val[0].id)) {
-    //                     if (val.ID) {
-    //                         throw Error(
-    //                             'propsObjects: value cannot be an AgentSet: ' +
-    //                                 key
-    //                         )
-    //                     }
-    //                     // assume all are agents, replace w/ id
-    //                     val = val.map(v => v.id)
-    //                 } else {
-    //                     // Should check that all values are primitives
-    //                     val = util.clone(val)
-    //                 }
-    //             } else if (util.isObject(val)) {
-    //                 if (util.isInteger(val.id)) {
-    //                     val = val.id
-    //                 } else {
-    //                     val = Object.assign({}, obj)
-    //                     util.forLoop(val, (v, key) => {
-    //                         // Should check that all values are primitives
-    //                         if (util.isInteger(v.id)) {
-    //                             v[key] = v.id
-    //                         }
-    //                     })
-    //                 }
-    //             }
-
-    //             vals[key] = val
-    //         }
-    //         result[indexed ? agent.id : i] = vals
-    //     }
-    //     return result
-    // }
 }
 
-// A **DataSet** is an object with width/height and an array
-// whose length = width * height
-//
-// The data array can be a TypedArray or a javascript Array
-// Notice that it is very much like an ImageData object!
+/**
+ * A DataSet is an object with width/height and an array
+ * of numbers of length = width * height.
+ *
+ * The array can be a TypedArray or a JavaScript Array.
+ *
+ * @class
+ */
 
 class DataSet {
     // **Static methods:** called via DataSet.foo(), similar to Math.foo().
     // Generally useful utilities for use with TypedArrays & JS Arrays
 
     // Return an empty dataset of given width, height, dataType
+    /**
+     * Factory method returning an empty dataset of given
+     * width, height, dataType
+     *
+     * @static
+     * @param {number} width The integer width of the array
+     * @param {number} height The integer height of the array
+     * @param {ArrayType} Type Array or one of the typed array types
+     * @return {DataSet} The resulting DataSet with no values assigned
+     * @memberof DataSet
+     */
     static emptyDataSet(width, height, Type) {
         return new DataSet(width, height, new Type(width * height))
     }
 
-    // The **DataSet Class** constructor and methods
-
-    // constructor: Stores the three DataSet components.
-    // Checks data is right size, throws an error if not.
+    /**
+     * Creates an instance of DataSet.
+     * Checks data is right size, throws an error if not.
+     *
+     * @param {number} width The integer width of the array
+     * @param {number} height The integer height of the array
+     * @param {array} data The array of numbers of length width * height
+     * @memberof DataSet
+     */
     constructor(width, height, data) {
         if (data.length !== width * height) {
             throw Error(
@@ -2854,8 +2815,6 @@ class DataSet {
     }
 }
 
-// export default DataSet
-
 // Class Link instances form a link between two turtles, forming a graph.
 // Flyweight object creation, see Patch/Patches.
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
@@ -2968,7 +2927,23 @@ class Links extends AgentSet {
 
 // export default Links
 
+/**
+ * Class World defines the coordinate system for the model.
+ * It has transforms for multiple coordinate systems.
+ *
+ * @class
+ */
 class World {
+    /**
+     * Return a default options object.
+     *
+     * @static
+     * @param {number} [maxX=16]
+     * @param {number} [maxY=maxX]
+     * @param {number} [maxZ=Math.max(maxX, maxY)]
+     * @return {Object}
+     * @memberof World
+     */
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
         return {
             minX: -maxX,
@@ -2979,7 +2954,16 @@ class World {
             maxZ: maxZ,
         }
     }
-    // static defaultWorld(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+    /**
+     * Factory to create a default World instance.
+     *
+     * @static
+     * @param {number} [maxX=16]
+     * @param {number} [maxY=maxX]
+     * @param {number} [maxZ=maxX]
+     * @return {World}
+     * @memberof World
+     */
     static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
         return new World(World.defaultOptions(maxX, maxY, maxZ))
     }
@@ -2987,17 +2971,23 @@ class World {
     // ======================
 
     // Initialize the world w/ defaults overridden w/ options.
+    /**
+     * Create a new World object given an Object with
+     * minX, maxX, minY, maxY, minZ, maxZ values.
+     *
+     * Defaults to World.defaultOptions()
+     *
+     * @param {Object} [options=World.defaultOptions()] Object with min/max X,Y,Z
+     * @memberof World
+     */
     constructor(options = World.defaultOptions()) {
-        // Object.assign(this, World.defaultOptions()) // initial this w/ defaults
-        // Object.assign(this, options) // override defaults with options
-
         // override defaults with the given options
         options = Object.assign(World.defaultOptions(), options);
         Object.assign(this, options); // set the option values
         this.setWorld(); // convert these to rest of world parameters
     }
-    // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
     setWorld() {
+        // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
         let { minX, maxX, minY, maxY, minZ, maxZ } = this;
         this.numX = this.width = maxX - minX + 1;
         this.numY = this.height = maxY - minY + 1;
@@ -3018,22 +3008,40 @@ class World {
 
         this.numPatches = this.width * this.height;
     }
+
+    /**
+     * Return a random 2D point within the World
+     *
+     * @return {Array} A random x,y float array
+     * @memberof World
+     */
     randomPoint() {
         return [
             util.randomFloat2(this.minXcor, this.maxXcor),
             util.randomFloat2(this.minYcor, this.maxYcor),
         ]
     }
+
+    /**
+     * Return a random 3D point within the World
+     *
+     * @return {Array} A random x,y,z float array
+     * @memberof World
+     */
     random3DPoint() {
-        // const pt = this.randomPoint()
-        // pt.push(util.randomFloat2(this.minZcor, this.maxZcor))
-        // return pt
         return [
             util.randomFloat2(this.minXcor, this.maxXcor),
             util.randomFloat2(this.minYcor, this.maxYcor),
             util.randomFloat2(this.minZcor, this.maxZcor),
         ]
     }
+
+    /**
+     * Return a random Patch 2D integer point
+     *
+     * @return {Array}  A random x,y integer array
+     * @memberof World
+     */
     randomPatchPoint() {
         return [
             // REMIND: can maxX/Y be in the result?
@@ -3041,7 +3049,16 @@ class World {
             util.randomInt2(this.minY, this.maxY),
         ]
     }
-    // Test x,y for being on-world.
+
+    /**
+     * Given x,y,z values return true if within the world
+     *
+     * @param {number} x x value
+     * @param {number} y y value
+     * @param {number} [z=this.centerZ] z value
+     * @return {boolean} Whether or not on-world
+     * @memberof World
+     */
     isOnWorld(x, y, z = this.centerZ) {
         return (
             this.minXcor <= x &&
@@ -3057,6 +3074,20 @@ class World {
     // cropToWorld(x, y) {}
 
     // Note minX etc NOT the world's but of the coord sys we want to use.
+    /**
+     * Return an instance of a bounding box 2D transform.
+     * It linearly interpolates between the given minX, minY, maxX, maxY,
+     * and the world's values of the same properties.
+     *
+     * Useful for Canvas top-left transforms and geojson transforms.
+     *
+     * @param {number} minX min bounding box x value
+     * @param {number} minY max bounding box x value
+     * @param {number} maxX min bounding box y value
+     * @param {number} maxY max bounding box y value
+     * @return {Class} Instance of the BBoxTransform
+     * @memberof World
+     */
     bboxTransform(minX, minY, maxX, maxY) {
         return new BBoxTransform(minX, minY, maxX, maxY, this)
     }
@@ -3117,10 +3148,24 @@ class World {
     // patchIndexToXY(index) {}
 }
 
+/**
+ * A linear transformer between world coords and the given bounding box.
+ *
+ * @class
+ */
 class BBoxTransform {
     // geo bbox definition:
     //    https://tools.ietf.org/html/rfc7946#section-5
     //    [west, south, east, north]
+    /**
+     * Creates an instance of BBoxTransform.
+     * @param {number} minX min bounding box x value
+     * @param {number} minY max bounding box x value
+     * @param {number} maxX min bounding box y value
+     * @param {number} maxY max bounding box y value
+     * @param {World} world instance of a World object
+     * @memberof BBoxTransform
+     */
     constructor(minX, minY, maxX, maxY, world) {
         if (minX < maxX) console.log('flipX');
         if (maxY < minY) console.log('flipY');
@@ -3137,6 +3182,14 @@ class BBoxTransform {
 
         Object.assign(this, { mx, my, bx, by });
     }
+
+    /**
+     * Convert from bbox point to world point
+     *
+     * @param {Array} bboxPoint A point in the bbox coordinates
+     * @return {Array} A point in the world coordinates
+     * @memberof BBoxTransform
+     */
     toWorld(bboxPoint) {
         const { mx, my, bx, by } = this;
         const [bboxX, bboxY] = bboxPoint;
@@ -3144,6 +3197,14 @@ class BBoxTransform {
         const y = (bboxY - by) / my;
         return [x, y]
     }
+
+    /**
+     * Convert from world point to bbox point
+     *
+     * @param {Array} bboxPoint A point in the world coordinates
+     * @return {Array} A point in the bbox coordinates
+     * @memberof BBoxTransform
+     */
     toBBox(worldPoint) {
         const { mx, my, bx, by } = this;
         const [worldX, worldY] = worldPoint;
@@ -3152,8 +3213,6 @@ class BBoxTransform {
         return [x, y]
     }
 }
-
-// export default World
 
 // The midpoints of the world, in world coords.
 // (0, 0) for the centered default worlds. REMIND: remove?
@@ -3171,7 +3230,23 @@ class BBoxTransform {
 
 // Patches are the world other agentsets live on. They create a coord system
 // from Model's world values: minX, maxX, minY, maxY
+/**
+ * Patches are the world other agentsets live on.
+ * They create a coord system
+ * from Model's world values: minX, maxX, minY, maxY
+ *
+ * Manged by class Model. Not created by modeler.
+ *
+ * @class
+ */
 class Patches extends AgentSet {
+    /**
+     * Creates an instance of Patches.
+     * @param {Model} model An instance of class Model
+     * @param {Class} AgentClass The class managed by Patches
+     * @param {string} name Name of the AgentSet
+     * @memberof Patches
+     */
     constructor(model, AgentClass, name) {
         // AgentSet sets these variables:
         // model, name, baseSet, world: model.world, agentProto: new AgentClass
@@ -3190,36 +3265,6 @@ class Patches extends AgentSet {
         util.repeat(this.model.world.numX * this.model.world.numY, i => {
             this.addAgent(); // Object.create(this.agentProto))
         });
-    }
-
-    // Oops, color is a view property
-    // setDefault(name, value) {
-    //     if (name === 'color') {
-    //         this.ask(p => {
-    //             p.setColor(value)
-    //         })
-    //         util.logOnce(
-    //             'patches.setDefault(color, value): color default not supported. Clearing to value'
-    //         )
-    //     } else {
-    //         super.setDefault(name, value)
-    //     }
-    // }
-
-    // Get/Set label. REMIND: not implemented.
-    // Set removes label if label is null or undefined.
-    // Get returns undefined if no label.
-    setLabel(patch, label) {
-        // REMIND: does this work for breeds?
-        // null or undefined
-        if (label == null) {
-            delete this.labels[patch.id];
-        } else {
-            this.labels[patch.id] = label;
-        }
-    }
-    getLabel(patch) {
-        return this.labels[patch.id]
     }
 
     // Return the offsets from a patch for its 8 element neighbors.
@@ -3249,7 +3294,17 @@ class Patches extends AgentSet {
         // .filter((n) => [1, -1, numX, -numX].indexOf(n) >= 0)
         // .filter((n) => [1, -1, numX, -numX].includes(n)) // slower than indexOf
     }
-    // Return my 8 patch neighbors
+
+    /**
+     * Return the 8 patch
+     * ["Moore" neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood)
+     * of the given patch.
+     * Will be less than 8 on the edge of the patches
+     *
+     * @param {Patch} patch a Patch instance
+     * @return {AgentArray} An array of the neighboring patches
+     * @memberof Patches
+     */
     neighbors(patch) {
         const { id, x, y } = patch;
         const offsets = this.neighborsOffsets(x, y);
@@ -3259,7 +3314,17 @@ class Patches extends AgentSet {
         });
         return as
     }
-    // Return my 4 patch neighbors
+
+    /**
+     * Return the 4 patch
+     * ["Van Neumann" neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood)
+     * of the given patch.
+     * Will be less than 4 on the edge of the patches
+     *
+     * @param {Patch} patch a Patch instance
+     * @return {AgentArray} An array of the neighboring patches
+     * @memberof Patches
+     */
     neighbors4(patch) {
         const { id, x, y } = patch;
         const offsets = this.neighbors4Offsets(x, y);
@@ -3270,35 +3335,43 @@ class Patches extends AgentSet {
         return as
     }
 
-    // // Return a random valid int x,y point in patch space
-    // randomPt() {
-    //     const { minX, maxX, minY, maxY } = this.model.world
-    //     return [util.randomInt2(minX, maxX), util.randomInt2(minY, maxY)]
-    // }
-
-    // Import/export DataSet to/from patch variable `patchVar`.
-    // `useNearest`: true for fast rounding to nearest; false for bi-linear.
-    importDataSet(dataSet, patchVar, useNearest = false) {
+    /**
+     * Assign a DataSet's values into the patches as the given property name
+     *
+     * @param {DataSet} dataSet An instance of [DataSet](./DataSet.html)
+     * @param {string} property A Patch property name
+     * @param {boolean} [useNearest=false] Resample to nearest dataset value?
+     * @memberof Patches
+     */
+    importDataSet(dataSet, property, useNearest = false) {
         if (this.isBreedSet()) {
             // REMIND: error
             util.warn('Patches: exportDataSet called with breed, using patches');
-            this.baseSet.importDataSet(dataSet, patchVar, useNearest);
+            this.baseSet.importDataSet(dataSet, property, useNearest);
             return
         }
         const { numX, numY } = this.model.world;
         const dataset = dataSet.resample(numX, numY, useNearest);
         this.ask(p => {
-            p[patchVar] = dataset.data[p.id];
+            p[property] = dataset.data[p.id];
         });
     }
-    exportDataSet(patchVar, Type = Array) {
+    /**
+     * Extract a property from each Patch as a DataSet
+     *
+     * @param {string} property The patch numeric property to extract
+     * @param {Type} [Type=Array] The DataSet array's type
+     * @return {DataSet} A DataSet of the patche's values
+     * @memberof Patches
+     */
+    exportDataSet(property, Type = Array) {
         if (this.isBreedSet()) {
             util.warn('Patches: exportDataSet called with breed, using patches');
-            return this.baseSet.exportDataSet(patchVar, Type)
+            return this.baseSet.exportDataSet(property, Type)
         }
         const { numX, numY } = this.model.world;
-        // let data = util.arrayProps(this, patchVar)
-        let data = this.props(patchVar);
+        // let data = util.arrayProps(this, property)
+        let data = this.props(property);
         data = util.convertArrayType(data, Type);
         return new DataSet(numX, numY, data)
     }
@@ -3464,8 +3537,6 @@ class Patches extends AgentSet {
         }
     }
 }
-
-// export default Patches
 
 // Class Patch instances represent a rectangle on a grid.  They hold variables
 // that are in the patches the turtles live on.  The set of all patches

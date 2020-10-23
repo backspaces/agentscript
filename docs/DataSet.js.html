@@ -1,4 +1,32 @@
-import util from './util.js'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: DataSet.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: DataSet.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import util from './util.js'
 
 /**
  * A DataSet is an object with width/height and an array
@@ -11,7 +39,7 @@ import util from './util.js'
 
 class DataSet {
     // **Static methods:** called via DataSet.foo(), similar to Math.foo().
-    // Generally useful utilities for use with TypedArrays & JS Arrays
+    // Generally useful utilities for use with TypedArrays &amp; JS Arrays
 
     // Return an empty dataset of given width, height, dataType
     /**
@@ -70,7 +98,7 @@ class DataSet {
     // true if x,y in dataset bounds
     inBounds(x, y) {
         return (
-            util.between(x, 0, this.width - 1) &&
+            util.between(x, 0, this.width - 1) &amp;&amp;
             util.between(y, 0, this.height - 1)
         )
     }
@@ -171,7 +199,7 @@ class DataSet {
     // Create new dataset of size width/height/type by resampling each point.
     // Type is not this.type() due to integer/float differences. Default Array.
     // If same size, return a copy of this.
-    // NOTE: This used to calc an x & y scale and apply it:
+    // NOTE: This used to calc an x &amp; y scale and apply it:
     //      const xScale = (this.width - 1) / (width - 1)
     //      const yScale = (this.height - 1) / (height - 1)
     //      ...
@@ -179,10 +207,10 @@ class DataSet {
     // .. which had precision errors.
     // Multiplying first, then dividing more accurate.
     resample(width, height, useNearest = true, Type = Array) {
-        if (width === this.width && height === this.height) return this.copy()
+        if (width === this.width &amp;&amp; height === this.height) return this.copy()
         const ds = DataSet.emptyDataSet(width, height, Type)
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
+        for (let y = 0; y &lt; height; y++) {
+            for (let x = 0; x &lt; width; x++) {
                 ds.setXY(
                     x,
                     y,
@@ -221,8 +249,8 @@ class DataSet {
             throw Error('DataSet.subSet: params out of range')
         }
         const ds = this.emptyDataSet(width, height)
-        for (let i = 0; i < width; i++) {
-            for (let j = 0; j < height; j++) {
+        for (let i = 0; i &lt; width; i++) {
+            for (let j = 0; j &lt; height; j++) {
                 ds.setXY(i, j, this.getXY(i + x, j + y))
             }
         }
@@ -239,7 +267,7 @@ class DataSet {
         const [w, h, data] = [this.width, this.height, this.data]
         if (x >= w) throw Error(`col: x out of range width: ${w} x: ${x}`)
         const colData = this.emptyArray(h)
-        for (let i = 0; i < h; i++) colData[i] = data[x + i * w]
+        for (let i = 0; i &lt; h; i++) colData[i] = data[x + i * w]
         return colData
     }
 
@@ -266,14 +294,14 @@ class DataSet {
         if (h !== h1) throw Error(`concatEast: heights not equal ${h}, ${h1}`)
         const ds1 = this.emptyDataSet(w + w1, h)
         // copy this into new dataset
-        for (let x = 0; x < h; x++) {
-            for (let y = 0; y < w; y++) {
+        for (let x = 0; x &lt; h; x++) {
+            for (let y = 0; y &lt; w; y++) {
                 ds1.setXY(x, y, this.getXY(x, y))
             }
         }
         // copy ds to the left side
-        for (let x = 0; x < h1; x++) {
-            for (let y = 0; y < w1; y++) {
+        for (let x = 0; x &lt; h1; x++) {
+            for (let y = 0; y &lt; w1; y++) {
                 ds1.setXY(x + w, y, ds.getXY(x, y))
             }
         }
@@ -314,8 +342,8 @@ class DataSet {
         array.length = 0 // in case user supplied an array to reduce GC
         const clampNeeded =
             x === 0 || x === this.width - 1 || y === 0 || y === this.height - 1
-        for (let dy = -1; dy <= +1; dy++) {
-            for (let dx = -1; dx <= +1; dx++) {
+        for (let dy = -1; dy &lt;= +1; dy++) {
+            for (let dx = -1; dx &lt;= +1; dx++) {
                 let x0 = x + dx
                 let y0 = y + dy
                 if (clampNeeded) {
@@ -342,12 +370,12 @@ class DataSet {
         const newDS = this.emptyDataSet(w, h)
         const newData = newDS.data
         let i = 0
-        for (let y = y0; y < h; y++) {
-            for (let x = x0; x < w; x++) {
+        for (let y = y0; y &lt; h; y++) {
+            for (let x = x0; x &lt; w; x++) {
                 const nei = this.neighborhood(x, y)
                 // remind: use reduce if performant
                 let sum2 = 0
-                for (let i2 = 0; i2 < kernel.length; i2++) {
+                for (let i2 = 0; i2 &lt; kernel.length; i2++) {
                     // sum2 += kernel[i2] * nei[i2] // Chrome can't optimize compound let
                     sum2 = sum2 + kernel[i2] * nei[i2]
                 }
@@ -391,8 +419,8 @@ class DataSet {
         const dzdy = this.dzdy() // sub bottom z from top
         let [aspect, slope] = [[], []]
         const [h, w] = [dzdx.height, dzdx.width]
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
+        for (let y = 0; y &lt; h; y++) {
+            for (let x = 0; x &lt; w; x++) {
                 const [gx, gy] = [dzdx.getXY(x, y), dzdy.getXY(x, y)]
                 // slope.push(Math.atan(util.distance(gx, gy)) / cellSize) // radians
                 slope.push(Math.atan(util.distance(0, 0, gx, gy)) / cellSize)
@@ -402,10 +430,10 @@ class DataSet {
                 //     gy += util.randomNormal(0, 0.0001)
                 //   }
                 // radians in [-PI,PI], downhill
-                // let rad = (gx === gy && gy === 0) ? NaN : Math.atan2(-gy, -gx)
+                // let rad = (gx === gy &amp;&amp; gy === 0) ? NaN : Math.atan2(-gy, -gx)
                 let rad = Math.atan2(-gy, -gx)
                 // positive radians in [0,2PI] if desired
-                if (posAngle && rad < 0) rad += 2 * Math.PI
+                if (posAngle &amp;&amp; rad &lt; 0) rad += 2 * Math.PI
                 aspect.push(rad)
             }
         }
@@ -445,14 +473,14 @@ class DataSet {
     //   const ctx = util.createCtx(w, h)
     //   const id = ctx.getImageData(0, 0, w, h)
     //   const ta = id.data // ta short for typed array
-    //   for (let i = 0; i < idata.length; i++) {
+    //   for (let i = 0; i &lt; idata.length; i++) {
     //     const [num, j] = [idata[i], 4 * i] // j = byte index into ta
     //     if (gray) {
     //       ta[j] = ta[j + 1] = ta[j + 2] = Math.floor(num); ta[j + 3] = alpha
     //     } else {
-    //       ta[j] = (num >> 16) & 0xff
-    //       ta[j + 1] = (num >> 8) & 0xff
-    //       ta[j + 2] = num & 0xff
+    //       ta[j] = (num >> 16) &amp; 0xff
+    //       ta[j + 1] = (num >> 8) &amp; 0xff
+    //       ta[j + 2] = num &amp; 0xff
     //       ta[j + 3] = alpha // if not 255, image will be premultiplied.
     //     }
     //   }
@@ -480,11 +508,34 @@ class DataSet {
     // Note: does not require equal array type (Array or TypedArray)
     equals(dataset) {
         return (
-            this.width === dataset.width &&
-            this.height === dataset.height &&
+            this.width === dataset.width &amp;&amp;
+            this.height === dataset.height &amp;&amp;
             util.arraysEqual(this.data, dataset.data)
         )
     }
 }
 
 export default DataSet
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="BBoxTransform.html">BBoxTransform</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Oct 23 2020 09:53:35 GMT-0600 (Mountain Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

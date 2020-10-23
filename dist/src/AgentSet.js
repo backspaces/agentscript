@@ -2,8 +2,7 @@ import AgentArray from './AgentArray.js'
 
 /**
  * Subclass of AgentArray, used for Model Patches, Turtles, Links & Breeds.
- * @class
- * @description
+ *
  * AgentSets are AgentArrays that are factories for their own Agents.
  *
  * Thus the Turtles AgentSet is a factory for class Turtle instances
@@ -11,10 +10,17 @@ import AgentArray from './AgentArray.js'
  *
  * AgentSets are not created directly by modelers, only other
  * AgentSet subclasses: Patches, Turtles, Links & Breeds.
+ * @class
  */
 class AgentSet extends AgentArray {
-    // Magic to return AgentArray's rather than AgentSets
-    // Symbol.species: https://goo.gl/Zsxwxd
+    /**
+     * Magic to return AgentArrays rather than AgentSets
+     * [Symbol.species](https://goo.gl/Zsxwxd)
+     *
+     * @readonly
+     * @static
+     * @memberof AgentSet
+     */
     static get [Symbol.species]() {
         return AgentArray
     }
@@ -60,6 +66,7 @@ class AgentSet extends AgentArray {
      * Add common variables to an Agent being added to this AgentSet.
      *
      * Each Agent has it's AgentSet and the Model instance.
+     * It also has an id, set by the AgentSet's global ID.
      *
      * The Agent also has three methods added: setBreed, getBreed, isBreed.
      *
@@ -112,14 +119,14 @@ class AgentSet extends AgentArray {
     }
 
     /**
-     * @return {Boolean} true if I am a baseSet subarray
+     * @return {boolean} true if I am a baseSet subarray
      * @memberof AgentSet
      */
     isBreedSet() {
         return this.baseSet !== this
     }
     /**
-     * @return {Boolean} true if I am a Patches, Turtles or Links AgentSet
+     * @return {boolean} true if I am a Patches, Turtles or Links AgentSet
      * @memberof AgentSet
      */
     isBaseSet() {
@@ -144,9 +151,14 @@ class AgentSet extends AgentArray {
         console.log(`AgentSet: Abstract method called: ${this}`)
     }
 
-    // Add an agent to the list.  Only used by agentset factory methods.
-    // Adds the `id` property to all agents. Increment `ID`.
-    // Returns the object for chaining. The set will be sorted by `id`.
+    /**
+     * @param {Object} o An Agent to be added to this AgentSet
+     * @return {Object} The input Agent, bound to this AgentSet.
+     * @memberof AgentSet
+     * @description
+     * Add an Agent to this AgentSet.  Only used by factory methods.
+     * Adds the `id` property to Agent. Increment AgentSet `ID`.
+     */
     addAgent(o) {
         // o only for breeds adding themselves to their baseSet
         o = o || Object.create(this.agentProto) // REMIND: Simplify! Too slick.
@@ -159,14 +171,26 @@ class AgentSet extends AgentArray {
         this.push(o)
         return o
     }
+    /**
+     * Remove all Agents from this AgentSet using agent.die() for each agent.
+     *
+     * @memberof AgentSet
+     */
     clear() {
         // die() is an agent method. sets it's id to -1
         while (!this.isEmpty()) this.last().die()
     }
-    // Remove an agent from the agentset, returning the agentset for chaining.
-    // Note removeAgent(agent) different than remove(agent) which simply removes
-    // the agent from it's array
+    /**
+     * Remove an Agent from this AgentSet
+     *
+     * @param {Object} o The Agent to be removed
+     * @return {AgentSet} This AgentSet with the Agent removed
+     * @memberof AgentSet
+     */
     removeAgent(o) {
+        // Note removeAgent(agent) different than remove(agent) which
+        // simply removes the agent from it's array
+
         // Remove me from my baseSet
         if (this.isBreedSet()) this.baseSet.remove(o, 'id')
         // Remove me from my set.
@@ -174,33 +198,43 @@ class AgentSet extends AgentArray {
         return this
     }
 
-    // AgentSets often need a random color. We use a standard shared ColorMap map.
-    // randomColor () { return ColorMap.Basic16.randomColor() }
-
-    // Get/Set default values for this agentset's agents.
-    // Return this for chaining
+    /**
+     * Set a default value shared by all Agents in this AgentSet
+     *
+     * @param {String} name The name of the shared value
+     * @param {any} value
+     * @return {AgentSet} This AgentSet
+     * @memberof AgentSet
+     */
     setDefault(name, value) {
         this.agentProto[name] = value
         return this
     }
+    /**
+     * Return a default, shared value
+     *
+     * @param {String} name The name of the default
+     * @return {any} The default value
+     * @memberof AgentSet
+     */
     getDefault(name) {
         return this.agentProto[name]
     }
     // Used when getter/setter's need to know if get/set default
-    settingDefault(agent) {
-        return agent.id == null
-    }
+    // settingDefault(agent) {
+    //     return agent.id == null
+    // }
 
     // Declare variables of an agent class. May deprecate if not needed.
     // `varnames` is a string of space separated names
-    own(varnames) {
-        // if (this.isBreedSet())
-        //   this.ownVariables = util.clone(this.baseSet.ownVariables)
-        for (const name of varnames.split(' ')) {
-            this.setDefault(name, null)
-            this.ownVariables.push(name)
-        }
-    }
+    // own(varnames) {
+    //     // if (this.isBreedSet())
+    //     //   this.ownVariables = util.clone(this.baseSet.ownVariables)
+    //     for (const name of varnames.split(' ')) {
+    //         this.setDefault(name, null)
+    //         this.ownVariables.push(name)
+    //     }
+    // }
 
     /**
      * Move an agent from its AgentSet/breed to be in this AgentSet/breed
@@ -233,6 +267,14 @@ class AgentSet extends AgentArray {
         return Object.setPrototypeOf(a, this.agentProto)
     }
 
+    /**
+     * Call fcn(agent, index, array) for each item in AgentArray.
+     * Index & array optional. Overrides AgentArray's ask with
+     * additional guards for modifications in AgentSet's array.
+     *
+     * @param {Function} fcn fcn(agent, index?, array?)
+     * @memberof AgentSet
+     */
     ask(fcn) {
         if (this.length === 0) return
         const lastID = this.last().id // would fail w/o 0 check above
@@ -241,22 +283,21 @@ class AgentSet extends AgentArray {
             fcn(this[i], i, this)
         }
     }
-    // Manages immutability reasonably well.
+
+    /**
+     * A much stronger version of ask(fcn) with stronger mutability guards.
+     *
+     * @param {Function} fcn fcn(agent, index?, array?)
+     * @memberof AgentSet
+     */
     askSet(fcn) {
+        // Manages immutability reasonably well.
         if (this.length === 0) return
         // Patches are static
         if (this.name === 'patches') super.forLoop(fcn)
         else if (this.isBaseSet()) this.baseSetAsk(fcn)
         else if (this.isBreedSet()) this.cloneAsk(fcn)
     }
-    // // Above, returning array for chaining
-    // askSet(fcn) {
-    //     if (this.length === 0) return this
-    //     // Patches are static
-    //     if (this.name === 'patches') return super.each(fcn)
-    //     if (this.isBaseSet()) return this.baseSetAsk(fcn)
-    //     if (this.isBreedSet()) return this.cloneAsk(fcn)
-    // }
 
     // An ask function for mutable baseSets.
     // BaseSets can only add past the end of the array.
@@ -284,26 +325,6 @@ class AgentSet extends AgentArray {
             }
         }
     }
-    // baseSetAsk(fcn) {
-    //     if (this.length === 0) return
-    //     // const length = this.length
-    //     const lastID = this.last().id
-
-    //     // Added obj's have id > lastID. Just check for deletions.
-    //     // There Be Dragons:
-    //     // - AgentSet can become length 0 if all deleted
-    //     // - While loop tricky:
-    //     //   - i can beocme negative w/in while loop:
-    //     //   - i can beocme bigger than current AgentSet:
-    //     //   - Guard w/ i<len & i>=0
-    //     for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
-    //         const id = this[i].id
-    //         fcn(this[i], i, this)
-    //         while (i < this.length && i >= 0 && this[i].id > id) {
-    //             i--
-    //         }
-    //     }
-    // }
 
     // For breeds, mutations can occur in many ways.
     // This solves this by cloning the initial array and
@@ -319,86 +340,7 @@ class AgentSet extends AgentArray {
                 fcn(obj, i, clone)
             }
         }
-        // return this
     }
-
-    // // Temp: data transfer. May not use if AgentArray.typedSample
-    // // (OofA) is sufficient.
-    // propsArrays(keys, indexed = true) {
-    //     const result = indexed ? {} : new AgentArray(this.length)
-    //     if (util.isString(keys)) keys = keys.split(' ')
-    //     for (let i = 0; i < this.length; i++) {
-    //         const vals = []
-    //         const agent = this[i]
-    //         for (let j = 0; j < keys.length; j++) {
-    //             vals.push(agent[keys[j]])
-    //         }
-    //         result[indexed ? agent.id : i] = vals
-    //     }
-    //     return result
-    // }
-    // propsObjects(keys, indexed = true) {
-    //     const result = indexed ? {} : new AgentArray(this.length)
-    //     // if (util.isString(keys)) keys = keys.split(' ')
-    //     if (util.isString(keys)) keys = keys.split(/,*  */)
-    //     for (let i = 0; i < this.length; i++) {
-    //         const vals = {}
-    //         const agent = this[i]
-    //         for (let j = 0; j < keys.length; j++) {
-    //             // Parse key/val pair for nested objects
-    //             let key = keys[j],
-    //                 val
-    //             if (key.includes(':')) {
-    //                 [key, val] = key.split(':')
-    //                 val = util.getNestedObject(agent, val)
-    //             } else {
-    //                 if (key.includes('.')) {
-    //                     throw Error(
-    //                         'propsObjects: dot notation requires name:val: ' +
-    //                             key
-    //                     )
-    //                 }
-    //                 val = agent[key]
-    //             }
-
-    //             // If function, val is result of calling it w/ no args
-    //             if (util.typeOf(val) === 'function') val = agent[val.name]()
-
-    //             // Do id substitution for arrays & objects
-    //             if (util.isArray(val)) {
-    //                 if (util.isInteger(val[0].id)) {
-    //                     if (val.ID) {
-    //                         throw Error(
-    //                             'propsObjects: value cannot be an AgentSet: ' +
-    //                                 key
-    //                         )
-    //                     }
-    //                     // assume all are agents, replace w/ id
-    //                     val = val.map(v => v.id)
-    //                 } else {
-    //                     // Should check that all values are primitives
-    //                     val = util.clone(val)
-    //                 }
-    //             } else if (util.isObject(val)) {
-    //                 if (util.isInteger(val.id)) {
-    //                     val = val.id
-    //                 } else {
-    //                     val = Object.assign({}, obj)
-    //                     util.forLoop(val, (v, key) => {
-    //                         // Should check that all values are primitives
-    //                         if (util.isInteger(v.id)) {
-    //                             v[key] = v.id
-    //                         }
-    //                     })
-    //                 }
-    //             }
-
-    //             vals[key] = val
-    //         }
-    //         result[indexed ? agent.id : i] = vals
-    //     }
-    //     return result
-    // }
 }
 
 export default AgentSet

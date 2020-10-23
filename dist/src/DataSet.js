@@ -1,24 +1,43 @@
 import util from './util.js'
 
-// A **DataSet** is an object with width/height and an array
-// whose length = width * height
-//
-// The data array can be a TypedArray or a javascript Array
-// Notice that it is very much like an ImageData object!
+/**
+ * A DataSet is an object with width/height and an array
+ * of numbers of length = width * height.
+ *
+ * The array can be a TypedArray or a JavaScript Array.
+ *
+ * @class
+ */
 
-export default class DataSet {
+class DataSet {
     // **Static methods:** called via DataSet.foo(), similar to Math.foo().
     // Generally useful utilities for use with TypedArrays & JS Arrays
 
     // Return an empty dataset of given width, height, dataType
+    /**
+     * Factory method returning an empty dataset of given
+     * width, height, dataType
+     *
+     * @static
+     * @param {number} width The integer width of the array
+     * @param {number} height The integer height of the array
+     * @param {ArrayType} Type Array or one of the typed array types
+     * @return {DataSet} The resulting DataSet with no values assigned
+     * @memberof DataSet
+     */
     static emptyDataSet(width, height, Type) {
         return new DataSet(width, height, new Type(width * height))
     }
 
-    // The **DataSet Class** constructor and methods
-
-    // constructor: Stores the three DataSet components.
-    // Checks data is right size, throws an error if not.
+    /**
+     * Creates an instance of DataSet.
+     * Checks data is right size, throws an error if not.
+     *
+     * @param {number} width The integer width of the array
+     * @param {number} height The integer height of the array
+     * @param {array} data The array of numbers of length width * height
+     * @memberof DataSet
+     */
     constructor(width, height, data) {
         if (data.length !== width * height) {
             throw Error(
@@ -468,4 +487,4 @@ export default class DataSet {
     }
 }
 
-// export default DataSet
+export default DataSet

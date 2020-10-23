@@ -5,7 +5,23 @@ import DataSet from './DataSet.js'
 
 // Patches are the world other agentsets live on. They create a coord system
 // from Model's world values: minX, maxX, minY, maxY
-export default class Patches extends AgentSet {
+/**
+ * Patches are the world other agentsets live on.
+ * They create a coord system
+ * from Model's world values: minX, maxX, minY, maxY
+ *
+ * Manged by class Model. Not created by modeler.
+ *
+ * @class
+ */
+class Patches extends AgentSet {
+    /**
+     * Creates an instance of Patches.
+     * @param {Model} model An instance of class Model
+     * @param {Class} AgentClass The class managed by Patches
+     * @param {string} name Name of the AgentSet
+     * @memberof Patches
+     */
     constructor(model, AgentClass, name) {
         // AgentSet sets these variables:
         // model, name, baseSet, world: model.world, agentProto: new AgentClass
@@ -24,36 +40,6 @@ export default class Patches extends AgentSet {
         util.repeat(this.model.world.numX * this.model.world.numY, i => {
             this.addAgent() // Object.create(this.agentProto))
         })
-    }
-
-    // Oops, color is a view property
-    // setDefault(name, value) {
-    //     if (name === 'color') {
-    //         this.ask(p => {
-    //             p.setColor(value)
-    //         })
-    //         util.logOnce(
-    //             'patches.setDefault(color, value): color default not supported. Clearing to value'
-    //         )
-    //     } else {
-    //         super.setDefault(name, value)
-    //     }
-    // }
-
-    // Get/Set label. REMIND: not implemented.
-    // Set removes label if label is null or undefined.
-    // Get returns undefined if no label.
-    setLabel(patch, label) {
-        // REMIND: does this work for breeds?
-        // null or undefined
-        if (label == null) {
-            delete this.labels[patch.id]
-        } else {
-            this.labels[patch.id] = label
-        }
-    }
-    getLabel(patch) {
-        return this.labels[patch.id]
     }
 
     // Return the offsets from a patch for its 8 element neighbors.
@@ -83,7 +69,17 @@ export default class Patches extends AgentSet {
         // .filter((n) => [1, -1, numX, -numX].indexOf(n) >= 0)
         // .filter((n) => [1, -1, numX, -numX].includes(n)) // slower than indexOf
     }
-    // Return my 8 patch neighbors
+
+    /**
+     * Return the 8 patch
+     * ["Moore" neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood)
+     * of the given patch.
+     * Will be less than 8 on the edge of the patches
+     *
+     * @param {Patch} patch a Patch instance
+     * @return {AgentArray} An array of the neighboring patches
+     * @memberof Patches
+     */
     neighbors(patch) {
         const { id, x, y } = patch
         const offsets = this.neighborsOffsets(x, y)
@@ -93,7 +89,17 @@ export default class Patches extends AgentSet {
         })
         return as
     }
-    // Return my 4 patch neighbors
+
+    /**
+     * Return the 4 patch
+     * ["Van Neumann" neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood)
+     * of the given patch.
+     * Will be less than 4 on the edge of the patches
+     *
+     * @param {Patch} patch a Patch instance
+     * @return {AgentArray} An array of the neighboring patches
+     * @memberof Patches
+     */
     neighbors4(patch) {
         const { id, x, y } = patch
         const offsets = this.neighbors4Offsets(x, y)
@@ -104,35 +110,43 @@ export default class Patches extends AgentSet {
         return as
     }
 
-    // // Return a random valid int x,y point in patch space
-    // randomPt() {
-    //     const { minX, maxX, minY, maxY } = this.model.world
-    //     return [util.randomInt2(minX, maxX), util.randomInt2(minY, maxY)]
-    // }
-
-    // Import/export DataSet to/from patch variable `patchVar`.
-    // `useNearest`: true for fast rounding to nearest; false for bi-linear.
-    importDataSet(dataSet, patchVar, useNearest = false) {
+    /**
+     * Assign a DataSet's values into the patches as the given property name
+     *
+     * @param {DataSet} dataSet An instance of [DataSet](./DataSet.html)
+     * @param {string} property A Patch property name
+     * @param {boolean} [useNearest=false] Resample to nearest dataset value?
+     * @memberof Patches
+     */
+    importDataSet(dataSet, property, useNearest = false) {
         if (this.isBreedSet()) {
             // REMIND: error
             util.warn('Patches: exportDataSet called with breed, using patches')
-            this.baseSet.importDataSet(dataSet, patchVar, useNearest)
+            this.baseSet.importDataSet(dataSet, property, useNearest)
             return
         }
         const { numX, numY } = this.model.world
         const dataset = dataSet.resample(numX, numY, useNearest)
         this.ask(p => {
-            p[patchVar] = dataset.data[p.id]
+            p[property] = dataset.data[p.id]
         })
     }
-    exportDataSet(patchVar, Type = Array) {
+    /**
+     * Extract a property from each Patch as a DataSet
+     *
+     * @param {string} property The patch numeric property to extract
+     * @param {Type} [Type=Array] The DataSet array's type
+     * @return {DataSet} A DataSet of the patche's values
+     * @memberof Patches
+     */
+    exportDataSet(property, Type = Array) {
         if (this.isBreedSet()) {
             util.warn('Patches: exportDataSet called with breed, using patches')
-            return this.baseSet.exportDataSet(patchVar, Type)
+            return this.baseSet.exportDataSet(property, Type)
         }
         const { numX, numY } = this.model.world
-        // let data = util.arrayProps(this, patchVar)
-        let data = this.props(patchVar)
+        // let data = util.arrayProps(this, property)
+        let data = this.props(property)
         data = util.convertArrayType(data, Type)
         return new DataSet(numX, numY, data)
     }
@@ -299,4 +313,4 @@ export default class Patches extends AgentSet {
     }
 }
 
-// export default Patches
+export default Patches

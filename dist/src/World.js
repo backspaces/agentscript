@@ -6,7 +6,23 @@ import util from './util.js'
 
 const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
 
-export default class World {
+/**
+ * Class World defines the coordinate system for the model.
+ * It has transforms for multiple coordinate systems.
+ *
+ * @class
+ */
+class World {
+    /**
+     * Return a default options object.
+     *
+     * @static
+     * @param {number} [maxX=16]
+     * @param {number} [maxY=maxX]
+     * @param {number} [maxZ=Math.max(maxX, maxY)]
+     * @return {Object}
+     * @memberof World
+     */
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
         return {
             minX: -maxX,
@@ -17,7 +33,16 @@ export default class World {
             maxZ: maxZ,
         }
     }
-    // static defaultWorld(maxX = 16, maxY = maxX, maxZ = defaultZ(maxX, maxY)) {
+    /**
+     * Factory to create a default World instance.
+     *
+     * @static
+     * @param {number} [maxX=16]
+     * @param {number} [maxY=maxX]
+     * @param {number} [maxZ=maxX]
+     * @return {World}
+     * @memberof World
+     */
     static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
         return new World(World.defaultOptions(maxX, maxY, maxZ))
     }
@@ -25,17 +50,23 @@ export default class World {
     // ======================
 
     // Initialize the world w/ defaults overridden w/ options.
+    /**
+     * Create a new World object given an Object with
+     * minX, maxX, minY, maxY, minZ, maxZ values.
+     *
+     * Defaults to World.defaultOptions()
+     *
+     * @param {Object} [options=World.defaultOptions()] Object with min/max X,Y,Z
+     * @memberof World
+     */
     constructor(options = World.defaultOptions()) {
-        // Object.assign(this, World.defaultOptions()) // initial this w/ defaults
-        // Object.assign(this, options) // override defaults with options
-
         // override defaults with the given options
         options = Object.assign(World.defaultOptions(), options)
         Object.assign(this, options) // set the option values
         this.setWorld() // convert these to rest of world parameters
     }
-    // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
     setWorld() {
+        // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
         let { minX, maxX, minY, maxY, minZ, maxZ } = this
         this.numX = this.width = maxX - minX + 1
         this.numY = this.height = maxY - minY + 1
@@ -56,22 +87,40 @@ export default class World {
 
         this.numPatches = this.width * this.height
     }
+
+    /**
+     * Return a random 2D point within the World
+     *
+     * @return {Array} A random x,y float array
+     * @memberof World
+     */
     randomPoint() {
         return [
             util.randomFloat2(this.minXcor, this.maxXcor),
             util.randomFloat2(this.minYcor, this.maxYcor),
         ]
     }
+
+    /**
+     * Return a random 3D point within the World
+     *
+     * @return {Array} A random x,y,z float array
+     * @memberof World
+     */
     random3DPoint() {
-        // const pt = this.randomPoint()
-        // pt.push(util.randomFloat2(this.minZcor, this.maxZcor))
-        // return pt
         return [
             util.randomFloat2(this.minXcor, this.maxXcor),
             util.randomFloat2(this.minYcor, this.maxYcor),
             util.randomFloat2(this.minZcor, this.maxZcor),
         ]
     }
+
+    /**
+     * Return a random Patch 2D integer point
+     *
+     * @return {Array}  A random x,y integer array
+     * @memberof World
+     */
     randomPatchPoint() {
         return [
             // REMIND: can maxX/Y be in the result?
@@ -79,7 +128,16 @@ export default class World {
             util.randomInt2(this.minY, this.maxY),
         ]
     }
-    // Test x,y for being on-world.
+
+    /**
+     * Given x,y,z values return true if within the world
+     *
+     * @param {number} x x value
+     * @param {number} y y value
+     * @param {number} [z=this.centerZ] z value
+     * @return {boolean} Whether or not on-world
+     * @memberof World
+     */
     isOnWorld(x, y, z = this.centerZ) {
         return (
             this.minXcor <= x &&
@@ -95,6 +153,20 @@ export default class World {
     // cropToWorld(x, y) {}
 
     // Note minX etc NOT the world's but of the coord sys we want to use.
+    /**
+     * Return an instance of a bounding box 2D transform.
+     * It linearly interpolates between the given minX, minY, maxX, maxY,
+     * and the world's values of the same properties.
+     *
+     * Useful for Canvas top-left transforms and geojson transforms.
+     *
+     * @param {number} minX min bounding box x value
+     * @param {number} minY max bounding box x value
+     * @param {number} maxX min bounding box y value
+     * @param {number} maxY max bounding box y value
+     * @return {Class} Instance of the BBoxTransform
+     * @memberof World
+     */
     bboxTransform(minX, minY, maxX, maxY) {
         return new BBoxTransform(minX, minY, maxX, maxY, this)
     }
@@ -155,10 +227,24 @@ export default class World {
     // patchIndexToXY(index) {}
 }
 
+/**
+ * A linear transformer between world coords and the given bounding box.
+ *
+ * @class
+ */
 class BBoxTransform {
     // geo bbox definition:
     //    https://tools.ietf.org/html/rfc7946#section-5
     //    [west, south, east, north]
+    /**
+     * Creates an instance of BBoxTransform.
+     * @param {number} minX min bounding box x value
+     * @param {number} minY max bounding box x value
+     * @param {number} maxX min bounding box y value
+     * @param {number} maxY max bounding box y value
+     * @param {World} world instance of a World object
+     * @memberof BBoxTransform
+     */
     constructor(minX, minY, maxX, maxY, world) {
         if (minX < maxX) console.log('flipX')
         if (maxY < minY) console.log('flipY')
@@ -175,6 +261,14 @@ class BBoxTransform {
 
         Object.assign(this, { mx, my, bx, by })
     }
+
+    /**
+     * Convert from bbox point to world point
+     *
+     * @param {Array} bboxPoint A point in the bbox coordinates
+     * @return {Array} A point in the world coordinates
+     * @memberof BBoxTransform
+     */
     toWorld(bboxPoint) {
         const { mx, my, bx, by } = this
         const [bboxX, bboxY] = bboxPoint
@@ -182,6 +276,14 @@ class BBoxTransform {
         const y = (bboxY - by) / my
         return [x, y]
     }
+
+    /**
+     * Convert from world point to bbox point
+     *
+     * @param {Array} bboxPoint A point in the world coordinates
+     * @return {Array} A point in the bbox coordinates
+     * @memberof BBoxTransform
+     */
     toBBox(worldPoint) {
         const { mx, my, bx, by } = this
         const [worldX, worldY] = worldPoint
@@ -191,7 +293,7 @@ class BBoxTransform {
     }
 }
 
-// export default World
+export default World
 
 // The midpoints of the world, in world coords.
 // (0, 0) for the centered default worlds. REMIND: remove?

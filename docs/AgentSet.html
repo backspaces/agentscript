@@ -30,7 +30,12 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>AgentSet<span class="signature">(model, AgentClass, name, baseSet<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Subclass of AgentArray, used for Model Patches, Turtles, Links &amp; Breeds.</p></div>
+            <div class="class-description"><p>Subclass of AgentArray, used for Model Patches, Turtles, Links &amp; Breeds.</p>
+<p>AgentSets are AgentArrays that are factories for their own Agents.</p>
+<p>Thus the Turtles AgentSet is a factory for class Turtle instances
+using the create() or addAgent() factory methods.</p>
+<p>AgentSets are not created directly by modelers, only other
+AgentSet subclasses: Patches, Turtles, Links &amp; Breeds.</p></div>
         
     
 </header>
@@ -51,14 +56,6 @@
     
 
 
-
-<div class="description">
-    <p>AgentSets are AgentArrays that are factories for their own Agents.</p>
-<p>Thus the Turtles AgentSet is a factory for class Turtle instances
-using the create() or addAgent() factory methods.</p>
-<p>AgentSets are not created directly by modelers, only other
-AgentSet subclasses: Patches, Turtles, Links &amp; Breeds.</p>
-</div>
 
 
 
@@ -338,7 +335,796 @@ AgentSet subclasses: Patches, Turtles, Links &amp; Breeds.</p>
     
 
     
-    <h4 class="name" id="isBaseSet"><span class="type-signature"></span>isBaseSet<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="addAgent"><span class="type-signature"></span>addAgent<span class="signature">(o)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Add an Agent to this AgentSet.  Only used by factory methods.
+Adds the <code>id</code> property to Agent. Increment AgentSet <code>ID</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>o</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An Agent to be added to this AgentSet</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line162">line 162</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The input Agent, bound to this AgentSet.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ask"><span class="type-signature"></span>ask<span class="signature">(fcn)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Call fcn(agent, index, array) for each item in AgentArray.
+Index &amp; array optional. Overrides AgentArray's ask with
+additional guards for modifications in AgentSet's array.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fcn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>fcn(agent, index?, array?)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line278">line 278</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="askSet"><span class="type-signature"></span>askSet<span class="signature">(fcn)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>A much stronger version of ask(fcn) with stronger mutability guards.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fcn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>fcn(agent, index?, array?)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line293">line 293</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Remove all Agents from this AgentSet using agent.die() for each agent.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line179">line 179</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getDefault"><span class="type-signature"></span>getDefault<span class="signature">(name)</span><span class="type-signature"> &rarr; {any}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Return a default, shared value</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the default</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line220">line 220</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The default value</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">any</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isBaseSet"><span class="type-signature"></span>isBaseSet<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line132">line 132</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>true if I am a Patches, Turtles or Links AgentSet</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isBreedSet"><span class="type-signature"></span>isBreedSet<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -415,112 +1201,6 @@ AgentSet subclasses: Patches, Turtles, Links &amp; Breeds.</p>
 
         
 <div class="param-desc">
-    <p>true if I am a Patches, Turtles or Links AgentSet</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="isBreedSet"><span class="type-signature"></span>isBreedSet<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line118">line 118</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
     <p>true if I am a baseSet subarray</p>
 </div>
 
@@ -532,7 +1212,7 @@ AgentSet subclasses: Patches, Turtles, Links &amp; Breeds.</p>
     </dt>
     <dd>
         
-<span class="param-type">Boolean</span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -653,7 +1333,7 @@ Example: create a people breed of Turtles:</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line110">line 110</a>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line117">line 117</a>
     </li></ul></dd>
     
 
@@ -720,7 +1400,8 @@ Example: create a people breed of Turtles:</p>
 
 <div class="description">
     <p>Add common variables to an Agent being added to this AgentSet.</p>
-<p>Each Agent has it's AgentSet and the Model instance.</p>
+<p>Each Agent has it's AgentSet and the Model instance.
+It also has an id, set by the AgentSet's global ID.</p>
 <p>The Agent also has three methods added: setBreed, getBreed, isBreed.</p>
 </div>
 
@@ -837,7 +1518,7 @@ Example: create a people breed of Turtles:</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line70">line 70</a>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -862,6 +1543,165 @@ Example: create a people breed of Turtles:</p>
 
 
 
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeAgent"><span class="type-signature"></span>removeAgent<span class="signature">(o)</span><span class="type-signature"> &rarr; {<a href="AgentSet.html">AgentSet</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Remove an Agent from this AgentSet</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>o</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The Agent to be removed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line190">line 190</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This AgentSet with the Agent removed</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="AgentSet.html">AgentSet</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -974,7 +1814,7 @@ Example: create a people breed of Turtles:</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line212">line 212</a>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line246">line 246</a>
     </li></ul></dd>
     
 
@@ -1015,6 +1855,188 @@ Example: create a people breed of Turtles:</p>
     <dd>
         
 <span class="param-type">Agent</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setDefault"><span class="type-signature"></span>setDefault<span class="signature">(name, value)</span><span class="type-signature"> &rarr; {<a href="AgentSet.html">AgentSet</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Set a default value shared by all Agents in this AgentSet</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the shared value</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line209">line 209</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This AgentSet</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="AgentSet.html">AgentSet</a></span>
 
 
     </dd>
@@ -1134,7 +2156,7 @@ Example: create a people breed of Turtles:</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line138">line 138</a>
+        <a href="AgentSet.js.html">AgentSet.js</a>, <a href="AgentSet.js.html#line145">line 145</a>
     </li></ul></dd>
     
 
@@ -1198,13 +2220,13 @@ Example: create a people breed of Turtles:</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="BBoxTransform.html">BBoxTransform</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Oct 22 2020 11:16:35 GMT-0600 (Mountain Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Oct 23 2020 09:53:35 GMT-0600 (Mountain Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
