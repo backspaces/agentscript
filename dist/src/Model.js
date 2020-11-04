@@ -14,8 +14,6 @@ import Link from './Link.js'
  * * Startup(): (Optional) Called once to import images, data etc
  * * Setup(): Called to initialize the model state. Can be called multiple times, see reset()
  * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
- *
- * @class
  */
 class Model {
     /**

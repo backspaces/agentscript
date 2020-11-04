@@ -10,7 +10,6 @@ import AgentArray from './AgentArray.js'
  *
  * AgentSets are not created directly by modelers, only other
  * AgentSet subclasses: Patches, Turtles, Links & Breeds.
- * @class
  */
 class AgentSet extends AgentArray {
     /**
@@ -25,11 +24,10 @@ class AgentSet extends AgentArray {
         return AgentArray
     }
 
-    // Create an empty `AgentSet` and initialize the `ID` counter for add().
-    // If baseSet is supplied, the new agentset is a subarray of baseSet.
-    // This sub-array feature is how breeds are managed, see class `Model`
     /**
-     * @param {Object} model Instance of Class {@link ./Model.js} to which I belong
+     * Create an empty AgentSet and initialize the `ID` counter for add().
+     * If baseSet is supplied, the new agentset is a "breed" of baseSet
+     * @param {Model} model Instance of Class Model to which I belong
      * @param {Class} AgentClass Class of items stored in this AgentSet
      * @param {String} name Name of this AgentSet. Ex: Patches
      * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet

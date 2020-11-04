@@ -10,15 +10,13 @@ import DataSet from './DataSet.js'
  * They create a coord system
  * from Model's world values: minX, maxX, minY, maxY
  *
- * Manged by class Model. Not created by modeler.
- *
- * @class
+ * Created by class Model. Used by modeler in their Model subclass
  */
 class Patches extends AgentSet {
     /**
      * Creates an instance of Patches.
      * @param {Model} model An instance of class Model
-     * @param {Class} AgentClass The class managed by Patches
+     * @param {Patch} AgentClass The Patch class managed by Patches
      * @param {string} name Name of the AgentSet
      * @memberof Patches
      */

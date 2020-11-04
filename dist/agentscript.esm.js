@@ -953,7 +953,7 @@ const isInteger = n => Number.isInteger(n); // assume es6, babel otherwise.
 const isFloat = n => isNumber(n) && n % 1 !== 0; // https://goo.gl/6MS0Tm
 const isCanvas = obj =>
     isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']);
-
+const isImage = obj => isType(obj, 'image');
 const isImageable = obj =>
     isOneOfTypes(obj, [
         'image',
@@ -1006,6 +1006,7 @@ var types = /*#__PURE__*/Object.freeze({
     isInteger: isInteger,
     isFloat: isFloat,
     isCanvas: isCanvas,
+    isImage: isImage,
     isImageable: isImageable,
     isTypedArray: isTypedArray,
     isUintArray: isUintArray,
@@ -1529,10 +1530,21 @@ Object.assign(
 
 /**
  * Subclass of Array used by AgentScript, enspired by NetLogo
- * @class
- * @extends Array
  */
 class AgentArray extends Array {
+    /**
+     * Creates an instance of AgentArray. Simply pass-through to super()
+     * now, but may add initialization code later.
+     * @example
+     * let aa = new AgentArray({x:0,y:0}, {x:0,y:1}, {x:1,y:0})
+     *  //=>  [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 0 }]
+     * @memberof AgentArray
+     */
+    constructor(...args) {
+        super(...args);
+        // maybe do some initialization later
+    }
+
     /**
      * Convert an existing Array to an AgentArray "in place".
      * Use array.slice() if a new array is wanted
@@ -1546,15 +1558,6 @@ class AgentArray extends Array {
         Object.setPrototypeOf(array, AgentArray.prototype);
         return array
     }
-
-    // /**
-    //  * Creates an instance of AgentArray. Simply calls super()
-    //  *
-    //  * @memberof AgentArray
-    //  */
-    // constructor() {
-    //     super()
-    // }
 
     /**
      * Convert this AgentArray to Array in-place
@@ -1580,6 +1583,12 @@ class AgentArray extends Array {
      *
      * @return {boolean}
      * @memberof AgentArray
+     * @example
+     *  new AgentArray().isEmpty()
+     *  //=> true
+     * @example
+     *  aa.isEmpty()
+     *  //=> false
      */
     isEmpty() {
         return this.length === 0
@@ -1589,6 +1598,9 @@ class AgentArray extends Array {
      *
      * @return {any}
      * @memberof AgentArray
+     * @example
+     *  aa.first()
+     *  //=> { x: 0, y: 0 }
      */
     first() {
         return this[0]
@@ -1598,6 +1610,9 @@ class AgentArray extends Array {
      *
      * @return {any}
      * @memberof AgentArray
+     * @example
+     *  aa.last()
+     *  //=>  { x: 1, y: 0 }
      */
     last() {
         return this[this.length - 1]
@@ -1623,6 +1638,12 @@ class AgentArray extends Array {
      * @param {ArrayType} [type=AgentArray]
      * @return {Array} Array of given type
      * @memberof AgentArray
+     * @example
+     *  aa.props('x')
+     *  //=> [0, 0, 1]
+     * @example
+     *  aa.props('y')
+     *  //=> [0, 1, 0]
      */
     props(key, type = AgentArray) {
         const result = new type(this.length);
@@ -1995,7 +2016,6 @@ class AgentArray extends Array {
  *
  * AgentSets are not created directly by modelers, only other
  * AgentSet subclasses: Patches, Turtles, Links & Breeds.
- * @class
  */
 class AgentSet extends AgentArray {
     /**
@@ -2010,11 +2030,10 @@ class AgentSet extends AgentArray {
         return AgentArray
     }
 
-    // Create an empty `AgentSet` and initialize the `ID` counter for add().
-    // If baseSet is supplied, the new agentset is a subarray of baseSet.
-    // This sub-array feature is how breeds are managed, see class `Model`
     /**
-     * @param {Object} model Instance of Class {@link ./Model.js} to which I belong
+     * Create an empty AgentSet and initialize the `ID` counter for add().
+     * If baseSet is supplied, the new agentset is a "breed" of baseSet
+     * @param {Model} model Instance of Class Model to which I belong
      * @param {Class} AgentClass Class of items stored in this AgentSet
      * @param {String} name Name of this AgentSet. Ex: Patches
      * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet
@@ -2333,8 +2352,6 @@ class AgentSet extends AgentArray {
  * of numbers of length = width * height.
  *
  * The array can be a TypedArray or a JavaScript Array.
- *
- * @class
  */
 
 class DataSet {
@@ -2528,7 +2545,13 @@ class DataSet {
     // Scale each data element to be between min/max
     // This is a linear scale from this dataset's min/max
     // y = mx + b
-    // scale (ds, min, max) {
+    // utils.objects.js:
+    // export function normalize(array, lo = 0, hi = 1) {
+    //     const [min, max] = [arrayMin(array), arrayMax(array)]
+    //     const scale = 1 / (max - min)
+    //     return array.map(n => lerp(lo, hi, scale * (n - min)))
+    // }
+
     scale(min, max) {
         // const data = ds.data
         const dsMin = this.min();
@@ -2927,11 +2950,28 @@ class Links extends AgentSet {
 
 // export default Links
 
+// class World defines the coordinate system for the model.
+// It will be  upgraded with methods converting from other
+// transforms like  GIS and DataSets.
+
+// const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
+
 /**
+ * @description
  * Class World defines the coordinate system for the model.
  * It has transforms for multiple coordinate systems.
  *
- * @class
+ * The world is defined by an object with 6 properties:
+ *
+ *          options = {
+ *              minX: int,
+ *              maxX: int,
+ *              minY: int,
+ *              maxY: int,
+ *              minZ: int,
+ *              maxZ: int,
+ *          }
+ *
  */
 class World {
     /**
@@ -3152,6 +3192,7 @@ class World {
  * A linear transformer between world coords and the given bounding box.
  *
  * @class
+ * @private
  */
 class BBoxTransform {
     // geo bbox definition:
@@ -3235,15 +3276,13 @@ class BBoxTransform {
  * They create a coord system
  * from Model's world values: minX, maxX, minY, maxY
  *
- * Manged by class Model. Not created by modeler.
- *
- * @class
+ * Created by class Model. Used by modeler in their Model subclass
  */
 class Patches extends AgentSet {
     /**
      * Creates an instance of Patches.
      * @param {Model} model An instance of class Model
-     * @param {Class} AgentClass The class managed by Patches
+     * @param {Patch} AgentClass The Patch class managed by Patches
      * @param {string} name Name of the AgentSet
      * @memberof Patches
      */
@@ -3557,11 +3596,21 @@ class Patches extends AgentSet {
 // The flyweight Patch objects are created via Object.create(protoObject),
 // This lets the new Patch(agentset) object be "defaults".
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
+
+/**
+ * Class Patch instances represent a rectangle on a grid.  They hold variables
+ * that are in the patches the turtles live on.  The set of all patches
+ * is the world on which the turtles live and the model runs.
+ *
+ * @export
+ * @class
+ */
 class Patch {
     static defaultVariables() {
         // Core variables for patches.
         return {
             turtles: undefined, // the turtles on me. Lazy evalued, see turtlesHere
+            z: 0, // default shared z val. Can be overridden
         }
     }
     // Initialize a Patch given its Patches AgentSet.
@@ -3577,9 +3626,10 @@ class Patch {
             this.model.world.maxY - Math.floor(this.id / this.model.world.numX)
         )
     }
-    get z() {
-        return 0
-    }
+    // get z() {
+    //     return 0
+    // }
+    // set z(z) {}
     isOnEdge() {
         return this.patches.isOnEdge(this)
     }
@@ -3672,8 +3722,6 @@ class Patch {
         })
     }
 }
-
-// export default Patch
 
 // Turtles are the world other agentsets live on. They create a coord system
 // from Model's world values: size, minX, maxX, minY, maxY
@@ -4075,8 +4123,6 @@ class Turtle {
  * * Startup(): (Optional) Called once to import images, data etc
  * * Setup(): Called to initialize the model state. Can be called multiple times, see reset()
  * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
- *
- * @class
  */
 class Model {
     /**
@@ -4211,40 +4257,6 @@ class Model {
 //      min = -32768; scale = 1/256
 
 class RGBDataSet extends DataSet {
-    static newRgbDataFunction(min, scale) {
-        return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
-    }
-
-    // amazon/mapzen: https://registry.opendata.aws/tag/elevation/
-    static newMapzenElevation() {
-        return this.newRgbDataFunction(-32768, 1 / 256)
-    }
-    static mapzenUrl(z, x, y) {
-        return `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`
-    }
-    // https://docs.mapbox.com/help/troubleshooting/access-elevation-data/
-    static newMapboxElevation() {
-        return this.newRgbDataFunction(-10000, 0.1)
-    }
-    static mapboxUrl(z, x, y, token) {
-        return `https://api.mapbox.com/v4/mapbox.terrain-rgb/${z}/${x}/${y}.pngraw?access_token=${token}`
-    }
-
-    static redfishElevation(r, g, b) {
-        let negative = 1; // From RGB2DeciMeters()
-        if (r > 63) {
-            negative = -1;
-            r = 0;
-        }
-        return (negative * (r * 256 * 256 + g * 256 + b)) / 10
-    }
-    static redfishUSAUrl(z, x, y) {
-        return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
-    }
-    static redfishWorldUrl(z, x, y) {
-        return `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/${x}/${y}.png`
-    }
-
     static rgbToInt24(r, g, b) {
         return r * 256 * 256 + g * 256 + b
     }

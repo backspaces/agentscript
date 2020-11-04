@@ -1,0 +1,87 @@
+<html>
+    <head>
+        <title>terrain1</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import util from '../src/util.js'
+            import World from '../src/World.js'
+            import { redfishUSDataSet } from '../src/TileDataSet.js'
+            import Model from '../models/HelloModel.js'
+            import { THREE } from '../vendor/three.esm.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+
+            async function run() {
+                const [Z, X, Y] = [13, 1594, 3339]
+                const elevation = await redfishUSDataSet(Z, X, Y)
+                const el0to10 = elevation.scale(0, 10)
+
+                const model = new Model(World.defaultOptions(50))
+                model.population = 0
+                model.patches.importDataSet(el0to10, 'z')
+
+                await model.startup()
+                model.setup()
+
+                // REMIND: fix patches to update only once
+                const drawOptions = {
+                    patchesMesh: {
+                        meshClass: 'PatchesMesh',
+                        useSegments: true,
+                    },
+                    // patchesSize: 5,
+                    patchesMap: 'Jet',
+                    patchesColor: p => {
+                        const map = view.drawOptions.patchesMap
+                        const color = map.scaleColor(p.z, 0, 10)
+                        return color
+                    },
+                }
+
+                const view = new ThreeDraw(
+                    model,
+                    { div: 'modelDiv' },
+                    drawOptions
+                )
+                const data = el0to10.resample(101, 101).data
+                const geometry = view.meshes.patches.mesh.geometry
+                const pos = geometry.getAttribute('position')
+                const a = pos.array
+                util.repeat(a.length / 3, (i, a) => (a[i * 3 + 2] = data[i]), a)
+                geometry.setAttribute(
+                    'position',
+                    new THREE.BufferAttribute(a, 3)
+                )
+
+                util.toWindow({ util, model, view })
+
+                util.timeoutLoop(
+                    () => {
+                        model.step()
+                        view.draw()
+                    },
+                    1, // 500, just draw once, is static
+                    33
+                )
+
+                view.idle()
+            }
+            run()
+
+            // const drawOptions = {
+            //     initPatches: (model, view) => {
+            //         const elevation = model.patches.exportDataSet('elevation')
+            //         const grays = elevation.scale(0, 255).data
+            //         const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
+            //         const localMinColor = Color.typedColor(255, 0, 0)
+            //         model.localMins.forEach(p => {
+            //             colors[p.id] = localMinColor
+            //         })
+            //         return colors
+            //     },
+            // }
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

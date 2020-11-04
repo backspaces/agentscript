@@ -5,8 +5,6 @@ import util from './util.js'
  * of numbers of length = width * height.
  *
  * The array can be a TypedArray or a JavaScript Array.
- *
- * @class
  */
 
 class DataSet {
@@ -200,7 +198,13 @@ class DataSet {
     // Scale each data element to be between min/max
     // This is a linear scale from this dataset's min/max
     // y = mx + b
-    // scale (ds, min, max) {
+    // utils.objects.js:
+    // export function normalize(array, lo = 0, hi = 1) {
+    //     const [min, max] = [arrayMin(array), arrayMax(array)]
+    //     const scale = 1 / (max - min)
+    //     return array.map(n => lerp(lo, hi, scale * (n - min)))
+    // }
+
     scale(min, max) {
         // const data = ds.data
         const dsMin = this.min()

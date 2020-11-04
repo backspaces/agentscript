@@ -1,0 +1,36 @@
+#!/usr/bin/env node --require esm
+// import util from '../src/util.js'
+const shell = require('shelljs')
+const AS = require('../dist/agentscript.umd.js')
+
+Object.assign(this, AS)
+console.log('this', Object.keys(this))
+
+const fileName = process.argv[2]
+if (!fileName) throw Error('Needs fileName argument')
+const file = shell.cat(fileName)
+// shell.echo(file)
+
+const x = file.matchAll(/\* @example.*\n.*\* *(.*)\n.*> *(.*)\n/g)
+const matches = [...x].map(a => ({ ex: a[1], val: a[2] }))
+
+// console.log(matches)
+
+console.log('file', fileName)
+matches.forEach(obj => {
+    const { ex, val } = obj
+    console.log(ex)
+    console.log(val)
+    const exval = JSON.stringify(eval(ex))
+    const valval = JSON.stringify(eval(val))
+    console.log(exval)
+    console.log(valval)
+    assert()
+
+    console.log()
+})
+
+// const util = esmImport('../src/util.js')
+
+// console.log(util)
+// console.log(shell)

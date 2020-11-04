@@ -11,7 +11,14 @@
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+
+   <script src="../dist/agentscript.umd.js"></script>
+   <script>
+       Object.assign(window, AS)
+       
+   </script>
 </head>
+
 
 <body>
 
@@ -30,9 +37,6 @@
     
         <h2><span class="attribs"><span class="type-signature"></span></span>World<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Class World defines the coordinate system for the model.
-It has transforms for multiple coordinate systems.</p></div>
-        
     
 </header>
 
@@ -41,8 +45,6 @@ It has transforms for multiple coordinate systems.</p></div>
     
         
 
-    
-    <h2>Constructor</h2>
     
 
     
@@ -54,9 +56,17 @@ It has transforms for multiple coordinate systems.</p></div>
 
 
 <div class="description">
-    <p>Create a new World object given an Object with
-minX, maxX, minY, maxY, minZ, maxZ values.</p>
-<p>Defaults to World.defaultOptions()</p>
+    <p>Class World defines the coordinate system for the model.
+It has transforms for multiple coordinate systems.</p>
+<p>The world is defined by an object with 6 properties:</p>
+<pre><code>     options = {
+         minX: int,
+         maxX: int,
+         minY: int,
+         maxY: int,
+         minZ: int,
+         maxZ: int,
+     }</code></pre>
 </div>
 
 
@@ -169,7 +179,7 @@ minX, maxX, minY, maxY, minZ, maxZ values.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line15">line 15</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -431,7 +441,7 @@ minX, maxX, minY, maxY, minZ, maxZ values.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line26">line 26</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -684,7 +694,7 @@ minX, maxX, minY, maxY, minZ, maxZ values.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line46">line 46</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -911,7 +921,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line170">line 170</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line181">line 181</a>
     </li></ul></dd>
     
 
@@ -1160,7 +1170,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line141">line 141</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -1270,7 +1280,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line110">line 110</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -1380,7 +1390,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line124">line 124</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -1490,7 +1500,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line97">line 97</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line108">line 108</a>
     </li></ul></dd>
     
 
@@ -1558,13 +1568,13 @@ and the world's values of the same properties.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="BBoxTransform.html">BBoxTransform</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Model.html">Model</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Model.html">Model</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Oct 23 2020 15:28:39 GMT-0600 (Mountain Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 04 2020 15:46:55 GMT-0700 (Mountain Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -12,6 +12,7 @@ test.html
 **/.DS_Store
 
 Attic
+temp
 
 # package-lock.json
 # yarn.lock

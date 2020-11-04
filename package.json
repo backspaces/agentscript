@@ -46,9 +46,9 @@
         "build-scripts": "node bin/models2scripts",
         "build-vendor": "yarn && rm -f vendor/* && rollup -c workflow/rollup.vendor.js && npm run build-css",
         "build-css": "bin/wrapcss < 'node_modules/mapbox-gl/dist/mapbox-gl.css' > vendor/mapboxgl.css.js",
-        "build-md": "bin/src2md 'models views2 views3 views3d tutorial gis fb' > /dev/null",
-        "build-docs": "shx rm docs/*.html && jsdoc src/*js -c jsdoc.config.js",
-        "clean-docs": "shx rm -rf docs/*.html",
+        "build-md": "bin/src2md 'models views2 views3 views3d tutorial gis' > /dev/null",
+        "build-docs": "jsdoc src/*js -c workflow/jsdoc.config.js && bin/docsmod",
+        "clean-docs": "shx rm docs/*.html",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
@@ -67,9 +67,9 @@
         "run3w": "bin/runmodels workers3",
         "runnode": "bin/runnodemodels",
         "safari": "bin/testsafari &",
-        "start": "./node_modules/.bin/live-server &",
-        "foo": "./node_modules/.bin/live-server &",
-        "temp": "snowpack  --polyfill-node"
+        "start": "./node_modules/.bin/live-server --watch=docs&",
+        "foo": "bin/docsmod",
+        "temp": "documentation build src/*.js --shallow -f html -o temp"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
@@ -93,6 +93,7 @@
         "live-server": "latest",
         "npm-run-all": "4.1.2",
         "puppeteer": "2.1.1",
+        "require-from-web": "^1.2.0",
         "rollup": "^1.15.0",
         "rollup-plugin-commonjs": "^10.1.0",
         "rollup-plugin-copy": "^3.1.0",

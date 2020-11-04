@@ -29,8 +29,9 @@ export class BaseMesh {
     // An abstract class for all Meshes. Assume all classes have options:
     // static options() {..}
     constructor(view, options = {}) {
+        // this.view = view
         // Overide default options
-        options = Object.assign(this.constructor.options(), options)
+        options = Object.assign(this.constructor.options(view), options)
         const { scene, world } = view
         Object.assign(this, { scene, world, view, options })
         this.mesh = null
@@ -90,7 +91,7 @@ export class NullMesh {
 // ============= CanvasMesh =============
 
 export class CanvasMesh extends BaseMesh {
-    static options() {
+    static options(view) {
         return {
             // https://threejs.org/docs/#api/en/textures/Texture
             textureOptions: {
@@ -99,13 +100,13 @@ export class CanvasMesh extends BaseMesh {
             },
             z: 0.0,
             useSegments: false,
-            canvas: null, // fill in w/ BaseMesh ctor options
+            canvas: view.patchesCanvas(),
             // colorType: undefined
         }
     }
-    init(canvas = this.options.canvas) {
+    init() {
         if (this.mesh) disposeMesh(this.mesh)
-        const { textureOptions, useSegments, z } = this.options
+        const { canvas, textureOptions, useSegments, z } = this.options
         Object.assign(this, { canvas, z, textureOptions })
         const { width, height, centerX, centerY } = this.world
 
@@ -139,34 +140,11 @@ export class CanvasMesh extends BaseMesh {
     }
 }
 
-// Several classes for patches, turtles, links, etc.
-
-// ============= DrawingMesh =============
-// For now, just use CanvasMesh
-// Drawing meshes are a form of Canvas Mesh
-// export class DrawingMesh extends CanvasMesh {
-//     static options() {
-//         return {
-//             textureOptions: {
-//                 minFilter: THREE.NearestFilter,
-//                 magFilter: THREE.NearestFilter,
-//             },
-//             z: 1.25,
-//         }
-//     }
-//     init(drawing) {
-//         super.init(drawing.ctx.canvas)
-//     }
-//     update() {
-//         super.update()
-//     }
-// }
-
 // ============= PatchesMesh =============
 
 // Patch meshes are a form of Canvas Mesh
 export class PatchesMesh extends CanvasMesh {
-    static options() {
+    static options(view) {
         // REMIND: use CanvasMesh options?
         return {
             // https://threejs.org/docs/#api/en/textures/Texture
@@ -177,12 +155,15 @@ export class PatchesMesh extends CanvasMesh {
             z: 0.0,
             useSegments: false,
             colorType: 'pixel',
+            canvas: view.patchesCanvas(),
         }
     }
-    init(canvas = this.view.patchesView.ctx.canvas) {
+    // init(canvas = this.view.patchesView.ctx.canvas) {
+    // init(canvas = this.view.patchesCanvas()) {
+    init() {
         // init() {
         // super.init(canvas, this.options.useSegments)
-        super.init(canvas)
+        super.init()
         this.centerMesh()
     }
     update(data, viewFcn = d => d) {
@@ -192,6 +173,21 @@ export class PatchesMesh extends CanvasMesh {
     }
 }
 
+// ============= TerrainMesh =============
+
+export class TerrainMesh extends PatchesMesh {
+    static options() {
+        return {
+            textureOptions: {
+                minFilter: THREE.LinearFilter,
+                magFilter: THREE.LinearFilter,
+            },
+            z: 0.0,
+            useSegments: true,
+            // colorType: 'image',
+        }
+    }
+}
 // ============= QuadSpritesMesh =============
 
 export class QuadSpritesMesh extends BaseMesh {
@@ -339,12 +335,11 @@ export class PointsMesh extends BaseMesh {
         const vertices = []
         const colors = this.fixedColor ? null : []
 
-        util.forLoop(agents, (turtle, i) => {
-            let { x, y, z } = turtle
+        util.forLoop(agents, (agent, i) => {
+            let { x, y, z } = agent
             // if (!z) z = 0
             vertices.push(x, y, z)
-            if (colors)
-                colors.push(...meshColor(viewFcn(turtle, i).color, this))
+            if (colors) colors.push(...meshColor(viewFcn(agent, i).color, this))
         })
         this.mesh.geometry.setAttribute(
             'position',

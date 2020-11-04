@@ -21,7 +21,7 @@ export function setDefaultStyle(id = 'canvas') {
     document.head.append(meta)
 }
 
-export function modelCamera(renderer, model) {
+export function newCamera(renderer, position, up = [0, 0, 1]) {
     const canvas = renderer.domElement
     const camera = new THREE.PerspectiveCamera(
         45, // fov
@@ -30,20 +30,26 @@ export function modelCamera(renderer, model) {
         10000 //far
     )
 
-    const width = model.world.width
-    camera.position.set(width, width, width)
-    camera.up.set(0, 0, 1)
+    camera.position.set(...position)
+    camera.up.set(...up)
 
     checkResize(renderer, camera)
 
     return camera
 }
-export function addModelHelpers(renderer, scene, camera, model) {
+export function modelCamera(renderer, model) {
     const width = model.world.width
-
+    const position = [width, width, width]
+    return newCamera(renderer, position)
+}
+export function addModelHelpers(renderer, scene, camera, model) {
+    addHelpers(renderer, scene, camera, model.world.width)
+}
+export function addHelpers(renderer, scene, camera, width, zUp = true) {
+    // const width = model.world.width
     const axes = new THREE.AxesHelper((1.5 * width) / 2)
     const grid = new THREE.GridHelper(1.25 * width, 10)
-    grid.rotation.x = degToRad(90)
+    if (zUp) grid.rotation.x = degToRad(90)
 
     const orbitControl = new OrbitControls(camera, renderer.domElement)
 
@@ -56,14 +62,14 @@ export function addModelHelpers(renderer, scene, camera, model) {
 
 export function addMesh(
     scene,
-    name,
+    geometryName,
     material = 'Phong',
     color = 'red',
-    params = []
+    geometryParams = []
 ) {
-    name = name + 'Geometry'
+    geometryName = geometryName + 'Geometry'
     material = 'Mesh' + material + 'Material'
-    const geometry = new THREE[name](...params)
+    const geometry = new THREE[geometryName](...geometryParams)
     material = new THREE[material]({ color })
     const mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh)

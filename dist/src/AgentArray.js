@@ -6,10 +6,21 @@ import util from './util.js'
 
 /**
  * Subclass of Array used by AgentScript, enspired by NetLogo
- * @class
- * @extends Array
  */
 class AgentArray extends Array {
+    /**
+     * Creates an instance of AgentArray. Simply pass-through to super()
+     * now, but may add initialization code later.
+     * @example
+     * let aa = new AgentArray({x:0,y:0}, {x:0,y:1}, {x:1,y:0})
+     *  //=>  [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 0 }]
+     * @memberof AgentArray
+     */
+    constructor(...args) {
+        super(...args)
+        // maybe do some initialization later
+    }
+
     /**
      * Convert an existing Array to an AgentArray "in place".
      * Use array.slice() if a new array is wanted
@@ -23,15 +34,6 @@ class AgentArray extends Array {
         Object.setPrototypeOf(array, AgentArray.prototype)
         return array
     }
-
-    // /**
-    //  * Creates an instance of AgentArray. Simply calls super()
-    //  *
-    //  * @memberof AgentArray
-    //  */
-    // constructor() {
-    //     super()
-    // }
 
     /**
      * Convert this AgentArray to Array in-place
@@ -57,6 +59,12 @@ class AgentArray extends Array {
      *
      * @return {boolean}
      * @memberof AgentArray
+     * @example
+     *  new AgentArray().isEmpty()
+     *  //=> true
+     * @example
+     *  aa.isEmpty()
+     *  //=> false
      */
     isEmpty() {
         return this.length === 0
@@ -66,6 +74,9 @@ class AgentArray extends Array {
      *
      * @return {any}
      * @memberof AgentArray
+     * @example
+     *  aa.first()
+     *  //=> { x: 0, y: 0 }
      */
     first() {
         return this[0]
@@ -75,6 +86,9 @@ class AgentArray extends Array {
      *
      * @return {any}
      * @memberof AgentArray
+     * @example
+     *  aa.last()
+     *  //=>  { x: 1, y: 0 }
      */
     last() {
         return this[this.length - 1]
@@ -100,6 +114,12 @@ class AgentArray extends Array {
      * @param {ArrayType} [type=AgentArray]
      * @return {Array} Array of given type
      * @memberof AgentArray
+     * @example
+     *  aa.props('x')
+     *  //=> [0, 0, 1]
+     * @example
+     *  aa.props('y')
+     *  //=> [0, 1, 0]
      */
     props(key, type = AgentArray) {
         const result = new type(this.length)

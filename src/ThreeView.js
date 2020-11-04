@@ -303,6 +303,9 @@ export default class ThreeView {
         return util.isObject(viewFcn) ? () => viewFcn : viewFcn
     }
 
+    patchesCanvas() {
+        return this.patchesView.ctx.canvas
+    }
     clearPatches(color) {
         // color can be typed, pixel, css, or undefined (clear to transparent)
         this.patchesView.clear(color)

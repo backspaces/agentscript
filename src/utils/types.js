@@ -21,7 +21,7 @@ export const isInteger = n => Number.isInteger(n) // assume es6, babel otherwise
 export const isFloat = n => isNumber(n) && n % 1 !== 0 // https://goo.gl/6MS0Tm
 export const isCanvas = obj =>
     isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas'])
-
+export const isImage = obj => isType(obj, 'image')
 export const isImageable = obj =>
     isOneOfTypes(obj, [
         'image',

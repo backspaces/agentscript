@@ -11,7 +11,14 @@
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+
+   <script src="../dist/agentscript.umd.js"></script>
+   <script>
+       Object.assign(window, AS)
+       
+   </script>
 </head>
+
 
 <body>
 
@@ -33,7 +40,7 @@
             <div class="class-description"><p>Patches are the world other agentsets live on.
 They create a coord system
 from Model's world values: minX, maxX, minY, maxY</p>
-<p>Manged by class Model. Not created by modeler.</p></div>
+<p>Created by class Model. Used by modeler in their Model subclass</p></div>
         
     
 </header>
@@ -121,7 +128,7 @@ from Model's world values: minX, maxX, minY, maxY</p>
             <td class="type">
             
                 
-<span class="param-type">Class</span>
+<span class="param-type"><a href="Patch.html">Patch</a></span>
 
 
             
@@ -131,7 +138,7 @@ from Model's world values: minX, maxX, minY, maxY</p>
 
             
 
-            <td class="description last"><p>The class managed by Patches</p></td>
+            <td class="description last"><p>The Patch class managed by Patches</p></td>
         </tr>
 
     
@@ -195,7 +202,7 @@ from Model's world values: minX, maxX, minY, maxY</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line17">line 17</a>
+        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -414,7 +421,7 @@ from Model's world values: minX, maxX, minY, maxY</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line142">line 142</a>
+        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line140">line 140</a>
     </li></ul></dd>
     
 
@@ -663,7 +670,7 @@ from Model's world values: minX, maxX, minY, maxY</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line121">line 121</a>
+        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line119">line 119</a>
     </li></ul></dd>
     
 
@@ -752,7 +759,7 @@ Will be less than 8 on the edge of the patches</p>
             <td class="type">
             
                 
-<span class="param-type">Patch</span>
+<span class="param-type"><a href="Patch.html">Patch</a></span>
 
 
             
@@ -803,7 +810,7 @@ Will be less than 8 on the edge of the patches</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line83">line 83</a>
+        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -914,7 +921,7 @@ Will be less than 4 on the edge of the patches</p>
             <td class="type">
             
                 
-<span class="param-type">Patch</span>
+<span class="param-type"><a href="Patch.html">Patch</a></span>
 
 
             
@@ -965,7 +972,7 @@ Will be less than 4 on the edge of the patches</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line103">line 103</a>
+        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -1147,7 +1154,7 @@ Will be less than 4 on the edge of the patches</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line163">line 163</a>
+        <a href="Patches.js.html">Patches.js</a>, <a href="Patches.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -1215,13 +1222,13 @@ Will be less than 4 on the edge of the patches</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="BBoxTransform.html">BBoxTransform</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Model.html">Model</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Model.html">Model</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Oct 23 2020 15:28:39 GMT-0600 (Mountain Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 04 2020 15:46:55 GMT-0700 (Mountain Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -11,7 +11,41 @@
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+
+   <script src="../dist/agentscript.umd.js"></script>
+   <script>
+       Object.assign(window, AS)
+       
+console.log("aa = new AgentArray({x:0,y:0}, {x:0,y:1}, {x:1,y:0})");
+console.log(aa = new AgentArray({x:0,y:0}, {x:0,y:1}, {x:1,y:0}));
+console.log(' ')
+
+console.log("aa.first()");
+console.log(aa.first());
+console.log(' ')
+
+console.log("new AgentArray().isEmpty()");
+console.log(new AgentArray().isEmpty());
+console.log(' ')
+
+console.log("aa.isEmpty()");
+console.log(aa.isEmpty());
+console.log(' ')
+
+console.log("aa.last()");
+console.log(aa.last());
+console.log(' ')
+
+console.log("aa.props('x')");
+console.log(aa.props('x'));
+console.log(' ')
+
+console.log("aa.props('y')");
+console.log(aa.props('y'));
+console.log(' ')
+   </script>
 </head>
+
 
 <body>
 
@@ -51,6 +85,11 @@
     
 
 
+
+<div class="description">
+    <p>Creates an instance of AgentArray. Simply pass-through to super()
+now, but may add initialization code later.</p>
+</div>
 
 
 
@@ -93,7 +132,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line12">line 12</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -122,25 +161,27 @@
 
 
 
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>let aa = new AgentArray({x:0,y:0}, {x:0,y:1}, {x:1,y:0})
+ //=>  [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 0 }]</code></pre>
+
+
 
     
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li>Array</li>
-    </ul>
-
 
     
 
     
+        <h3 class="subsection-title">Classes</h3>
 
+        <dl>
+            <dt><a href="AgentArray.html">AgentArray</a></dt>
+            <dd></dd>
+        </dl>
     
 
     
@@ -262,7 +303,7 @@ Use array.slice() if a new array is wanted</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line22">line 22</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -418,7 +459,7 @@ Same as Array.every, using NetLogo's name</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line91">line 91</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -580,7 +621,7 @@ Array can shrink. If it grows, will not visit beyond original length.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line192">line 192</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line212">line 212</a>
     </li></ul></dd>
     
 
@@ -668,7 +709,7 @@ Array can shrink. If it grows, will not visit beyond original length.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line70">line 70</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -713,6 +754,12 @@ Array can shrink. If it grows, will not visit beyond original length.
     
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>aa.first()
+ //=> { x: 0, y: 0 }</code></pre>
 
 
 
@@ -826,7 +873,7 @@ Note: 5x+ faster than this.forEach(fcn)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line174">line 174</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line194">line 194</a>
     </li></ul></dd>
     
 
@@ -936,7 +983,7 @@ Note: 5x+ faster than this.forEach(fcn)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line61">line 61</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -981,6 +1028,15 @@ Note: 5x+ faster than this.forEach(fcn)</p>
     
 
 
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>new AgentArray().isEmpty()
+ //=> true</code></pre>
+
+    <pre class="prettyprint"><code>aa.isEmpty()
+ //=> false</code></pre>
 
 
 
@@ -1042,7 +1098,7 @@ Note: 5x+ faster than this.forEach(fcn)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line79">line 79</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -1087,6 +1143,12 @@ Note: 5x+ faster than this.forEach(fcn)</p>
     
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>aa.last()
+ //=>  { x: 1, y: 0 }</code></pre>
 
 
 
@@ -1253,7 +1315,7 @@ Array type is specified, defaults to AgentArray</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line104">line 104</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line124">line 124</a>
     </li></ul></dd>
     
 
@@ -1302,6 +1364,15 @@ Array type is specified, defaults to AgentArray</p>
     
 
 
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>aa.props('x')
+ //=> [0, 0, 1]</code></pre>
+
+    <pre class="prettyprint"><code>aa.props('y')
+ //=> [0, 1, 0]</code></pre>
 
 
 
@@ -1363,7 +1434,7 @@ Array type is specified, defaults to AgentArray</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line42">line 42</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -1523,7 +1594,7 @@ Obj is key, arrayType pairs: x: Float32Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line122">line 122</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -1629,7 +1700,7 @@ Obj is key, arrayType pairs: x: Float32Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line149">line 149</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line169">line 169</a>
     </li></ul></dd>
     
 
@@ -1784,7 +1855,7 @@ Obj is key, arrayType pairs: x: Float32Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line216">line 216</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line236">line 236</a>
     </li></ul></dd>
     
 
@@ -1848,13 +1919,13 @@ Obj is key, arrayType pairs: x: Float32Array</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="BBoxTransform.html">BBoxTransform</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Model.html">Model</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Model.html">Model</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Oct 23 2020 15:28:39 GMT-0600 (Mountain Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 04 2020 15:46:55 GMT-0700 (Mountain Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

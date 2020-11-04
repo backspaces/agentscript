@@ -37,9 +37,6 @@ export default class DefineTransform {
         this.transformsRef(modelName).child(transformName).set(xfm)
 
         // Used by onValue() below
-        // this.resultsRef = this.transformsRef(modelName).child(
-        //     transformName + '/result'
-        // )
         const resultsRef = this.transformsRef(modelName).child(
             transformName + '/result'
         )

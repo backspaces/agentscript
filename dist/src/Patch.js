@@ -12,11 +12,21 @@ import AgentArray from './AgentArray.js'
 // The flyweight Patch objects are created via Object.create(protoObject),
 // This lets the new Patch(agentset) object be "defaults".
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
-export default class Patch {
+
+/**
+ * Class Patch instances represent a rectangle on a grid.  They hold variables
+ * that are in the patches the turtles live on.  The set of all patches
+ * is the world on which the turtles live and the model runs.
+ *
+ * @export
+ * @class
+ */
+class Patch {
     static defaultVariables() {
         // Core variables for patches.
         return {
             turtles: undefined, // the turtles on me. Lazy evalued, see turtlesHere
+            z: 0, // default shared z val. Can be overridden
         }
     }
     // Initialize a Patch given its Patches AgentSet.
@@ -32,9 +42,10 @@ export default class Patch {
             this.model.world.maxY - Math.floor(this.id / this.model.world.numX)
         )
     }
-    get z() {
-        return 0
-    }
+    // get z() {
+    //     return 0
+    // }
+    // set z(z) {}
     isOnEdge() {
         return this.patches.isOnEdge(this)
     }
@@ -128,4 +139,4 @@ export default class Patch {
     }
 }
 
-// export default Patch
+export default Patch

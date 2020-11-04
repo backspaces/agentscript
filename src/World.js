@@ -1,16 +1,27 @@
 import util from './util.js'
 
 // class World defines the coordinate system for the model.
-// It will be upgraded with methods converting from other
-// transforms like GIS and DataSets.
+// It will be  upgraded with methods converting from other
+// transforms like  GIS and DataSets.
 
-const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
+// const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
 
 /**
+ * @description
  * Class World defines the coordinate system for the model.
  * It has transforms for multiple coordinate systems.
  *
- * @class
+ * The world is defined by an object with 6 properties:
+ *
+ *          options = {
+ *              minX: int,
+ *              maxX: int,
+ *              minY: int,
+ *              maxY: int,
+ *              minZ: int,
+ *              maxZ: int,
+ *          }
+ *
  */
 class World {
     /**
@@ -231,6 +242,7 @@ class World {
  * A linear transformer between world coords and the given bounding box.
  *
  * @class
+ * @private
  */
 class BBoxTransform {
     // geo bbox definition:

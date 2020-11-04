@@ -20,7 +20,8 @@ export default class ThreeDraw extends ThreeView {
             linksMesh: null, // 'LinksMesh',
 
             patchesColor: 'random',
-            patchesShape: 'point',
+            // patchesShape: 'point',
+            // patchesShape: null,
             patchesSize: 1,
             initPatches: null,
 
@@ -43,12 +44,16 @@ export default class ThreeDraw extends ThreeView {
     // ======================
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
+        // merge defaultOptions into drawOptions
         drawOptions = Object.assign(ThreeDraw.defaultOptions(), drawOptions)
+
+        // Instantiate maps if only names given.
         if (typeof drawOptions.turtlesMap === 'string')
             drawOptions.turtlesMap = ColorMap[drawOptions.turtlesMap]
         if (typeof drawOptions.patchesMap === 'string')
             drawOptions.patchesMap = ColorMap[drawOptions.patchesMap]
 
+        // filter out meshes object from View & viewOptions overrides
         const { patches, turtles, links } = Object.assign(
             ThreeView.defaultOptions(),
             viewOptions
@@ -57,14 +62,22 @@ export default class ThreeDraw extends ThreeView {
 
         // Sync meshes to drawOptions.
         for (const mesh of ['patches', 'turtles', 'links']) {
-            if (drawOptions[mesh + 'Mesh'])
-                meshes[mesh] = { meshClass: drawOptions[mesh + 'Mesh'] }
+            // Add draw meshes to view
+            const meshName = mesh + 'Mesh'
+            if (drawOptions[meshName]) {
+                const option = drawOptions[meshName]
+                meshes[mesh] =
+                    typeof option === 'string' ? { meshClass: option } : option
+            }
 
+            // If color is static, convert to typedColor
+            // & add to mesh for static static meshes & attributes
             const color = mesh + 'Color'
             if (isStaticColor(drawOptions[color])) {
                 drawOptions[color] = Color.toTypedColor(drawOptions[color])
-                meshes[mesh].color = drawOptions[color]
+                meshes[mesh].color = drawOptions[color] // typed color
             }
+
             // Add static sizes to viewOptions for static meshes & attributes
             const size = mesh + 'Size'
             if (typeof drawOptions[size] === 'number') {
@@ -72,11 +85,14 @@ export default class ThreeDraw extends ThreeView {
                 meshes[mesh].size = drawOptions[size]
             }
         }
-        console.log('meshes', meshes)
+        // console.log('meshes', meshes)
 
+        // call View ctor, overriding mesh options derived above
         Object.assign(viewOptions, meshes)
         super(model.world, viewOptions)
-        console.log(viewOptions, '\n', drawOptions, '\n', meshes)
+        console.log('viewOptions', viewOptions)
+        console.log('drawOptions', drawOptions)
+        console.log('meshes', meshes)
 
         // Initialization for static patches:
         if (this.meshName('patches') === 'PatchesMesh') {
@@ -92,11 +108,8 @@ export default class ThreeDraw extends ThreeView {
             }
         }
 
-        // this.model = model
-        // this.view = this
-        // Object.assign(this, { model, view, drawOptions })
+        // merge model, view, drawOptions into "this"
         this.checkParams(drawOptions)
-        // this.drawOptions = drawOptions
         Object.assign(this, { model, view: this, drawOptions })
     }
 
