@@ -315,11 +315,13 @@ export default class ThreeView {
     // drawPatchesImage(img) {
     drawPatchesImage(img) {
         // this.meshes.patches.options.textureOptions = {
-        this.meshes.patches.textureOptions = {
+        const options = this.meshes.patches.options
+        options.textureOptions = {
             minFilter: THREE.NearestFilter,
             magFilter: THREE.LinearFilter,
         }
-        this.meshes.patches.init(img)
+        options.canvas = img
+        this.meshes.patches.init()
     }
     createPatchPixels(pixelFcn) {
         this.patchesView.createPixels(pixelFcn)

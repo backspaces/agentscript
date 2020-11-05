@@ -16,8 +16,8 @@ export function osmUrl(z, x, y) {
 }
 
 // ============= MapTiler =============
-// https://api.maptiler.com/maps/streets/14/3370/6451.png?key=iQurAP6lArV1UP4gfSVs
-// type = 'street' (default); 'topo',
+// https://cloud.maptiler.com/tiles/
+// type = 'street' (default); 'topo', 'Hillshades', 'contours', 'hybrid'?
 export function maptilerUrl(z, x, y, key, type = 'street') {
     return `https://api.maptiler.com/maps/${type}/${z}/${x}/${y}.png?key=${key}`
 }
