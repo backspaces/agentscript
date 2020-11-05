@@ -7,12 +7,12 @@
         <script type="module">
             import util from '../src/util.js'
             import World from '../src/World.js'
-            import {redfishUSDataSet} from '../src/TileDataSet.js'
+            import { redfishUSDataSet } from '../src/TileDataSet.js'
             import Model from '../models/HelloModel.js'
             import ThreeDraw from '../src/ThreeDraw.js'
 
             async function run() {
-                const [ Z, X, Y ] = [13, 1594, 3339]
+                const [Z, X, Y] = [13, 1594, 3339]
                 const elevation = await redfishUSDataSet(Z, X, Y)
                 const el0to10 = elevation.scale(0, 10)
 
@@ -28,18 +28,17 @@
                     patchesMesh: 'PointsMesh',
                     patchesSize: 5,
                     patchesMap: 'Jet',
-                    patchesColor: (p) => {
+                    patchesColor: p => {
                         const map = view.drawOptions.patchesMap
                         const color = map.scaleColor(p.z, 0, 10)
                         return color
-                    }
+                    },
                 }
-
 
                 const view = new ThreeDraw(
                     model,
                     { div: 'modelDiv' },
-                    drawOptions,
+                    drawOptions
                 )
 
                 util.toWindow({ util, model, view })
