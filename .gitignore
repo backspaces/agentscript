@@ -3,7 +3,7 @@
 # Derived files other than docs/
 # /dist/
 
-node_modules/
+node_modules
 npm-debug.log
 yarn-error.log
 test.html

@@ -21,11 +21,13 @@ export default class Turtle {
             // theta: null, // set to random if default not set by modeler
             // What to do if I wander off world. Can be 'clamp', 'wrap'
             // 'bounce', or a function, see handleEdge() method
+            agentSet: null, // set by AgentSet's proto method
             atEdge: 'wrap',
         }
     }
     // Initialize a Turtle given its Turtles AgentSet.
     constructor() {
+        this.agentSet = this.atEdge = this.model = null // needed by jsDoc
         Object.assign(this, Turtle.defaultVariables())
     }
     agentConstructor() {
@@ -47,7 +49,7 @@ export default class Turtle {
         //     util.removeArrayItem(this.patch.turtles, this)
         // }
         if (this.patch && this.patch.turtles)
-            util.removeArrayItem(p0.turtles, this)
+            util.removeArrayItem(this.patch.turtles, this)
 
         // Set id to -1, indicates that I've died.
         // Useful when other JS objects contain turtles. Views for example.

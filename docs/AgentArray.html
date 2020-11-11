@@ -62,9 +62,10 @@ console.log(' ')
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>AgentArray<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>AgentArray<span class="signature">(&hellip;args)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Subclass of Array used by AgentScript, enspired by NetLogo</p></div>
+            <div class="class-description"><p>Subclass of Array with convenience methods used by NetLogo.
+Tipically the items in the array are Objects but can be any type.</p></div>
         
     
 </header>
@@ -79,7 +80,7 @@ console.log(' ')
     
 
     
-    <h4 class="name" id="AgentArray"><span class="type-signature"></span>new AgentArray<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AgentArray"><span class="type-signature"></span>new AgentArray<span class="signature">(&hellip;args)</span><span class="type-signature"></span></h4>
     
 
     
@@ -97,6 +98,67 @@ now, but may add initialization code later.</p>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>args</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Zero or more items in Array</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -132,7 +194,7 @@ now, but may add initialization code later.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line10">line 10</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -175,13 +237,6 @@ now, but may add initialization code later.</p>
 
     
 
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="AgentArray.html">AgentArray</a></dt>
-            <dd></dd>
-        </dl>
     
 
     
@@ -303,7 +358,7 @@ Use array.slice() if a new array is wanted</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line33">line 33</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -331,6 +386,10 @@ Use array.slice() if a new array is wanted</p>
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>array converted to AgentArray</p>
+</div>
+
 
 
 <dl>
@@ -459,7 +518,7 @@ Same as Array.every, using NetLogo's name</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line105">line 105</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -580,7 +639,7 @@ Array can shrink. If it grows, will not visit beyond original length.
 
             
 
-            <td class="description last"><p>fcn(agent, index?, array?)</p></td>
+            <td class="description last"><p>fcn(agent, [index], [array])</p></td>
         </tr>
 
     
@@ -621,7 +680,7 @@ Array can shrink. If it grows, will not visit beyond original length.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line212">line 212</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line199">line 199</a>
     </li></ul></dd>
     
 
@@ -646,6 +705,104 @@ Array can shrink. If it grows, will not visit beyond original length.
 
 
 
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="clone"><span class="type-signature"></span>clone<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Create copy of this AgentArray</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line280">line 280</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>AgentArray</p>
+</div>
+
+
+
+    
 
 
 
@@ -709,7 +866,7 @@ Array can shrink. If it grows, will not visit beyond original length.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line81">line 81</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -832,7 +989,7 @@ Note: 5x+ faster than this.forEach(fcn)</p>
 
             
 
-            <td class="description last"><p>fcn(agent, index?, array?)</p></td>
+            <td class="description last"><p>fcn(agent, [index], [array])</p></td>
         </tr>
 
     
@@ -873,7 +1030,7 @@ Note: 5x+ faster than this.forEach(fcn)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line194">line 194</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line182">line 182</a>
     </li></ul></dd>
     
 
@@ -983,7 +1140,7 @@ Note: 5x+ faster than this.forEach(fcn)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line69">line 69</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -1098,7 +1255,7 @@ Note: 5x+ faster than this.forEach(fcn)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line93">line 93</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line86">line 86</a>
     </li></ul></dd>
     
 
@@ -1248,7 +1405,7 @@ Array type is specified, defaults to AgentArray</p>
             <td class="type">
             
                 
-<span class="param-type">ArrayType</span>
+<span class="param-type">Array</span>
 
 
             
@@ -1274,7 +1431,7 @@ Array type is specified, defaults to AgentArray</p>
                 </td>
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>Type of array (Array, Uint8Array, ...)</p></td>
         </tr>
 
     
@@ -1315,7 +1472,7 @@ Array type is specified, defaults to AgentArray</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line124">line 124</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line115">line 115</a>
     </li></ul></dd>
     
 
@@ -1382,6 +1539,217 @@ Array type is specified, defaults to AgentArray</p>
     
 
     
+    <h4 class="name" id="sortBy"><span class="type-signature"></span>sortBy<span class="signature">(reporter, ascending<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="AgentArray.html">AgentArray</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Return this AgentArray sorted by the reporter in ascending/descending order.
+If reporter is a string, convert to a fcn returning that property.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>reporter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ascending</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line299">line 299</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="AgentArray.html">AgentArray</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="toArray"><span class="type-signature"></span>toArray<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
     
 
@@ -1390,7 +1758,8 @@ Array type is specified, defaults to AgentArray</p>
 
 
 <div class="description">
-    <p>Convert this AgentArray to Array in-place</p>
+    <p>See <a href="World.html">World</a> and <a href="World.html#bboxTransform">MyClass's foo property</a>.
+Convert this AgentArray to Array in-place</p>
 </div>
 
 
@@ -1434,7 +1803,7 @@ Array type is specified, defaults to AgentArray</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line44">line 44</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -1594,7 +1963,7 @@ Obj is key, arrayType pairs: x: Float32Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line142">line 142</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -1700,7 +2069,7 @@ Obj is key, arrayType pairs: x: Float32Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line169">line 169</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line158">line 158</a>
     </li></ul></dd>
     
 
@@ -1814,7 +2183,7 @@ Obj is key, arrayType pairs: x: Float32Array</p>
 
             
 
-            <td class="description last"><p>fcn(agent, index?, array?)</p></td>
+            <td class="description last"><p>fcn(agent, [index], [array])</p></td>
         </tr>
 
     
@@ -1855,7 +2224,7 @@ Obj is key, arrayType pairs: x: Float32Array</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line236">line 236</a>
+        <a href="AgentArray.js.html">AgentArray.js</a>, <a href="AgentArray.js.html#line222">line 222</a>
     </li></ul></dd>
     
 
@@ -1925,7 +2294,7 @@ Obj is key, arrayType pairs: x: Float32Array</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Nov 05 2020 16:01:49 GMT-0700 (Mountain Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a>
 </footer>
 
 <script> prettyPrint(); </script>

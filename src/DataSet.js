@@ -21,7 +21,6 @@ class DataSet {
      * @param {number} height The integer height of the array
      * @param {Object} Type Array or one of the typed array types
      * @return {DataSet} The resulting DataSet with no values assigned
-     * @memberof DataSet
      */
     static emptyDataSet(width, height, Type) {
         return new DataSet(width, height, new Type(width * height))
@@ -34,7 +33,6 @@ class DataSet {
      * @param {number} width The integer width of the array
      * @param {number} height The integer height of the array
      * @param {array} data The array of numbers of length width * height
-     * @memberof DataSet
      */
     constructor(width, height, data) {
         if (data.length !== width * height) {

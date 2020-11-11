@@ -14,16 +14,42 @@ import util from './util.js'
  * The world is defined by an object with 6 properties:
  *
  *          options = {
- *              minX: int,
- *              maxX: int,
- *              minY: int,
- *              maxY: int,
- *              minZ: int,
- *              maxZ: int,
+ *              minX: integer,
+ *              maxX: integer,
+ *              minY: integer,
+ *              maxY: integer,
+ *              minZ: integer,
+ *              maxZ: integer,
  *          }
- *
  */
+
 class World {
+    /**
+     * Create a new World object given an Object with optional
+     * minX, maxX, minY, maxY, minZ, maxZ overriding class properties.
+     * @param {Object.<string,number>} options Object with overrides for class properties
+     */
+    constructor(options = {}) {
+        // constructor(options = World.defaultOptions()) {
+        // minX, maxX, minY, maxY, minZ, maxZ
+        // override defaults with the given options
+        // options = Object.assign(World.defaultOptions(), options)
+        this.setClassProperties()
+
+        Object.assign(this, options) // set the option values
+        this.setWorld() // convert these to rest of world parameters
+    }
+
+    // Until class properties universally, this approach is used:
+    setClassProperties() {
+        this.maxX = 16
+        this.maxY = 16
+        this.maxZ = 16
+        this.minX = -this.maxX
+        this.minY = -this.maxY
+        this.minZ = -this.maxZ
+    }
+
     /**
      * Return a default options object, origin at center.
      *
@@ -32,7 +58,6 @@ class World {
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
      * @return {Object}
-     * @memberof World
      */
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
         return {
@@ -52,7 +77,6 @@ class World {
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
      * @return {World}
-     * @memberof World
      */
     static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
         return new World(World.defaultOptions(maxX, maxY, maxZ))
@@ -60,25 +84,11 @@ class World {
 
     // ======================
 
-    // Initialize the world w/ defaults overridden w/ options.
-    /**
-     * Create a new World object given an Object with
-     * minX, maxX, minY, maxY, minZ, maxZ values.
-     *
-     * Defaults to World.defaultOptions()
-     *
-     * @param {Object} [options=World.defaultOptions()] Object with Integer min/max X,Y,Z
-     * @memberof World
-     */
-    constructor(options = World.defaultOptions()) {
-        // override defaults with the given options
-        options = Object.assign(World.defaultOptions(), options)
-        Object.assign(this, options) // set the option values
-        this.setWorld() // convert these to rest of world parameters
-    }
     setWorld() {
         // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
+
         let { minX, maxX, minY, maxY, minZ, maxZ } = this
+
         this.numX = this.width = maxX - minX + 1
         this.numY = this.height = maxY - minY + 1
         // if (maxZ == null) maxZ = this.maxZ = Math.max(this.width, this.height)
@@ -96,14 +106,13 @@ class World {
         this.centerY = (minY + maxY) / 2
         this.centerZ = (minZ + maxZ) / 2
 
-        this.numPatches = this.width * this.height
+        this.numPatches = this.numX * this.numY
     }
 
     /**
      * Return a random 2D point within the World
      *
      * @return {Array} A random x,y float array
-     * @memberof World
      */
     randomPoint() {
         return [
@@ -116,7 +125,6 @@ class World {
      * Return a random 3D point within the World
      *
      * @return {Array} A random x,y,z float array
-     * @memberof World
      */
     random3DPoint() {
         return [
@@ -130,11 +138,9 @@ class World {
      * Return a random Patch 2D integer point
      *
      * @return {Array}  A random x,y integer array
-     * @memberof World
      */
     randomPatchPoint() {
         return [
-            // REMIND: can maxX/Y be in the result?
             util.randomInt2(this.minX, this.maxX),
             util.randomInt2(this.minY, this.maxY),
         ]
@@ -147,7 +153,6 @@ class World {
      * @param {number} y y value
      * @param {number} [z=this.centerZ] z value
      * @return {boolean} Whether or not on-world
-     * @memberof World
      */
     isOnWorld(x, y, z = this.centerZ) {
         return (
@@ -169,14 +174,15 @@ class World {
      * It linearly interpolates between the given minX, minY, maxX, maxY,
      * and the world's values of the same properties.
      *
+     * The parameters are in the popular geojson order: west, south, east, north
+     *
      * Useful for Canvas top-left transforms and geojson transforms.
      *
      * @param {number} minX min bounding box x value
-     * @param {number} minY max bounding box x value
-     * @param {number} maxX min bounding box y value
+     * @param {number} minY min bounding box y value
+     * @param {number} maxX max bounding box x value
      * @param {number} maxY max bounding box y value
-     * @return {Class} Instance of the BBoxTransform
-     * @memberof World
+     * @return {BBoxTransform} Instance of the BBoxTransform
      */
     bboxTransform(minX, minY, maxX, maxY) {
         return new BBoxTransform(minX, minY, maxX, maxY, this)
@@ -255,7 +261,6 @@ class BBoxTransform {
      * @param {number} maxX min bounding box y value
      * @param {number} maxY max bounding box y value
      * @param {World} world instance of a World object
-     * @memberof BBoxTransform
      */
     constructor(minX, minY, maxX, maxY, world) {
         if (minX < maxX) console.log('flipX')
@@ -271,7 +276,14 @@ class BBoxTransform {
         const bx = (minX + maxX - mx * (maxXcor + minXcor)) / 2
         const by = (maxY + minY - my * (maxYcor + minYcor)) / 2
 
-        Object.assign(this, { mx, my, bx, by })
+        // Object.assign(this, { mx, my, bx, by })
+        this.setClassProperties({ mx, my, bx, by })
+    }
+    setClassProperties(obj) {
+        this.mx = obj.mx
+        this.my = obj.my
+        this.bx = obj.bx
+        this.by = obj.by
     }
 
     /**
@@ -279,7 +291,6 @@ class BBoxTransform {
      *
      * @param {Array} bboxPoint A point in the bbox coordinates
      * @return {Array} A point in the world coordinates
-     * @memberof BBoxTransform
      */
     toWorld(bboxPoint) {
         const { mx, my, bx, by } = this
@@ -292,9 +303,8 @@ class BBoxTransform {
     /**
      * Convert from world point to bbox point
      *
-     * @param {Array} bboxPoint A point in the world coordinates
+     * @param {Array} worldPoint A point in the world coordinates
      * @return {Array} A point in the bbox coordinates
-     * @memberof BBoxTransform
      */
     toBBox(worldPoint) {
         const { mx, my, bx, by } = this
@@ -320,3 +330,32 @@ export default World
 // canvasSize(patchSize) {
 //     return [this.numX * patchSize, this.numY * patchSize]
 // }
+
+// Other ways to specify class properties:
+// maxX = 16
+// maxY = 16
+// maxZ = 16
+// minX = -this.maxX
+// minY = -this.maxY
+// minZ = -this.maxZ
+
+// Note: this is es7 class properties.
+// /** @type {number} Max patch x value */ maxX = 16
+// /** @type {number} */ maxY = this.maxX
+// /** @type {number} */ maxZ = Math.max(this.maxX, this.maxY)
+// /** @type {number} */ minX = -this.maxX
+// /** @type {number} */ minY = -this.maxY
+// /** @type {number} */ minZ = -this.maxZ
+
+//  * @property {number} maxX = 16
+//  * @property {number} maxY = this.maxX
+//  * @property {number} maxZ = Math.max(this.maxX, this.maxY)
+//  * @property {number} minX = -this.maxX
+//  * @property {number} minY = -this.maxY
+//  * @property {number} minZ = -this.maxZ
+
+// Note: this is es7 class properties.
+// /** @type {number} */ mx
+// /** @type {number} */ my
+// /** @type {number} */ bx
+// /** @type {number} */ by

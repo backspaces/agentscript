@@ -113,6 +113,7 @@ function minify(json) {
 }
 
 var gis = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     lon2x: lon2x,
     lat2y: lat2y,
     lonlat2xy: lonlat2xy,
@@ -232,6 +233,7 @@ function waitPromise(done, ms = 10) {
 }
 
 var async = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     imagePromise: imagePromise,
     imageBitmapPromise: imageBitmapPromise,
     canvasBlobPromise: canvasBlobPromise,
@@ -352,6 +354,7 @@ function getEventXY(element, evt) {
 }
 
 var dom = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     getQueryString: getQueryString,
     parseQueryString: parseQueryString,
     RESTapi: RESTapi,
@@ -551,6 +554,7 @@ function imageToBytes(img, flipY = false, imgFormat = 'RGBA') {
 }
 
 var canvas = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     createCanvas: createCanvas,
     createCtx: createCtx,
     cloneCanvas: cloneCanvas,
@@ -680,6 +684,7 @@ function dump(model = window.model) {
 // }
 
 var debug = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     logOnce: logOnce,
     warn: warn,
     timeit: timeit,
@@ -885,6 +890,7 @@ function inCone(x, y, radius, coneAngle, angle, x0, y0) {
 }
 
 var math = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     randomInt: randomInt,
     randomInt2: randomInt2,
     randomFloat: randomFloat,
@@ -995,6 +1001,7 @@ function convertArrayType(array, Type) {
 // typeName: obj => obj.constructor.name
 
 var types = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     typeOf: typeOf,
     isType: isType,
     isOneOfTypes: isOneOfTypes,
@@ -1335,6 +1342,7 @@ function simplifyFunctionString(str) {
 }
 
 var objects = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     identityFcn: identityFcn,
     noopFcn: noopFcn,
     propFcn: propFcn,
@@ -1454,6 +1462,7 @@ async function runModel(params) {
 }
 
 var models = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     sampleModel: sampleModel,
     runModel: runModel
 });
@@ -1499,6 +1508,7 @@ function oofaBuffers(postData) {
 }
 
 var oofa = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     isOofA: isOofA,
     toOofA: toOofA,
     oofaObject: oofaObject,
@@ -1524,21 +1534,31 @@ Object.assign(
     types
 );
 
-// An Array superclass with convenience methods used by NetLogo.
-// Tipically the items in the array are Objects, NetLogo Agents,
-// but generally useful as an ArrayPlus
-
 /**
- * Subclass of Array used by AgentScript, enspired by NetLogo
+ * Subclass of Array with convenience methods used by NetLogo.
+ * Tipically the items in the array are Objects but can be any type.
  */
 class AgentArray extends Array {
     /**
+     * Convert an existing Array to an AgentArray "in place".
+     * Use array.slice() if a new array is wanted
+     *
+     * @static
+     * @param {Array} array Array to convert to AgentArray
+     * @return {AgentArray} array converted to AgentArray
+     */
+    static fromArray(array) {
+        const aarray = Object.setPrototypeOf(array, AgentArray.prototype);
+        return aarray
+    }
+
+    /**
      * Creates an instance of AgentArray. Simply pass-through to super()
      * now, but may add initialization code later.
+     * @param {*} args Zero or more items in Array
      * @example
      * let aa = new AgentArray({x:0,y:0}, {x:0,y:1}, {x:1,y:0})
      *  //=>  [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 0 }]
-     * @memberof AgentArray
      */
     constructor(...args) {
         super(...args);
@@ -1546,24 +1566,10 @@ class AgentArray extends Array {
     }
 
     /**
-     * Convert an existing Array to an AgentArray "in place".
-     * Use array.slice() if a new array is wanted
-     *
-     * @static
-     * @param {Array} array Array to convert to AgentArray
-     * @return {AgentArray}
-     * @memberof AgentArray
-     */
-    static fromArray(array) {
-        Object.setPrototypeOf(array, AgentArray.prototype);
-        return array
-    }
-
-    /**
+     * See {@link World} and [MyClass's foo property]{@link World#bboxTransform}.
      * Convert this AgentArray to Array in-place
      *
      * @return {Array} This AgentArray converted to Array
-     * @memberof AgentArray
      */
     toArray() {
         Object.setPrototypeOf(this, Array.prototype);
@@ -1582,7 +1588,6 @@ class AgentArray extends Array {
      * Return true if there are no items in this Array
      *
      * @return {boolean}
-     * @memberof AgentArray
      * @example
      *  new AgentArray().isEmpty()
      *  //=> true
@@ -1597,7 +1602,6 @@ class AgentArray extends Array {
      * Return first item in this array. Returns undefined if empty.
      *
      * @return {any}
-     * @memberof AgentArray
      * @example
      *  aa.first()
      *  //=> { x: 0, y: 0 }
@@ -1609,7 +1613,6 @@ class AgentArray extends Array {
      * Return last item in this array. Returns undefined if empty.
      *
      * @return {any}
-     * @memberof AgentArray
      * @example
      *  aa.last()
      *  //=>  { x: 1, y: 0 }
@@ -1624,7 +1627,6 @@ class AgentArray extends Array {
      *
      * @param {Function} fcn Return boolean
      * @return {boolean} true if fcn returns true for all elements
-     * @memberof AgentArray
      */
     all(fcn) {
         return this.every(fcn)
@@ -1635,9 +1637,8 @@ class AgentArray extends Array {
      * Array type is specified, defaults to AgentArray
      *
      * @param {String} key Property name
-     * @param {ArrayType} [type=AgentArray]
+     * @param {Array} [type=AgentArray] Type of array (Array, Uint8Array, ...)
      * @return {Array} Array of given type
-     * @memberof AgentArray
      * @example
      *  aa.props('x')
      *  //=> [0, 0, 1]
@@ -1661,7 +1662,6 @@ class AgentArray extends Array {
      *
      * @param {Object} obj Object of prop, array type pairs
      * @return {Object}
-     * @memberof AgentArray
      */
     typedSample(obj) {
         // const length = this.length
@@ -1688,7 +1688,6 @@ class AgentArray extends Array {
      * Return new AgentArray of the unique values of this array
      *
      * @return {AgentArray}
-     * @memberof AgentArray
      */
     uniq() {
         // return AgentArray.fromArray(Array.from(new Set(this)))
@@ -1711,8 +1710,7 @@ class AgentArray extends Array {
      * Array assumed not mutable.
      * Note: 5x+ faster than this.forEach(fcn)
      *
-     * @param {Function} fcn fcn(agent, index?, array?)
-     * @memberof AgentArray
+     * @param {Function} fcn fcn(agent, [index], [array])
      * @return {this} Return this for chaining.
      */
     forLoop(fcn) {
@@ -1730,8 +1728,7 @@ class AgentArray extends Array {
      * Array can shrink. If it grows, will not visit beyond original length.
      * "ask" is NetLogo term.
      *
-     * @param {Function} fcn fcn(agent, index?, array?)
-     * @memberof AgentArray
+     * @param {Function} fcn fcn(agent, [index], [array])
      */
     ask(fcn) {
         const length = this.length;
@@ -1751,9 +1748,8 @@ class AgentArray extends Array {
      * Return all elements returning f(obj, index, array) true.
      * NetLogo term, simply calls this.filter(fcn)
      *
-     * @param {Function} fcn fcn(agent, index?, array?)
+     * @param {Function} fcn fcn(agent, [index], [array])
      * @return {AgentArray}
-     * @memberof AgentArray
      * @description
      * Use: turtles.with(t => t.foo > 20).ask(t => t.bar = true)
      */
@@ -1811,6 +1807,10 @@ class AgentArray extends Array {
     cloneRange(begin = 0, end = this.length) {
         return this.slice(begin, end) // Returns an AgentArray rather than Array!
     }
+    /**
+     * Create copy of this AgentArray
+     * @return AgentArray
+     */
     clone() {
         return this.slice(0) // Returns an AgentArray rather than Array!
     }
@@ -1822,6 +1822,14 @@ class AgentArray extends Array {
     // Return this AgentArray sorted by the reporter in ascending/descending order.
     // If reporter is a string, convert to a fcn returning that property.
     // Use clone if you don't want to mutate this array.
+    /**
+     * Return this AgentArray sorted by the reporter in ascending/descending order.
+     * If reporter is a string, convert to a fcn returning that property.
+     *
+     * @param {function} reporter
+     * @param {boolean} [ascending=true]
+     * @return {AgentArray}
+     */
     sortBy(reporter, ascending = true) {
         util.sortObjs(this, reporter, ascending);
         return this
@@ -2024,7 +2032,6 @@ class AgentSet extends AgentArray {
      *
      * @readonly
      * @static
-     * @memberof AgentSet
      */
     static get [Symbol.species]() {
         return AgentArray
@@ -2034,10 +2041,9 @@ class AgentSet extends AgentArray {
      * Create an empty AgentSet and initialize the `ID` counter for add().
      * If baseSet is supplied, the new agentset is a "breed" of baseSet
      * @param {Model} model Instance of Class Model to which I belong
-     * @param {Class} AgentClass Class of items stored in this AgentSet
+     * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
      * @param {String} name Name of this AgentSet. Ex: Patches
      * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet
-     * @memberof AgentSet
      */
     constructor(model, AgentClass, name, baseSet = null) {
         super(); // create empty AgentArray
@@ -2075,8 +2081,7 @@ class AgentSet extends AgentArray {
      * The Agent also has three methods added: setBreed, getBreed, isBreed.
      *
      * @param {Object} agentProto A new instance of the Agent being added
-     * @param {Class} AgentClass It's Class
-     * @memberof AgentSet
+     * @param {(Patch|Turtle|Link)} AgentClass It's Class
      */
     protoMixin(agentProto, AgentClass) {
         Object.assign(agentProto, {
@@ -2116,7 +2121,6 @@ class AgentSet extends AgentArray {
      *
      * @param {String} name The name of the new breed AgentSet
      * @return {AgentSet} A subarray of me
-     * @memberof AgentSet
      */
     newBreed(name) {
         return new AgentSet(this.model, this.AgentClass, name, this)
@@ -2124,14 +2128,12 @@ class AgentSet extends AgentArray {
 
     /**
      * @return {boolean} true if I am a baseSet subarray
-     * @memberof AgentSet
      */
     isBreedSet() {
         return this.baseSet !== this
     }
     /**
      * @return {boolean} true if I am a Patches, Turtles or Links AgentSet
-     * @memberof AgentSet
      */
     isBaseSet() {
         return this.baseSet === this
@@ -2144,7 +2146,6 @@ class AgentSet extends AgentArray {
      *
      * @param {AgentSet} breed A breed AgentSet
      * @return {AgentSet}
-     * @memberof AgentSet
      */
     withBreed(breed) {
         return this.filter(a => a.agentSet === breed)
@@ -2158,7 +2159,6 @@ class AgentSet extends AgentArray {
     /**
      * @param {Object} o An Agent to be added to this AgentSet
      * @return {Object} The input Agent, bound to this AgentSet.
-     * @memberof AgentSet
      * @description
      * Add an Agent to this AgentSet.  Only used by factory methods.
      * Adds the `id` property to Agent. Increment AgentSet `ID`.
@@ -2178,7 +2178,6 @@ class AgentSet extends AgentArray {
     /**
      * Remove all Agents from this AgentSet using agent.die() for each agent.
      *
-     * @memberof AgentSet
      */
     clear() {
         // die() is an agent method. sets it's id to -1
@@ -2189,7 +2188,6 @@ class AgentSet extends AgentArray {
      *
      * @param {Object} o The Agent to be removed
      * @return {AgentSet} This AgentSet with the Agent removed
-     * @memberof AgentSet
      */
     removeAgent(o) {
         // Note removeAgent(agent) different than remove(agent) which
@@ -2208,7 +2206,6 @@ class AgentSet extends AgentArray {
      * @param {String} name The name of the shared value
      * @param {any} value
      * @return {AgentSet} This AgentSet
-     * @memberof AgentSet
      */
     setDefault(name, value) {
         this.agentProto[name] = value;
@@ -2219,7 +2216,6 @@ class AgentSet extends AgentArray {
      *
      * @param {String} name The name of the default
      * @return {any} The default value
-     * @memberof AgentSet
      */
     getDefault(name) {
         return this.agentProto[name]
@@ -2245,7 +2241,6 @@ class AgentSet extends AgentArray {
      *
      * @param {Agent} a An agent, a member of another AgentSet
      * @return {Agent} The updated agent
-     * @memberof AgentSet
      */
     setBreed(a) {
         // change agent a to be in this breed
@@ -2277,7 +2272,6 @@ class AgentSet extends AgentArray {
      * additional guards for modifications in AgentSet's array.
      *
      * @param {Function} fcn fcn(agent, index?, array?)
-     * @memberof AgentSet
      */
     ask(fcn) {
         if (this.length === 0) return
@@ -2292,7 +2286,6 @@ class AgentSet extends AgentArray {
      * A much stronger version of ask(fcn) with stronger mutability guards.
      *
      * @param {Function} fcn fcn(agent, index?, array?)
-     * @memberof AgentSet
      */
     askSet(fcn) {
         // Manages immutability reasonably well.
@@ -2368,7 +2361,6 @@ class DataSet {
      * @param {number} height The integer height of the array
      * @param {Object} Type Array or one of the typed array types
      * @return {DataSet} The resulting DataSet with no values assigned
-     * @memberof DataSet
      */
     static emptyDataSet(width, height, Type) {
         return new DataSet(width, height, new Type(width * height))
@@ -2381,7 +2373,6 @@ class DataSet {
      * @param {number} width The integer width of the array
      * @param {number} height The integer height of the array
      * @param {array} data The array of numbers of length width * height
-     * @memberof DataSet
      */
     constructor(width, height, data) {
         if (data.length !== width * height) {
@@ -2964,16 +2955,42 @@ class Links extends AgentSet {
  * The world is defined by an object with 6 properties:
  *
  *          options = {
- *              minX: int,
- *              maxX: int,
- *              minY: int,
- *              maxY: int,
- *              minZ: int,
- *              maxZ: int,
+ *              minX: integer,
+ *              maxX: integer,
+ *              minY: integer,
+ *              maxY: integer,
+ *              minZ: integer,
+ *              maxZ: integer,
  *          }
- *
  */
+
 class World {
+    /**
+     * Create a new World object given an Object with optional
+     * minX, maxX, minY, maxY, minZ, maxZ overriding class properties.
+     * @param {Object.<string,number>} options Object with overrides for class properties
+     */
+    constructor(options = {}) {
+        // constructor(options = World.defaultOptions()) {
+        // minX, maxX, minY, maxY, minZ, maxZ
+        // override defaults with the given options
+        // options = Object.assign(World.defaultOptions(), options)
+        this.setClassProperties();
+
+        Object.assign(this, options); // set the option values
+        this.setWorld(); // convert these to rest of world parameters
+    }
+
+    // Until class properties universally, this approach is used:
+    setClassProperties() {
+        this.maxX = 16;
+        this.maxY = 16;
+        this.maxZ = 16;
+        this.minX = -this.maxX;
+        this.minY = -this.maxY;
+        this.minZ = -this.maxZ;
+    }
+
     /**
      * Return a default options object, origin at center.
      *
@@ -2982,7 +2999,6 @@ class World {
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
      * @return {Object}
-     * @memberof World
      */
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
         return {
@@ -3002,7 +3018,6 @@ class World {
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
      * @return {World}
-     * @memberof World
      */
     static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
         return new World(World.defaultOptions(maxX, maxY, maxZ))
@@ -3010,25 +3025,11 @@ class World {
 
     // ======================
 
-    // Initialize the world w/ defaults overridden w/ options.
-    /**
-     * Create a new World object given an Object with
-     * minX, maxX, minY, maxY, minZ, maxZ values.
-     *
-     * Defaults to World.defaultOptions()
-     *
-     * @param {Object} [options=World.defaultOptions()] Object with Integer min/max X,Y,Z
-     * @memberof World
-     */
-    constructor(options = World.defaultOptions()) {
-        // override defaults with the given options
-        options = Object.assign(World.defaultOptions(), options);
-        Object.assign(this, options); // set the option values
-        this.setWorld(); // convert these to rest of world parameters
-    }
     setWorld() {
         // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
+
         let { minX, maxX, minY, maxY, minZ, maxZ } = this;
+
         this.numX = this.width = maxX - minX + 1;
         this.numY = this.height = maxY - minY + 1;
         // if (maxZ == null) maxZ = this.maxZ = Math.max(this.width, this.height)
@@ -3046,14 +3047,13 @@ class World {
         this.centerY = (minY + maxY) / 2;
         this.centerZ = (minZ + maxZ) / 2;
 
-        this.numPatches = this.width * this.height;
+        this.numPatches = this.numX * this.numY;
     }
 
     /**
      * Return a random 2D point within the World
      *
      * @return {Array} A random x,y float array
-     * @memberof World
      */
     randomPoint() {
         return [
@@ -3066,7 +3066,6 @@ class World {
      * Return a random 3D point within the World
      *
      * @return {Array} A random x,y,z float array
-     * @memberof World
      */
     random3DPoint() {
         return [
@@ -3080,11 +3079,9 @@ class World {
      * Return a random Patch 2D integer point
      *
      * @return {Array}  A random x,y integer array
-     * @memberof World
      */
     randomPatchPoint() {
         return [
-            // REMIND: can maxX/Y be in the result?
             util.randomInt2(this.minX, this.maxX),
             util.randomInt2(this.minY, this.maxY),
         ]
@@ -3097,7 +3094,6 @@ class World {
      * @param {number} y y value
      * @param {number} [z=this.centerZ] z value
      * @return {boolean} Whether or not on-world
-     * @memberof World
      */
     isOnWorld(x, y, z = this.centerZ) {
         return (
@@ -3119,14 +3115,15 @@ class World {
      * It linearly interpolates between the given minX, minY, maxX, maxY,
      * and the world's values of the same properties.
      *
+     * The parameters are in the popular geojson order: west, south, east, north
+     *
      * Useful for Canvas top-left transforms and geojson transforms.
      *
      * @param {number} minX min bounding box x value
-     * @param {number} minY max bounding box x value
-     * @param {number} maxX min bounding box y value
+     * @param {number} minY min bounding box y value
+     * @param {number} maxX max bounding box x value
      * @param {number} maxY max bounding box y value
-     * @return {Class} Instance of the BBoxTransform
-     * @memberof World
+     * @return {BBoxTransform} Instance of the BBoxTransform
      */
     bboxTransform(minX, minY, maxX, maxY) {
         return new BBoxTransform(minX, minY, maxX, maxY, this)
@@ -3205,7 +3202,6 @@ class BBoxTransform {
      * @param {number} maxX min bounding box y value
      * @param {number} maxY max bounding box y value
      * @param {World} world instance of a World object
-     * @memberof BBoxTransform
      */
     constructor(minX, minY, maxX, maxY, world) {
         if (minX < maxX) console.log('flipX');
@@ -3221,7 +3217,14 @@ class BBoxTransform {
         const bx = (minX + maxX - mx * (maxXcor + minXcor)) / 2;
         const by = (maxY + minY - my * (maxYcor + minYcor)) / 2;
 
-        Object.assign(this, { mx, my, bx, by });
+        // Object.assign(this, { mx, my, bx, by })
+        this.setClassProperties({ mx, my, bx, by });
+    }
+    setClassProperties(obj) {
+        this.mx = obj.mx;
+        this.my = obj.my;
+        this.bx = obj.bx;
+        this.by = obj.by;
     }
 
     /**
@@ -3229,7 +3232,6 @@ class BBoxTransform {
      *
      * @param {Array} bboxPoint A point in the bbox coordinates
      * @return {Array} A point in the world coordinates
-     * @memberof BBoxTransform
      */
     toWorld(bboxPoint) {
         const { mx, my, bx, by } = this;
@@ -3242,9 +3244,8 @@ class BBoxTransform {
     /**
      * Convert from world point to bbox point
      *
-     * @param {Array} bboxPoint A point in the world coordinates
+     * @param {Array} worldPoint A point in the world coordinates
      * @return {Array} A point in the bbox coordinates
-     * @memberof BBoxTransform
      */
     toBBox(worldPoint) {
         const { mx, my, bx, by } = this;
@@ -3269,6 +3270,35 @@ class BBoxTransform {
 //     return [this.numX * patchSize, this.numY * patchSize]
 // }
 
+// Other ways to specify class properties:
+// maxX = 16
+// maxY = 16
+// maxZ = 16
+// minX = -this.maxX
+// minY = -this.maxY
+// minZ = -this.maxZ
+
+// Note: this is es7 class properties.
+// /** @type {number} Max patch x value */ maxX = 16
+// /** @type {number} */ maxY = this.maxX
+// /** @type {number} */ maxZ = Math.max(this.maxX, this.maxY)
+// /** @type {number} */ minX = -this.maxX
+// /** @type {number} */ minY = -this.maxY
+// /** @type {number} */ minZ = -this.maxZ
+
+//  * @property {number} maxX = 16
+//  * @property {number} maxY = this.maxX
+//  * @property {number} maxZ = Math.max(this.maxX, this.maxY)
+//  * @property {number} minX = -this.maxX
+//  * @property {number} minY = -this.maxY
+//  * @property {number} minZ = -this.maxZ
+
+// Note: this is es7 class properties.
+// /** @type {number} */ mx
+// /** @type {number} */ my
+// /** @type {number} */ bx
+// /** @type {number} */ by
+
 // Patches are the world other agentsets live on. They create a coord system
 // from Model's world values: minX, maxX, minY, maxY
 /**
@@ -3284,7 +3314,6 @@ class Patches extends AgentSet {
      * @param {Model} model An instance of class Model
      * @param {Patch} AgentClass The Patch class managed by Patches
      * @param {string} name Name of the AgentSet
-     * @memberof Patches
      */
     constructor(model, AgentClass, name) {
         // AgentSet sets these variables:
@@ -3342,7 +3371,6 @@ class Patches extends AgentSet {
      *
      * @param {Patch} patch a Patch instance
      * @return {AgentArray} An array of the neighboring patches
-     * @memberof Patches
      */
     neighbors(patch) {
         const { id, x, y } = patch;
@@ -3362,7 +3390,6 @@ class Patches extends AgentSet {
      *
      * @param {Patch} patch a Patch instance
      * @return {AgentArray} An array of the neighboring patches
-     * @memberof Patches
      */
     neighbors4(patch) {
         const { id, x, y } = patch;
@@ -3380,7 +3407,6 @@ class Patches extends AgentSet {
      * @param {DataSet} dataSet An instance of [DataSet](./DataSet.html)
      * @param {string} property A Patch property name
      * @param {boolean} [useNearest=false] Resample to nearest dataset value?
-     * @memberof Patches
      */
     importDataSet(dataSet, property, useNearest = false) {
         if (this.isBreedSet()) {
@@ -3401,7 +3427,6 @@ class Patches extends AgentSet {
      * @param {string} property The patch numeric property to extract
      * @param {Type} [Type=Array] The DataSet array's type
      * @return {DataSet} A DataSet of the patche's values
-     * @memberof Patches
      */
     exportDataSet(property, Type = Array) {
         if (this.isBreedSet()) {
@@ -3422,7 +3447,6 @@ class Patches extends AgentSet {
      * @param {number} x Integer X value
      * @param {number} y Integer Y value
      * @return {number} Integer index into Patches array
-     * @memberof Patches
      */
     patchIndex(x, y) {
         const { minX, maxY, numX } = this.model.world;
@@ -3619,11 +3643,11 @@ class Patch {
     }
     // Getter for x,y derived from patch id, thus no setter.
     get x() {
-        return (this.id % this.model.world.numX) + this.model.world.minX
+        return (this.id % this.model.world.width) + this.model.world.minX
     }
     get y() {
         return (
-            this.model.world.maxY - Math.floor(this.id / this.model.world.numX)
+            this.model.world.maxY - Math.floor(this.id / this.model.world.width)
         )
     }
     // get z() {
@@ -3844,11 +3868,13 @@ class Turtle {
             // theta: null, // set to random if default not set by modeler
             // What to do if I wander off world. Can be 'clamp', 'wrap'
             // 'bounce', or a function, see handleEdge() method
+            agentSet: null, // set by AgentSet's proto method
             atEdge: 'wrap',
         }
     }
     // Initialize a Turtle given its Turtles AgentSet.
     constructor() {
+        this.agentSet = this.atEdge = this.model = null; // needed by jsDoc
         Object.assign(this, Turtle.defaultVariables());
     }
     agentConstructor() {
@@ -3870,7 +3896,7 @@ class Turtle {
         //     util.removeArrayItem(this.patch.turtles, this)
         // }
         if (this.patch && this.patch.turtles)
-            util.removeArrayItem(p0.turtles, this);
+            util.removeArrayItem(this.patch.turtles, this);
 
         // Set id to -1, indicates that I've died.
         // Useful when other JS objects contain turtles. Views for example.
@@ -4129,9 +4155,10 @@ class Model {
      * Creates an instance of Model.
      * @param {Object|World} [worldOptions=World.defaultOptions()] Can be Object of min/max X,Y,Z values or an instance of World
      * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
-     * @memberof Model
      */
     constructor(worldOptions = World.defaultOptions(), autoTick = true) {
+        // Let jsDocs/vscode know these variables exist. Initialized by reseetModel()
+        this.patches = this.turtles = this.links = null;
         this.resetModel(worldOptions);
         if (autoTick) this.autoTick();
     }
@@ -4159,7 +4186,6 @@ class Model {
      * changed by modeler.
      *
      * @param {Object|World} [worldOptions=this.world] World object
-     * @memberof Model
      */
     reset(worldOptions = this.world) {
         this.resetModel(worldOptions);
@@ -4168,7 +4194,6 @@ class Model {
     /**
      * Increment the tick cound. Generally not needed if autoTick true
      *
-     * @memberof Model
      */
     tick() {
         this.ticks++;
@@ -4179,7 +4204,6 @@ class Model {
     /**
      * A method to perform one-time initialization
      *
-     * @memberof Model
      */
     async startup() {}
     /**
@@ -4190,13 +4214,11 @@ class Model {
      *  * reset()
      *  * setup()
      *
-     * @memberof Model
      */
     setup() {} // Your initialization code goes here
     /**
      * Run the model one step.
      *
-     * @memberof Model
      */
     step() {} // Called each step of the model
 
@@ -4216,7 +4238,6 @@ class Model {
      * * this.patchBreeds('exits inside wall')
      *
      * @param {string} breedNames A string of space separated breeds names
-     * @memberof Model
      */
     patchBreeds(breedNames) {
         for (const breedName of breedNames.split(' ')) {
@@ -4228,7 +4249,6 @@ class Model {
      * * this.turtleBreeds('lefty righty')
      *
      * @param {string} breedNames A string of space separated breeds names
-     * @memberof Model
      */
     turtleBreeds(breedNames) {
         for (const breedName of breedNames.split(' ')) {
@@ -4240,7 +4260,6 @@ class Model {
      * * this.linkBreeds('trips')
      *
      * @param {string} breedNames A string of space separated breeds names
-     * @memberof Model
      */
     linkBreeds(breedNames) {
         for (const breedName of breedNames.split(' ')) {

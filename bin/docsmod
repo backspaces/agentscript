@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 const shell = require('shelljs')
+// const prettier = require('prettier')
+
+// console.log(prettier)
 
 shell.cd('./docs')
 const docs = shell.ls('*.html').filter(s => !s.includes('.js.html'))
@@ -42,3 +45,6 @@ docs.forEach(doc => {
         )
         .to(doc)
 })
+
+// Reformat all docs via prettier:
+// shell.exec(`prettier --write ${docs.join(' ')}`)

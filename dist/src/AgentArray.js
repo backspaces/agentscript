@@ -1,20 +1,30 @@
 import util from './util.js'
 
-// An Array superclass with convenience methods used by NetLogo.
-// Tipically the items in the array are Objects, NetLogo Agents,
-// but generally useful as an ArrayPlus
-
 /**
- * Subclass of Array used by AgentScript, enspired by NetLogo
+ * Subclass of Array with convenience methods used by NetLogo.
+ * Tipically the items in the array are Objects but can be any type.
  */
 class AgentArray extends Array {
     /**
+     * Convert an existing Array to an AgentArray "in place".
+     * Use array.slice() if a new array is wanted
+     *
+     * @static
+     * @param {Array} array Array to convert to AgentArray
+     * @return {AgentArray} array converted to AgentArray
+     */
+    static fromArray(array) {
+        const aarray = Object.setPrototypeOf(array, AgentArray.prototype)
+        return aarray
+    }
+
+    /**
      * Creates an instance of AgentArray. Simply pass-through to super()
      * now, but may add initialization code later.
+     * @param {*} args Zero or more items in Array
      * @example
      * let aa = new AgentArray({x:0,y:0}, {x:0,y:1}, {x:1,y:0})
      *  //=>  [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 0 }]
-     * @memberof AgentArray
      */
     constructor(...args) {
         super(...args)
@@ -22,24 +32,10 @@ class AgentArray extends Array {
     }
 
     /**
-     * Convert an existing Array to an AgentArray "in place".
-     * Use array.slice() if a new array is wanted
-     *
-     * @static
-     * @param {Array} array Array to convert to AgentArray
-     * @return {AgentArray}
-     * @memberof AgentArray
-     */
-    static fromArray(array) {
-        Object.setPrototypeOf(array, AgentArray.prototype)
-        return array
-    }
-
-    /**
+     * See {@link World} and [MyClass's foo property]{@link World#bboxTransform}.
      * Convert this AgentArray to Array in-place
      *
      * @return {Array} This AgentArray converted to Array
-     * @memberof AgentArray
      */
     toArray() {
         Object.setPrototypeOf(this, Array.prototype)
@@ -58,7 +54,6 @@ class AgentArray extends Array {
      * Return true if there are no items in this Array
      *
      * @return {boolean}
-     * @memberof AgentArray
      * @example
      *  new AgentArray().isEmpty()
      *  //=> true
@@ -73,7 +68,6 @@ class AgentArray extends Array {
      * Return first item in this array. Returns undefined if empty.
      *
      * @return {any}
-     * @memberof AgentArray
      * @example
      *  aa.first()
      *  //=> { x: 0, y: 0 }
@@ -85,7 +79,6 @@ class AgentArray extends Array {
      * Return last item in this array. Returns undefined if empty.
      *
      * @return {any}
-     * @memberof AgentArray
      * @example
      *  aa.last()
      *  //=>  { x: 1, y: 0 }
@@ -100,7 +93,6 @@ class AgentArray extends Array {
      *
      * @param {Function} fcn Return boolean
      * @return {boolean} true if fcn returns true for all elements
-     * @memberof AgentArray
      */
     all(fcn) {
         return this.every(fcn)
@@ -111,9 +103,8 @@ class AgentArray extends Array {
      * Array type is specified, defaults to AgentArray
      *
      * @param {String} key Property name
-     * @param {ArrayType} [type=AgentArray]
+     * @param {Array} [type=AgentArray] Type of array (Array, Uint8Array, ...)
      * @return {Array} Array of given type
-     * @memberof AgentArray
      * @example
      *  aa.props('x')
      *  //=> [0, 0, 1]
@@ -137,7 +128,6 @@ class AgentArray extends Array {
      *
      * @param {Object} obj Object of prop, array type pairs
      * @return {Object}
-     * @memberof AgentArray
      */
     typedSample(obj) {
         // const length = this.length
@@ -164,7 +154,6 @@ class AgentArray extends Array {
      * Return new AgentArray of the unique values of this array
      *
      * @return {AgentArray}
-     * @memberof AgentArray
      */
     uniq() {
         // return AgentArray.fromArray(Array.from(new Set(this)))
@@ -187,8 +176,7 @@ class AgentArray extends Array {
      * Array assumed not mutable.
      * Note: 5x+ faster than this.forEach(fcn)
      *
-     * @param {Function} fcn fcn(agent, index?, array?)
-     * @memberof AgentArray
+     * @param {Function} fcn fcn(agent, [index], [array])
      * @return {this} Return this for chaining.
      */
     forLoop(fcn) {
@@ -206,8 +194,7 @@ class AgentArray extends Array {
      * Array can shrink. If it grows, will not visit beyond original length.
      * "ask" is NetLogo term.
      *
-     * @param {Function} fcn fcn(agent, index?, array?)
-     * @memberof AgentArray
+     * @param {Function} fcn fcn(agent, [index], [array])
      */
     ask(fcn) {
         const length = this.length
@@ -227,9 +214,8 @@ class AgentArray extends Array {
      * Return all elements returning f(obj, index, array) true.
      * NetLogo term, simply calls this.filter(fcn)
      *
-     * @param {Function} fcn fcn(agent, index?, array?)
+     * @param {Function} fcn fcn(agent, [index], [array])
      * @return {AgentArray}
-     * @memberof AgentArray
      * @description
      * Use: turtles.with(t => t.foo > 20).ask(t => t.bar = true)
      */
@@ -287,6 +273,10 @@ class AgentArray extends Array {
     cloneRange(begin = 0, end = this.length) {
         return this.slice(begin, end) // Returns an AgentArray rather than Array!
     }
+    /**
+     * Create copy of this AgentArray
+     * @return AgentArray
+     */
     clone() {
         return this.slice(0) // Returns an AgentArray rather than Array!
     }
@@ -298,6 +288,14 @@ class AgentArray extends Array {
     // Return this AgentArray sorted by the reporter in ascending/descending order.
     // If reporter is a string, convert to a fcn returning that property.
     // Use clone if you don't want to mutate this array.
+    /**
+     * Return this AgentArray sorted by the reporter in ascending/descending order.
+     * If reporter is a string, convert to a fcn returning that property.
+     *
+     * @param {function} reporter
+     * @param {boolean} [ascending=true]
+     * @return {AgentArray}
+     */
     sortBy(reporter, ascending = true) {
         util.sortObjs(this, reporter, ascending)
         return this

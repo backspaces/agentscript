@@ -6,6 +6,12 @@ module.exports = {
     // },
     opts: {
         destination: './docs/',
+        readme: './src/README.md',
+    },
+    templates: {
+        default: {
+            includeDate: false,
+        },
     },
     plugins: ['plugins/markdown'],
 }

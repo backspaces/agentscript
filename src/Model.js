@@ -20,9 +20,10 @@ class Model {
      * Creates an instance of Model.
      * @param {Object|World} [worldOptions=World.defaultOptions()] Can be Object of min/max X,Y,Z values or an instance of World
      * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
-     * @memberof Model
      */
     constructor(worldOptions = World.defaultOptions(), autoTick = true) {
+        // Let jsDocs/vscode know these variables exist. Initialized by reseetModel()
+        this.patches = this.turtles = this.links = null
         this.resetModel(worldOptions)
         if (autoTick) this.autoTick()
     }
@@ -50,7 +51,6 @@ class Model {
      * changed by modeler.
      *
      * @param {Object|World} [worldOptions=this.world] World object
-     * @memberof Model
      */
     reset(worldOptions = this.world) {
         this.resetModel(worldOptions)
@@ -59,7 +59,6 @@ class Model {
     /**
      * Increment the tick cound. Generally not needed if autoTick true
      *
-     * @memberof Model
      */
     tick() {
         this.ticks++
@@ -70,7 +69,6 @@ class Model {
     /**
      * A method to perform one-time initialization
      *
-     * @memberof Model
      */
     async startup() {}
     /**
@@ -81,13 +79,11 @@ class Model {
      *  * reset()
      *  * setup()
      *
-     * @memberof Model
      */
     setup() {} // Your initialization code goes here
     /**
      * Run the model one step.
      *
-     * @memberof Model
      */
     step() {} // Called each step of the model
 
@@ -107,7 +103,6 @@ class Model {
      * * this.patchBreeds('exits inside wall')
      *
      * @param {string} breedNames A string of space separated breeds names
-     * @memberof Model
      */
     patchBreeds(breedNames) {
         for (const breedName of breedNames.split(' ')) {
@@ -119,7 +114,6 @@ class Model {
      * * this.turtleBreeds('lefty righty')
      *
      * @param {string} breedNames A string of space separated breeds names
-     * @memberof Model
      */
     turtleBreeds(breedNames) {
         for (const breedName of breedNames.split(' ')) {
@@ -131,7 +125,6 @@ class Model {
      * * this.linkBreeds('trips')
      *
      * @param {string} breedNames A string of space separated breeds names
-     * @memberof Model
      */
     linkBreeds(breedNames) {
         for (const breedName of breedNames.split(' ')) {

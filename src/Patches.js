@@ -18,7 +18,6 @@ class Patches extends AgentSet {
      * @param {Model} model An instance of class Model
      * @param {Patch} AgentClass The Patch class managed by Patches
      * @param {string} name Name of the AgentSet
-     * @memberof Patches
      */
     constructor(model, AgentClass, name) {
         // AgentSet sets these variables:
@@ -76,7 +75,6 @@ class Patches extends AgentSet {
      *
      * @param {Patch} patch a Patch instance
      * @return {AgentArray} An array of the neighboring patches
-     * @memberof Patches
      */
     neighbors(patch) {
         const { id, x, y } = patch
@@ -96,7 +94,6 @@ class Patches extends AgentSet {
      *
      * @param {Patch} patch a Patch instance
      * @return {AgentArray} An array of the neighboring patches
-     * @memberof Patches
      */
     neighbors4(patch) {
         const { id, x, y } = patch
@@ -114,7 +111,6 @@ class Patches extends AgentSet {
      * @param {DataSet} dataSet An instance of [DataSet](./DataSet.html)
      * @param {string} property A Patch property name
      * @param {boolean} [useNearest=false] Resample to nearest dataset value?
-     * @memberof Patches
      */
     importDataSet(dataSet, property, useNearest = false) {
         if (this.isBreedSet()) {
@@ -135,7 +131,6 @@ class Patches extends AgentSet {
      * @param {string} property The patch numeric property to extract
      * @param {Type} [Type=Array] The DataSet array's type
      * @return {DataSet} A DataSet of the patche's values
-     * @memberof Patches
      */
     exportDataSet(property, Type = Array) {
         if (this.isBreedSet()) {
@@ -156,7 +151,6 @@ class Patches extends AgentSet {
      * @param {number} x Integer X value
      * @param {number} y Integer Y value
      * @return {number} Integer index into Patches array
-     * @memberof Patches
      */
     patchIndex(x, y) {
         const { minX, maxY, numX } = this.model.world

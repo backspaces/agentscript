@@ -18,7 +18,6 @@ class AgentSet extends AgentArray {
      *
      * @readonly
      * @static
-     * @memberof AgentSet
      */
     static get [Symbol.species]() {
         return AgentArray
@@ -28,10 +27,9 @@ class AgentSet extends AgentArray {
      * Create an empty AgentSet and initialize the `ID` counter for add().
      * If baseSet is supplied, the new agentset is a "breed" of baseSet
      * @param {Model} model Instance of Class Model to which I belong
-     * @param {Class} AgentClass Class of items stored in this AgentSet
+     * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
      * @param {String} name Name of this AgentSet. Ex: Patches
      * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet
-     * @memberof AgentSet
      */
     constructor(model, AgentClass, name, baseSet = null) {
         super() // create empty AgentArray
@@ -69,8 +67,7 @@ class AgentSet extends AgentArray {
      * The Agent also has three methods added: setBreed, getBreed, isBreed.
      *
      * @param {Object} agentProto A new instance of the Agent being added
-     * @param {Class} AgentClass It's Class
-     * @memberof AgentSet
+     * @param {(Patch|Turtle|Link)} AgentClass It's Class
      */
     protoMixin(agentProto, AgentClass) {
         Object.assign(agentProto, {
@@ -110,7 +107,6 @@ class AgentSet extends AgentArray {
      *
      * @param {String} name The name of the new breed AgentSet
      * @return {AgentSet} A subarray of me
-     * @memberof AgentSet
      */
     newBreed(name) {
         return new AgentSet(this.model, this.AgentClass, name, this)
@@ -118,14 +114,12 @@ class AgentSet extends AgentArray {
 
     /**
      * @return {boolean} true if I am a baseSet subarray
-     * @memberof AgentSet
      */
     isBreedSet() {
         return this.baseSet !== this
     }
     /**
      * @return {boolean} true if I am a Patches, Turtles or Links AgentSet
-     * @memberof AgentSet
      */
     isBaseSet() {
         return this.baseSet === this
@@ -138,7 +132,6 @@ class AgentSet extends AgentArray {
      *
      * @param {AgentSet} breed A breed AgentSet
      * @return {AgentSet}
-     * @memberof AgentSet
      */
     withBreed(breed) {
         return this.filter(a => a.agentSet === breed)
@@ -152,7 +145,6 @@ class AgentSet extends AgentArray {
     /**
      * @param {Object} o An Agent to be added to this AgentSet
      * @return {Object} The input Agent, bound to this AgentSet.
-     * @memberof AgentSet
      * @description
      * Add an Agent to this AgentSet.  Only used by factory methods.
      * Adds the `id` property to Agent. Increment AgentSet `ID`.
@@ -172,7 +164,6 @@ class AgentSet extends AgentArray {
     /**
      * Remove all Agents from this AgentSet using agent.die() for each agent.
      *
-     * @memberof AgentSet
      */
     clear() {
         // die() is an agent method. sets it's id to -1
@@ -183,7 +174,6 @@ class AgentSet extends AgentArray {
      *
      * @param {Object} o The Agent to be removed
      * @return {AgentSet} This AgentSet with the Agent removed
-     * @memberof AgentSet
      */
     removeAgent(o) {
         // Note removeAgent(agent) different than remove(agent) which
@@ -202,7 +192,6 @@ class AgentSet extends AgentArray {
      * @param {String} name The name of the shared value
      * @param {any} value
      * @return {AgentSet} This AgentSet
-     * @memberof AgentSet
      */
     setDefault(name, value) {
         this.agentProto[name] = value
@@ -213,7 +202,6 @@ class AgentSet extends AgentArray {
      *
      * @param {String} name The name of the default
      * @return {any} The default value
-     * @memberof AgentSet
      */
     getDefault(name) {
         return this.agentProto[name]
@@ -239,7 +227,6 @@ class AgentSet extends AgentArray {
      *
      * @param {Agent} a An agent, a member of another AgentSet
      * @return {Agent} The updated agent
-     * @memberof AgentSet
      */
     setBreed(a) {
         // change agent a to be in this breed
@@ -271,7 +258,6 @@ class AgentSet extends AgentArray {
      * additional guards for modifications in AgentSet's array.
      *
      * @param {Function} fcn fcn(agent, index?, array?)
-     * @memberof AgentSet
      */
     ask(fcn) {
         if (this.length === 0) return
@@ -286,7 +272,6 @@ class AgentSet extends AgentArray {
      * A much stronger version of ask(fcn) with stronger mutability guards.
      *
      * @param {Function} fcn fcn(agent, index?, array?)
-     * @memberof AgentSet
      */
     askSet(fcn) {
         // Manages immutability reasonably well.

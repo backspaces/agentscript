@@ -11,14 +11,7 @@
     <![endif]-->
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-
-   <script src="../dist/agentscript.umd.js"></script>
-   <script>
-       Object.assign(window, AS)
-       
-   </script>
 </head>
-
 
 <body>
 
@@ -35,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>World<span class="signature">(options)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>World<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -48,7 +41,7 @@
     
 
     
-    <h4 class="name" id="World"><span class="type-signature"></span>new World<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="World"><span class="type-signature"></span>new World<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -56,17 +49,9 @@
 
 
 <div class="description">
-    <p>Class World defines the coordinate system for the model.
-It has transforms for multiple coordinate systems.</p>
-<p>The world is defined by an object with 6 properties:</p>
-<pre><code>     options = {
-         minX: integer,
-         maxX: integer,
-         minY: integer,
-         maxY: integer,
-         minZ: integer,
-         maxZ: integer,
-     }</code></pre>
+    <p>Create a new World object given an Object with
+minX, maxX, minY, maxY, minZ, maxZ values.</p>
+<p>Defaults to World.defaultOptions()</p>
 </div>
 
 
@@ -90,7 +75,11 @@ It has transforms for multiple coordinate systems.</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -108,7 +97,77 @@ It has transforms for multiple coordinate systems.</p>
             <td class="type">
             
                 
-<span class="param-type">Object.&lt;string, number></span>
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    World.defaultOptions()
+                
+                </td>
+            
+
+            <td class="description last"><p>Object with Integer min/max X,Y,Z</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>minX</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
 
 
             
@@ -118,14 +177,127 @@ It has transforms for multiple coordinate systems.</p>
 
             
 
-            <td class="description last"><p>Object with overrides for class properties</p></td>
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minY</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>minZ</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxX</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxY</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxZ</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
-
-
 
 
 
@@ -159,7 +331,7 @@ It has transforms for multiple coordinate systems.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line26">line 26</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -414,7 +586,7 @@ It has transforms for multiple coordinate systems.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line62">line 62</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -468,7 +640,7 @@ It has transforms for multiple coordinate systems.</p>
     
 
     
-    <h4 class="name" id=".defaultWorld"><span class="type-signature">(static) </span>defaultWorld<span class="signature">(maxX<span class="signature-attributes">opt</span>, maxY<span class="signature-attributes">opt</span>, maxZ<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="World.html">World</a>}</span></h4>
+    <h4 class="name" id=".defaultWorld"><span class="type-signature">(static) </span>defaultWorld<span class="signature">(maxX<span class="signature-attributes">opt</span>, maxY<span class="signature-attributes">opt</span>, maxZ<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="global.html#World">World</a>}</span></h4>
     
 
     
@@ -667,7 +839,7 @@ It has transforms for multiple coordinate systems.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line81">line 81</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line61">line 61</a>
     </li></ul></dd>
     
 
@@ -703,7 +875,7 @@ It has transforms for multiple coordinate systems.</p>
     </dt>
     <dd>
         
-<span class="param-type"><a href="World.html">World</a></span>
+<span class="param-type"><a href="global.html#World">World</a></span>
 
 
     </dd>
@@ -732,7 +904,6 @@ It has transforms for multiple coordinate systems.</p>
     <p>Return an instance of a bounding box 2D transform.
 It linearly interpolates between the given minX, minY, maxX, maxY,
 and the world's values of the same properties.</p>
-<p>The parameters are in the popular geojson order: west, south, east, north</p>
 <p>Useful for Canvas top-left transforms and geojson transforms.</p>
 </div>
 
@@ -808,7 +979,7 @@ and the world's values of the same properties.</p>
 
             
 
-            <td class="description last"><p>min bounding box y value</p></td>
+            <td class="description last"><p>max bounding box x value</p></td>
         </tr>
 
     
@@ -831,7 +1002,7 @@ and the world's values of the same properties.</p>
 
             
 
-            <td class="description last"><p>max bounding box x value</p></td>
+            <td class="description last"><p>min bounding box y value</p></td>
         </tr>
 
     
@@ -1144,7 +1315,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line157">line 157</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line159">line 159</a>
     </li></ul></dd>
     
 
@@ -1254,7 +1425,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line129">line 129</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -1364,7 +1535,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line142">line 142</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line143">line 143</a>
     </li></ul></dd>
     
 
@@ -1474,7 +1645,7 @@ and the world's values of the same properties.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="World.js.html">World.js</a>, <a href="World.js.html#line117">line 117</a>
+        <a href="World.js.html">World.js</a>, <a href="World.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -1542,13 +1713,13 @@ and the world's values of the same properties.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Model.html">Model</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="World.html">World</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="Model.html">Model</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="global.html#World">World</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Nov 09 2020 13:11:58 GMT-0700 (Mountain Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
