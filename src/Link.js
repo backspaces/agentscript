@@ -4,8 +4,16 @@ import AgentArray from './AgentArray.js'
 // Class Link instances form a link between two turtles, forming a graph.
 // Flyweight object creation, see Patch/Patches.
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
+/**
+ * Class Link instances form a link between two {@link Turtle}s, forming a graph
+ * with the Turtles being the nodes, and the Links the edges.
+ */
+class Link {
+    // Set by AgentSet
+    agentSet
+    model
+    name
 
-export default class Link {
     // The core default variables needed by a Link.
     // Use links.setDefault(name, val) to change
     // Modelers add additional "own variables" as needed.
@@ -75,4 +83,4 @@ export default class Link {
     }
 }
 
-// export default Link
+export default Link

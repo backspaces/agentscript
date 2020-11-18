@@ -1,19 +1,16 @@
 import util from 'https://agentscript.org/src/util.js'
 import Model from 'https://agentscript.org/src/Model.js'
 
-// A really simple "random walker" hello world model
-export default class HelloModel extends Model {
-    static defaultOptions() {
-        return {
-            population: 10,
-            speed: 0.1,
-            wiggle: 0.1,
-        }
-    }
-    constructor() {
-        super() // use default world options
-        Object.assign(this, HelloModel.defaultOptions())
-    }
+class HelloModel extends Model {
+    population = 10 // number of turtles
+    speed = 0.1 // step size in patch units
+    wiggle = util.degToRad(10) // Wiggle angle in radians
+
+    // We can use Model's constructor, due to using Model's default World
+    // constructor() {
+    //     super() // use default world options.
+    // }
+
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')
 
@@ -26,10 +23,13 @@ export default class HelloModel extends Model {
             this.links.create(t, this.turtles.otherOneOf(t))
         })
     }
+
     step() {
         this.turtles.ask(t => {
-            t.direction += util.randomCentered(this.wiggle)
+            t.angle += util.randomCentered(this.wiggle)
             t.forward(this.speed)
         })
     }
 }
+
+export default HelloModel

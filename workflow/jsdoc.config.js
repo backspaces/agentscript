@@ -1,12 +1,18 @@
 'use strict'
 
 module.exports = {
-    // source: {
-    //     includePattern: './src/*.js',
-    // },
+    source: {
+        include: ['./src', './tutorials'],
+        includePattern: '.*.js',
+    },
     opts: {
         destination: './docs/',
         readme: './src/README.md',
+        tutorials: './tutorials',
+        template: './node_modules/clean-jsdoc-theme',
+        theme_opts: {
+            theme: 'light', // dark or light
+        },
     },
     templates: {
         default: {

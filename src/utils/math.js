@@ -97,8 +97,8 @@ export function lerpScale(number, lo, hi) {
 // Note: quantity, not coord system xfm
 const toDegrees = 180 / PI
 const toRadians = PI / 180
-export const radians = degrees => mod2pi(degrees * toRadians)
-export const degrees = radians => mod360(radians * toDegrees)
+// export const radians = degrees => mod2pi(degrees * toRadians)
+// export const degrees = radians => mod360(radians * toDegrees)
 
 // Better names and format for arrays. Change above?
 export const degToRad = degrees => mod2pi(degrees * toRadians)

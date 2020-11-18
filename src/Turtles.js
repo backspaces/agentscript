@@ -4,7 +4,13 @@ import AgentSet from './AgentSet.js'
 
 // Turtles are the world other agentsets live on. They create a coord system
 // from Model's world values: size, minX, maxX, minY, maxY
-export default class Turtles extends AgentSet {
+/**
+ * Turtles are objects living on the {@link Patches} world.
+ * Their coordinates are floats, unlike Patches with integer coordinates.
+ *
+ * @extends {AgentSet}
+ */
+class Turtles extends AgentSet {
     // Factories:
     // Add 1 or more turtles.
     // Can be a single turtle or an array of turtles. The optional init
@@ -36,7 +42,12 @@ export default class Turtles extends AgentSet {
         //pDisk.minOneOf(t => t.dist)
     }
 
-    // Return an array of this breed within the array of patchs
+    /**
+     * Return an array of this breed within the array of patchs
+     *
+     * @param {Patch[]} patches Array of patches
+     * @return {AgentArray}
+     */
     inPatches(patches) {
         let array = new AgentArray() // []
         for (const p of patches) array.push(...p.turtlesHere())
@@ -100,4 +111,4 @@ export default class Turtles extends AgentSet {
     }
 }
 
-// export default Turtles
+export default Turtles

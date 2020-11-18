@@ -18,7 +18,7 @@
                 return Color.toTypedColor(`hsl(${(r * 240) % 240}, 100%, 50%)`)
             }
             const drawOptions = {
-                turtlesMesh: 'Obj3DMesh',
+                turtlesMesh: { meshClass: 'Obj3DMesh', useAxes: true },
                 turtlesShape: t => (isPixel(t) ? 'Cube' : 'Dart'),
                 turtlesColor: t =>
                     isPixel(t) ? uvToColor(t) : Color.toTypedColor('red'),

@@ -2,7 +2,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = global || self, factory(global.AS = {}));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.AS = {}));
 }(this, (function (exports) { 'use strict';
 
     // import util from '../src/util.js'
@@ -799,8 +799,8 @@ out;`;
     // Note: quantity, not coord system xfm
     const toDegrees = 180 / PI$1;
     const toRadians = PI$1 / 180;
-    const radians$1 = degrees => mod2pi(degrees * toRadians);
-    const degrees$1 = radians => mod360(radians * toDegrees);
+    // export const radians = degrees => mod2pi(degrees * toRadians)
+    // export const degrees = radians => mod360(radians * toDegrees)
 
     // Better names and format for arrays. Change above?
     const degToRad = degrees => mod2pi(degrees * toRadians);
@@ -915,8 +915,6 @@ out;`;
         between: between,
         lerp: lerp$1,
         lerpScale: lerpScale,
-        radians: radians$1,
-        degrees: degrees$1,
         degToRad: degToRad,
         degToRadAll: degToRadAll,
         radToDeg: radToDeg,
@@ -1549,7 +1547,6 @@ out;`;
          * Convert an existing Array to an AgentArray "in place".
          * Use array.slice() if a new array is wanted
          *
-         * @static
          * @param {Array} array Array to convert to AgentArray
          * @return {AgentArray} array converted to AgentArray
          */
@@ -1628,10 +1625,10 @@ out;`;
         }
 
         /**
-         * Return true if fcn(element) returns true for each element in array.
+         * Return true if fcn(element) returns true for each element in this array.
          * Same as Array.every, using NetLogo's name
          *
-         * @param {Function} fcn Return boolean
+         * @param {Function} fcn fcn(element) return boolean
          * @return {boolean} true if fcn returns true for all elements
          */
         all(fcn) {
@@ -1663,11 +1660,15 @@ out;`;
         // Obj is key, arrayType pairs: x: Float32Array
         // Result is this.props(key, arrayType) for each key
         /**
-         * Creates an Object of Arrays, one Array per property.
+         * Creates an Object of Arrays, one Array per each property in obj.
          * Obj is key, arrayType pairs: x: Float32Array
+         * This is advanced, used for web workers, very large data sets, and remote communication
          *
          * @param {Object} obj Object of prop, array type pairs
          * @return {Object}
+         * @example
+         *  aa.typedSample({x: Uint8Array, y: Uint8Array})
+         *  //=> {x: new Uint8Array([0, 0, 1]), y: new Uint8Array([0, 1, 0])}
          */
         typedSample(obj) {
             // const length = this.length
@@ -2032,12 +2033,17 @@ out;`;
      * AgentSet subclasses: Patches, Turtles, Links & Breeds.
      */
     class AgentSet extends AgentArray {
+        // Inherited by Patches, Turtles, Links
+        model
+        name
+        baseSet
+        AgentClass
+
         /**
          * Magic to return AgentArrays rather than AgentSets
          * [Symbol.species](https://goo.gl/Zsxwxd)
          *
          * @readonly
-         * @static
          */
         static get [Symbol.species]() {
             return AgentArray
@@ -2049,7 +2055,7 @@ out;`;
          * @param {Model} model Instance of Class Model to which I belong
          * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
          * @param {String} name Name of this AgentSet. Ex: Patches
-         * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet
+         * @param {(Patches|Turtles|Links)} [baseSet=null] If a Breed, it's parent AgentSet
          */
         constructor(model, AgentClass, name, baseSet = null) {
             super(); // create empty AgentArray
@@ -2151,7 +2157,7 @@ out;`;
          * Ex: patches.inRect(5).withBreed(houses)
          *
          * @param {AgentSet} breed A breed AgentSet
-         * @return {AgentSet}
+         * @return {AgentArray}
          */
         withBreed(breed) {
             return this.filter(a => a.agentSet === breed)
@@ -2169,7 +2175,7 @@ out;`;
          * Add an Agent to this AgentSet.  Only used by factory methods.
          * Adds the `id` property to Agent. Increment AgentSet `ID`.
          */
-        addAgent(o) {
+        addAgent(o = undefined) {
             // o only for breeds adding themselves to their baseSet
             o = o || Object.create(this.agentProto); // REMIND: Simplify! Too slick.
             if (this.isBreedSet()) {
@@ -2838,8 +2844,16 @@ out;`;
     // Class Link instances form a link between two turtles, forming a graph.
     // Flyweight object creation, see Patch/Patches.
     // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
-
+    /**
+     * Class Link instances form a link between two {@link Turtle}s, forming a graph
+     * with the Turtles being the nodes, and the Links the edges.
+     */
     class Link {
+        // Set by AgentSet
+        agentSet
+        model
+        name
+
         // The core default variables needed by a Link.
         // Use links.setDefault(name, val) to change
         // Modelers add additional "own variables" as needed.
@@ -2909,9 +2923,11 @@ out;`;
         }
     }
 
-    // export default Link
-
     // Links are a collection of all the Link objects between turtles.
+    /**
+     * Links are a collection of all the {@link Link} objects between turtles.
+     *
+     */
     class Links extends AgentSet {
         // Use AgentSeet ctor: constructor (model, AgentClass, name)
 
@@ -2945,13 +2961,22 @@ out;`;
         }
     }
 
-    // export default Links
-
     // class World defines the coordinate system for the model.
     // It will be  upgraded with methods converting from other
     // transforms like  GIS and DataSets.
 
     // const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
+
+    /**
+     * @private
+     * @typedef {Object} WorldOptions
+     * @property {number} minX Max world patch x integer value
+     * @property {number} minY Max world patch y integer value
+     * @property {number} minZ Max world patch z integer value
+     * @property {number} maxX Min world patch x integer value
+     * @property {number} maxY Min world patch y integer value
+     * @property {number} maxZ Min world patch z integer value
+     */
 
     /**
      * @description
@@ -2960,7 +2985,7 @@ out;`;
      *
      * The world is defined by an object with 6 properties:
      *
-     *          options = {
+     *          WorldOptions = {
      *              minX: integer,
      *              maxX: integer,
      *              minY: integer,
@@ -2969,42 +2994,41 @@ out;`;
      *              maxZ: integer,
      *          }
      */
-
     class World {
+        maxX = 16
+        maxY = 16
+        maxZ = 16
+        minX = -16
+        minY = -16
+        minZ = -16
+
         /**
          * Create a new World object given an Object with optional
          * minX, maxX, minY, maxY, minZ, maxZ overriding class properties.
-         * @param {Object.<string,number>} options Object with overrides for class properties
+         * @param {World|WorldOptions|Object} options Object with overrides for class properties
          */
         constructor(options = {}) {
-            // constructor(options = World.defaultOptions()) {
-            // minX, maxX, minY, maxY, minZ, maxZ
-            // override defaults with the given options
-            // options = Object.assign(World.defaultOptions(), options)
-            this.setClassProperties();
-
-            Object.assign(this, options); // set the option values
+            Object.assign(this, options); // set the option override values
             this.setWorld(); // convert these to rest of world parameters
         }
 
         // Until class properties universally, this approach is used:
-        setClassProperties() {
-            this.maxX = 16;
-            this.maxY = 16;
-            this.maxZ = 16;
-            this.minX = -this.maxX;
-            this.minY = -this.maxY;
-            this.minZ = -this.maxZ;
-        }
+        // setClassProperties() {
+        //     this.maxX = 16
+        //     this.maxY = 16
+        //     this.maxZ = 16
+        //     this.minX = -this.maxX
+        //     this.minY = -this.maxY
+        //     this.minZ = -this.maxZ
+        // }
 
         /**
          * Return a default options object, origin at center.
          *
-         * @static
          * @param {number} [maxX=16] Integer max X value
          * @param {number} [maxY=maxX] Integer max Y value
          * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-         * @return {Object}
+         * @return {WorldOptions}
          */
         static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
             return {
@@ -3019,7 +3043,6 @@ out;`;
         /**
          * Factory to create a default World instance.
          *
-         * @static
          * @param {number} [maxX=16] Integer max X value
          * @param {number} [maxY=maxX] Integer max Y value
          * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
@@ -3183,7 +3206,7 @@ out;`;
 
         xyToPatchIndex(x, y) {
             if (!this.isOnWorld(x, y)) return undefined
-            const { minX, maxY, numX, maxXcor, maxYcor } = this;
+            const { minX, maxX, maxY, numX, maxXcor, maxYcor } = this;
             x = x === maxXcor ? maxX : Math.round(x);
             y = y === maxYcor ? maxY : Math.round(y);
             return x - minX + numX * (maxY - y)
@@ -3305,12 +3328,12 @@ out;`;
     // /** @type {number} */ bx
     // /** @type {number} */ by
 
-    // Patches are the world other agentsets live on. They create a coord system
-    // from Model's world values: minX, maxX, minY, maxY
     /**
-     * Patches are the world other agentsets live on.
-     * They create a coord system
-     * from Model's world values: minX, maxX, minY, maxY
+     * Patches are the world other AgentSets live on.
+     * They define a coord system from the Model's World values:
+     * minX, maxX, minY, maxY, (minZ, maxZ) (z optional)
+     * Patches form a grid of Patch objects which can store world data
+     * (elevation, fires, ant pheromones, buildings, roads, gis spatial data, water and so on)
      *
      * Created by class Model. Used by modeler in their Model subclass
      */
@@ -3628,7 +3651,7 @@ out;`;
     // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
 
     /**
-     * Class Patch instances represent a rectangle on a grid.  They hold variables
+     * Class Patch instances represent a square on the Patches grid.  They hold variables
      * that are in the patches the turtles live on.  The set of all patches
      * is the world on which the turtles live and the model runs.
      *
@@ -3636,6 +3659,11 @@ out;`;
      * @class
      */
     class Patch {
+        // Set by AgentSet
+        agentSet
+        model
+        name
+
         static defaultVariables() {
             // Core variables for patches.
             return {
@@ -3755,6 +3783,12 @@ out;`;
 
     // Turtles are the world other agentsets live on. They create a coord system
     // from Model's world values: size, minX, maxX, minY, maxY
+    /**
+     * Turtles are objects living on the {@link Patches} world.
+     * Their coordinates are floats, unlike Patches with integer coordinates.
+     *
+     * @extends {AgentSet}
+     */
     class Turtles extends AgentSet {
         // Factories:
         // Add 1 or more turtles.
@@ -3787,7 +3821,12 @@ out;`;
             //pDisk.minOneOf(t => t.dist)
         }
 
-        // Return an array of this breed within the array of patchs
+        /**
+         * Return an array of this breed within the array of patchs
+         *
+         * @param {Patch[]} patches Array of patches
+         * @return {AgentArray}
+         */
         inPatches(patches) {
             let array = new AgentArray(); // []
             for (const p of patches) array.push(...p.turtlesHere());
@@ -3851,8 +3890,6 @@ out;`;
         }
     }
 
-    // export default Turtles
-
     // import Color from './Color.js'
 
     // Flyweight object creation, see Patch/Patches.
@@ -3861,7 +3898,18 @@ out;`;
     // Each turtle knows the patch it is on, and interacts with that and other
     // patches, as well as other turtles.
 
+    /**
+     * Class Turtle instances represent the dynamic, behavioral element of modeling.
+     * Each turtle knows the patch it is on, and interacts with that and other
+     * patches, as well as other turtles.
+     */
     class Turtle {
+        atEdge
+        // Set by AgentSet
+        agentSet
+        model
+        name
+
         static defaultVariables() {
             return {
                 // Core variables for turtles.
@@ -3874,13 +3922,12 @@ out;`;
                 // theta: null, // set to random if default not set by modeler
                 // What to do if I wander off world. Can be 'clamp', 'wrap'
                 // 'bounce', or a function, see handleEdge() method
-                agentSet: null, // set by AgentSet's proto method
                 atEdge: 'wrap',
             }
         }
         // Initialize a Turtle given its Turtles AgentSet.
         constructor() {
-            this.agentSet = this.atEdge = this.model = null; // needed by jsDoc
+            // this.agentSet = this.atEdge = this.model = null // needed by jsDoc
             Object.assign(this, Turtle.defaultVariables());
         }
         agentConstructor() {
@@ -3938,19 +3985,19 @@ out;`;
             return this.model.patches.patch(this.x, this.y)
         }
 
-        // Heading vs Euclidean Angles. Direction for clarity when ambiguity.
-        // get heading() {
-        //     return util.angleToHeading(this.theta)
-        // }
-        // set heading(heading) {
-        //     this.theta = util.headingToAngle(heading)
-        // }
-        // get direction() {
-        //     return this.theta
-        // }
-        // set direction(theta) {
-        //     this.theta = theta
-        // }
+        // Heading vs Euclidean Angles. Angle for clarity when ambiguity.
+        get heading() {
+            return util.angleToHeading(this.theta)
+        }
+        set heading(heading) {
+            this.theta = util.headingToAngle(heading);
+        }
+        get angle() {
+            return this.theta
+        }
+        set angle(theta) {
+            this.theta = theta;
+        }
 
         // Set x, y position. If z given, override default z.
         // Call handleEdge(x, y) if x, y off-world.
@@ -4027,7 +4074,7 @@ out;`;
                     throw Error(`turtle.handleEdge: bad atEdge: ${atEdge}`)
                 }
             } else {
-                atEdge(this);
+                this.atEdge(this);
             }
         }
         // Place the turtle at the given patch/turtle location
@@ -4148,15 +4195,28 @@ out;`;
     }
 
     /**
+     * @description
      * Class Model is the primary interface for modelers, integrating
-     * the Patches/Patch Turtles/Turtle and Links/Link AgentSets.
+     * the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:
+     * * model.Patches is an array ({@link Patches}) of {@link Patch} instances
+     * * model.Turtles is an array ({@link Turtles}) of {@link Turtle} instances
+     * * model.Links is an array ({@link Links}) of {@link Link} instances
+     * * model.breed is a sub-array of any of the three above. See AgentSet's ctor.
+     * * All of which are subclasses of ({@link AgentSet})
      *
      * Convention: Three abstract methods are provided by the modeler
      * * Startup(): (Optional) Called once to import images, data etc
      * * Setup(): Called to initialize the model state. Can be called multiple times, see reset()
      * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
+     *
+     * See {@tutorial ModelTutorial}
      */
     class Model {
+        world
+        patches
+        turtles
+        links
+
         /**
          * Creates an instance of Model.
          * @param {Object|World} [worldOptions=World.defaultOptions()] Can be Object of min/max X,Y,Z values or an instance of World
@@ -4164,7 +4224,7 @@ out;`;
          */
         constructor(worldOptions = World.defaultOptions(), autoTick = true) {
             // Let jsDocs/vscode know these variables exist. Initialized by reseetModel()
-            this.patches = this.turtles = this.links = null;
+            // this.patches = this.turtles = this.links = null
             this.resetModel(worldOptions);
             if (autoTick) this.autoTick();
         }
@@ -4199,7 +4259,6 @@ out;`;
 
         /**
          * Increment the tick cound. Generally not needed if autoTick true
-         *
          */
         tick() {
             this.ticks++;
@@ -4210,8 +4269,10 @@ out;`;
         /**
          * A method to perform one-time initialization
          *
+         * @abstract
          */
         async startup() {}
+
         /**
          * A method for initializing the model
          *
@@ -4220,11 +4281,13 @@ out;`;
          *  * reset()
          *  * setup()
          *
+         * @abstract
          */
         setup() {} // Your initialization code goes here
         /**
          * Run the model one step.
          *
+         * @abstract
          */
         step() {} // Called each step of the model
 

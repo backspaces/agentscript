@@ -7,15 +7,28 @@ import Links from './Links.js'
 import Link from './Link.js'
 
 /**
+ * @description
  * Class Model is the primary interface for modelers, integrating
- * the Patches/Patch Turtles/Turtle and Links/Link AgentSets.
+ * the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:
+ * * model.Patches is an array ({@link Patches}) of {@link Patch} instances
+ * * model.Turtles is an array ({@link Turtles}) of {@link Turtle} instances
+ * * model.Links is an array ({@link Links}) of {@link Link} instances
+ * * model.breed is a sub-array of any of the three above. See AgentSet's ctor.
+ * * All of which are subclasses of ({@link AgentSet})
  *
  * Convention: Three abstract methods are provided by the modeler
  * * Startup(): (Optional) Called once to import images, data etc
  * * Setup(): Called to initialize the model state. Can be called multiple times, see reset()
  * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
+ *
+ * See {@tutorial ModelTutorial}
  */
 class Model {
+    world
+    patches
+    turtles
+    links
+
     /**
      * Creates an instance of Model.
      * @param {Object|World} [worldOptions=World.defaultOptions()] Can be Object of min/max X,Y,Z values or an instance of World
@@ -23,7 +36,7 @@ class Model {
      */
     constructor(worldOptions = World.defaultOptions(), autoTick = true) {
         // Let jsDocs/vscode know these variables exist. Initialized by reseetModel()
-        this.patches = this.turtles = this.links = null
+        // this.patches = this.turtles = this.links = null
         this.resetModel(worldOptions)
         if (autoTick) this.autoTick()
     }
@@ -58,7 +71,6 @@ class Model {
 
     /**
      * Increment the tick cound. Generally not needed if autoTick true
-     *
      */
     tick() {
         this.ticks++
@@ -69,8 +81,10 @@ class Model {
     /**
      * A method to perform one-time initialization
      *
+     * @abstract
      */
     async startup() {}
+
     /**
      * A method for initializing the model
      *
@@ -79,11 +93,13 @@ class Model {
      *  * reset()
      *  * setup()
      *
+     * @abstract
      */
     setup() {} // Your initialization code goes here
     /**
      * Run the model one step.
      *
+     * @abstract
      */
     step() {} // Called each step of the model
 

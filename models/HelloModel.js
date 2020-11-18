@@ -1,22 +1,16 @@
 import Model from '../src/Model.js'
 import util from '../src/util.js'
 
-export default class HelloModel extends Model {
-    static defaultOptions() {
-        return {
-            population: 10,
-            speed: 0.1,
-            wiggle: 0.1,
-            linksToo: true,
-        }
-    }
+class HelloModel extends Model {
+    population = 10 // number of turtles
+    speed = 0.1 // step size in patch units
+    wiggle = util.degToRad(10) // Wiggle angle in radians
 
-    // ======================
+    // We can use Model's constructor, due to using Model's default World
+    // constructor() {
+    //     super() // use default world options.
+    // }
 
-    constructor(worldDptions) {
-        super(worldDptions) // default world options if "undefined"
-        Object.assign(this, HelloModel.defaultOptions())
-    }
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')
 
@@ -26,15 +20,16 @@ export default class HelloModel extends Model {
         })
 
         this.turtles.ask(t => {
-            if (this.population > 1 && this.linksToo)
-                this.links.create(t, this.turtles.otherOneOf(t))
+            this.links.create(t, this.turtles.otherOneOf(t))
         })
     }
 
     step() {
         this.turtles.ask(t => {
-            t.direction += util.randomCentered(this.wiggle)
+            t.angle += util.randomCentered(this.wiggle)
             t.forward(this.speed)
         })
     }
 }
+
+export default HelloModel

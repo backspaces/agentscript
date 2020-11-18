@@ -9,7 +9,6 @@ class AgentArray extends Array {
      * Convert an existing Array to an AgentArray "in place".
      * Use array.slice() if a new array is wanted
      *
-     * @static
      * @param {Array} array Array to convert to AgentArray
      * @return {AgentArray} array converted to AgentArray
      */
@@ -88,10 +87,10 @@ class AgentArray extends Array {
     }
 
     /**
-     * Return true if fcn(element) returns true for each element in array.
+     * Return true if fcn(element) returns true for each element in this array.
      * Same as Array.every, using NetLogo's name
      *
-     * @param {Function} fcn Return boolean
+     * @param {Function} fcn fcn(element) return boolean
      * @return {boolean} true if fcn returns true for all elements
      */
     all(fcn) {
@@ -123,11 +122,15 @@ class AgentArray extends Array {
     // Obj is key, arrayType pairs: x: Float32Array
     // Result is this.props(key, arrayType) for each key
     /**
-     * Creates an Object of Arrays, one Array per property.
+     * Creates an Object of Arrays, one Array per each property in obj.
      * Obj is key, arrayType pairs: x: Float32Array
+     * This is advanced, used for web workers, very large data sets, and remote communication
      *
      * @param {Object} obj Object of prop, array type pairs
      * @return {Object}
+     * @example
+     *  aa.typedSample({x: Uint8Array, y: Uint8Array})
+     *  //=> {x: new Uint8Array([0, 0, 1]), y: new Uint8Array([0, 1, 0])}
      */
     typedSample(obj) {
         // const length = this.length

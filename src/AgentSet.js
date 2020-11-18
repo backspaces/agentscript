@@ -12,12 +12,17 @@ import AgentArray from './AgentArray.js'
  * AgentSet subclasses: Patches, Turtles, Links & Breeds.
  */
 class AgentSet extends AgentArray {
+    // Inherited by Patches, Turtles, Links
+    model
+    name
+    baseSet
+    AgentClass
+
     /**
      * Magic to return AgentArrays rather than AgentSets
      * [Symbol.species](https://goo.gl/Zsxwxd)
      *
      * @readonly
-     * @static
      */
     static get [Symbol.species]() {
         return AgentArray
@@ -29,7 +34,7 @@ class AgentSet extends AgentArray {
      * @param {Model} model Instance of Class Model to which I belong
      * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
      * @param {String} name Name of this AgentSet. Ex: Patches
-     * @param {AgentSet} [baseSet=null] If a Breed, it's parent AgentSet
+     * @param {(Patches|Turtles|Links)} [baseSet=null] If a Breed, it's parent AgentSet
      */
     constructor(model, AgentClass, name, baseSet = null) {
         super() // create empty AgentArray
@@ -131,7 +136,7 @@ class AgentSet extends AgentArray {
      * Ex: patches.inRect(5).withBreed(houses)
      *
      * @param {AgentSet} breed A breed AgentSet
-     * @return {AgentSet}
+     * @return {AgentArray}
      */
     withBreed(breed) {
         return this.filter(a => a.agentSet === breed)
@@ -149,7 +154,7 @@ class AgentSet extends AgentArray {
      * Add an Agent to this AgentSet.  Only used by factory methods.
      * Adds the `id` property to Agent. Increment AgentSet `ID`.
      */
-    addAgent(o) {
+    addAgent(o = undefined) {
         // o only for breeds adding themselves to their baseSet
         o = o || Object.create(this.agentProto) // REMIND: Simplify! Too slick.
         if (this.isBreedSet()) {

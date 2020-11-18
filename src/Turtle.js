@@ -8,7 +8,18 @@ import util from './util.js'
 // Each turtle knows the patch it is on, and interacts with that and other
 // patches, as well as other turtles.
 
-export default class Turtle {
+/**
+ * Class Turtle instances represent the dynamic, behavioral element of modeling.
+ * Each turtle knows the patch it is on, and interacts with that and other
+ * patches, as well as other turtles.
+ */
+class Turtle {
+    atEdge
+    // Set by AgentSet
+    agentSet
+    model
+    name
+
     static defaultVariables() {
         return {
             // Core variables for turtles.
@@ -21,13 +32,12 @@ export default class Turtle {
             // theta: null, // set to random if default not set by modeler
             // What to do if I wander off world. Can be 'clamp', 'wrap'
             // 'bounce', or a function, see handleEdge() method
-            agentSet: null, // set by AgentSet's proto method
             atEdge: 'wrap',
         }
     }
     // Initialize a Turtle given its Turtles AgentSet.
     constructor() {
-        this.agentSet = this.atEdge = this.model = null // needed by jsDoc
+        // this.agentSet = this.atEdge = this.model = null // needed by jsDoc
         Object.assign(this, Turtle.defaultVariables())
     }
     agentConstructor() {
@@ -85,19 +95,19 @@ export default class Turtle {
         return this.model.patches.patch(this.x, this.y)
     }
 
-    // Heading vs Euclidean Angles. Direction for clarity when ambiguity.
-    // get heading() {
-    //     return util.angleToHeading(this.theta)
-    // }
-    // set heading(heading) {
-    //     this.theta = util.headingToAngle(heading)
-    // }
-    // get direction() {
-    //     return this.theta
-    // }
-    // set direction(theta) {
-    //     this.theta = theta
-    // }
+    // Heading vs Euclidean Angles. Angle for clarity when ambiguity.
+    get heading() {
+        return util.angleToHeading(this.theta)
+    }
+    set heading(heading) {
+        this.theta = util.headingToAngle(heading)
+    }
+    get angle() {
+        return this.theta
+    }
+    set angle(theta) {
+        this.theta = theta
+    }
 
     // Set x, y position. If z given, override default z.
     // Call handleEdge(x, y) if x, y off-world.
@@ -174,7 +184,7 @@ export default class Turtle {
                 throw Error(`turtle.handleEdge: bad atEdge: ${atEdge}`)
             }
         } else {
-            atEdge(this)
+            this.atEdge(this)
         }
     }
     // Place the turtle at the given patch/turtle location
@@ -293,3 +303,5 @@ export default class Turtle {
         return t in this.linkNeighbors()
     }
 }
+
+export default Turtle

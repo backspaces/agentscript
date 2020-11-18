@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>src/AgentArray.js</title>
+
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/third-party/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/third-party/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-base.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-light.css">
+    
+    
+    
+<svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none">
+    <defs>
+        <symbol id="copy-icon" viewbox="0 0 488.3 488.3">
+            <g>
+                <path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/>
+                <path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/>
+            </g>
+        </symbol>
+    </defs>
+</svg>
+
+</head>
+<body>
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html"><div class="text">Home</div></a></h2><div class="search-box"><input type="text" placeholder="Search..." id="search-box" /><div class="search-item-container" id="search-item-container"><ul class="search-item-ul" id="search-item-ul"></ul></div></div><div class="sidebar-list-div"><h3>Tutorials</h3><ul><li><a href="tutorial-ModelTutorial.html">ModelTutorial</a></li></ul><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a><ul class='methods'><li data-type='method'><a href="AgentArray.html#.fromArray">fromArray</a></li><li data-type='method'><a href="AgentArray.html#all">all</a></li><li data-type='method'><a href="AgentArray.html#ask">ask</a></li><li data-type='method'><a href="AgentArray.html#clone">clone</a></li><li data-type='method'><a href="AgentArray.html#first">first</a></li><li data-type='method'><a href="AgentArray.html#forLoop">forLoop</a></li><li data-type='method'><a href="AgentArray.html#isEmpty">isEmpty</a></li><li data-type='method'><a href="AgentArray.html#last">last</a></li><li data-type='method'><a href="AgentArray.html#props">props</a></li><li data-type='method'><a href="AgentArray.html#sortBy">sortBy</a></li><li data-type='method'><a href="AgentArray.html#toArray">toArray</a></li><li data-type='method'><a href="AgentArray.html#typedSample">typedSample</a></li><li data-type='method'><a href="AgentArray.html#uniq">uniq</a></li><li data-type='method'><a href="AgentArray.html#with">with</a></li></ul></li><li><a href="AgentSet.html">AgentSet</a><ul class='methods'><li data-type='method'><a href="AgentSet.html#addAgent">addAgent</a></li><li data-type='method'><a href="AgentSet.html#ask">ask</a></li><li data-type='method'><a href="AgentSet.html#askSet">askSet</a></li><li data-type='method'><a href="AgentSet.html#clear">clear</a></li><li data-type='method'><a href="AgentSet.html#getDefault">getDefault</a></li><li data-type='method'><a href="AgentSet.html#isBaseSet">isBaseSet</a></li><li data-type='method'><a href="AgentSet.html#isBreedSet">isBreedSet</a></li><li data-type='method'><a href="AgentSet.html#newBreed">newBreed</a></li><li data-type='method'><a href="AgentSet.html#protoMixin">protoMixin</a></li><li data-type='method'><a href="AgentSet.html#removeAgent">removeAgent</a></li><li data-type='method'><a href="AgentSet.html#setBreed">setBreed</a></li><li data-type='method'><a href="AgentSet.html#setDefault">setDefault</a></li><li data-type='method'><a href="AgentSet.html#withBreed">withBreed</a></li></ul></li><li><a href="DataSet.html">DataSet</a><ul class='methods'><li data-type='method'><a href="DataSet.html#.emptyDataSet">emptyDataSet</a></li></ul></li><li><a href="HelloModel.html">HelloModel</a></li><li><a href="Link.html">Link</a></li><li><a href="Links.html">Links</a></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method'><a href="Model.html#linkBreeds">linkBreeds</a></li><li data-type='method'><a href="Model.html#patchBreeds">patchBreeds</a></li><li data-type='method'><a href="Model.html#reset">reset</a></li><li data-type='method'><a href="Model.html#setup">setup</a></li><li data-type='method'><a href="Model.html#startup">startup</a></li><li data-type='method'><a href="Model.html#step">step</a></li><li data-type='method'><a href="Model.html#tick">tick</a></li><li data-type='method'><a href="Model.html#turtleBreeds">turtleBreeds</a></li></ul></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a><ul class='methods'><li data-type='method'><a href="Patches.html#exportDataSet">exportDataSet</a></li><li data-type='method'><a href="Patches.html#importDataSet">importDataSet</a></li><li data-type='method'><a href="Patches.html#neighbors">neighbors</a></li><li data-type='method'><a href="Patches.html#neighbors4">neighbors4</a></li><li data-type='method'><a href="Patches.html#patchIndex">patchIndex</a></li></ul></li><li><a href="Turtle.html">Turtle</a></li><li><a href="Turtles.html">Turtles</a><ul class='methods'><li data-type='method'><a href="Turtles.html#addAgent">addAgent</a></li><li data-type='method'><a href="Turtles.html#ask">ask</a></li><li data-type='method'><a href="Turtles.html#askSet">askSet</a></li><li data-type='method'><a href="Turtles.html#clear">clear</a></li><li data-type='method'><a href="Turtles.html#getDefault">getDefault</a></li><li data-type='method'><a href="Turtles.html#inPatches">inPatches</a></li><li data-type='method'><a href="Turtles.html#isBaseSet">isBaseSet</a></li><li data-type='method'><a href="Turtles.html#isBreedSet">isBreedSet</a></li><li data-type='method'><a href="Turtles.html#newBreed">newBreed</a></li><li data-type='method'><a href="Turtles.html#protoMixin">protoMixin</a></li><li data-type='method'><a href="Turtles.html#removeAgent">removeAgent</a></li><li data-type='method'><a href="Turtles.html#setBreed">setBreed</a></li><li data-type='method'><a href="Turtles.html#setDefault">setDefault</a></li><li data-type='method'><a href="Turtles.html#withBreed">withBreed</a></li></ul></li><li><a href="World.html">World</a><ul class='methods'><li data-type='method'><a href="World.html#.defaultOptions">defaultOptions</a></li><li data-type='method'><a href="World.html#.defaultWorld">defaultWorld</a></li><li data-type='method'><a href="World.html#bboxTransform">bboxTransform</a></li><li data-type='method'><a href="World.html#isOnWorld">isOnWorld</a></li><li data-type='method'><a href="World.html#random3DPoint">random3DPoint</a></li><li data-type='method'><a href="World.html#randomPatchPoint">randomPatchPoint</a></li><li data-type='method'><a href="World.html#randomPoint">randomPoint</a></li></ul></li></ul></div>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/AgentArray.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import util from './util.js'
+
+/**
+ * Subclass of Array with convenience methods used by NetLogo.
+ * Tipically the items in the array are Objects but can be any type.
+ */
+class AgentArray extends Array {
+    /**
+     * Convert an existing Array to an AgentArray "in place".
+     * Use array.slice() if a new array is wanted
+     *
+     * @param {Array} array Array to convert to AgentArray
+     * @return {AgentArray} array converted to AgentArray
+     */
+    static fromArray(array) {
+        const aarray = Object.setPrototypeOf(array, AgentArray.prototype)
+        return aarray
+    }
+
+    /**
+     * Creates an instance of AgentArray. Simply pass-through to super()
+     * now, but may add initialization code later.
+     * @param {*} args Zero or more items in Array
+     * @example
+     * let aa = new AgentArray({x:0,y:0}, {x:0,y:1}, {x:1,y:0})
+     *  //=>  [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 0 }]
+     */
+    constructor(...args) {
+        super(...args)
+        // maybe do some initialization later
+    }
+
+    /**
+     * See {@link World} and [MyClass's foo property]{@link World#bboxTransform}.
+     * Convert this AgentArray to Array in-place
+     *
+     * @return {Array} This AgentArray converted to Array
+     */
+    toArray() {
+        Object.setPrototypeOf(this, Array.prototype)
+        return this
+    }
+
+    // NL: Return true if reporter true for all of this set's objects
+    // Use Array.every(). Also Array.some()
+    // all (reporter) { return this.every(reporter) }
+    // // Return !isEmpty()
+    // any () { return this.length !== 0 }
+    // NL: Return AgentArray with reporter(agent) true. Use Array.filter()
+    // with (reporter) { return this.filter(reporter) }
+
+    /**
+     * Return true if there are no items in this Array
+     *
+     * @return {boolean}
+     * @example
+     *  new AgentArray().isEmpty()
+     *  //=> true
+     * @example
+     *  aa.isEmpty()
+     *  //=> false
+     */
+    isEmpty() {
+        return this.length === 0
+    }
+    /**
+     * Return first item in this array. Returns undefined if empty.
+     *
+     * @return {any}
+     * @example
+     *  aa.first()
+     *  //=> { x: 0, y: 0 }
+     */
+    first() {
+        return this[0]
+    }
+    /**
+     * Return last item in this array. Returns undefined if empty.
+     *
+     * @return {any}
+     * @example
+     *  aa.last()
+     *  //=>  { x: 1, y: 0 }
+     */
+    last() {
+        return this[this.length - 1]
+    }
+
+    /**
+     * Return true if fcn(element) returns true for each element in this array.
+     * Same as Array.every, using NetLogo's name
+     *
+     * @param {Function} fcn fcn(element) return boolean
+     * @return {boolean} true if fcn returns true for all elements
+     */
+    all(fcn) {
+        return this.every(fcn)
+    }
+
+    /**
+     * Return array of property values from this array's objects.
+     * Array type is specified, defaults to AgentArray
+     *
+     * @param {String} key Property name
+     * @param {Array} [type=AgentArray] Type of array (Array, Uint8Array, ...)
+     * @return {Array} Array of given type
+     * @example
+     *  aa.props('x')
+     *  //=> [0, 0, 1]
+     * @example
+     *  aa.props('y')
+     *  //=> [0, 1, 0]
+     */
+    props(key, type = AgentArray) {
+        const result = new type(this.length)
+        for (let i = 0; i &lt; this.length; i++) {
+            result[i] = this[i][key]
+        }
+        return result
+    }
+    // Creates an OofA for several sets of props.
+    // Obj is key, arrayType pairs: x: Float32Array
+    // Result is this.props(key, arrayType) for each key
+    /**
+     * Creates an Object of Arrays, one Array per each property in obj.
+     * Obj is key, arrayType pairs: x: Float32Array
+     * This is advanced, used for web workers, very large data sets, and remote communication
+     *
+     * @param {Object} obj Object of prop, array type pairs
+     * @return {Object}
+     * @example
+     *  aa.typedSample({x: Uint8Array, y: Uint8Array})
+     *  //=> {x: new Uint8Array([0, 0, 1]), y: new Uint8Array([0, 1, 0])}
+     */
+    typedSample(obj) {
+        // const length = this.length
+        const result = {}
+        // note: use util's forLoop, does not iterate over this agent array.
+        util.forLoop(obj, (val, key) => {
+            result[key] = this.props(key, val)
+        })
+        return result
+    }
+
+    // Return AgentArray of results of the function fcn
+    // Similar to "props" but can return computation over all keys
+    // Odd: as.props('type') twice as fast as as.results(p => p.type)?
+    // results(fcn) {
+    //     const result = new AgentArray(this.length)
+    //     for (let i = 0; i &lt; this.length; i++) {
+    //         result[i] = fcn(this[i])
+    //     }
+    //     return result
+    // }
+
+    /**
+     * Return new AgentArray of the unique values of this array
+     *
+     * @return {AgentArray}
+     */
+    uniq() {
+        // return AgentArray.fromArray(Array.from(new Set(this)))
+        return AgentArray.from(new Set(this))
+    }
+
+    // Returns AgentArray of unique elements in this *sorted* AgentArray.
+    // Use sortBy or clone &amp; sortBy if needed.
+    // uniq(f = util.identityFcn) {
+    //     if (util.isString(f)) f = o => o[f]
+    //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
+    // }
+
+    // Call fcn(agent, index, array) for each agent in AgentArray.
+    // Array assumed not mutable
+    // Note: 5x+ faster than this.forEach(fcn) !!
+    /**
+     * Call fcn(agent, index, array) for each item in AgentArray.
+     * Index &amp; array optional.
+     * Array assumed not mutable.
+     * Note: 5x+ faster than this.forEach(fcn)
+     *
+     * @param {Function} fcn fcn(agent, [index], [array])
+     * @return {this} Return this for chaining.
+     */
+    forLoop(fcn) {
+        for (let i = 0, len = this.length; i &lt; len; i++) {
+            fcn(this[i], i, this)
+        }
+        return this
+    }
+
+    // Call fcn(agent, index, array) for each item in AgentArray.
+    // Array can shrink. If it grows, will not visit beyond original length
+    /**
+     * Call fcn(agent, index, array) for each item in AgentArray.
+     * Index &amp; array optional.
+     * Array can shrink. If it grows, will not visit beyond original length.
+     * "ask" is NetLogo term.
+     *
+     * @param {Function} fcn fcn(agent, [index], [array])
+     */
+    ask(fcn) {
+        const length = this.length
+        // for (let i = 0; i &lt; length || i &lt; this.length; i++) {
+        for (let i = 0; i &lt; Math.min(length, this.length); i++) {
+            fcn(this[i], i, this)
+        }
+        if (length != this.length) {
+            const name = this.name || this.constructor.name
+            const direction = this.length &lt; length ? 'decreasing' : 'increasing'
+            util.warn(`AgentArray.ask array mutation: ${name}: ${direction}`)
+        }
+        // return this
+    }
+    // Return all elements returning f(obj, index, array) true
+    /**
+     * Return all elements returning f(obj, index, array) true.
+     * NetLogo term, simply calls this.filter(fcn)
+     *
+     * @param {Function} fcn fcn(agent, [index], [array])
+     * @return {AgentArray}
+     * @description
+     * Use: turtles.with(t => t.foo > 20).ask(t => t.bar = true)
+     */
+    with(fcn) {
+        return this.filter(fcn)
+    }
+    // Return all other than me.
+    other(t) {
+        return this.filter(o => o !== t)
+    }
+
+    // Return count of agents with reporter(agent) true
+    count(reporter) {
+        return this.reduce((prev, o) => prev + (reporter(o) ? 1 : 0), 0)
+    }
+
+    sum(key) {
+        return this.reduce((prev, o) => prev + (key ? o[key] : o), 0)
+    }
+    avg(key) {
+        return this.sum(key) / this.length
+    }
+    min(key) {
+        return this.reduce((prev, o) => Math.min(prev, key ? o[key] : o))
+    }
+    max(key) {
+        return this.reduce((prev, o) => Math.max(prev, key ? o[key] : o))
+    }
+    extent(key) {
+        return [this.min(key), this.max(key)]
+    }
+    histogram(key, bins = 10, min = this.min(key), max = this.max(key)) {
+        const binSize = (max - min) / bins
+        const aa = new AgentArray(bins)
+        aa.fill(0)
+        this.ask(a => {
+            const val = key ? a[key] : a
+            if (val &lt; min || val > max) {
+                util.warn(`histogram bounds error: ${val}: ${min}-${max}`)
+            } else {
+                let bin = Math.floor((val - min) / binSize)
+                if (bin === bins) bin-- // val is max, round down
+                aa[bin]++
+            }
+        })
+        // Object.assign(aa, {bins, min, max, binSize, key})
+        aa.parameters = { key, bins, min, max, binSize, arraySize: this.length }
+        // console.log(key, bins, min, max, binSize, aa)
+        return aa
+    }
+
+    // Return shallow copy of a portion of this AgentArray
+    // [See Array.slice](https://goo.gl/Ilgsok)
+    // Default is to clone entire AgentArray
+    cloneRange(begin = 0, end = this.length) {
+        return this.slice(begin, end) // Returns an AgentArray rather than Array!
+    }
+    /**
+     * Create copy of this AgentArray
+     * @return AgentArray
+     */
+    clone() {
+        return this.slice(0) // Returns an AgentArray rather than Array!
+    }
+    // Randomize the AgentArray in place. Use clone first if new AgentArray needed.
+    // Return "this" for chaining.
+    shuffle() {
+        return util.shuffle(this)
+    }
+    // Return this AgentArray sorted by the reporter in ascending/descending order.
+    // If reporter is a string, convert to a fcn returning that property.
+    // Use clone if you don't want to mutate this array.
+    /**
+     * Return this AgentArray sorted by the reporter in ascending/descending order.
+     * If reporter is a string, convert to a fcn returning that property.
+     *
+     * @param {function} reporter
+     * @param {boolean} [ascending=true]
+     * @return {AgentArray}
+     */
+    sortBy(reporter, ascending = true) {
+        util.sortObjs(this, reporter, ascending)
+        return this
+    }
+
+    // Remove an item from an array. Binary search if f given
+    // Array unchanged if item not found.
+    remove(o, f) {
+        const i = this.agentIndex(o, f)
+        if (i !== -1) this.splice(i, 1)
+        else util.warn(`remove: ${o} not in AgentArray`)
+        return this // chaining
+    }
+    insert(o, f) {
+        const i = this.sortedIndex(o, f)
+        if (this[i] === o) throw Error('insert: item already in AgentArray')
+        this.splice(i, 0, o) // copyWithin?
+    }
+
+    // Binary search:
+    // Return array index of item, where array is sorted.
+    // If item not found, return index for item for array to remain sorted.
+    // f is used to return an integer for sorting, defaults to identity.
+    // If f is a string, it is the object property to sort by.
+    // Adapted from underscore's _.sortedIndex.
+    sortedIndex(item, f = util.identityFcn) {
+        if (util.isString(f)) f = util.propFcn(f)
+        const value = f(item)
+        // Why not array.length - 1? Because we can insert 1 after end of array.
+        // let [low, high] = [0, array.length]
+        let low = 0
+        let high = this.length
+        while (low &lt; high) {
+            const mid = (low + high) >>> 1 // floor (low+high)/2
+            if (f(this[mid]) &lt; value) {
+                low = mid + 1
+            } else {
+                high = mid
+            }
+        }
+        return low
+    }
+    // Return index of value in array with given property or -1 if not found.
+    // Binary search if property isnt null
+    // Property can be string or function.
+    // Use property = identity to compare objs directly.
+    agentIndex(item, property) {
+        if (!property) return this.indexOf(item)
+        const i = this.sortedIndex(item, property)
+        return this[i] === item ? i : -1
+    }
+    // True if item is in array. Binary search if f given
+    contains(item, f) {
+        return this.agentIndex(item, f) >= 0
+    }
+
+    // Return a random agent. Return undefined if empty.
+    oneOf() {
+        return util.oneOf(this)
+    }
+    // Return a random agent, not equal to agent
+    otherOneOf(agent) {
+        return util.otherOneOf(this, agent)
+    }
+    // Return n other random agents from this array
+    // otherNOf (n, agent) { return util.otherNOf(n, this, agent) }
+    otherNOf(n, item) {
+        if (this.length &lt; n) throw Error('AgentArray: otherNOf: length &lt; N')
+        return this.clone().remove(item).shuffle().slice(0, n)
+    }
+
+    // Return the first agent having the min/max of given value of f(agent).
+    // If reporter is a string, convert to a fcn returning that property
+    minOrMaxOf(min, reporter, valueToo = false) {
+        if (this.isEmpty()) throw Error('min/max OneOf: empty array')
+        if (typeof reporter === 'string') reporter = util.propFcn(reporter)
+        let o = null
+        let val = min ? Infinity : -Infinity
+        for (let i = 0; i &lt; this.length; i++) {
+            const a = this[i]
+            const aval = reporter(a)
+            if ((min &amp;&amp; aval &lt; val) || (!min &amp;&amp; aval > val)) {
+                ;[o, val] = [a, aval]
+            }
+        }
+        return valueToo ? [o, val] : o
+    }
+    // The min version of the above
+    minOneOf(reporter) {
+        return this.minOrMaxOf(true, reporter)
+    }
+    // The max version of the above
+    maxOneOf(reporter) {
+        return this.minOrMaxOf(false, reporter)
+    }
+    // Like the pair above, but return both the object and its value in an array.
+    // const [obj, value] = minValOf(...)
+    minValOf(reporter) {
+        return this.minOrMaxOf(true, reporter, true)
+    }
+    maxValOf(reporter) {
+        return this.minOrMaxOf(false, reporter, true)
+    }
+
+    // Return n random agents as AgentArray.
+    // See [Fisher-Yates-Knuth shuffle](https://goo.gl/fWNFf)
+    // for better approach for large n.
+    nOf(n) {
+        if (n > this.length) throw Error('nOf: n larger than AgentArray')
+        if (n === this.length) return this
+        const result = new AgentArray()
+        while (result.length &lt; n) {
+            const o = this.oneOf()
+            if (!(o in result)) result.push(o)
+        }
+        return result
+    }
+    // Return a new AgentArray of the n min/max agents of the value of reporter,
+    // in ascending order.
+    // If reporter is a string, convert to a fcn returning that property
+    // NOTE: we do not manage ties, see NetLogo docs.
+    minOrMaxNOf(min, n, reporter) {
+        if (n > this.length) {
+            throw Error('min/max nOf: n larger than AgentArray')
+        }
+        const as = this.clone().sortBy(reporter)
+        return min ? as.clone(0, n) : as.clone(as.length - n)
+    }
+    minNOf(n, reporter) {
+        return this.minOrMaxNOf(true, n, reporter)
+    }
+    maxNOf(n, reporter) {
+        return this.minOrMaxNOf(false, n, reporter)
+    }
+
+    // Geometry methods for patches, turtles, and other AgentArrays which have x,y.
+    // Return all agents within rect, radius, cone from given agent o.
+    // If meToo, include given object, default excludes it
+    // Typically the AgentArray is a subset of larger sets, reducing
+    // the size, then uses these inRect, inRadius or inCone methods
+
+    // Return all agents within rectangle from given agent o.
+    // dx &amp; dy are (float) half width/height of rect
+    inRect(o, dx, dy = dx, meToo = false) {
+        const agents = new AgentArray()
+        const minX = o.x - dx // ok if max/min off-world, o, a are in-world
+        const maxX = o.x + dx
+        const minY = o.y - dy
+        const maxY = o.y + dy
+        this.ask(a => {
+            if (minX &lt;= a.x &amp;&amp; a.x &lt;= maxX &amp;&amp; minY &lt;= a.y &amp;&amp; a.y &lt;= maxY) {
+                if (meToo || o !== a) agents.push(a)
+            }
+        })
+        return agents
+    }
+
+    // Return all agents in AgentArray within d distance from given object.
+    inRadius(o, radius, meToo = false) {
+        const agents = new AgentArray()
+        // const {x, y} = o // perf?
+        const d2 = radius * radius
+        const sqDistance = util.sqDistance // Local function 2-3x faster, inlined?
+        this.ask(a => {
+            if (sqDistance(o.x, o.y, a.x, a.y) &lt;= d2) {
+                if (meToo || o !== a) agents.push(a)
+            }
+        })
+        return agents
+    }
+
+    // As above, but also limited to the angle `coneAngle` around
+    // a `angle` from object `o`.
+    inCone(o, radius, coneAngle, angle, meToo = false) {
+        const agents = new AgentArray()
+        this.ask(a => {
+            if (util.inCone(a.x, a.y, radius, coneAngle, angle, o.x, o.y)) {
+                if (meToo || o !== a) agents.push(a)
+            }
+        })
+        return agents
+    }
+}
+
+export default AgentArray
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+  
+</footer>
+
+<script src="scripts/third-party/prettify.js"></script>
+<script src="scripts/third-party/lang-css.js"></script>
+<script src="scripts/search.js"></script>
+<script src="scripts/third-party/fuse.js"></script>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/fix-code-block.js"></script>
+<script>
+var list = [{"title":"ModelTutorial","link":"ModelTutorial"},{"title":"AgentArray","link":"<a href=\"AgentArray.html\">AgentArray</a>"},{"title":"AgentArray.fromArray","link":"<a href=\"AgentArray.html#.fromArray\">AgentArray.fromArray &rtrif; undefined</a>"},{"title":"AgentArray#all","link":"<a href=\"AgentArray.html#all\">AgentArray &rtrif; all</a>"},{"title":"AgentArray#ask","link":"<a href=\"AgentArray.html#ask\">AgentArray &rtrif; ask</a>"},{"title":"AgentArray#clone","link":"<a href=\"AgentArray.html#clone\">AgentArray &rtrif; clone</a>"},{"title":"AgentArray#first","link":"<a href=\"AgentArray.html#first\">AgentArray &rtrif; first</a>"},{"title":"AgentArray#forLoop","link":"<a href=\"AgentArray.html#forLoop\">AgentArray &rtrif; forLoop</a>"},{"title":"AgentArray#isEmpty","link":"<a href=\"AgentArray.html#isEmpty\">AgentArray &rtrif; isEmpty</a>"},{"title":"AgentArray#last","link":"<a href=\"AgentArray.html#last\">AgentArray &rtrif; last</a>"},{"title":"AgentArray#props","link":"<a href=\"AgentArray.html#props\">AgentArray &rtrif; props</a>"},{"title":"AgentArray#sortBy","link":"<a href=\"AgentArray.html#sortBy\">AgentArray &rtrif; sortBy</a>"},{"title":"AgentArray#toArray","link":"<a href=\"AgentArray.html#toArray\">AgentArray &rtrif; toArray</a>"},{"title":"AgentArray#typedSample","link":"<a href=\"AgentArray.html#typedSample\">AgentArray &rtrif; typedSample</a>"},{"title":"AgentArray#uniq","link":"<a href=\"AgentArray.html#uniq\">AgentArray &rtrif; uniq</a>"},{"title":"AgentArray#with","link":"<a href=\"AgentArray.html#with\">AgentArray &rtrif; with</a>"},{"title":"AgentSet","link":"<a href=\"AgentSet.html\">AgentSet</a>"},{"title":"AgentSet#addAgent","link":"<a href=\"AgentSet.html#addAgent\">AgentSet &rtrif; addAgent</a>"},{"title":"AgentSet#ask","link":"<a href=\"AgentSet.html#ask\">AgentSet &rtrif; ask</a>"},{"title":"AgentSet#askSet","link":"<a href=\"AgentSet.html#askSet\">AgentSet &rtrif; askSet</a>"},{"title":"AgentSet#clear","link":"<a href=\"AgentSet.html#clear\">AgentSet &rtrif; clear</a>"},{"title":"AgentSet#getDefault","link":"<a href=\"AgentSet.html#getDefault\">AgentSet &rtrif; getDefault</a>"},{"title":"AgentSet#isBaseSet","link":"<a href=\"AgentSet.html#isBaseSet\">AgentSet &rtrif; isBaseSet</a>"},{"title":"AgentSet#isBreedSet","link":"<a href=\"AgentSet.html#isBreedSet\">AgentSet &rtrif; isBreedSet</a>"},{"title":"AgentSet#newBreed","link":"<a href=\"AgentSet.html#newBreed\">AgentSet &rtrif; newBreed</a>"},{"title":"AgentSet#protoMixin","link":"<a href=\"AgentSet.html#protoMixin\">AgentSet &rtrif; protoMixin</a>"},{"title":"AgentSet#removeAgent","link":"<a href=\"AgentSet.html#removeAgent\">AgentSet &rtrif; removeAgent</a>"},{"title":"AgentSet#setBreed","link":"<a href=\"AgentSet.html#setBreed\">AgentSet &rtrif; setBreed</a>"},{"title":"AgentSet#setDefault","link":"<a href=\"AgentSet.html#setDefault\">AgentSet &rtrif; setDefault</a>"},{"title":"AgentSet#withBreed","link":"<a href=\"AgentSet.html#withBreed\">AgentSet &rtrif; withBreed</a>"},{"title":"DataSet","link":"<a href=\"DataSet.html\">DataSet</a>"},{"title":"DataSet.emptyDataSet","link":"<a href=\"DataSet.html#.emptyDataSet\">DataSet.emptyDataSet &rtrif; undefined</a>"},{"title":"HelloModel","link":"<a href=\"HelloModel.html\">HelloModel</a>"},{"title":"Link","link":"<a href=\"Link.html\">Link</a>"},{"title":"Links","link":"<a href=\"Links.html\">Links</a>"},{"title":"Model","link":"<a href=\"Model.html\">Model</a>"},{"title":"Model#linkBreeds","link":"<a href=\"Model.html#linkBreeds\">Model &rtrif; linkBreeds</a>"},{"title":"Model#patchBreeds","link":"<a href=\"Model.html#patchBreeds\">Model &rtrif; patchBreeds</a>"},{"title":"Model#reset","link":"<a href=\"Model.html#reset\">Model &rtrif; reset</a>"},{"title":"Model#setup","link":"<a href=\"Model.html#setup\">Model &rtrif; setup</a>"},{"title":"Model#startup","link":"<a href=\"Model.html#startup\">Model &rtrif; startup</a>"},{"title":"Model#step","link":"<a href=\"Model.html#step\">Model &rtrif; step</a>"},{"title":"Model#tick","link":"<a href=\"Model.html#tick\">Model &rtrif; tick</a>"},{"title":"Model#turtleBreeds","link":"<a href=\"Model.html#turtleBreeds\">Model &rtrif; turtleBreeds</a>"},{"title":"Patch","link":"<a href=\"Patch.html\">Patch</a>"},{"title":"Patches","link":"<a href=\"Patches.html\">Patches</a>"},{"title":"Patches#exportDataSet","link":"<a href=\"Patches.html#exportDataSet\">Patches &rtrif; exportDataSet</a>"},{"title":"Patches#importDataSet","link":"<a href=\"Patches.html#importDataSet\">Patches &rtrif; importDataSet</a>"},{"title":"Patches#neighbors","link":"<a href=\"Patches.html#neighbors\">Patches &rtrif; neighbors</a>"},{"title":"Patches#neighbors4","link":"<a href=\"Patches.html#neighbors4\">Patches &rtrif; neighbors4</a>"},{"title":"Patches#patchIndex","link":"<a href=\"Patches.html#patchIndex\">Patches &rtrif; patchIndex</a>"},{"title":"Turtle","link":"<a href=\"Turtle.html\">Turtle</a>"},{"title":"Turtles","link":"<a href=\"Turtles.html\">Turtles</a>"},{"title":"Turtles#addAgent","link":"<a href=\"Turtles.html#addAgent\">Turtles &rtrif; addAgent</a>"},{"title":"Turtles#ask","link":"<a href=\"Turtles.html#ask\">Turtles &rtrif; ask</a>"},{"title":"Turtles#askSet","link":"<a href=\"Turtles.html#askSet\">Turtles &rtrif; askSet</a>"},{"title":"Turtles#clear","link":"<a href=\"Turtles.html#clear\">Turtles &rtrif; clear</a>"},{"title":"Turtles#getDefault","link":"<a href=\"Turtles.html#getDefault\">Turtles &rtrif; getDefault</a>"},{"title":"Turtles#inPatches","link":"<a href=\"Turtles.html#inPatches\">Turtles &rtrif; inPatches</a>"},{"title":"Turtles#isBaseSet","link":"<a href=\"Turtles.html#isBaseSet\">Turtles &rtrif; isBaseSet</a>"},{"title":"Turtles#isBreedSet","link":"<a href=\"Turtles.html#isBreedSet\">Turtles &rtrif; isBreedSet</a>"},{"title":"Turtles#newBreed","link":"<a href=\"Turtles.html#newBreed\">Turtles &rtrif; newBreed</a>"},{"title":"Turtles#protoMixin","link":"<a href=\"Turtles.html#protoMixin\">Turtles &rtrif; protoMixin</a>"},{"title":"Turtles#removeAgent","link":"<a href=\"Turtles.html#removeAgent\">Turtles &rtrif; removeAgent</a>"},{"title":"Turtles#setBreed","link":"<a href=\"Turtles.html#setBreed\">Turtles &rtrif; setBreed</a>"},{"title":"Turtles#setDefault","link":"<a href=\"Turtles.html#setDefault\">Turtles &rtrif; setDefault</a>"},{"title":"Turtles#withBreed","link":"<a href=\"Turtles.html#withBreed\">Turtles &rtrif; withBreed</a>"},{"title":"World","link":"<a href=\"World.html\">World</a>"},{"title":"World.defaultOptions","link":"<a href=\"World.html#.defaultOptions\">World.defaultOptions &rtrif; undefined</a>"},{"title":"World.defaultWorld","link":"<a href=\"World.html#.defaultWorld\">World.defaultWorld &rtrif; undefined</a>"},{"title":"World#bboxTransform","link":"<a href=\"World.html#bboxTransform\">World &rtrif; bboxTransform</a>"},{"title":"World#isOnWorld","link":"<a href=\"World.html#isOnWorld\">World &rtrif; isOnWorld</a>"},{"title":"World#random3DPoint","link":"<a href=\"World.html#random3DPoint\">World &rtrif; random3DPoint</a>"},{"title":"World#randomPatchPoint","link":"<a href=\"World.html#randomPatchPoint\">World &rtrif; randomPatchPoint</a>"},{"title":"World#randomPoint","link":"<a href=\"World.html#randomPoint\">World &rtrif; randomPoint</a>"}];
+setupSearch(list)
+</script>
+
+ 
+<script type="text/javascript" src="scripts/misc.js"></script>
+</body>
+</html>

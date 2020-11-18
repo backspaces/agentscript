@@ -33,7 +33,7 @@ export default class HelloModel extends Model {
 
     step() {
         this.turtles.ask(t => {
-            t.direction += util.randomCentered(this.wiggle)
+            t.angle += util.randomCentered(this.wiggle)
             t.forward(this.speed)
             this.moveToSphere(t)
         })

@@ -14,7 +14,7 @@ import AgentArray from './AgentArray.js'
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
 
 /**
- * Class Patch instances represent a rectangle on a grid.  They hold variables
+ * Class Patch instances represent a square on the Patches grid.  They hold variables
  * that are in the patches the turtles live on.  The set of all patches
  * is the world on which the turtles live and the model runs.
  *
@@ -22,6 +22,11 @@ import AgentArray from './AgentArray.js'
  * @class
  */
 class Patch {
+    // Set by AgentSet
+    agentSet
+    model
+    name
+
     static defaultVariables() {
         // Core variables for patches.
         return {

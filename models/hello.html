@@ -1,26 +1,22 @@
 <html>
     <head>
         <title>Hello</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
-            // A simpler version of index.html for running the ./HelloModel.js
-            // Run any model by changing the import's path (i.e. ./AntsModel.js)
+            // An html file for running the ./HelloModel.js
+            // Run any other model by changing the import's path (i.e. ./MyModel.js)
             import util from '../src/util.js'
             import Model from './HelloModel.js'
 
-            // Run the model. async used for startup().
-            // Not needed by Hello but in generally is used for one-time init.
+            // Run the model 500 steps. Async used for startup() and timeoutLoop().
+            // Startup not needed by Hello but others will need it..
             async function run() {
-                // Init and run the model 500 steps
+                // Avoid a white screen puzzling the user!
+                util.printToPage(`Running for 500 steps. Takes a while!`)
+
+                // Now create, init and run the model 500 steps
                 const model = new Model()
-
-                // Push model & util to window from inside this module.
-                // You don't need to do this but is nice for debugging.
-                util.toWindow({ model, util })
-
-                // Now init and run the model 500 steps async (don't block browser)
                 await model.startup()
                 model.setup()
                 await util.timeoutLoop(() => {
@@ -35,10 +31,5 @@
             }
             run()
         </script>
-        <!--
-            A div for general use. We don't use it here. Printing could use:
-            util.printToPage(sample, 'modelDiv')
-        -->
-        <div id="modelDiv"></div>
     </body>
 </html>

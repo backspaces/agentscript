@@ -7,13 +7,24 @@ import util from './util.js'
 // const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
 
 /**
+ * @private
+ * @typedef {Object} WorldOptions
+ * @property {number} minX Max world patch x integer value
+ * @property {number} minY Max world patch y integer value
+ * @property {number} minZ Max world patch z integer value
+ * @property {number} maxX Min world patch x integer value
+ * @property {number} maxY Min world patch y integer value
+ * @property {number} maxZ Min world patch z integer value
+ */
+
+/**
  * @description
  * Class World defines the coordinate system for the model.
  * It has transforms for multiple coordinate systems.
  *
  * The world is defined by an object with 6 properties:
  *
- *          options = {
+ *          WorldOptions = {
  *              minX: integer,
  *              maxX: integer,
  *              minY: integer,
@@ -22,42 +33,41 @@ import util from './util.js'
  *              maxZ: integer,
  *          }
  */
-
 class World {
+    maxX = 16
+    maxY = 16
+    maxZ = 16
+    minX = -16
+    minY = -16
+    minZ = -16
+
     /**
      * Create a new World object given an Object with optional
      * minX, maxX, minY, maxY, minZ, maxZ overriding class properties.
-     * @param {Object.<string,number>} options Object with overrides for class properties
+     * @param {World|WorldOptions|Object} options Object with overrides for class properties
      */
     constructor(options = {}) {
-        // constructor(options = World.defaultOptions()) {
-        // minX, maxX, minY, maxY, minZ, maxZ
-        // override defaults with the given options
-        // options = Object.assign(World.defaultOptions(), options)
-        this.setClassProperties()
-
-        Object.assign(this, options) // set the option values
+        Object.assign(this, options) // set the option override values
         this.setWorld() // convert these to rest of world parameters
     }
 
     // Until class properties universally, this approach is used:
-    setClassProperties() {
-        this.maxX = 16
-        this.maxY = 16
-        this.maxZ = 16
-        this.minX = -this.maxX
-        this.minY = -this.maxY
-        this.minZ = -this.maxZ
-    }
+    // setClassProperties() {
+    //     this.maxX = 16
+    //     this.maxY = 16
+    //     this.maxZ = 16
+    //     this.minX = -this.maxX
+    //     this.minY = -this.maxY
+    //     this.minZ = -this.maxZ
+    // }
 
     /**
      * Return a default options object, origin at center.
      *
-     * @static
      * @param {number} [maxX=16] Integer max X value
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-     * @return {Object}
+     * @return {WorldOptions}
      */
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
         return {
@@ -72,7 +82,6 @@ class World {
     /**
      * Factory to create a default World instance.
      *
-     * @static
      * @param {number} [maxX=16] Integer max X value
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
@@ -236,7 +245,7 @@ class World {
 
     xyToPatchIndex(x, y) {
         if (!this.isOnWorld(x, y)) return undefined
-        const { minX, maxY, numX, maxXcor, maxYcor } = this
+        const { minX, maxX, maxY, numX, maxXcor, maxYcor } = this
         x = x === maxXcor ? maxX : Math.round(x)
         y = y === maxYcor ? maxY : Math.round(y)
         return x - minX + numX * (maxY - y)
