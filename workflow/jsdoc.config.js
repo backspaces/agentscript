@@ -2,7 +2,8 @@
 
 module.exports = {
     source: {
-        include: ['./src', './tutorials'],
+        // include: ['./src', './tutorials'],
+        include: ['./src'],
         includePattern: '.*.js',
     },
     opts: {

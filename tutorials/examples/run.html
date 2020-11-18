@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>test</title>
+    </head>
+    <body>
+        <script type="module">
+            // Run any model in this dir by it's short name via queryString.
+            // Ex: <url/path/to/dir>?ants runs ./AntsModel.js
+            // Note: see hello.html for how to run a single model, much simpler.
+            import util from 'https://agentscript.org/src/util.js'
+
+            // Convert short name to model class name.
+            const modelParams = util.parseQueryString()
+            const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
+            const className = name[0].toUpperCase() + name.slice(1)
+            console.log('Running', className)
+            document.title = `M:${name}`
+
+            // Run the model. async used for importing the model and startup()
+            async function run() {
+                // Let user know this is working:
+                util.printToPage(
+                    `Running ${className} for 500 steps. Takes a while!`
+                )
+
+                // Dynamically import the model:
+                const module = await import(`./${className}.js`)
+                const Model = module.default
+
+                // This is what you need to run your model in your own html file.
+                // First instanciate the Model:
+                const model = new Model()
+
+                // Push model & util to window from inside this module.
+                // You don't need to do this but is nice for debugging.
+                util.toWindow({ model, util })
+
+                // Now init and run the model 500 steps async (don't block browser)
+                await model.startup()
+                model.setup()
+                await util.timeoutLoop(() => {
+                    model.step()
+                }, 500)
+                // That's it!
+
+                // For our use, we print out a sample of the model's variables.
+                // It will be different each run of the model
+                const sample = util.sampleModel(model)
+                util.printToPage(sample)
+            }
+            run()
+        </script>
+        <!--
+            A div for general use. We don't use it here. Printing could use:
+            util.printToPage(sample, 'modelDiv')
+        -->
+        <div id="modelDiv"></div>
+    </body>
+</html>

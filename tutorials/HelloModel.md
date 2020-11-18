@@ -123,6 +123,7 @@ the turtles to "bounce" when they are about to leave the World. The default is t
 wrap around to the other side of the World. You can remove this to see how wrap works.
 
 Next we create `population` turtles, initializing them to be over a random patch.
+They will be at random angles unless setup uses `t.angle = ...`
 
 Finally, we create links between random pairs of turtles.
 
@@ -133,7 +134,6 @@ In this case, we ask each turtle to wiggle (change it's angle by -5 to +5 radian
 and move forward by the speed parameter (0.1 patch size)
 
 ```javascript
-
     step() {
         this.turtles.ask(t => {
             t.angle += util.randomCentered(this.wiggle)
@@ -144,6 +144,8 @@ and move forward by the speed parameter (0.1 patch size)
 
 ### Running the model
 
-You can see this running:
-[http://agentscript.org/models/hello.html](http://agentscript.org/models/hello.html)
+Well, now that we have our model, how do we run it? We'll run it in the browser.
 
+This will run HelloModel.js on our server: [http://agentscript.org/tutorials/examples/hello.html](http://agentscript.org/tutorials/examples/hello.html)
+
+The hello.html file is a wrapper for running HelloModel.js. On the server, the tutorials/examples dir has both of these.

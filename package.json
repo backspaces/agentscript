@@ -47,7 +47,7 @@
         "build-vendor": "yarn && rm -f vendor/* && rollup -c workflow/rollup.vendor.js && npm run build-css",
         "build-css": "bin/wrapcss < 'node_modules/mapbox-gl/dist/mapbox-gl.css' > vendor/mapboxgl.css.js",
         "build-md": "bin/src2md 'models views2 views3 views3d gis' > /dev/null",
-        "build-docs": "jsdoc  -c workflow/jsdoc.config.js && bin/docsmod",
+        "build-docs": "npm run clean-docs && jsdoc -c workflow/jsdoc.config.js && bin/docsmod",
         "clean-docs": "shx rm docs/*.html",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",

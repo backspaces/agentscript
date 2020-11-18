@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>World.js</title>
+    <title>Tutorial: HelloModel</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -28,7 +28,14 @@
     </defs>
 </svg>
 
+
+   <script src="../dist/agentscript.umd.js"></script>
+   <script>
+       Object.assign(window, AS)
+       
+   </script>
 </head>
+
 <body>
 <input type="checkbox" id="nav-trigger" class="nav-trigger" />
 <label for="nav-trigger" class="navicon-button x">
@@ -43,392 +50,141 @@
 
 <div id="main">
     
-    <h1 class="page-title">World.js</h1>
+    <h1 class="page-title">Tutorial: HelloModel</h1>
     
 
-    
-
-
-
-    
     <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import util from './util.js'
 
-// class World defines the coordinate system for the model.
-// It will be  upgraded with methods converting from other
-// transforms like  GIS and DataSets.
+<header>
+    
 
-// const defaultZ = (maxX, maxY) => Math.max(maxX, maxY)
+    <h2>HelloModel</h2>
+</header>
 
-/**
- * @private
- * @typedef {Object} WorldOptions
- * @property {number} minX Max world patch x integer value
- * @property {number} minY Max world patch y integer value
- * @property {number} minZ Max world patch z integer value
- * @property {number} maxX Min world patch x integer value
- * @property {number} maxY Min world patch y integer value
- * @property {number} maxZ Min world patch z integer value
- */
+<article>
+    <p>This is a simple Hello World example of class Model.</p>
+<h3>The tutorials/HelloModel.js file:</h3>
+<pre class="prettyprint source lang-javascript"><code>import util from 'https://agentscript.org/src/util.js'
+import Model from 'https://agentscript.org/src/Model.js'
 
-/**
- * @description
- * Class World defines the coordinate system for the model.
- * It has transforms for multiple coordinate systems.
- *
- * The world is defined by an object with 6 properties:
- *
- *          WorldOptions = {
- *              minX: integer,
- *              maxX: integer,
- *              minY: integer,
- *              maxY: integer,
- *              minZ: integer,
- *              maxZ: integer,
- *          }
- */
-class World {
-    maxX = 16
-    maxY = 16
-    maxZ = 16
-    minX = -16
-    minY = -16
-    minZ = -16
+class HelloModel extends Model {
+    population = 10 // number of turtles
+    speed = 0.1 // step size in patch units
+    wiggle = util.degToRad(10) // Wiggle angle in radians
 
-    /**
-     * Create a new World object given an Object with optional
-     * minX, maxX, minY, maxY, minZ, maxZ overriding class properties.
-     * @param {World|WorldOptions|Object} options Object with overrides for class properties
-     */
-    constructor(options = {}) {
-        Object.assign(this, options) // set the option override values
-        this.setWorld() // convert these to rest of world parameters
-    }
-
-    // Until class properties universally, this approach is used:
-    // setClassProperties() {
-    //     this.maxX = 16
-    //     this.maxY = 16
-    //     this.maxZ = 16
-    //     this.minX = -this.maxX
-    //     this.minY = -this.maxY
-    //     this.minZ = -this.maxZ
+    // We can use Model's constructor, due to using Model's default World
+    // constructor() {
+    //     super() // use default world options.
     // }
 
-    /**
-     * Return a default options object, origin at center.
-     *
-     * @param {number} [maxX=16] Integer max X value
-     * @param {number} [maxY=maxX] Integer max Y value
-     * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-     * @return {WorldOptions}
-     */
-    static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
-        return {
-            minX: -maxX,
-            maxX: maxX,
-            minY: -maxY,
-            maxY: maxY,
-            minZ: -maxZ,
-            maxZ: maxZ,
-        }
-    }
-    /**
-     * Factory to create a default World instance.
-     *
-     * @param {number} [maxX=16] Integer max X value
-     * @param {number} [maxY=maxX] Integer max Y value
-     * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-     * @return {World}
-     */
-    static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
-        return new World(World.defaultOptions(maxX, maxY, maxZ))
+    setup() {
+        this.turtles.setDefault('atEdge', 'bounce')
+
+        this.turtles.create(this.population, t => {
+            const patch = this.patches.oneOf()
+            t.setxy(patch.x, patch.y)
+        })
+
+        this.turtles.ask(t => {
+            this.links.create(t, this.turtles.otherOneOf(t))
+        })
     }
 
-    // ======================
-
-    setWorld() {
-        // Complete properties derived from minX/Y, maxX/Y (patchSize === 1)
-
-        let { minX, maxX, minY, maxY, minZ, maxZ } = this
-
-        this.numX = this.width = maxX - minX + 1
-        this.numY = this.height = maxY - minY + 1
-        // if (maxZ == null) maxZ = this.maxZ = Math.max(this.width, this.height)
-        this.numZ = this.depth = maxZ - minZ + 1
-
-        this.minXcor = minX - 0.5
-        this.maxXcor = maxX + 0.5
-        this.minYcor = minY - 0.5
-        this.maxYcor = maxY + 0.5
-        this.minZcor = minZ - 0.5
-        this.maxZcor = maxZ + 0.5
-
-        // The midpoints of the world, in world coords.
-        this.centerX = (minX + maxX) / 2
-        this.centerY = (minY + maxY) / 2
-        this.centerZ = (minZ + maxZ) / 2
-
-        this.numPatches = this.numX * this.numY
-    }
-
-    /**
-     * Return a random 2D point within the World
-     *
-     * @return {Array} A random x,y float array
-     */
-    randomPoint() {
-        return [
-            util.randomFloat2(this.minXcor, this.maxXcor),
-            util.randomFloat2(this.minYcor, this.maxYcor),
-        ]
-    }
-
-    /**
-     * Return a random 3D point within the World
-     *
-     * @return {Array} A random x,y,z float array
-     */
-    random3DPoint() {
-        return [
-            util.randomFloat2(this.minXcor, this.maxXcor),
-            util.randomFloat2(this.minYcor, this.maxYcor),
-            util.randomFloat2(this.minZcor, this.maxZcor),
-        ]
-    }
-
-    /**
-     * Return a random Patch 2D integer point
-     *
-     * @return {Array}  A random x,y integer array
-     */
-    randomPatchPoint() {
-        return [
-            util.randomInt2(this.minX, this.maxX),
-            util.randomInt2(this.minY, this.maxY),
-        ]
-    }
-
-    /**
-     * Given x,y,z values return true if within the world
-     *
-     * @param {number} x x value
-     * @param {number} y y value
-     * @param {number} [z=this.centerZ] z value
-     * @return {boolean} Whether or not on-world
-     */
-    isOnWorld(x, y, z = this.centerZ) {
-        return (
-            this.minXcor &lt;= x &amp;&amp;
-            x &lt;= this.maxXcor &amp;&amp;
-            //
-            this.minYcor &lt;= y &amp;&amp;
-            y &lt;= this.maxYcor &amp;&amp;
-            //
-            this.minZcor &lt;= z &amp;&amp;
-            z &lt;= this.maxZcor
-        )
-    }
-    // cropToWorld(x, y) {}
-
-    // Note minX etc NOT the world's but of the coord sys we want to use.
-    /**
-     * Return an instance of a bounding box 2D transform.
-     * It linearly interpolates between the given minX, minY, maxX, maxY,
-     * and the world's values of the same properties.
-     *
-     * The parameters are in the popular geojson order: west, south, east, north
-     *
-     * Useful for Canvas top-left transforms and geojson transforms.
-     *
-     * @param {number} minX min bounding box x value
-     * @param {number} minY min bounding box y value
-     * @param {number} maxX max bounding box x value
-     * @param {number} maxY max bounding box y value
-     * @return {BBoxTransform} Instance of the BBoxTransform
-     */
-    bboxTransform(minX, minY, maxX, maxY) {
-        return new BBoxTransform(minX, minY, maxX, maxY, this)
-    }
-
-    // ### Following use PatchSize
-
-    // Get the world size in pixels. PatchSize is optional, defalting to 1
-    getWorldSize(patchSize = 1) {
-        return [this.numX * patchSize, this.numY * patchSize]
-    }
-
-    // Convert a canvas context to world euclidean coordinates
-    // Change the ctx.canvas size, determined by patchSize.
-    setEuclideanTransform(ctx, patchSize) {
-        // ctx.canvas.width = this.numX * patchSize
-        // ctx.canvas.height = this.numY * patchSize
-        this.setCanvasSize(ctx.canvas, patchSize)
-        ctx.restore() // close earlier save(). OK if no save called yet.
-        ctx.save()
-        ctx.scale(patchSize, -patchSize)
-        ctx.translate(-this.minXcor, -this.maxYcor)
-    }
-    // Return patch size for given canvas.
-    // Error if canvas patch width/height differ.
-    patchSize(canvas) {
-        const { numX, numY } = this
-        const { clientWidth: width, clientHeight: height } = canvas
-        const xSize = width / numX
-        const ySize = height / numY
-        if (xSize !== ySize) {
-            throw Error(`World patchSize: x/y sizes differ ${xSize}, ${ySize}`)
-        }
-        return xSize
-    }
-    // Change canvas size to this world's size.
-    // Does not change size if already the same, preserving the ctx content.
-    setCanvasSize(canvas, patchSize) {
-        const [width, height] = this.getWorldSize(patchSize)
-        util.setCanvasSize(canvas, width, height)
-    }
-
-    // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)
-    pixelXYtoPatchXY(x, y, patchSize) {
-        return [this.minXcor + x / patchSize, this.maxYcor - y / patchSize]
-    }
-    // Convert patch coords (float) to pixel location (top/left offset i.e. mouse)
-    patchXYtoPixelXY(x, y, patchSize) {
-        return [(x - this.minXcor) * patchSize, (this.maxYcor - y) * patchSize]
-    }
-
-    xyToPatchIndex(x, y) {
-        if (!this.isOnWorld(x, y)) return undefined
-        const { minX, maxX, maxY, numX, maxXcor, maxYcor } = this
-        x = x === maxXcor ? maxX : Math.round(x)
-        y = y === maxYcor ? maxY : Math.round(y)
-        return x - minX + numX * (maxY - y)
-    }
-    // patchIndexToXY(index) {}
-}
-
-/**
- * A linear transformer between world coords and the given bounding box.
- *
- * @class
- * @private
- */
-class BBoxTransform {
-    // geo bbox definition:
-    //    https://tools.ietf.org/html/rfc7946#section-5
-    //    [west, south, east, north]
-    /**
-     * Creates an instance of BBoxTransform.
-     * @param {number} minX min bounding box x value
-     * @param {number} minY max bounding box x value
-     * @param {number} maxX min bounding box y value
-     * @param {number} maxY max bounding box y value
-     * @param {World} world instance of a World object
-     */
-    constructor(minX, minY, maxX, maxY, world) {
-        if (minX &lt; maxX) console.log('flipX')
-        if (maxY &lt; minY) console.log('flipY')
-
-        if (minX &lt; maxX) [minX, maxX] = [maxX, minX]
-        if (maxY &lt; minY) [maxY, minY] = [minY, maxY]
-        const { maxXcor, maxYcor, minXcor, minYcor } = world
-
-        const mx = (minX - maxX) / (maxXcor - minXcor)
-        const my = (maxY - minY) / (maxYcor - minYcor)
-
-        const bx = (minX + maxX - mx * (maxXcor + minXcor)) / 2
-        const by = (maxY + minY - my * (maxYcor + minYcor)) / 2
-
-        // Object.assign(this, { mx, my, bx, by })
-        this.setClassProperties({ mx, my, bx, by })
-    }
-    setClassProperties(obj) {
-        this.mx = obj.mx
-        this.my = obj.my
-        this.bx = obj.bx
-        this.by = obj.by
-    }
-
-    /**
-     * Convert from bbox point to world point
-     *
-     * @param {Array} bboxPoint A point in the bbox coordinates
-     * @return {Array} A point in the world coordinates
-     */
-    toWorld(bboxPoint) {
-        const { mx, my, bx, by } = this
-        const [bboxX, bboxY] = bboxPoint
-        const x = (bboxX - bx) / mx
-        const y = (bboxY - by) / my
-        return [x, y]
-    }
-
-    /**
-     * Convert from world point to bbox point
-     *
-     * @param {Array} worldPoint A point in the world coordinates
-     * @return {Array} A point in the bbox coordinates
-     */
-    toBBox(worldPoint) {
-        const { mx, my, bx, by } = this
-        const [worldX, worldY] = worldPoint
-        const x = mx * worldX + bx
-        const y = my * worldY + by
-        return [x, y]
+    step() {
+        this.turtles.ask(t => {
+            t.angle += util.randomCentered(this.wiggle)
+            t.forward(this.speed)
+        })
     }
 }
 
-export default World
-
-// The midpoints of the world, in world coords.
-// (0, 0) for the centered default worlds. REMIND: remove?
-// this.centerX = (this.minX + this.maxX) / 2
-// this.centerY = (this.minY + this.maxY) / 2
-
-// Calculate patchSize from canvas (any imagable) dimensions
-// canvasPatchSize(canvas) {
-//     // const [width, height] = canvas
-//     return canvas.width / this.numX
-// }
-// canvasSize(patchSize) {
-//     return [this.numX * patchSize, this.numY * patchSize]
-// }
-
-// Other ways to specify class properties:
-// maxX = 16
-// maxY = 16
-// maxZ = 16
-// minX = -this.maxX
-// minY = -this.maxY
-// minZ = -this.maxZ
-
-// Note: this is es7 class properties.
-// /** @type {number} Max patch x value */ maxX = 16
-// /** @type {number} */ maxY = this.maxX
-// /** @type {number} */ maxZ = Math.max(this.maxX, this.maxY)
-// /** @type {number} */ minX = -this.maxX
-// /** @type {number} */ minY = -this.maxY
-// /** @type {number} */ minZ = -this.maxZ
-
-//  * @property {number} maxX = 16
-//  * @property {number} maxY = this.maxX
-//  * @property {number} maxZ = Math.max(this.maxX, this.maxY)
-//  * @property {number} minX = -this.maxX
-//  * @property {number} minY = -this.maxY
-//  * @property {number} minZ = -this.maxZ
-
-// Note: this is es7 class properties.
-// /** @type {number} */ mx
-// /** @type {number} */ my
-// /** @type {number} */ bx
-// /** @type {number} */ by
+export default HelloModel
 </code></pre>
-        </article>
-    </section>
+<p>Lets break this down into it's component parts.</p>
+<h3>Modules: import and export</h3>
+<p>First, as this is a Module system, we have two imports to the files src/utils.js and class src/Model.js.</p>
+<p>Our code creates a subclass of class Model, then exports it</p>
+<pre class="prettyprint source lang-javascript"><code>import util from 'https://agentscript.org/src/util.js'
+import Model from 'https://agentscript.org/src/Model.js'
 
+class HelloModel extends Model {
+  ...
+}
 
+export default HelloModel
+</code></pre>
+<p>The imports are on our home repository, https://agentscript.org, so can be run without any workflow or downloads.</p>
+<p>Our single default export is the HelloModel ready to be used in the browser via html, or in node.</p>
+<h3>The HelloModel class</h3>
+<p>We &quot;extend&quot; class <a href="Model.html">Model</a>. The documentation explains how models have &quot;abstract methods&quot;, startup, setup, and step. These are overridden by the modeler.</p>
+<p>At the top of the class are properties that can be modified after creating the model. You'll notice we don't need a class constructor because we use the same values class Model would use .. the default <a href="World.html">World</a> properties.</p>
+<pre class="prettyprint source lang-javascript"><code>class HelloModel extends Model {
+    population = 10 // number of turtles
+    speed = 0.1 // step size in patch units
+    wiggle = util.degToRad(10) // Wiggle angle in radians
 
+    // We can use Model's constructor, due to using Model's default World
+    // constructor() {
+    //     super() // use default world options.
+    // }
+
+    setup() {
+        ...
+    }
+
+    step() {
+        ...
+    }
+}
+</code></pre>
+<p>Our model has three properties:</p>
+<ul>
+<li><strong>population</strong>: the number of turtles</li>
+<li><strong>speed</strong>: how far they go during each step</li>
+<li><strong>wiggle</strong>: how much they wiggle each step.</li>
+</ul>
+<p>Note wiggle is 10 degrees, converted to radians. Radians are standard in JavaScript trigonometry, see JavaScript's <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math">built-in Math module</a> for details.</p>
+<p>No worries tho, we provide utilities to work in degrees and even other geometries like GIS latitude &amp; longitude, and pixel coordinates, and the heading transform used by NetLogo.</p>
+<h3>setup() &amp; step()</h3>
+<p>Setup() is used to initialize the model, creating turtles &amp; links
+(patches are created by the constructor when the Patches array is initialized)</p>
+<pre class="prettyprint source lang-javascript"><code>    setup() {
+        this.turtles.setDefault('atEdge', 'bounce')
+
+        this.turtles.create(this.population, t => {
+            const patch = this.patches.oneOf()
+            t.setxy(patch.x, patch.y)
+        })
+
+        this.turtles.ask(t => {
+            this.links.create(t, this.turtles.otherOneOf(t))
+        })
+    }
+</code></pre>
+<p>First we set a <code>default</code>, a property shared by all turtles. In this case, we tell
+the turtles to &quot;bounce&quot; when they are about to leave the World. The default is to
+wrap around to the other side of the World. You can remove this to see how wrap works.</p>
+<p>Next we create <code>population</code> turtles, initializing them to be over a random patch.
+They will be at random angles unless setup uses <code>t.angle = ...</code></p>
+<p>Finally, we create links between random pairs of turtles.</p>
+<p>Even thought this is a very simple model, it exercises all three of the AgentSets: Patches, Turtles, and Links. Great for debugging!</p>
+<p>After we setup our model, we define it's dynamic behavior via the step() method.
+In this case, we ask each turtle to wiggle (change it's angle by -5 to +5 radians)
+and move forward by the speed parameter (0.1 patch size)</p>
+<pre class="prettyprint source lang-javascript"><code>    step() {
+        this.turtles.ask(t => {
+            t.angle += util.randomCentered(this.wiggle)
+            t.forward(this.speed)
+        })
+    }
+</code></pre>
+<h3>Running the model</h3>
+<p>Well, now that we have our model, how do we run it? We'll run it in the browser.</p>
+<p>This will run HelloModel.js on our server: <a href="http://agentscript.org/tutorials/examples/hello.html">http://agentscript.org/tutorials/examples/hello.html</a></p>
+<p>The hello.html file is a wrapper for running HelloModel.js. On the server, the tutorials/examples dir has both of these.</p>
+</article>
+
+</section>
 
 </div>
 
