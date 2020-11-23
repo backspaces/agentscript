@@ -1,0 +1,5 @@
+{
+    "HelloModel": { "title": "Hello Model" },
+    "HelloHtml": { "title": "Hello HTML" },
+    "LocalServer": { "title": "Hello Server" }
+}

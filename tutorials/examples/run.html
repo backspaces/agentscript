@@ -38,6 +38,7 @@
                 // Now init and run the model 500 steps async (don't block browser)
                 await model.startup()
                 model.setup()
+
                 await util.timeoutLoop(() => {
                     model.step()
                 }, 500)

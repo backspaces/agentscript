@@ -1,6 +1,6 @@
 This is a simple Hello World example of class Model.
 
-### The tutorials/HelloModel.js file:
+### The  HelloModel.js file:
 
 ``` javascript
 import util from 'https://agentscript.org/src/util.js'
@@ -60,7 +60,7 @@ export default HelloModel
 
 The imports are on our home repository, https://agentscript.org, so can be run without any workflow or downloads.
 
-Our single default export is the HelloModel ready to be used in the browser via html, or in node.
+Our single default export is the HelloModel ready to be used in the browser via html.
 
 ### The HelloModel class
 
@@ -98,7 +98,7 @@ Our model has three properties:
 
 Note wiggle is 10 degrees, converted to radians. Radians are standard in JavaScript trigonometry, see JavaScript's [built-in Math module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math) for details.
 
-No worries tho, we provide utilities to work in degrees and even other geometries like GIS latitude & longitude, and pixel coordinates, and the heading transform used by NetLogo.
+No worries tho, we provide utilities to work in degrees and even other geometries like GIS latitude & longitude, pixel coordinates, and the heading coordinate system used by NetLogo.
 
 ### setup() & step()
 
@@ -146,6 +146,12 @@ and move forward by the speed parameter (0.1 patch size)
 
 Well, now that we have our model, how do we run it? We'll run it in the browser.
 
-This will run HelloModel.js on our server: [http://agentscript.org/tutorials/examples/hello.html](http://agentscript.org/tutorials/examples/hello.html)
+This takes two steps:
+* Create an html file that imports the HelloModel.js and runs it for 500 steps
+* Create a local server to run that html file.
 
-The hello.html file is a wrapper for running HelloModel.js. On the server, the tutorials/examples dir has both of these.
+To get a peak at what this looks like, we can run it on our server:
+[http://agentscript.org/tutorials/examples/hello.html](http://agentscript.org/tutorials/examples/hello.html)
+
+Next, {@tutorial HelloHtml}: creating an html file to run HelloModel.js
+

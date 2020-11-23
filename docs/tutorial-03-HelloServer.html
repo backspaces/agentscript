@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Patch</title>
+    <title>Tutorial: 03-HelloServer</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -50,149 +50,45 @@
 
 <div id="main">
     
-    <h1 class="page-title">Patch</h1>
+    <h1 class="page-title">Tutorial: 03-HelloServer</h1>
     
 
-    
-
-
-
-
-<section>
-
+    <section>
 
 <header>
     
-        
-        <h2>
-        
-        Patch
-        
-        </h2>
-        
-        
-            <div class="class-description"><p>Class Patch instances represent a square on the Patches grid.  They hold variables
-that are in the patches the turtles live on.  The set of all patches
-is the world on which the turtles live and the model runs.</p></div>
-            <hr/>
-        
-    
+
+    <h2>03-HelloServer</h2>
 </header>
 
-
 <article>
-    <div class="container-overview">
-    
-        
-
-    
-        <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="Patch">
-        <a href="#Patch">#</a>
-        <span class="type-signature"></span>new Patch<span class="signature">()</span><span class="type-signature"></span>
-    </h4>
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Patch.js.html">Patch.js</a>, <a href="Patch.js.html#line24">line 24</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
+    <p>Lets build a local http server for you to test HelloModel.js &amp; HelloHtml.js.</p>
+<h3>Mozilla Developer Network</h3>
+<p>The MDN has a nice <a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server">article on local dev servers.</a> They use Python which comes with a simple HTTP server module built-in.</p>
+<p>If you are on a Mac, it's likely already installed. Depending on which version of MacOS you have, one or both of these should work:</p>
+<ul>
+<li>python3 -m http.server</li>
+<li>python -m SimpleHTTPServer</li>
+</ul>
+<p>If you do not have python installed, the article above leads you through the process. Follow their instructions for starting the python server in your working directory.</p>
+<p>At this point <a href="http://localhost:8000/">http://localhost:8000/</a> in your browser uses our Python HTTP server.</p>
+<h3>Create a Models Folder</h3>
+<p>Lets finally run the HelloModel.js with hello.html using the new server.</p>
+<p>First, create an empty folder. Any name is fine, I'll use models/</p>
+<p>Then cd to models and cut/paste the tutorial code to HelloModel.js and hello.html.</p>
+<p>Inside that folder, startup your server. I'm using <code>python3 -m http.server</code>.</p>
+<p>Cut/paste <code>http://localhost:8000/</code> into your browser.  You should see something like this:</p>
+<p><img src="data/browser.jpg" alt="Browser"></p>
+<p>Click on hello.html to see the model run and report a sampling of the final state of the model. This will differ each run due to the random nature</p>
+<p><img src="data/hello.jpg" alt="Hello"></p>
+<h3>Views: Seeing the model run</h3>
+<p>It probably seems odd that thus far we've only &quot;seen&quot; the model by having it's html script printing out a sample of the model's properties.</p>
+<p>This is the MVC at work: the Model only creates numbers .. a dynamic DataSet creator.</p>
+<p>So how about a &quot;V&quot; now to see how that works.</p>
+<p>Next, HelloView: Adding a View to hello.html.</p>
 </article>
 
 </section>
-
-
-
 
 </div>
 

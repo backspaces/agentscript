@@ -4203,7 +4203,7 @@ class Turtle {
  * * Setup(): Called to initialize the model state. Can be called multiple times, see reset()
  * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
  *
- * See {@tutorial ModelTutorial}
+ * See {@tutorial HelloModel}
  */
 class Model {
     world

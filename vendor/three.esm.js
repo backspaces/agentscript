@@ -50776,6 +50776,7 @@ if ( typeof __THREE_DEVTOOLS__ !== 'undefined' ) {
 }
 
 var three_module = /*#__PURE__*/Object.freeze({
+	__proto__: null,
 	ACESFilmicToneMapping: ACESFilmicToneMapping,
 	AddEquation: AddEquation,
 	AddOperation: AddOperation,
