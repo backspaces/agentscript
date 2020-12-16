@@ -1,5 +1,18 @@
 // import { isObject } from './types.js' // see printToPage
 
+// export function setCssStyle(url) {
+//     document.head.innerHTML += `<link rel="stylesheet" href="${url}" type="text/css" />`
+// }
+export async function setCssStyle(url) {
+    const response = await fetch(url)
+    if (!response.ok) throw Error(`Not found: ${url}`)
+    const css = await response.text()
+
+    document.head.innerHTML += `<style>
+${css}
+</style>`
+}
+
 // REST:
 // Parse the query, returning an object of key / val pairs.
 export function getQueryString() {
@@ -27,32 +40,16 @@ export function RESTapi(parameters) {
     return Object.assign(parameters, parseQueryString())
 }
 
-// Create dynamic `<script>` tag, appending to `<head>`
-//   <script src="./test/src/three0.js" type="module"></script>
-// NOTE: Use import(path) for es6 modules.
-// I.e. this is legacy, for umd's only.
-// export function loadScript(path, props = {}) {
-//     const scriptTag = document.createElement('script')
-//     scriptTag.src = path
-//     Object.assign(scriptTag, props)
-//     document.querySelector('head').appendChild(scriptTag)
-// }
-export function loadScript(path, props = {}) {
-    return new Promise((resolve, reject) => {
-        const scriptTag = document.createElement('script')
-        scriptTag.onload = () => resolve(scriptTag)
-        scriptTag.src = path
-        Object.assign(scriptTag, props)
-        document.querySelector('head').appendChild(scriptTag)
-    })
-}
-
 export function inWorker() {
     return !inNode() && typeof self.window === 'undefined'
 }
 
 export function inNode() {
     return typeof global !== 'undefined'
+}
+
+export function inDeno() {
+    return !!Deno
 }
 
 // Print a message to an html element
@@ -73,7 +70,14 @@ export function printToPage(msg, element = document.body) {
     }
 
     element.style.fontFamily = 'monospace'
-    element.innerHTML += msg + '<br />'
+    element.innerHTML += msg //+ '<br />'
+}
+
+// Get element (i.e. canvas) relative x,y position from event/mouse position.
+export function getEventXY(element, evt) {
+    // http://goo.gl/356S91
+    const rect = element.getBoundingClientRect()
+    return [evt.clientX - rect.left, evt.clientY - rect.top]
 }
 
 // Convert a function into a worker via blob url.
@@ -86,21 +90,34 @@ export function fcnToWorker(fcn) {
         new Blob([fcnStr], { type: 'text/javascript' })
     )
     const worker = new Worker(objUrl)
-    worker.onerror = function(e) {
+    worker.onerror = function (e) {
         console.log('Worker ERROR: Line ', e.lineno, ': ', e.message)
     }
     return worker
 }
 
-export function workerScript(script, worker) {
-    const srcBlob = new Blob([script], { type: 'text/javascript' })
-    const srcURL = URL.createObjectURL(srcBlob)
-    worker.postMessage({ cmd: 'script', url: srcURL })
-}
+// export function workerScript(script, worker) {
+//     const srcBlob = new Blob([script], { type: 'text/javascript' })
+//     const srcURL = URL.createObjectURL(srcBlob)
+//     worker.postMessage({ cmd: 'script', url: srcURL })
+// }
 
-// Get element (i.e. canvas) relative x,y position from event/mouse position.
-export function getEventXY(element, evt) {
-    // http://goo.gl/356S91
-    const rect = element.getBoundingClientRect()
-    return [evt.clientX - rect.left, evt.clientY - rect.top]
-}
+// Create dynamic `<script>` tag, appending to `<head>`
+//   <script src="./test/src/three0.js" type="module"></script>
+// NOTE: Use import(path) for es6 modules.
+// I.e. this is legacy, for umd's only.
+// export function loadScript(path, props = {}) {
+//     const scriptTag = document.createElement('script')
+//     scriptTag.src = path
+//     Object.assign(scriptTag, props)
+//     document.querySelector('head').appendChild(scriptTag)
+// }
+// export function loadScript(path, props = {}) {
+//     return new Promise((resolve, reject) => {
+//         const scriptTag = document.createElement('script')
+//         scriptTag.onload = () => resolve(scriptTag)
+//         scriptTag.src = path
+//         Object.assign(scriptTag, props)
+//         document.querySelector('head').appendChild(scriptTag)
+//     })
+// }

@@ -12,6 +12,8 @@ If you do not have python installed, the article above leads you through the pro
 
 At this point [http://localhost:8000/](http://localhost:8000/) in your browser uses our Python HTTP server.
 
+And for a Zero Install solution for Windows, IIS [(Internet Information Services)](https://teckangaroo.com/enable-iis-windows-10/) may already be available for you.
+
 ### Create a Models Folder
 
 Lets finally run the HelloModel.js with hello.html using the new server.
@@ -38,5 +40,5 @@ This is the MVC at work: the Model only creates numbers .. a dynamic DataSet cre
 
 So how about a "V" now to see how that works.
 
-Next, {@tutorial HelloView}: Adding a View to hello.html.
+Next, {@tutorial 04-HelloView}: Adding a View to hello.html.
 

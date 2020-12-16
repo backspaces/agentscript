@@ -11,19 +11,6 @@ export function warn(msg) {
     logOnce('Warning: ' + msg)
 }
 
-// export function logHistogram(name, array) {
-//     // const hist = AgentArray.fromArray(dataset.data).histogram()
-//     const hist = histogram(array)
-//     const { min, max } = hist.parameters
-//     console.log(
-//         `${name}:`, // name + ':'
-//         hist.toString(),
-//         'min/max:',
-//         min.toFixed(3),
-//         max.toFixed(3)
-//     )
-// }
-
 // Use chrome/ffox/ie console.time()/timeEnd() performance functions
 export function timeit(f, runs = 1e5, name = 'test') {
     name = name + '-' + runs
@@ -96,6 +83,18 @@ export function dump(model = window.model) {
     window.l = ls.length > 0 ? ls.oneOf() : {}
 }
 
+// export function logHistogram(name, array) {
+//     // const hist = AgentArray.fromArray(dataset.data).histogram()
+//     const hist = histogram(array)
+//     const { min, max } = hist.parameters
+//     console.log(
+//         `${name}:`, // name + ':'
+//         hist.toString(),
+//         'min/max:',
+//         min.toFixed(3),
+//         max.toFixed(3)
+//     )
+// }
 // Use JSON to return pretty, printable string of an object, array, other
 // Remove ""s around keys. Will fail on circular structures.
 // export function objectToString(obj) {

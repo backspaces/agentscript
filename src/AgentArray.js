@@ -163,16 +163,6 @@ class AgentArray extends Array {
         return AgentArray.from(new Set(this))
     }
 
-    // Returns AgentArray of unique elements in this *sorted* AgentArray.
-    // Use sortBy or clone & sortBy if needed.
-    // uniq(f = util.identityFcn) {
-    //     if (util.isString(f)) f = o => o[f]
-    //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
-    // }
-
-    // Call fcn(agent, index, array) for each agent in AgentArray.
-    // Array assumed not mutable
-    // Note: 5x+ faster than this.forEach(fcn) !!
     /**
      * Call fcn(agent, index, array) for each item in AgentArray.
      * Index & array optional.
@@ -189,8 +179,6 @@ class AgentArray extends Array {
         return this
     }
 
-    // Call fcn(agent, index, array) for each item in AgentArray.
-    // Array can shrink. If it grows, will not visit beyond original length
     /**
      * Call fcn(agent, index, array) for each item in AgentArray.
      * Index & array optional.
@@ -212,7 +200,6 @@ class AgentArray extends Array {
         }
         // return this
     }
-    // Return all elements returning f(obj, index, array) true
     /**
      * Return all elements returning f(obj, index, array) true.
      * NetLogo term, simply calls this.filter(fcn)
@@ -270,12 +257,6 @@ class AgentArray extends Array {
         return aa
     }
 
-    // Return shallow copy of a portion of this AgentArray
-    // [See Array.slice](https://goo.gl/Ilgsok)
-    // Default is to clone entire AgentArray
-    cloneRange(begin = 0, end = this.length) {
-        return this.slice(begin, end) // Returns an AgentArray rather than Array!
-    }
     /**
      * Create copy of this AgentArray
      * @return AgentArray
@@ -484,3 +465,10 @@ class AgentArray extends Array {
 }
 
 export default AgentArray
+
+// // Return shallow copy of a portion of this AgentArray
+// // [See Array.slice](https://goo.gl/Ilgsok)
+// // Default is to clone entire AgentArray
+// cloneRange(begin = 0, end = this.length) {
+//     return this.slice(begin, end) // Returns an AgentArray rather than Array!
+// }

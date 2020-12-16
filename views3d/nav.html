@@ -13,7 +13,8 @@
             import dat from '../vendor/dat.gui.esm.min.js'
 
             const degToRad = util.degToRad
-            const radToDegAll = util.radToDegAll
+            // const radToDegAll = util.radToDegAll
+            const radToDegAll = array => array.map(rad => util.radToDeg(rad))
 
             const drawOptions = {
                 turtlesShape: 'Dart',

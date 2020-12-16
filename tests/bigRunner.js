@@ -32,15 +32,15 @@ export default async function run(params) {
     const module = await import(params.classPath)
     const Model = module.default
 
-    let options = Model.defaultOptions()
-    util.override(options, params)
+    // let options = Model.defaultOptions()
+    // util.override(options, params)
 
     const world = params.maxX ? World.defaultOptions(params.maxX) : undefined
 
     if (params.seed) util.randomSeed()
 
     const model = new Model(world)
-    Object.assign(model, options)
+    util.override(model, params)
 
     if (typeof window !== 'undefined') util.toWindow({ util, model }) // debug
 

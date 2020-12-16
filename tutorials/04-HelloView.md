@@ -34,7 +34,9 @@ Not much left!
 
 There are several Views available for us to use. We'll use the simplest HTML Canvas version, src/TwoDraw.js. It is a subclass of a more basic src/TwoView.js with easy to use drawing options.
 
-`import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'`
+```javascript
+import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
+```
 
 We'll then create an instance of TwoDraw just underneath ` model.setup()`
 ```javascript

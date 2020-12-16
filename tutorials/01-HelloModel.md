@@ -153,5 +153,4 @@ This takes two steps:
 To get a peak at what this looks like, we can run it on our server:
 [http://agentscript.org/tutorials/examples/hello.html](http://agentscript.org/tutorials/examples/hello.html)
 
-Next, {@tutorial HelloHtml}: creating an html file to run HelloModel.js
-
+Next, {@tutorial 02-HelloHtml}: creating an html file to run HelloModel.js

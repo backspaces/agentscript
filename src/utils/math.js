@@ -19,41 +19,22 @@ export function randomNormal(mean = 0.0, sigma = 1.0) {
     return norm * sigma + mean
 }
 
-// Two seedable random number generators
-export function randomSeedSin(seed = PI / 4) {
-    // ~3.4 million b4 repeat.
-    // https://stackoverflow.com/a/19303725/1791917
-    return () => {
-        const x = Math.sin(seed++) * 10000
-        return x - Math.floor(x)
-    }
-}
-export function randomSeedParkMiller(seed = 123456) {
+export function randomSeed(seed = 123456) {
     // doesn't repeat b4 JS dies.
     // https://gist.github.com/blixt/f17b47c62508be59987b
     seed = seed % 2147483647
-    return () => {
+    Math.random = () => {
         seed = (seed * 16807) % 2147483647
         return (seed - 1) / 2147483646
     }
 }
-// Replace Math.random with one of these
-export function randomSeed(seed, useParkMiller = true) {
-    Math.random = useParkMiller
-        ? randomSeedParkMiller(seed)
-        : randomSeedSin(seed)
-}
 
+// num can be numeric array
 export function precision(num, digits = 4) {
     if (Array.isArray(num)) return num.map(val => this.precision(val, digits))
     const mult = 10 ** digits
     return Math.round(num * mult) / mult
 }
-
-// export function precision(num, digits = 4) {
-//     const mult = 10 ** digits
-//     return Math.round(num * mult) / mult
-// }
 
 // Return whether num is [Power of Two](http://goo.gl/tCfg5). Very clever!
 export const isPowerOf2 = num => (num & (num - 1)) === 0 // twgl library
@@ -75,7 +56,7 @@ export function clamp(v, min, max) {
     return v
 }
 // Return true is val in [min, max] enclusive
-export const between = (val, min, max) => min <= val && val <= max
+export const isBetween = (val, min, max) => min <= val && val <= max
 
 // Return a linear interpolation between lo and hi.
 // Scale is in [0-1], a percentage, and the result is in [lo,hi]
@@ -97,15 +78,10 @@ export function lerpScale(number, lo, hi) {
 // Note: quantity, not coord system xfm
 const toDegrees = 180 / PI
 const toRadians = PI / 180
-// export const radians = degrees => mod2pi(degrees * toRadians)
-// export const degrees = radians => mod360(radians * toDegrees)
 
 // Better names and format for arrays. Change above?
 export const degToRad = degrees => mod2pi(degrees * toRadians)
-export const degToRadAll = array => array.map(deg => degToRad(deg))
-
 export const radToDeg = radians => mod360(radians * toDegrees)
-export const radToDegAll = array => array.map(rad => radToDeg(rad))
 
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
@@ -118,31 +94,12 @@ export function headingToAngle(heading) {
     const deg = mod(90 - heading, 360)
     return deg * toRadians
 }
-// AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
-// We choose Phi radians from xy plane, "math" is often from Z axis
-// REMIND: some prefer -90, 90
-export function altAzToAnglePhi(alt, az) {
-    const angle = headingToAngle(az)
-    const phi = modpipi(alt * toRadians)
-    return [angle, phi]
-}
-export function anglePhiToAltAz(angle, phi) {
-    const az = angleToHeading(angle)
-    const alt = mod180180(phi * toDegrees)
-    return [alt, az]
-}
 
 export function mod360(degrees) {
     return mod(degrees, 360)
 }
 export function mod2pi(radians) {
     return mod(radians, 2 * PI)
-}
-export function mod180180(degrees) {
-    return mod360(degrees) - 180
-}
-export function modpipi(radians) {
-    return mod2pi(radians) - PI
 }
 
 export function headingsEqual(heading1, heading2) {
@@ -155,15 +112,14 @@ export function anglesEqual(angle1, angle2) {
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
 export function subtractRadians(rad1, rad0) {
-    // let dr = mod(rad1 - rad0, 2 * PI)
-    let dr = mod2pi(rad1 - rad0)
-    if (dr > PI) dr = dr - 2 * PI
+    let dr = mod2pi(rad1 - rad0) - PI
+    // if (dr > PI) dr = dr - 2 * PI
     return dr
 }
 // Above using headings (degrees) returning degrees in (-180, 180]
 export function subtractHeadings(deg1, deg0) {
-    let dAngle = mod360(deg1 - deg0)
-    if (dAngle > 180) dAngle = dAngle - 360
+    let dAngle = mod360(deg1 - deg0) - 180
+    // if (dAngle > 180) dAngle = dAngle - 360
     return dAngle
 }
 
@@ -174,6 +130,26 @@ export const radiansToward = (x, y, x1, y1) => Math.atan2(y1 - y, x1 - x)
 export function headingToward(x, y, x1, y1) {
     return heading(radiansToward(x, y, x1, y1))
 }
+
+// AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
+// We choose Phi radians from xy plane, "math" is often from Z axis
+// REMIND: some prefer -90, 90
+// export function altAzToAnglePhi(alt, az) {
+//     const angle = headingToAngle(az)
+//     const phi = modpipi(alt * toRadians)
+//     return [angle, phi]
+// }
+// export function anglePhiToAltAz(angle, phi) {
+//     const az = angleToHeading(angle)
+//     const alt = mod180180(phi * toDegrees)
+//     return [alt, az]
+// }
+// export function mod180180(degrees) {
+//     return mod360(degrees) - 180
+// }
+// export function modpipi(radians) {
+//     return mod2pi(radians) - PI
+// }
 
 // Return distance between (x, y), (x1, y1)
 export const sqDistance = (x, y, x1, y1) => (x - x1) ** 2 + (y - y1) ** 2
@@ -192,3 +168,36 @@ export function inCone(x, y, radius, coneAngle, angle, x0, y0) {
     const angle12 = radiansToward(x0, y0, x, y) // angle from 1 to 2
     return coneAngle / 2 >= Math.abs(subtractRadians(angle, angle12))
 }
+
+// export const radians = degrees => mod2pi(degrees * toRadians)
+// export const degrees = radians => mod360(radians * toDegrees)
+
+// export function precision(num, digits = 4) {
+//     const mult = 10 ** digits
+//     return Math.round(num * mult) / mult
+// }
+
+// Two seedable random number generators
+// export function randomSeedSin(seed = PI / 4) {
+//     // ~3.4 million b4 repeat.
+//     // https://stackoverflow.com/a/19303725/1791917
+//     return () => {
+//         const x = Math.sin(seed++) * 10000
+//         return x - Math.floor(x)
+//     }
+// }
+// export function randomSeedParkMiller(seed = 123456) {
+//     // doesn't repeat b4 JS dies.
+//     // https://gist.github.com/blixt/f17b47c62508be59987b
+//     seed = seed % 2147483647
+//     return () => {
+//         seed = (seed * 16807) % 2147483647
+//         return (seed - 1) / 2147483646
+//     }
+// }
+// // Replace Math.random with one of these
+// export function randomSeed(seed, useParkMiller = true) {
+//     Math.random = useParkMiller
+//         ? randomSeedParkMiller(seed)
+//         : randomSeedSin(seed)
+// }

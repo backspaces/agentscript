@@ -95,19 +95,19 @@
         <p>Class Model is the primary interface for modelers, integrating
 the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:</p>
 <ul>
-<li>model.Patches is an array (<a href="Patches.html">Patches</a>) of <a href="Patch.html">Patch</a> instances</li>
-<li>model.Turtles is an array (<a href="Turtles.html">Turtles</a>) of <a href="Turtle.html">Turtle</a> instances</li>
-<li>model.Links is an array (<a href="Links.html">Links</a>) of <a href="Link.html">Link</a> instances</li>
-<li>model.breed is a sub-array of any of the three above. See AgentSet's ctor.</li>
+<li>model.Patches: an array (<a href="Patches.html">Patches</a>) of <a href="Patch.html">Patch</a> instances</li>
+<li>model.Turtles: an array (<a href="Turtles.html">Turtles</a>) of <a href="Turtle.html">Turtle</a> instances</li>
+<li>model.Links: an array (<a href="Links.html">Links</a>) of <a href="Link.html">Link</a> instances</li>
+<li>model.breed: a sub-array of any of the three above. See AgentSet's ct</li>
 <li>All of which are subclasses of (<a href="AgentSet.html">AgentSet</a>)</li>
 </ul>
 <p>Convention: Three abstract methods are provided by the modeler</p>
 <ul>
 <li>Startup(): (Optional) Called once to import images, data etc</li>
-<li>Setup(): Called to initialize the model state. Can be called multiple times, see reset()</li>
+<li>Setup(): Called to initialize the model state.</li>
 <li>Step(): Step the model. Will advance ticks if autoTick = true in constructor.</li>
 </ul>
-<p>See HelloModel</p>
+<p>See tutorial <a href="tutorial-01-HelloModel.html">01-HelloModel</a></p>
     </div>
 
 
@@ -265,7 +265,7 @@ the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line26">line 26</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line28">line 28</a>
             </li></ul></dd>
         </div>
     
@@ -424,7 +424,7 @@ the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line145">line 145</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line146">line 146</a>
             </li></ul></dd>
         </div>
     
@@ -565,7 +565,7 @@ the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line123">line 123</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line124">line 124</a>
             </li></ul></dd>
         </div>
     
@@ -609,7 +609,8 @@ the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:</p>
     <div class="description">
         <p>Resets model to initial state w/ new Patches, Turtles, Links.
 The worldOptions will default to initial values but can be
-changed by modeler.</p>
+changed by modeler. Setup() often called after reset() to
+re-initialize the model.</p>
     </div>
 
 
@@ -728,7 +729,7 @@ changed by modeler.</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line68">line 68</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line70">line 70</a>
             </li></ul></dd>
         </div>
     
@@ -821,7 +822,7 @@ the Patches, Turtles, Links for re-running the model</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line98">line 98</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line100">line 100</a>
             </li></ul></dd>
         </div>
     
@@ -908,7 +909,7 @@ the Patches, Turtles, Links for re-running the model</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line86">line 86</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line88">line 88</a>
             </li></ul></dd>
         </div>
     
@@ -995,7 +996,7 @@ the Patches, Turtles, Links for re-running the model</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line104">line 104</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line106">line 106</a>
             </li></ul></dd>
         </div>
     
@@ -1082,7 +1083,7 @@ the Patches, Turtles, Links for re-running the model</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line75">line 75</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line77">line 77</a>
             </li></ul></dd>
         </div>
     
@@ -1223,7 +1224,7 @@ the Patches, Turtles, Links for re-running the model</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line134">line 134</a>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line135">line 135</a>
             </li></ul></dd>
         </div>
     

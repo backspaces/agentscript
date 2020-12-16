@@ -65,24 +65,27 @@ import Link from './Link.js'
  * @description
  * Class Model is the primary interface for modelers, integrating
  * the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:
- * * model.Patches is an array ({@link Patches}) of {@link Patch} instances
- * * model.Turtles is an array ({@link Turtles}) of {@link Turtle} instances
- * * model.Links is an array ({@link Links}) of {@link Link} instances
- * * model.breed is a sub-array of any of the three above. See AgentSet's ctor.
- * * All of which are subclasses of ({@link AgentSet})
+ *
+ * - model.Patches: an array ({@link Patches}) of {@link Patch} instances
+ * - model.Turtles: an array ({@link Turtles}) of {@link Turtle} instances
+ * - model.Links: an array ({@link Links}) of {@link Link} instances
+ * - model.breed: a sub-array of any of the three above. See AgentSet's ct
+ * - All of which are subclasses of ({@link AgentSet})
  *
  * Convention: Three abstract methods are provided by the modeler
+ *
  * * Startup(): (Optional) Called once to import images, data etc
- * * Setup(): Called to initialize the model state. Can be called multiple times, see reset()
+ * * Setup(): Called to initialize the model state.
  * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
  *
- * See {@tutorial HelloModel}
+ * See tutorial {@tutorial 01-HelloModel}
  */
 class Model {
     world
     patches
     turtles
     links
+    ticks
 
     /**
      * Creates an instance of Model.
@@ -90,8 +93,6 @@ class Model {
      * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
      */
     constructor(worldOptions = World.defaultOptions(), autoTick = true) {
-        // Let jsDocs/vscode know these variables exist. Initialized by reseetModel()
-        // this.patches = this.turtles = this.links = null
         this.resetModel(worldOptions)
         if (autoTick) this.autoTick()
     }
@@ -116,7 +117,8 @@ class Model {
     /**
      * Resets model to initial state w/ new Patches, Turtles, Links.
      * The worldOptions will default to initial values but can be
-     * changed by modeler.
+     * changed by modeler. Setup() often called after reset() to
+     * re-initialize the model.
      *
      * @param {Object|World} [worldOptions=this.world] World object
      */
@@ -150,13 +152,13 @@ class Model {
      *
      * @abstract
      */
-    setup() {} // Your initialization code goes here
+    setup() {}
     /**
      * Run the model one step.
      *
      * @abstract
      */
-    step() {} // Called each step of the model
+    step() {}
 
     // A trick to auto advance ticks every step
     stepAndTick() {
@@ -168,7 +170,6 @@ class Model {
         this.step = this.stepAndTick
     }
 
-    // Breeds: create breeds/subarrays of Patches, Agents, Links
     /**
      * Create breeds (sub-arrays) of Patches. Used in the Exit model:
      * * this.patchBreeds('exits inside wall')

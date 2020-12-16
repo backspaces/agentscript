@@ -14,14 +14,14 @@ export const isObject = obj => isType(obj, 'object')
 // export const isArray = obj => isType(obj, 'array')
 export const isArray = obj => Array.isArray(obj)
 export const isNumber = obj => isType(obj, 'number')
+export const isInteger = n => Number.isInteger(n)
+// export const isFloat = n => isNumber(n) && n % 1 !== 0 // https://goo.gl/6MS0Tm
 export const isFunction = obj => isType(obj, 'function')
+export const isImage = obj => isType(obj, 'image')
 
 // Is a number an integer (rather than a float w/ non-zero fractional part)
-export const isInteger = n => Number.isInteger(n) // assume es6, babel otherwise.
-export const isFloat = n => isNumber(n) && n % 1 !== 0 // https://goo.gl/6MS0Tm
 export const isCanvas = obj =>
     isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas'])
-export const isImage = obj => isType(obj, 'image')
 export const isImageable = obj =>
     isOneOfTypes(obj, [
         'image',
@@ -37,9 +37,6 @@ export const isUintArray = obj => /^uint.*array$/.test(typeOf(obj))
 export const isIntArray = obj => /^int.*array$/.test(typeOf(obj))
 export const isFloatArray = obj => /^float.*array$/.test(typeOf(obj))
 
-// export const isWebglArray = obj =>
-//     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
-
 export function isLittleEndian() {
     const d32 = new Uint32Array([0x01020304])
     return new Uint8ClampedArray(d32.buffer)[0] === 4
@@ -54,6 +51,8 @@ export function convertArrayType(array, Type) {
 }
 
 // Unused:
+// export const isWebglArray = obj =>
+//     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
 // isHtmlElement: obj => /^html.*element$/.test(typeOf(obj))
 // isImage: obj => isType(obj, 'image')
 // isImageBitmap: obj => isType(obj, 'imagebitmap')

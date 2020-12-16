@@ -178,13 +178,6 @@ out;`;
         })
     }
 
-    // Hopefully tempory: promise for MapBox map loaded callback
-    // export function mapLoadPromise(map) {
-    //     return new Promise((resolve, reject) => {
-    //         map.on('load', () => resolve())
-    //     })
-    // }
-
     // Return promise for pause of ms. Use:
     // timeoutPromise(2000).then(()=>console.log('foo'))
     function timeoutPromise(ms = 1000) {
@@ -205,29 +198,6 @@ out;`;
         }
     }
 
-    function yieldLoop(fcn, steps = -1) {
-        let i = 0;
-        function* gen() {
-            while (i++ !== steps) {
-                yield fcn(i - 1);
-            }
-        }
-        const iterator = gen();
-        while (!iterator.next().done) {}
-    }
-
-    // Similar pair for requestAnimationFrame
-    function rafPromise() {
-        return new Promise(resolve => requestAnimationFrame(resolve))
-    }
-    async function rafLoop(fcn, steps = -1) {
-        let i = 0;
-        while (i++ !== steps) {
-            fcn(i - 1);
-            await rafPromise();
-        }
-    }
-
     function waitPromise(done, ms = 10) {
         return new Promise(resolve => {
             function waitOn() {
@@ -238,6 +208,27 @@ out;`;
         })
     }
 
+    // type = "arrayBuffer" "blob" "formData" "json" "text"
+    async function fetchType(url, type = 'text') {
+        const response = await fetch(url);
+        if (!response.ok) throw Error(`Not found: ${url}`)
+        const value = await response[type]();
+        return value
+    }
+
+    // // Similar pair for requestAnimationFrame
+    // export function rafPromise() {
+    //     return new Promise(resolve => requestAnimationFrame(resolve))
+    // }
+    // export async function rafLoop(fcn, steps = -1) {
+    //     let i = 0
+    //     while (i++ !== steps) {
+    //         fcn(i - 1)
+    //         await rafPromise()
+    //     }
+    // }
+    //
+
     var async = /*#__PURE__*/Object.freeze({
         __proto__: null,
         imagePromise: imagePromise,
@@ -246,13 +237,24 @@ out;`;
         xhrPromise: xhrPromise,
         timeoutPromise: timeoutPromise,
         timeoutLoop: timeoutLoop,
-        yieldLoop: yieldLoop,
-        rafPromise: rafPromise,
-        rafLoop: rafLoop,
-        waitPromise: waitPromise
+        waitPromise: waitPromise,
+        fetchType: fetchType
     });
 
     // import { isObject } from './types.js' // see printToPage
+
+    // export function setCssStyle(url) {
+    //     document.head.innerHTML += `<link rel="stylesheet" href="${url}" type="text/css" />`
+    // }
+    async function setCssStyle(url) {
+        const response = await fetch(url);
+        if (!response.ok) throw Error(`Not found: ${url}`)
+        const css = await response.text();
+
+        document.head.innerHTML += `<style>
+${css}
+</style>`;
+    }
 
     // REST:
     // Parse the query, returning an object of key / val pairs.
@@ -281,32 +283,16 @@ out;`;
         return Object.assign(parameters, parseQueryString())
     }
 
-    // Create dynamic `<script>` tag, appending to `<head>`
-    //   <script src="./test/src/three0.js" type="module"></script>
-    // NOTE: Use import(path) for es6 modules.
-    // I.e. this is legacy, for umd's only.
-    // export function loadScript(path, props = {}) {
-    //     const scriptTag = document.createElement('script')
-    //     scriptTag.src = path
-    //     Object.assign(scriptTag, props)
-    //     document.querySelector('head').appendChild(scriptTag)
-    // }
-    function loadScript(path, props = {}) {
-        return new Promise((resolve, reject) => {
-            const scriptTag = document.createElement('script');
-            scriptTag.onload = () => resolve(scriptTag);
-            scriptTag.src = path;
-            Object.assign(scriptTag, props);
-            document.querySelector('head').appendChild(scriptTag);
-        })
-    }
-
     function inWorker() {
         return !inNode() && typeof self.window === 'undefined'
     }
 
     function inNode() {
         return typeof global !== 'undefined'
+    }
+
+    function inDeno() {
+        return !!Deno
     }
 
     // Print a message to an html element
@@ -327,7 +313,14 @@ out;`;
         }
 
         element.style.fontFamily = 'monospace';
-        element.innerHTML += msg + '<br />';
+        element.innerHTML += msg; //+ '<br />'
+    }
+
+    // Get element (i.e. canvas) relative x,y position from event/mouse position.
+    function getEventXY(element, evt) {
+        // http://goo.gl/356S91
+        const rect = element.getBoundingClientRect();
+        return [evt.clientX - rect.left, evt.clientY - rect.top]
     }
 
     // Convert a function into a worker via blob url.
@@ -340,37 +333,50 @@ out;`;
             new Blob([fcnStr], { type: 'text/javascript' })
         );
         const worker = new Worker(objUrl);
-        worker.onerror = function(e) {
+        worker.onerror = function (e) {
             console.log('Worker ERROR: Line ', e.lineno, ': ', e.message);
         };
         return worker
     }
 
-    function workerScript(script, worker) {
-        const srcBlob = new Blob([script], { type: 'text/javascript' });
-        const srcURL = URL.createObjectURL(srcBlob);
-        worker.postMessage({ cmd: 'script', url: srcURL });
-    }
+    // export function workerScript(script, worker) {
+    //     const srcBlob = new Blob([script], { type: 'text/javascript' })
+    //     const srcURL = URL.createObjectURL(srcBlob)
+    //     worker.postMessage({ cmd: 'script', url: srcURL })
+    // }
 
-    // Get element (i.e. canvas) relative x,y position from event/mouse position.
-    function getEventXY(element, evt) {
-        // http://goo.gl/356S91
-        const rect = element.getBoundingClientRect();
-        return [evt.clientX - rect.left, evt.clientY - rect.top]
-    }
+    // Create dynamic `<script>` tag, appending to `<head>`
+    //   <script src="./test/src/three0.js" type="module"></script>
+    // NOTE: Use import(path) for es6 modules.
+    // I.e. this is legacy, for umd's only.
+    // export function loadScript(path, props = {}) {
+    //     const scriptTag = document.createElement('script')
+    //     scriptTag.src = path
+    //     Object.assign(scriptTag, props)
+    //     document.querySelector('head').appendChild(scriptTag)
+    // }
+    // export function loadScript(path, props = {}) {
+    //     return new Promise((resolve, reject) => {
+    //         const scriptTag = document.createElement('script')
+    //         scriptTag.onload = () => resolve(scriptTag)
+    //         scriptTag.src = path
+    //         Object.assign(scriptTag, props)
+    //         document.querySelector('head').appendChild(scriptTag)
+    //     })
+    // }
 
     var dom = /*#__PURE__*/Object.freeze({
         __proto__: null,
+        setCssStyle: setCssStyle,
         getQueryString: getQueryString,
         parseQueryString: parseQueryString,
         RESTapi: RESTapi,
-        loadScript: loadScript,
         inWorker: inWorker,
         inNode: inNode,
+        inDeno: inDeno,
         printToPage: printToPage,
-        fcnToWorker: fcnToWorker,
-        workerScript: workerScript,
-        getEventXY: getEventXY
+        getEventXY: getEventXY,
+        fcnToWorker: fcnToWorker
     });
 
     function offscreenOK() {
@@ -493,72 +499,6 @@ out;`;
         fillCtxWithImage(ctx, img);
     }
 
-    // Use webgl texture to convert img to Uint8Array w/o alpha premultiply
-    // or color profile modification.
-    // Img can be Image, ImageData, Canvas: [See MDN](https://goo.gl/a3oyRA).
-    // `flipY` is used to invert image to upright.
-    // REMIND: use webgl12 if it works .. allows all imagables, not just Image.
-    const imageToBytesCtx = null;
-    function imageToBytes(img, flipY = false, imgFormat = 'RGBA') {
-        // Create the gl context using the image width and height
-        if (!imageToBytesCtx) {
-            const can = createCanvas(0, 0);
-            imageToBytesCtx = can.getContext('webgl', {
-                premultipliedAlpha: false,
-            });
-        }
-
-        const { width, height } = img;
-        const gl = imageToBytesCtx;
-        Object.assign(gl.canvas, { width, height });
-        const fmt = gl[imgFormat];
-
-        // Create and initialize the texture.
-        const texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        if (flipY) {
-            // Mainly used for pictures rather than data
-            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        }
-        // Insure [no color profile applied](https://goo.gl/BzBVJ9):
-        gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
-        // Insure no [alpha premultiply](http://goo.gl/mejNCK).
-        // False is the default, but lets make sure!
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
-
-        // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
-        gl.texImage2D(gl.TEXTURE_2D, 0, fmt, fmt, gl.UNSIGNED_BYTE, img);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-
-        // Create the framebuffer used for the texture
-        const framebuffer = gl.createFramebuffer();
-        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
-        gl.framebufferTexture2D(
-            gl.FRAMEBUFFER,
-            gl.COLOR_ATTACHMENT0,
-            gl.TEXTURE_2D,
-            texture,
-            0
-        );
-
-        // See if it all worked. Apparently not async.
-        const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
-        if (status !== gl.FRAMEBUFFER_COMPLETE) {
-            throw Error(`imageToBytes: status not FRAMEBUFFER_COMPLETE: ${status}`)
-        }
-
-        // If all OK, create the pixels buffer and read data.
-        const pixSize = imgFormat === 'RGB' ? 3 : 4;
-        const pixels = new Uint8Array(pixSize * width * height);
-        // gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels)
-        gl.readPixels(0, 0, width, height, fmt, gl.UNSIGNED_BYTE, pixels);
-
-        // Unbind the framebuffer and return pixels
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-        return pixels
-    }
-
     var canvas = /*#__PURE__*/Object.freeze({
         __proto__: null,
         createCanvas: createCanvas,
@@ -572,8 +512,7 @@ out;`;
         ctxImageData: ctxImageData,
         clearCtx: clearCtx,
         fillCtxWithImage: fillCtxWithImage,
-        setCtxImage: setCtxImage,
-        imageToBytes: imageToBytes
+        setCtxImage: setCtxImage
     });
 
     // Print a message just once.
@@ -588,19 +527,6 @@ out;`;
     function warn(msg) {
         logOnce('Warning: ' + msg);
     }
-
-    // export function logHistogram(name, array) {
-    //     // const hist = AgentArray.fromArray(dataset.data).histogram()
-    //     const hist = histogram(array)
-    //     const { min, max } = hist.parameters
-    //     console.log(
-    //         `${name}:`, // name + ':'
-    //         hist.toString(),
-    //         'min/max:',
-    //         min.toFixed(3),
-    //         max.toFixed(3)
-    //     )
-    // }
 
     // Use chrome/ffox/ie console.time()/timeEnd() performance functions
     function timeit(f, runs = 1e5, name = 'test') {
@@ -674,6 +600,18 @@ out;`;
         window.l = ls.length > 0 ? ls.oneOf() : {};
     }
 
+    // export function logHistogram(name, array) {
+    //     // const hist = AgentArray.fromArray(dataset.data).histogram()
+    //     const hist = histogram(array)
+    //     const { min, max } = hist.parameters
+    //     console.log(
+    //         `${name}:`, // name + ':'
+    //         hist.toString(),
+    //         'min/max:',
+    //         min.toFixed(3),
+    //         max.toFixed(3)
+    //     )
+    // }
     // Use JSON to return pretty, printable string of an object, array, other
     // Remove ""s around keys. Will fail on circular structures.
     // export function objectToString(obj) {
@@ -721,41 +659,22 @@ out;`;
         return norm * sigma + mean
     }
 
-    // Two seedable random number generators
-    function randomSeedSin(seed = PI$1 / 4) {
-        // ~3.4 million b4 repeat.
-        // https://stackoverflow.com/a/19303725/1791917
-        return () => {
-            const x = Math.sin(seed++) * 10000;
-            return x - Math.floor(x)
-        }
-    }
-    function randomSeedParkMiller(seed = 123456) {
+    function randomSeed(seed = 123456) {
         // doesn't repeat b4 JS dies.
         // https://gist.github.com/blixt/f17b47c62508be59987b
         seed = seed % 2147483647;
-        return () => {
+        Math.random = () => {
             seed = (seed * 16807) % 2147483647;
             return (seed - 1) / 2147483646
-        }
-    }
-    // Replace Math.random with one of these
-    function randomSeed(seed, useParkMiller = true) {
-        Math.random = useParkMiller
-            ? randomSeedParkMiller(seed)
-            : randomSeedSin(seed);
+        };
     }
 
+    // num can be numeric array
     function precision(num, digits = 4) {
         if (Array.isArray(num)) return num.map(val => this.precision(val, digits))
         const mult = 10 ** digits;
         return Math.round(num * mult) / mult
     }
-
-    // export function precision(num, digits = 4) {
-    //     const mult = 10 ** digits
-    //     return Math.round(num * mult) / mult
-    // }
 
     // Return whether num is [Power of Two](http://goo.gl/tCfg5). Very clever!
     const isPowerOf2 = num => (num & (num - 1)) === 0; // twgl library
@@ -777,7 +696,7 @@ out;`;
         return v
     }
     // Return true is val in [min, max] enclusive
-    const between = (val, min, max) => min <= val && val <= max;
+    const isBetween = (val, min, max) => min <= val && val <= max;
 
     // Return a linear interpolation between lo and hi.
     // Scale is in [0-1], a percentage, and the result is in [lo,hi]
@@ -799,15 +718,10 @@ out;`;
     // Note: quantity, not coord system xfm
     const toDegrees = 180 / PI$1;
     const toRadians = PI$1 / 180;
-    // export const radians = degrees => mod2pi(degrees * toRadians)
-    // export const degrees = radians => mod360(radians * toDegrees)
 
     // Better names and format for arrays. Change above?
     const degToRad = degrees => mod2pi(degrees * toRadians);
-    const degToRadAll = array => array.map(deg => degToRad(deg));
-
     const radToDeg = radians => mod360(radians * toDegrees);
-    const radToDegAll = array => array.map(rad => radToDeg(rad));
 
     // Heading & Angles: coord system
     // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
@@ -820,31 +734,12 @@ out;`;
         const deg = mod(90 - heading, 360);
         return deg * toRadians
     }
-    // AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
-    // We choose Phi radians from xy plane, "math" is often from Z axis
-    // REMIND: some prefer -90, 90
-    function altAzToAnglePhi(alt, az) {
-        const angle = headingToAngle(az);
-        const phi = modpipi(alt * toRadians);
-        return [angle, phi]
-    }
-    function anglePhiToAltAz(angle, phi) {
-        const az = angleToHeading(angle);
-        const alt = mod180180(phi * toDegrees);
-        return [alt, az]
-    }
 
     function mod360(degrees) {
         return mod(degrees, 360)
     }
     function mod2pi(radians) {
         return mod(radians, 2 * PI$1)
-    }
-    function mod180180(degrees) {
-        return mod360(degrees) - 180
-    }
-    function modpipi(radians) {
-        return mod2pi(radians) - PI$1
     }
 
     function headingsEqual(heading1, heading2) {
@@ -857,15 +752,14 @@ out;`;
     // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
     // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
     function subtractRadians(rad1, rad0) {
-        // let dr = mod(rad1 - rad0, 2 * PI)
-        let dr = mod2pi(rad1 - rad0);
-        if (dr > PI$1) dr = dr - 2 * PI$1;
+        let dr = mod2pi(rad1 - rad0) - PI$1;
+        // if (dr > PI) dr = dr - 2 * PI
         return dr
     }
     // Above using headings (degrees) returning degrees in (-180, 180]
     function subtractHeadings(deg1, deg0) {
-        let dAngle = mod360(deg1 - deg0);
-        if (dAngle > 180) dAngle = dAngle - 360;
+        let dAngle = mod360(deg1 - deg0) - 180;
+        // if (dAngle > 180) dAngle = dAngle - 360
         return dAngle
     }
 
@@ -876,6 +770,26 @@ out;`;
     function headingToward(x, y, x1, y1) {
         return heading(radiansToward(x, y, x1, y1))
     }
+
+    // AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
+    // We choose Phi radians from xy plane, "math" is often from Z axis
+    // REMIND: some prefer -90, 90
+    // export function altAzToAnglePhi(alt, az) {
+    //     const angle = headingToAngle(az)
+    //     const phi = modpipi(alt * toRadians)
+    //     return [angle, phi]
+    // }
+    // export function anglePhiToAltAz(angle, phi) {
+    //     const az = angleToHeading(angle)
+    //     const alt = mod180180(phi * toDegrees)
+    //     return [alt, az]
+    // }
+    // export function mod180180(degrees) {
+    //     return mod360(degrees) - 180
+    // }
+    // export function modpipi(radians) {
+    //     return mod2pi(radians) - PI
+    // }
 
     // Return distance between (x, y), (x1, y1)
     const sqDistance = (x, y, x1, y1) => (x - x1) ** 2 + (y - y1) ** 2;
@@ -895,6 +809,39 @@ out;`;
         return coneAngle / 2 >= Math.abs(subtractRadians(angle, angle12))
     }
 
+    // export const radians = degrees => mod2pi(degrees * toRadians)
+    // export const degrees = radians => mod360(radians * toDegrees)
+
+    // export function precision(num, digits = 4) {
+    //     const mult = 10 ** digits
+    //     return Math.round(num * mult) / mult
+    // }
+
+    // Two seedable random number generators
+    // export function randomSeedSin(seed = PI / 4) {
+    //     // ~3.4 million b4 repeat.
+    //     // https://stackoverflow.com/a/19303725/1791917
+    //     return () => {
+    //         const x = Math.sin(seed++) * 10000
+    //         return x - Math.floor(x)
+    //     }
+    // }
+    // export function randomSeedParkMiller(seed = 123456) {
+    //     // doesn't repeat b4 JS dies.
+    //     // https://gist.github.com/blixt/f17b47c62508be59987b
+    //     seed = seed % 2147483647
+    //     return () => {
+    //         seed = (seed * 16807) % 2147483647
+    //         return (seed - 1) / 2147483646
+    //     }
+    // }
+    // // Replace Math.random with one of these
+    // export function randomSeed(seed, useParkMiller = true) {
+    //     Math.random = useParkMiller
+    //         ? randomSeedParkMiller(seed)
+    //         : randomSeedSin(seed)
+    // }
+
     var math = /*#__PURE__*/Object.freeze({
         __proto__: null,
         randomInt: randomInt,
@@ -903,8 +850,6 @@ out;`;
         randomFloat2: randomFloat2,
         randomCentered: randomCentered,
         randomNormal: randomNormal,
-        randomSeedSin: randomSeedSin,
-        randomSeedParkMiller: randomSeedParkMiller,
         randomSeed: randomSeed,
         precision: precision,
         isPowerOf2: isPowerOf2,
@@ -912,21 +857,15 @@ out;`;
         mod: mod,
         wrap: wrap,
         clamp: clamp,
-        between: between,
+        isBetween: isBetween,
         lerp: lerp$1,
         lerpScale: lerpScale,
         degToRad: degToRad,
-        degToRadAll: degToRadAll,
         radToDeg: radToDeg,
-        radToDegAll: radToDegAll,
         angleToHeading: angleToHeading,
         headingToAngle: headingToAngle,
-        altAzToAnglePhi: altAzToAnglePhi,
-        anglePhiToAltAz: anglePhiToAltAz,
         mod360: mod360,
         mod2pi: mod2pi,
-        mod180180: mod180180,
-        modpipi: modpipi,
         headingsEqual: headingsEqual,
         anglesEqual: anglesEqual,
         subtractRadians: subtractRadians,
@@ -938,6 +877,89 @@ out;`;
         sqDistance3: sqDistance3,
         distance3: distance3,
         inCone: inCone
+    });
+
+    // import { loadScript, inWorker } from './dom.js'
+    // import { randomSeed } from './math.js'
+    // import { repeat } from './objects.js'
+    // import { timeoutLoop } from './async.js'
+
+    function toJSON(obj, indent = 0, topLevelArrayOK = true) {
+        let firstCall = topLevelArrayOK;
+        const blackList = ['rectCache'];
+        const json = JSON.stringify(
+            obj,
+            (key, val) => {
+                if (blackList.includes(key)) {
+                    // if (key === 'rectCache') return val.length
+                    return undefined
+                }
+                const isAgentArray =
+                    Array.isArray(val) &&
+                    val.length > 0 &&
+                    Number.isInteger(val[0].id);
+
+                if (isAgentArray && !firstCall) {
+                    return val.map(v => v.id)
+                }
+
+                firstCall = false;
+                return val
+            },
+            indent
+        );
+        return json
+    }
+
+    function sampleModel(model) {
+        const obj = {
+            ticks: model.ticks,
+            model: Object.keys(model),
+            patches: model.patches.length,
+            patch: model.patches.oneOf(),
+            turtles: model.turtles.length,
+            turtle: model.turtles.oneOf(),
+            links: model.links.length,
+            link: model.links.oneOf(),
+        };
+        const json = toJSON(obj);
+        return JSON.parse(json)
+    }
+
+    // // params; classPath, steps, seed,
+    // export async function runModel(params) {
+    //     var worker = inWorker() // fails in test/models.js
+    //     const prefix = worker ? 'worker ' : 'main '
+    //     console.log(prefix + 'params', params)
+
+    //     if (worker) importScripts(params.classPath)
+    //     else await loadScript(params.classPath)
+
+    //     if (params.seed) randomSeed()
+
+    //     // const Model = eval(params.className)
+    //     const model = new defaultModel()
+    //     console.log(prefix + 'model', model)
+
+    //     await model.startup()
+    //     model.setup()
+    //     if (worker) {
+    //         repeat(params.steps, () => {
+    //             model.step()
+    //         })
+    //     } else {
+    //         await timeoutLoop(() => {
+    //             model.step()
+    //         }, params.steps)
+    //     }
+    //     console.log(prefix + 'done, model', model)
+
+    //     return sampleModel(model)
+    // }
+
+    var models = /*#__PURE__*/Object.freeze({
+        __proto__: null,
+        sampleModel: sampleModel
     });
 
     // ### Types
@@ -956,14 +978,14 @@ out;`;
     // export const isArray = obj => isType(obj, 'array')
     const isArray = obj => Array.isArray(obj);
     const isNumber = obj => isType(obj, 'number');
+    const isInteger = n => Number.isInteger(n);
+    // export const isFloat = n => isNumber(n) && n % 1 !== 0 // https://goo.gl/6MS0Tm
     const isFunction = obj => isType(obj, 'function');
+    const isImage = obj => isType(obj, 'image');
 
     // Is a number an integer (rather than a float w/ non-zero fractional part)
-    const isInteger = n => Number.isInteger(n); // assume es6, babel otherwise.
-    const isFloat = n => isNumber(n) && n % 1 !== 0; // https://goo.gl/6MS0Tm
     const isCanvas = obj =>
         isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']);
-    const isImage = obj => isType(obj, 'image');
     const isImageable = obj =>
         isOneOfTypes(obj, [
             'image',
@@ -979,9 +1001,6 @@ out;`;
     const isIntArray = obj => /^int.*array$/.test(typeOf(obj));
     const isFloatArray = obj => /^float.*array$/.test(typeOf(obj));
 
-    // export const isWebglArray = obj =>
-    //     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
-
     function isLittleEndian() {
         const d32 = new Uint32Array([0x01020304]);
         return new Uint8ClampedArray(d32.buffer)[0] === 4
@@ -996,6 +1015,8 @@ out;`;
     }
 
     // Unused:
+    // export const isWebglArray = obj =>
+    //     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
     // isHtmlElement: obj => /^html.*element$/.test(typeOf(obj))
     // isImage: obj => isType(obj, 'image')
     // isImageBitmap: obj => isType(obj, 'imagebitmap')
@@ -1013,11 +1034,10 @@ out;`;
         isObject: isObject,
         isArray: isArray,
         isNumber: isNumber,
-        isFunction: isFunction,
         isInteger: isInteger,
-        isFloat: isFloat,
-        isCanvas: isCanvas,
+        isFunction: isFunction,
         isImage: isImage,
+        isCanvas: isCanvas,
         isImageable: isImageable,
         isTypedArray: isTypedArray,
         isUintArray: isUintArray,
@@ -1037,31 +1057,6 @@ out;`;
     // Return function returning an object's property.  Property in fcn closure.
     const propFcn = prop => o => o[prop];
 
-    // get nested property like obj.foo.bar.baz:
-    //   const val = nestedProperty(obj, 'foo.bar.baz')
-    // Optimized for path length up to 4, else uses path.reduce()
-    function nestedProperty(obj, path) {
-        if (typeof path === 'string') path = path.split('.');
-        switch (path.length) {
-            case 1:
-                return obj[path[0]]
-            case 2:
-                return obj[path[0]][path[1]]
-            case 3:
-                return obj[path[0]][path[1]][path[2]]
-            case 4:
-                return obj[path[0]][path[1]][path[2]][path[3]]
-            default:
-                return path.reduce((obj, param) => obj[param], obj)
-        }
-    }
-
-    const arrayFirst = array => array[0];
-    const arrayLast = array => array[array.length - 1];
-    const arrayMax = array => array.reduce((a, b) => Math.max(a, b));
-    const arrayMin = array => array.reduce((a, b) => Math.min(a, b));
-    const arrayExtent = array => [arrayMin(array), arrayMax(array)];
-    const arraySum = array => array.reduce((a, b) => a + b, 0);
     function arraysEqual(a1, a2) {
         if (a1.length !== a2.length) return false
         for (let i = 0; i < a1.length; i++) {
@@ -1114,27 +1109,6 @@ out;`;
         })
     }
 
-    // Return a new shallow of array (either Array or TypedArray) or object
-    function clone(object) {
-        return object.slice ? array.slice(0) : Object.assign({}, object)
-    }
-
-    // Assign values from one object to another.
-    // keys is an array of keys or a string of space separated keys.
-    // Similar to Object.assign:
-    //    util.assign(model, controls, 'speed wiggle population')
-    // is equivalent to
-    //    {
-    //        const { speed, wiggle, population } = controls
-    //        Object.assign(model, { speed, wiggle, population })
-    //    }
-    function assign(to, from, keys) {
-        if (typeof keys === 'string') keys = keys.split(' ');
-        forLoop(keys, key => {
-            to[key] = from[key];
-        });
-        return to
-    }
     // REMIND: use set function on object keys
     // export function override(defaults, options) {
     //     return assign(defaults, options, Object.keys(defaults))
@@ -1176,36 +1150,6 @@ out;`;
 
     // Compare Objects or Arrays via JSON string. Note: TypedArrays !== Arrays
     const objectsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-
-    // Create a histogram, given an array, a bin size, and a
-    // min bin defaulting to min of of the array.
-    // Return an object with:
-    // - min/maxBin: the first/last bin with data
-    // - min/maxVal: the min/max values in the array
-    // - bins: the number of bins
-    // - hist: the array of bins
-    function histogram(
-        array,
-        bins = 10,
-        min = arrayMin(array),
-        max = arrayMax(array)
-    ) {
-        const binSize = (max - min) / bins;
-        const hist = new Array(bins);
-        hist.fill(0);
-        forLoop(array, val => {
-            // const val = key ? a[key] : a
-            if (val < min || val > max) {
-                throw Error(`histogram bounds error: ${val}: ${min}-${max}`)
-            } else {
-                let bin = Math.floor((val - min) / binSize);
-                if (bin === bins) bin--; // val is max, round down
-                hist[bin]++;
-            }
-        });
-        hist.parameters = { bins, min, max, binSize, arraySize: array.length };
-        return hist
-    }
 
     // Return random one of array items.
     const oneOf = array => array[randomInt(array.length)];
@@ -1251,15 +1195,6 @@ out;`;
         }
         return array
     }
-    // // Returns new array (of this type) of unique elements in this *sorted* array.
-    // // Sort or clone & sort if needed.
-    // export function uniq(array, f = identityFcn) {
-    //     if (isString(f)) f = propFcn(f)
-    //     return array.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
-    // }
-
-    // Simple uniq on sorted or unsorted array.
-    const uniq = array => Array.from(new Set(array));
 
     // Set operations on arrays
     // union: elements in a1 or a2
@@ -1303,60 +1238,133 @@ out;`;
     }
 
     // Return an array normalized (lerp) between lo/hi values
-    function normalize(array, lo = 0, hi = 1) {
-        const [min, max] = [arrayMin(array), arrayMax(array)];
-        const scale = 1 / (max - min);
-        return array.map(n => lerp(lo, hi, scale * (n - min)))
-    }
-    // Return Uint8ClampedArray normalized in 0-255
-    function normalize8(array) {
-        return new Uint8ClampedArray(normalize(array, -0.5, 255.5))
-    }
-    // Return Array normalized to integers in lo-hi
-    function normalizeInt(array, lo, hi) {
-        return normalize(array, lo, hi).map(n => Math.round(n))
-    }
+    // export function normalize(array, lo = 0, hi = 1) {
+    //     const [min, max] = [arrayMin(array), arrayMax(array)]
+    //     const scale = 1 / (max - min)
+    //     return array.map(n => lerp(lo, hi, scale * (n - min)))
+    // }
+    // // Return Uint8ClampedArray normalized in 0-255
+    // export function normalize8(array) {
+    //     return new Uint8ClampedArray(normalize(array, -0.5, 255.5))
+    // }
+    // // Return Array normalized to integers in lo-hi
+    // export function normalizeInt(array, lo, hi) {
+    //     return normalize(array, lo, hi).map(n => Math.round(n))
+    // }
 
-    // Function <> String for Cap F functions
-    function functionToStrings(fcn, simplify = true) {
-        const str = fcn.toString();
-        const args = str.replace(/.*\(/, '').replace(/\).*/s, '');
-        let body = str.replace(/.*\) {/, '').replace(/}$/, '');
-        if (simplify) body = simplifyFunctionString(body);
-        return [args, body]
-    }
-    function stringsToFunction(args, body) {
-        return new Function(args, body)
-    }
-    function simplifyFunctionString(str) {
-        // str = str.replace(/\n/g, ' ')
-        // str = str.replace(/^ */, '')
-        // str = str.replace(/ *$/g, '')
-        // str = str.replace(/  */g, ' ')
+    // // get nested property like obj.foo.bar.baz:
+    // //   const val = nestedProperty(obj, 'foo.bar.baz')
+    // // Optimized for path length up to 4, else uses path.reduce()
+    // export function nestedProperty(obj, path) {
+    //     if (typeof path === 'string') path = path.split('.')
+    //     switch (path.length) {
+    //         case 1:
+    //             return obj[path[0]]
+    //         case 2:
+    //             return obj[path[0]][path[1]]
+    //         case 3:
+    //             return obj[path[0]][path[1]][path[2]]
+    //         case 4:
+    //             return obj[path[0]][path[1]][path[2]][path[3]]
+    //         default:
+    //             return path.reduce((obj, param) => obj[param], obj)
+    //     }
+    // }
 
-        // str = str.replace(/^ */gm, '')
-        // str = str.replace(/ *$/gm, '')
-        // str = str.replace(/  */g, ' ')
+    // // Assign values from one object to another.
+    // // keys is an array of keys or a string of space separated keys.
+    // // Similar to Object.assign:
+    // //    util.assign(model, controls, 'speed wiggle population')
+    // // is equivalent to
+    // //    {
+    // //        const { speed, wiggle, population } = controls
+    // //        Object.assign(model, { speed, wiggle, population })
+    // //    }
+    // export function assign(to, from, keys) {
+    //     if (typeof keys === 'string') keys = keys.split(' ')
+    //     forLoop(keys, key => {
+    //         to[key] = from[key]
+    //     })
+    //     return to
+    // }
 
-        str = str.replace(/^ */gm, '');
-        str = str.replace(/^\n/, '');
-        str = str.replace(/\n$/, '');
+    // // Function <> String for Cap F functions
+    // export function functionToStrings(fcn, simplify = true) {
+    //     const str = fcn.toString()
+    //     const args = str.replace(/.*\(/, '').replace(/\).*/s, '')
+    //     let body = str.replace(/.*\) {/, '').replace(/}$/, '')
+    //     if (simplify) body = simplifyFunctionString(body)
+    //     return [args, body]
+    // }
+    // export function stringsToFunction(args, body) {
+    //     return new Function(args, body)
+    // }
+    // export function simplifyFunctionString(str) {
+    //     // str = str.replace(/\n/g, ' ')
+    //     // str = str.replace(/^ */, '')
+    //     // str = str.replace(/ *$/g, '')
+    //     // str = str.replace(/  */g, ' ')
 
-        return str
-    }
+    //     // str = str.replace(/^ */gm, '')
+    //     // str = str.replace(/ *$/gm, '')
+    //     // str = str.replace(/  */g, ' ')
+
+    //     str = str.replace(/^ */gm, '')
+    //     str = str.replace(/^\n/, '')
+    //     str = str.replace(/\n$/, '')
+
+    //     return str
+    // }
+
+    // // Create a histogram, given an array, a bin size, and a
+    // // min bin defaulting to min of of the array.
+    // // Return an object with:
+    // // - min/maxBin: the first/last bin with data
+    // // - min/maxVal: the min/max values in the array
+    // // - bins: the number of bins
+    // // - hist: the array of bins
+    // export function histogram(
+    //     array,
+    //     bins = 10,
+    //     min = arrayMin(array),
+    //     max = arrayMax(array)
+    // ) {
+    //     const binSize = (max - min) / bins
+    //     const hist = new Array(bins)
+    //     hist.fill(0)
+    //     forLoop(array, val => {
+    //         // const val = key ? a[key] : a
+    //         if (val < min || val > max) {
+    //             throw Error(`histogram bounds error: ${val}: ${min}-${max}`)
+    //         } else {
+    //             let bin = Math.floor((val - min) / binSize)
+    //             if (bin === bins) bin-- // val is max, round down
+    //             hist[bin]++
+    //         }
+    //     })
+    //     hist.parameters = { bins, min, max, binSize, arraySize: array.length }
+    //     return hist
+    // }
+
+    // export const arrayFirst = array => array[0]
+    const arrayLast = array => array[array.length - 1];
+    // export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
+    // export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
+    // export const arrayExtent = array => [arrayMin(array), arrayMax(array)]
+
+    // // Return a new shallow of array (either Array or TypedArray)
+    // export function clone(array) {
+    //     return array.slice(0)
+    // }
+
+    // // Simple uniq on sorted or unsorted array.
+    // export const uniq = array => Array.from(new Set(array))
 
     var objects = /*#__PURE__*/Object.freeze({
         __proto__: null,
         identityFcn: identityFcn,
         noopFcn: noopFcn,
         propFcn: propFcn,
-        nestedProperty: nestedProperty,
-        arrayFirst: arrayFirst,
-        arrayLast: arrayLast,
-        arrayMax: arrayMax,
-        arrayMin: arrayMin,
-        arrayExtent: arrayExtent,
-        arraySum: arraySum,
         arraysEqual: arraysEqual,
         removeArrayItem: removeArrayItem,
         arraysToString: arraysToString,
@@ -1364,13 +1372,10 @@ out;`;
         repeat: repeat,
         step: step,
         range: range,
-        clone: clone,
-        assign: assign,
         override: override,
         concatArrays: concatArrays,
         objectToString: objectToString,
         objectsEqual: objectsEqual,
-        histogram: histogram,
         oneOf: oneOf,
         otherOneOf: otherOneOf,
         oneKeyOf: oneKeyOf,
@@ -1378,97 +1383,12 @@ out;`;
         sortNums: sortNums,
         sortObjs: sortObjs,
         shuffle: shuffle,
-        uniq: uniq,
         union: union,
         intersection: intersection,
         difference: difference,
         floatRamp: floatRamp,
         integerRamp: integerRamp,
-        normalize: normalize,
-        normalize8: normalize8,
-        normalizeInt: normalizeInt,
-        functionToStrings: functionToStrings,
-        stringsToFunction: stringsToFunction,
-        simplifyFunctionString: simplifyFunctionString
-    });
-
-    function toJSON(obj, indent = 0, topLevelArrayOK = true) {
-        let firstCall = topLevelArrayOK;
-        const blackList = ['rectCache'];
-        const json = JSON.stringify(
-            obj,
-            (key, val) => {
-                if (blackList.includes(key)) {
-                    // if (key === 'rectCache') return val.length
-                    return undefined
-                }
-                const isAgentArray =
-                    Array.isArray(val) &&
-                    val.length > 0 &&
-                    Number.isInteger(val[0].id);
-
-                if (isAgentArray && !firstCall) {
-                    return val.map(v => v.id)
-                }
-
-                firstCall = false;
-                return val
-            },
-            indent
-        );
-        return json
-    }
-
-    function sampleModel(model) {
-        const obj = {
-            ticks: model.ticks,
-            model: Object.keys(model),
-            patches: model.patches.length,
-            patch: model.patches.oneOf(),
-            turtles: model.turtles.length,
-            turtle: model.turtles.oneOf(),
-            links: model.links.length,
-            link: model.links.oneOf(),
-        };
-        const json = toJSON(obj);
-        return JSON.parse(json)
-    }
-
-    // params; classPath, steps, seed,
-    async function runModel(params) {
-        var worker = inWorker(); // fails in test/models.js
-        const prefix = worker ? 'worker ' : 'main ';
-        console.log(prefix + 'params', params);
-
-        if (worker) importScripts(params.classPath);
-        else await loadScript(params.classPath);
-
-        if (params.seed) randomSeed();
-
-        // const Model = eval(params.className)
-        const model = new defaultModel();
-        console.log(prefix + 'model', model);
-
-        await model.startup();
-        model.setup();
-        if (worker) {
-            repeat(params.steps, () => {
-                model.step();
-            });
-        } else {
-            await timeoutLoop(() => {
-                model.step();
-            }, params.steps);
-        }
-        console.log(prefix + 'done, model', model);
-
-        return sampleModel(model)
-    }
-
-    var models = /*#__PURE__*/Object.freeze({
-        __proto__: null,
-        sampleModel: sampleModel,
-        runModel: runModel
+        arrayLast: arrayLast
     });
 
     // ### OofA/AofO
@@ -1487,7 +1407,6 @@ out;`;
         forLoop(aofo, (o, i) => {
             keys.forEach(key => (oofa[key][i] = o[key]));
         });
-
         return oofa
     }
     function oofaObject(oofa, i, keys) {
@@ -1701,16 +1620,6 @@ out;`;
             return AgentArray.from(new Set(this))
         }
 
-        // Returns AgentArray of unique elements in this *sorted* AgentArray.
-        // Use sortBy or clone & sortBy if needed.
-        // uniq(f = util.identityFcn) {
-        //     if (util.isString(f)) f = o => o[f]
-        //     return this.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
-        // }
-
-        // Call fcn(agent, index, array) for each agent in AgentArray.
-        // Array assumed not mutable
-        // Note: 5x+ faster than this.forEach(fcn) !!
         /**
          * Call fcn(agent, index, array) for each item in AgentArray.
          * Index & array optional.
@@ -1727,8 +1636,6 @@ out;`;
             return this
         }
 
-        // Call fcn(agent, index, array) for each item in AgentArray.
-        // Array can shrink. If it grows, will not visit beyond original length
         /**
          * Call fcn(agent, index, array) for each item in AgentArray.
          * Index & array optional.
@@ -1750,7 +1657,6 @@ out;`;
             }
             // return this
         }
-        // Return all elements returning f(obj, index, array) true
         /**
          * Return all elements returning f(obj, index, array) true.
          * NetLogo term, simply calls this.filter(fcn)
@@ -1808,12 +1714,6 @@ out;`;
             return aa
         }
 
-        // Return shallow copy of a portion of this AgentArray
-        // [See Array.slice](https://goo.gl/Ilgsok)
-        // Default is to clone entire AgentArray
-        cloneRange(begin = 0, end = this.length) {
-            return this.slice(begin, end) // Returns an AgentArray rather than Array!
-        }
         /**
          * Create copy of this AgentArray
          * @return AgentArray
@@ -2020,6 +1920,13 @@ out;`;
             return agents
         }
     }
+
+    // // Return shallow copy of a portion of this AgentArray
+    // // [See Array.slice](https://goo.gl/Ilgsok)
+    // // Default is to clone entire AgentArray
+    // cloneRange(begin = 0, end = this.length) {
+    //     return this.slice(begin, end) // Returns an AgentArray rather than Array!
+    // }
 
     /**
      * Subclass of AgentArray, used for Model Patches, Turtles, Links & Breeds.
@@ -2395,20 +2302,6 @@ out;`;
             Object.assign(this, { width, height, data });
         }
 
-        // Get/Set name, useful for storage key.
-        setName(string) {
-            this.name = string;
-            return this
-        }
-        getName() {
-            return this.name ? this.name : this.makeName()
-        }
-        makeName() {
-            const { width, height } = this;
-            const sum = util.arraySum(this.data).toFixed(2);
-            return `${this.dataType().name}-${width}-${height}-${sum}`
-        }
-
         // Checks x,y are within DataSet. Throw error if not.
         checkXY(x, y) {
             if (!this.inBounds(x, y)) {
@@ -2418,8 +2311,8 @@ out;`;
         // true if x,y in dataset bounds
         inBounds(x, y) {
             return (
-                util.between(x, 0, this.width - 1) &&
-                util.between(y, 0, this.height - 1)
+                util.isBetween(x, 0, this.width - 1) &&
+                util.isBetween(y, 0, this.height - 1)
             )
         }
 
@@ -2501,8 +2394,8 @@ out;`;
         }
 
         // Return a copy of this, with new data array
-        copy() {
-            return new DataSet(this.width, this.height, util.clone(this.data))
+        clone() {
+            return new DataSet(this.width, this.height, this.data.slice(0))
         }
 
         // Return new (empty) dataset, defaulting to this type
@@ -2768,68 +2661,30 @@ out;`;
             return { slope, aspect, dzdx, dzdy }
         }
 
-        // REMIND: limit to data that can be 24 bit. Error otherwise.
-        // DataType of Int8, 16, Int24 OK, others need testing.
-        // Possibly use precision to minimize byte size to 3, rgb?
-        //
-        // Convert dataset to an image context object.
-        //
-        // This can be used to "visualize" the data by normalizing
-        // which will scale the data to use the entire RGB space.
-        // It can also be used to create tiles or image-as-data if
-        // the defaults are used.
-        //
-        // Due to
-        // [alpha-premultiply](https://en.wikipedia.org/wiki/Alpha_compositing),
-        // the best we can do as data is 24 bit ints.
-        // You can simulate floats/fixed by multiplying the dataset
-        // the dividing on conversion back.
-        //
-        // Our preferred transport is in the works, likely in the
-        // tile datasets via blobs or arraybuffers. Sigh.
-        // toContext (normalize = false, gray = false, alpha = 255) {
-        //   const [w, h, data] = [this.width, this.height, this.data]
-        //   let idata
-        //   if (normalize) {
-        //     idata = gray
-        //       ? util.normalize8(data) : util.normalizeInt(data, 0, Math.pow(2, 24) - 1)
-        //   } else {
-        //     idata = data.map((a) => Math.round(a))
-        //   }
-        //   const ctx = util.createCtx(w, h)
-        //   const id = ctx.getImageData(0, 0, w, h)
-        //   const ta = id.data // ta short for typed array
-        //   for (let i = 0; i < idata.length; i++) {
-        //     const [num, j] = [idata[i], 4 * i] // j = byte index into ta
-        //     if (gray) {
-        //       ta[j] = ta[j + 1] = ta[j + 2] = Math.floor(num); ta[j + 3] = alpha
-        //     } else {
-        //       ta[j] = (num >> 16) & 0xff
-        //       ta[j + 1] = (num >> 8) & 0xff
-        //       ta[j + 2] = num & 0xff
-        //       ta[j + 3] = alpha // if not 255, image will be premultiplied.
-        //     }
-        //   }
-        //   ctx.putImageData(id, 0, 0)
-        //   return ctx
-        // }
-        //
-        // // Convert dataset to a canvas, which can be used as an image
-        // toCanvas (normalize = false, gray = false, alpha = 255) {
-        //   return this.toContext(gray, normalize, alpha).canvas
-        // }
-        // // Convert dataset to a base64 string
-        // toDataUrl (normalize = false, gray = false, alpha = 255) {
-        //   return util.ctxToDataUrl(this.toContext(gray, normalize, alpha))
-        // }
-
-        // Return max/min of data
+        // Return max/min/extent/sum of data
         max() {
-            return util.arrayMax(this.data)
+            // return util.arrayMax(this.data)
+            return this.data.reduce((a, b) => Math.max(a, b))
         }
         min() {
-            return util.arrayMin(this.data)
+            // return util.arrayMin(this.data)
+            return this.data.reduce((a, b) => Math.min(a, b))
         }
+        extent() {
+            return [this.min(), this.max()]
+        }
+        sum() {
+            return this.data.reduce((a, b) => a + b, 0)
+        }
+
+        // Return new dataset scaled between lo, hi values
+        normalize(lo = 0, hi = 1) {
+            const [min, max] = this.extent();
+            const scale = 1 / (max - min);
+            const data = this.data.map(n => lerp(lo, hi, scale * (n - min)));
+            return new DataSet(this.width, this.height, data)
+        }
+
         // Test that this has same width, height, data as dataset.
         // Note: does not require equal array type (Array or TypedArray)
         equals(dataset) {
@@ -2840,6 +2695,75 @@ out;`;
             )
         }
     }
+
+    // REMIND: limit to data that can be 24 bit. Error otherwise.
+    // DataType of Int8, 16, Int24 OK, others need testing.
+    // Possibly use precision to minimize byte size to 3, rgb?
+    //
+    // Convert dataset to an image context object.
+    //
+    // This can be used to "visualize" the data by normalizing
+    // which will scale the data to use the entire RGB space.
+    // It can also be used to create tiles or image-as-data if
+    // the defaults are used.
+    //
+    // Due to
+    // [alpha-premultiply](https://en.wikipedia.org/wiki/Alpha_compositing),
+    // the best we can do as data is 24 bit ints.
+    // You can simulate floats/fixed by multiplying the dataset
+    // the dividing on conversion back.
+    //
+    // Our preferred transport is in the works, likely in the
+    // tile datasets via blobs or arraybuffers. Sigh.
+    // toContext (normalize = false, gray = false, alpha = 255) {
+    //   const [w, h, data] = [this.width, this.height, this.data]
+    //   let idata
+    //   if (normalize) {
+    //     idata = gray
+    //       ? util.normalize8(data) : util.normalizeInt(data, 0, Math.pow(2, 24) - 1)
+    //   } else {
+    //     idata = data.map((a) => Math.round(a))
+    //   }
+    //   const ctx = util.createCtx(w, h)
+    //   const id = ctx.getImageData(0, 0, w, h)
+    //   const ta = id.data // ta short for typed array
+    //   for (let i = 0; i < idata.length; i++) {
+    //     const [num, j] = [idata[i], 4 * i] // j = byte index into ta
+    //     if (gray) {
+    //       ta[j] = ta[j + 1] = ta[j + 2] = Math.floor(num); ta[j + 3] = alpha
+    //     } else {
+    //       ta[j] = (num >> 16) & 0xff
+    //       ta[j + 1] = (num >> 8) & 0xff
+    //       ta[j + 2] = num & 0xff
+    //       ta[j + 3] = alpha // if not 255, image will be premultiplied.
+    //     }
+    //   }
+    //   ctx.putImageData(id, 0, 0)
+    //   return ctx
+    // }
+    //
+    // // Convert dataset to a canvas, which can be used as an image
+    // toCanvas (normalize = false, gray = false, alpha = 255) {
+    //   return this.toContext(gray, normalize, alpha).canvas
+    // }
+    // // Convert dataset to a base64 string
+    // toDataUrl (normalize = false, gray = false, alpha = 255) {
+    //   return util.ctxToDataUrl(this.toContext(gray, normalize, alpha))
+    // }
+
+    // // Get/Set name, useful for storage key.
+    // setName(string) {
+    //     this.name = string
+    //     return this
+    // }
+    // getName() {
+    //     return this.name ? this.name : this.makeName()
+    // }
+    // makeName() {
+    //     const { width, height } = this
+    //     const sum = this.sum().toFixed(2)
+    //     return `${this.dataType().name}-${width}-${height}-${sum}`
+    // }
 
     // Class Link instances form a link between two turtles, forming a graph.
     // Flyweight object creation, see Patch/Patches.
@@ -4198,24 +4122,27 @@ out;`;
      * @description
      * Class Model is the primary interface for modelers, integrating
      * the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:
-     * * model.Patches is an array ({@link Patches}) of {@link Patch} instances
-     * * model.Turtles is an array ({@link Turtles}) of {@link Turtle} instances
-     * * model.Links is an array ({@link Links}) of {@link Link} instances
-     * * model.breed is a sub-array of any of the three above. See AgentSet's ctor.
-     * * All of which are subclasses of ({@link AgentSet})
+     *
+     * - model.Patches: an array ({@link Patches}) of {@link Patch} instances
+     * - model.Turtles: an array ({@link Turtles}) of {@link Turtle} instances
+     * - model.Links: an array ({@link Links}) of {@link Link} instances
+     * - model.breed: a sub-array of any of the three above. See AgentSet's ct
+     * - All of which are subclasses of ({@link AgentSet})
      *
      * Convention: Three abstract methods are provided by the modeler
+     *
      * * Startup(): (Optional) Called once to import images, data etc
-     * * Setup(): Called to initialize the model state. Can be called multiple times, see reset()
+     * * Setup(): Called to initialize the model state.
      * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
      *
-     * See {@tutorial HelloModel}
+     * See tutorial {@tutorial 01-HelloModel}
      */
     class Model {
         world
         patches
         turtles
         links
+        ticks
 
         /**
          * Creates an instance of Model.
@@ -4223,8 +4150,6 @@ out;`;
          * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
          */
         constructor(worldOptions = World.defaultOptions(), autoTick = true) {
-            // Let jsDocs/vscode know these variables exist. Initialized by reseetModel()
-            // this.patches = this.turtles = this.links = null
             this.resetModel(worldOptions);
             if (autoTick) this.autoTick();
         }
@@ -4249,7 +4174,8 @@ out;`;
         /**
          * Resets model to initial state w/ new Patches, Turtles, Links.
          * The worldOptions will default to initial values but can be
-         * changed by modeler.
+         * changed by modeler. Setup() often called after reset() to
+         * re-initialize the model.
          *
          * @param {Object|World} [worldOptions=this.world] World object
          */
@@ -4283,13 +4209,13 @@ out;`;
          *
          * @abstract
          */
-        setup() {} // Your initialization code goes here
+        setup() {}
         /**
          * Run the model one step.
          *
          * @abstract
          */
-        step() {} // Called each step of the model
+        step() {}
 
         // A trick to auto advance ticks every step
         stepAndTick() {
@@ -4301,7 +4227,6 @@ out;`;
             this.step = this.stepAndTick;
         }
 
-        // Breeds: create breeds/subarrays of Patches, Agents, Links
         /**
          * Create breeds (sub-arrays) of Patches. Used in the Exit model:
          * * this.patchBreeds('exits inside wall')

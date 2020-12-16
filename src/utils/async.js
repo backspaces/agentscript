@@ -39,13 +39,6 @@ export function xhrPromise(url, type = 'text', method = 'GET') {
     })
 }
 
-// Hopefully tempory: promise for MapBox map loaded callback
-// export function mapLoadPromise(map) {
-//     return new Promise((resolve, reject) => {
-//         map.on('load', () => resolve())
-//     })
-// }
-
 // Return promise for pause of ms. Use:
 // timeoutPromise(2000).then(()=>console.log('foo'))
 export function timeoutPromise(ms = 1000) {
@@ -66,29 +59,6 @@ export async function timeoutLoop(fcn, steps = -1, ms = 0) {
     }
 }
 
-export function yieldLoop(fcn, steps = -1) {
-    let i = 0
-    function* gen() {
-        while (i++ !== steps) {
-            yield fcn(i - 1)
-        }
-    }
-    const iterator = gen()
-    while (!iterator.next().done) {}
-}
-
-// Similar pair for requestAnimationFrame
-export function rafPromise() {
-    return new Promise(resolve => requestAnimationFrame(resolve))
-}
-export async function rafLoop(fcn, steps = -1) {
-    let i = 0
-    while (i++ !== steps) {
-        fcn(i - 1)
-        await rafPromise()
-    }
-}
-
 export function waitPromise(done, ms = 10) {
     return new Promise(resolve => {
         function waitOn() {
@@ -98,3 +68,24 @@ export function waitPromise(done, ms = 10) {
         waitOn()
     })
 }
+
+// type = "arrayBuffer" "blob" "formData" "json" "text"
+export async function fetchType(url, type = 'text') {
+    const response = await fetch(url)
+    if (!response.ok) throw Error(`Not found: ${url}`)
+    const value = await response[type]()
+    return value
+}
+
+// // Similar pair for requestAnimationFrame
+// export function rafPromise() {
+//     return new Promise(resolve => requestAnimationFrame(resolve))
+// }
+// export async function rafLoop(fcn, steps = -1) {
+//     let i = 0
+//     while (i++ !== steps) {
+//         fcn(i - 1)
+//         await rafPromise()
+//     }
+// }
+//

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>fetch</title>
+    </head>
+
+    <body>
+        <script type="module">
+            async function run() {
+                function tileUrl(z, x, y) {
+                    return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
+                }
+                const url = tileUrl(13, 1594, 3339)
+                console.log(url)
+                // const file = await Deno.readFileSync(url)
+                let abuf = await fetch(url).then(response =>
+                    response.arrayBuffer()
+                )
+                // .then(blob => blob.arrayBuffer())
+
+                console.log(abuf)
+
+                Object.assign(window, { url, abuf })
+            }
+            run()
+        </script>
+    </body>
+</html>

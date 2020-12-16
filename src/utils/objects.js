@@ -11,31 +11,6 @@ export const noopFcn = () => {}
 // Return function returning an object's property.  Property in fcn closure.
 export const propFcn = prop => o => o[prop]
 
-// get nested property like obj.foo.bar.baz:
-//   const val = nestedProperty(obj, 'foo.bar.baz')
-// Optimized for path length up to 4, else uses path.reduce()
-export function nestedProperty(obj, path) {
-    if (typeof path === 'string') path = path.split('.')
-    switch (path.length) {
-        case 1:
-            return obj[path[0]]
-        case 2:
-            return obj[path[0]][path[1]]
-        case 3:
-            return obj[path[0]][path[1]][path[2]]
-        case 4:
-            return obj[path[0]][path[1]][path[2]][path[3]]
-        default:
-            return path.reduce((obj, param) => obj[param], obj)
-    }
-}
-
-export const arrayFirst = array => array[0]
-export const arrayLast = array => array[array.length - 1]
-export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
-export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
-export const arrayExtent = array => [arrayMin(array), arrayMax(array)]
-export const arraySum = array => array.reduce((a, b) => a + b, 0)
 export function arraysEqual(a1, a2) {
     if (a1.length !== a2.length) return false
     for (let i = 0; i < a1.length; i++) {
@@ -88,27 +63,6 @@ export function range(length) {
     })
 }
 
-// Return a new shallow of array (either Array or TypedArray) or object
-export function clone(object) {
-    return object.slice ? array.slice(0) : Object.assign({}, object)
-}
-
-// Assign values from one object to another.
-// keys is an array of keys or a string of space separated keys.
-// Similar to Object.assign:
-//    util.assign(model, controls, 'speed wiggle population')
-// is equivalent to
-//    {
-//        const { speed, wiggle, population } = controls
-//        Object.assign(model, { speed, wiggle, population })
-//    }
-export function assign(to, from, keys) {
-    if (typeof keys === 'string') keys = keys.split(' ')
-    forLoop(keys, key => {
-        to[key] = from[key]
-    })
-    return to
-}
 // REMIND: use set function on object keys
 // export function override(defaults, options) {
 //     return assign(defaults, options, Object.keys(defaults))
@@ -150,36 +104,6 @@ export function objectToString(obj, indent = 2, jsKeys = true) {
 
 // Compare Objects or Arrays via JSON string. Note: TypedArrays !== Arrays
 export const objectsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
-
-// Create a histogram, given an array, a bin size, and a
-// min bin defaulting to min of of the array.
-// Return an object with:
-// - min/maxBin: the first/last bin with data
-// - min/maxVal: the min/max values in the array
-// - bins: the number of bins
-// - hist: the array of bins
-export function histogram(
-    array,
-    bins = 10,
-    min = arrayMin(array),
-    max = arrayMax(array)
-) {
-    const binSize = (max - min) / bins
-    const hist = new Array(bins)
-    hist.fill(0)
-    forLoop(array, val => {
-        // const val = key ? a[key] : a
-        if (val < min || val > max) {
-            throw Error(`histogram bounds error: ${val}: ${min}-${max}`)
-        } else {
-            let bin = Math.floor((val - min) / binSize)
-            if (bin === bins) bin-- // val is max, round down
-            hist[bin]++
-        }
-    })
-    hist.parameters = { bins, min, max, binSize, arraySize: array.length }
-    return hist
-}
 
 // Return random one of array items.
 export const oneOf = array => array[randomInt(array.length)]
@@ -225,15 +149,6 @@ export function shuffle(array) {
     }
     return array
 }
-// // Returns new array (of this type) of unique elements in this *sorted* array.
-// // Sort or clone & sort if needed.
-// export function uniq(array, f = identityFcn) {
-//     if (isString(f)) f = propFcn(f)
-//     return array.filter((ai, i, a) => i === 0 || f(ai) !== f(a[i - 1]))
-// }
-
-// Simple uniq on sorted or unsorted array.
-export const uniq = array => Array.from(new Set(array))
 
 // Set operations on arrays
 // union: elements in a1 or a2
@@ -277,44 +192,124 @@ export function integerRamp(
 }
 
 // Return an array normalized (lerp) between lo/hi values
-export function normalize(array, lo = 0, hi = 1) {
-    const [min, max] = [arrayMin(array), arrayMax(array)]
-    const scale = 1 / (max - min)
-    return array.map(n => lerp(lo, hi, scale * (n - min)))
-}
-// Return Uint8ClampedArray normalized in 0-255
-export function normalize8(array) {
-    return new Uint8ClampedArray(normalize(array, -0.5, 255.5))
-}
-// Return Array normalized to integers in lo-hi
-export function normalizeInt(array, lo, hi) {
-    return normalize(array, lo, hi).map(n => Math.round(n))
-}
+// export function normalize(array, lo = 0, hi = 1) {
+//     const [min, max] = [arrayMin(array), arrayMax(array)]
+//     const scale = 1 / (max - min)
+//     return array.map(n => lerp(lo, hi, scale * (n - min)))
+// }
+// // Return Uint8ClampedArray normalized in 0-255
+// export function normalize8(array) {
+//     return new Uint8ClampedArray(normalize(array, -0.5, 255.5))
+// }
+// // Return Array normalized to integers in lo-hi
+// export function normalizeInt(array, lo, hi) {
+//     return normalize(array, lo, hi).map(n => Math.round(n))
+// }
 
-// Function <> String for Cap F functions
-export function functionToStrings(fcn, simplify = true) {
-    const str = fcn.toString()
-    const args = str.replace(/.*\(/, '').replace(/\).*/s, '')
-    let body = str.replace(/.*\) {/, '').replace(/}$/, '')
-    if (simplify) body = simplifyFunctionString(body)
-    return [args, body]
-}
-export function stringsToFunction(args, body) {
-    return new Function(args, body)
-}
-export function simplifyFunctionString(str) {
-    // str = str.replace(/\n/g, ' ')
-    // str = str.replace(/^ */, '')
-    // str = str.replace(/ *$/g, '')
-    // str = str.replace(/  */g, ' ')
+// // get nested property like obj.foo.bar.baz:
+// //   const val = nestedProperty(obj, 'foo.bar.baz')
+// // Optimized for path length up to 4, else uses path.reduce()
+// export function nestedProperty(obj, path) {
+//     if (typeof path === 'string') path = path.split('.')
+//     switch (path.length) {
+//         case 1:
+//             return obj[path[0]]
+//         case 2:
+//             return obj[path[0]][path[1]]
+//         case 3:
+//             return obj[path[0]][path[1]][path[2]]
+//         case 4:
+//             return obj[path[0]][path[1]][path[2]][path[3]]
+//         default:
+//             return path.reduce((obj, param) => obj[param], obj)
+//     }
+// }
 
-    // str = str.replace(/^ */gm, '')
-    // str = str.replace(/ *$/gm, '')
-    // str = str.replace(/  */g, ' ')
+// // Assign values from one object to another.
+// // keys is an array of keys or a string of space separated keys.
+// // Similar to Object.assign:
+// //    util.assign(model, controls, 'speed wiggle population')
+// // is equivalent to
+// //    {
+// //        const { speed, wiggle, population } = controls
+// //        Object.assign(model, { speed, wiggle, population })
+// //    }
+// export function assign(to, from, keys) {
+//     if (typeof keys === 'string') keys = keys.split(' ')
+//     forLoop(keys, key => {
+//         to[key] = from[key]
+//     })
+//     return to
+// }
 
-    str = str.replace(/^ */gm, '')
-    str = str.replace(/^\n/, '')
-    str = str.replace(/\n$/, '')
+// // Function <> String for Cap F functions
+// export function functionToStrings(fcn, simplify = true) {
+//     const str = fcn.toString()
+//     const args = str.replace(/.*\(/, '').replace(/\).*/s, '')
+//     let body = str.replace(/.*\) {/, '').replace(/}$/, '')
+//     if (simplify) body = simplifyFunctionString(body)
+//     return [args, body]
+// }
+// export function stringsToFunction(args, body) {
+//     return new Function(args, body)
+// }
+// export function simplifyFunctionString(str) {
+//     // str = str.replace(/\n/g, ' ')
+//     // str = str.replace(/^ */, '')
+//     // str = str.replace(/ *$/g, '')
+//     // str = str.replace(/  */g, ' ')
 
-    return str
-}
+//     // str = str.replace(/^ */gm, '')
+//     // str = str.replace(/ *$/gm, '')
+//     // str = str.replace(/  */g, ' ')
+
+//     str = str.replace(/^ */gm, '')
+//     str = str.replace(/^\n/, '')
+//     str = str.replace(/\n$/, '')
+
+//     return str
+// }
+
+// // Create a histogram, given an array, a bin size, and a
+// // min bin defaulting to min of of the array.
+// // Return an object with:
+// // - min/maxBin: the first/last bin with data
+// // - min/maxVal: the min/max values in the array
+// // - bins: the number of bins
+// // - hist: the array of bins
+// export function histogram(
+//     array,
+//     bins = 10,
+//     min = arrayMin(array),
+//     max = arrayMax(array)
+// ) {
+//     const binSize = (max - min) / bins
+//     const hist = new Array(bins)
+//     hist.fill(0)
+//     forLoop(array, val => {
+//         // const val = key ? a[key] : a
+//         if (val < min || val > max) {
+//             throw Error(`histogram bounds error: ${val}: ${min}-${max}`)
+//         } else {
+//             let bin = Math.floor((val - min) / binSize)
+//             if (bin === bins) bin-- // val is max, round down
+//             hist[bin]++
+//         }
+//     })
+//     hist.parameters = { bins, min, max, binSize, arraySize: array.length }
+//     return hist
+// }
+
+// export const arrayFirst = array => array[0]
+export const arrayLast = array => array[array.length - 1]
+// export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
+// export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
+// export const arrayExtent = array => [arrayMin(array), arrayMax(array)]
+
+// // Return a new shallow of array (either Array or TypedArray)
+// export function clone(array) {
+//     return array.slice(0)
+// }
+
+// // Simple uniq on sorted or unsorted array.
+// export const uniq = array => Array.from(new Set(array))

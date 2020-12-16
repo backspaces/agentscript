@@ -25,6 +25,7 @@
         // turtle.reset()
 
         util.toWindow({ THREE, util, model, utils3, turtle })
+        const radToDegAll = array => array.map(rad => util.radToDeg(rad))
 
         const canvas = document.querySelector('#can')
         const renderer = new THREE.WebGLRenderer({ canvas })
@@ -54,9 +55,7 @@
             }
 
             controls.HeadingPitchRoll = fmt(turtle.getHeadingPitchRoll())
-            controls.ThetaPhiPsi = fmt(
-                util.radToDegAll(turtle.getThetaPhiPsi())
-            )
+            controls.ThetaPhiPsi = fmt(radToDegAll(turtle.getThetaPhiPsi()))
             controls.Position = fmt(turtle.getxyz())
 
             mesh.position.set(...turtle.getxyz())

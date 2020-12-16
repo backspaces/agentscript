@@ -98,20 +98,6 @@ class DataSet {
         Object.assign(this, { width, height, data })
     }
 
-    // Get/Set name, useful for storage key.
-    setName(string) {
-        this.name = string
-        return this
-    }
-    getName() {
-        return this.name ? this.name : this.makeName()
-    }
-    makeName() {
-        const { width, height } = this
-        const sum = util.arraySum(this.data).toFixed(2)
-        return `${this.dataType().name}-${width}-${height}-${sum}`
-    }
-
     // Checks x,y are within DataSet. Throw error if not.
     checkXY(x, y) {
         if (!this.inBounds(x, y)) {
@@ -121,8 +107,8 @@ class DataSet {
     // true if x,y in dataset bounds
     inBounds(x, y) {
         return (
-            util.between(x, 0, this.width - 1) &amp;&amp;
-            util.between(y, 0, this.height - 1)
+            util.isBetween(x, 0, this.width - 1) &amp;&amp;
+            util.isBetween(y, 0, this.height - 1)
         )
     }
 
@@ -204,8 +190,8 @@ class DataSet {
     }
 
     // Return a copy of this, with new data array
-    copy() {
-        return new DataSet(this.width, this.height, util.clone(this.data))
+    clone() {
+        return new DataSet(this.width, this.height, this.data.slice(0))
     }
 
     // Return new (empty) dataset, defaulting to this type
@@ -471,68 +457,30 @@ class DataSet {
         return { slope, aspect, dzdx, dzdy }
     }
 
-    // REMIND: limit to data that can be 24 bit. Error otherwise.
-    // DataType of Int8, 16, Int24 OK, others need testing.
-    // Possibly use precision to minimize byte size to 3, rgb?
-    //
-    // Convert dataset to an image context object.
-    //
-    // This can be used to "visualize" the data by normalizing
-    // which will scale the data to use the entire RGB space.
-    // It can also be used to create tiles or image-as-data if
-    // the defaults are used.
-    //
-    // Due to
-    // [alpha-premultiply](https://en.wikipedia.org/wiki/Alpha_compositing),
-    // the best we can do as data is 24 bit ints.
-    // You can simulate floats/fixed by multiplying the dataset
-    // the dividing on conversion back.
-    //
-    // Our preferred transport is in the works, likely in the
-    // tile datasets via blobs or arraybuffers. Sigh.
-    // toContext (normalize = false, gray = false, alpha = 255) {
-    //   const [w, h, data] = [this.width, this.height, this.data]
-    //   let idata
-    //   if (normalize) {
-    //     idata = gray
-    //       ? util.normalize8(data) : util.normalizeInt(data, 0, Math.pow(2, 24) - 1)
-    //   } else {
-    //     idata = data.map((a) => Math.round(a))
-    //   }
-    //   const ctx = util.createCtx(w, h)
-    //   const id = ctx.getImageData(0, 0, w, h)
-    //   const ta = id.data // ta short for typed array
-    //   for (let i = 0; i &lt; idata.length; i++) {
-    //     const [num, j] = [idata[i], 4 * i] // j = byte index into ta
-    //     if (gray) {
-    //       ta[j] = ta[j + 1] = ta[j + 2] = Math.floor(num); ta[j + 3] = alpha
-    //     } else {
-    //       ta[j] = (num >> 16) &amp; 0xff
-    //       ta[j + 1] = (num >> 8) &amp; 0xff
-    //       ta[j + 2] = num &amp; 0xff
-    //       ta[j + 3] = alpha // if not 255, image will be premultiplied.
-    //     }
-    //   }
-    //   ctx.putImageData(id, 0, 0)
-    //   return ctx
-    // }
-    //
-    // // Convert dataset to a canvas, which can be used as an image
-    // toCanvas (normalize = false, gray = false, alpha = 255) {
-    //   return this.toContext(gray, normalize, alpha).canvas
-    // }
-    // // Convert dataset to a base64 string
-    // toDataUrl (normalize = false, gray = false, alpha = 255) {
-    //   return util.ctxToDataUrl(this.toContext(gray, normalize, alpha))
-    // }
-
-    // Return max/min of data
+    // Return max/min/extent/sum of data
     max() {
-        return util.arrayMax(this.data)
+        // return util.arrayMax(this.data)
+        return this.data.reduce((a, b) => Math.max(a, b))
     }
     min() {
-        return util.arrayMin(this.data)
+        // return util.arrayMin(this.data)
+        return this.data.reduce((a, b) => Math.min(a, b))
     }
+    extent() {
+        return [this.min(), this.max()]
+    }
+    sum() {
+        return this.data.reduce((a, b) => a + b, 0)
+    }
+
+    // Return new dataset scaled between lo, hi values
+    normalize(lo = 0, hi = 1) {
+        const [min, max] = this.extent()
+        const scale = 1 / (max - min)
+        const data = this.data.map(n => lerp(lo, hi, scale * (n - min)))
+        return new DataSet(this.width, this.height, data)
+    }
+
     // Test that this has same width, height, data as dataset.
     // Note: does not require equal array type (Array or TypedArray)
     equals(dataset) {
@@ -545,6 +493,75 @@ class DataSet {
 }
 
 export default DataSet
+
+// REMIND: limit to data that can be 24 bit. Error otherwise.
+// DataType of Int8, 16, Int24 OK, others need testing.
+// Possibly use precision to minimize byte size to 3, rgb?
+//
+// Convert dataset to an image context object.
+//
+// This can be used to "visualize" the data by normalizing
+// which will scale the data to use the entire RGB space.
+// It can also be used to create tiles or image-as-data if
+// the defaults are used.
+//
+// Due to
+// [alpha-premultiply](https://en.wikipedia.org/wiki/Alpha_compositing),
+// the best we can do as data is 24 bit ints.
+// You can simulate floats/fixed by multiplying the dataset
+// the dividing on conversion back.
+//
+// Our preferred transport is in the works, likely in the
+// tile datasets via blobs or arraybuffers. Sigh.
+// toContext (normalize = false, gray = false, alpha = 255) {
+//   const [w, h, data] = [this.width, this.height, this.data]
+//   let idata
+//   if (normalize) {
+//     idata = gray
+//       ? util.normalize8(data) : util.normalizeInt(data, 0, Math.pow(2, 24) - 1)
+//   } else {
+//     idata = data.map((a) => Math.round(a))
+//   }
+//   const ctx = util.createCtx(w, h)
+//   const id = ctx.getImageData(0, 0, w, h)
+//   const ta = id.data // ta short for typed array
+//   for (let i = 0; i &lt; idata.length; i++) {
+//     const [num, j] = [idata[i], 4 * i] // j = byte index into ta
+//     if (gray) {
+//       ta[j] = ta[j + 1] = ta[j + 2] = Math.floor(num); ta[j + 3] = alpha
+//     } else {
+//       ta[j] = (num >> 16) &amp; 0xff
+//       ta[j + 1] = (num >> 8) &amp; 0xff
+//       ta[j + 2] = num &amp; 0xff
+//       ta[j + 3] = alpha // if not 255, image will be premultiplied.
+//     }
+//   }
+//   ctx.putImageData(id, 0, 0)
+//   return ctx
+// }
+//
+// // Convert dataset to a canvas, which can be used as an image
+// toCanvas (normalize = false, gray = false, alpha = 255) {
+//   return this.toContext(gray, normalize, alpha).canvas
+// }
+// // Convert dataset to a base64 string
+// toDataUrl (normalize = false, gray = false, alpha = 255) {
+//   return util.ctxToDataUrl(this.toContext(gray, normalize, alpha))
+// }
+
+// // Get/Set name, useful for storage key.
+// setName(string) {
+//     this.name = string
+//     return this
+// }
+// getName() {
+//     return this.name ? this.name : this.makeName()
+// }
+// makeName() {
+//     const { width, height } = this
+//     const sum = this.sum().toFixed(2)
+//     return `${this.dataType().name}-${width}-${height}-${sum}`
+// }
 </code></pre>
         </article>
     </section>

@@ -1,7 +1,7 @@
-import { loadScript, inWorker } from './dom.js'
-import { randomSeed } from './math.js'
-import { repeat } from './objects.js'
-import { timeoutLoop } from './async.js'
+// import { loadScript, inWorker } from './dom.js'
+// import { randomSeed } from './math.js'
+// import { repeat } from './objects.js'
+// import { timeoutLoop } from './async.js'
 
 function toJSON(obj, indent = 0, topLevelArrayOK = true) {
     let firstCall = topLevelArrayOK
@@ -45,33 +45,33 @@ export function sampleModel(model) {
     return JSON.parse(json)
 }
 
-// params; classPath, steps, seed,
-export async function runModel(params) {
-    var worker = inWorker() // fails in test/models.js
-    const prefix = worker ? 'worker ' : 'main '
-    console.log(prefix + 'params', params)
+// // params; classPath, steps, seed,
+// export async function runModel(params) {
+//     var worker = inWorker() // fails in test/models.js
+//     const prefix = worker ? 'worker ' : 'main '
+//     console.log(prefix + 'params', params)
 
-    if (worker) importScripts(params.classPath)
-    else await loadScript(params.classPath)
+//     if (worker) importScripts(params.classPath)
+//     else await loadScript(params.classPath)
 
-    if (params.seed) randomSeed()
+//     if (params.seed) randomSeed()
 
-    // const Model = eval(params.className)
-    const model = new defaultModel()
-    console.log(prefix + 'model', model)
+//     // const Model = eval(params.className)
+//     const model = new defaultModel()
+//     console.log(prefix + 'model', model)
 
-    await model.startup()
-    model.setup()
-    if (worker) {
-        repeat(params.steps, () => {
-            model.step()
-        })
-    } else {
-        await timeoutLoop(() => {
-            model.step()
-        }, params.steps)
-    }
-    console.log(prefix + 'done, model', model)
+//     await model.startup()
+//     model.setup()
+//     if (worker) {
+//         repeat(params.steps, () => {
+//             model.step()
+//         })
+//     } else {
+//         await timeoutLoop(() => {
+//             model.step()
+//         }, params.steps)
+//     }
+//     console.log(prefix + 'done, model', model)
 
-    return sampleModel(model)
-}
+//     return sampleModel(model)
+// }

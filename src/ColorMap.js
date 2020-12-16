@@ -150,9 +150,9 @@ const ColorMap = {
         },
         // Return the Uint8 array used to create the typedColors,
         // undefined if not webgl ready.
-        webglArray() {
-            return this.typedArray
-        },
+        // webglArray() {
+        //     return this.typedArray
+        // },
 
         // Debugging: Return a string with length and array of colors
         toString() {

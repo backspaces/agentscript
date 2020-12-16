@@ -17,7 +17,6 @@ export function toOofA(aofo, spec) {
     forLoop(aofo, (o, i) => {
         keys.forEach(key => (oofa[key][i] = o[key]))
     })
-
     return oofa
 }
 export function oofaObject(oofa, i, keys) {
