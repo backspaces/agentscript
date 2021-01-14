@@ -477,7 +477,7 @@ class DataSet {
     normalize(lo = 0, hi = 1) {
         const [min, max] = this.extent()
         const scale = 1 / (max - min)
-        const data = this.data.map(n => lerp(lo, hi, scale * (n - min)))
+        const data = this.data.map(n => util.lerp(lo, hi, scale * (n - min)))
         return new DataSet(this.width, this.height, data)
     }
 

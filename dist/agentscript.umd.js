@@ -250,10 +250,7 @@ out;`;
         const response = await fetch(url);
         if (!response.ok) throw Error(`Not found: ${url}`)
         const css = await response.text();
-
-        document.head.innerHTML += `<style>
-${css}
-</style>`;
+        document.head.innerHTML += `<style>${css}</style>`;
     }
 
     // REST:
@@ -702,7 +699,7 @@ ${css}
     // Scale is in [0-1], a percentage, and the result is in [lo,hi]
     // If lo>hi, scaling is from hi end of range.
     // [Why the name `lerp`?](http://goo.gl/QrzMc)
-    const lerp$1 = (lo, hi, scale) =>
+    const lerp = (lo, hi, scale) =>
         lo <= hi ? lo + (hi - lo) * scale : lo - (lo - hi) * scale;
     // Calculate the lerp scale given lo/hi pair and a number between them.
     // Clamps number to be between lo & hi.
@@ -858,7 +855,7 @@ ${css}
         wrap: wrap,
         clamp: clamp,
         isBetween: isBetween,
-        lerp: lerp$1,
+        lerp: lerp,
         lerpScale: lerpScale,
         degToRad: degToRad,
         radToDeg: radToDeg,
@@ -2681,7 +2678,7 @@ ${css}
         normalize(lo = 0, hi = 1) {
             const [min, max] = this.extent();
             const scale = 1 / (max - min);
-            const data = this.data.map(n => lerp(lo, hi, scale * (n - min)));
+            const data = this.data.map(n => util.lerp(lo, hi, scale * (n - min)));
             return new DataSet(this.width, this.height, data)
         }
 

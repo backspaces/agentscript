@@ -6,37 +6,22 @@
 
     <body>
         <script type="module">
-            import util from '../src/util.js'
-            import {
-                TestModel as Model,
-                TestModule as module,
-            } from './TestModel.js'
-            util.toWindow({ util, Model, module })
+            // import util from '../src/util.js'
+            // // import TestClass from './test.js'
+            // // import './test.js'
+            // import Model from 'https://agentscript.org/models/LinkTravelModel.js'
 
-            async function run() {
-                const model = new Model()
+            import DataSet from '../src/DataSet.js'
 
-                util.randomSeed()
-                await model.startup()
-                model.setup()
-                await util.timeoutLoop(() => {
-                    model.step()
-                }, 500)
+            let range = size => [...Array(size)].map((_, i) => i)
+            // let range = size => Array.from({ length: size }, (x, i) => i)
 
-                util.printToPage(util.sampleModel(model))
+            let range2 = (size, start = 0, step = 1) =>
+                [...Array(size)].map((_, i) => start + i * step)
 
-                // =====================
-
-                util.randomSeed()
-                await module.startup()
-                module.setup()
-                await util.timeoutLoop(() => {
-                    module.step()
-                }, 500)
-
-                util.printToPage(util.sampleModel(module.model))
-            }
-            run()
+            let ds = new DataSet(5, 10, range2(50, 0, 10))
+            let dsn = ds.normalize(0, 1)
+            console.log(dsn.data)
         </script>
     </body>
 </html>

@@ -7,15 +7,25 @@
         <div id="plot1"></div>
 
         <script type="module">
-            import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
+            // import 'https://cdn.skypack.dev/uplot/dist/uPlot.min.css'
+            // import 'https://cdn.skypack.dev/uplot/uPlot.min.css'
+            // import '../vendor/uplot.css.js'
+            // import '../tests/test.js'
+
+            import uPlot from 'https://cdn.skypack.dev/uplot'
+            // import uPlot from 'https://cdn.skypack.dev/uplot/dist/uPlot.esm.js'
+            // import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
+            document.head.innerHTML +=
+                '<link rel="stylesheet" href="https://cdn.skypack.dev/uplot/dist/uPlot.min.css">'
+
             // import AgentArray from '../src/AgentArray.js'
             import util from '../src/util.js'
             util.toWindow({ uPlot, util })
 
             async function run() {
-                await util.setCssStyle(
-                    'https://unpkg.com/uplot/dist/uPlot.min.css'
-                )
+                // await util.setCssStyle(
+                //     'https://cdn.skypack.dev/uplot/dist/uPlot.min.css'
+                // )
 
                 let size = 200
                 let opts = {

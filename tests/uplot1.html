@@ -11,11 +11,12 @@
         <div id="plot1"></div>
 
         <script type="module">
+            // import 'https://unpkg.com/uplot/dist/uPlot.min.css'
             import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
             import util from '../src/util.js'
             util.toWindow({ uPlot, util })
 
-            util.setCssStyle('https://unpkg.com/uplot/dist/uPlot.min.css')
+            // util.setCssStyle('https://unpkg.com/uplot/dist/uPlot.min.css')
 
             let size = 200
             let opts = {

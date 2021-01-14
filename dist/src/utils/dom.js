@@ -7,10 +7,7 @@ export async function setCssStyle(url) {
     const response = await fetch(url)
     if (!response.ok) throw Error(`Not found: ${url}`)
     const css = await response.text()
-
-    document.head.innerHTML += `<style>
-${css}
-</style>`
+    document.head.innerHTML += `<style>${css}</style>`
 }
 
 // REST:
