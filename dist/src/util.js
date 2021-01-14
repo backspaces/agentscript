@@ -11,6 +11,12 @@ import * as types from './utils/types.js'
 
 const util = {}
 
+// console.warn(
+//     `util.js is deprecated, please use utils.js which has individual exports
+//     Use: import * as util from src/utils.js
+//     To replace: import util from src/util.js`
+// )
+
 Object.assign(
     util,
 
