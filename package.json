@@ -14,7 +14,8 @@
         "/models/",
         "/views2/",
         "/views3/",
-        "/gis/"
+        "/gis/",
+        "/tests/"
     ],
     "repository": {
         "type": "git",
