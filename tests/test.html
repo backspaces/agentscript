@@ -11,17 +11,18 @@
             // // import './test.js'
             // import Model from 'https://agentscript.org/models/LinkTravelModel.js'
 
-            import DataSet from '../src/DataSet.js'
+            // import DataSet from '../src/DataSet.js'
+            // let range = size => [...Array(size)].map((_, i) => i)
+            // // let range = size => Array.from({ length: size }, (x, i) => i)
+            // let range2 = (size, start = 0, step = 1) =>
+            //     [...Array(size)].map((_, i) => start + i * step)
+            // let ds = new DataSet(5, 10, range2(50, 0, 10))
+            // let dsn = ds.normalize(0, 1)
+            // console.log(dsn.data)
 
-            let range = size => [...Array(size)].map((_, i) => i)
-            // let range = size => Array.from({ length: size }, (x, i) => i)
-
-            let range2 = (size, start = 0, step = 1) =>
-                [...Array(size)].map((_, i) => start + i * step)
-
-            let ds = new DataSet(5, 10, range2(50, 0, 10))
-            let dsn = ds.normalize(0, 1)
-            console.log(dsn.data)
+            import { lerp } from './utils.js'
+            // import lerp from 'https://agentscript.org/tests/utils.js'
+            console.log(lerp)
         </script>
     </body>
 </html>

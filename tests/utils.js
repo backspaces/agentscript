@@ -89,7 +89,8 @@ export async function fetchType(url, type = 'text') {
 //     }
 // }
 //
-import { inWorker } from './dom.js'
+
+// import { inWorker } from './dom.js'
 
 function offscreenOK() {
     // return !!self.OffscreenCanvas
@@ -721,8 +722,9 @@ export function sampleModel(model) {
 
 //     return sampleModel(model)
 // }
-import { randomInt } from './math.js'
-import { convertArrayType } from './types.js'
+
+// import { randomInt } from './math.js'
+// import { convertArrayType } from './types.js'
 
 // ### Arrays, Objects and Iteration
 
@@ -1036,8 +1038,9 @@ export const arrayLast = array => array[array.length - 1]
 
 // // Simple uniq on sorted or unsorted array.
 // export const uniq = array => Array.from(new Set(array))
-import { isObject, isTypedArray } from './types.js'
-import { forLoop } from './objects.js'
+
+// import { isObject, isTypedArray } from './types.js'
+// import { forLoop } from './objects.js'
 
 // ### OofA/AofO
 
