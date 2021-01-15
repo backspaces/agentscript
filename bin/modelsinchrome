@@ -3,8 +3,8 @@
 if [ "$1" == "" ]; then echo "This program requires arguments"; exit; fi
 
 dir=$1
-# root='http://localhost/src/agentscript/'
-root='https://agentscript.org/'
+root='http://localhost/src/agentscript/'
+# root='https://agentscript.org/'
 
 cd ~/src/agentscript
 

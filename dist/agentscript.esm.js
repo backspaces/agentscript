@@ -223,152 +223,9 @@ async function fetchType(url, type = 'text') {
 // }
 //
 
-var async = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    imagePromise: imagePromise,
-    imageBitmapPromise: imageBitmapPromise,
-    canvasBlobPromise: canvasBlobPromise,
-    xhrPromise: xhrPromise,
-    timeoutPromise: timeoutPromise,
-    timeoutLoop: timeoutLoop,
-    waitPromise: waitPromise,
-    fetchType: fetchType
-});
+// ### Canvas
 
-// import { isObject } from './types.js' // see printToPage
-
-// export function setCssStyle(url) {
-//     document.head.innerHTML += `<link rel="stylesheet" href="${url}" type="text/css" />`
-// }
-async function setCssStyle(url) {
-    const response = await fetch(url);
-    if (!response.ok) throw Error(`Not found: ${url}`)
-    const css = await response.text();
-    document.head.innerHTML += `<style>${css}</style>`;
-}
-
-// REST:
-// Parse the query, returning an object of key / val pairs.
-function getQueryString() {
-    return window.location.search.substr(1)
-}
-function parseQueryString(
-    // paramsString = window.location.search.substr(1)
-    paramsString = getQueryString()
-) {
-    const results = {};
-    const searchParams = new URLSearchParams(paramsString);
-    for (var pair of searchParams.entries()) {
-        let [key, val] = pair;
-        if (val.match(/^[0-9.]+$/) || val.match(/^[0-9.]+e[0-9]+$/))
-            val = Number(val);
-        if (['true', 't', ''].includes(val)) val = true;
-        if (['false', 'f'].includes(val)) val = false;
-
-        results[key] = val;
-    }
-    return results
-}
-// Merge the querystring into the default parameters
-function RESTapi(parameters) {
-    return Object.assign(parameters, parseQueryString())
-}
-
-function inWorker() {
-    return !inNode() && typeof self.window === 'undefined'
-}
-
-function inNode() {
-    return typeof global !== 'undefined'
-}
-
-function inDeno() {
-    return !!Deno
-}
-
-// Print a message to an html element
-// Default to document.body if in browser.
-// If msg is an object, convert to JSON
-// (object canot have cycles etc)
-// If element is string, find element by ID
-function printToPage(msg, element = document.body) {
-    // if (isObject(msg)) {
-    if (typeof msg === 'object') {
-        msg = JSON.stringify(msg, null, 2);
-        // msg = '<pre>' + msg + '</pre>'
-    }
-    msg = '<pre>' + msg + '</pre>';
-
-    if (typeof element === 'string') {
-        element = document.getElementById(element);
-    }
-
-    element.style.fontFamily = 'monospace';
-    element.innerHTML += msg; //+ '<br />'
-}
-
-// Get element (i.e. canvas) relative x,y position from event/mouse position.
-function getEventXY(element, evt) {
-    // http://goo.gl/356S91
-    const rect = element.getBoundingClientRect();
-    return [evt.clientX - rect.left, evt.clientY - rect.top]
-}
-
-// Convert a function into a worker via blob url.
-// Adds generic error handler. Scripts only, not modules.
-function fcnToWorker(fcn) {
-    const href = document.location.href;
-    const root = href.replace(/\/[^\/]+$/, '/');
-    const fcnStr = `(${fcn.toString(root)})("${root}")`;
-    const objUrl = URL.createObjectURL(
-        new Blob([fcnStr], { type: 'text/javascript' })
-    );
-    const worker = new Worker(objUrl);
-    worker.onerror = function (e) {
-        console.log('Worker ERROR: Line ', e.lineno, ': ', e.message);
-    };
-    return worker
-}
-
-// export function workerScript(script, worker) {
-//     const srcBlob = new Blob([script], { type: 'text/javascript' })
-//     const srcURL = URL.createObjectURL(srcBlob)
-//     worker.postMessage({ cmd: 'script', url: srcURL })
-// }
-
-// Create dynamic `<script>` tag, appending to `<head>`
-//   <script src="./test/src/three0.js" type="module"></script>
-// NOTE: Use import(path) for es6 modules.
-// I.e. this is legacy, for umd's only.
-// export function loadScript(path, props = {}) {
-//     const scriptTag = document.createElement('script')
-//     scriptTag.src = path
-//     Object.assign(scriptTag, props)
-//     document.querySelector('head').appendChild(scriptTag)
-// }
-// export function loadScript(path, props = {}) {
-//     return new Promise((resolve, reject) => {
-//         const scriptTag = document.createElement('script')
-//         scriptTag.onload = () => resolve(scriptTag)
-//         scriptTag.src = path
-//         Object.assign(scriptTag, props)
-//         document.querySelector('head').appendChild(scriptTag)
-//     })
-// }
-
-var dom = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    setCssStyle: setCssStyle,
-    getQueryString: getQueryString,
-    parseQueryString: parseQueryString,
-    RESTapi: RESTapi,
-    inWorker: inWorker,
-    inNode: inNode,
-    inDeno: inDeno,
-    printToPage: printToPage,
-    getEventXY: getEventXY,
-    fcnToWorker: fcnToWorker
-});
+// import { inWorker } from './dom.js'
 
 function offscreenOK() {
     // return !!self.OffscreenCanvas
@@ -490,21 +347,7 @@ function setCtxImage(ctx, img) {
     fillCtxWithImage(ctx, img);
 }
 
-var canvas = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    createCanvas: createCanvas,
-    createCtx: createCtx,
-    cloneCanvas: cloneCanvas,
-    resizeCtx: resizeCtx,
-    setCanvasSize: setCanvasSize,
-    setIdentity: setIdentity,
-    setTextProperties: setTextProperties,
-    drawText: drawText,
-    ctxImageData: ctxImageData,
-    clearCtx: clearCtx,
-    fillCtxWithImage: fillCtxWithImage,
-    setCtxImage: setCtxImage
-});
+// ### Debug
 
 // Print a message just once.
 let logOnceMsgSet;
@@ -617,17 +460,128 @@ function dump(model = window.model) {
 //         .replace(/,"/g, ',')
 //         .replace(/":/g, ':')
 // }
+// import { isObject } from './types.js' // see printToPage
 
-var debug = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    logOnce: logOnce,
-    warn: warn,
-    timeit: timeit,
-    fps: fps,
-    pps: pps,
-    toWindow: toWindow,
-    dump: dump
-});
+// ### Dom
+
+// export function setCssStyle(url) {
+//     document.head.innerHTML += `<link rel="stylesheet" href="${url}" type="text/css" />`
+// }
+async function setCssStyle(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw Error(`Not found: ${url}`)
+    const css = await response.text();
+    document.head.innerHTML += `<style>${css}</style>`;
+}
+
+// REST:
+// Parse the query, returning an object of key / val pairs.
+function getQueryString() {
+    return window.location.search.substr(1)
+}
+function parseQueryString(
+    // paramsString = window.location.search.substr(1)
+    paramsString = getQueryString()
+) {
+    const results = {};
+    const searchParams = new URLSearchParams(paramsString);
+    for (var pair of searchParams.entries()) {
+        let [key, val] = pair;
+        if (val.match(/^[0-9.]+$/) || val.match(/^[0-9.]+e[0-9]+$/))
+            val = Number(val);
+        if (['true', 't', ''].includes(val)) val = true;
+        if (['false', 'f'].includes(val)) val = false;
+
+        results[key] = val;
+    }
+    return results
+}
+// Merge the querystring into the default parameters
+function RESTapi(parameters) {
+    return Object.assign(parameters, parseQueryString())
+}
+
+function inWorker() {
+    return !inNode() && typeof self.window === 'undefined'
+}
+
+function inNode() {
+    return typeof global !== 'undefined'
+}
+
+function inDeno() {
+    return !!Deno
+}
+
+// Print a message to an html element
+// Default to document.body if in browser.
+// If msg is an object, convert to JSON
+// (object canot have cycles etc)
+// If element is string, find element by ID
+function printToPage(msg, element = document.body) {
+    // if (isObject(msg)) {
+    if (typeof msg === 'object') {
+        msg = JSON.stringify(msg, null, 2);
+        // msg = '<pre>' + msg + '</pre>'
+    }
+    msg = '<pre>' + msg + '</pre>';
+
+    if (typeof element === 'string') {
+        element = document.getElementById(element);
+    }
+
+    element.style.fontFamily = 'monospace';
+    element.innerHTML += msg; //+ '<br />'
+}
+
+// Get element (i.e. canvas) relative x,y position from event/mouse position.
+function getEventXY(element, evt) {
+    // http://goo.gl/356S91
+    const rect = element.getBoundingClientRect();
+    return [evt.clientX - rect.left, evt.clientY - rect.top]
+}
+
+// Convert a function into a worker via blob url.
+// Adds generic error handler. Scripts only, not modules.
+function fcnToWorker(fcn) {
+    const href = document.location.href;
+    const root = href.replace(/\/[^\/]+$/, '/');
+    const fcnStr = `(${fcn.toString(root)})("${root}")`;
+    const objUrl = URL.createObjectURL(
+        new Blob([fcnStr], { type: 'text/javascript' })
+    );
+    const worker = new Worker(objUrl);
+    worker.onerror = function (e) {
+        console.log('Worker ERROR: Line ', e.lineno, ': ', e.message);
+    };
+    return worker
+}
+
+// export function workerScript(script, worker) {
+//     const srcBlob = new Blob([script], { type: 'text/javascript' })
+//     const srcURL = URL.createObjectURL(srcBlob)
+//     worker.postMessage({ cmd: 'script', url: srcURL })
+// }
+
+// Create dynamic `<script>` tag, appending to `<head>`
+//   <script src="./test/src/three0.js" type="module"></script>
+// NOTE: Use import(path) for es6 modules.
+// I.e. this is legacy, for umd's only.
+// export function loadScript(path, props = {}) {
+//     const scriptTag = document.createElement('script')
+//     scriptTag.src = path
+//     Object.assign(scriptTag, props)
+//     document.querySelector('head').appendChild(scriptTag)
+// }
+// export function loadScript(path, props = {}) {
+//     return new Promise((resolve, reject) => {
+//         const scriptTag = document.createElement('script')
+//         scriptTag.onload = () => resolve(scriptTag)
+//         scriptTag.src = path
+//         Object.assign(scriptTag, props)
+//         document.querySelector('head').appendChild(scriptTag)
+//     })
+// }
 
 // ### Math
 
@@ -833,42 +787,7 @@ function inCone(x, y, radius, coneAngle, angle, x0, y0) {
 //         : randomSeedSin(seed)
 // }
 
-var math = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    randomInt: randomInt,
-    randomInt2: randomInt2,
-    randomFloat: randomFloat,
-    randomFloat2: randomFloat2,
-    randomCentered: randomCentered,
-    randomNormal: randomNormal,
-    randomSeed: randomSeed,
-    precision: precision,
-    isPowerOf2: isPowerOf2,
-    nextPowerOf2: nextPowerOf2,
-    mod: mod,
-    wrap: wrap,
-    clamp: clamp,
-    isBetween: isBetween,
-    lerp: lerp,
-    lerpScale: lerpScale,
-    degToRad: degToRad,
-    radToDeg: radToDeg,
-    angleToHeading: angleToHeading,
-    headingToAngle: headingToAngle,
-    mod360: mod360,
-    mod2pi: mod2pi,
-    headingsEqual: headingsEqual,
-    anglesEqual: anglesEqual,
-    subtractRadians: subtractRadians,
-    subtractHeadings: subtractHeadings,
-    radiansToward: radiansToward,
-    headingToward: headingToward,
-    sqDistance: sqDistance,
-    distance: distance,
-    sqDistance3: sqDistance3,
-    distance3: distance3,
-    inCone: inCone
-});
+// ### Models
 
 // import { loadScript, inWorker } from './dom.js'
 // import { randomSeed } from './math.js'
@@ -948,95 +867,8 @@ function sampleModel(model) {
 //     return sampleModel(model)
 // }
 
-var models = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    sampleModel: sampleModel
-});
-
-// ### Types
-
-// Fix the javascript typeof operator https://goo.gl/Efdzk5
-const typeOf = obj =>
-    ({}.toString
-        .call(obj)
-        .match(/\s(\w+)/)[1]
-        .toLowerCase());
-const isType = (obj, string) => typeOf(obj) === string;
-const isOneOfTypes = (obj, array) => array.includes(typeOf(obj));
-
-const isString = obj => isType(obj, 'string');
-const isObject = obj => isType(obj, 'object');
-// export const isArray = obj => isType(obj, 'array')
-const isArray = obj => Array.isArray(obj);
-const isNumber = obj => isType(obj, 'number');
-const isInteger = n => Number.isInteger(n);
-// export const isFloat = n => isNumber(n) && n % 1 !== 0 // https://goo.gl/6MS0Tm
-const isFunction = obj => isType(obj, 'function');
-const isImage = obj => isType(obj, 'image');
-
-// Is a number an integer (rather than a float w/ non-zero fractional part)
-const isCanvas = obj =>
-    isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']);
-const isImageable = obj =>
-    isOneOfTypes(obj, [
-        'image',
-        'htmlimageelement',
-        'htmlcanvaselement',
-        'offscreencanvas',
-        'imagebitmap',
-    ]);
-
-// Typed Arrays:
-const isTypedArray = obj => typeOf(obj.buffer) === 'arraybuffer';
-const isUintArray = obj => /^uint.*array$/.test(typeOf(obj));
-const isIntArray = obj => /^int.*array$/.test(typeOf(obj));
-const isFloatArray = obj => /^float.*array$/.test(typeOf(obj));
-
-function isLittleEndian() {
-    const d32 = new Uint32Array([0x01020304]);
-    return new Uint8ClampedArray(d32.buffer)[0] === 4
-}
-
-// Convert Array or TypedArray to given Type (Array or TypedArray).
-// Result same length as array, precision may be lost.
-function convertArrayType(array, Type) {
-    const Type0 = array.constructor;
-    if (Type0 === Type) return array // return array if already same Type
-    return Type.from(array) // Use .from (both TypedArrays and Arrays)
-}
-
-// Unused:
-// export const isWebglArray = obj =>
-//     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
-// isHtmlElement: obj => /^html.*element$/.test(typeOf(obj))
-// isImage: obj => isType(obj, 'image')
-// isImageBitmap: obj => isType(obj, 'imagebitmap')
-// // Is undefined, null, bool, number, string, symbol
-// isPrimitive: obj => obj == null || 'object' != typeof obj
-// Return array's type (Array or TypedArray variant)
-// typeName: obj => obj.constructor.name
-
-var types = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    typeOf: typeOf,
-    isType: isType,
-    isOneOfTypes: isOneOfTypes,
-    isString: isString,
-    isObject: isObject,
-    isArray: isArray,
-    isNumber: isNumber,
-    isInteger: isInteger,
-    isFunction: isFunction,
-    isImage: isImage,
-    isCanvas: isCanvas,
-    isImageable: isImageable,
-    isTypedArray: isTypedArray,
-    isUintArray: isUintArray,
-    isIntArray: isIntArray,
-    isFloatArray: isFloatArray,
-    isLittleEndian: isLittleEndian,
-    convertArrayType: convertArrayType
-});
+// import { randomInt } from './math.js'
+// import { convertArrayType } from './types.js'
 
 // ### Arrays, Objects and Iteration
 
@@ -1351,36 +1183,8 @@ const arrayLast = array => array[array.length - 1];
 // // Simple uniq on sorted or unsorted array.
 // export const uniq = array => Array.from(new Set(array))
 
-var objects = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    identityFcn: identityFcn,
-    noopFcn: noopFcn,
-    propFcn: propFcn,
-    arraysEqual: arraysEqual,
-    removeArrayItem: removeArrayItem,
-    arraysToString: arraysToString,
-    forLoop: forLoop,
-    repeat: repeat,
-    step: step,
-    range: range,
-    override: override,
-    concatArrays: concatArrays,
-    objectToString: objectToString,
-    objectsEqual: objectsEqual,
-    oneOf: oneOf,
-    otherOneOf: otherOneOf,
-    oneKeyOf: oneKeyOf,
-    oneValOf: oneValOf,
-    sortNums: sortNums,
-    sortObjs: sortObjs,
-    shuffle: shuffle,
-    union: union,
-    intersection: intersection,
-    difference: difference,
-    floatRamp: floatRamp,
-    integerRamp: integerRamp,
-    arrayLast: arrayLast
-});
+// import { isObject, isTypedArray } from './types.js'
+// import { forLoop } from './objects.js'
 
 // ### OofA/AofO
 
@@ -1420,38 +1224,198 @@ function oofaBuffers(postData) {
     forLoop(postData, obj => forLoop(obj, a => buffers.push(a.buffer)));
     return buffers
 }
+// ### Types
 
-var oofa = /*#__PURE__*/Object.freeze({
+// Fix the javascript typeof operator https://goo.gl/Efdzk5
+const typeOf = obj =>
+    ({}.toString
+        .call(obj)
+        .match(/\s(\w+)/)[1]
+        .toLowerCase());
+const isType = (obj, string) => typeOf(obj) === string;
+const isOneOfTypes = (obj, array) => array.includes(typeOf(obj));
+
+const isString = obj => isType(obj, 'string');
+const isObject = obj => isType(obj, 'object');
+// export const isArray = obj => isType(obj, 'array')
+const isArray = obj => Array.isArray(obj);
+const isNumber = obj => isType(obj, 'number');
+const isInteger = n => Number.isInteger(n);
+// export const isFloat = n => isNumber(n) && n % 1 !== 0 // https://goo.gl/6MS0Tm
+const isFunction = obj => isType(obj, 'function');
+const isImage = obj => isType(obj, 'image');
+
+// Is a number an integer (rather than a float w/ non-zero fractional part)
+const isCanvas = obj =>
+    isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas']);
+const isImageable = obj =>
+    isOneOfTypes(obj, [
+        'image',
+        'htmlimageelement',
+        'htmlcanvaselement',
+        'offscreencanvas',
+        'imagebitmap',
+    ]);
+
+// Typed Arrays:
+const isTypedArray = obj => typeOf(obj.buffer) === 'arraybuffer';
+const isUintArray = obj => /^uint.*array$/.test(typeOf(obj));
+const isIntArray = obj => /^int.*array$/.test(typeOf(obj));
+const isFloatArray = obj => /^float.*array$/.test(typeOf(obj));
+
+function isLittleEndian() {
+    const d32 = new Uint32Array([0x01020304]);
+    return new Uint8ClampedArray(d32.buffer)[0] === 4
+}
+
+// Convert Array or TypedArray to given Type (Array or TypedArray).
+// Result same length as array, precision may be lost.
+function convertArrayType(array, Type) {
+    const Type0 = array.constructor;
+    if (Type0 === Type) return array // return array if already same Type
+    return Type.from(array) // Use .from (both TypedArrays and Arrays)
+}
+
+// Unused:
+// export const isWebglArray = obj =>
+//     Array.isArray(obj) && obj.length === 3 && util.arrayMax(obj) <= 1
+// isHtmlElement: obj => /^html.*element$/.test(typeOf(obj))
+// isImage: obj => isType(obj, 'image')
+// isImageBitmap: obj => isType(obj, 'imagebitmap')
+// // Is undefined, null, bool, number, string, symbol
+// isPrimitive: obj => obj == null || 'object' != typeof obj
+// Return array's type (Array or TypedArray variant)
+// typeName: obj => obj.constructor.name
+
+var util = /*#__PURE__*/Object.freeze({
     __proto__: null,
+    imagePromise: imagePromise,
+    imageBitmapPromise: imageBitmapPromise,
+    canvasBlobPromise: canvasBlobPromise,
+    xhrPromise: xhrPromise,
+    timeoutPromise: timeoutPromise,
+    timeoutLoop: timeoutLoop,
+    waitPromise: waitPromise,
+    fetchType: fetchType,
+    createCanvas: createCanvas,
+    createCtx: createCtx,
+    cloneCanvas: cloneCanvas,
+    resizeCtx: resizeCtx,
+    setCanvasSize: setCanvasSize,
+    setIdentity: setIdentity,
+    setTextProperties: setTextProperties,
+    drawText: drawText,
+    ctxImageData: ctxImageData,
+    clearCtx: clearCtx,
+    fillCtxWithImage: fillCtxWithImage,
+    setCtxImage: setCtxImage,
+    logOnce: logOnce,
+    warn: warn,
+    timeit: timeit,
+    fps: fps,
+    pps: pps,
+    toWindow: toWindow,
+    dump: dump,
+    setCssStyle: setCssStyle,
+    getQueryString: getQueryString,
+    parseQueryString: parseQueryString,
+    RESTapi: RESTapi,
+    inWorker: inWorker,
+    inNode: inNode,
+    inDeno: inDeno,
+    printToPage: printToPage,
+    getEventXY: getEventXY,
+    fcnToWorker: fcnToWorker,
+    randomInt: randomInt,
+    randomInt2: randomInt2,
+    randomFloat: randomFloat,
+    randomFloat2: randomFloat2,
+    randomCentered: randomCentered,
+    randomNormal: randomNormal,
+    randomSeed: randomSeed,
+    precision: precision,
+    isPowerOf2: isPowerOf2,
+    nextPowerOf2: nextPowerOf2,
+    mod: mod,
+    wrap: wrap,
+    clamp: clamp,
+    isBetween: isBetween,
+    lerp: lerp,
+    lerpScale: lerpScale,
+    degToRad: degToRad,
+    radToDeg: radToDeg,
+    angleToHeading: angleToHeading,
+    headingToAngle: headingToAngle,
+    mod360: mod360,
+    mod2pi: mod2pi,
+    headingsEqual: headingsEqual,
+    anglesEqual: anglesEqual,
+    subtractRadians: subtractRadians,
+    subtractHeadings: subtractHeadings,
+    radiansToward: radiansToward,
+    headingToward: headingToward,
+    sqDistance: sqDistance,
+    distance: distance,
+    sqDistance3: sqDistance3,
+    distance3: distance3,
+    inCone: inCone,
+    sampleModel: sampleModel,
+    identityFcn: identityFcn,
+    noopFcn: noopFcn,
+    propFcn: propFcn,
+    arraysEqual: arraysEqual,
+    removeArrayItem: removeArrayItem,
+    arraysToString: arraysToString,
+    forLoop: forLoop,
+    repeat: repeat,
+    step: step,
+    range: range,
+    override: override,
+    concatArrays: concatArrays,
+    objectToString: objectToString,
+    objectsEqual: objectsEqual,
+    oneOf: oneOf,
+    otherOneOf: otherOneOf,
+    oneKeyOf: oneKeyOf,
+    oneValOf: oneValOf,
+    sortNums: sortNums,
+    sortObjs: sortObjs,
+    shuffle: shuffle,
+    union: union,
+    intersection: intersection,
+    difference: difference,
+    floatRamp: floatRamp,
+    integerRamp: integerRamp,
+    arrayLast: arrayLast,
     isOofA: isOofA,
     toOofA: toOofA,
     oofaObject: oofaObject,
     toAofO: toAofO,
-    oofaBuffers: oofaBuffers
+    oofaBuffers: oofaBuffers,
+    typeOf: typeOf,
+    isType: isType,
+    isOneOfTypes: isOneOfTypes,
+    isString: isString,
+    isObject: isObject,
+    isArray: isArray,
+    isNumber: isNumber,
+    isInteger: isInteger,
+    isFunction: isFunction,
+    isImage: isImage,
+    isCanvas: isCanvas,
+    isImageable: isImageable,
+    isTypedArray: isTypedArray,
+    isUintArray: isUintArray,
+    isIntArray: isIntArray,
+    isFloatArray: isFloatArray,
+    isLittleEndian: isLittleEndian,
+    convertArrayType: convertArrayType
 });
 
-// A set of useful misc utils which will eventually move to individual files.
-
-const util = {};
-
-// console.warn(
-//     `util.js is deprecated, please use utils.js which has individual exports
-//     Use: import * as util from src/utils.js
-//     To replace: import util from src/util.js`
-// )
-
-Object.assign(
-    util,
-
-    async,
-    canvas,
-    debug,
-    dom,
-    math,
-    models,
-    objects,
-    oofa,
-    types
+console.warn(
+    `util.js is deprecated, please use utils.js which has individual exports
+    Use: import * as util from src/utils.js
+    To replace: import util from src/util.js`
 );
 
 /**

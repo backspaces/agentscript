@@ -1,5 +1,4 @@
 import Turtle from './Turtle.js'
-import { radToDeg, degToRad, mod } from './utils/math.js'
 import { Object3D } from '../vendor/Object3D.esm.js'
 import util from './util.js'
 

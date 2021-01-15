@@ -90,6 +90,8 @@ export async function fetchType(url, type = 'text') {
 // }
 //
 
+// ### Canvas
+
 // import { inWorker } from './dom.js'
 
 function offscreenOK() {
@@ -211,6 +213,9 @@ export function setCtxImage(ctx, img) {
     setCanvasSize(ctx.canvas, img.width, img.height)
     fillCtxWithImage(ctx, img)
 }
+
+// ### Debug
+
 // Print a message just once.
 let logOnceMsgSet
 export function logOnce(msg) {
@@ -323,6 +328,8 @@ export function dump(model = window.model) {
 //         .replace(/":/g, ':')
 // }
 // import { isObject } from './types.js' // see printToPage
+
+// ### Dom
 
 // export function setCssStyle(url) {
 //     document.head.innerHTML += `<link rel="stylesheet" href="${url}" type="text/css" />`
@@ -442,6 +449,7 @@ export function fcnToWorker(fcn) {
 //         document.querySelector('head').appendChild(scriptTag)
 //     })
 // }
+
 // ### Math
 
 // const { PI, floor, cos, sin, atan2, log, log2, sqrt } = Math
@@ -645,6 +653,9 @@ export function inCone(x, y, radius, coneAngle, angle, x0, y0) {
 //         ? randomSeedParkMiller(seed)
 //         : randomSeedSin(seed)
 // }
+
+// ### Models
+
 // import { loadScript, inWorker } from './dom.js'
 // import { randomSeed } from './math.js'
 // import { repeat } from './objects.js'

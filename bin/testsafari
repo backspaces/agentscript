@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 const shell = require('shelljs')
 
+const port = 9091
 const child = shell.exec(
-    './node_modules/.bin/live-server --no-browser --quiet',
+    `./node_modules/.bin/live-server --no-browser --quiet --port=${port}`,
     {
         async: true,
     }
@@ -20,8 +21,9 @@ wait().then(() => {
         model = model.replace('Model.js', '').replace('models/', '')
         model = model.charAt(0).toLowerCase() + model.slice(1)
         // const url = `http://localhost/src/agentscript/models/?${model}`
-        const url = `http://127.0.0.1:8080/models/run.html?${model}`
-        const cmd = `open -a Safari ${url}`
+        const url = `http://127.0.0.1:${port}/models/run.html?${model}`
+        // const cmd = `open -a Safari ${url}`
+        const cmd = `open -a 'Google Chrome' ${url}`
         shell.echo(cmd)
         shell.exec(cmd)
     })
