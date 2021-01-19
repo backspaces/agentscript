@@ -8,8 +8,10 @@
         <!-- <div id="map"></div> -->
         <script type="module">
             import '../vendor/mapboxgl.css.js'
-            import mapboxgl from '../vendor/mapbox-gl.esm.js'
-            import * as turf from '../vendor/turf.esm.js'
+            // import mapboxgl from '../vendor/mapbox-gl.esm.js'
+            import mapboxgl from 'https://cdn.skypack.dev/mapbox-gl'
+            // import * as turf from '../vendor/turf.esm.js'
+            import * as turf from 'https://cdn.skypack.dev/@turf/turf'
             import * as mbox from '../src/mbtools.js'
             import TwoDraw from '../src/TwoDraw.js'
             import util from '../src/util.js'

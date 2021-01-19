@@ -564,14 +564,20 @@ export function anglesEqual(angle1, angle2) {
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
 export function subtractRadians(rad1, rad0) {
-    let dr = mod2pi(rad1 - rad0) - PI
-    // if (dr > PI) dr = dr - 2 * PI
+    let dr = mod2pi(rad1 - rad0)
+    if (dr > PI) dr = dr - 2 * PI
     return dr
 }
+
 // Above using headings (degrees) returning degrees in (-180, 180]
+// export function subtractHeadings(deg1, deg0) {
+//     let dAngle = mod360(deg1 - deg0) - 180
+//     // if (dAngle > 180) dAngle = dAngle - 360
+//     return dAngle
+// }
 export function subtractHeadings(deg1, deg0) {
-    let dAngle = mod360(deg1 - deg0) - 180
-    // if (dAngle > 180) dAngle = dAngle - 360
+    let dAngle = mod360(deg1 - deg0)
+    if (dAngle > 180) dAngle = dAngle - 360
     return dAngle
 }
 

@@ -1,6 +1,7 @@
 // Meshes used by the Three.js view module
 
-import { THREE } from '../vendor/three.esm.js'
+// import { THREE } from '../vendor/three.esm.js'
+import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
 import util from './util.js'
 
 // ========== global utilities ==========

@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
 
 if [ "$1" == "" ]; then echo "This program requires arguments"; exit; fi
+if [ "$2" == "" ]; then browser='Google Chrome'; else browser=$2; fi
 
 dir=$1
+
+
+# browser=$2 || 'Google Chrome'
+
 root='http://localhost/src/agentscript/'
 # root='https://agentscript.org/'
 
 cd ~/src/agentscript
 
 #  Create new browser window first! Wait a bit before running models.
-open -na "Google Chrome" --args --new-window
+open -na "$browser" --args --new-window
 sleep 2
 
 models=`ls $dir/*html | grep -v index.html`
 for model in $models; do
 	url=$root$model
 	echo $url
-	open $url
+	# open $url
+	open -a "$browser" $url
 done

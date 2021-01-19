@@ -2,73 +2,79 @@
 <html>
     <head>
         <title>uPlot1</title>
-        <link
+        <!-- <link
             rel="stylesheet"
             href="https://unpkg.com/uplot/dist/uPlot.min.css"
-        />
+        /> -->
     </head>
     <body>
         <div id="plot1"></div>
 
         <script type="module">
-            // import 'https://unpkg.com/uplot/dist/uPlot.min.css'
-            import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
             import util from '../src/util.js'
+            // import 'https://unpkg.com/uplot/dist/uPlot.min.css'
+            import uPlot from 'https://cdn.skypack.dev/uplot'
             util.toWindow({ uPlot, util })
 
             // util.setCssStyle('https://unpkg.com/uplot/dist/uPlot.min.css')
+            async function run() {
+                await util.setCssStyle(
+                    'https://cdn.skypack.dev/uplot/dist/uPlot.min.css'
+                )
 
-            let size = 200
-            let opts = {
-                title: 'Data',
-                width: 2 * size,
-                height: size,
+                let size = 200
+                let opts = {
+                    title: 'Data',
+                    width: 2 * size,
+                    height: size,
 
-                series: [
-                    { label: 'x' },
-                    {
-                        label: 'y',
-                        stroke: 'red',
-                        width: 1,
-                        points: { space: 0 },
-                        paths: u => null,
+                    series: [
+                        { label: 'x' },
+                        {
+                            label: 'y',
+                            stroke: 'red',
+                            width: 1,
+                            points: { space: 0 },
+                            paths: u => null,
+                        },
+                    ],
+                    scales: {
+                        x: {
+                            time: false,
+                            // range: [0, 100],
+                        },
+                        y: {
+                            // range: [0, 100],
+                        },
                     },
-                ],
-                scales: {
-                    x: {
-                        time: false,
-                        // range: [0, 100],
+                    // axes: [{ show: false }, { show: false }],
+                }
+                let xs = [0]
+                let ys = [50]
+                let data = [xs, ys]
+
+                let plotDiv = document.getElementById('plot1')
+                let uplot = new uPlot(opts, data, plotDiv)
+
+                util.toWindow({ uplot })
+
+                util.timeoutLoop(
+                    () => {
+                        const len = xs.length
+                        const lastData = ys[len - 1]
+                        const nextData = util.precision(
+                            lastData + util.randomCentered(4),
+                            2
+                        )
+                        xs.push(xs.length)
+                        ys.push(nextData)
+                        uplot.setData(data)
                     },
-                    y: {
-                        // range: [0, 100],
-                    },
-                },
-                // axes: [{ show: false }, { show: false }],
+                    500,
+                    0
+                )
             }
-            let xs = [0]
-            let ys = [50]
-            let data = [xs, ys]
-
-            let plotDiv = document.getElementById('plot1')
-            let uplot = new uPlot(opts, data, plotDiv)
-
-            util.toWindow({ uplot })
-
-            util.timeoutLoop(
-                () => {
-                    const len = xs.length
-                    const lastData = ys[len - 1]
-                    const nextData = util.precision(
-                        lastData + util.randomCentered(4),
-                        2
-                    )
-                    xs.push(xs.length)
-                    ys.push(nextData)
-                    uplot.setData(data)
-                },
-                500,
-                0
-            )
+            run()
         </script>
     </body>
 </html>

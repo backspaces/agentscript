@@ -2,69 +2,76 @@
 <html>
     <head>
         <title>uPlot2</title>
-        <link
+        <!-- <link
             rel="stylesheet"
             href="https://unpkg.com/uplot/dist/uPlot.min.css"
-        />
+        /> -->
     </head>
     <body>
         <div id="plot1"></div>
 
         <script type="module">
-            import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
+            // import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
             import util from '../src/util.js'
+            import uPlot from 'https://cdn.skypack.dev/uplot'
             util.toWindow({ uPlot, util })
 
-            let size = 200
-            let opts = {
-                title: 'Data',
-                width: 2 * size,
-                height: size,
-                series: [
-                    { label: 'x' },
-                    {
-                        label: 'y',
-                        // value: (self, rawValue) => '$' + rawValue.toFixed(2),
+            async function run() {
+                await util.setCssStyle(
+                    'https://cdn.skypack.dev/uplot/dist/uPlot.min.css'
+                )
+                let size = 200
+                let opts = {
+                    title: 'Data',
+                    width: 2 * size,
+                    height: size,
+                    series: [
+                        { label: 'x' },
+                        {
+                            label: 'y',
+                            // value: (self, rawValue) => '$' + rawValue.toFixed(2),
 
-                        stroke: 'red',
-                        width: 1,
-                        // fill: 'rgba(255, 0, 0, 0.3)',
+                            stroke: 'red',
+                            width: 1,
+                            // fill: 'rgba(255, 0, 0, 0.3)',
 
-                        points: { space: 0 },
-                        // linear, spline, stepped, bars
-                        // paths: uPlot.paths.stepped({ align: -1 }),
-                        // paths: uPlot.paths.spline({}),
-                        paths: uPlot.paths.bars({
-                            size: [1],
-                        }),
-                        // lineInterpolation: 3,
+                            points: { space: 0 },
+                            // linear, spline, stepped, bars
+                            // paths: uPlot.paths.stepped({ align: -1 }),
+                            // paths: uPlot.paths.spline({}),
+                            paths: uPlot.paths.bars({
+                                size: [1],
+                            }),
+                            // lineInterpolation: 3,
+                        },
+                    ],
+                    scales: {
+                        x: {
+                            time: false,
+                            range: [0, 10],
+                        },
+                        y: {
+                            range: [0, 20],
+                        },
                     },
-                ],
-                scales: {
-                    x: {
-                        time: false,
-                        range: [0, 10],
-                    },
-                    y: {
-                        range: [0, 20],
-                    },
-                },
-                // axes: [{ show: false }, { show: false }],
+                    // axes: [{ show: false }, { show: false }],
+                }
+                // let count = 100
+                let points = 10
+                let y0 = 10
+                let xs = util.range(points).map(i => i + 0.5)
+                let ys = util.repeat(points, (i, a) => {
+                    a[i] = y0
+                    y0 += util.precision(util.randomCentered(4), 2)
+                })
+                let data = [xs, ys]
+
+                let mydiv = document.getElementById('plot1')
+                let uplot = new uPlot(opts, data, plot1)
+
+                util.toWindow({ uplot })
             }
-            // let count = 100
-            let points = 10
-            let y0 = 10
-            let xs = util.range(points).map(i => i + 0.5)
-            let ys = util.repeat(points, (i, a) => {
-                a[i] = y0
-                y0 += util.precision(util.randomCentered(4), 2)
-            })
-            let data = [xs, ys]
-
-            let mydiv = document.getElementById('plot1')
-            let uplot = new uPlot(opts, data, plot1)
-
-            util.toWindow({ uplot })
+            run()
         </script>
     </body>
 </html>

@@ -1,4 +1,5 @@
-import Chart from '../vendor/chart.esm.js'
+// import Chart from '../vendor/chart.esm.js'
+import Chart from 'https://cdn.skypack.dev/chart.js'
 import util from './util.js'
 
 // Using https://github.com/chartjs/Chart.js

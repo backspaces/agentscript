@@ -59,11 +59,11 @@
         "run1": "bin/runmodels models",
         "run1s": "bin/runmodels models/scripts",
         "run2": "bin/runmodels views2",
-        "run2c": "bin/modelsinchrome views2",
+        "run2c": "bin/modelsinbrowser views2",
         "run3": "bin/runmodels views3",
-        "run3c": "bin/modelsinchrome views3",
+        "run3c": "bin/modelsinbrowser views3",
         "run3d": "bin/runmodels views3d",
-        "run3dc": "bin/modelsinchrome views3d",
+        "run3dc": "bin/modelsinbrowser views3d",
         "rund": "bin/runmodels docs",
         "rung": "bin/runmodels gis",
         "run3w": "bin/runmodels workers3",
@@ -83,7 +83,7 @@
         "fflate": "^0.2.3",
         "mapbox-gl": "^1.10.1",
         "stats.js": "^0.17.0",
-        "three": "^0.119.0",
+        "three": "^0.120.0",
         "uplot": "^1.5.2"
     },
     "devDependencies": {

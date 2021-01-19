@@ -703,14 +703,20 @@ out;`;
     // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
     // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
     function subtractRadians(rad1, rad0) {
-        let dr = mod2pi(rad1 - rad0) - PI$1;
-        // if (dr > PI) dr = dr - 2 * PI
+        let dr = mod2pi(rad1 - rad0);
+        if (dr > PI$1) dr = dr - 2 * PI$1;
         return dr
     }
+
     // Above using headings (degrees) returning degrees in (-180, 180]
+    // export function subtractHeadings(deg1, deg0) {
+    //     let dAngle = mod360(deg1 - deg0) - 180
+    //     // if (dAngle > 180) dAngle = dAngle - 360
+    //     return dAngle
+    // }
     function subtractHeadings(deg1, deg0) {
-        let dAngle = mod360(deg1 - deg0) - 180;
-        // if (dAngle > 180) dAngle = dAngle - 360
+        let dAngle = mod360(deg1 - deg0);
+        if (dAngle > 180) dAngle = dAngle - 360;
         return dAngle
     }
 
@@ -1420,8 +1426,8 @@ out;`;
 
     console.warn(
         `util.js is deprecated, please use utils.js which has individual exports
-    Use: import * as util from src/utils.js
-    To replace: import util from src/util.js`
+    To replace: import util from src/util.js
+    Use: import * as util from src/utils.js`
     );
 
     /**
@@ -3988,6 +3994,7 @@ out;`;
         // Change current direction by rad radians which can be + (left) or - (right).
         rotate(rad) {
             // this.theta = util.mod(this.theta + rad, Math.PI * 2)
+            // this.theta = this.theta + rad
             this.theta = util.mod2pi(this.theta + rad);
         }
         right(rad) {

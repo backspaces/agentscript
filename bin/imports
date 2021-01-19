@@ -1,11 +1,12 @@
 #!/usr/bin/env node --require esm
 import { install } from 'esinstall'
 import nodePolyfills from 'rollup-plugin-node-polyfills'
+
 async function run() {
     const foo = await install(
         [
             'uplot',
-            'uplot/dist/uPlot.min.css',
+            // 'uplot/dist/uPlot.min.css',
             'mapbox-gl',
             'three',
             'three/examples/jsm/controls/OrbitControls.js',

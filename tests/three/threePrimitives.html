@@ -54,7 +54,7 @@
             const meshes = []
             function setPopulation() {
                 meshes.forEach(m => disposeMesh(m, scene))
-                scene.dispose()
+                // scene.dispose() // 119->120
                 meshes.length = 0
 
                 model.turtles.ask(t => {

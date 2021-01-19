@@ -2,89 +2,97 @@
 <html>
     <head>
         <title>uPlot</title>
-        <link
+        <!-- <link
             rel="stylesheet"
             href="https://unpkg.com/uplot/dist/uPlot.min.css"
-        />
+        /> -->
     </head>
     <body>
         <div id="plot1"></div>
 
         <script type="module">
+            import util from '../src/util.js'
+
             // https://www.cssscript.com/time-series-data-uplot/
             // https://www.cssscript.com/demo/time-series-data-uplot/
 
             // import 'https://unpkg.com/uplot/dist/uPlot.min.css'
-            import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
+            // import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
             // import * as util from 'http://agentscript.org/src/utils.js'
             // import util from 'http://agentscript.org/src/util.js'
-            import util from '../src/util.js'
+
+            import uPlot from 'https://cdn.skypack.dev/uplot'
             util.toWindow({ uPlot, util })
 
-            // util.setCssStyle('https://unpkg.com/uplot/dist/uPlot.min.css')
+            async function run() {
+                await util.setCssStyle(
+                    'https://cdn.skypack.dev/uplot/dist/uPlot.min.css'
+                )
 
-            let size = 200
-            let opts = {
-                title: 'Data',
-                // id: 'plot',
-                // class: 'plot1',
-                width: 2 * size,
-                height: size,
+                let size = 200
+                let opts = {
+                    title: 'Data',
+                    // id: 'plot',
+                    // class: 'plot1',
+                    width: 2 * size,
+                    height: size,
 
-                cursor: { show: true },
-                legend: { show: true },
-                // select: { show: true }, // ?
+                    cursor: { show: true },
+                    legend: { show: true },
+                    // select: { show: true }, // ?
 
-                series: [
-                    { label: 'x' },
-                    {
-                        // initial toggled state (optional)
-                        // show: true,
-                        // spanGaps: false,
+                    series: [
+                        { label: 'x' },
+                        {
+                            // initial toggled state (optional)
+                            // show: true,
+                            // spanGaps: false,
 
-                        // in-legend display
-                        // label: 'RAM',
-                        label: 'y',
-                        // value: (self, rawValue) => '$' + rawValue.toFixed(2),
+                            // in-legend display
+                            // label: 'RAM',
+                            label: 'y',
+                            // value: (self, rawValue) => '$' + rawValue.toFixed(2),
 
-                        // series style
-                        stroke: 'red',
-                        width: 1,
-                        // fill: 'rgba(255, 0, 0, 0.3)',
-                        // dash: [10, 5],
+                            // series style
+                            stroke: 'red',
+                            width: 1,
+                            // fill: 'rgba(255, 0, 0, 0.3)',
+                            // dash: [10, 5],
 
-                        points: { space: 0 },
-                        paths: u => null,
+                            points: { space: 0 },
+                            paths: u => null,
+                        },
+                    ],
+                    scales: {
+                        x: {
+                            time: false,
+                            range: [0, 100],
+                        },
+                        y: {
+                            // range: [0, 100],
+                        },
                     },
-                ],
-                scales: {
-                    x: {
-                        time: false,
-                        range: [0, 100],
-                    },
-                    y: {
-                        // range: [0, 100],
-                    },
-                },
-                // axes: [{ show: false }, { show: false }],
+                    // axes: [{ show: false }, { show: false }],
+                }
+                // let count = 100
+                let points = 100
+                let y0 = 50
+                let xs = util.range(points + 1)
+                // let ys = util.range(100)
+                let ys = util.repeat(points, (i, a) => {
+                    a[i] = y0
+                    y0 += util.precision(util.randomCentered(4), 2)
+                })
+                let data = [xs, ys]
+
+                // let uplot = new uPlot(opts, data) //document.getElementById('plot'))
+                let mydiv = document.getElementById('plot1')
+                let uplot = new uPlot(opts, data, plot1)
+                // document.getElementById('plot').appendChild(uplot.root)
+
+                util.toWindow({ uplot })
             }
-            // let count = 100
-            let points = 100
-            let y0 = 50
-            let xs = util.range(points + 1)
-            // let ys = util.range(100)
-            let ys = util.repeat(points, (i, a) => {
-                a[i] = y0
-                y0 += util.precision(util.randomCentered(4), 2)
-            })
-            let data = [xs, ys]
-
-            // let uplot = new uPlot(opts, data) //document.getElementById('plot'))
-            let mydiv = document.getElementById('plot1')
-            let uplot = new uPlot(opts, data, plot1)
-            // document.getElementById('plot').appendChild(uplot.root)
-
-            util.toWindow({ uplot })
+            run()
 
             // const ticks = [0]
             // const data = [0]

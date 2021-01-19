@@ -262,6 +262,7 @@ class Turtle {
     // Change current direction by rad radians which can be + (left) or - (right).
     rotate(rad) {
         // this.theta = util.mod(this.theta + rad, Math.PI * 2)
+        // this.theta = this.theta + rad
         this.theta = util.mod2pi(this.theta + rad)
     }
     right(rad) {
