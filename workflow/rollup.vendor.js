@@ -1,7 +1,7 @@
-import commonjs from 'rollup-plugin-commonjs'
+// import commonjs from 'rollup-plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
-import copy from 'rollup-plugin-copy'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
+// import copy from 'rollup-plugin-copy'
+// import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 export default [
     // {

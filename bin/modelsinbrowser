@@ -17,9 +17,23 @@ cd ~/src/agentscript
 open -na "$browser" --args --new-window
 sleep 2
 
-models=`ls $dir/*html | grep -v index.html`
+# if [["$dir" == 'models']]
+if [[ $dir == "models" ]]; then
+	models=`cd models; ls *Model.js | sed 's:Model.js::'`
+else
+	models=`ls $dir/*.html | grep -v index.html`
+fi
+
+echo $models
+
 for model in $models; do
-	url=$root$model
+  if [[ $dir == "models" ]]; then
+		url=$root/models/run.html?$model
+	else
+		url=$root$model
+	fi
+
+	# url=$root$model
 	echo $url
 	# open $url
 	open -a "$browser" $url

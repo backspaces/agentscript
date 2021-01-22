@@ -42,7 +42,8 @@
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "build": "npm-run-all clean build-scripts build-dist build-md build-docs",
+        "start": "./node_modules/.bin/live-server --watch=docs&",
+        "build": "npm-run-all clean build-scripts build-dist build-vendor build-md build-docs",
         "build-dist": "rollup -c workflow/rollup.config.js && cp -R src dist",
         "build-scripts": "node bin/models2scripts",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c workflow/rollup.vendor.js",
@@ -67,43 +68,27 @@
         "rung": "bin/runmodels gis",
         "run3w": "bin/runmodels workers3",
         "runnode": "bin/runnodemodels",
-        "safari": "bin/testsafari &",
-        "start": "./node_modules/.bin/live-server --watch=docs&",
+        "chrome": "bin/modelsinbrowser models",
+        "safari": "bin/modelsinbrowser models Safari",
         "foo": "bin/docsmod",
         "temp": "documentation build src/*.js --shallow -f html -o temp"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
-        "@firebase/app": "^0.6.11",
-        "@firebase/database": "^0.6.13",
-        "@turf/turf": "^5.1.6",
-        "chart.js": "^2.8.0",
-        "dat.gui": "^0.7.6",
-        "fflate": "^0.2.3",
-        "mapbox-gl": "^1.10.1",
-        "stats.js": "^0.17.0",
-        "three": "^0.120.0",
-        "uplot": "^1.5.2"
+        "three": "^0.120.0"
     },
     "devDependencies": {
-        "@rollup/plugin-node-resolve": "^9.0.0",
         "ava": "^2.1.0",
         "chokidar-cli": "^1.2.1",
         "clean-jsdoc-theme": "^2.2.14",
-        "esinstall": "*",
         "esm": "^3.2.25",
         "jsdoc": "*",
         "live-server": "latest",
         "npm-run-all": "4.1.2",
         "prettier": "^2.1.2",
         "puppeteer": "*",
-        "require-from-web": "^1.2.0",
         "rollup": "^2.33.1",
-        "rollup-plugin-commonjs": "^10.1.0",
-        "rollup-plugin-copy": "^3.1.0",
         "rollup-plugin-terser": "^5.0.0",
-        "shx": "0.3",
-        "snowpack": "^2.18.5",
-        "terser": "^3.10.11"
+        "shx": "0.3"
     }
 }
