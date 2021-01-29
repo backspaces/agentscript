@@ -1,6 +1,6 @@
 import firebase from 'https://cdn.skypack.dev/@firebase/app'
 import 'https://cdn.skypack.dev/@firebase/database'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 
 let config = {
     apiKey: 'AIzaSyAas9GkevhLj3k6PSaGM36hNQQUTmMbzoY',

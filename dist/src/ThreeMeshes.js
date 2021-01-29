@@ -2,7 +2,7 @@
 
 // import { THREE } from '../vendor/three.esm.js'
 import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
-import util from './util.js'
+import * as util from './utils.js'
 
 // ========== global utilities ==========
 function createQuad(r, z = 0) {

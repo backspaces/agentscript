@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 import AgentArray from './AgentArray.js'
 import AgentSet from './AgentSet.js'
 

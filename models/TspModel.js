@@ -1,6 +1,6 @@
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 
 export default class TSPModel extends Model {
     static defaultOptions() {

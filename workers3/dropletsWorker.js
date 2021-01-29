@@ -1,4 +1,4 @@
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 import DataSet from '../src/DataSet.js'
 import DropletsModel from '../models/DropletsModel.js'
 console.log('worker self', self)

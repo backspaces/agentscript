@@ -4,7 +4,7 @@
 // into the Array. They are also designed to be webgl-ready, being a
 // GLSL "Uniform" variable TypedArray for colors.
 
-import util from './util.js'
+import * as util from './utils.js'
 import Color from './Color.js'
 
 const ColorMap = {

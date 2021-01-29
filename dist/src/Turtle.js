@@ -1,6 +1,6 @@
 // import Color from './Color.js'
 import AgentArray from './AgentArray.js'
-import util from './util.js'
+import * as util from './utils.js'
 
 // Flyweight object creation, see Patch/Patches.
 

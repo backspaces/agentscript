@@ -1,5 +1,5 @@
 import { THREE, OrbitControls, Stats } from '../vendor/three.esm.js'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 const degToRad = util.degToRad
 const radToDeg = util.radToDeg
 

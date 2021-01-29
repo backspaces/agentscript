@@ -1,4 +1,4 @@
-import util from '../src/util.js'
+import * as util from './utils.js'
 import ThreeView from '../src/ThreeView.js'
 import ColorMap from '../src/ColorMap.js'
 import Color from './Color.js'

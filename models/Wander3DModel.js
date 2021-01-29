@@ -1,4 +1,4 @@
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 import Model3D from '../src/Model3D.js'
 
 export default class Wander3DModel extends Model3D {

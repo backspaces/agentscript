@@ -11,7 +11,7 @@ Copy hello.html to helloview.html, and remove all the comments and the util.prin
     <body>
         <script type="module">
             import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
-            import util from 'https://agentscript.org/src/util.js'
+            import * as util from 'https://agentscript.org/src/utils.js'
             import Model from './HelloModel.js'
 
             async function run() {

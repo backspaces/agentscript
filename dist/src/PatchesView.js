@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 
 const getPixel = color => color.pixel || color
 

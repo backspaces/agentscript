@@ -1,4 +1,5 @@
-// import util from './util.js'
+// import * as util from '../src/utils.js'
+
 import DataSet from './DataSet.js'
 
 // Parse an RGBA image to a DataSet of the given type.

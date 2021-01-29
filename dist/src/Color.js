@@ -2,7 +2,7 @@
 // colors, webgl and canvas2d Uint8ClampedArray r,g,b,a arrays.
 // Notice a JavaScript Array is **not** a color!
 
-import util from './util.js'
+import * as util from './utils.js'
 
 const Color = {
     // export default Color = {

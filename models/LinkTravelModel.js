@@ -1,6 +1,6 @@
 // import ColorMap from '../src/ColorMap.js'
 import Model from '../src/Model.js'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 
 export default class LinkTravelModel extends Model {
     static defaultOptions() {

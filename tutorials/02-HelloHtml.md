@@ -12,7 +12,7 @@ Here is an html file that imports HelloModel.js, runs it for 500 steps, then pri
         <script type="module">
             // An html file for running the ./HelloModel.js.  Run any other
             // model by changing the import's path (i.e. ./MyModel.js)
-            import util from 'https://agentscript.org/src/util.js'
+            import * as util from 'https://agentscript.org/src/utils.js'
             import Model from './HelloModel.js'
 
             // Run the model 500 steps.
@@ -77,7 +77,7 @@ Finally note we use an async function, run(), which we immediately run. This is 
 ```javascript
     // An html file for running the ./HelloModel.js.  Run any other
     // model by changing the import's path (i.e. ./MyModel.js)
-    import util from 'https://agentscript.org/src/util.js'
+    import * as util from 'https://agentscript.org/src/utils.js'
     import Model from './HelloModel.js'
 
     // Run the model 500 steps.

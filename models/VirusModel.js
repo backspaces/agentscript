@@ -1,6 +1,6 @@
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 
 // A port of the NetLogo "Virus on a Network" model
 // http://www.netlogoweb.org/launch#http://www.netlogoweb.org/assets/modelslib/Sample%20Models/Networks/Virus%20on%20a%20Network.nlogo

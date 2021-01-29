@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 import AgentArray from './AgentArray.js'
 
 // Class Link instances form a link between two turtles, forming a graph.
