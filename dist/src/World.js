@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 
 // class World defines the coordinate system for the model.
 // It will be  upgraded with methods converting from other

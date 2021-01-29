@@ -1,6 +1,6 @@
 import Turtle from './Turtle.js'
 import { Object3D } from '../vendor/Object3D.esm.js'
-import util from './util.js'
+import * as util from './utils.js'
 
 export default class Turtle3D extends Turtle {
     static defaultVariables() {

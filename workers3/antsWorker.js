@@ -1,4 +1,4 @@
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 import AntsModel from '../models/AntsModel.js'
 console.log('worker self', self)
 

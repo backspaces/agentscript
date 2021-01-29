@@ -1,4 +1,4 @@
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 import World from '../src/World.js'
 import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'

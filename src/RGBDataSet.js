@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 import DataSet from './DataSet.js'
 
 // The mapbox elevation formula:

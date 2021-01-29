@@ -1,4 +1,4 @@
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 import World from '../src/World.js'
 import HelloModel from '../models/HelloModel.js'
 import TurtlesView from '../src/TurtlesView.js'

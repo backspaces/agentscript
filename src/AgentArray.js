@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 
 /**
  * Subclass of Array with convenience methods used by NetLogo.

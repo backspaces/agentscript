@@ -1,7 +1,7 @@
 // import ColorMap from '../src/ColorMap.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 
 // The NetLogo models library wall followers example
 // http://ccl.northwestern.edu/netlogo/models/WallFollowingExample

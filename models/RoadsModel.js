@@ -1,7 +1,7 @@
 import * as gis from '../src/gis.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 // import AgentArray from '../src/AgentArray.js'
 
 export default class RoadsModel extends Model {

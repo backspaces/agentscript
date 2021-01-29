@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 import World from './World.js'
 import SpriteSheet from './SpriteSheet.js'
 import PatchesView from './PatchesView.js'

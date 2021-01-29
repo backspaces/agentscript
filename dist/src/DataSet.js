@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 
 /**
  * A DataSet is an object with width/height and an array

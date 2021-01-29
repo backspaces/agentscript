@@ -1,4 +1,4 @@
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 import HelloModel from '../models/HelloModel.js'
 // importScripts('../src/util.js', '../models/HelloModel.js')
 console.log('worker self', self)

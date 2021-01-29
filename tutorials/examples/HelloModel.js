@@ -1,4 +1,4 @@
-import util from 'https://agentscript.org/src/util.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 import Model from 'https://agentscript.org/src/Model.js'
 
 class HelloModel extends Model {

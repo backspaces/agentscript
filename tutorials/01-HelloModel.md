@@ -3,7 +3,7 @@ This is a simple Hello World example of class Model.
 ### The  HelloModel.js file:
 
 ``` javascript
-import util from 'https://agentscript.org/src/util.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 import Model from 'https://agentscript.org/src/Model.js'
 
 class HelloModel extends Model {
@@ -48,7 +48,7 @@ First, as this is a Module system, we have two imports to the files src/utils.js
 
 Our code creates a subclass of class Model, then exports it
 ``` javascript
-import util from 'https://agentscript.org/src/util.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 import Model from 'https://agentscript.org/src/Model.js'
 
 class HelloModel extends Model {

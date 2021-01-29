@@ -1,5 +1,5 @@
 import World from '../src/World.js'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 import FireModel from '../models/FireModel.js'
 
 util.randomSeed() // for consistant results over runs

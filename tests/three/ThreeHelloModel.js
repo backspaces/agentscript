@@ -1,6 +1,6 @@
 import Model from '../src/Model.js'
 import YPR from './object3d.js'
-import util from '../src/util.js'
+import * as util from '../src/utils.js'
 
 export default class ThreeHelloModel extends Model {
     static defaultOptions() {

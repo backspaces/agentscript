@@ -1,4 +1,4 @@
-import util from './util.js'
+import * as util from './utils.js'
 
 function cssColor(color) {
     if (color) return color.css || color
