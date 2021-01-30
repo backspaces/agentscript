@@ -14,7 +14,7 @@ root='http://localhost/src/agentscript/'
 cd ~/src/agentscript
 
 #  Create new browser window first! Wait a bit before running models.
-open -na "$browser" --args --new-window
+open -na "$browser" --args --new-window --auto-open-devtools-for-tabs
 sleep 2
 
 # if [["$dir" == 'models']]

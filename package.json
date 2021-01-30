@@ -80,7 +80,7 @@
     "devDependencies": {
         "ava": "^2.1.0",
         "chokidar-cli": "^1.2.1",
-        "clean-jsdoc-theme": "^2.2.14",
+        "clean-jsdoc-theme": "^3.0.0",
         "esm": "^3.2.25",
         "jsdoc": "*",
         "live-server": "latest",

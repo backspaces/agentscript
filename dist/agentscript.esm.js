@@ -1,5 +1,6 @@
 /* eslint-disable */
-// import util from '../src/util.js'
+// import * as util from '../src/utils.js'
+
 const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan } = Math;
 const radians = degrees => (degrees * PI) / 180;
 const degrees = radians => (radians * 180) / PI;
@@ -1418,12 +1419,6 @@ var util = /*#__PURE__*/Object.freeze({
     convertArrayType: convertArrayType
 });
 
-console.warn(
-    `util.js is deprecated, please use utils.js which has individual exports
-    To replace: import util from src/util.js
-    Use: import * as util from src/utils.js`
-);
-
 /**
  * Subclass of Array with convenience methods used by NetLogo.
  * Tipically the items in the array are Objects but can be any type.
@@ -1560,7 +1555,7 @@ class AgentArray extends Array {
         // const length = this.length
         const result = {};
         // note: use util's forLoop, does not iterate over this agent array.
-        util.forLoop(obj, (val, key) => {
+        forLoop(obj, (val, key) => {
             result[key] = this.props(key, val);
         });
         return result
@@ -1620,7 +1615,7 @@ class AgentArray extends Array {
         if (length != this.length) {
             const name = this.name || this.constructor.name;
             const direction = this.length < length ? 'decreasing' : 'increasing';
-            util.warn(`AgentArray.ask array mutation: ${name}: ${direction}`);
+            warn(`AgentArray.ask array mutation: ${name}: ${direction}`);
         }
         // return this
     }
@@ -1668,7 +1663,7 @@ class AgentArray extends Array {
         this.ask(a => {
             const val = key ? a[key] : a;
             if (val < min || val > max) {
-                util.warn(`histogram bounds error: ${val}: ${min}-${max}`);
+                warn(`histogram bounds error: ${val}: ${min}-${max}`);
             } else {
                 let bin = Math.floor((val - min) / binSize);
                 if (bin === bins) bin--; // val is max, round down
@@ -1691,7 +1686,7 @@ class AgentArray extends Array {
     // Randomize the AgentArray in place. Use clone first if new AgentArray needed.
     // Return "this" for chaining.
     shuffle() {
-        return util.shuffle(this)
+        return shuffle(this)
     }
     // Return this AgentArray sorted by the reporter in ascending/descending order.
     // If reporter is a string, convert to a fcn returning that property.
@@ -1705,7 +1700,7 @@ class AgentArray extends Array {
      * @return {AgentArray}
      */
     sortBy(reporter, ascending = true) {
-        util.sortObjs(this, reporter, ascending);
+        sortObjs(this, reporter, ascending);
         return this
     }
 
@@ -1714,7 +1709,7 @@ class AgentArray extends Array {
     remove(o, f) {
         const i = this.agentIndex(o, f);
         if (i !== -1) this.splice(i, 1);
-        else util.warn(`remove: ${o} not in AgentArray`);
+        else warn(`remove: ${o} not in AgentArray`);
         return this // chaining
     }
     insert(o, f) {
@@ -1729,8 +1724,8 @@ class AgentArray extends Array {
     // f is used to return an integer for sorting, defaults to identity.
     // If f is a string, it is the object property to sort by.
     // Adapted from underscore's _.sortedIndex.
-    sortedIndex(item, f = util.identityFcn) {
-        if (util.isString(f)) f = util.propFcn(f);
+    sortedIndex(item, f = identityFcn) {
+        if (isString(f)) f = propFcn(f);
         const value = f(item);
         // Why not array.length - 1? Because we can insert 1 after end of array.
         // let [low, high] = [0, array.length]
@@ -1762,11 +1757,11 @@ class AgentArray extends Array {
 
     // Return a random agent. Return undefined if empty.
     oneOf() {
-        return util.oneOf(this)
+        return oneOf(this)
     }
     // Return a random agent, not equal to agent
     otherOneOf(agent) {
-        return util.otherOneOf(this, agent)
+        return otherOneOf(this, agent)
     }
     // Return n other random agents from this array
     // otherNOf (n, agent) { return util.otherNOf(n, this, agent) }
@@ -1779,7 +1774,7 @@ class AgentArray extends Array {
     // If reporter is a string, convert to a fcn returning that property
     minOrMaxOf(min, reporter, valueToo = false) {
         if (this.isEmpty()) throw Error('min/max OneOf: empty array')
-        if (typeof reporter === 'string') reporter = util.propFcn(reporter);
+        if (typeof reporter === 'string') reporter = propFcn(reporter);
         let o = null;
         let val = min ? Infinity : -Infinity;
         for (let i = 0; i < this.length; i++) {
@@ -1866,9 +1861,9 @@ class AgentArray extends Array {
         const agents = new AgentArray();
         // const {x, y} = o // perf?
         const d2 = radius * radius;
-        const sqDistance = util.sqDistance; // Local function 2-3x faster, inlined?
+        const sqDistance$1 = sqDistance; // Local function 2-3x faster, inlined?
         this.ask(a => {
-            if (sqDistance(o.x, o.y, a.x, a.y) <= d2) {
+            if (sqDistance$1(o.x, o.y, a.x, a.y) <= d2) {
                 if (meToo || o !== a) agents.push(a);
             }
         });
@@ -1880,7 +1875,7 @@ class AgentArray extends Array {
     inCone(o, radius, coneAngle, angle, meToo = false) {
         const agents = new AgentArray();
         this.ask(a => {
-            if (util.inCone(a.x, a.y, radius, coneAngle, angle, o.x, o.y)) {
+            if (inCone(a.x, a.y, radius, coneAngle, angle, o.x, o.y)) {
                 if (meToo || o !== a) agents.push(a);
             }
         });
@@ -2278,8 +2273,8 @@ class DataSet {
     // true if x,y in dataset bounds
     inBounds(x, y) {
         return (
-            util.isBetween(x, 0, this.width - 1) &&
-            util.isBetween(y, 0, this.height - 1)
+            isBetween(x, 0, this.width - 1) &&
+            isBetween(y, 0, this.height - 1)
         )
     }
 
@@ -2467,7 +2462,7 @@ class DataSet {
     // Convert this dataset's data to new type. Precision may be lost.
     // Does nothing if current data is already of this Type.
     convertType(type) {
-        this.data = util.convertArrayType(this.data, type);
+        this.data = convertArrayType(this.data, type);
     }
 
     // Concatinate a dataset of equal height to my right to my east.
@@ -2503,7 +2498,7 @@ class DataSet {
         if (w !== dataset.width) {
             throw Error(`concatSouth: widths not equal ${w}, ${dataset.width}`)
         }
-        const data1 = util.concatArrays(data, dataset.data);
+        const data1 = concatArrays(data, dataset.data);
         return new DataSet(w, h + dataset.height, data1)
     }
 
@@ -2533,8 +2528,8 @@ class DataSet {
                 let x0 = x + dx;
                 let y0 = y + dy;
                 if (clampNeeded) {
-                    x0 = util.clamp(x0, 0, this.width - 1);
-                    y0 = util.clamp(y0, 0, this.height - 1);
+                    x0 = clamp(x0, 0, this.width - 1);
+                    y0 = clamp(y0, 0, this.height - 1);
                 }
                 array.push(this.data[this.toIndex(x0, y0)]);
             }
@@ -2609,7 +2604,7 @@ class DataSet {
             for (let x = 0; x < w; x++) {
                 const [gx, gy] = [dzdx.getXY(x, y), dzdy.getXY(x, y)];
                 // slope.push(Math.atan(util.distance(gx, gy)) / cellSize) // radians
-                slope.push(Math.atan(util.distance(0, 0, gx, gy)) / cellSize);
+                slope.push(Math.atan(distance(0, 0, gx, gy)) / cellSize);
                 // if (noNaNs)
                 //   while (gx === gy) {
                 //     gx += util.randomNormal(0, 0.0001)
@@ -2648,7 +2643,7 @@ class DataSet {
     normalize(lo = 0, hi = 1) {
         const [min, max] = this.extent();
         const scale = 1 / (max - min);
-        const data = this.data.map(n => util.lerp(lo, hi, scale * (n - min)));
+        const data = this.data.map(n => lerp(lo, hi, scale * (n - min)));
         return new DataSet(this.width, this.height, data)
     }
 
@@ -2658,7 +2653,7 @@ class DataSet {
         return (
             this.width === dataset.width &&
             this.height === dataset.height &&
-            util.arraysEqual(this.data, dataset.data)
+            arraysEqual(this.data, dataset.data)
         )
     }
 }
@@ -2769,8 +2764,8 @@ class Link {
     // Remove this link from its agentset
     die() {
         this.agentSet.removeAgent(this);
-        util.removeArrayItem(this.end0.links, this);
-        util.removeArrayItem(this.end1.links, this);
+        removeArrayItem(this.end0.links, this);
+        removeArrayItem(this.end1.links, this);
         // Set id to -1, indicates that I've died.
         this.id = -1;
     }
@@ -2977,8 +2972,8 @@ class World {
      */
     randomPoint() {
         return [
-            util.randomFloat2(this.minXcor, this.maxXcor),
-            util.randomFloat2(this.minYcor, this.maxYcor),
+            randomFloat2(this.minXcor, this.maxXcor),
+            randomFloat2(this.minYcor, this.maxYcor),
         ]
     }
 
@@ -2989,9 +2984,9 @@ class World {
      */
     random3DPoint() {
         return [
-            util.randomFloat2(this.minXcor, this.maxXcor),
-            util.randomFloat2(this.minYcor, this.maxYcor),
-            util.randomFloat2(this.minZcor, this.maxZcor),
+            randomFloat2(this.minXcor, this.maxXcor),
+            randomFloat2(this.minYcor, this.maxYcor),
+            randomFloat2(this.minZcor, this.maxZcor),
         ]
     }
 
@@ -3002,8 +2997,8 @@ class World {
      */
     randomPatchPoint() {
         return [
-            util.randomInt2(this.minX, this.maxX),
-            util.randomInt2(this.minY, this.maxY),
+            randomInt2(this.minX, this.maxX),
+            randomInt2(this.minY, this.maxY),
         ]
     }
 
@@ -3083,7 +3078,7 @@ class World {
     // Does not change size if already the same, preserving the ctx content.
     setCanvasSize(canvas, patchSize) {
         const [width, height] = this.getWorldSize(patchSize);
-        util.setCanvasSize(canvas, width, height);
+        setCanvasSize(canvas, width, height);
     }
 
     // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)
@@ -3250,7 +3245,7 @@ class Patches extends AgentSet {
     }
     // Set up all the patches.
     populate() {
-        util.repeat(this.model.world.numX * this.model.world.numY, i => {
+        repeat(this.model.world.numX * this.model.world.numY, i => {
             this.addAgent(); // Object.create(this.agentProto))
         });
     }
@@ -3331,7 +3326,7 @@ class Patches extends AgentSet {
     importDataSet(dataSet, property, useNearest = false) {
         if (this.isBreedSet()) {
             // REMIND: error
-            util.warn('Patches: exportDataSet called with breed, using patches');
+            warn('Patches: exportDataSet called with breed, using patches');
             this.baseSet.importDataSet(dataSet, property, useNearest);
             return
         }
@@ -3350,13 +3345,13 @@ class Patches extends AgentSet {
      */
     exportDataSet(property, Type = Array) {
         if (this.isBreedSet()) {
-            util.warn('Patches: exportDataSet called with breed, using patches');
+            warn('Patches: exportDataSet called with breed, using patches');
             return this.baseSet.exportDataSet(property, Type)
         }
         const { numX, numY } = this.model.world;
         // let data = util.arrayProps(this, property)
         let data = this.props(property);
-        data = util.convertArrayType(data, Type);
+        data = convertArrayType(data, Type);
         return new DataSet(numX, numY, data)
     }
 
@@ -3628,8 +3623,8 @@ class Patch {
     distanceXY(x, y, z = null) {
         const useZ = z != null && this.z != null;
         return useZ
-            ? util.distance3(this.x, this.y, this.z, x, y, z)
-            : util.distance(this.x, this.y, x, y)
+            ? distance3(this.x, this.y, this.z, x, y, z)
+            : distance(this.x, this.y, x, y)
     }
     // Return distance from me to object having an x,y pair (turtle, patch, ...)
     // 2.5D: use z too if both agent.z and this.z exist
@@ -3653,7 +3648,7 @@ class Patch {
         return this.towardsXY(agent.x, agent.y)
     }
     towardsXY(x, y) {
-        return util.radiansToward(this.x, this.y, x, y)
+        return radiansToward(this.x, this.y, x, y)
     }
     // Return patch w/ given parameters. Return undefined if off-world.
     // Return patch dx, dy from my position.
@@ -3691,14 +3686,14 @@ class Turtles extends AgentSet {
         const turtle = this.addAgent();
         // NetLogo docs: Creates number new turtles at the origin.
         // New turtles have random integer headings
-        turtle.theta = util.randomFloat(Math.PI * 2);
+        turtle.theta = randomFloat(Math.PI * 2);
         initFcn(turtle);
         return turtle
     }
     // Create num turtles, returning an array.
     // If num == 1, return array with single turtle
     create(num, initFcn = turtle => {}) {
-        return util.repeat(num, (i, a) => {
+        return repeat(num, (i, a) => {
             a.push(this.createOne(initFcn));
         })
     }
@@ -3735,7 +3730,7 @@ class Turtles extends AgentSet {
         // const agents = this.inPatches(patches)
         const agents = this.inPatchRectXY(turtle.x, turtle.y, dx, dy);
         // don't use agents.removeAgent: breeds
-        if (!meToo) util.removeArrayItem(agents, turtle);
+        if (!meToo) removeArrayItem(agents, turtle);
         // if (!meToo) util.removeItem(agents, turtle)
         return agents // this.inPatches(patches)
         // return this.inPatchRect(turtle.x, turtle.y, dx, dy, meToo)
@@ -3840,7 +3835,7 @@ class Turtle {
         //     util.removeArrayItem(this.patch.turtles, this)
         // }
         if (this.patch && this.patch.turtles)
-            util.removeArrayItem(this.patch.turtles, this);
+            removeArrayItem(this.patch.turtles, this);
 
         // Set id to -1, indicates that I've died.
         // Useful when other JS objects contain turtles. Views for example.
@@ -3878,10 +3873,10 @@ class Turtle {
 
     // Heading vs Euclidean Angles. Angle for clarity when ambiguity.
     get heading() {
-        return util.angleToHeading(this.theta)
+        return angleToHeading(this.theta)
     }
     set heading(heading) {
-        this.theta = util.headingToAngle(heading);
+        this.theta = headingToAngle(heading);
     }
     get angle() {
         return this.theta
@@ -3916,7 +3911,7 @@ class Turtle {
         const p = this.patch;
 
         if (p != p0) {
-            if (p0 && p0.turtles) util.removeArrayItem(p0.turtles, this);
+            if (p0 && p0.turtles) removeArrayItem(p0.turtles, this);
             if (p && p.turtles) p.turtles.push(this);
         }
         // if (p && p.turtles != null && p !== p0) {
@@ -3929,7 +3924,7 @@ class Turtle {
     handleEdge(x, y, z = undefined) {
         let atEdge = this.atEdge;
 
-        if (util.isString(atEdge)) {
+        if (isString(atEdge)) {
             const {
                 minXcor,
                 maxXcor,
@@ -3940,13 +3935,13 @@ class Turtle {
             } = this.model.world;
 
             if (atEdge === 'wrap') {
-                this.x = util.wrap(x, minXcor, maxXcor);
-                this.y = util.wrap(y, minYcor, maxYcor);
-                if (z != null) this.z = util.wrap(z, minZcor, maxZcor);
+                this.x = wrap(x, minXcor, maxXcor);
+                this.y = wrap(y, minYcor, maxYcor);
+                if (z != null) this.z = wrap(z, minZcor, maxZcor);
             } else if (atEdge === 'clamp' || atEdge === 'bounce') {
-                this.x = util.clamp(x, minXcor, maxXcor);
-                this.y = util.clamp(y, minYcor, maxYcor);
-                if (z != null) this.z = util.clamp(z, minZcor, maxZcor);
+                this.x = clamp(x, minXcor, maxXcor);
+                this.y = clamp(y, minYcor, maxYcor);
+                if (z != null) this.z = clamp(z, minZcor, maxZcor);
 
                 if (atEdge === 'bounce') {
                     if (this.x === minXcor || this.x === maxXcor) {
@@ -3957,7 +3952,7 @@ class Turtle {
                         if (this.pitch) {
                             this.pitch = -this.pitch;
                         } else {
-                            this.z = util.wrap(z, minZcor, maxZcor);
+                            this.z = wrap(z, minZcor, maxZcor);
                         }
                     }
                 }
@@ -3989,7 +3984,7 @@ class Turtle {
     rotate(rad) {
         // this.theta = util.mod(this.theta + rad, Math.PI * 2)
         // this.theta = this.theta + rad
-        this.theta = util.mod2pi(this.theta + rad);
+        this.theta = mod2pi(this.theta + rad);
     }
     right(rad) {
         this.rotate(-rad);
@@ -4029,8 +4024,8 @@ class Turtle {
     distanceXY(x, y, z = null) {
         const useZ = z != null && this.z != null;
         return useZ
-            ? util.distance3(this.x, this.y, this.z, x, y, z)
-            : util.distance(this.x, this.y, x, y)
+            ? distance3(this.x, this.y, this.z, x, y, z)
+            : distance(this.x, this.y, x, y)
     }
     // Return distance from me to object having an x,y pair (turtle, patch, ...)
     // 2.5D: use z too if both agent.z and this.z exist
@@ -4055,7 +4050,7 @@ class Turtle {
         return this.towardsXY(agent.x, agent.y)
     }
     towardsXY(x, y) {
-        return util.radiansToward(this.x, this.y, x, y)
+        return radiansToward(this.x, this.y, x, y)
     }
     // Return patch w/ given parameters. Return undefined if off-world.
     // Return patch dx, dy from my position.
@@ -4260,9 +4255,9 @@ class RGBDataSet extends DataSet {
         if (Array.isArray(rgbToData))
             rgbToData = RGBDataSet.newRgbDataFunction(rgbToData);
 
-        const ctx = util.createCtx(img.width, img.height);
-        util.fillCtxWithImage(ctx, img);
-        const imgData = util.ctxImageData(ctx);
+        const ctx = createCtx(img.width, img.height);
+        fillCtxWithImage(ctx, img);
+        const imgData = ctxImageData(ctx);
 
         const convertedData = this.data;
         for (var i = 0; i < convertedData.length; i++) {
@@ -4275,5 +4270,11 @@ class RGBDataSet extends DataSet {
 }
 
 // export default RGBDataSet
+
+console.warn(
+    `util.js is deprecated, please use utils.js which has individual exports
+    To replace: import util from src/util.js
+    Use: import * as util from src/utils.js`
+);
 
 export { AgentArray, AgentSet, DataSet, Link, Links, Model, Patch, Patches, RGBDataSet, Turtle, Turtles, World, gis, util };

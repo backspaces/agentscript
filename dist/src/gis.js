@@ -1,4 +1,5 @@
-// import util from '../src/util.js'
+// import * as util from '../src/utils.js'
+
 const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan } = Math
 const radians = degrees => (degrees * PI) / 180
 const degrees = radians => (radians * 180) / PI
