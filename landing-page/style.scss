@@ -1,0 +1,44 @@
+html, body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0px;
+}
+
+.header {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+.cover {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  .cover-title-container {
+    position: absolute;
+    margin-top: -20px;
+    top: 50%;
+    left: 20px;
+    padding: 40px 40px;
+    
+    transform: translateY(-50%);
+
+    .cover-title {
+      font-size: 60px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      background: rgba(248, 248, 248, 0.86);
+      display: inline-block;
+      padding: 0px 8px;
+    }
+    
+    .cover-subtitle {
+      font-size: 40px;
+      font-weight: normal;
+      background: rgba(248, 248, 248, 0.86);
+      display: inline-block;
+      padding: 0px 8px;
+    }
+  }
+}
