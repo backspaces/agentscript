@@ -2,6 +2,8 @@
 
 // import { THREE } from '../vendor/three.esm.js'
 import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
+import AgentArray from './AgentArray.js'
+// import Color from './Color.js'
 import * as util from './utils.js'
 
 // ========== global utilities ==========
@@ -436,6 +438,7 @@ const geometries = {
         new THREE.CylinderBufferGeometry(0.5, 0.5, 1).rotateZ(-PI / 2),
     Sphere: () => new THREE.SphereBufferGeometry(0.5),
 }
+const Obj3DShapes = AgentArray.fromArray(Object.keys(geometries))
 
 export class Obj3DMesh extends BaseMesh {
     static options() {
@@ -457,18 +460,18 @@ export class Obj3DMesh extends BaseMesh {
         this.lastAgentsLength = null
         this.lastAgentsMaxID = null
     }
-    newMesh(geometryName = 'Dart', color = 'red', size = 1) {
-        // let geometry = this.options.geometries[geometryName]
-        if (geometryName === 'random') geometryName = util.oneKeyOf(geometries)
-        let geometry = geometries[geometryName]
+    newMesh(shape = 'Dart', color = 'red', size = 1) {
+        if (shape === 'random') shape = util.oneKeyOf(geometries)
+        let geometry = geometries[shape]
         if (!geometry) {
-            console.log('Geometry not found: ', geometryName, '..using Default')
-            geometryName = 'Dart'
-            // geometry = this.options.geometries[geometryName]
-            geometry = geometries[geometryName]
+            console.log('Geometry not found: ', shape, '..using Default')
+            shape = 'Dart'
+            geometry = geometries[shape]
         }
         geometry = geometry()
         if (size !== 1) geometry.scale(size, size, size)
+
+        const view = { shape, color, size }
 
         color = new THREE.Color(...meshColor(color, this))
         const material = this.view.options.useLights
@@ -479,6 +482,8 @@ export class Obj3DMesh extends BaseMesh {
         mesh.rotation.order = 'ZYX'
         if (this.options.useAxes) mesh.add(new THREE.AxesHelper(size))
 
+        mesh.userData.view = view
+
         this.scene.add(mesh)
         return mesh
     }
@@ -488,15 +493,15 @@ export class Obj3DMesh extends BaseMesh {
         if (lastLen === 0) return
         if (
             lastLen != null && // first time through
-            (lastLen > agents.length || agents[lastLen - 1].id !== lastID)
+            (lastLen > agents.length || agents.last().id !== lastID)
         ) {
             // remove dead agents
-            // console.log('look for dead agents')
+            console.log('look for dead agents')
             this.meshes.forEach((mesh, agent) => {
                 if (mesh.userData.agent.id === -1) {
+                    console.log('found one:', mesh.userData.agent)
                     disposeMesh(mesh)
                     this.meshes.delete(agent)
-                    // console.log(mesh, agent)
                 }
             })
         }
@@ -506,18 +511,28 @@ export class Obj3DMesh extends BaseMesh {
     update(agents, viewFcn) {
         this.checkDeadAgents(agents)
 
-        // util.forLoop(agents, (agent, i) => {
-        util.forLoop(agents, (agent, i) => {
-            // let mesh = this.meshes[agent.id]
+        util.forLoop(agents, agent => {
+            const view = viewFcn(agent)
             let mesh = this.meshes.get(agent)
+
+            if (mesh) {
+                const { shape, color, size } = mesh.userData.view
+                if (
+                    shape !== view.shape ||
+                    (view.color !== 'random' && color !== view.color) ||
+                    size != view.size
+                ) {
+                    disposeMesh(mesh)
+                    mesh = null
+                }
+            }
+
             if (!mesh) {
-                const view = viewFcn(agent, i)
                 mesh = this.newMesh(view.shape, view.color, view.size)
-                // this.meshes[agent.id] = mesh
                 this.meshes.set(agent, mesh)
                 mesh.userData.agent = agent
             }
-            // const { x, y, z, obj3d } = agent
+
             const obj3d = agent.obj3d
             if (obj3d) {
                 const pos = obj3d.position
@@ -572,4 +587,5 @@ export default {
     PointsMesh,
     LinksMesh,
     Obj3DMesh,
+    Obj3DShapes,
 }

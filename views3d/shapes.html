@@ -10,7 +10,8 @@
             import Model from '../models/Hello3DModel.js'
 
             const drawOptions = {
-                turtlesShape: 'random',
+                // turtlesShape: 'random',
+                turtlesShape: t => ThreeDraw.get3DShapes().atIndex(t.id),
                 turtlesColor: 'random',
                 turtlesSize: 2.5,
             }

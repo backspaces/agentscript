@@ -13,7 +13,9 @@ root='http://localhost/src/agentscript/'
 
 cd ~/src/agentscript
 
-#  Create new browser window first! Wait a bit before running models.
+# Create new browser window first! Wait a bit before running models.
+# See: https://addyosmani.com/blog/automatically-open-chrome-devtools-in-each-new-tab/
+# Doesn't work using "open", apparently
 open --new -a "$browser" --args --new-window --auto-open-devtools-for-tabs
 # open --new -a "$browser" --args --auto-open-devtools-for-tabs
 sleep 2

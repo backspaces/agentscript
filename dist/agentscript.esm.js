@@ -1504,6 +1504,20 @@ class AgentArray extends Array {
     last() {
         return this[this.length - 1]
     }
+    /**
+     * Return at index. Returns undefined if empty.
+     * Wrap the index to be within the array.
+     *
+     * @return {any}
+     * @example
+     *  aa.atIndex(aa.length)
+     *  //=>  { x: 0, y: 0 }
+     */
+    atIndex(i) {
+        if (this.length === 0) return undefined
+        const index = mod(i, this.length);
+        return this[index]
+    }
 
     /**
      * Return true if fcn(element) returns true for each element in this array.

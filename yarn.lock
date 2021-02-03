@@ -963,10 +963,10 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-clean-jsdoc-theme@^3.0.0:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-3.0.6.tgz#cbf0c40eefcf674e76ff8d6c7a6d27c8fe6cea9c"
-  integrity sha512-KbUGLAPv1q0aaJtpmQ1uMPvsVp2oebiIFxcbkJ+e4YHSQDEWHJLD8ziougWQaVp8CtqHKL7TXQz+JQOnFoUI8A==
+clean-jsdoc-theme@*:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-3.0.7.tgz#b25a845c711528c8d3a86a792a21326a396e446c"
+  integrity sha512-on+PyI8MVYz+My4DEiZ3yzltXTHzZSxmnXvHYhNgQL4L89gn97IqkmxWLFD+/bGN9DGWAtx94VAc+C2/xuqllg==
   dependencies:
     fs-extra "^9.0.1"
 
