@@ -2,22 +2,52 @@
 <html>
     <head>
         <title>Test</title>
+        <style>
+            html,
+            body,
+            #modelDiv,
+            canvas {
+                margin: 0;
+                padding: 0;
+                border: 0;
+            }
+            #modelDiv canvas {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
     </head>
 
     <body>
+        <div id="modelDiv"></div>
         <script type="module">
             import * as util from '../src/utils.js'
+
+            import Color from '../src/Color.js'
+            import Model from '../models/HelloModel.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            const model = new Model({ maxX: 16 })
+            model.setup()
+            const view = new TwoDraw(
+                model,
+                {
+                    div: 'modelDiv',
+                    patchSize: 15,
+                },
+                {
+                    patchesColor: 'black',
+                }
+            ) // defalt drawOptions!
+            view.draw()
 
             // import * as THREE from 'https://cdn.skypack.dev/three@0.120.0'
             // import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
 
-            import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
-            import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
-
-            import AS from 'https://jspm.dev/agentscript'
-            import utils from 'https://jspm.dev/agentscript/src/utils.js'
-
-            util.toWindow({ AS, utils })
+            // import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
+            // import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
+            // import AS from 'https://jspm.dev/agentscript'
+            // import utils from 'https://jspm.dev/agentscript/src/utils.js'
+            // util.toWindow({ AS, utils })
 
             // import { THREE, OrbitControls } from '../vendor/three.esm.js'
 

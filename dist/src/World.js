@@ -98,6 +98,11 @@ class World {
 
         let { minX, maxX, minY, maxY, minZ, maxZ } = this
 
+        util.forLoop({ minX, maxX, minY, maxY, minZ, maxZ }, (val, key) => {
+            if (!Number.isInteger(val))
+                throw Error(`${key}:${val} must be an integer`)
+        })
+
         this.numX = this.width = maxX - minX + 1
         this.numY = this.height = maxY - minY + 1
         // if (maxZ == null) maxZ = this.maxZ = Math.max(this.width, this.height)
