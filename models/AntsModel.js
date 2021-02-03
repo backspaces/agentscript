@@ -11,6 +11,10 @@ export default class AntsModel extends Model {
             diffusionRate: 0.3,
             evaporationRate: 0.01,
             wiggleAngle: util.degToRad(30),
+            foodX: (world) => world.minX + 6,
+            foodY: () => 0,
+            nestX: (world) => world.maxX - 6,
+            nestY: () => 0
         }
     }
 
@@ -31,17 +35,16 @@ export default class AntsModel extends Model {
             p.isNest = p.isFood = false
             p.nestPheromone = p.foodPheromone = 0
         })
-        const { maxX, minX } = this.world
-        this.patches.patchRectXY(maxX - 6, 0, 3, 3).ask(p => {
+        this.patches.patchRectXY(this.nestX(this.world), this.nestY(this.world), 3, 3).ask(p => {
             p.isNest = true
         })
-        this.patches.patchRectXY(minX + 6, 0, 3, 3).ask(p => {
+        this.patches.patchRectXY(this.foodX(this.world), this.foodY(this.world), 3, 3).ask(p => {
             p.isFood = true
         })
     }
     setupTurtles() {
         this.turtles.create(this.population, t => {
-            t.setxy(this.world.maxX - 6, 0)
+            t.setxy(this.nestX(this.world), this.nestY(this.world))
             this.resetTurtle(t, false) // sets t.pheromone to max
         })
     }
