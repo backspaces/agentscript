@@ -333,6 +333,7 @@ out;`;
         if (!cssColor || cssColor === 'transparent') {
             ctx.clearRect(0, 0, width, height);
         } else {
+            cssColor = cssColor.css || cssColor;
             ctx.fillStyle = cssColor;
             ctx.fillRect(0, 0, width, height);
         }

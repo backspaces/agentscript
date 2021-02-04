@@ -68,6 +68,7 @@ export default class TwoView {
 
     // Clear the view.canvas.
     // If no color, or 'transparent', make transparent via clearCtx.
+    // If cssColor.css (typedColor) use it, else cssColor
     clear(cssColor) {
         util.clearCtx(this.ctx, cssColor)
 
