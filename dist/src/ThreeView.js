@@ -13,7 +13,7 @@ import Stats from 'https://cdn.skypack.dev/stats.js'
 // util.toWindow({ THREE, OrbitControls })
 
 export default class ThreeView {
-    static get3DShapes() {
+    static shapeNames() {
         return ThreeMeshes.Obj3DShapes
     }
     static defaultOptions(useThreeHelpers = true) {

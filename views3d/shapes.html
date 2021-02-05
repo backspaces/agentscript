@@ -11,7 +11,7 @@
 
             const drawOptions = {
                 // turtlesShape: 'random',
-                turtlesShape: t => ThreeDraw.get3DShapes().atIndex(t.id),
+                turtlesShape: t => ThreeDraw.shapeNames().atIndex(t.id),
                 turtlesColor: 'random',
                 turtlesSize: 2.5,
             }
@@ -31,7 +31,7 @@
                     drawOptions
                 )
 
-                util.toWindow({ util, model, view })
+                util.toWindow({ util, model, view, ThreeDraw })
 
                 await util.timeoutLoop(
                     () => {
@@ -39,7 +39,7 @@
                         view.draw()
                     },
                     -1, //500,
-                    33
+                    0 //33
                 )
 
                 view.idle()

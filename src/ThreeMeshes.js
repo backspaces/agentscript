@@ -18,10 +18,13 @@ function meshColor(color, mesh) {
     return color[mesh.options.colorType] || color
 }
 function disposeMesh(mesh) {
+    // mesh.parent.remove(mesh)
     mesh.parent.remove(mesh)
     mesh.geometry.dispose()
     mesh.material.dispose()
     if (mesh.material.map) mesh.material.map.dispose()
+    // mesh.userData = {}
+    util.forLoop(mesh.userData, (val, key) => delete mesh.userData[key])
 }
 const zMultiplier = 0.25
 const PI = Math.PI
@@ -57,19 +60,19 @@ export class BaseMesh {
     update() {
         throw Error('update is abstract, must be overriden')
     }
-    clear() {
-        if (this.mesh) {
-            disposeMesh(this.mesh)
-            this.mesh = null
-            this.init()
-        } else if (this.meshes) {
-            this.meshes.forEach(mesh => disposeMesh(mesh))
-            this.meshes = null
-            this.init()
-        } else {
-            throw Error('BaseMesh.clear: no meshes available')
-        }
-    }
+    // clear() {
+    //     if (this.mesh) {
+    //         disposeMesh(this.mesh)
+    //         this.mesh = null
+    //         this.init()
+    //     } else if (this.meshes) {
+    //         this.meshes.forEach(mesh => disposeMesh(mesh))
+    //         this.meshes = null
+    //         this.init()
+    //     } else {
+    //         throw Error('BaseMesh.clear: no meshes available')
+    //     }
+    // }
 
     get spriteSheetTexture() {
         if (this.view.spriteSheet.texture == null) {
@@ -426,8 +429,7 @@ export class LinksMesh extends BaseMesh {
 
 // ============= Obj3DMesh =============
 const geometries = {
-    // Use functions .. allows geo scale/rotate etc
-    // Default: () => turtleGeometry(),
+    // Use functions .. needed for individual geometry differences
     Dart: () => turtleGeometry(),
     Cone0: () => new THREE.ConeBufferGeometry(0.5).rotateX(PI / 2),
     Cone: () => new THREE.ConeBufferGeometry(0.5).rotateZ(-PI / 2),
@@ -439,6 +441,15 @@ const geometries = {
     Sphere: () => new THREE.SphereBufferGeometry(0.5),
 }
 const Obj3DShapes = AgentArray.fromArray(Object.keys(geometries))
+function getGeometry(shape) {
+    let geometry = geometries[shape]
+    if (!geometry) {
+        console.log('Geometry not found: ', shape, '..using Default')
+        shape = 'Dart'
+        geometry = geometries[shape]
+    }
+    return [geometry(), shape]
+}
 
 export class Obj3DMesh extends BaseMesh {
     static options() {
@@ -461,14 +472,7 @@ export class Obj3DMesh extends BaseMesh {
         this.lastAgentsMaxID = null
     }
     newMesh(shape = 'Dart', color = 'red', size = 1) {
-        if (shape === 'random') shape = util.oneKeyOf(geometries)
-        let geometry = geometries[shape]
-        if (!geometry) {
-            console.log('Geometry not found: ', shape, '..using Default')
-            shape = 'Dart'
-            geometry = geometries[shape]
-        }
-        geometry = geometry()
+        var [geometry, shape] = getGeometry(shape)
         if (size !== 1) geometry.scale(size, size, size)
 
         const view = { shape, color, size }
@@ -480,6 +484,7 @@ export class Obj3DMesh extends BaseMesh {
 
         const mesh = new THREE.Mesh(geometry, material)
         mesh.rotation.order = 'ZYX'
+        // if (size !== 1) mesh.scale.set(size, size, size)
         if (this.options.useAxes) mesh.add(new THREE.AxesHelper(size))
 
         mesh.userData.view = view
@@ -515,15 +520,41 @@ export class Obj3DMesh extends BaseMesh {
             const view = viewFcn(agent)
             let mesh = this.meshes.get(agent)
 
+            // if (mesh) {
+            //     const { shape, color, size } = mesh.userData.view
+            //     if (
+            //         shape !== view.shape ||
+            //         (view.color !== 'random' && color !== view.color) ||
+            //         size != view.size
+            //     ) {
+            //         disposeMesh(mesh)
+            //         this.meshes.set(agent, null)
+            //         mesh = null
+            //     }
+            // }
             if (mesh) {
-                const { shape, color, size } = mesh.userData.view
-                if (
-                    shape !== view.shape ||
-                    (view.color !== 'random' && color !== view.color) ||
-                    size != view.size
-                ) {
-                    disposeMesh(mesh)
-                    mesh = null
+                var { shape, color, size } = mesh.userData.view
+
+                // if (view.color !== 'random' && color !== view.color) {
+                if (color !== view.color) {
+                    color = mesh.userData.view.color = view.color
+                    color = new THREE.Color(...meshColor(color, this))
+                    mesh.material.color = color
+                    // mesh.material.needsUpdate = true
+                }
+                if (shape !== view.shape) {
+                    var [geometry, shape] = getGeometry(view.shape)
+                    mesh.geometry.dispose()
+                    mesh.geometry = geometry
+                    mesh.geometry.scale(size, size, size)
+                    mesh.userData.view.shape = shape
+                    // mesh.geometry.needsUpdate = true
+                }
+                if (size !== view.size) {
+                    size = view.size / size
+                    mesh.geometry.scale(size, size, size)
+                    mesh.userData.view.size = view.size
+                    // mesh.geometry.needsUpdate = true
                 }
             }
 
