@@ -7,7 +7,8 @@
   
   <!-- fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
@@ -24,7 +25,85 @@
       </div>
     </div>
   </section>
-  <section></section>
+  <section class="two-columns-container">
+    <div class="two-columns">
+      <div class="column-left">
+        <h1>What is Agent Based Modeling?</h1>
+        <p>Agent Based Modeling (ABM) is a tool for simulating natural and social phenomena, from the spread of wildfire to the ups and downs in the stock market.</p>
+        <p>It has a ton of applications, including:</p>
+        <ul>
+          <li>in biology, to study predator/prey dynamics, coordination in ants and other super-organisms, and the immune system</li>
+          <li>in ecology and land stewardship, to understand how fire, rain, erosion, and vegetation all effect each other</li>
+          <li>in epidemiology, to study the spread of infection</li>
+          <li>in urban planning, to simulate traffic congestion and evacuation</li>
+          <li>in economics, to study financial markets and game theory</li>
+          <li>in computer graphics, to animate schools of fish, flocks of birds, particle effects, and crowds</li>
+        </ul>
+        <p>People use agent-based models to understand the underlying principles of phenomena that have no central brain or authority.</p>
+        <p>The basic idea is to give simple rules to a bunch of agents in an environment, let them loose, and see what happens!</p>
+      </div>
+      <div class="column-right">
+        <canvas id="what-is-agentscript"></canvas>
+      </div>
+    </div>
+  </section>
+  <section class="two-columns-container">
+    <div class="two-columns">
+      <div class="column-left">
+        <h1>What is Agentscript?</h1>
+        
+        <p>Agentscript is a javascript library for writing agent based models that run in your web browser. It is inspired by an incredible language called <a href="https://ccl.northwestern.edu/netlogo/">Netlogo</a>.</p>
+        <p>Some note about performance and other features here--how many turtles can it support at once?</p>
+        <h2>Turtles, Patches, and Links</h2>
+        <p>In Agentscript, there are three primary ingredients: turtles, patches, and links. We'll look at these one by one.</p>
+        
+        <h2>Turtles</h2>
+        
+        <p>First things first, let's make a turtle:</p>
+        <div class="code-block">
+          <textarea class="code">model.turtles.create(1)</textarea>
+          <div class="code-buttons"><div class="button" run-once>run once</div></div>  
+        </div>
+        <p>Click the "run once" button to execute that code once.</p>
+        <p>Click it several times, and you'll start to build up a stack of turtles in the center of the world. By default, each turtle points in a different random direction.</p>
+        
+        <p>We can ask the turtles to do lots of things, like move forward:</p>
+        <div class="code-block">
+          <textarea class="code">model.turtles.ask(t => t.forward(1))</textarea>
+          <div class="code-buttons"><div class="button" run-once>run once</div></div>
+        </div>
+
+        <p>or rotate:</p>
+        <div class="code-block">
+          <textarea class="code">model.turtles.ask(t => t.rotate(90))</textarea>
+          <div class="code-buttons"><div class="button" run-once>run once</div></div>
+        </div>
+
+        <p>or face another random turtle, and then move forward:</p>
+        <div class="code-block">
+<textarea class="code">model.turtles.ask(t => {
+  t.face(util.oneOf(model.turtles))
+  t.forward(1)
+})</textarea>
+          <div class="code-buttons"><div class="button" run-once>run once</div></div>
+        </div>
+
+        <p>Try changing one of the numbers in the above code to make the turtles move farther away.</p>
+
+        <p>Here's a button that will run the code over and over again so you don't have to keep clicking. See what happens when they reach the edge of the world?</p>
+        <div class="code-block">
+<textarea class="code">model.turtles.ask(t => {
+  t.face(util.oneOf(model.turtles))
+  t.forward(1)
+})</textarea>
+          <div class="code-buttons"><div class="button" run-once>run once</div><div class="button forever" run-forever>run forever</div></div>
+        </div>
+      </div>
+      <div class="column-right">
+      </div>
+    </div>
+  </section>
+  <canvas id="fixed-canvas"></canvas>
 </body>
 <script src="main.js" type="module"></script>
 </html>
