@@ -52,7 +52,7 @@
             }
         </script>
         <script type="module">
-            import util from '../src/util.js'
+            import * as util from '../src/utils.js'
 
             const worker = util.fcnToWorker(workerSrc)
             console.log('worker:', worker)

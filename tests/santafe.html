@@ -9,10 +9,10 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.1.0/leaflet.js"></script>
     </head>
     <body>
-        <div id="map" style="height: 800px;"></div>
+        <div id="map" style="height: 800px"></div>
         <!-- <script src="play0.js"></script> -->
         <script type="module">
-            import util from '../src/util.js'
+            import * as util from '../src/utils.js'
             import World from '../src/World.js'
             const world = World.defaultWorld(10, 20)
             util.toWindow({ util, World, world })

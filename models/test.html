@@ -6,7 +6,7 @@
     <body>
         <script type="module">
             // Only used for testing. Run in Puppeteer by test/models.js.
-            import util from '../src/util.js'
+            import * as util from '../src/utils.js'
 
             const modelParams = util.parseQueryString()
             const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'

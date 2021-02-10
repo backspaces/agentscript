@@ -4,7 +4,7 @@
     </head>
     <body>
         <script type="module">
-            import util from '../src/util.js'
+            import * as util from '../src/utils.js'
 
             const modelParams = util.parseQueryString()
             const appName = Object.keys(modelParams)[0] || 'hello'

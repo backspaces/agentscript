@@ -429,8 +429,7 @@ export class LinksMesh extends BaseMesh {
 
 // ============= Obj3DMesh =============
 const geometries = {
-    // Use functions .. allows geo scale/rotate etc
-    // Default: () => turtleGeometry(),
+    // Use functions .. needed for individual geometry differences
     Dart: () => turtleGeometry(),
     Cone0: () => new THREE.ConeBufferGeometry(0.5).rotateX(PI / 2),
     Cone: () => new THREE.ConeBufferGeometry(0.5).rotateZ(-PI / 2),
@@ -441,15 +440,6 @@ const geometries = {
         new THREE.CylinderBufferGeometry(0.5, 0.5, 1).rotateZ(-PI / 2),
     Sphere: () => new THREE.SphereBufferGeometry(0.5),
 }
-// const geometries = {
-//     Dart: turtleGeometry(),
-//     Cone0: new THREE.ConeBufferGeometry(0.5).rotateX(PI / 2),
-//     Cone: new THREE.ConeBufferGeometry(0.5).rotateZ(-PI / 2),
-//     Cube: new THREE.BoxBufferGeometry(),
-//     Cylinder0: new THREE.CylinderBufferGeometry(0.5, 0.5, 1).rotateX(PI / 2),
-//     Cylinder: new THREE.CylinderBufferGeometry(0.5, 0.5, 1).rotateZ(-PI / 2),
-//     Sphere: new THREE.SphereBufferGeometry(0.5),
-// }
 const Obj3DShapes = AgentArray.fromArray(Object.keys(geometries))
 function getGeometry(shape) {
     let geometry = geometries[shape]
@@ -482,12 +472,6 @@ export class Obj3DMesh extends BaseMesh {
         this.lastAgentsMaxID = null
     }
     newMesh(shape = 'Dart', color = 'red', size = 1) {
-        // let geometry = geometries[shape]
-        // if (!geometry) {
-        //     console.log('Geometry not found: ', shape, '..using Default')
-        //     shape = 'Dart'
-        //     geometry = geometries[shape]
-        // }
         var [geometry, shape] = getGeometry(shape)
         if (size !== 1) geometry.scale(size, size, size)
 

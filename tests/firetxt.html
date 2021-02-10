@@ -13,13 +13,13 @@
 
     <body>
         <script type="module">
-            import util from '../src/util.js'
+            import * as util from '../src/utils.js'
 
             const maxX = 50
             const width = 2 * maxX + 1
 
             const worker = new Worker('fire.js', { type: 'module' })
-            worker.onerror = function(e) {
+            worker.onerror = function (e) {
                 console.log('ERROR: Line ', e.lineno, ': ', e.message)
             }
             worker.postMessage({ cmd: 'init', size: maxX })

@@ -6,10 +6,10 @@
 
     <body>
         <script type="module">
-            import util from '../src/util.js'
+            import * as util from '../src/utils.js'
 
             const worker = new Worker('fire1.js', { type: 'module' })
-            worker.onerror = function(e) {
+            worker.onerror = function (e) {
                 console.log('ERROR: Line ', e.lineno, ': ', e.message)
             }
             console.log('worker:', worker)
