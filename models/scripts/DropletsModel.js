@@ -4,35 +4,31 @@ var Model = AS.Model
 var AgentArray = AS.AgentArray
 var RGBDataSet = AS.RGBDataSet
 
-class DropletsModel extends Model {
-    static tileUrl(z, x, y) {
-        return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
-    }
-    static tileDecoder() {
-        return RGBDataSet.redfishElevation
-    }
-    static defaultOptions() {
-        const [z, x, y] = [13, 1594, 3339]
-        return {
-            // stepType choices:
-            //    'minNeighbor',
-            //    'patchAspect',
-            //    'dataSetAspectNearest',
-            //    'dataSetAspectBilinear',
-            stepType: 'dataSetAspectNearest',
-            killOffworld: false, // Kill vs clamp turtles when offworld.
-            speed: 0.2,
+function tileUrl(z, x, y) {
+    return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
+}
+function tileDecoder() {
+    return RGBDataSet.redfishElevation
+}
 
-            // can be a function(r,g,b) or [min, scale] array
-            tileDecoder: this.tileDecoder(),
-            tile: this.tileUrl(z, x, y),
-        }
-    }
+class DropletsModel extends Model {
+    zxy = [13, 1594, 3339]
+    // stepType choices:
+    //    'minNeighbor',
+    //    'patchAspect',
+    //    'dataSetAspectNearest',
+    //    'dataSetAspectBilinear',
+    stepType = 'dataSetAspectNearest'
+    killOffworld = false // Kill vs clamp turtles when offworld.
+    speed = 0.2
+    tileDecoder = tileDecoder()
+    tile = tileUrl(...this.zxy)
+
     // ======================
 
     constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        Object.assign(this, DropletsModel.defaultOptions())
+        // Object.assign(this, DropletsModel.defaultOptions())
     }
 
     async startup() {

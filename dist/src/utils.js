@@ -300,6 +300,7 @@ export function dump(model = window.model) {
     window.p = ps.length > 0 ? ps.oneOf() : {}
     window.t = ts.length > 0 ? ts.oneOf() : {}
     window.l = ls.length > 0 ? ls.oneOf() : {}
+    console.log('debug: ps, ts, ls, p, t, l dumped to window')
 }
 
 // export function logHistogram(name, array) {

@@ -2,11 +2,11 @@ import AgentArray from '../src/AgentArray.js'
 import Model from '../src/Model.js'
 
 export default class GridPathModel extends Model {
-    static defaultOptions() {
-        return {
-            // No programmable variables
-        }
-    }
+    // static defaultOptions() {
+    //     return {
+    //         // No programmable variables
+    //     }
+    // }
 
     // ======================
 
@@ -21,7 +21,7 @@ export default class GridPathModel extends Model {
         }
     ) {
         super(worldOptions) // default world options if "undefined"
-        Object.assign(this, GridPathModel.defaultOptions())
+        // Object.assign(this, GridPathModel.defaultOptions())
     }
 
     setup() {

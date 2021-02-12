@@ -1,6 +1,6 @@
 This is a simple Hello World example of class Model.
 
-### The  HelloModel.js file:
+### The HelloModel.js file:
 
 ``` javascript
 import * as util from 'https://agentscript.org/src/utils.js'
@@ -9,7 +9,7 @@ import Model from 'https://agentscript.org/src/Model.js'
 class HelloModel extends Model {
     population = 10 // number of turtles
     speed = 0.1 // step size in patch units
-    wiggle = util.degToRad(10) // Wiggle angle in radians
+    wiggleAngle = util.degToRad(10) // Wiggle angle in radians
 
     // We can use Model's constructor, due to using Model's default World
     // constructor() {
@@ -31,7 +31,7 @@ class HelloModel extends Model {
 
     step() {
         this.turtles.ask(t => {
-            t.angle += util.randomCentered(this.wiggle)
+            t.theta+= util.randomCentered(this.wiggleAngle)
             t.forward(this.speed)
         })
     }
@@ -72,7 +72,7 @@ At the top of the class are properties that can be modified after creating the m
 class HelloModel extends Model {
     population = 10 // number of turtles
     speed = 0.1 // step size in patch units
-    wiggle = util.degToRad(10) // Wiggle angle in radians
+    wiggleAngle = util.degToRad(10) // Wiggle angle in radians
 
     // We can use Model's constructor, due to using Model's default World
     // constructor() {
@@ -93,10 +93,10 @@ Our model has three properties:
 
   - **population**: the number of turtles
   - **speed**: how far they go during each step
-  - **wiggle**: how much they wiggle each step.
+  - **wiggleAngle**: how much they wiggle each step.
 
 
-Note wiggle is 10 degrees, converted to radians. Radians are standard in JavaScript trigonometry, see JavaScript's [built-in Math module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math) for details.
+Note wiggleAngle is 10 degrees, converted to radians. Radians are standard in JavaScript trigonometry, see JavaScript's [built-in Math module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math) for details.
 
 No worries tho, we provide utilities to work in degrees and even other geometries like GIS latitude & longitude, pixel coordinates, and the heading coordinate system used by NetLogo.
 
@@ -123,20 +123,20 @@ the turtles to "bounce" when they are about to leave the World. The default is t
 wrap around to the other side of the World. You can remove this to see how wrap works.
 
 Next we create `population` turtles, initializing them to be over a random patch.
-They will be at random angles unless setup uses `t.angle = ...`
+They will be at random angles unless setup uses `t.theta= ...`
 
 Finally, we create links between random pairs of turtles.
 
 Even thought this is a very simple model, it exercises all three of the AgentSets: Patches, Turtles, and Links. Great for debugging!
 
 After we setup our model, we define it's dynamic behavior via the step() method.
-In this case, we ask each turtle to wiggle (change it's angle by -5 to +5 radians)
+In this case, we ask each turtle to wiggle (change it's angle by -5 to +5 degrees)
 and move forward by the speed parameter (0.1 patch size)
 
 ```javascript
     step() {
         this.turtles.ask(t => {
-            t.angle += util.randomCentered(this.wiggle)
+            t.theta+= util.randomCentered(this.wiggleAngle)
             t.forward(this.speed)
         })
     }

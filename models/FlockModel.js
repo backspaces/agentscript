@@ -2,21 +2,27 @@ import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
 export default class FlockModel extends Model {
-    static defaultOptions() {
-        return {
-            population: 1000,
-            vision: 3,
-            speed: 0.25,
-            maxTurn: util.degToRad(3.0),
-            minSeparation: 0.75,
-        }
-    }
+    population = 1000
+    vision = 3
+    speed = 0.25
+    maxTurn = util.degToRad(3.0)
+    minSeparation = 0.75
+
+    // static defaultOptions() {
+    //     return {
+    //         population: 1000,
+    //         vision: 3,
+    //         speed: 0.25,
+    //         maxTurn: util.degToRad(3.0),
+    //         minSeparation: 0.75,
+    //     }
+    // }
 
     // ======================
 
     constructor(worldDptions) {
         super(worldDptions) // default world options if "undefined"
-        Object.assign(this, FlockModel.defaultOptions())
+        // Object.assign(this, FlockModel.defaultOptions())
     }
 
     // setMaxTurn(maxTurnDegrees) {

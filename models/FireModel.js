@@ -3,17 +3,18 @@ import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
 export default class FireModel extends Model {
-    static defaultOptions() {
-        return {
-            density: 60, // percent
-        }
-    }
+    density = 60 // percent of patches with tree
+    // static defaultOptions() {
+    //     return {
+    //         density: 60, // percent
+    //     }
+    // }
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(125)) {
         super(worldDptions)
-        Object.assign(this, FireModel.defaultOptions())
+        // Object.assign(this, FireModel.defaultOptions())
     }
 
     setup() {

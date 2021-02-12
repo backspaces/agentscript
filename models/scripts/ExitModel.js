@@ -2,18 +2,21 @@ var World = AS.World
 var Model = AS.Model
 
 class ExitModel extends Model {
-    static defaultOptions() {
-        return {
-            numExits: 10,
-            population: 0.75, // percent of inside populated
-        }
-    }
+    numExits = 10
+    population = 0.75 // percent of inside populated
+
+    // static defaultOptions() {
+    //     return {
+    //         numExits: 10,
+    //         population: 0.75, // percent of inside populated
+    //     }
+    // }
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(35, 35, 1)) {
         super(worldDptions)
-        Object.assign(this, ExitModel.defaultOptions())
+        // Object.assign(this, ExitModel.defaultOptions())
     }
 
     setup() {

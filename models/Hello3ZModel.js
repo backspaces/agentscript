@@ -2,20 +2,24 @@ import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
 export default class HelloModel extends Model {
-    static defaultOptions() {
-        return {
-            population: 100,
-            speed: 0.1,
-            wiggle: 0.1,
-        }
-    }
+    population = 100
+    speed = 0.1 // patches per step
+    wiggleAngle = util.degToRad(10)
+
+    // static defaultOptions() {
+    //     return {
+    //         population: 100,
+    //         speed: 0.1,
+    //         wiggleAngle: util.degToRad(10),
+    //     }
+    // }
 
     // ======================
 
     constructor(worldDptions) {
         super(worldDptions) // default world options if "undefined"
         this.radius = this.world.maxX * 0.85
-        Object.assign(this, HelloModel.defaultOptions())
+        // Object.assign(this, HelloModel.defaultOptions())
     }
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')
@@ -33,7 +37,7 @@ export default class HelloModel extends Model {
 
     step() {
         this.turtles.ask(t => {
-            t.angle += util.randomCentered(this.wiggle)
+            t.theta += util.randomCentered(this.wiggleAngle)
             t.forward(this.speed)
             this.moveToSphere(t)
         })

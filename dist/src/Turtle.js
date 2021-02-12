@@ -14,31 +14,31 @@ import * as util from './utils.js'
  * patches, as well as other turtles.
  */
 class Turtle {
-    atEdge
+    atEdge = 'wrap'
     // Set by AgentSet
     agentSet
     model
     name
 
-    static defaultVariables() {
-        return {
-            // Core variables for turtles.
-            // turtle's position: x, y, z.
-            // Generally z set to constant via turtles.setDefault('z', num)
-            // x: 0,
-            // y: 0,
-            // z: 0,
-            // my euclidean direction, radians from x axis, counter-clockwise
-            // theta: null, // set to random if default not set by modeler
-            // What to do if I wander off world. Can be 'clamp', 'wrap'
-            // 'bounce', or a function, see handleEdge() method
-            atEdge: 'wrap',
-        }
-    }
+    // static defaultVariables() {
+    //     return {
+    //         // Core variables for turtles.
+    //         // turtle's position: x, y, z.
+    //         // Generally z set to constant via turtles.setDefault('z', num)
+    //         // x: 0,
+    //         // y: 0,
+    //         // z: 0,
+    //         // my euclidean direction, radians from x axis, counter-clockwise
+    //         // theta: null, // set to random if default not set by modeler
+    //         // What to do if I wander off world. Can be 'clamp', 'wrap'
+    //         // 'bounce', or a function, see handleEdge() method
+    //         atEdge: 'wrap',
+    //     }
+    // }
     // Initialize a Turtle given its Turtles AgentSet.
     constructor() {
         // this.agentSet = this.atEdge = this.model = null // needed by jsDoc
-        Object.assign(this, Turtle.defaultVariables())
+        // Object.assign(this, Turtle.defaultVariables())
     }
     agentConstructor() {
         this.theta = null

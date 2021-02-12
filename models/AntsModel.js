@@ -3,26 +3,37 @@ import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
 export default class AntsModel extends Model {
-    static defaultOptions() {
-        return {
-            population: 255,
-            speed: 1.0,
-            maxPheromone: 35,
-            diffusionRate: 0.3,
-            evaporationRate: 0.01,
-            wiggleAngle: util.degToRad(30),
-            foodX: (world) => world.minX + 6,
-            foodY: () => 0,
-            nestX: (world) => world.maxX - 6,
-            nestY: () => 0
-        }
-    }
+    population = 255
+    speed = 1.0
+    maxPheromone = 35
+    diffusionRate = 0.3
+    evaporationRate = 0.01
+    wiggleAngle = util.degToRad(30)
+    foodX = world => world.minX + 6
+    foodY = () => 0
+    nestX = world => world.maxX - 6
+    nestY = () => 0
+
+    // static defaultOptions() {
+    //     return {
+    //         // population: 255,
+    //         // speed: 1.0,
+    //         // maxPheromone: 35,
+    //         // diffusionRate: 0.3,
+    //         // evaporationRate: 0.01,
+    //         // wiggleAngle: util.degToRad(30),
+    //         // foodX: world => world.minX + 6,
+    //         // foodY: () => 0,
+    //         // nestX: world => world.maxX - 6,
+    //         // nestY: () => 0,
+    //     }
+    // }
 
     // ======================
 
     constructor(worldOptions = World.defaultOptions(40)) {
         super(worldOptions)
-        Object.assign(this, AntsModel.defaultOptions())
+        // Object.assign(this, AntsModel.defaultOptions())
     }
 
     setup() {
@@ -35,12 +46,16 @@ export default class AntsModel extends Model {
             p.isNest = p.isFood = false
             p.nestPheromone = p.foodPheromone = 0
         })
-        this.patches.patchRectXY(this.nestX(this.world), this.nestY(this.world), 3, 3).ask(p => {
-            p.isNest = true
-        })
-        this.patches.patchRectXY(this.foodX(this.world), this.foodY(this.world), 3, 3).ask(p => {
-            p.isFood = true
-        })
+        this.patches
+            .patchRectXY(this.nestX(this.world), this.nestY(this.world), 3, 3)
+            .ask(p => {
+                p.isNest = true
+            })
+        this.patches
+            .patchRectXY(this.foodX(this.world), this.foodY(this.world), 3, 3)
+            .ask(p => {
+                p.isFood = true
+            })
     }
     setupTurtles() {
         this.turtles.create(this.population, t => {

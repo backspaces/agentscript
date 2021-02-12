@@ -4,7 +4,7 @@ var util = AS.util
 class HelloModel extends Model {
     population = 10 // number of turtles
     speed = 0.1 // step size in patch units
-    wiggle = util.degToRad(10) // Wiggle angle in radians
+    wiggleAngle = util.degToRad(10)
 
     // We can use Model's constructor, due to using Model's default World
     // constructor() {
@@ -26,7 +26,7 @@ class HelloModel extends Model {
 
     step() {
         this.turtles.ask(t => {
-            t.angle += util.randomCentered(this.wiggle)
+            t.theta += util.randomCentered(this.wiggleAngle)
             t.forward(this.speed)
         })
     }
