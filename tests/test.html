@@ -22,25 +22,46 @@
         <div id="modelDiv"></div>
         <script type="module">
             import * as util from '../src/utils.js'
+            util.toWindow({ util })
+            Object.assign(window, util)
+            const obj = {
+                r2d: radToDeg,
+                d2r: degToRad,
+                r2h: radToHeading,
+                h2r: headingToRad,
+                d2h: degToHeading,
+                h2d: headingToDeg,
+                deq: degreesEqual,
+                req: radsEqual,
+                heq: headingsEq,
+                subr: subtractRadians,
+                subh: subtractHeadings,
+                subd: subtractDegrees,
+                rtw: radiansTowardXY,
+                htw: headingTowardXY,
+                dtw: degreesTowardXY,
+                pi: Math.PI,
+            } // = util
+            Object.assign(window, obj)
 
-            import Color from '../src/Color.js'
-            import Model from '../models/HelloModel.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            const model = new Model({ maxX: 16 })
-            model.setup()
-            const view = new TwoDraw(
-                model,
-                {
-                    div: 'modelDiv',
-                    patchSize: 15,
-                },
-                {
-                    // patchesColor: 'black',
-                    patchesColor: Color.typedColor('black'),
-                    turtlesColor: Color.typedColor('white'),
-                }
-            ) // defalt drawOptions!
-            view.draw()
+            // import Color from '../src/Color.js'
+            // import Model from '../models/HelloModel.js'
+            // import TwoDraw from '../src/TwoDraw.js'
+            // const model = new Model({ maxX: 16 })
+            // model.setup()
+            // const view = new TwoDraw(
+            //     model,
+            //     {
+            //         div: 'modelDiv',
+            //         patchSize: 15,
+            //     },
+            //     {
+            //         // patchesColor: 'black',
+            //         patchesColor: Color.typedColor('black'),
+            //         turtlesColor: Color.typedColor('white'),
+            //     }
+            // ) // defalt drawOptions!
+            // view.draw()
 
             // import * as THREE from 'https://cdn.skypack.dev/three@0.120.0'
             // import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'

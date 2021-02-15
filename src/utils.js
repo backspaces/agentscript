@@ -537,17 +537,23 @@ const toRadians = PI / 180
 export const degToRad = degrees => mod2pi(degrees * toRadians)
 export const radToDeg = radians => mod360(radians * toDegrees)
 
-// Heading & Angles: coord system
+// Heading & Radians: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
-// * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
-export function angleToHeading(radians) {
+// * Rad is euclidean: 0-right (x-axis), counterclockwise in radians
+export function radToHeading(radians) {
     const deg = radians * toDegrees
-    return mod(90 - deg, 360)
+    return mod360(90 - deg)
+    // return mod(90 - deg, 360)
 }
-export function headingToAngle(heading) {
-    const deg = mod(90 - heading, 360)
+export function headingToRad(heading) {
+    // const deg = mod(90 - heading, 360)
+    const deg = mod360(90 - heading)
     return deg * toRadians
 }
+
+// Wow. surprise: headingToDeg = degToHeading! Just like above.
+export const degToHeading = degrees => mod360(90 - degrees)
+export const headingToDeg = heading => mod360(90 - heading)
 
 export function mod360(degrees) {
     return mod(degrees, 360)
@@ -556,12 +562,14 @@ export function mod2pi(radians) {
     return mod(radians, 2 * PI)
 }
 
-export function headingsEqual(heading1, heading2) {
-    return mod360(heading1) === mod360(heading2)
+// headingsEa === degreesEq
+export function degreesEqual(deg1, deg2) {
+    return mod360(deg1) === mod360(deg2)
 }
-export function anglesEqual(angle1, angle2) {
-    return mod2pi(angle1) === mod2pi(angle2)
+export function radsEqual(rads1, rads2) {
+    return mod2pi(rads1) === mod2pi(rads2)
 }
+export const headingsEq = degreesEqual
 
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
@@ -577,7 +585,12 @@ export function subtractRadians(rad1, rad0) {
 //     // if (dAngle > 180) dAngle = dAngle - 360
 //     return dAngle
 // }
-export function subtractHeadings(deg1, deg0) {
+export function subtractHeadings(head1, head0) {
+    let dAngle = mod360(head1 - head0)
+    if (dAngle > 180) dAngle = dAngle - 360
+    return dAngle
+}
+export function subtractDegrees(deg1, deg0) {
     let dAngle = mod360(deg1 - deg0)
     if (dAngle > 180) dAngle = dAngle - 360
     return dAngle
@@ -585,22 +598,29 @@ export function subtractHeadings(deg1, deg0) {
 
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
 // [See: Math.atan2](http://goo.gl/JS8DF)
-export const radiansToward = (x, y, x1, y1) => Math.atan2(y1 - y, x1 - x)
+// export const radiansTowardXY = (x, y, x1, y1) => Math.atan2(y1 - y, x1 - x)
+export function radiansTowardXY(x, y, x1, y1) {
+    return Math.atan2(y1 - y, x1 - x)
+}
 // Above using headings (degrees) returning degrees in [-90, 90]
-export function headingToward(x, y, x1, y1) {
-    return heading(radiansToward(x, y, x1, y1))
+export function headingTowardXY(x, y, x1, y1) {
+    return radToHeading(radiansTowardXY(x, y, x1, y1))
+}
+// Above using degrees returning degrees in [-90, 90]
+export function degreesTowardXY(x, y, x1, y1) {
+    return radToDeg(radiansTowardXY(x, y, x1, y1))
 }
 
 // AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
 // We choose Phi radians from xy plane, "math" is often from Z axis
 // REMIND: some prefer -90, 90
 // export function altAzToAnglePhi(alt, az) {
-//     const angle = headingToAngle(az)
+//     const angle = headingToRad(az)
 //     const phi = modpipi(alt * toRadians)
 //     return [angle, phi]
 // }
 // export function anglePhiToAltAz(angle, phi) {
-//     const az = angleToHeading(angle)
+//     const az = radToHeading(angle)
 //     const alt = mod180180(phi * toDegrees)
 //     return [alt, az]
 // }
@@ -625,7 +645,7 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 // All angles in radians
 export function inCone(x, y, radius, coneAngle, angle, x0, y0) {
     if (sqDistance(x0, y0, x, y) > radius * radius) return false
-    const angle12 = radiansToward(x0, y0, x, y) // angle from 1 to 2
+    const angle12 = radiansTowardXY(x0, y0, x, y) // angle from 1 to 2
     return coneAngle / 2 >= Math.abs(subtractRadians(angle, angle12))
 }
 

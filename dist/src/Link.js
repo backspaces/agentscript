@@ -50,6 +50,10 @@ class Link {
     length() {
         return this.end0.distance(this.end1)
     }
+    angle() {
+        const { x0, x1, y0, y1 } = this
+        return Math.atan2(y1 - y0, x1 - x0)
+    }
     otherEnd(turtle) {
         if (turtle === this.end0) return this.end1
         if (turtle === this.end1) return this.end0

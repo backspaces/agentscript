@@ -538,11 +538,11 @@ export const radToDeg = radians => mod360(radians * toDegrees)
 // Heading & Angles: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
 // * Angle is euclidean: 0-right (x-axis), counterclockwise in radians
-export function angleToHeading(radians) {
+export function radToHeading(radians) {
     const deg = radians * toDegrees
     return mod(90 - deg, 360)
 }
-export function headingToAngle(heading) {
+export function headingToRad(heading) {
     const deg = mod(90 - heading, 360)
     return deg * toRadians
 }
@@ -554,10 +554,10 @@ export function mod2pi(radians) {
     return mod(radians, 2 * PI)
 }
 
-export function headingsEqual(heading1, heading2) {
+export function degreesEqual(heading1, heading2) {
     return mod360(heading1) === mod360(heading2)
 }
-export function anglesEqual(angle1, angle2) {
+export function radsEqual(angle1, angle2) {
     return mod2pi(angle1) === mod2pi(angle2)
 }
 
@@ -577,22 +577,22 @@ export function subtractHeadings(deg1, deg0) {
 
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
 // [See: Math.atan2](http://goo.gl/JS8DF)
-export const radiansToward = (x, y, x1, y1) => Math.atan2(y1 - y, x1 - x)
+export const radiansTowardXY = (x, y, x1, y1) => Math.atan2(y1 - y, x1 - x)
 // Above using headings (degrees) returning degrees in [-90, 90]
-export function headingToward(x, y, x1, y1) {
-    return heading(radiansToward(x, y, x1, y1))
+export function headingTowardXY(x, y, x1, y1) {
+    return heading(radiansTowardXY(x, y, x1, y1))
 }
 
 // AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
 // We choose Phi radians from xy plane, "math" is often from Z axis
 // REMIND: some prefer -90, 90
 // export function altAzToAnglePhi(alt, az) {
-//     const angle = headingToAngle(az)
+//     const angle = headingToRad(az)
 //     const phi = modpipi(alt * toRadians)
 //     return [angle, phi]
 // }
 // export function anglePhiToAltAz(angle, phi) {
-//     const az = angleToHeading(angle)
+//     const az = radToHeading(angle)
 //     const alt = mod180180(phi * toDegrees)
 //     return [alt, az]
 // }
@@ -617,7 +617,7 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 // All angles in radians
 export function inCone(x, y, radius, coneAngle, angle, x0, y0) {
     if (sqDistance(x0, y0, x, y) > radius * radius) return false
-    const angle12 = radiansToward(x0, y0, x, y) // angle from 1 to 2
+    const angle12 = radiansTowardXY(x0, y0, x, y) // angle from 1 to 2
     return coneAngle / 2 >= Math.abs(subtractRadians(angle, angle12))
 }
 

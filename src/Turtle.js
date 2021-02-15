@@ -8,6 +8,9 @@ import * as util from './utils.js'
 // Each turtle knows the patch it is on, and interacts with that and other
 // patches, as well as other turtles.
 
+const toDeg = 180 / Math.PI
+const toRad = Math.PI / 180
+
 /**
  * Class Turtle instances represent the dynamic, behavioral element of modeling.
  * Each turtle knows the patch it is on, and interacts with that and other
@@ -72,6 +75,7 @@ class Turtle {
         return breed.create(num, turtle => {
             // turtle.setxy(this.x, this.y)
             turtle.setxy(this.x, this.y, this.z)
+            turtle.theta = this.theta
             // hatched turtle inherits parents' ownVariables
             for (const key of breed.ownVariables) {
                 if (turtle[key] == null) turtle[key] = this[key]
@@ -97,17 +101,23 @@ class Turtle {
 
     // Heading vs Euclidean Angles. Angle for clarity when ambiguity.
     get heading() {
-        return util.angleToHeading(this.theta)
+        return util.radToHeading(this.theta)
     }
     set heading(heading) {
-        this.theta = util.headingToAngle(heading)
+        this.theta = util.headingToRad(heading)
     }
-    get angle() {
-        return this.theta
-    }
-    set angle(theta) {
-        this.theta = theta
-    }
+    // get theta() {
+    //     return this.theta
+    // }
+    // set theta(theta) {
+    //     this.theta = theta
+    // }
+    // get degrees() {
+    //     return this.theta * toDeg
+    // }
+    // set degrees(deg) {
+    //     this.theta = deg * toRad
+    // }
 
     // Set x, y position. If z given, override default z.
     // Call handleEdge(x, y) if x, y off-world.
@@ -269,12 +279,12 @@ class Turtle {
     }
 
     // Return angle towards agent/x,y
-    // Use util.angleToHeading to convert to heading
+    // Use util.radToHeading to convert to heading
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
     towardsXY(x, y) {
-        return util.radiansToward(this.x, this.y, x, y)
+        return util.radiansTowardXY(this.x, this.y, x, y)
     }
     // Return patch w/ given parameters. Return undefined if off-world.
     // Return patch dx, dy from my position.

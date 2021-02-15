@@ -244,7 +244,7 @@ class Patches extends AgentSet {
     // Return patch at distance and angle from obj's (patch or turtle)
     // x, y (floats). If off world, return undefined.
     // To use heading:
-    //   patchAtAngleAndDistance(obj, util.headingToAngle(heading), distance)
+    //   patchAtAngleAndDistance(obj, util.headingToRad(heading), distance)
     // Does not take into account the angle of the obj .. turtle.theta for example.
     patchAtAngleAndDistance(obj, angle, distance) {
         let { x, y } = obj

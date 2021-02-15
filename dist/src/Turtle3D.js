@@ -48,7 +48,7 @@ export default class Turtle3D extends Turtle {
     }
     getHeadingPitchRoll() {
         const [psi, phi, theta] = this.getRotation()
-        const heading = util.angleToHeading(theta)
+        const heading = util.radToHeading(theta)
         const pitch = util.radToDeg(-phi)
         const roll = util.radToDeg(psi)
         return [heading, pitch, roll]
