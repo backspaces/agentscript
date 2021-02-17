@@ -683,15 +683,21 @@ out;`;
     function radToHeading(radians) {
         const deg = radians * toDegrees;
         return mod360(90 - deg)
-        // return mod(90 - deg, 360)
     }
     function headingToRad(heading) {
-        // const deg = mod(90 - heading, 360)
         const deg = mod360(90 - heading);
         return deg * toRadians
     }
+    // Relative angles in heading space: deg Heading => -deg Eucledian
+    function radToHeadingAngle(radians) {
+        return -radToDeg(radians)
+    }
+    function headingAngleToRad(headingAngle) {
+        return -degToRad(headingAngle)
+    }
 
     // Wow. surprise: headingToDeg = degToHeading! Just like above.
+    // deg is absolute eucledian degrees direction
     const degToHeading = degrees => mod360(90 - degrees);
     const headingToDeg = heading => mod360(90 - heading);
 
@@ -701,8 +707,14 @@ out;`;
     function mod2pi(radians) {
         return mod(radians, 2 * PI$1)
     }
+    function modpipi(radians) {
+        return mod(radians, 2 * PI$1) - PI$1
+    }
+    function mod180180(degrees) {
+        return mod360(degrees) - 180
+    }
 
-    // headingsEa === degreesEq
+    // headingsEq === degreesEq
     function degreesEqual(deg1, deg2) {
         return mod360(deg1) === mod360(deg2)
     }
@@ -714,31 +726,20 @@ out;`;
     // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
     // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
     function subtractRadians(rad1, rad0) {
-        let dr = mod2pi(rad1 - rad0);
+        let dr = mod2pi(rad1 - rad0); // - PI
         if (dr > PI$1) dr = dr - 2 * PI$1;
         return dr
     }
-
     // Above using headings (degrees) returning degrees in (-180, 180]
-    // export function subtractHeadings(deg1, deg0) {
-    //     let dAngle = mod360(deg1 - deg0) - 180
-    //     // if (dAngle > 180) dAngle = dAngle - 360
-    //     return dAngle
-    // }
-    function subtractHeadings(head1, head0) {
-        let dAngle = mod360(head1 - head0);
-        if (dAngle > 180) dAngle = dAngle - 360;
-        return dAngle
-    }
     function subtractDegrees(deg1, deg0) {
-        let dAngle = mod360(deg1 - deg0);
+        let dAngle = mod360(deg1 - deg0); // - 180
         if (dAngle > 180) dAngle = dAngle - 360;
         return dAngle
     }
+    const subtractHeadings = subtractDegrees;
 
     // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
     // [See: Math.atan2](http://goo.gl/JS8DF)
-    // export const radiansTowardXY = (x, y, x1, y1) => Math.atan2(y1 - y, x1 - x)
     function radiansTowardXY(x, y, x1, y1) {
         return Math.atan2(y1 - y, x1 - x)
     }
@@ -783,10 +784,10 @@ out;`;
     // Return true if x,y is within cone.
     // Cone: origin x0,y0 in direction angle, with coneAngle width in radians.
     // All angles in radians
-    function inCone(x, y, radius, coneAngle, angle, x0, y0) {
+    function inCone(x, y, radius, coneAngle, direction, x0, y0) {
         if (sqDistance(x0, y0, x, y) > radius * radius) return false
         const angle12 = radiansTowardXY(x0, y0, x, y); // angle from 1 to 2
-        return coneAngle / 2 >= Math.abs(subtractRadians(angle, angle12))
+        return coneAngle / 2 >= Math.abs(subtractRadians(direction, angle12))
     }
 
     // export const radians = degrees => mod2pi(degrees * toRadians)
@@ -1381,16 +1382,20 @@ out;`;
         radToDeg: radToDeg,
         radToHeading: radToHeading,
         headingToRad: headingToRad,
+        radToHeadingAngle: radToHeadingAngle,
+        headingAngleToRad: headingAngleToRad,
         degToHeading: degToHeading,
         headingToDeg: headingToDeg,
         mod360: mod360,
         mod2pi: mod2pi,
+        modpipi: modpipi,
+        mod180180: mod180180,
         degreesEqual: degreesEqual,
         radsEqual: radsEqual,
         headingsEq: headingsEq,
         subtractRadians: subtractRadians,
-        subtractHeadings: subtractHeadings,
         subtractDegrees: subtractDegrees,
+        subtractHeadings: subtractHeadings,
         radiansTowardXY: radiansTowardXY,
         headingTowardXY: headingTowardXY,
         degreesTowardXY: degreesTowardXY,
@@ -1919,10 +1924,10 @@ out;`;
 
         // As above, but also limited to the angle `coneAngle` around
         // a `angle` from object `o`.
-        inCone(o, radius, coneAngle, angle, meToo = false) {
+        inCone(o, radius, coneAngle, direction, meToo = false) {
             const agents = new AgentArray();
             this.ask(a => {
-                if (inCone(a.x, a.y, radius, coneAngle, angle, o.x, o.y)) {
+                if (inCone(a.x, a.y, radius, coneAngle, direction, o.x, o.y)) {
                     if (meToo || o !== a) agents.push(a);
                 }
             });
@@ -2823,7 +2828,7 @@ out;`;
         length() {
             return this.end0.distance(this.end1)
         }
-        angle() {
+        direction() {
             const { x0, x1, y0, y1 } = this;
             return Math.atan2(y1 - y0, x1 - x0)
         }
@@ -3502,29 +3507,23 @@ out;`;
         }
         // Patches in cone from p in direction `angle`,
         // with `coneAngle` and float `radius`
-        inCone(patch, radius, coneAngle, angle, meToo = true) {
+        inCone(patch, radius, coneAngle, direction, meToo = true) {
             const dxy = Math.ceil(radius);
             const pRect = this.inRect(patch, dxy, dxy, meToo);
-            return pRect.inCone(patch, radius, coneAngle, angle, meToo)
+            return pRect.inCone(patch, radius, coneAngle, direction, meToo)
         }
 
         // Return patch at distance and angle from obj's (patch or turtle)
         // x, y (floats). If off world, return undefined.
         // To use heading:
-        //   patchAtAngleAndDistance(obj, util.headingToRad(heading), distance)
+        //   patchAtDirectionAndDistance(obj, util.headingToRad(heading), distance)
         // Does not take into account the angle of the obj .. turtle.theta for example.
-        patchAtAngleAndDistance(obj, angle, distance) {
-            let { x, y } = obj;
-            x = x + distance * Math.cos(angle);
-            y = y + distance * Math.sin(angle);
+        patchAtDirectionAndDistance(agent, direction, distance) {
+            let { x, y } = agent;
+            x = x + distance * Math.cos(direction);
+            y = y + distance * Math.sin(direction);
             return this.patch(x, y)
         }
-        // patchLeftAndAhead (dTheta, distance) {
-        //   return this.patchAtAngleAndDistance(dTheta, distance)
-        // }
-        // patchRightAndAhead (dTheta, distance) {
-        //   return this.patchAtAngleAndDistance(-dTheta, distance)
-        // }
 
         // Return true if patch on edge of world
         isOnEdge(patch) {
@@ -3711,8 +3710,12 @@ out;`;
         patchAt(dx, dy) {
             return this.patches.patch(this.x + dx, this.y + dy)
         }
-        patchAtAngleAndDistance(angle, distance) {
-            return this.patches.patchAtAngleAndDistance(this, angle, distance)
+        patchAtDirectionAndDistance(direction, distance) {
+            return this.patches.patchAtDirectionAndDistance(
+                this,
+                direction,
+                distance
+            )
         }
 
         sprout(num = 1, breed = this.model.turtles, initFcn = turtle => {}) {
@@ -3922,13 +3925,20 @@ out;`;
             return this.model.patches.patch(this.x, this.y)
         }
 
-        // Heading vs Euclidean Angles. Angle for clarity when ambiguity.
+        // Heading vs Euclidean Absolute Angles.
         get heading() {
             return radToHeading(this.theta)
         }
         set heading(heading) {
             this.theta = headingToRad(heading);
         }
+        get direction() {
+            return this.theta
+        }
+        set direction(theta) {
+            this.theta = theta;
+        }
+
         // get theta() {
         //     return this.theta
         // }
@@ -4033,14 +4043,8 @@ out;`;
             );
         }
 
-        // Also used by turtles.create()
-        // setTheta(rad) {
-        //     this.theta = util.mod(rad, Math.PI * 2)
-        // }
         // Change current direction by rad radians which can be + (left) or - (right).
         rotate(rad) {
-            // this.theta = util.mod(this.theta + rad, Math.PI * 2)
-            // this.theta = this.theta + rad
             this.theta = mod2pi(this.theta + rad);
         }
         right(rad) {
@@ -4061,17 +4065,17 @@ out;`;
         // Return the patch ahead of this turtle by distance (patchSize units).
         // Return undefined if off-world.
         patchAhead(distance) {
-            return this.patchAtAngleAndDistance(this.theta, distance)
+            return this.patchAtDirectionAndDistance(this.theta, distance)
+        }
+        patchLeftAndAhead(angle, distance) {
+            return this.patchAtDirectionAndDistance(angle + this.theta, distance)
+        }
+        patchRightAndAhead(angle, distance) {
+            return this.patchAtDirectionAndDistance(angle - this.theta, distance)
         }
         // Use patchAhead to determine if this turtle can move forward by distance.
         canMove(distance) {
             return this.patchAhead(distance) != null
-        } // null / undefined
-        patchLeftAndAhead(angle, distance) {
-            return this.patchAtAngleAndDistance(angle + this.theta, distance)
-        }
-        patchRightAndAhead(angle, distance) {
-            return this.patchAtAngleAndDistance(angle - this.theta, distance)
         }
 
         // 6 methods in both Patch & Turtle modules
@@ -4101,7 +4105,7 @@ out;`;
             return Math.sin(this.theta)
         }
 
-        // Return angle towards agent/x,y
+        // Return direction towards agent/x,y
         // Use util.radToHeading to convert to heading
         towards(agent) {
             return this.towardsXY(agent.x, agent.y)
@@ -4114,10 +4118,14 @@ out;`;
         patchAt(dx, dy) {
             return this.model.patches.patch(this.x + dx, this.y + dy)
         }
-        // Note: angle is absolute, w/o regard to existing angle of turtle.
-        // Use Left/Right versions for angle-relative.
-        patchAtAngleAndDistance(angle, distance) {
-            return this.model.patches.patchAtAngleAndDistance(this, angle, distance)
+        // Note: direction is absolute, w/o regard to existing angle of turtle.
+        // Use Left/Right versions for relative angles.
+        patchAtDirectionAndDistance(direction, distance) {
+            return this.model.patches.patchAtDirectionAndDistance(
+                this,
+                direction,
+                distance
+            )
         }
 
         // Link methods. Note: this.links returns all links linked to me.

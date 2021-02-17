@@ -99,13 +99,20 @@ class Turtle {
         return this.model.patches.patch(this.x, this.y)
     }
 
-    // Heading vs Euclidean Angles. Angle for clarity when ambiguity.
+    // Heading vs Euclidean Absolute Angles.
     get heading() {
         return util.radToHeading(this.theta)
     }
     set heading(heading) {
         this.theta = util.headingToRad(heading)
     }
+    get direction() {
+        return this.theta
+    }
+    set direction(theta) {
+        this.theta = theta
+    }
+
     // get theta() {
     //     return this.theta
     // }
@@ -210,14 +217,8 @@ class Turtle {
         )
     }
 
-    // Also used by turtles.create()
-    // setTheta(rad) {
-    //     this.theta = util.mod(rad, Math.PI * 2)
-    // }
     // Change current direction by rad radians which can be + (left) or - (right).
     rotate(rad) {
-        // this.theta = util.mod(this.theta + rad, Math.PI * 2)
-        // this.theta = this.theta + rad
         this.theta = util.mod2pi(this.theta + rad)
     }
     right(rad) {
@@ -238,17 +239,17 @@ class Turtle {
     // Return the patch ahead of this turtle by distance (patchSize units).
     // Return undefined if off-world.
     patchAhead(distance) {
-        return this.patchAtAngleAndDistance(this.theta, distance)
+        return this.patchAtDirectionAndDistance(this.theta, distance)
+    }
+    patchLeftAndAhead(angle, distance) {
+        return this.patchAtDirectionAndDistance(angle + this.theta, distance)
+    }
+    patchRightAndAhead(angle, distance) {
+        return this.patchAtDirectionAndDistance(angle - this.theta, distance)
     }
     // Use patchAhead to determine if this turtle can move forward by distance.
     canMove(distance) {
         return this.patchAhead(distance) != null
-    } // null / undefined
-    patchLeftAndAhead(angle, distance) {
-        return this.patchAtAngleAndDistance(angle + this.theta, distance)
-    }
-    patchRightAndAhead(angle, distance) {
-        return this.patchAtAngleAndDistance(angle - this.theta, distance)
     }
 
     // 6 methods in both Patch & Turtle modules
@@ -278,7 +279,7 @@ class Turtle {
         return Math.sin(this.theta)
     }
 
-    // Return angle towards agent/x,y
+    // Return direction towards agent/x,y
     // Use util.radToHeading to convert to heading
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
@@ -291,10 +292,14 @@ class Turtle {
     patchAt(dx, dy) {
         return this.model.patches.patch(this.x + dx, this.y + dy)
     }
-    // Note: angle is absolute, w/o regard to existing angle of turtle.
-    // Use Left/Right versions for angle-relative.
-    patchAtAngleAndDistance(angle, distance) {
-        return this.model.patches.patchAtAngleAndDistance(this, angle, distance)
+    // Note: direction is absolute, w/o regard to existing angle of turtle.
+    // Use Left/Right versions for relative angles.
+    patchAtDirectionAndDistance(direction, distance) {
+        return this.model.patches.patchAtDirectionAndDistance(
+            this,
+            direction,
+            distance
+        )
     }
 
     // Link methods. Note: this.links returns all links linked to me.

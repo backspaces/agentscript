@@ -34,13 +34,17 @@
                 deq: degreesEqual,
                 req: radsEqual,
                 heq: headingsEq,
-                subr: subtractRadians,
-                subh: subtractHeadings,
-                subd: subtractDegrees,
+                sr: subtractRadians,
+                sh: subtractHeadings,
+                sd: subtractDegrees,
                 rtw: radiansTowardXY,
                 htw: headingTowardXY,
                 dtw: degreesTowardXY,
+                md: mod360,
+                mp: mod2pi,
+                mpp: modpipi,
                 pi: Math.PI,
+                pi2: 2 * Math.PI,
             } // = util
             Object.assign(window, obj)
 

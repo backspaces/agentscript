@@ -554,11 +554,12 @@ export function mod2pi(radians) {
     return mod(radians, 2 * PI)
 }
 
-export function degreesEqual(heading1, heading2) {
-    return mod360(heading1) === mod360(heading2)
+// Works for headings as well:
+export function degreesEqual(deg1, deg2) {
+    return mod360(deg1) === mod360(deg2)
 }
-export function radsEqual(angle1, angle2) {
-    return mod2pi(angle1) === mod2pi(angle2)
+export function radsEqual(rad1, rad2) {
+    return mod2pi(rad1) === mod2pi(rad2)
 }
 
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1

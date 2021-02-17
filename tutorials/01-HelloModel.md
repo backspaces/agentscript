@@ -130,7 +130,7 @@ Finally, we create links between random pairs of turtles.
 Even thought this is a very simple model, it exercises all three of the AgentSets: Patches, Turtles, and Links. Great for debugging!
 
 After we setup our model, we define it's dynamic behavior via the step() method.
-In this case, we ask each turtle to wiggle (change it's angle by -5 to +5 degrees)
+In this case, we ask each turtle to wiggle (change it's direction by -5 to +5 degrees)
 and move forward by the speed parameter (0.1 patch size)
 
 ```javascript

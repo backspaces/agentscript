@@ -543,15 +543,21 @@ export const radToDeg = radians => mod360(radians * toDegrees)
 export function radToHeading(radians) {
     const deg = radians * toDegrees
     return mod360(90 - deg)
-    // return mod(90 - deg, 360)
 }
 export function headingToRad(heading) {
-    // const deg = mod(90 - heading, 360)
     const deg = mod360(90 - heading)
     return deg * toRadians
 }
+// Relative angles in heading space: deg Heading => -deg Eucledian
+export function radToHeadingAngle(radians) {
+    return -radToDeg(radians)
+}
+export function headingAngleToRad(headingAngle) {
+    return -degToRad(headingAngle)
+}
 
 // Wow. surprise: headingToDeg = degToHeading! Just like above.
+// deg is absolute eucledian degrees direction
 export const degToHeading = degrees => mod360(90 - degrees)
 export const headingToDeg = heading => mod360(90 - heading)
 
@@ -561,8 +567,14 @@ export function mod360(degrees) {
 export function mod2pi(radians) {
     return mod(radians, 2 * PI)
 }
+export function modpipi(radians) {
+    return mod(radians, 2 * PI) - PI
+}
+export function mod180180(degrees) {
+    return mod360(degrees) - 180
+}
 
-// headingsEa === degreesEq
+// headingsEq === degreesEq
 export function degreesEqual(deg1, deg2) {
     return mod360(deg1) === mod360(deg2)
 }
@@ -574,31 +586,20 @@ export const headingsEq = degreesEqual
 // Return angle (radians) in (-pi,pi] that added to rad0 = rad1
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
 export function subtractRadians(rad1, rad0) {
-    let dr = mod2pi(rad1 - rad0)
+    let dr = mod2pi(rad1 - rad0) // - PI
     if (dr > PI) dr = dr - 2 * PI
     return dr
 }
-
 // Above using headings (degrees) returning degrees in (-180, 180]
-// export function subtractHeadings(deg1, deg0) {
-//     let dAngle = mod360(deg1 - deg0) - 180
-//     // if (dAngle > 180) dAngle = dAngle - 360
-//     return dAngle
-// }
-export function subtractHeadings(head1, head0) {
-    let dAngle = mod360(head1 - head0)
-    if (dAngle > 180) dAngle = dAngle - 360
-    return dAngle
-}
 export function subtractDegrees(deg1, deg0) {
-    let dAngle = mod360(deg1 - deg0)
+    let dAngle = mod360(deg1 - deg0) // - 180
     if (dAngle > 180) dAngle = dAngle - 360
     return dAngle
 }
+export const subtractHeadings = subtractDegrees
 
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
 // [See: Math.atan2](http://goo.gl/JS8DF)
-// export const radiansTowardXY = (x, y, x1, y1) => Math.atan2(y1 - y, x1 - x)
 export function radiansTowardXY(x, y, x1, y1) {
     return Math.atan2(y1 - y, x1 - x)
 }
@@ -643,10 +644,10 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 // Return true if x,y is within cone.
 // Cone: origin x0,y0 in direction angle, with coneAngle width in radians.
 // All angles in radians
-export function inCone(x, y, radius, coneAngle, angle, x0, y0) {
+export function inCone(x, y, radius, coneAngle, direction, x0, y0) {
     if (sqDistance(x0, y0, x, y) > radius * radius) return false
     const angle12 = radiansTowardXY(x0, y0, x, y) // angle from 1 to 2
-    return coneAngle / 2 >= Math.abs(subtractRadians(angle, angle12))
+    return coneAngle / 2 >= Math.abs(subtractRadians(direction, angle12))
 }
 
 // export const radians = degrees => mod2pi(degrees * toRadians)

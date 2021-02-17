@@ -109,11 +109,6 @@ export default class Turtle3D extends Turtle {
         // super.setxy(x, y, z)
     }
 
-    // Also used by turtles.create()
-    // setTheta(rad) {
-    //     this.obj3d.rotateZ(rad)
-    // }
-
     // Incremental rotation around given axis
     right(rad) {
         this.obj3d.rotateZ(-rad)

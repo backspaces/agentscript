@@ -235,29 +235,23 @@ class Patches extends AgentSet {
     }
     // Patches in cone from p in direction `angle`,
     // with `coneAngle` and float `radius`
-    inCone(patch, radius, coneAngle, angle, meToo = true) {
+    inCone(patch, radius, coneAngle, direction, meToo = true) {
         const dxy = Math.ceil(radius)
         const pRect = this.inRect(patch, dxy, dxy, meToo)
-        return pRect.inCone(patch, radius, coneAngle, angle, meToo)
+        return pRect.inCone(patch, radius, coneAngle, direction, meToo)
     }
 
     // Return patch at distance and angle from obj's (patch or turtle)
     // x, y (floats). If off world, return undefined.
     // To use heading:
-    //   patchAtAngleAndDistance(obj, util.headingToRad(heading), distance)
+    //   patchAtDirectionAndDistance(obj, util.headingToRad(heading), distance)
     // Does not take into account the angle of the obj .. turtle.theta for example.
-    patchAtAngleAndDistance(obj, angle, distance) {
-        let { x, y } = obj
-        x = x + distance * Math.cos(angle)
-        y = y + distance * Math.sin(angle)
+    patchAtDirectionAndDistance(agent, direction, distance) {
+        let { x, y } = agent
+        x = x + distance * Math.cos(direction)
+        y = y + distance * Math.sin(direction)
         return this.patch(x, y)
     }
-    // patchLeftAndAhead (dTheta, distance) {
-    //   return this.patchAtAngleAndDistance(dTheta, distance)
-    // }
-    // patchRightAndAhead (dTheta, distance) {
-    //   return this.patchAtAngleAndDistance(-dTheta, distance)
-    // }
 
     // Return true if patch on edge of world
     isOnEdge(patch) {

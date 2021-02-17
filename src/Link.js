@@ -50,7 +50,7 @@ class Link {
     length() {
         return this.end0.distance(this.end1)
     }
-    angle() {
+    direction() {
         const { x0, x1, y0, y1 } = this
         return Math.atan2(y1 - y0, x1 - x0)
     }
