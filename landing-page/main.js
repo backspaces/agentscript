@@ -6,20 +6,22 @@ import TwoDraw from '../src/TwoDraw.js'
 import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
+import { CodeBlock } from './src/codeblock.js'
+
 window.util = util
 
-// setup code blocks
-document.querySelectorAll('.code').forEach(el => {
-    el.style.height = el.scrollHeight + 5 + 'px'
-})
+// document.querySelectorAll('.code-block').forEach(el => {
+//     let codeEl = el.querySelector('.code')
+//     let runOnceButton = el.querySelector('[run-once]')
+//     runOnceButton.addEventListener('click', () => {
+//         let code = codeEl.value
+//         eval(code)
+//     })
+// })
 
-document.querySelectorAll('.code-block').forEach(el => {
-    let codeEl = el.querySelector('.code')
-    let runOnceButton = el.querySelector('[run-once]')
-    runOnceButton.addEventListener('click', () => {
-        let code = codeEl.value
-        eval(code)
-    })
+
+document.querySelectorAll('[reset-model]').forEach(el => {
+    el.addEventListener('click', () => model.reset())
 })
 
 let viewConfigs = [
@@ -54,6 +56,8 @@ function nextModel() {
 
 let whatIsABMView
 let fixedView
+let tutorialModelContainer
+let fixedModelContainer
 let model
 
 function step() {
@@ -77,23 +81,50 @@ async function run() {
         view.div.style.display = 'none'
     })
 
-    const whatIsABMModel = model = new HelloPlusModel({
-        minX: 0,
-        maxX: 25,
-        minY: 0,
-        maxY: 25
+    // const whatIsABMModel = model = new HelloPlusModel({
+    //     minX: 0,
+    //     maxX: 25,
+    //     minY: 0,
+    //     maxY: 25
+    // })
+    const whatIsABMModel = model = new Model({
+        minX: -5,
+        maxX: 5,
+        minY: -5,
+        maxY: 5
     })
     whatIsABMView = new TwoDraw(whatIsABMModel, {
-        div: document.querySelector('#what-is-agentscript'),
-        patchSize: 20,
+        div: document.querySelector('#tutorial-model'),
+        patchSize: 40,
+    },{
+        patchesColor: 'black'
     })
 
     fixedView = new TwoDraw(whatIsABMModel, {
-        div: document.querySelector('#fixed-canvas'),
-        patchSize: 20,
+        div: document.querySelector('#tutorial-model-fixed'),
+        patchSize: 40,
+    }, {
+        patchesColor: 'black'
     })
-    fixedView.div.style.display = 'none'
-    fixedView.div.style.left = whatIsABMView.div.offsetLeft + 'px'
+
+    tutorialModelContainer = document.querySelector('.tutorial-model-container')
+    fixedModelContainer = document.querySelector('.tutorial-model-container-fixed')
+    fixedModelContainer.style.display = 'none'
+    fixedModelContainer.style.left = whatIsABMView.div.offsetLeft + 'px'
+
+    // Set up code blocks
+    document.querySelectorAll('[code-block]').forEach(el => {
+      let codeContent = el.textContent
+      console.log(codeContent)
+      let hasForeverButton = el.getAttribute('forever-button') !== null
+      el.innerHTML = ''
+      el.appendChild(new CodeBlock(whatIsABMModel).render({ codeContent, hasForeverButton }))
+    })
+
+    // TODO: move into component logic
+    document.querySelectorAll('.code').forEach(el => {
+        el.style.height = el.scrollHeight + 5 + 'px'
+    })
 
     // Start cycling through models
     nextModel()
@@ -104,12 +135,14 @@ async function run() {
 run()
 
 document.addEventListener('scroll', (event) => {
-    if (document.scrollingElement.scrollTop > whatIsABMView.div.offsetTop) {
-        whatIsABMView.div.style.visibility = 'hidden'
-        fixedView.div.style.display = 'block'
+    // Code smell. Must match .tutorial-model-container-fixed top css property
+    let topPadding = 80;
+    if (document.scrollingElement.scrollTop > (tutorialModelContainer.offsetTop - topPadding)) {
+        tutorialModelContainer.style.visibility = 'hidden'
+        fixedModelContainer.style.display = 'block'
     } else {
-        whatIsABMView.div.style.visibility = 'visible'
-        fixedView.div.style.display = 'none'
+        tutorialModelContainer.style.visibility = 'visible'
+        fixedModelContainer.style.display = 'none'
     }
 })
 

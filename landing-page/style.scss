@@ -99,26 +99,31 @@ html, body {
     box-sizing: border-box;
     font-size: 0.7rem;
   }
+}
 
-  .button {
-    cursor: pointer;
-    background: skyblue;
-    display: inline-block;
-    padding: 10px 14px;
-    font-size: 18px;
-    user-select: none;
+.button {
+  cursor: pointer;
+  background: skyblue;
+  display: inline-block;
+  padding: 10px 14px;
+  font-size: 18px;
+  user-select: none;
 
-    &:hover {
-      background: color.scale(skyblue, $lightness: -10%, $saturation: 10%);
-    }
+  &:hover {
+    background: color.scale(skyblue, $lightness: -10%, $saturation: 10%);
+  }
 
-    &.forever {
-      background: orange;
-    }
+  &.forever {
+    background: orange;
+  }
+
+  &.running {
+    background: color.scale(orange, $lightness: 50%, $saturation: -10%); 
   }
 }
 
-#fixed-canvas {
+.tutorial-model-container-fixed {
+  display: none;
   position: fixed;
   top: 80px;
 }

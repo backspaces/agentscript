@@ -25,7 +25,7 @@
       </div>
     </div>
   </section>
-  <section class="two-columns-container">
+  <!-- <section class="two-columns-container">
     <div class="two-columns">
       <div class="column-left">
         <h1>What is Agent Based Modeling?</h1>
@@ -43,67 +43,94 @@
         <p>The basic idea is to give simple rules to a bunch of agents in an environment, let them loose, and see what happens!</p>
       </div>
       <div class="column-right">
-        <canvas id="what-is-agentscript"></canvas>
       </div>
     </div>
-  </section>
+  </section> -->
   <section class="two-columns-container">
     <div class="two-columns">
       <div class="column-left">
         <h1>What is Agentscript?</h1>
         
         <p>Agentscript is a javascript library for writing agent based models that run in your web browser. It is inspired by an incredible language called <a href="https://ccl.northwestern.edu/netlogo/">Netlogo</a>.</p>
-        <p>Some note about performance and other features here--how many turtles can it support at once?</p>
+      </div>
+      <div class="column-right"></div>
+    </div>
+  </section>
+  <section class="two-columns-container">
+    <div class="two-columns">
+      <div class="column-left">
         <h2>Turtles, Patches, and Links</h2>
         <p>In Agentscript, there are three primary ingredients: turtles, patches, and links. We'll look at these one by one.</p>
         
         <h2>Turtles</h2>
         
         <p>First things first, let's make a turtle:</p>
-        <div class="code-block">
-          <textarea class="code">model.turtles.create(1)</textarea>
-          <div class="code-buttons"><div class="button" run-once>run once</div></div>  
-        </div>
-        <p>Click the "run once" button to execute that code once.</p>
-        <p>Click it several times, and you'll start to build up a stack of turtles in the center of the world. By default, each turtle points in a different random direction.</p>
+        <div code-block>model.turtles.create(1)</div>
         
-        <p>We can ask the turtles to do lots of things, like move forward:</p>
-        <div class="code-block">
-          <textarea class="code">model.turtles.ask(t => t.forward(1))</textarea>
-          <div class="code-buttons"><div class="button" run-once>run once</div></div>
-        </div>
+        <p>Click the "run once" button to execute that code once.</p>
+        <p>You'll see a turtle appear in the center of the world. It will look like a white chevron.</p>
+        
+        <p>Now that we have a turtle, we can ask it do something, like move forward:</p>
+        <div code-block>model.turtles.ask(turtle => turtle.forward(1))</div>
 
         <p>or rotate:</p>
-        <div class="code-block">
-          <textarea class="code">model.turtles.ask(t => t.rotate(90))</textarea>
-          <div class="code-buttons"><div class="button" run-once>run once</div></div>
-        </div>
+        <div code-block>model.turtles.ask(turtle => turtle.rotate(45))</div>
 
-        <p>or face another random turtle, and then move forward:</p>
-        <div class="code-block">
-<textarea class="code">model.turtles.ask(t => {
-  t.face(util.oneOf(model.turtles))
-  t.forward(1)
-})</textarea>
-          <div class="code-buttons"><div class="button" run-once>run once</div></div>
-        </div>
+        <p>Or move forward, and then rotate:</p>
+        <div code-block>model.turtles.ask(turtle => {
+  turtle.forward(1)
+  turtle.rotate(25)
+})</div>
 
         <p>Try changing one of the numbers in the above code to make the turtles move farther away.</p>
 
-        <p>Here's a button that will run the code over and over again so you don't have to keep clicking. See what happens when they reach the edge of the world?</p>
-        <div class="code-block">
-<textarea class="code">model.turtles.ask(t => {
-  t.face(util.oneOf(model.turtles))
-  t.forward(1)
-})</textarea>
-          <div class="code-buttons"><div class="button" run-once>run once</div><div class="button forever" run-forever>run forever</div></div>
-        </div>
+        <p>Instead of working one step at a time, things get really interesting when you run a behavior over and over again.</p>
+
+        <p>I added a "run forever" button to the code snippet above. Try it out!</p>
+
+        <div code-block forever-button>model.turtles.ask(turtle => {
+  turtle.forward(1)
+  turtle.rotate(25)
+})</div>
+
+        <p>Now add a few more turtles:</p>
+        <div code-block>model.turtles.create(1)</div>
+
+        <p>With multiple turtles in the model, we can make them interact with each other.</p>
+
+        <p>Read this code before you run it. What do you think will happen?</p>
+        <div code-block forever-button>model.turtles.ask(turtle => {
+  turtle.face(util.oneOf(model.turtles))
+  turtle.forward(1)
+})</div>
+
+        <p>Up next: patches.</p>
+
+        <h2>Patches</h2>
+
+        <p>Patches are square regions of space that make up the world. Right now, they're all black, so you can't see them. Let's make them visible:</p>
+
+        <div code-block forever-button>model.patches.ask(patch => {
+  patch.color = util.randomColor()
+})</div>
+
       </div>
       <div class="column-right">
+        <div class="tutorial-model-container">
+          <canvas id="tutorial-model"></canvas>
+          <div class="model-buttons">
+            <div class="button" reset-model>reset</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
-  <canvas id="fixed-canvas"></canvas>
+  <div class="tutorial-model-container-fixed">
+    <canvas id="tutorial-model-fixed"></canvas>
+    <div class="model-buttons">
+      <div class="button" reset-model>reset</div>
+    </div>
+  </div>
 </body>
 <script src="main.js" type="module"></script>
 </html>

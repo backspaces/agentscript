@@ -87,7 +87,8 @@ html, body {
   box-sizing: border-box;
   font-size: 0.7rem;
 }
-.code-block .button {
+
+.button {
   cursor: pointer;
   background: skyblue;
   display: inline-block;
@@ -95,14 +96,18 @@ html, body {
   font-size: 18px;
   user-select: none;
 }
-.code-block .button:hover {
+.button:hover {
   background: #65c2e8;
 }
-.code-block .button.forever {
+.button.forever {
   background: orange;
 }
+.button.running {
+  background: #f9d086;
+}
 
-#fixed-canvas {
+.tutorial-model-container-fixed {
+  display: none;
   position: fixed;
   top: 80px;
 }
