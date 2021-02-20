@@ -4,25 +4,15 @@ import { createFlockView } from './models/createFlockView.js'
 import HelloPlusModel from '../models/HelloPlusModel.js'
 import TwoDraw from '../src/TwoDraw.js'
 import Model from '../src/Model.js'
+import Color from '../../src/Color.js'
+import ColorMap from '../../src/ColorMap.js'
 import * as util from '../src/utils.js'
 
 import { CodeBlock } from './src/codeblock.js'
 
 window.util = util
-
-// document.querySelectorAll('.code-block').forEach(el => {
-//     let codeEl = el.querySelector('.code')
-//     let runOnceButton = el.querySelector('[run-once]')
-//     runOnceButton.addEventListener('click', () => {
-//         let code = codeEl.value
-//         eval(code)
-//     })
-// })
-
-
-document.querySelectorAll('[reset-model]').forEach(el => {
-    el.addEventListener('click', () => model.reset())
-})
+window.Color = Color
+window.ColorMap = ColorMap
 
 let viewConfigs = [
     { view: createFlockView() },
@@ -87,7 +77,7 @@ async function run() {
     //     minY: 0,
     //     maxY: 25
     // })
-    const whatIsABMModel = model = new Model({
+    const whatIsABMModel = window.model = new Model({
         minX: -5,
         maxX: 5,
         minY: -5,
@@ -97,14 +87,14 @@ async function run() {
         div: document.querySelector('#tutorial-model'),
         patchSize: 40,
     },{
-        patchesColor: 'black'
+        patchesColor: (p) => p.color ? p.color : Color.typedColor('black')
     })
 
     fixedView = new TwoDraw(whatIsABMModel, {
         div: document.querySelector('#tutorial-model-fixed'),
         patchSize: 40,
     }, {
-        patchesColor: 'black'
+        patchesColor: (p) => p.color ? p.color : Color.typedColor('black')
     })
 
     tutorialModelContainer = document.querySelector('.tutorial-model-container')
@@ -115,7 +105,6 @@ async function run() {
     // Set up code blocks
     document.querySelectorAll('[code-block]').forEach(el => {
       let codeContent = el.textContent
-      console.log(codeContent)
       let hasForeverButton = el.getAttribute('forever-button') !== null
       el.innerHTML = ''
       el.appendChild(new CodeBlock(whatIsABMModel).render({ codeContent, hasForeverButton }))
@@ -139,6 +128,10 @@ document.addEventListener('scroll', (event) => {
         tutorialModelContainer.style.visibility = 'visible'
         fixedModelContainer.style.display = 'none'
     }
+})
+
+document.querySelectorAll('[reset-model]').forEach(el => {
+    el.addEventListener('click', () => window.model.reset())
 })
 
 // window.addEventListener('resize', () => {

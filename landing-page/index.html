@@ -104,14 +104,12 @@
   turtle.forward(1)
 })</div>
 
-        <p>Up next: patches.</p>
-
         <h2>Patches</h2>
 
         <p>Patches are square regions of space that make up the world. Right now, they're all black, so you can't see them. Let's make them visible:</p>
 
         <div code-block forever-button>model.patches.ask(patch => {
-  patch.color = util.randomColor()
+  patch.color = ColorMap.Jet.randomColor()
 })</div>
 
       </div>
