@@ -121,11 +121,6 @@ async function run() {
       el.appendChild(new CodeBlock(whatIsABMModel).render({ codeContent, hasForeverButton }))
     })
 
-    // TODO: move into component logic
-    document.querySelectorAll('.code').forEach(el => {
-        el.style.height = el.scrollHeight + 5 + 'px'
-    })
-
     // Start cycling through models
     nextModel()
 

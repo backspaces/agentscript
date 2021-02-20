@@ -1,9 +1,10 @@
-import Nanocomponent from '../vendor/nanocomponent.es6.js';
+import morph from '../vendor/nanomorph.es6.js';
 import html from '../vendor/nanohtml.es6.js';
+import onLoad from '../vendor/on-load.es6.js';
 
-export class CodeBlock extends Nanocomponent {
+export class CodeBlock {
   constructor(model) {
-    super()
+    // super()
     this.model = model
     this.isRunning = false
   }
@@ -13,9 +14,17 @@ export class CodeBlock extends Nanocomponent {
     let foreverButtonEl = html`
       <div class="button forever ${ this.isRunning ? 'running' : '' }" onclick="${() => this.toggleRunForever()}">${ this.isRunning ? 'stop running' : 'run forever' }</div>
     `;
+    
+    // It looks here like we create a new textarea on every render, but
+    // we really always reuse the same one because isSameNode always returns true
     let textAreaEl = html`<textarea class="code">${codeContent}</textarea>`
     textAreaEl.isSameNode = () => true // never rerender the textarea
-    return html`
+    
+    if (!this.textAreaEl) {
+      this.textAreaEl = textAreaEl
+    }
+
+    let codeblockEl = html`
       <div class="code-block">
         ${textAreaEl}
         <div class="code-buttons">
@@ -24,14 +33,29 @@ export class CodeBlock extends Nanocomponent {
         </div>
       </div>
     `
+    
+    return codeblockEl
   }
-  load(el) {
-    console.log('resizing')
-    let textAreaEl = el.querySelector('textarea')
-    textAreaEl.style.height = textAreaEl.scrollHeight + 5 + 'px'
+  render(opts) {
+    this.lastOpts = opts
+    if (!this.element) {
+      this.element = this.createElement(opts)
+      onLoad(this.element, (el) => this.afterRender(el))
+    } else {
+      this.element = morph(this.element, this.createElement(opts))
+    }
+    return this.element
+  }
+  rerender() {
+    this.render(this.lastOpts)
+  }
+  afterRender(el) {
+    this.textAreaEl.style.height = this.textAreaEl.scrollHeight + 5 + 'px'
   }
   runOnce() {
-    let fn = new Function(this.opts.codeContent.replaceAll('model.', 'this.model.'))
+    // this.textAreaEl = this.element.querySelector('textarea')
+    let currentCode = this.textAreaEl.value
+    let fn = new Function(currentCode.replaceAll('model.', 'this.model.'))
     fn.apply(this)
   }
   runForever() {
