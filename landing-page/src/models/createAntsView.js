@@ -1,7 +1,7 @@
-import AntsModel from '../../../models/AntsModel.js'
-import TwoDraw from '../../../src/TwoDraw.js'
-import Color from '../../../src/Color.js'
-import ColorMap from '../../../src/ColorMap.js'
+import AntsModel from '../../agentscript/models/AntsModel.js'
+import TwoDraw from '../../agentscript/src/TwoDraw.js'
+import Color from '../../agentscript/src/Color.js'
+import ColorMap from '../../agentscript/src/ColorMap.js'
 
 export const createAntsView = () => {
     let viewportWidth = window.innerWidth
