@@ -61,6 +61,8 @@
       <div class="column-left">
         <h2>Turtles, Patches, and Links</h2>
         <p>In Agentscript, there are three primary ingredients: turtles, patches, and links. We'll look at these one by one.</p>
+
+        <p class="note">This tutorial assumes you have a little familiarity with javascript. If you have never seen javascript before, or if you want a refresher, try out this interactive tutorial: <a href="https://jgthms.com/javascript-in-14-minutes/" target="_blank">Javascript in 14 Minutes</a>.</p>
         
         <h2>Turtles</h2>
         
@@ -73,7 +75,9 @@
         <p>Now that we have a turtle, we can ask it do something, like move forward:</p>
         <div code-block>model.turtles.ask(turtle => turtle.forward(1))</div>
 
-        <p>or rotate:</p>
+        <p class="note">If you are familiar with javascript, it may help to know that <code>turtles.ask()</code> has the same meaning as <code>turtles.forEach()</code>.</p>
+
+        <p>Or we can ask it to rotate:</p>
         <div code-block>model.turtles.ask(turtle => turtle.rotate(45))</div>
 
         <p>Or move forward, and then rotate:</p>
@@ -82,7 +86,7 @@
   turtle.rotate(25)
 })</div>
 
-        <p>Try changing one of the numbers in the above code to make the turtles move farther away.</p>
+        <p>Try changing one of the numbers in the above code to make the turtle move farther away, or rotate more.</p>
 
         <p>Instead of working one step at a time, things get really interesting when you run a behavior over and over again.</p>
 
@@ -93,8 +97,8 @@
   turtle.rotate(25)
 })</div>
 
-        <p>Now add a few more turtles:</p>
-        <div code-block>model.turtles.create(1)</div>
+        <p>If you haven't already, let's add a few more turtles:</p>
+        <div code-block>model.turtles.create(10)</div>
 
         <p>With multiple turtles in the model, we can make them interact with each other.</p>
 
@@ -110,6 +114,14 @@
 
         <div code-block forever-button>model.patches.ask(patch => {
   patch.color = ColorMap.Jet.randomColor()
+})</div>
+
+        <p>These square regions of space have been there the whole time. We just couldn't see them before.</p>
+
+        <p>Turtles can interact with patches too! Let's ask the turtles to reset the color of the patches beneath them:</p>
+
+        <div code-block forever-button>model.turtles.ask(turtle => {
+  turtle.patch.color = 'black'
 })</div>
 
       </div>
