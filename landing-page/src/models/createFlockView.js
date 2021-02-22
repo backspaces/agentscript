@@ -1,5 +1,5 @@
-import FlockModel from '../../models/FlockModel.js'
-import TwoDraw from '../../src/TwoDraw.js'
+import FlockModel from '../../../models/FlockModel.js'
+import TwoDraw from '../../../src/TwoDraw.js'
 
 export const createFlockView = () => {
     let viewportWidth = window.innerWidth
