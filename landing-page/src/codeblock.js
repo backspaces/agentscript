@@ -17,7 +17,7 @@ export class CodeBlock {
     
     // It looks here like we create a new textarea on every render, but
     // we really always reuse the same one because isSameNode always returns true
-    let textAreaEl = html`<textarea class="code">${codeContent}</textarea>`
+    let textAreaEl = html`<textarea class="code" onkeydown="${(e) => this.handleEnterKey(e)}">${codeContent}</textarea>`
     textAreaEl.isSameNode = () => true // never rerender the textarea
     
     if (!this.textAreaEl) {
@@ -51,6 +51,11 @@ export class CodeBlock {
   }
   afterRender(el) {
     this.textAreaEl.style.height = this.textAreaEl.scrollHeight + 5 + 'px'
+  }
+  handleEnterKey(event) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
+      this.runOnce()
+    }
   }
   runOnce() {
     // this.textAreaEl = this.element.querySelector('textarea')
