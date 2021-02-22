@@ -71,6 +71,17 @@ html, body {
   margin-top: 0px;
   font-size: 50px;
 }
+.two-columns-container .two-columns .column-left .note {
+  font-size: 0.6em;
+  background: #ffe8cf;
+  padding: 12px 20px;
+  line-height: 1.4em;
+  margin: 40px 0px;
+}
+.two-columns-container .two-columns .column-left .note code {
+  font-size: 0.8em;
+  background: #F8F8FF;
+}
 .two-columns-container .two-columns .column-right {
   width: 500px;
   flex-shrink: 0;
@@ -85,7 +96,7 @@ html, body {
   resize: none;
   padding: 20px;
   box-sizing: border-box;
-  font-size: 0.7rem;
+  font-size: 0.7em;
 }
 
 .button {
