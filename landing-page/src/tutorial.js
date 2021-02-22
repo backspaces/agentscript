@@ -1,9 +1,9 @@
-import HelloPlusModel from '../agentscript/models/HelloPlusModel.js'
-import TwoDraw from '../agentscript/src/TwoDraw.js'
-import Model from '../agentscript/src/Model.js'
-import Color from '../agentscript/src/Color.js'
-import ColorMap from '../agentscript/src/ColorMap.js'
-import * as util from '../agentscript/src/utils.js'
+import HelloPlusModel from '../../models/HelloPlusModel.js'
+import TwoDraw from '../../src/TwoDraw.js'
+import Model from '../../src/Model.js'
+import Color from '../../../src/Color.js'
+import ColorMap from '../../../src/ColorMap.js'
+import * as util from '../../src/utils.js'
 
 import { CodeBlock } from './codeblock.js'
 
