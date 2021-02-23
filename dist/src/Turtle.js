@@ -109,8 +109,8 @@ class Turtle {
     get direction() {
         return this.theta
     }
-    set direction(theta) {
-        this.theta = theta
+    set direction(radians) {
+        this.theta = radians
     }
 
     // get theta() {

@@ -1,46 +1,34 @@
-import * as util from '../src/utils.js'
+// import * as util from '../src/utils.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-import AgentArray from '../src/AgentArray.js'
-import RGBDataSet from '../src/RGBDataSet.js'
-
-function tileUrl(z, x, y) {
-    return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/${z}/${x}/${y}.png`
-}
-function tileDecoder() {
-    return RGBDataSet.redfishElevation
-}
+// Current tile dataSet functions:
+//   redfishUSDataSet
+//   redfishWorldDataSet
+//   mapzenDataSet
+//   mapboxDataSet
+// Use mapzenDataSet for free amazon elevation, redfishUSDataSet for high rez
+import { mapzenDataSet as getElevation } from '../src/TileDataSet.js'
+// import { redfishUSDataSet as getElevation } from '../src/TileDataSet.js'
 
 export default class DropletsModel extends Model {
     zxy = [13, 1594, 3339]
+    killOffworld = false // Kill vs clamp turtles when offworld.
+    speed = 0.2
     // stepType choices:
     //    'minNeighbor',
     //    'patchAspect',
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
     stepType = 'dataSetAspectNearest'
-    killOffworld = false // Kill vs clamp turtles when offworld.
-    speed = 0.2
-    tileDecoder = tileDecoder()
-    tile = tileUrl(...this.zxy)
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        // Object.assign(this, DropletsModel.defaultOptions())
     }
 
     async startup() {
-        const { tile, tileDecoder } = this
-        // const png = await util.imagePromise(this.tile)
-        const png = util.isImageable(tile)
-            ? tile
-            : self.ImageBitmap
-            ? await util.imageBitmapPromise(tile)
-            : await util.imagePromise(tile)
-        console.log('RGBDataSet: png', png)
-        const elevation = new RGBDataSet(png, tileDecoder, AgentArray)
+        const elevation = await getElevation(...this.zxy)
         this.installDataSets(elevation)
     }
     installDataSets(elevation) {

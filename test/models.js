@@ -64,9 +64,10 @@ async function runModels() {
 runModels()
 
 async function runModel(model) {
-    const url = useWorkers // && model !== 'helloPlus'
-        ? `http://127.0.0.1:${port}/models/worker.html?${model}`
-        : `http://127.0.0.1:${port}/models/test.html?${model}`
+    const url =
+        useWorkers && model !== 'droplets' // use list of non-worker models
+            ? `http://127.0.0.1:${port}/models/worker.html?${model}`
+            : `http://127.0.0.1:${port}/models/test.html?${model}`
 
     const browser = await puppeteer.launch({
         args: [
