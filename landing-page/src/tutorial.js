@@ -1,9 +1,9 @@
-import HelloPlusModel from '../../models/HelloPlusModel.js'
-import TwoDraw from '../../src/TwoDraw.js'
-import Model from '../../src/Model.js'
-import Color from '../../../src/Color.js'
-import ColorMap from '../../../src/ColorMap.js'
-import * as util from '../../src/utils.js'
+import HelloPlusModel from 'https://cdn.skypack.dev/agentscript/models/HelloPlusModel.js'
+import TwoDraw from 'https://cdn.skypack.dev/agentscript/src/TwoDraw.js'
+import Model from 'https://cdn.skypack.dev/agentscript/src/Model.js'
+import Color from 'https://cdn.skypack.dev/agentscript/src/Color.js'
+import ColorMap from 'https://cdn.skypack.dev/agentscript/src/ColorMap.js'
+import * as util from 'https://cdn.skypack.dev/agentscript/src/utils.js'
 
 import { CodeBlock } from './codeblock.js'
 

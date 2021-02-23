@@ -1,7 +1,7 @@
-import AntsModel from '../../../models/AntsModel.js'
-import TwoDraw from '../../../src/TwoDraw.js'
-import Color from '../../../src/Color.js'
-import ColorMap from '../../../src/ColorMap.js'
+import AntsModel from 'https://cdn.skypack.dev/agentscript/models/AntsModel.js'
+import TwoDraw from 'https://cdn.skypack.dev/agentscript/src/TwoDraw.js'
+import Color from 'https://cdn.skypack.dev/agentscript/src/Color.js'
+import ColorMap from 'https://cdn.skypack.dev/agentscript/src/ColorMap.js'
 
 export const createAntsView = () => {
     let viewportWidth = window.innerWidth
