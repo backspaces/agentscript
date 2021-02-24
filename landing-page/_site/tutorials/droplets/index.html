@@ -26,15 +26,17 @@
 <section class="two-columns-container">
   <div class="two-columns">
     <div class="column-left">
-      <h2>Turtles, Patches, and Links</h2>
-      <p>In Agentscript, there are three primary ingredients: turtles, patches, and links. We'll look at these one by one.</p>
+      <h2>Droplet Model</h2>
+      <p>In this tutorial we're building a model of droplets that flow downhill.</p>
 
       <p class="note">This tutorial assumes you have a little familiarity with javascript. If you have never seen javascript before, or if you want a refresher, try out this interactive tutorial: <a href="https://jgthms.com/javascript-in-14-minutes/" target="_blank">Javascript in 14 Minutes</a>.</p>
       
-      <h2>Turtles</h2>
+      <h2>The Terrain</h2>
       
-      <p>First things first, let's make a turtle:</p>
-      <div code-block>model.turtles.create(1)</div>
+      <p>Let's make our landscape. We can use <code>patches.nOf()</code> to select 10 patches at random to turn into hills:</p>
+      <div code-block>model.patches.nOf(10).ask(patch => {
+  patch.elevation = util.randomInt(90) + 10
+})</div>
     </div>
     <div class="column-right">
       <div class="tutorial-model-container">
