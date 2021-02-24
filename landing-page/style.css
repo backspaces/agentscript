@@ -9,6 +9,23 @@ html, body {
   top: 0px;
   left: 0px;
   right: 0px;
+  z-index: 1;
+  background: #121212;
+}
+.header .button-row {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 40px;
+}
+.header .button-row .nav-button {
+  margin-left: 80px;
+  color: white;
+  text-decoration: none;
+}
+.header .button-row .nav-button:hover {
+  text-decoration: underline;
 }
 
 .cover {
@@ -49,6 +66,18 @@ html, body {
   background: rgba(248, 248, 248, 0.86);
   display: inline-block;
   padding: 0px 8px;
+}
+.cover .cover-title-container .learn-more-button {
+  position: absolute;
+  margin-top: 40px;
+  display: inline-block;
+  text-transform: lowercase;
+  background: orange;
+  cursor: pointer;
+  padding: 10px 14px;
+}
+.cover .cover-title-container .learn-more-button:hover {
+  background: #f9d086;
 }
 
 .two-columns-container {

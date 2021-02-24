@@ -1,5 +1,8 @@
 @use "sass:color";
 
+$offwhite-blue: #F8F8FF;
+$bright-orange: orange;
+
 html, body {
   font-family: 'Lato', sans-serif;
   margin: 0px;
@@ -11,6 +14,26 @@ html, body {
   top: 0px;
   left: 0px;
   right: 0px;
+  z-index: 1;
+  background: #121212;
+
+  .button-row {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 40px;
+
+    .nav-button {
+      margin-left: 80px;
+      color: white;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 }
 
 .cover {
@@ -56,12 +79,26 @@ html, body {
       display: inline-block;
       padding: 0px 8px;
     }
+
+    .learn-more-button {
+      position: absolute;
+      margin-top: 40px;
+      display: inline-block;
+      text-transform: lowercase;
+      background: orange;
+      cursor: pointer;
+      padding: 10px 14px;
+
+      &:hover {
+        background: color.scale($bright-orange, $lightness: 50%, $saturation: -10%);
+      }
+    }
   }
 }
 
 .two-columns-container {
   border-top: 1px solid;
-  background: #F8F8FF;
+  background: $offwhite-blue;
   
   .two-columns {
     display: flex;
@@ -127,11 +164,11 @@ html, body {
   }
 
   &.forever {
-    background: orange;
+    background: $bright-orange;
   }
 
   &.running {
-    background: color.scale(orange, $lightness: 50%, $saturation: -10%); 
+    background: color.scale($bright-orange, $lightness: 50%, $saturation: -10%); 
   }
 }
 
