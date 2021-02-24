@@ -16,16 +16,21 @@ html, body {
   height: 70px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  margin-right: 40px;
+  margin: 0px 40px;
+}
+.header .button-row .spacer {
+  flex-grow: 1;
 }
 .header .button-row .nav-button {
-  margin-left: 80px;
+  margin-right: 80px;
   color: white;
   text-decoration: none;
 }
 .header .button-row .nav-button:hover {
   text-decoration: underline;
+}
+.header .button-row .nav-button:last-child {
+  margin-right: 0px;
 }
 
 .cover {
@@ -116,6 +121,25 @@ html, body {
   flex-shrink: 0;
 }
 
+.center-column {
+  padding-top: 70px;
+  width: 1000px;
+  margin: 0px auto;
+}
+
+.tutorials-grid {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+.tutorials-grid .tutorial-panel .canvas-placeholder {
+  width: 300px;
+  height: 300px;
+  background: grey;
+}
+.tutorials-grid .tutorial-panel .tutorial-title {
+  margin-top: 5px;
+}
 .code-block {
   display: flex;
   flex-direction: column;
