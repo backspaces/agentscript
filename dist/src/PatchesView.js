@@ -1,6 +1,12 @@
 import * as util from './utils.js'
+import Color from './Color.js'
 
-const getPixel = color => color.pixel || color
+// const getPixel = color => color.pixel || color
+function getPixel(color) {
+    if (typeof pixel === 'number') return pixel
+    if (color.pixel) return color.pixel
+    return Color.toTypedColor(color).pixel
+}
 
 export default class PatchesView {
     // Ctor: create a 2D context and imageData for this View
