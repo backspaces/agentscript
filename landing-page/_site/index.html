@@ -14,7 +14,10 @@
 <body>
   <header class="header">
     <nav class="button-row">
-      <a class="nav-button" href="tutorials">Tutorials</a>
+      <a class="nav-button" href="/landing-page/_site/">agentscript</a>
+      <div class="spacer"></div>
+      <a class="nav-button" href="/landing-page/_site/tutorials">Tutorials</a>
+      <a class="nav-button" href="/landing-page/_site/examples">Examples</a>
       <a class="nav-button" href="https://agentscript.org/docs">Docs</a>
       <a class="nav-button" href="https://github.com/backspaces/agentscript">Github</a>
     </nav>
@@ -89,8 +92,8 @@
 
       <p>Or move forward, and then rotate:</p>
       <div code-block>model.turtles.ask(turtle => {
-turtle.forward(1)
-turtle.rotate(25)
+  turtle.forward(1)
+  turtle.rotate(25)
 })</div>
 
       <p>Try changing one of the numbers in the above code to make the turtle move farther away, or rotate more.</p>
@@ -100,8 +103,8 @@ turtle.rotate(25)
       <p>I added a "run forever" button to the code snippet above. Try it out!</p>
 
       <div code-block forever-button>model.turtles.ask(turtle => {
-turtle.forward(1)
-turtle.rotate(25)
+  turtle.forward(1)
+  turtle.rotate(25)
 })</div>
 
       <p>If you haven't already, let's add a few more turtles:</p>
@@ -111,8 +114,8 @@ turtle.rotate(25)
 
       <p>Read this code before you run it. What do you think will happen?</p>
       <div code-block forever-button>model.turtles.ask(turtle => {
-turtle.face(util.oneOf(model.turtles))
-turtle.forward(1)
+  turtle.face(util.oneOf(model.turtles))
+  turtle.forward(1)
 })</div>
 
       <h2>Patches</h2>
@@ -120,7 +123,7 @@ turtle.forward(1)
       <p>Patches are square regions of space that make up the world. Right now, they're all black, so you can't see them. Let's make them visible:</p>
 
       <div code-block forever-button>model.patches.ask(patch => {
-patch.color = ColorMap.Jet.randomColor()
+  patch.color = ColorMap.Jet.randomColor()
 })</div>
 
       <p>These square regions of space have been there the whole time. We just couldn't see them before.</p>
@@ -128,7 +131,7 @@ patch.color = ColorMap.Jet.randomColor()
       <p>Turtles can interact with patches too! Let's ask the turtles to reset the color of the patches beneath them:</p>
 
       <div code-block forever-button>model.turtles.ask(turtle => {
-turtle.patch.color = 'black'
+  turtle.patch.color = 'black'
 })</div>
 
     </div>

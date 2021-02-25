@@ -2,6 +2,7 @@
 
 $offwhite-blue: #F8F8FF;
 $bright-orange: orange;
+$header-height: 70px;
 
 html, body {
   font-family: 'Lato', sans-serif;
@@ -18,19 +19,26 @@ html, body {
   background: #121212;
 
   .button-row {
-    height: 70px;
+    height: $header-height;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    margin-right: 40px;
+    margin: 0px 40px;
+
+    .spacer {
+      flex-grow: 1;
+    }
 
     .nav-button {
-      margin-left: 80px;
+      margin-right: 80px;
       color: white;
       text-decoration: none;
 
       &:hover {
         text-decoration: underline;
+      }
+
+      &:last-child {
+        margin-right: 0px;
       }
     }
   }
@@ -136,6 +144,38 @@ html, body {
       flex-shrink: 0;
     }
   }
+}
+
+.center-column {
+  padding-top: $header-height;
+  width: 1000px;
+  margin: 0px auto;
+}
+
+//
+// Tutorials list
+//
+
+.tutorials-grid {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  
+  .tutorial-panel {
+    .canvas-placeholder {
+      width: 300px;
+      height: 300px;
+      background: grey;
+    }
+
+    .tutorial-title {
+      margin-top: 5px;
+    }
+
+    .tutorial-description {
+
+    }
+  }    
 }
 
 .code-block {
