@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Test</title>
-        <style>
+        <!-- <style>
             html,
             body,
             #modelDiv,
@@ -15,38 +15,51 @@
                 width: 100vw;
                 height: 100vh;
             }
-        </style>
+        </style> -->
     </head>
 
     <body>
         <div id="modelDiv"></div>
         <script type="module">
             import * as util from '../src/utils.js'
-            util.toWindow({ util })
-            Object.assign(window, util)
-            const obj = {
-                r2d: radToDeg,
-                d2r: degToRad,
-                r2h: radToHeading,
-                h2r: headingToRad,
-                d2h: degToHeading,
-                h2d: headingToDeg,
-                deq: degreesEqual,
-                req: radsEqual,
-                heq: headingsEq,
-                sr: subtractRadians,
-                sh: subtractHeadings,
-                sd: subtractDegrees,
-                rtw: radiansTowardXY,
-                htw: headingTowardXY,
-                dtw: degreesTowardXY,
-                md: mod360,
-                mp: mod2pi,
-                mpp: modpipi,
-                pi: Math.PI,
-                pi2: 2 * Math.PI,
-            } // = util
-            Object.assign(window, obj)
+
+            import Model from '../models/HelloModel.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            const model = new Model()
+            model.population = 1
+            model.setup()
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+            }) // defalt drawOptions!
+            view.draw()
+            util.toWindow({ util, Model, model, view })
+            util.dump()
+
+            // Object.assign(window, util)
+            // const obj = {
+            //     r2d: radToDeg,
+            //     d2r: degToRad,
+            //     r2h: radToHeading,
+            //     h2r: headingToRad,
+            //     d2h: degToHeading,
+            //     h2d: headingToDeg,
+            //     deq: degreesEqual,
+            //     req: radsEqual,
+            //     heq: headingsEq,
+            //     sr: subtractRadians,
+            //     sh: subtractHeadings,
+            //     sd: subtractDegrees,
+            //     rtw: radiansTowardXY,
+            //     htw: headingTowardXY,
+            //     dtw: degreesTowardXY,
+            //     md: mod360,
+            //     mp: mod2pi,
+            //     mpp: modpipi,
+            //     pi: Math.PI,
+            //     pi2: 2 * Math.PI,
+            // } // = util
+            // Object.assign(window, obj)
 
             // import Color from '../src/Color.js'
             // import Model from '../models/HelloModel.js'

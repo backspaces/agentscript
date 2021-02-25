@@ -31,6 +31,7 @@ class Model {
     turtles
     links
     ticks
+    defaultGeometry = 'radians'
 
     /**
      * Creates an instance of Model.
@@ -40,6 +41,7 @@ class Model {
     constructor(worldOptions = World.defaultOptions(), autoTick = true) {
         this.resetModel(worldOptions)
         if (autoTick) this.autoTick()
+        this.setGeometry(this.defaultGeometry)
     }
 
     // Intercepted by Model3D to use Turtle3D AgentClass
@@ -148,6 +150,44 @@ class Model {
             this[breedName] = this.links.newBreed(breedName)
         }
     }
+
+    setGeometry(name) {
+        const geometry = geometries[name]
+        if (!geometry)
+            throw Error(`model.setGeometry: ${name} geometry not defined`)
+        Object.assign(this, geometry)
+        this.geometry = name
+    }
+}
+
+const toDeg = 180 / Math.PI
+const toRad = Math.PI / 180
+
+const geometries = {
+    // radians: {
+    //     toDirection: rads => rads,
+    //     fromDirection: rads => rads,
+    //     toAngle: rads => rads,
+    //     fromAngle: rads => rads,
+    // },
+    // degrees: {
+    //     toDirection: deg => deg * toRad,
+    //     fromDirection: rads => rads * toDeg,
+    //     toAngle: deg => deg * toRad,
+    //     fromAngle: rads => rads * toDeg,
+    // },
+    radians: {
+        toRads: rads => rads,
+        fromRads: rads => rads,
+        toDeltaRads: rads => rads,
+        fromDeltaRads: rads => rads,
+    },
+    degrees: {
+        toRads: deg => deg * toRad,
+        fromRads: rads => rads * toDeg,
+        toDeltaRads: deg => deg * toRad,
+        fromDeltaRads: rads => rads * toDeg,
+    },
 }
 
 export default Model
