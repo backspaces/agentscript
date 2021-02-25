@@ -3837,6 +3837,12 @@ out;`;
 
     // import Color from './Color.js'
 
+    // Flyweight object creation, see Patch/Patches.
+
+    // Class Turtle instances represent the dynamic, behavioral element of modeling.
+    // Each turtle knows the patch it is on, and interacts with that and other
+    // patches, as well as other turtles.
+
     /**
      * Class Turtle instances represent the dynamic, behavioral element of modeling.
      * Each turtle knows the patch it is on, and interacts with that and other
@@ -3927,16 +3933,24 @@ out;`;
 
         // Heading vs Euclidean Absolute Angles.
         get heading() {
+            console.warn(
+                'Note: turtle.heading is deprecated, use direction instead'
+            );
             return radToHeading(this.theta)
         }
         set heading(heading) {
+            console.warn(
+                'Note: turtle.heading is deprecated, use direction instead'
+            );
             this.theta = headingToRad(heading);
         }
+        // Get/put direction using the current geometry
         get direction() {
-            return this.theta
+            return this.model.fromRads(this.theta)
         }
-        set direction(radians) {
-            this.theta = radians;
+        set direction(direction) {
+            this.theta = this.model.toRads(direction);
+            // this.theta = util.mod2pi(this.model.toRads(direction))
         }
 
         // get theta() {
@@ -4043,15 +4057,18 @@ out;`;
             );
         }
 
-        // Change current direction by rad radians which can be + (left) or - (right).
-        rotate(rad) {
-            this.theta = mod2pi(this.theta + rad);
+        // Change current direction by angle in current geometry
+        // Angle can be positive or negative
+        rotate(angle) {
+            // this.theta = util.mod2pi(this.theta + rad)
+            const rads = this.model.toDeltaRads(angle);
+            this.theta = mod2pi(this.theta + rads);
         }
-        right(rad) {
-            this.rotate(-rad);
+        right(angle) {
+            this.rotate(-angle);
         }
-        left(rad) {
-            this.rotate(rad);
+        left(angle) {
+            this.rotate(angle);
         }
 
         // Set my direction towards turtle/patch or x,y.
@@ -4068,10 +4085,14 @@ out;`;
             return this.patchAtDirectionAndDistance(this.theta, distance)
         }
         patchLeftAndAhead(angle, distance) {
-            return this.patchAtDirectionAndDistance(angle + this.theta, distance)
+            const rads = this.model.toDeltaRads(angle);
+            return this.patchAtDirectionAndDistance(rads + this.theta, distance)
+            // return this.patchAtDirectionAndDistance(angle + this.theta, distance)
         }
         patchRightAndAhead(angle, distance) {
-            return this.patchAtDirectionAndDistance(angle - this.theta, distance)
+            const rads = this.model.toDeltaRads(angle);
+            return this.patchAtDirectionAndDistance(rads - this.theta, distance)
+            // return this.patchAtDirectionAndDistance(angle - this.theta, distance)
         }
         // Use patchAhead to determine if this turtle can move forward by distance.
         canMove(distance) {
@@ -4105,13 +4126,14 @@ out;`;
             return Math.sin(this.theta)
         }
 
-        // Return direction towards agent/x,y
-        // Use util.radToHeading to convert to heading
+        // Return direction towards agent/x,y using current geometry
         towards(agent) {
             return this.towardsXY(agent.x, agent.y)
         }
         towardsXY(x, y) {
-            return radiansTowardXY(this.x, this.y, x, y)
+            // return util.radiansTowardXY(this.x, this.y, x, y)
+            const rads = radiansTowardXY(this.x, this.y, x, y);
+            return this.model.fromRads(rads)
         }
         // Return patch w/ given parameters. Return undefined if off-world.
         // Return patch dx, dy from my position.
@@ -4121,6 +4143,7 @@ out;`;
         // Note: direction is absolute, w/o regard to existing angle of turtle.
         // Use Left/Right versions for relative angles.
         patchAtDirectionAndDistance(direction, distance) {
+            direction = this.model.toRads(direction);
             return this.model.patches.patchAtDirectionAndDistance(
                 this,
                 direction,
@@ -4171,6 +4194,7 @@ out;`;
         turtles
         links
         ticks
+        defaultGeometry = 'radians'
 
         /**
          * Creates an instance of Model.
@@ -4180,6 +4204,7 @@ out;`;
         constructor(worldOptions = World.defaultOptions(), autoTick = true) {
             this.resetModel(worldOptions);
             if (autoTick) this.autoTick();
+            this.setGeometry(this.defaultGeometry);
         }
 
         // Intercepted by Model3D to use Turtle3D AgentClass
@@ -4288,7 +4313,39 @@ out;`;
                 this[breedName] = this.links.newBreed(breedName);
             }
         }
+
+        setGeometry(name) {
+            const geometry = geometries[name];
+            if (!geometry)
+                throw Error(`model.setGeometry: ${name} geometry not defined`)
+            Object.assign(this, geometry);
+            this.geometry = name;
+        }
     }
+
+    const toDeg = 180 / Math.PI;
+    const toRad = Math.PI / 180;
+
+    const geometries = {
+        radians: {
+            toRads: rads => rads,
+            fromRads: rads => rads,
+            toDeltaRads: rads => rads,
+            fromDeltaRads: rads => rads,
+        },
+        degrees: {
+            toRads: deg => deg * toRad,
+            fromRads: rads => rads * toDeg,
+            toDeltaRads: deg => deg * toRad,
+            fromDeltaRads: rads => rads * toDeg,
+        },
+        heading: {
+            toRads: deg => (90 - deg) * toRad,
+            fromRads: rads => 90 - rads * toDeg,
+            toDeltaRads: deg => -deg * toRad,
+            fromDeltaRads: rads => -rads * toDeg,
+        },
+    };
 
     // The mapbox elevation formula:
     // https://blog.mapbox.com/global-elevation-data-6689f1d0ba65

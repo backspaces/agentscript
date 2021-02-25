@@ -19,6 +19,7 @@ class HelloModel extends Model {
             t.setxy(patch.x, patch.y)
         })
 
+        if (this.population < 2) return
         this.turtles.ask(t => {
             this.links.create(t, this.turtles.otherOneOf(t))
         })

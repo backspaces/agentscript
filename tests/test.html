@@ -26,15 +26,19 @@
             import Model from '../models/HelloModel.js'
             import TwoDraw from '../src/TwoDraw.js'
             const model = new Model()
+            model.setGeometry('heading')
             model.population = 1
             model.setup()
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
                 patchSize: 20,
             }) // defalt drawOptions!
-            view.draw()
             util.toWindow({ util, Model, model, view })
             util.dump()
+            window.draw = () => view.draw()
+            t.setxy(0, 0)
+            t.direction = 0
+            draw()
 
             // Object.assign(window, util)
             // const obj = {

@@ -164,18 +164,6 @@ const toDeg = 180 / Math.PI
 const toRad = Math.PI / 180
 
 const geometries = {
-    // radians: {
-    //     toDirection: rads => rads,
-    //     fromDirection: rads => rads,
-    //     toAngle: rads => rads,
-    //     fromAngle: rads => rads,
-    // },
-    // degrees: {
-    //     toDirection: deg => deg * toRad,
-    //     fromDirection: rads => rads * toDeg,
-    //     toAngle: deg => deg * toRad,
-    //     fromAngle: rads => rads * toDeg,
-    // },
     radians: {
         toRads: rads => rads,
         fromRads: rads => rads,
@@ -187,6 +175,12 @@ const geometries = {
         fromRads: rads => rads * toDeg,
         toDeltaRads: deg => deg * toRad,
         fromDeltaRads: rads => rads * toDeg,
+    },
+    heading: {
+        toRads: deg => (90 - deg) * toRad,
+        fromRads: rads => 90 - rads * toDeg,
+        toDeltaRads: deg => -deg * toRad,
+        fromDeltaRads: rads => -rads * toDeg,
     },
 }
 

@@ -109,13 +109,13 @@ class Turtle {
         )
         this.theta = util.headingToRad(heading)
     }
+    // Get/put direction using the current geometry
     get direction() {
         return this.model.fromRads(this.theta)
-        // return this.theta
     }
     set direction(direction) {
-        this.theta = util.mod2pi(this.model.toRads(direction))
-        // this.theta = radians
+        this.theta = this.model.toRads(direction)
+        // this.theta = util.mod2pi(this.model.toRads(direction))
     }
 
     // get theta() {
