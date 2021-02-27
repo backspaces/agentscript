@@ -31,7 +31,7 @@ class Model {
     turtles
     links
     ticks
-    defaultGeometry = 'radians'
+    geometry = 'radians'
 
     /**
      * Creates an instance of Model.
@@ -41,7 +41,7 @@ class Model {
     constructor(worldOptions = World.defaultOptions(), autoTick = true) {
         this.resetModel(worldOptions)
         if (autoTick) this.autoTick()
-        this.setGeometry(this.defaultGeometry)
+        this.setGeometry(this.geometry)
     }
 
     // Intercepted by Model3D to use Turtle3D AgentClass
@@ -160,6 +160,11 @@ class Model {
     }
 }
 
+const mod = (val, n) => ((val % n) + n) % n // believe it or not!
+const mod360 = degrees => mod(degrees, 360)
+const mod2pi = radians => mod(radians, 2 * Math.PI)
+
+// Add mod2pi & mod360
 const toDeg = 180 / Math.PI
 const toRad = Math.PI / 180
 
@@ -183,21 +188,5 @@ const geometries = {
         fromDeltaRads: rads => -rads * toDeg,
     },
 }
-
-// export function radToHeading(radians) {
-//     const deg = radians * toDegrees
-//     return mod360(90 - deg)
-// }
-// export function headingToRad(heading) {
-//     const deg = mod360(90 - heading)
-//     return deg * toRadians
-// }
-// // Relative angles in heading space: deg Heading => -deg Eucledian
-// export function radToHeadingAngle(radians) {
-//     return -radToDeg(radians)
-// }
-// export function headingAngleToRad(headingAngle) {
-//     return -degToRad(headingAngle)
-// }
 
 export default Model

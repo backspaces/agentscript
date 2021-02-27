@@ -98,15 +98,11 @@ class Turtle {
 
     // Heading vs Euclidean Absolute Angles.
     get heading() {
-        console.warn(
-            'Note: turtle.heading is deprecated, use direction instead'
-        )
+        util.warn('Turtle.heading is deprecated, use direction instead')
         return util.radToHeading(this.theta)
     }
     set heading(heading) {
-        console.warn(
-            'Note: turtle.heading is deprecated, use direction instead'
-        )
+        util.warn('Turtle.heading is deprecated, use direction instead')
         this.theta = util.headingToRad(heading)
     }
     // Get/put direction using the current geometry
@@ -222,7 +218,7 @@ class Turtle {
         )
     }
 
-    // Change current direction by angle in current geometry
+    // Change current direction by relative angle in current geometry
     // Angle can be positive or negative
     rotate(angle) {
         // this.theta = util.mod2pi(this.theta + rad)
@@ -230,9 +226,11 @@ class Turtle {
         this.theta = util.mod2pi(this.theta + rads)
     }
     right(angle) {
-        this.rotate(-angle)
+        if (model.geometry !== 'heading') angle = -angle
+        this.rotate(angle)
     }
     left(angle) {
+        if (model.geometry === 'heading') angle = -angle
         this.rotate(angle)
     }
 
@@ -247,16 +245,20 @@ class Turtle {
     // Return the patch ahead of this turtle by distance (patchSize units).
     // Return undefined if off-world.
     patchAhead(distance) {
-        return this.patchAtDirectionAndDistance(this.theta, distance)
+        return this.patchAtDirectionAndDistance(this.direction, distance)
     }
     patchLeftAndAhead(angle, distance) {
-        const rads = this.model.toDeltaRads(angle)
-        return this.patchAtDirectionAndDistance(rads + this.theta, distance)
+        return this.patchAtDirectionAndDistance(
+            angle + this.direction,
+            distance
+        )
         // return this.patchAtDirectionAndDistance(angle + this.theta, distance)
     }
     patchRightAndAhead(angle, distance) {
-        const rads = this.model.toDeltaRads(angle)
-        return this.patchAtDirectionAndDistance(rads - this.theta, distance)
+        return this.patchAtDirectionAndDistance(
+            angle - this.direction,
+            distance
+        )
         // return this.patchAtDirectionAndDistance(angle - this.theta, distance)
     }
     // Use patchAhead to determine if this turtle can move forward by distance.
@@ -308,7 +310,7 @@ class Turtle {
     // Note: direction is absolute, w/o regard to existing angle of turtle.
     // Use Left/Right versions for relative angles.
     patchAtDirectionAndDistance(direction, distance) {
-        direction = this.model.toRads(direction)
+        // direction = this.model.toRads(direction)
         return this.model.patches.patchAtDirectionAndDistance(
             this,
             direction,

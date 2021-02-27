@@ -35,10 +35,18 @@
             }) // defalt drawOptions!
             util.toWindow({ util, Model, model, view })
             util.dump()
-            window.draw = () => view.draw()
+            // window.draw = () => view.draw()
+            window.pi = Math.PI
             t.setxy(0, 0)
             t.direction = 0
-            draw()
+
+            util.timeoutLoop(
+                () => {
+                    view.draw()
+                },
+                -1,
+                100
+            )
 
             // Object.assign(window, util)
             // const obj = {

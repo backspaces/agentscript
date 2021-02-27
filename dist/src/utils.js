@@ -218,16 +218,19 @@ export function setCtxImage(ctx, img) {
 // ### Debug
 
 // Print a message just once.
-let logOnceMsgSet
-export function logOnce(msg) {
-    if (!logOnceMsgSet) logOnceMsgSet = new Set()
+const logOnceMsgSet = new Set()
+export function logOnce(msg, useWarn = false) {
     if (!logOnceMsgSet.has(msg)) {
-        console.log(msg)
+        if (useWarn) {
+            console.warn(msg)
+        } else {
+            console.log(msg)
+        }
         logOnceMsgSet.add(msg)
     }
 }
 export function warn(msg) {
-    logOnce('Warning: ' + msg)
+    logOnce(msg, true)
 }
 
 // Use chrome/ffox/ie console.time()/timeEnd() performance functions
@@ -496,7 +499,7 @@ export const isPowerOf2 = num => (num & (num - 1)) === 0 // twgl library
 // [Stack Overflow](https://goo.gl/zvD78e)
 export const nextPowerOf2 = num => Math.pow(2, Math.ceil(Math.log2(num)))
 
-// A [modulus](http://mathjs.org/docs/reference/functions/mod.html) function.
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
 // The modulus is defined as: x - y * floor(x / y)
 // It is not %, the remainder function.
 export const mod = (v, n) => ((v % n) + n) % n // v - n * Math.floor(v / n)

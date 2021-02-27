@@ -247,6 +247,7 @@ class Patches extends AgentSet {
     //   patchAtDirectionAndDistance(obj, util.headingToRad(heading), distance)
     // Does not take into account the angle of the obj .. turtle.theta for example.
     patchAtDirectionAndDistance(agent, direction, distance) {
+        direction = this.model.toRads(direction)
         let { x, y } = agent
         x = x + distance * Math.cos(direction)
         y = y + distance * Math.sin(direction)
