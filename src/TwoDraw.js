@@ -32,7 +32,16 @@ export default class TwoDraw extends TwoView {
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
         // drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
+        if (viewOptions.drawOptions) {
+            drawOptions = viewOptions.drawOptions
+            delete viewOptions.drawOptions
+        }
         drawOptions = Object.assign(TwoDraw.defaultOptions(), drawOptions)
+
+        if (typeof drawOptions.turtlesMap === 'string')
+            drawOptions.turtlesMap = ColorMap[drawOptions.turtlesMap]
+        if (typeof drawOptions.patchesMap === 'string')
+            drawOptions.patchesMap = ColorMap[drawOptions.patchesMap]
 
         super(model.world, viewOptions)
         this.model = model
@@ -80,12 +89,6 @@ export default class TwoDraw extends TwoView {
         const { model, view } = this
 
         if (view.ticks === 0) {
-            // REMIND: if moved to ctor, do this there?
-            if (typeof turtlesMap === 'string')
-                this.drawOptions.turtlesMap = turtlesMap = ColorMap[turtlesMap]
-            if (typeof patchesMap === 'string')
-                this.drawOptions.patchesMap = patchesMap = ColorMap[patchesMap]
-
             if (textProperty) view.setTextProperties(textSize)
 
             if (initPatches) {

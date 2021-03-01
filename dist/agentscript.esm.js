@@ -3943,7 +3943,7 @@ class Turtle {
         return this.model.fromRads(this.theta)
     }
     set direction(direction) {
-        this.theta = this.model.toRads(direction);
+        this.theta = mod2pi(this.model.toRads(direction));
         // this.theta = util.mod2pi(this.model.toRads(direction))
     }
 
@@ -4054,17 +4054,17 @@ class Turtle {
     // Change current direction by relative angle in current geometry
     // Angle can be positive or negative
     rotate(angle) {
-        // this.theta = util.mod2pi(this.theta + rad)
-        const rads = this.model.toDeltaRads(angle);
-        this.theta = mod2pi(this.theta + rads);
+        // const rads = this.model.toDeltaRads(angle)
+        // this.theta = util.mod2pi(this.theta + rads)
+
+        this.direction += angle;
     }
     right(angle) {
-        if (model.geometry !== 'heading') angle = -angle;
-        this.rotate(angle);
+        if (this.model.geometry === 'heading') angle = -angle;
+        this.rotate(-angle);
     }
     left(angle) {
-        if (model.geometry === 'heading') angle = -angle;
-        this.rotate(angle);
+        this.right(-angle);
     }
 
     // Set my direction towards turtle/patch or x,y.
@@ -4080,19 +4080,15 @@ class Turtle {
     patchAhead(distance) {
         return this.patchAtDirectionAndDistance(this.direction, distance)
     }
-    patchLeftAndAhead(angle, distance) {
-        return this.patchAtDirectionAndDistance(
-            angle + this.direction,
-            distance
-        )
-        // return this.patchAtDirectionAndDistance(angle + this.theta, distance)
-    }
     patchRightAndAhead(angle, distance) {
+        if (this.model.geometry === 'heading') angle = -angle;
         return this.patchAtDirectionAndDistance(
-            angle - this.direction,
+            this.direction - angle,
             distance
         )
-        // return this.patchAtDirectionAndDistance(angle - this.theta, distance)
+    }
+    patchLeftAndAhead(angle, distance) {
+        return this.patchRightAndAhead(-angle, distance)
     }
     // Use patchAhead to determine if this turtle can move forward by distance.
     canMove(distance) {

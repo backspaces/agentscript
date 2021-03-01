@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Geometry</title>
+    </head>
+
+    <body>
+        <div id="modelDiv"></div>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            // import AgentArray from '../src/AgentArray.js'
+            import Color from '../src/Color.js'
+            import Model from '../models/HelloModel.js'
+            import TwoDraw from '../src/TwoDraw.js'
+
+            const model = new Model()
+            model.setGeometry('heading')
+            model.population = 1
+            model.setup()
+
+            const drawOptions = {
+                turtlesColor: 'red',
+                patchesColor: p => (p.mark ? 'white' : grays[p.id]),
+            }
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions,
+            })
+            const grays = Color.randomGrayArray(model.patches.length, 0, 100)
+
+            util.toWindow({ util, Model, model, view, grays })
+            util.dump()
+
+            // window.draw = () => view.draw()
+            window.pi = Math.PI
+            window.clear = () => model.patches.ask(p => (p.mark = false))
+            window.head = () => model.setGeometry('heading')
+            window.deg = () => model.setGeometry('degrees')
+            window.geom = () => model.geometry
+
+            t.setxy(0, 0)
+            t.direction = 0
+
+            util.timeoutLoop(
+                () => {
+                    view.draw()
+                },
+                -1,
+                100
+            )
+        </script>
+    </body>
+</html>

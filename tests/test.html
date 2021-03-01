@@ -23,30 +23,36 @@
         <script type="module">
             import * as util from '../src/utils.js'
 
-            import Model from '../models/HelloModel.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            const model = new Model()
-            model.setGeometry('heading')
-            model.population = 1
-            model.setup()
-            const view = new TwoDraw(model, {
-                div: 'modelDiv',
-                patchSize: 20,
-            }) // defalt drawOptions!
-            util.toWindow({ util, Model, model, view })
-            util.dump()
-            // window.draw = () => view.draw()
-            window.pi = Math.PI
-            t.setxy(0, 0)
-            t.direction = 0
+            // import Model from '../models/HelloModel.js'
+            // import TwoDraw from '../src/TwoDraw.js'
+            // const model = new Model()
+            // model.setGeometry('heading')
+            // model.population = 1
+            // model.setup()
+            // const view = new TwoDraw(
+            //     model,
+            //     {
+            //         div: 'modelDiv',
+            //         patchSize: 20,
+            //     },
+            //     {
+            //         //
+            //     }
+            // )
+            // util.toWindow({ util, Model, model, view })
+            // util.dump()
+            // // window.draw = () => view.draw()
+            // window.pi = Math.PI
+            // t.setxy(0, 0)
+            // t.direction = 0
 
-            util.timeoutLoop(
-                () => {
-                    view.draw()
-                },
-                -1,
-                100
-            )
+            // util.timeoutLoop(
+            //     () => {
+            //         view.draw()
+            //     },
+            //     -1,
+            //     100
+            // )
 
             // Object.assign(window, util)
             // const obj = {

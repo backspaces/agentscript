@@ -168,6 +168,20 @@ const Color = {
         const gray = util.randomInt2(min, max) // random int in [min,max]
         return this.typedColor(gray, gray, gray)
     },
+    // Arrays of random typed colors, very useful for patch colors
+    randomColorArray(length) {
+        const colors = new Array(length)
+        util.forLoop(colors, (c, i) => (colors[i] = this.randomTypedColor()))
+        return colors
+    },
+    randomGrayArray(length, min = 0, max = 255) {
+        const grays = new Array(length)
+        util.forLoop(
+            grays,
+            (g, i) => (grays[i] = this.randomGrayTypedColor(min, max))
+        )
+        return grays
+    },
 }
 
 // Prototype for Color. Getters/setters for usability, may be slower.
