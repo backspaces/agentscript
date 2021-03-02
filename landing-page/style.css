@@ -1,0 +1,179 @@
+html, body {
+  font-family: "Lato", sans-serif;
+  margin: 0px;
+  font-size: 24px;
+}
+
+.header {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 1;
+  background: #121212;
+}
+.header .button-row {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  margin: 0px 40px;
+}
+.header .button-row .spacer {
+  flex-grow: 1;
+}
+.header .button-row .nav-button {
+  margin-right: 80px;
+  color: white;
+  text-decoration: none;
+}
+.header .button-row .nav-button:hover {
+  text-decoration: underline;
+}
+.header .button-row .nav-button:last-child {
+  margin-right: 0px;
+}
+
+.cover {
+  width: 100%;
+  height: 100vh;
+}
+.cover .models-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.cover .models-container canvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+.cover .cover-title-container {
+  position: absolute;
+  margin-top: -20px;
+  top: 50%;
+  left: 160px;
+  padding: 40px 40px;
+  transform: translateY(-50%);
+}
+.cover .cover-title-container .cover-title {
+  font-size: 60px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  background: rgba(248, 248, 248, 0.86);
+  display: inline-block;
+  padding: 0px 8px;
+}
+.cover .cover-title-container .cover-subtitle {
+  font-size: 40px;
+  font-weight: normal;
+  background: rgba(248, 248, 248, 0.86);
+  display: inline-block;
+  padding: 0px 8px;
+}
+.cover .cover-title-container .learn-more-button {
+  position: absolute;
+  margin-top: 40px;
+  display: inline-block;
+  text-transform: lowercase;
+  background: orange;
+  cursor: pointer;
+  padding: 10px 14px;
+}
+.cover .cover-title-container .learn-more-button:hover {
+  background: #f9d086;
+}
+
+.two-columns-container {
+  border-top: 1px solid;
+  background: #F8F8FF;
+}
+.two-columns-container .two-columns {
+  display: flex;
+  min-height: 400px;
+  box-sizing: border-box;
+  padding: 80px 0px;
+  width: 1200px;
+  margin: 0px auto;
+}
+.two-columns-container .two-columns .column-left {
+  width: 700px;
+  margin-right: 80px;
+}
+.two-columns-container .two-columns .column-left h1 {
+  margin-top: 0px;
+  font-size: 50px;
+}
+.two-columns-container .two-columns .column-left .note {
+  font-size: 0.6em;
+  background: #ffe8cf;
+  padding: 12px 20px;
+  line-height: 1.4em;
+  margin: 40px 0px;
+}
+.two-columns-container .two-columns .column-left .note code {
+  font-size: 0.8em;
+  background: #F8F8FF;
+}
+.two-columns-container .two-columns .column-right {
+  width: 500px;
+  flex-shrink: 0;
+}
+
+.center-column {
+  padding-top: 70px;
+  width: 1000px;
+  margin: 0px auto;
+}
+
+.tutorials-grid {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+.tutorials-grid .tutorial-panel .canvas-placeholder {
+  width: 300px;
+  height: 300px;
+  background: grey;
+}
+.tutorials-grid .tutorial-panel .tutorial-title {
+  margin-top: 5px;
+}
+.code-block {
+  display: flex;
+  flex-direction: column;
+}
+.code-block .code {
+  width: 100%;
+  resize: none;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: 0.7em;
+}
+
+.button {
+  cursor: pointer;
+  background: skyblue;
+  display: inline-block;
+  padding: 10px 14px;
+  font-size: 18px;
+  user-select: none;
+}
+.button:hover {
+  background: #65c2e8;
+}
+.button.forever {
+  background: orange;
+}
+.button.running {
+  background: #f9d086;
+}
+
+.tutorial-model-container-fixed {
+  display: none;
+  position: fixed;
+  top: 80px;
+}
+
+/*# sourceMappingURL=style.css.map */
