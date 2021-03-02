@@ -9,4 +9,10 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("style.css")
   eleventyConfig.addPassthroughCopy("style.css.map")
   eleventyConfig.addPassthroughCopy("main.js")
+
+  return {
+    dir: {
+      output: "../landing-page"
+    }
+  }
 }
