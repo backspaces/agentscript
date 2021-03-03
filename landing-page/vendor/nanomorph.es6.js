@@ -58,6 +58,9 @@ var events = [
   'onfocus',
   'onblur',
   'oninput',
+  'onanimationend',
+  'onanimationiteration',
+  'onanimationstart',
   // other common events
   'oncontextmenu',
   'onfocusin',
@@ -182,6 +185,15 @@ function updateInput (newNode, oldNode) {
   updateAttribute(newNode, oldNode, 'checked');
   updateAttribute(newNode, oldNode, 'disabled');
 
+  // The "indeterminate" property can not be set using an HTML attribute.
+  // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox
+  if (newNode.indeterminate !== oldNode.indeterminate) {
+    oldNode.indeterminate = newNode.indeterminate;
+  }
+
+  // Persist file value since file inputs can't be changed programatically
+  if (oldNode.type === 'file') return
+
   if (newValue !== oldValue) {
     oldNode.setAttribute('value', newValue);
     oldNode.value = newValue;
@@ -231,7 +243,7 @@ function updateAttribute (newNode, oldNode, name) {
 var TEXT_NODE$1 = 3;
 // var DEBUG = false
 
-var nanomorph5_1_3 = nanomorph;
+var nanomorph_1 = nanomorph;
 
 // Morph one tree into another tree
 //
@@ -246,7 +258,7 @@ var nanomorph5_1_3 = nanomorph;
 //   -> diff nodes and apply patch to old node
 // nodes are the same
 //   -> walk all child nodes and append to old node
-function nanomorph (oldTree, newTree) {
+function nanomorph (oldTree, newTree, options) {
   // if (DEBUG) {
   //   console.log(
   //   'nanomorph\nold\n  %s\nnew\n  %s',
@@ -256,9 +268,19 @@ function nanomorph (oldTree, newTree) {
   // }
   nanoassert.equal(typeof oldTree, 'object', 'nanomorph: oldTree should be an object');
   nanoassert.equal(typeof newTree, 'object', 'nanomorph: newTree should be an object');
-  var tree = walk(newTree, oldTree);
-  // if (DEBUG) console.log('=> morphed\n  %s', tree.outerHTML)
-  return tree
+
+  if (options && options.childrenOnly) {
+    updateChildren(newTree, oldTree);
+    return oldTree
+  }
+
+  nanoassert.notEqual(
+    newTree.nodeType,
+    11,
+    'nanomorph: newTree should have one root node (which is not a DocumentFragment)'
+  );
+
+  return walk(newTree, oldTree)
 }
 
 // Walk and morph a dom tree
@@ -276,13 +298,17 @@ function walk (newNode, oldNode) {
     return null
   } else if (newNode.isSameNode && newNode.isSameNode(oldNode)) {
     return oldNode
-  } else if (newNode.tagName !== oldNode.tagName) {
+  } else if (newNode.tagName !== oldNode.tagName || getComponentId(newNode) !== getComponentId(oldNode)) {
     return newNode
   } else {
     morph_1(newNode, oldNode);
     updateChildren(newNode, oldNode);
     return oldNode
   }
+}
+
+function getComponentId (node) {
+  return node.dataset ? node.dataset.nanomorphComponentId : undefined
 }
 
 // Update the children of elements
@@ -375,6 +401,6 @@ function same (a, b) {
   return false
 }
 
-var nanomorphEs6 = nanomorph5_1_3;
+var nanomorphEs6 = nanomorph_1;
 
 export default nanomorphEs6;

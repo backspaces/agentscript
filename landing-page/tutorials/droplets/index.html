@@ -9,15 +9,15 @@
   <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> -->
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" type="text/css" href="/landing-page/style.css">
+  <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
   <header class="header">
     <nav class="button-row">
-      <a class="nav-button" href="/landing-page/">agentscript</a>
+      <a class="nav-button" href="/">agentscript</a>
       <div class="spacer"></div>
-      <a class="nav-button" href="/landing-page/tutorials">Tutorials</a>
-      <a class="nav-button" href="/landing-page/examples">Examples</a>
+      <a class="nav-button" href="/tutorials">Tutorials</a>
+      <a class="nav-button" href="/examples">Examples</a>
       <a class="nav-button" href="https://agentscript.org/docs">Docs</a>
       <a class="nav-button" href="https://github.com/backspaces/agentscript">Github</a>
     </nav>
@@ -33,10 +33,68 @@
       
       <h2>The Terrain</h2>
       
-      <p>Let's make our landscape. We can use <code>patches.nOf()</code> to select 10 patches at random to turn into hills:</p>
+      <p>Let's make some hills. First we'll give our patches a default property called elevation:</p>
+      <div code-block>model.patches.setDefault('elevation', 0)</div>
+
+      <p>Then we can use <code>patches.nOf()</code> to select 10 patches at random to turn into hills:</p>
       <div code-block>model.patches.nOf(10).ask(patch => {
   patch.elevation = util.randomInt(90) + 10
 })</div>
+
+      <p>Something happened, but it's impossible to see. Let's color the patches with a <code>ColorMap</code> based on their elevation:</p>
+      <div code-block>myColorMap = ColorMap.gradientColorMap(
+  8, ['black', 'purple']
+)
+minElevation = 0
+maxElevation = 100
+model.patches.ask(patch => {
+  patch.color = myColorMap.scaleColor(
+    patch.elevation, minElevation, maxElevation
+  )
+})</div>
+
+      <p>Let's break this down.</p>
+      <p>First we created a <code>ColorMap</code> with 8 colors ranging from black to purple:</p>
+      <div code-block colormap="window.myColorMap ? window.myColorMap : ColorMap.gradientColorMap(8, ['black', 'purple'])">myColorMap = ColorMap.gradientColorMap(
+  8, ['black', 'purple']
+)</div>      
+
+      <p>Then we asked each patch to select a color from this 8-color range based on its elevation:</p>
+      <div code-block>minElevation = 0
+maxElevation = 100
+model.patches.ask(patch => {
+  patch.color = myColorMap.scaleColor(
+    patch.elevation, minElevation, maxElevation
+  )
+})</div>
+      <p>If the elevation is <code>minElevation</code>, the color comes from the left end of the range. If the elevation is <code>maxElevation</code>, the color comes from the right end of the range.</p>
+
+      <p>With our patches colored, we can see that most of the terrain is totally flat, except for the 10 random patches that we gave some elevation.</p>
+
+      <p>Let's use the <code>patches.diffuse()</code> method to spread that elevation out, and turn these sharp peaks into smooth hills:</p>
+      <div code-block>model.patches.diffuse('elevation', 0.5)</div>
+      
+      <p><code>elevation</code> is the name of the property we want to diffuse, and <code>0.5</code> is the portion of <code>elevation</code> that each patch spreads to its neighbors.</p>
+
+      <p>We need to ask the patches to re-color themselves in order to see what we've done:</p>
+      <div code-block>model.patches.ask(patch => {
+  patch.color = myColorMap.scaleColor(
+    patch.elevation, minElevation, maxElevation
+  )
+})</div>
+
+      <p>All the hills got fainter because they lost some elevation to their neighbors.</p>
+
+      <p>We can see this more clearly if we change the scale of the color map:</p>
+      <div code-block>minElevation = 0
+maxElevation = patches.max('elevation')
+model.patches.ask(patch => {
+  patch.color = myColorMap.scaleColor(
+    patch.elevation, minElevation, maxElevation
+  )
+})</div>
+
+      <p>Now the highest patches will always be purple, no matter how high.</p>
     </div>
     <div class="column-right">
       <div class="tutorial-model-container">
