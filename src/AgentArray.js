@@ -243,10 +243,10 @@ class AgentArray extends Array {
         return this.sum(key) / this.length
     }
     min(key) {
-        return this.reduce((prev, o) => Math.min(prev, key ? o[key] : o))
+        return this.reduce((prev, o) => Math.min(prev, key ? o[key] : o), 0)
     }
     max(key) {
-        return this.reduce((prev, o) => Math.max(prev, key ? o[key] : o))
+        return this.reduce((prev, o) => Math.max(prev, key ? o[key] : o), 0)
     }
     extent(key) {
         return [this.min(key), this.max(key)]
