@@ -128,11 +128,11 @@ html, body {
         padding: 12px 20px;
         line-height: 1.4em;
         margin: 40px 0px;
+      }
 
-        code {
-          font-size: 0.8em;
-          background: #F8F8FF;
-        }
+      code {
+        font-size: 0.8em;
+        background: #d9d1ff;
       }
       
       width: 700px;
@@ -140,6 +140,7 @@ html, body {
     }
 
     .column-right {
+      margin-top: 100px;
       width: 500px;
       flex-shrink: 0;
     }
@@ -188,6 +189,12 @@ html, body {
     padding: 20px;
     box-sizing: border-box;
     font-size: 0.7em;
+
+    &[disabled] {
+      background: white;
+      color: initial;
+      border-color: initial;
+    }
   }
 }
 

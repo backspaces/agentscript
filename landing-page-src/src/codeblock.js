@@ -2,6 +2,8 @@ import morph from '../vendor/nanomorph.es6.js';
 import html from '../vendor/nanohtml.es6.js';
 import onLoad from '../vendor/on-load.es6.js';
 
+import { renderColorMapBlock } from './colormapBlock.js'
+
 export class CodeBlock {
   constructor(model) {
     // super()
@@ -10,27 +12,42 @@ export class CodeBlock {
   }
   createElement(opts) {
     this.opts = opts
-    let { codeContent, hasForeverButton } = opts
+    let { codeContent, hasForeverButton, isDisabled, colorMapCode } = opts
     let foreverButtonEl = html`
       <div class="button forever ${ this.isRunning ? 'running' : '' }" onclick="${() => this.toggleRunForever()}">${ this.isRunning ? 'stop running' : 'run forever' }</div>
     `;
     
     // It looks here like we create a new textarea on every render, but
     // we really always reuse the same one because isSameNode always returns true
-    let textAreaEl = html`<textarea class="code" onkeydown="${(e) => this.handleEnterKey(e)}">${codeContent}</textarea>`
+    let textAreaEl = html`
+      <textarea class="code"
+                spellcheck="false"
+                onkeydown="${(e) => this.handleEnterKey(e)}"
+                disabled="${isDisabled}">${codeContent}</textarea>
+    `
     textAreaEl.isSameNode = () => true // never rerender the textarea
     
     if (!this.textAreaEl) {
       this.textAreaEl = textAreaEl
     }
 
+    let codeButtonsEl = html`
+      <div class="code-buttons">
+        <div class="button" onclick="${() => this.runOnce()}">run once</div>
+        ${hasForeverButton ? foreverButtonEl : ''}
+      </div>
+    `
+
+    let colorMapEl = ''
+    if (colorMapCode) {
+      colorMapEl = renderColorMapBlock({ codeContent: colorMapCode })
+    }
+
     let codeblockEl = html`
       <div class="code-block">
         ${textAreaEl}
-        <div class="code-buttons">
-          <div class="button" onclick="${() => this.runOnce()}">run once</div>
-          ${hasForeverButton ? foreverButtonEl : ''}
-        </div>
+        ${isDisabled ? '' : codeButtonsEl}
+        ${colorMapEl}
       </div>
     `
     
@@ -62,6 +79,7 @@ export class CodeBlock {
     let currentCode = this.textAreaEl.value
     let fn = new Function(currentCode.replaceAll('model.', 'this.model.'))
     fn.apply(this)
+    this.rerender()
   }
   runForever() {
     if (this.isRunning) {
