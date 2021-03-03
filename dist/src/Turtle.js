@@ -221,25 +221,24 @@ class Turtle {
     // Change current direction by relative angle in current geometry
     // Angle can be positive or negative
     rotate(angle) {
-        // const rads = this.model.toDeltaRads(angle)
-        // this.theta = util.mod2pi(this.theta + rads)
-
+        angle = this.model.toCCW(angle)
         this.direction += angle
     }
     right(angle) {
-        if (this.model.geometry === 'heading') angle = -angle
         this.rotate(-angle)
     }
     left(angle) {
-        this.right(-angle)
+        this.rotate(angle)
     }
 
     // Set my direction towards turtle/patch or x,y.
     face(agent) {
-        this.theta = this.towards(agent)
+        // this.theta = this.towards(agent)
+        this.direction = this.towards(agent)
     }
     facexy(x, y) {
-        this.theta = this.towardsXY(x, y)
+        // this.theta = this.towardsXY(x, y)
+        this.direction = this.towardsXY(x, y)
     }
 
     // Return the patch ahead of this turtle by distance (patchSize units).
@@ -295,7 +294,8 @@ class Turtle {
     }
     towardsXY(x, y) {
         // return util.radiansTowardXY(this.x, this.y, x, y)
-        const rads = util.radiansTowardXY(this.x, this.y, x, y)
+        let rads = util.radiansTowardXY(this.x, this.y, x, y)
+        // rads = this.model.toCCW(rads)
         return this.model.fromRads(rads)
     }
     // Return patch w/ given parameters. Return undefined if off-world.

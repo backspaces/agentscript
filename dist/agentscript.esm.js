@@ -1697,10 +1697,16 @@ class AgentArray extends Array {
         return this.sum(key) / this.length
     }
     min(key) {
-        return this.reduce((prev, o) => Math.min(prev, key ? o[key] : o))
+        return this.reduce(
+            (prev, o) => Math.min(prev, key ? o[key] : o),
+            Infinity
+        )
     }
     max(key) {
-        return this.reduce((prev, o) => Math.max(prev, key ? o[key] : o))
+        return this.reduce(
+            (prev, o) => Math.max(prev, key ? o[key] : o),
+            -Infinity
+        )
     }
     extent(key) {
         return [this.min(key), this.max(key)]
@@ -4054,25 +4060,24 @@ class Turtle {
     // Change current direction by relative angle in current geometry
     // Angle can be positive or negative
     rotate(angle) {
-        // const rads = this.model.toDeltaRads(angle)
-        // this.theta = util.mod2pi(this.theta + rads)
-
+        angle = this.model.toCCW(angle);
         this.direction += angle;
     }
     right(angle) {
-        if (this.model.geometry === 'heading') angle = -angle;
         this.rotate(-angle);
     }
     left(angle) {
-        this.right(-angle);
+        this.rotate(angle);
     }
 
     // Set my direction towards turtle/patch or x,y.
     face(agent) {
-        this.theta = this.towards(agent);
+        // this.theta = this.towards(agent)
+        this.direction = this.towards(agent);
     }
     facexy(x, y) {
-        this.theta = this.towardsXY(x, y);
+        // this.theta = this.towardsXY(x, y)
+        this.direction = this.towardsXY(x, y);
     }
 
     // Return the patch ahead of this turtle by distance (patchSize units).
@@ -4128,7 +4133,8 @@ class Turtle {
     }
     towardsXY(x, y) {
         // return util.radiansTowardXY(this.x, this.y, x, y)
-        const rads = radiansTowardXY(this.x, this.y, x, y);
+        let rads = radiansTowardXY(this.x, this.y, x, y);
+        // rads = this.model.toCCW(rads)
         return this.model.fromRads(rads)
     }
     // Return patch w/ given parameters. Return undefined if off-world.
@@ -4327,20 +4333,23 @@ const geometries = {
     radians: {
         toRads: rads => rads,
         fromRads: rads => rads,
-        toDeltaRads: rads => rads,
-        fromDeltaRads: rads => rads,
+        toCCW: angle => angle,
+        // toDeltaRads: rads => rads,
+        // fromDeltaRads: rads => rads,
     },
     degrees: {
         toRads: deg => deg * toRad,
         fromRads: rads => rads * toDeg,
-        toDeltaRads: deg => deg * toRad,
-        fromDeltaRads: rads => rads * toDeg,
+        toCCW: angle => angle,
+        // toDeltaRads: deg => deg * toRad,
+        // fromDeltaRads: rads => rads * toDeg,
     },
     heading: {
         toRads: deg => (90 - deg) * toRad,
         fromRads: rads => 90 - rads * toDeg,
-        toDeltaRads: deg => -deg * toRad,
-        fromDeltaRads: rads => -rads * toDeg,
+        toCCW: angle => -angle,
+        // toDeltaRads: deg => -deg * toRad,
+        // fromDeltaRads: rads => -rads * toDeg,
     },
 };
 

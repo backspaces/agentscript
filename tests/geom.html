@@ -38,6 +38,7 @@
             window.head = () => model.setGeometry('heading')
             window.deg = () => model.setGeometry('degrees')
             window.geom = () => model.geometry
+            window.mark = a => ((a.patch || a).mark = true)
 
             t.setxy(0, 0)
             t.direction = 0
