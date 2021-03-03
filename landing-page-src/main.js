@@ -1,5 +1,5 @@
 import Model from 'https://cdn.skypack.dev/agentscript/src/Model.js'
-import { initTutorial } from '../../src/tutorial.js'
+import { initTutorial } from './src/tutorial.js'
 import './src/landing-page.js'
 
 document.querySelector('[learn-more-button]').addEventListener('click', () => {
