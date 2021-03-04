@@ -3521,10 +3521,8 @@ class Patches extends AgentSet {
 
     // Return patch at distance and angle from obj's (patch or turtle)
     // x, y (floats). If off world, return undefined.
-    // To use heading:
-    //   patchAtDirectionAndDistance(obj, util.headingToRad(heading), distance)
-    // Does not take into account the angle of the obj .. turtle.theta for example.
-    patchAtDirectionAndDistance(agent, direction, distance) {
+    // Does not take into account the angle of the agent.
+    patchAtHeadingAndDistance(agent, direction, distance) {
         direction = this.model.toRads(direction);
         let { x, y } = agent;
         x = x + distance * Math.cos(direction);
@@ -3718,12 +3716,8 @@ class Patch {
     patchAt(dx, dy) {
         return this.patches.patch(this.x + dx, this.y + dy)
     }
-    patchAtDirectionAndDistance(direction, distance) {
-        return this.patches.patchAtDirectionAndDistance(
-            this,
-            direction,
-            distance
-        )
+    patchAtHeadingAndDistance(direction, distance) {
+        return this.patches.patchAtHeadingAndDistance(this, direction, distance)
     }
 
     sprout(num = 1, breed = this.model.turtles, initFcn = turtle => {}) {
@@ -4083,14 +4077,11 @@ class Turtle {
     // Return the patch ahead of this turtle by distance (patchSize units).
     // Return undefined if off-world.
     patchAhead(distance) {
-        return this.patchAtDirectionAndDistance(this.direction, distance)
+        return this.patchAtHeadingAndDistance(this.direction, distance)
     }
     patchRightAndAhead(angle, distance) {
         if (this.model.geometry === 'heading') angle = -angle;
-        return this.patchAtDirectionAndDistance(
-            this.direction - angle,
-            distance
-        )
+        return this.patchAtHeadingAndDistance(this.direction - angle, distance)
     }
     patchLeftAndAhead(angle, distance) {
         return this.patchRightAndAhead(-angle, distance)
@@ -4144,9 +4135,9 @@ class Turtle {
     }
     // Note: direction is absolute, w/o regard to existing angle of turtle.
     // Use Left/Right versions for relative angles.
-    patchAtDirectionAndDistance(direction, distance) {
+    patchAtHeadingAndDistance(direction, distance) {
         // direction = this.model.toRads(direction)
-        return this.model.patches.patchAtDirectionAndDistance(
+        return this.model.patches.patchAtHeadingAndDistance(
             this,
             direction,
             distance

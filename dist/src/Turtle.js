@@ -244,14 +244,11 @@ class Turtle {
     // Return the patch ahead of this turtle by distance (patchSize units).
     // Return undefined if off-world.
     patchAhead(distance) {
-        return this.patchAtDirectionAndDistance(this.direction, distance)
+        return this.patchAtHeadingAndDistance(this.direction, distance)
     }
     patchRightAndAhead(angle, distance) {
         if (this.model.geometry === 'heading') angle = -angle
-        return this.patchAtDirectionAndDistance(
-            this.direction - angle,
-            distance
-        )
+        return this.patchAtHeadingAndDistance(this.direction - angle, distance)
     }
     patchLeftAndAhead(angle, distance) {
         return this.patchRightAndAhead(-angle, distance)
@@ -305,9 +302,9 @@ class Turtle {
     }
     // Note: direction is absolute, w/o regard to existing angle of turtle.
     // Use Left/Right versions for relative angles.
-    patchAtDirectionAndDistance(direction, distance) {
+    patchAtHeadingAndDistance(direction, distance) {
         // direction = this.model.toRads(direction)
-        return this.model.patches.patchAtDirectionAndDistance(
+        return this.model.patches.patchAtHeadingAndDistance(
             this,
             direction,
             distance

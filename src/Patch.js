@@ -133,12 +133,8 @@ class Patch {
     patchAt(dx, dy) {
         return this.patches.patch(this.x + dx, this.y + dy)
     }
-    patchAtDirectionAndDistance(direction, distance) {
-        return this.patches.patchAtDirectionAndDistance(
-            this,
-            direction,
-            distance
-        )
+    patchAtHeadingAndDistance(direction, distance) {
+        return this.patches.patchAtHeadingAndDistance(this, direction, distance)
     }
 
     sprout(num = 1, breed = this.model.turtles, initFcn = turtle => {}) {
