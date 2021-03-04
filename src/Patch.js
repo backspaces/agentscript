@@ -119,13 +119,14 @@ class Patch {
     //     return this.distanceXY(agent.x, agent.y)
     // }
 
-    // Return angle in radians towards agent/x,y
-    // Use util.radToHeading to convert to heading
+    // Return direction towards agent/x,y using current geometry
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
     towardsXY(x, y) {
-        return util.radiansTowardXY(this.x, this.y, x, y)
+        // return util.radiansTowardXY(this.x, this.y, x, y)
+        let rads = util.radiansTowardXY(this.x, this.y, x, y)
+        return this.model.fromRads(rads)
     }
     // Return patch w/ given parameters. Return undefined if off-world.
     // Return patch dx, dy from my position.

@@ -87,20 +87,16 @@ class Turtles extends AgentSet {
     }
     inCone(turtle, radius, coneAngle, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true)
+        const direction = this.model.toRads(turtle.direction)
+        coneAngle = this.model.toRads(direction)
         return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
     }
 
     // Circle Layout: position the turtles in this breed in an equally
-    // spaced circle of the given radius, with the initial turtle
-    // at the given start angle (default to pi/2 or "up") and in the
-    // +1 or -1 direction (counter clockwise or clockwise)
-    // defaulting to -1 (clockwise).
-    layoutCircle(
-        radius = this.model.world.maxX * 0.9,
-        center = [0, 0],
-        startAngle = Math.PI / 2,
-        direction = -1
-    ) {
+    // spaced circle of the given center and radius
+    layoutCircle(radius = this.model.world.maxX * 0.9, center = [0, 0]) {
+        const startAngle = Math.PI / 2 // up
+        const direction = -1 // Clockwise
         const dTheta = (2 * Math.PI) / this.length
         const [x0, y0] = center
         this.ask((turtle, i) => {

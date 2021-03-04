@@ -52,7 +52,8 @@ class Link {
     }
     direction() {
         const { x0, x1, y0, y1 } = this
-        return Math.atan2(y1 - y0, x1 - x0)
+        const rads = Math.atan2(y1 - y0, x1 - x0)
+        return this.model.fromRads(rads)
     }
     otherEnd(turtle) {
         if (turtle === this.end0) return this.end1

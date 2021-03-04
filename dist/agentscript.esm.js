@@ -2833,7 +2833,8 @@ class Link {
     }
     direction() {
         const { x0, x1, y0, y1 } = this;
-        return Math.atan2(y1 - y0, x1 - x0)
+        const rads = Math.atan2(y1 - y0, x1 - x0);
+        return this.model.fromRads(rads)
     }
     otherEnd(turtle) {
         if (turtle === this.end0) return this.end1
@@ -3513,6 +3514,8 @@ class Patches extends AgentSet {
     inCone(patch, radius, coneAngle, direction, meToo = true) {
         const dxy = Math.ceil(radius);
         const pRect = this.inRect(patch, dxy, dxy, meToo);
+        direction = this.model.toRads(direction);
+        coneAngle = this.model.toRads(direction);
         return pRect.inCone(patch, radius, coneAngle, direction, meToo)
     }
 
@@ -3701,13 +3704,14 @@ class Patch {
     //     return this.distanceXY(agent.x, agent.y)
     // }
 
-    // Return angle in radians towards agent/x,y
-    // Use util.radToHeading to convert to heading
+    // Return direction towards agent/x,y using current geometry
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
     towardsXY(x, y) {
-        return radiansTowardXY(this.x, this.y, x, y)
+        // return util.radiansTowardXY(this.x, this.y, x, y)
+        let rads = radiansTowardXY(this.x, this.y, x, y);
+        return this.model.fromRads(rads)
     }
     // Return patch w/ given parameters. Return undefined if off-world.
     // Return patch dx, dy from my position.
@@ -3815,20 +3819,16 @@ class Turtles extends AgentSet {
     }
     inCone(turtle, radius, coneAngle, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true);
+        const direction = this.model.toRads(turtle.direction);
+        coneAngle = this.model.toRads(direction);
         return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
     }
 
     // Circle Layout: position the turtles in this breed in an equally
-    // spaced circle of the given radius, with the initial turtle
-    // at the given start angle (default to pi/2 or "up") and in the
-    // +1 or -1 direction (counter clockwise or clockwise)
-    // defaulting to -1 (clockwise).
-    layoutCircle(
-        radius = this.model.world.maxX * 0.9,
-        center = [0, 0],
-        startAngle = Math.PI / 2,
-        direction = -1
-    ) {
+    // spaced circle of the given center and radius
+    layoutCircle(radius = this.model.world.maxX * 0.9, center = [0, 0]) {
+        const startAngle = Math.PI / 2; // up
+        const direction = -1; // Clockwise
         const dTheta = (2 * Math.PI) / this.length;
         const [x0, y0] = center;
         this.ask((turtle, i) => {

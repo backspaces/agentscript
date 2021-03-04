@@ -15,11 +15,12 @@
 
             const model = new Model()
             model.setGeometry('heading')
-            model.population = 1
+            model.population = 1000
+            model.noLinks = true
             model.setup()
 
             const drawOptions = {
-                turtlesColor: 'red',
+                turtlesColor: t => (t.mark ? 'white' : 'red'),
                 patchesColor: p => (p.mark ? 'white' : grays[p.id]),
             }
             const view = new TwoDraw(model, {
@@ -38,10 +39,14 @@
             window.head = () => model.setGeometry('heading')
             window.deg = () => model.setGeometry('degrees')
             window.geom = () => model.geometry
-            window.mark = a => ((a.patch || a).mark = true)
+            // window.mark = a => ((a.patch || a).mark = true)
+            window.mark = a => (a.mark = true)
+            window.markall = aset => aset.ask(a => mark(a))
 
             t.setxy(0, 0)
             t.direction = 0
+            t.mark = true
+            p.mark = true
 
             util.timeoutLoop(
                 () => {

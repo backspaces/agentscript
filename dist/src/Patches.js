@@ -238,6 +238,8 @@ class Patches extends AgentSet {
     inCone(patch, radius, coneAngle, direction, meToo = true) {
         const dxy = Math.ceil(radius)
         const pRect = this.inRect(patch, dxy, dxy, meToo)
+        direction = this.model.toRads(direction)
+        coneAngle = this.model.toRads(direction)
         return pRect.inCone(patch, radius, coneAngle, direction, meToo)
     }
 

@@ -5,6 +5,7 @@ class HelloModel extends Model {
     population = 10 // number of turtles
     speed = 0.1 // step size in patch units
     wiggleAngle = util.degToRad(10)
+    noLinks = false
 
     // We can use Model's constructor, due to using Model's default World
     // constructor() {
@@ -19,7 +20,7 @@ class HelloModel extends Model {
             t.setxy(patch.x, patch.y)
         })
 
-        if (this.population < 2) return
+        if (this.population < 2 || this.noLinks) return
         this.turtles.ask(t => {
             this.links.create(t, this.turtles.otherOneOf(t))
         })
