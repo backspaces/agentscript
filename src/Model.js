@@ -172,6 +172,7 @@ const geometries = {
     radians: {
         toRads: rads => rads,
         fromRads: rads => rads,
+        toRadsAngle: rads => rads,
         toCCW: angle => angle,
         // toDeltaRads: rads => rads,
         // fromDeltaRads: rads => rads,
@@ -179,6 +180,7 @@ const geometries = {
     degrees: {
         toRads: deg => deg * toRad,
         fromRads: rads => rads * toDeg,
+        toRadsAngle: deg => deg * toRad,
         toCCW: angle => angle,
         // toDeltaRads: deg => deg * toRad,
         // fromDeltaRads: rads => rads * toDeg,
@@ -186,6 +188,7 @@ const geometries = {
     heading: {
         toRads: deg => (90 - deg) * toRad,
         fromRads: rads => 90 - rads * toDeg,
+        toRadsAngle: deg => deg * toRad,
         toCCW: angle => -angle,
         // toDeltaRads: deg => -deg * toRad,
         // fromDeltaRads: rads => -rads * toDeg,

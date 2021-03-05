@@ -233,24 +233,25 @@ class Patches extends AgentSet {
         const pRect = this.inRect(patch, dxy, dxy, meToo)
         return pRect.inRadius(patch, radius, meToo)
     }
-    // Patches in cone from p in direction `angle`,
-    // with `coneAngle` and float `radius`
-    inCone(patch, radius, coneAngle, direction, meToo = true) {
+    // Patches in cone from patch in direction `heading`,
+    // with `coneAngle` width and within float `radius`
+    inCone(patch, radius, coneAngle, heading, meToo = true) {
         const dxy = Math.ceil(radius)
         const pRect = this.inRect(patch, dxy, dxy, meToo)
-        direction = this.model.toRads(direction)
-        coneAngle = this.model.toRads(direction)
-        return pRect.inCone(patch, radius, coneAngle, direction, meToo)
+        // Using AgentArray's inCone, using radians
+        heading = this.model.toRads(heading)
+        coneAngle = this.model.toRadsAngle(coneAngle)
+        return pRect.inCone(patch, radius, coneAngle, heading, meToo)
     }
 
     // Return patch at distance and angle from obj's (patch or turtle)
     // x, y (floats). If off world, return undefined.
     // Does not take into account the angle of the agent.
-    patchAtHeadingAndDistance(agent, direction, distance) {
-        direction = this.model.toRads(direction)
+    patchAtHeadingAndDistance(agent, heading, distance) {
+        heading = this.model.toRads(heading)
         let { x, y } = agent
-        x = x + distance * Math.cos(direction)
-        y = y + distance * Math.sin(direction)
+        x = x + distance * Math.cos(heading)
+        y = y + distance * Math.sin(heading)
         return this.patch(x, y)
     }
 

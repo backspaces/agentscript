@@ -119,7 +119,7 @@ class Patch {
     //     return this.distanceXY(agent.x, agent.y)
     // }
 
-    // Return direction towards agent/x,y using current geometry
+    // Return heading towards agent/x,y using current geometry
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
@@ -133,8 +133,8 @@ class Patch {
     patchAt(dx, dy) {
         return this.patches.patch(this.x + dx, this.y + dy)
     }
-    patchAtHeadingAndDistance(direction, distance) {
-        return this.patches.patchAtHeadingAndDistance(this, direction, distance)
+    patchAtHeadingAndDistance(heading, distance) {
+        return this.patches.patchAtHeadingAndDistance(this, heading, distance)
     }
 
     sprout(num = 1, breed = this.model.turtles, initFcn = turtle => {}) {

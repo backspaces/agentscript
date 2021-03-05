@@ -1926,7 +1926,7 @@ class AgentArray extends Array {
     }
 
     // As above, but also limited to the angle `coneAngle` around
-    // a `angle` from object `o`.
+    // a `angle` from object `o`. coneAngle and direction in radians.
     inCone(o, radius, coneAngle, direction, meToo = false) {
         const agents = new AgentArray();
         this.ask(a => {
@@ -2831,7 +2831,8 @@ class Link {
     length() {
         return this.end0.distance(this.end1)
     }
-    direction() {
+    // use getter, all the other headings are getters
+    get heading() {
         const { x0, x1, y0, y1 } = this;
         const rads = Math.atan2(y1 - y0, x1 - x0);
         return this.model.fromRads(rads)
@@ -3509,24 +3510,25 @@ class Patches extends AgentSet {
         const pRect = this.inRect(patch, dxy, dxy, meToo);
         return pRect.inRadius(patch, radius, meToo)
     }
-    // Patches in cone from p in direction `angle`,
-    // with `coneAngle` and float `radius`
-    inCone(patch, radius, coneAngle, direction, meToo = true) {
+    // Patches in cone from patch in direction `heading`,
+    // with `coneAngle` width and within float `radius`
+    inCone(patch, radius, coneAngle, heading, meToo = true) {
         const dxy = Math.ceil(radius);
         const pRect = this.inRect(patch, dxy, dxy, meToo);
-        direction = this.model.toRads(direction);
-        coneAngle = this.model.toRads(direction);
-        return pRect.inCone(patch, radius, coneAngle, direction, meToo)
+        // Using AgentArray's inCone, using radians
+        heading = this.model.toRads(heading);
+        coneAngle = this.model.toRadsAngle(coneAngle);
+        return pRect.inCone(patch, radius, coneAngle, heading, meToo)
     }
 
     // Return patch at distance and angle from obj's (patch or turtle)
     // x, y (floats). If off world, return undefined.
     // Does not take into account the angle of the agent.
-    patchAtHeadingAndDistance(agent, direction, distance) {
-        direction = this.model.toRads(direction);
+    patchAtHeadingAndDistance(agent, heading, distance) {
+        heading = this.model.toRads(heading);
         let { x, y } = agent;
-        x = x + distance * Math.cos(direction);
-        y = y + distance * Math.sin(direction);
+        x = x + distance * Math.cos(heading);
+        y = y + distance * Math.sin(heading);
         return this.patch(x, y)
     }
 
@@ -3702,7 +3704,7 @@ class Patch {
     //     return this.distanceXY(agent.x, agent.y)
     // }
 
-    // Return direction towards agent/x,y using current geometry
+    // Return heading towards agent/x,y using current geometry
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
     }
@@ -3716,8 +3718,8 @@ class Patch {
     patchAt(dx, dy) {
         return this.patches.patch(this.x + dx, this.y + dy)
     }
-    patchAtHeadingAndDistance(direction, distance) {
-        return this.patches.patchAtHeadingAndDistance(this, direction, distance)
+    patchAtHeadingAndDistance(heading, distance) {
+        return this.patches.patchAtHeadingAndDistance(this, heading, distance)
     }
 
     sprout(num = 1, breed = this.model.turtles, initFcn = turtle => {}) {
@@ -3813,8 +3815,10 @@ class Turtles extends AgentSet {
     }
     inCone(turtle, radius, coneAngle, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true);
-        const direction = this.model.toRads(turtle.direction);
-        coneAngle = this.model.toRads(direction);
+        // const direction = this.model.toRads(turtle.direction)
+        // coneAngle = this.model.toRads(direction)
+        coneAngle = this.model.toRadsAngle(coneAngle);
+        // Calls AgentArray's radian based method
         return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
     }
 
@@ -3931,18 +3935,18 @@ class Turtle {
 
     // Heading vs Euclidean Absolute Angles.
     get heading() {
-        warn('Turtle.heading is deprecated, use direction instead');
-        return radToHeading(this.theta)
+        return this.model.fromRads(this.theta)
     }
     set heading(heading) {
-        warn('Turtle.heading is deprecated, use direction instead');
-        this.theta = headingToRad(heading);
+        this.theta = this.model.toRads(heading);
     }
     // Get/put direction using the current geometry
     get direction() {
+        warn('Turtle.direction is deprecated, use heading instead');
         return this.model.fromRads(this.theta)
     }
     set direction(direction) {
+        warn('Turtle.direction is deprecated, use heading instead');
         this.theta = mod2pi(this.model.toRads(direction));
         // this.theta = util.mod2pi(this.model.toRads(direction))
     }
@@ -4055,7 +4059,7 @@ class Turtle {
     // Angle can be positive or negative
     rotate(angle) {
         angle = this.model.toCCW(angle);
-        this.direction += angle;
+        this.heading += angle;
     }
     right(angle) {
         this.rotate(-angle);
@@ -4067,21 +4071,21 @@ class Turtle {
     // Set my direction towards turtle/patch or x,y.
     face(agent) {
         // this.theta = this.towards(agent)
-        this.direction = this.towards(agent);
+        this.heading = this.towards(agent);
     }
     facexy(x, y) {
         // this.theta = this.towardsXY(x, y)
-        this.direction = this.towardsXY(x, y);
+        this.heading = this.towardsXY(x, y);
     }
 
     // Return the patch ahead of this turtle by distance (patchSize units).
     // Return undefined if off-world.
     patchAhead(distance) {
-        return this.patchAtHeadingAndDistance(this.direction, distance)
+        return this.patchAtHeadingAndDistance(this.heading, distance)
     }
     patchRightAndAhead(angle, distance) {
         if (this.model.geometry === 'heading') angle = -angle;
-        return this.patchAtHeadingAndDistance(this.direction - angle, distance)
+        return this.patchAtHeadingAndDistance(this.heading - angle, distance)
     }
     patchLeftAndAhead(angle, distance) {
         return this.patchRightAndAhead(-angle, distance)
@@ -4133,13 +4137,13 @@ class Turtle {
     patchAt(dx, dy) {
         return this.model.patches.patch(this.x + dx, this.y + dy)
     }
-    // Note: direction is absolute, w/o regard to existing angle of turtle.
+    // Note: heading is absolute, w/o regard to existing angle of turtle.
     // Use Left/Right versions for relative angles.
-    patchAtHeadingAndDistance(direction, distance) {
+    patchAtHeadingAndDistance(heading, distance) {
         // direction = this.model.toRads(direction)
         return this.model.patches.patchAtHeadingAndDistance(
             this,
-            direction,
+            heading,
             distance
         )
     }
@@ -4324,6 +4328,7 @@ const geometries = {
     radians: {
         toRads: rads => rads,
         fromRads: rads => rads,
+        toRadsAngle: rads => rads,
         toCCW: angle => angle,
         // toDeltaRads: rads => rads,
         // fromDeltaRads: rads => rads,
@@ -4331,6 +4336,7 @@ const geometries = {
     degrees: {
         toRads: deg => deg * toRad,
         fromRads: rads => rads * toDeg,
+        toRadsAngle: deg => deg * toRad,
         toCCW: angle => angle,
         // toDeltaRads: deg => deg * toRad,
         // fromDeltaRads: rads => rads * toDeg,
@@ -4338,6 +4344,7 @@ const geometries = {
     heading: {
         toRads: deg => (90 - deg) * toRad,
         fromRads: rads => 90 - rads * toDeg,
+        toRadsAngle: deg => deg * toRad,
         toCCW: angle => -angle,
         // toDeltaRads: deg => -deg * toRad,
         // fromDeltaRads: rads => -rads * toDeg,

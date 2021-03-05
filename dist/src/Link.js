@@ -50,7 +50,8 @@ class Link {
     length() {
         return this.end0.distance(this.end1)
     }
-    direction() {
+    // use getter, all the other headings are getters
+    get heading() {
         const { x0, x1, y0, y1 } = this
         const rads = Math.atan2(y1 - y0, x1 - x0)
         return this.model.fromRads(rads)

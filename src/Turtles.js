@@ -87,8 +87,10 @@ class Turtles extends AgentSet {
     }
     inCone(turtle, radius, coneAngle, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true)
-        const direction = this.model.toRads(turtle.direction)
-        coneAngle = this.model.toRads(direction)
+        // const direction = this.model.toRads(turtle.direction)
+        // coneAngle = this.model.toRads(direction)
+        coneAngle = this.model.toRadsAngle(coneAngle)
+        // Calls AgentArray's radian based method
         return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
     }
 

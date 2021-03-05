@@ -85,6 +85,7 @@ export default class AntsModel extends Model {
         if (p.isOnEdge()) {
             t.rotate(Math.PI)
         } else {
+            // Note: neighbors is an AgentArray who's inCone uses radians.
             const nAhead = p.neighbors.inCone(p, 2, Math.PI, t.theta)
             const pheromone = t.carryingFood ? 'nestPheromone' : 'foodPheromone'
             const [n, max] = nAhead.maxValOf(pheromone)

@@ -472,7 +472,7 @@ class AgentArray extends Array {
     }
 
     // As above, but also limited to the angle `coneAngle` around
-    // a `angle` from object `o`.
+    // a `angle` from object `o`. coneAngle and direction in radians.
     inCone(o, radius, coneAngle, direction, meToo = false) {
         const agents = new AgentArray()
         this.ask(a => {
