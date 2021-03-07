@@ -31,7 +31,7 @@ class Model {
     turtles
     links
     ticks
-    geometry = 'radians'
+    geometry = 'heading' // 'radians'
 
     /**
      * Creates an instance of Model.

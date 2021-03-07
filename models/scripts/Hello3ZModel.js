@@ -4,7 +4,8 @@ var util = AS.util
 class HelloModel extends Model {
     population = 100
     speed = 0.1 // patches per step
-    wiggleAngle = util.degToRad(10)
+    wiggleAngle = 10 //util.degToRad(10)
+    // geometry = 'radians'
 
     // static defaultOptions() {
     //     return {
@@ -37,7 +38,8 @@ class HelloModel extends Model {
 
     step() {
         this.turtles.ask(t => {
-            t.theta += util.randomCentered(this.wiggleAngle)
+            // t.theta += util.randomCentered(this.wiggleAngle)
+            t.heading += util.randomCentered(this.wiggleAngle)
             t.forward(this.speed)
             this.moveToSphere(t)
         })
@@ -51,7 +53,8 @@ class HelloModel extends Model {
         if (z2 <= 0) {
             const theta = Math.atan2(y, x)
             t.setxy(r * Math.cos(theta), r * Math.sin(theta), 0)
-            t.theta = t.theta + Math.PI / 2
+            // t.theta = t.theta + Math.PI / 2
+            t.heading += 90
         } else {
             t.z = Math.sqrt(z2)
         }

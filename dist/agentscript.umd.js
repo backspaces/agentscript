@@ -4090,7 +4090,8 @@ out;`;
             return this.patchAtHeadingAndDistance(this.heading, distance)
         }
         patchRightAndAhead(angle, distance) {
-            if (this.model.geometry === 'heading') angle = -angle;
+            // if (this.model.geometry === 'heading') angle = -angle
+            angle = this.model.toCCW(angle);
             return this.patchAtHeadingAndDistance(this.heading - angle, distance)
         }
         patchLeftAndAhead(angle, distance) {
@@ -4197,7 +4198,7 @@ out;`;
         turtles
         links
         ticks
-        geometry = 'radians'
+        geometry = 'heading' // 'radians'
 
         /**
          * Creates an instance of Model.

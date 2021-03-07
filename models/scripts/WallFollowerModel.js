@@ -32,14 +32,8 @@ class WallFollowerModel extends Model {
     }
 
     setup() {
-        // this.refreshPatches = false
-        this.population = 40
-        // this.anim.setRate(10)
-
         this.patchBreeds('walls')
         this.turtleBreeds('lefty righty')
-        // REMIND: we don't allow setting default patch colors: raster not property.
-        // this.walls.setDefault('color', [222, 184, 135])
 
         // righty turtles follow the right hand rule, lefty the left.
         // righty turn right, a negative angle. lefty positive.
@@ -83,7 +77,7 @@ class WallFollowerModel extends Model {
     }
     walk(turtle) {
         // Calculate a right turn angle for lefty/righty
-        const rtAngle = Math.PI / 2
+        const rtAngle = 90 // Math.PI / 2
         const turnAngle = rtAngle * turtle.turn
 
         // Keeps me on the wall when drifting off: If a wall to my west/east and

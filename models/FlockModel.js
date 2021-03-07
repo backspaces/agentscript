@@ -7,6 +7,7 @@ export default class FlockModel extends Model {
     speed = 0.25
     maxTurn = util.degToRad(3.0)
     minSeparation = 0.75
+    geometry = 'radians' // could be tricky to use heading, later
 
     // static defaultOptions() {
     //     return {
@@ -21,7 +22,9 @@ export default class FlockModel extends Model {
     // ======================
 
     constructor(worldDptions) {
+        // this.geometry = 'radians' // this not defined 'til after super()
         super(worldDptions) // default world options if "undefined"
+        this.setGeometry(this.geometry)
         // Object.assign(this, FlockModel.defaultOptions())
     }
 
@@ -29,8 +32,6 @@ export default class FlockModel extends Model {
     //     this.maxTurn = util.degToRad(maxTurnDegrees)
     // }
     setup() {
-        Object.assign(this, this.UI)
-
         this.turtles.setDefault('speed', this.speed)
         this.patches.cacheRect(this.vision)
 
@@ -46,6 +47,8 @@ export default class FlockModel extends Model {
     }
     flock(t) {
         const flockmates = this.turtles.inRadius(t, this.vision, false)
+        // const vision = this.vision
+        // const flockmates = this.turtles.inPatchRect(t, vision, vision, false)
         if (flockmates.length !== 0) {
             const nearest = flockmates.minOneOf(f => f.distance(t))
             if (t.distance(nearest) < this.minSeparation) {
@@ -58,8 +61,8 @@ export default class FlockModel extends Model {
         t.forward(t.speed)
     }
     separate(t, nearest) {
-        const theta = nearest.towards(t)
-        this.turnTowards(t, theta)
+        const angle = nearest.towards(t)
+        this.turnTowards(t, angle)
     }
     align(t, flockmates) {
         this.turnTowards(t, this.averageHeading(flockmates))
@@ -87,13 +90,9 @@ export default class FlockModel extends Model {
     }
 
     flockVectorSize() {
-        const headings = this.turtles.map(t => t.theta)
-        const dx = headings
-            .map(theta => Math.cos(theta))
-            .reduce((x, y) => x + y)
-        const dy = headings
-            .map(theta => Math.sin(theta))
-            .reduce((x, y) => x + y)
+        const thetas = this.turtles.map(t => t.theta)
+        const dx = thetas.map(theta => Math.cos(theta)).reduce((x, y) => x + y)
+        const dy = thetas.map(theta => Math.sin(theta)).reduce((x, y) => x + y)
         return Math.sqrt(dx * dx + dy * dy) / this.population
     }
 }

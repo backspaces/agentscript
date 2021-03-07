@@ -247,7 +247,8 @@ class Turtle {
         return this.patchAtHeadingAndDistance(this.heading, distance)
     }
     patchRightAndAhead(angle, distance) {
-        if (this.model.geometry === 'heading') angle = -angle
+        // if (this.model.geometry === 'heading') angle = -angle
+        angle = this.model.toCCW(angle)
         return this.patchAtHeadingAndDistance(this.heading - angle, distance)
     }
     patchLeftAndAhead(angle, distance) {

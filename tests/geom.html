@@ -38,6 +38,7 @@
             window.clear = () => model.patches.ask(p => (p.mark = false))
             window.head = () => model.setGeometry('heading')
             window.deg = () => model.setGeometry('degrees')
+            window.rad = () => model.setGeometry('radians')
             window.geom = () => model.geometry
             // window.mark = a => ((a.patch || a).mark = true)
             window.mark = a => (a.mark = true)
