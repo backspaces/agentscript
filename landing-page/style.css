@@ -4,13 +4,31 @@ html, body {
   font-size: 24px;
 }
 
+.button {
+  cursor: pointer;
+  background: skyblue;
+  display: inline-block;
+  padding: 10px 14px;
+  font-size: 18px;
+  user-select: none;
+}
+.button:hover {
+  background: #65c2e8;
+}
+.button.forever {
+  background: orange;
+}
+.button.running {
+  background: #f9d086;
+}
+
 .header {
   position: absolute;
   top: 0px;
   left: 0px;
   right: 0px;
   z-index: 1;
-  background: #121212;
+  background: #d8d8d8;
 }
 .header .button-row {
   height: 70px;
@@ -23,7 +41,7 @@ html, body {
 }
 .header .button-row .nav-button {
   margin-right: 80px;
-  color: white;
+  color: black;
   text-decoration: none;
 }
 .header .button-row .nav-button:hover {
@@ -87,7 +105,7 @@ html, body {
 
 .two-columns-container {
   border-top: 1px solid;
-  background: #F8F8FF;
+  background: #fffbfb;
 }
 .two-columns-container .two-columns {
   display: flex;
@@ -102,8 +120,10 @@ html, body {
   margin-right: 80px;
 }
 .two-columns-container .two-columns .column-left h1 {
+  background: #d8d8d8;
   margin-top: 0px;
   font-size: 50px;
+  display: inline-block;
 }
 .two-columns-container .two-columns .column-left .note {
   font-size: 0.6em;
@@ -156,24 +176,6 @@ html, body {
   background: white;
   color: initial;
   border-color: initial;
-}
-
-.button {
-  cursor: pointer;
-  background: skyblue;
-  display: inline-block;
-  padding: 10px 14px;
-  font-size: 18px;
-  user-select: none;
-}
-.button:hover {
-  background: #65c2e8;
-}
-.button.forever {
-  background: orange;
-}
-.button.running {
-  background: #f9d086;
 }
 
 .tutorial-model-container-fixed {
