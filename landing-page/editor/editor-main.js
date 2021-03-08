@@ -42,12 +42,30 @@
 //   drawOpts
 // } from './flock-example-for-editor.js'
 
+import {EditorState, basicSetup} from "../_snowpack/pkg/@codemirror/basic-setup.js"
+import {EditorView, keymap} from "../_snowpack/pkg/@codemirror/view.js"
+import {defaultTabBinding} from "../_snowpack/pkg/@codemirror/commands.js"
+import {javascript} from "../_snowpack/pkg/@codemirror/lang-javascript.js"
+
+let editorExtensions = [
+  basicSetup,
+  keymap.of([defaultTabBinding]),
+  javascript()
+]
+let editor = new EditorView({
+  state: EditorState.create({
+    doc: '',
+    extensions: editorExtensions
+  }),
+  parent: document.querySelector(".ide-container")
+})
+
 let model
 let view
 
 async function initEditor() {
   let code = await fetch('./flock-example-for-editor.js').then(res => res.text())
-  document.querySelector('.ide-textarea').value = code
+  editor.setState(EditorState.create({ doc: code, extensions: editorExtensions }))
 
   await rebuildModel()
 
@@ -63,7 +81,7 @@ async function initEditor() {
 }
 
 async function rebuildModel() {
-  let code = document.querySelector('.ide-textarea').value
+  let code = editor.state.doc
   
   const dataUri = 'data:text/javascript;charset=utf-8,'
     + encodeURIComponent(code)

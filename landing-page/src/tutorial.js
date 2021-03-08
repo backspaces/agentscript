@@ -4,7 +4,6 @@ import ColorMap from 'https://cdn.skypack.dev/agentscript/src/ColorMap.js'
 import * as util from 'https://cdn.skypack.dev/agentscript/src/utils.js'
 
 import { CodeBlock } from './codeblock.js'
-import { renderColorMapBlock } from './colormapBlock.js'
 
 window.util = util
 window.Color = Color
