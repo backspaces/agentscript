@@ -3,15 +3,11 @@ import TwoDraw from 'https://cdn.skypack.dev/agentscript/src/TwoDraw.js'
 import * as util from 'https://cdn.skypack.dev/agentscript/src/utils.js'
 
 class FlockModel extends BaseModel {
-    population = 1000
+    population = 100
     vision = 3
     speed = 0.25
     maxTurn = util.degToRad(3.0)
     minSeparation = 0.75
-
-    constructor(worldOptions) {
-        super(worldOptions)
-    }
 
     setup() {
         this.turtles.setDefault('speed', this.speed)
@@ -27,6 +23,7 @@ class FlockModel extends BaseModel {
             this.flock(t)
         })
     }
+
     flock(t) {
         const flockmates = this.turtles.inRadius(t, this.vision, false)
         if (flockmates.length !== 0) {
@@ -40,13 +37,16 @@ class FlockModel extends BaseModel {
         }
         t.forward(t.speed)
     }
+
     separate(t, nearest) {
         const theta = nearest.towards(t)
         this.turnTowards(t, theta)
     }
+
     align(t, flockmates) {
         this.turnTowards(t, this.averageHeading(flockmates))
     }
+
     cohere(t, flockmates) {
         this.turnTowards(t, this.averageHeadingTowards(t, flockmates))
     }
@@ -56,12 +56,14 @@ class FlockModel extends BaseModel {
         turn = util.clamp(turn, -this.maxTurn, this.maxTurn) // limit the turn
         t.rotate(turn)
     }
+
     averageHeading(flockmates) {
         const thetas = flockmates.map(f => f.theta)
         const dx = thetas.map(t => Math.cos(t)).reduce((x, y) => x + y)
         const dy = thetas.map(t => Math.sin(t)).reduce((x, y) => x + y)
         return Math.atan2(dy, dx)
     }
+    
     averageHeadingTowards(t, flockmates) {
         const towards = flockmates.map(f => f.towards(t))
         const dx = towards.map(t => Math.cos(t)).reduce((x, y) => x + y)
