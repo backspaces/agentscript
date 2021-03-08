@@ -14,6 +14,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("main.js")
 
   return {
+    templateFormats: ["html"],
     dir: {
       output: "./dev-build"
     }
