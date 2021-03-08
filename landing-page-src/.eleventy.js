@@ -1,8 +1,4 @@
 module.exports = function(eleventyConfig) {
-  // eleventyConfig.setTemplateFormats([
-  //   "md",
-  //   "css" // css is not yet a recognized template extension in Eleventy
-  // ]);
   eleventyConfig.addPassthroughCopy("src")
   eleventyConfig.addWatchTarget("./src/")
   eleventyConfig.addPassthroughCopy("vendor")
@@ -11,13 +7,15 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addWatchTarget("./tutorials/")
   eleventyConfig.addPassthroughCopy("editor")
   eleventyConfig.addWatchTarget("./editor/")
+  eleventyConfig.addPassthroughCopy("sass")
+  eleventyConfig.addWatchTarget("./sass/")
   eleventyConfig.addPassthroughCopy("style.css")
   eleventyConfig.addPassthroughCopy("style.css.map")
   eleventyConfig.addPassthroughCopy("main.js")
 
   return {
     dir: {
-      output: "../landing-page"
+      output: "./dev-build"
     }
   }
 }
