@@ -1,0 +1,32 @@
+@use "sass:color";
+
+$offwhite: #fffbfb;
+$accent-grey: #d8d8d8;
+$bright-orange: orange;
+
+html, body {
+  font-family: 'Lato', sans-serif;
+  margin: 0px;
+  font-size: 24px;
+}
+
+.button {
+  cursor: pointer;
+  background: skyblue;
+  display: inline-block;
+  padding: 10px 14px;
+  font-size: 18px;
+  user-select: none;
+
+  &:hover {
+    background: color.scale(skyblue, $lightness: -10%, $saturation: 10%);
+  }
+
+  &.forever {
+    background: $bright-orange;
+  }
+
+  &.running {
+    background: color.scale($bright-orange, $lightness: 50%, $saturation: -10%); 
+  }
+}

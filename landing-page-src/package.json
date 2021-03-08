@@ -6,8 +6,8 @@
   "scripts": {
     "start": "concurrently \"npm:watch\" \"npm:serve\"",
     "serve": "eleventy --serve",
-    "watch": "sass --watch style.scss style.css",
-    "build": "sass style.scss style.css && eleventy --pathprefix=landing-page"
+    "watch": "sass --watch ./:./",
+    "build": "sass ./:./ && eleventy --pathprefix=landing-page"
   },
   "author": "",
   "license": "GPL-3.0",
