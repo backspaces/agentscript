@@ -51,8 +51,7 @@ export default class LinkTravelModel extends Model {
             const node = this.nodes.oneOf()
             node.hatch(1, this.drivers, driver => {
                 driver.fromNode = node
-                // note: linkNeighbors is a vanilla Array, not an AgentArray.
-                driver.toNode = util.oneOf(node.linkNeighbors())
+                driver.toNode = node.linkNeighbors().oneOf()
                 driver.face(driver.toNode)
                 driver.speed = this.speed + util.randomFloat(this.speedDelta)
             })

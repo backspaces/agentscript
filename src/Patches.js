@@ -1,5 +1,6 @@
 import * as util from './utils.js'
-import AgentArray from './AgentArray.js'
+// import AgentArray from './AgentArray.js'
+import AgentList from './AgentList.js'
 import AgentSet from './AgentSet.js'
 import DataSet from './DataSet.js'
 
@@ -74,12 +75,13 @@ class Patches extends AgentSet {
      * Will be less than 8 on the edge of the patches
      *
      * @param {Patch} patch a Patch instance
-     * @return {AgentArray} An array of the neighboring patches
+     * @return {AgentList} An array of the neighboring patches
      */
     neighbors(patch) {
         const { id, x, y } = patch
         const offsets = this.neighborsOffsets(x, y)
-        const as = new AgentArray(offsets.length)
+        // const as = new AgentArray(offsets.length)
+        const as = new AgentList(this.model, offsets.length)
         offsets.forEach((o, i) => {
             as[i] = this[o + id]
         })
@@ -93,12 +95,13 @@ class Patches extends AgentSet {
      * Will be less than 4 on the edge of the patches
      *
      * @param {Patch} patch a Patch instance
-     * @return {AgentArray} An array of the neighboring patches
+     * @return {AgentList} An array of the neighboring patches
      */
     neighbors4(patch) {
         const { id, x, y } = patch
         const offsets = this.neighbors4Offsets(x, y)
-        const as = new AgentArray(offsets.length)
+        // const as = new AgentArray(offsets.length)
+        const as = new AgentList(this.model, offsets.length)
         offsets.forEach((o, i) => {
             as[i] = this[o + id]
         })
@@ -185,7 +188,8 @@ class Patches extends AgentSet {
             const rect = p.rectCache[index]
             if (rect) return rect
         }
-        const rect = new AgentArray()
+        // const rect = new AgentArray()
+        const rect = new AgentList(this.model)
         let { minX, maxX, minY, maxY } = this.model.world
         minX = Math.max(minX, p.x - dx)
         maxX = Math.min(maxX, p.x + dx)
@@ -238,9 +242,10 @@ class Patches extends AgentSet {
     inCone(patch, radius, coneAngle, heading, meToo = true) {
         const dxy = Math.ceil(radius)
         const pRect = this.inRect(patch, dxy, dxy, meToo)
-        // Using AgentArray's inCone, using radians
-        heading = this.model.toRads(heading)
-        coneAngle = this.model.toRadsAngle(coneAngle)
+        // // Using AgentArray's inCone, using radians
+        // heading = this.model.toRads(heading)
+        // coneAngle = this.model.toRadsAngle(coneAngle)
+        // return pRect.inCone(patch, radius, coneAngle, heading, meToo)
         return pRect.inCone(patch, radius, coneAngle, heading, meToo)
     }
 

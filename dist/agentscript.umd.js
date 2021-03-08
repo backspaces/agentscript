@@ -1466,6 +1466,17 @@ out;`;
      */
     class AgentArray extends Array {
         /**
+         * Magic to return AgentArrays rather than AgentList
+         * or other AgentArray subclasses when using AA methods
+         * [Symbol.species](https://goo.gl/Zsxwxd)
+         *
+         * @readonly
+         */
+        static get [Symbol.species]() {
+            return AgentArray
+        }
+
+        /**
          * Convert an existing Array to an AgentArray "in place".
          * Use array.slice() if a new array is wanted
          *
@@ -1893,54 +1904,6 @@ out;`;
         }
         maxNOf(n, reporter) {
             return this.minOrMaxNOf(false, n, reporter)
-        }
-
-        // Geometry methods for patches, turtles, and other AgentArrays which have x,y.
-        // Return all agents within rect, radius, cone from given agent o.
-        // If meToo, include given object, default excludes it
-        // Typically the AgentArray is a subset of larger sets, reducing
-        // the size, then uses these inRect, inRadius or inCone methods
-
-        // Return all agents within rectangle from given agent o.
-        // dx & dy are (float) half width/height of rect
-        inRect(o, dx, dy = dx, meToo = false) {
-            const agents = new AgentArray();
-            const minX = o.x - dx; // ok if max/min off-world, o, a are in-world
-            const maxX = o.x + dx;
-            const minY = o.y - dy;
-            const maxY = o.y + dy;
-            this.ask(a => {
-                if (minX <= a.x && a.x <= maxX && minY <= a.y && a.y <= maxY) {
-                    if (meToo || o !== a) agents.push(a);
-                }
-            });
-            return agents
-        }
-
-        // Return all agents in AgentArray within d distance from given object.
-        inRadius(o, radius, meToo = false) {
-            const agents = new AgentArray();
-            // const {x, y} = o // perf?
-            const d2 = radius * radius;
-            const sqDistance$1 = sqDistance; // Local function 2-3x faster, inlined?
-            this.ask(a => {
-                if (sqDistance$1(o.x, o.y, a.x, a.y) <= d2) {
-                    if (meToo || o !== a) agents.push(a);
-                }
-            });
-            return agents
-        }
-
-        // As above, but also limited to the angle `coneAngle` around
-        // a `angle` from object `o`. coneAngle and direction in radians.
-        inCone(o, radius, coneAngle, direction, meToo = false) {
-            const agents = new AgentArray();
-            this.ask(a => {
-                if (inCone(a.x, a.y, radius, coneAngle, direction, o.x, o.y)) {
-                    if (meToo || o !== a) agents.push(a);
-                }
-            });
-            return agents
         }
     }
 
@@ -3286,6 +3249,75 @@ out;`;
     // /** @type {number} */ bx
     // /** @type {number} */ by
 
+    class AgentList extends AgentArray {
+        // /**
+        //  * Magic to return AgentArrays rather than AgentList
+        //  * [Symbol.species](https://goo.gl/Zsxwxd)
+        //  *
+        //  * @readonly
+        //  */
+        // static get [Symbol.species]() {
+        //     return AgentArray
+        // }
+
+        constructor(model, ...args) {
+            if (!model) throw Error('AgentList requires model')
+            super(...args);
+            this.model = model;
+        }
+
+        // Geometry methods for patches, turtles, and other AgentArrays which have x,y.
+        // Return all agents within rect, radius, cone from given agent o.
+        // If meToo, include given object, default excludes it
+        // Typically the AgentArray is a subset of larger sets, reducing
+        // the size, then uses these inRect, inRadius or inCone methods
+
+        // Return all agents within rectangle from given agent o.
+        // dx & dy are (float) half width/height of rect
+        inRect(o, dx, dy = dx, meToo = false) {
+            const agents = new AgentList(this.model);
+            const minX = o.x - dx; // ok if max/min off-world, o, a are in-world
+            const maxX = o.x + dx;
+            const minY = o.y - dy;
+            const maxY = o.y + dy;
+            this.ask(a => {
+                if (minX <= a.x && a.x <= maxX && minY <= a.y && a.y <= maxY) {
+                    if (meToo || o !== a) agents.push(a);
+                }
+            });
+            return agents
+        }
+
+        // Return all agents in AgentArray within d distance from given object.
+        inRadius(o, radius, meToo = false) {
+            const agents = new AgentList(this.model);
+            // const {x, y} = o // perf?
+            const d2 = radius * radius;
+            const sqDistance$1 = sqDistance; // Local function 2-3x faster, inlined?
+            this.ask(a => {
+                if (sqDistance$1(o.x, o.y, a.x, a.y) <= d2) {
+                    if (meToo || o !== a) agents.push(a);
+                }
+            });
+            return agents
+        }
+
+        // As above, but also limited to the angle `coneAngle` around
+        // a `angle` from object `o`. coneAngle and direction in radians.
+        inCone(o, radius, coneAngle, heading, meToo = false) {
+            heading = this.model.toRads(heading);
+            coneAngle = this.model.toRadsAngle(coneAngle);
+
+            const agents = new AgentList(this.model);
+            this.ask(a => {
+                if (inCone(a.x, a.y, radius, coneAngle, heading, o.x, o.y)) {
+                    if (meToo || o !== a) agents.push(a);
+                }
+            });
+            return agents
+        }
+    }
+
     /**
      * Patches are the world other AgentSets live on.
      * They define a coord system from the Model's World values:
@@ -3357,12 +3389,13 @@ out;`;
          * Will be less than 8 on the edge of the patches
          *
          * @param {Patch} patch a Patch instance
-         * @return {AgentArray} An array of the neighboring patches
+         * @return {AgentList} An array of the neighboring patches
          */
         neighbors(patch) {
             const { id, x, y } = patch;
             const offsets = this.neighborsOffsets(x, y);
-            const as = new AgentArray(offsets.length);
+            // const as = new AgentArray(offsets.length)
+            const as = new AgentList(this.model, offsets.length);
             offsets.forEach((o, i) => {
                 as[i] = this[o + id];
             });
@@ -3376,12 +3409,13 @@ out;`;
          * Will be less than 4 on the edge of the patches
          *
          * @param {Patch} patch a Patch instance
-         * @return {AgentArray} An array of the neighboring patches
+         * @return {AgentList} An array of the neighboring patches
          */
         neighbors4(patch) {
             const { id, x, y } = patch;
             const offsets = this.neighbors4Offsets(x, y);
-            const as = new AgentArray(offsets.length);
+            // const as = new AgentArray(offsets.length)
+            const as = new AgentList(this.model, offsets.length);
             offsets.forEach((o, i) => {
                 as[i] = this[o + id];
             });
@@ -3468,7 +3502,8 @@ out;`;
                 const rect = p.rectCache[index];
                 if (rect) return rect
             }
-            const rect = new AgentArray();
+            // const rect = new AgentArray()
+            const rect = new AgentList(this.model);
             let { minX, maxX, minY, maxY } = this.model.world;
             minX = Math.max(minX, p.x - dx);
             maxX = Math.min(maxX, p.x + dx);
@@ -3521,9 +3556,10 @@ out;`;
         inCone(patch, radius, coneAngle, heading, meToo = true) {
             const dxy = Math.ceil(radius);
             const pRect = this.inRect(patch, dxy, dxy, meToo);
-            // Using AgentArray's inCone, using radians
-            heading = this.model.toRads(heading);
-            coneAngle = this.model.toRadsAngle(coneAngle);
+            // // Using AgentArray's inCone, using radians
+            // heading = this.model.toRads(heading)
+            // coneAngle = this.model.toRadsAngle(coneAngle)
+            // return pRect.inCone(patch, radius, coneAngle, heading, meToo)
             return pRect.inCone(patch, radius, coneAngle, heading, meToo)
         }
 
@@ -3670,7 +3706,8 @@ out;`;
         turtlesHere() {
             if (this.turtles == null) {
                 this.patches.ask(p => {
-                    p.turtles = new AgentArray(); // []
+                    // p.turtles = new AgentArray()
+                    p.turtles = new AgentList(this.model);
                 });
                 this.model.turtles.ask(t => {
                     t.patch.turtles.push(t);
@@ -3780,10 +3817,11 @@ out;`;
          * Return an array of this breed within the array of patchs
          *
          * @param {Patch[]} patches Array of patches
-         * @return {AgentArray}
+         * @return {AgentList}
          */
         inPatches(patches) {
-            let array = new AgentArray(); // []
+            // let array = new AgentArray()
+            let array = new AgentList(this.model);
             for (const p of patches) array.push(...p.turtlesHere());
             // REMIND: can't use withBreed .. its not an AgentSet. Move to AgentArray?
             if (this.isBreedSet()) array = array.filter(a => a.agentSet === this);
@@ -3929,7 +3967,7 @@ out;`;
         get links() {
             // lazy promote links from getter to instance prop.
             Object.defineProperty(this, 'links', {
-                value: new AgentArray(0),
+                value: new AgentList(this.model),
                 enumerable: true,
             });
             return this.links

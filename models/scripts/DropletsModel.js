@@ -46,7 +46,7 @@ class DropletsModel extends Model {
             this.turtles.setDefault('atEdge', turtle => turtle.die())
         }
 
-        this.localMins = [] // new AgentArray()
+        this.localMins = []
         this.patches.ask(p => {
             if (p.neighbors.minOneOf('elevation').elevation > p.elevation) {
                 this.localMins.push(p)

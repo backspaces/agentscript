@@ -89,8 +89,8 @@ class AntsModel extends Model {
             t.rotate(180)
         } else {
             // Note: neighbors is an AgentArray who's inCone uses radians.
-            const nAhead = p.neighbors.inCone(p, 2, Math.PI, t.theta)
-            // const nAhead = p.neighbors.inCone(p, 2, 90, t.heading)
+            // const nAhead = p.neighbors.inCone(p, 2, Math.PI, t.theta)
+            const nAhead = p.neighbors.inCone(p, 2, 90, t.heading)
             const pheromone = t.carryingFood ? 'nestPheromone' : 'foodPheromone'
             const [n, max] = nAhead.maxValOf(pheromone)
             if (max > 0.001 / this.maxPheromone) t.face(n)

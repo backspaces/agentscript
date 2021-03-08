@@ -1,5 +1,6 @@
 import * as util from './utils.js'
-import AgentArray from './AgentArray.js'
+// import AgentArray from './AgentArray.js'
+import AgentList from './AgentList.js'
 import AgentSet from './AgentSet.js'
 
 // Turtles are the world other agentsets live on. They create a coord system
@@ -46,10 +47,11 @@ class Turtles extends AgentSet {
      * Return an array of this breed within the array of patchs
      *
      * @param {Patch[]} patches Array of patches
-     * @return {AgentArray}
+     * @return {AgentList}
      */
     inPatches(patches) {
-        let array = new AgentArray() // []
+        // let array = new AgentArray()
+        let array = new AgentList(this.model)
         for (const p of patches) array.push(...p.turtlesHere())
         // REMIND: can't use withBreed .. its not an AgentSet. Move to AgentArray?
         if (this.isBreedSet()) array = array.filter(a => a.agentSet === this)
