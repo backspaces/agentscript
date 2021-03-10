@@ -91,7 +91,7 @@ let renderError = ({ stepError, setupError }) => {
   }
 }
 
-let editor = new EditorView({
+let editor = window.editor = new EditorView({
   state: EditorState.create({
     doc: '',
     extensions: editorExtensions
@@ -104,6 +104,14 @@ let view
 
 async function initEditor() {
   let code = await fetch('./flock-example-for-editor.js').then(res => res.text())
+
+  let urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.get('code')) {
+    code = decodeURIComponent(atob(urlParams.get('code')))
+  }
+
+  console.log(code)
+
   editor.setState(EditorState.create({ doc: code, extensions: editorExtensions }))
 
   await rebuildModel()
@@ -127,6 +135,8 @@ async function initEditor() {
 
 async function rebuildModel() {
   let code = editor.state.doc
+
+  window.history.replaceState(null, null, `?code=${btoa(encodeURIComponent(editor.state.doc))}`)
   
   const dataUri = 'data:text/javascript;charset=utf-8,'
     + encodeURIComponent(code)
@@ -151,9 +161,13 @@ async function rebuildModel() {
   model.setup()
 }
 
+let prevModelOpts
+let prevViewOpts
 async function reloadModel() {
   try {
     let code = editor.state.doc
+
+    window.history.replaceState(null, null, `?code=${btoa(encodeURIComponent(editor.state.doc))}`)
   
     const dataUri = 'data:text/javascript;charset=utf-8,'
       + encodeURIComponent(code)
@@ -170,7 +184,8 @@ async function reloadModel() {
       window.model[key] = Model.prototype[key].bind(window.model)
     }
 
-    if (Model.prototype['setup'].toString() !== Object.getPrototypeOf(model).setup.toString()) {
+    if (Model.prototype['setup'].toString() !== Object.getPrototypeOf(model).setup.toString() ||
+        JSON.stringify(modelOpts)) {
       console.log('setup changed')
       model = window.model = new Model(modelOpts)
 
