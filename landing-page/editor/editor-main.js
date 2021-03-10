@@ -46,6 +46,8 @@ import {EditorState, basicSetup} from "../_snowpack/pkg/@codemirror/basic-setup.
 import {EditorView, keymap} from "../_snowpack/pkg/@codemirror/view.js"
 import {defaultTabBinding} from "../_snowpack/pkg/@codemirror/commands.js"
 import {javascript} from "../_snowpack/pkg/@codemirror/lang-javascript.js"
+import _ from "../vendor/underscore-esm-min.js"
+import html from '../vendor/nanohtml.es6.js';
 
 let editorExtensions = [
   basicSetup,
@@ -53,9 +55,42 @@ let editorExtensions = [
   javascript(),
   // This is how you register an event listener lol???
   EditorView.updateListener.of(update => {
-    console.log('hey im updating')
+    if (update.docChanged) {
+      onDocChange()
+    }
   })
 ]
+
+let onDocChange = _.debounce(() => {
+  reloadModel()
+}, 300)
+
+let lastStepError
+let lastSetupError
+let renderError = ({ stepError, setupError }) => {
+  let stepErrorContainer = document.querySelector('.step-error-container')
+  if (typeof stepError !== 'undefined') {
+    if (stepError === null) {
+      stepErrorContainer.innerHTML = ''
+    } else if (!lastStepError || lastStepError.message !== stepError.message) {
+      stepErrorContainer.innerHTML = ''
+      stepErrorContainer.appendChild(html`<div>${stepError.toString()}</div>`)
+      lastStepError = stepError
+    }
+  }
+
+  let setupErrorContainer = document.querySelector('.setup-error-container')
+  if (typeof setupError !== 'undefined') {
+    if (setupError === null) {
+      setupErrorContainer.innerHTML = ''
+    } else if (!lastSetupError || lastSetupError.message !== setupError.message) {
+      setupErrorContainer.innerHTML = ''
+      setupErrorContainer.appendChild(html`<div>${setupError.toString()}</div>`)
+      lastSetupError = setupError
+    }
+  }
+}
+
 let editor = new EditorView({
   state: EditorState.create({
     doc: '',
@@ -74,8 +109,14 @@ async function initEditor() {
   await rebuildModel()
 
   function step() {
-    model.step()
-    view.draw()
+    try {
+      model.step()
+      view.draw()
+      renderError({ stepError: null })
+    } catch (e) {
+      console.error(e)
+      renderError({ stepError: e })
+    }
 
     setTimeout(() => step(), 20)
   }
@@ -98,6 +139,8 @@ async function rebuildModel() {
     drawOpts
   } = await import(dataUri)
 
+  window.Model = Model
+
   model = window.model = new Model(modelOpts)
 
   viewOpts.div = 'ide-canvas-container'
@@ -106,6 +149,44 @@ async function rebuildModel() {
   view = new View(model, viewOpts, drawOpts)
 
   model.setup()
+}
+
+async function reloadModel() {
+  try {
+    let code = editor.state.doc
+  
+    const dataUri = 'data:text/javascript;charset=utf-8,'
+      + encodeURIComponent(code)
+    
+    let {
+      Model,
+      modelOpts,
+      View,
+      viewOpts,
+      drawOpts
+    } = await import(dataUri)
+
+    for (let key of Object.getOwnPropertyNames(Model.prototype)) {
+      window.model[key] = Model.prototype[key].bind(window.model)
+    }
+
+    if (Model.prototype['setup'].toString() !== Object.getPrototypeOf(model).setup.toString()) {
+      console.log('setup changed')
+      model = window.model = new Model(modelOpts)
+
+      viewOpts.div = 'ide-canvas-container'
+      document.querySelector(`#${viewOpts.div}`).innerHTML = ''
+      
+      view = new View(model, viewOpts, drawOpts)
+
+      model.setup()
+    }
+
+    renderError({ setupError: null })
+  } catch (e) {
+    console.error(e)
+    renderError({ setupError: e })
+  }
 }
 
 initEditor()
