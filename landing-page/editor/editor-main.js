@@ -50,7 +50,11 @@ import {javascript} from "../_snowpack/pkg/@codemirror/lang-javascript.js"
 let editorExtensions = [
   basicSetup,
   keymap.of([defaultTabBinding]),
-  javascript()
+  javascript(),
+  // This is how you register an event listener lol???
+  EditorView.updateListener.of(update => {
+    console.log('hey im updating')
+  })
 ]
 let editor = new EditorView({
   state: EditorState.create({
