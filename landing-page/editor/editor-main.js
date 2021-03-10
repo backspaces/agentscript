@@ -42,10 +42,10 @@
 //   drawOpts
 // } from './flock-example-for-editor.js'
 
-import {EditorState, basicSetup} from "../_snowpack/pkg/@codemirror/basic-setup.js"
-import {EditorView, keymap} from "../_snowpack/pkg/@codemirror/view.js"
-import {defaultTabBinding} from "../_snowpack/pkg/@codemirror/commands.js"
-import {javascript} from "../_snowpack/pkg/@codemirror/lang-javascript.js"
+import {EditorState, basicSetup} from "../snowpack/pkg/@codemirror/basic-setup.js"
+import {EditorView, keymap} from "../snowpack/pkg/@codemirror/view.js"
+import {defaultTabBinding} from "../snowpack/pkg/@codemirror/commands.js"
+import {javascript} from "../snowpack/pkg/@codemirror/lang-javascript.js"
 import _ from "../vendor/underscore-esm-min.js"
 import html from '../vendor/nanohtml.es6.js';
 

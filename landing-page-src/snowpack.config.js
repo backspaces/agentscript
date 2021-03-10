@@ -3,6 +3,7 @@ module.exports = {
     "./dev-build/": "/"
   },
   "buildOptions": {
-    "out": "../landing-page/"
+    "out": "../landing-page/",
+    "metaUrlPath": "snowpack"
   }
 }
