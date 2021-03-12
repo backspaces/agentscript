@@ -1,16 +1,32 @@
 <html>
     <head>
-        <title>nav</title>
+        <title>navRad</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
         <script type="module">
             import * as util from '../src/utils.js'
             import ThreeDraw from '../src/ThreeDraw.js'
-            import Model from '../models/Hello3DModel.js'
-            import * as utils3 from './threeUtils.js'
+            // import Model from '../models/Hello3DModel.js'
+            import Model3Drad from '../src/Model3Drad.js'
+            import * as utils3 from '../views3d/threeUtils.js'
             // import dat from '../vendor/dat.gui.esm.min.js'
             import dat from 'https://cdn.skypack.dev/dat.gui'
+
+            class Model extends Model3Drad {
+                population = 1
+                setup() {
+                    this.setGeometry('radians')
+                    this.turtles.create(this.population, t => {
+                        t.setxyz(...this.world.random3DPoint())
+                    })
+                }
+                step() {}
+            }
+
+            const degToRad = util.degToRad
+            // const radToDegAll = util.radToDegAll
+            const radToDegAll = array => array.map(rad => util.radToDeg(rad))
 
             const drawOptions = {
                 turtlesShape: 'Dart',
@@ -20,7 +36,7 @@
 
             async function run() {
                 const model = new Model()
-                model.population = 1
+                // model.population = 1
                 await model.startup()
                 model.setup()
                 const turtle = model.turtles[0]
@@ -57,6 +73,7 @@
                 const gui = new dat.GUI()
                 const reset = () => {
                     turtle.reset()
+                    turtle.left(degToRad(90))
                 }
                 const target = utils3.addMesh(view.scene, 'Sphere')
                 target.position.set(10, -10, 10)
@@ -75,14 +92,14 @@
                     backward: () => turtle.forward(-controls.speed),
                     lookAt: () => turtle.face(target.position),
 
-                    right: () => turtle.right(controls.angle),
-                    left: () => turtle.left(controls.angle),
+                    right: () => turtle.right(degToRad(controls.angle)),
+                    left: () => turtle.left(degToRad(controls.angle)),
 
-                    tiltUp: () => turtle.tiltUp(controls.angle),
-                    tiltDown: () => turtle.tiltDown(controls.angle),
+                    tiltUp: () => turtle.tiltUp(degToRad(controls.angle)),
+                    tiltDown: () => turtle.tiltDown(degToRad(controls.angle)),
 
-                    rollRight: () => turtle.rollRight(controls.angle),
-                    rollLeft: () => turtle.rollLeft(controls.angle),
+                    rollRight: () => turtle.rollRight(degToRad(controls.angle)),
+                    rollLeft: () => turtle.rollLeft(degToRad(controls.angle)),
                 }
                 util.toWindow({ target, gui, controls })
 
@@ -122,8 +139,11 @@
                     controls.HeadingPitchRoll = fmt(
                         turtle.getHeadingPitchRoll()
                     )
-                    controls.ThetaPhiPsi = fmt(turtle.getThetaPhiPsi())
+                    controls.ThetaPhiPsi = fmt(
+                        radToDegAll(turtle.getThetaPhiPsi())
+                    )
                     controls.Position = fmt(turtle.getxyz())
+                    // controls.DxDyDz = fmt(radToDegAll(turtle.getDxDyDz()))
                     controls.DxDyDz = fmt(turtle.getDxDyDz())
                 }
                 return step

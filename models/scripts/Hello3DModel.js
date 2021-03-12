@@ -4,7 +4,7 @@ var Model3D = AS.Model3D
 class Hello3DModel extends Model3D {
     population = 100
     speed = 0.1 // patches per step
-    wiggleAngle = util.degToRad(10)
+    wiggleAngle = 10 //util.degToRad(10)
     linksToo = true // handy to show just turtles if false
 
     // static defaultOptions() {

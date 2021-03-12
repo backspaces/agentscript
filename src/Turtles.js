@@ -22,7 +22,8 @@ class Turtles extends AgentSet {
         const turtle = this.addAgent()
         // NetLogo docs: Creates number new turtles at the origin.
         // New turtles have random integer headings
-        turtle.theta = util.randomFloat(Math.PI * 2)
+        // turtle.theta = util.randomFloat(Math.PI * 2)
+        turtle.heading = this.model.fromRads(util.randomFloat(Math.PI * 2))
         initFcn(turtle)
         return turtle
     }
@@ -91,9 +92,10 @@ class Turtles extends AgentSet {
         const agents = this.inPatchRect(turtle, radius, radius, true)
         // const direction = this.model.toRads(turtle.direction)
         // coneAngle = this.model.toRads(direction)
-        coneAngle = this.model.toRadsAngle(coneAngle)
+        // coneAngle = this.model.toAngleRads(coneAngle)
         // Calls AgentArray's radian based method
-        return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
+        // return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
+        return agents.inCone(turtle, radius, coneAngle, turtle.heading, meToo)
     }
 
     // Circle Layout: position the turtles in this breed in an equally

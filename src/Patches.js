@@ -244,7 +244,7 @@ class Patches extends AgentSet {
         const pRect = this.inRect(patch, dxy, dxy, meToo)
         // // Using AgentArray's inCone, using radians
         // heading = this.model.toRads(heading)
-        // coneAngle = this.model.toRadsAngle(coneAngle)
+        // coneAngle = this.model.toAngleRads(coneAngle)
         // return pRect.inCone(patch, radius, coneAngle, heading, meToo)
         return pRect.inCone(patch, radius, coneAngle, heading, meToo)
     }

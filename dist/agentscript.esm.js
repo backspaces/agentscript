@@ -3300,7 +3300,7 @@ class AgentList extends AgentArray {
     // a `angle` from object `o`. coneAngle and direction in radians.
     inCone(o, radius, coneAngle, heading, meToo = false) {
         heading = this.model.toRads(heading);
-        coneAngle = this.model.toRadsAngle(coneAngle);
+        coneAngle = this.model.toAngleRads(coneAngle);
 
         const agents = new AgentList(this.model);
         this.ask(a => {
@@ -3552,7 +3552,7 @@ class Patches extends AgentSet {
         const pRect = this.inRect(patch, dxy, dxy, meToo);
         // // Using AgentArray's inCone, using radians
         // heading = this.model.toRads(heading)
-        // coneAngle = this.model.toRadsAngle(coneAngle)
+        // coneAngle = this.model.toAngleRads(coneAngle)
         // return pRect.inCone(patch, radius, coneAngle, heading, meToo)
         return pRect.inCone(patch, radius, coneAngle, heading, meToo)
     }
@@ -3786,7 +3786,8 @@ class Turtles extends AgentSet {
         const turtle = this.addAgent();
         // NetLogo docs: Creates number new turtles at the origin.
         // New turtles have random integer headings
-        turtle.theta = randomFloat(Math.PI * 2);
+        // turtle.theta = util.randomFloat(Math.PI * 2)
+        turtle.heading = this.model.fromRads(randomFloat(Math.PI * 2));
         initFcn(turtle);
         return turtle
     }
@@ -3855,9 +3856,10 @@ class Turtles extends AgentSet {
         const agents = this.inPatchRect(turtle, radius, radius, true);
         // const direction = this.model.toRads(turtle.direction)
         // coneAngle = this.model.toRads(direction)
-        coneAngle = this.model.toRadsAngle(coneAngle);
+        // coneAngle = this.model.toAngleRads(coneAngle)
         // Calls AgentArray's radian based method
-        return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
+        // return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
+        return agents.inCone(turtle, radius, coneAngle, turtle.heading, meToo)
     }
 
     // Circle Layout: position the turtles in this breed in an equally
@@ -4367,7 +4369,7 @@ const geometries = {
     radians: {
         toRads: rads => rads,
         fromRads: rads => rads,
-        toRadsAngle: rads => rads,
+        toAngleRads: rads => rads,
         toCCW: angle => angle,
         // toDeltaRads: rads => rads,
         // fromDeltaRads: rads => rads,
@@ -4375,7 +4377,7 @@ const geometries = {
     degrees: {
         toRads: deg => deg * toRad,
         fromRads: rads => rads * toDeg,
-        toRadsAngle: deg => deg * toRad,
+        toAngleRads: deg => deg * toRad,
         toCCW: angle => angle,
         // toDeltaRads: deg => deg * toRad,
         // fromDeltaRads: rads => rads * toDeg,
@@ -4383,7 +4385,7 @@ const geometries = {
     heading: {
         toRads: deg => (90 - deg) * toRad,
         fromRads: rads => 90 - rads * toDeg,
-        toRadsAngle: deg => deg * toRad,
+        toAngleRads: deg => deg * toRad,
         toCCW: angle => -angle,
         // toDeltaRads: deg => -deg * toRad,
         // fromDeltaRads: rads => -rads * toDeg,

@@ -58,7 +58,7 @@ export default class AgentList extends AgentArray {
     // a `angle` from object `o`. coneAngle and direction in radians.
     inCone(o, radius, coneAngle, heading, meToo = false) {
         heading = this.model.toRads(heading)
-        coneAngle = this.model.toRadsAngle(coneAngle)
+        coneAngle = this.model.toAngleRads(coneAngle)
 
         const agents = new AgentList(this.model)
         this.ask(a => {
