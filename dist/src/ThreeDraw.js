@@ -45,6 +45,10 @@ export default class ThreeDraw extends ThreeView {
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
         // merge defaultOptions into drawOptions
+        if (viewOptions.drawOptions) {
+            drawOptions = viewOptions.drawOptions
+            delete viewOptions.drawOptions
+        }
         drawOptions = Object.assign(ThreeDraw.defaultOptions(), drawOptions)
 
         // Instantiate maps if only names given.
