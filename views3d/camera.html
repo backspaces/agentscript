@@ -9,7 +9,6 @@
             import Color from '../src/Color.js'
             import ThreeDraw from '../src/ThreeDraw.js'
             import Model from './Camera3DModel.js'
-            // import dat from '../vendor/dat.gui.esm.min.js'
             import dat from 'https://cdn.skypack.dev/dat.gui'
 
             const isPixel = t => t.breed.name === 'pixels'
@@ -32,14 +31,11 @@
                 await model.startup()
                 model.setup()
 
-                const view = new ThreeDraw(
-                    model,
-                    {
-                        div: document.body,
-                        // turtles: { meshClass: 'Obj3DMesh' },
-                    },
-                    drawOptions
-                )
+                const view = new ThreeDraw(model, {
+                    div: document.body,
+                    // turtles: { meshClass: 'Obj3DMesh' },
+                    drawOptions,
+                })
 
                 util.toWindow({ util, model, view })
 
@@ -70,7 +66,7 @@
                         })
                 }
 
-                guiAddVal(model, 'pan', -180, 180, 5)
+                guiAddVal(model, 'heading', -180, 180, 5)
                 guiAddVal(model, 'tilt', -180, 180, 5)
                 guiAddVal(model, 'roll', -180, 180, 5)
                 guiAddVal(model, 'sphereRadius', 0, 16, 1)

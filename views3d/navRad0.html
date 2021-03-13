@@ -7,34 +7,46 @@
         <script type="module">
             import * as util from '../src/utils.js'
             import ThreeDraw from '../src/ThreeDraw.js'
-            import Model from '../models/Hello3DModel.js'
+            import Model3Drad from '../src/Model3Drad.js'
+            import * as utils3 from '../views3d/threeUtils.js'
             import dat from 'https://cdn.skypack.dev/dat.gui'
 
+            class Model extends Model3Drad {
+                population = 1
+                setup() {
+                    this.setGeometry('radians')
+                    this.turtles.create(this.population, t => {
+                        t.setxyz(...this.world.random3DPoint())
+                    })
+                }
+                step() {}
+            }
+
             const degToRad = util.degToRad
+            // const radToDegAll = util.radToDegAll
             const radToDegAll = array => array.map(rad => util.radToDeg(rad))
 
             const drawOptions = {
-                turtlesShape: t => (t.id === 0 ? 'Dart' : 'Sphere'),
+                turtlesShape: 'Dart',
                 turtlesColor: 'red',
-                turtlesSize: t => (t.id === 0 ? 5 : 3),
+                turtlesSize: 5,
             }
 
             async function run() {
                 const model = new Model()
-                model.population = 2
-                model.linksToo = false
-                model.setGeometry('radians')
+                // model.population = 1
                 await model.startup()
                 model.setup()
                 const turtle = model.turtles[0]
-                const target = model.turtles[1]
-                target.setxyz(10, -10, 10)
 
-                const view = new ThreeDraw(model, {
-                    div: document.body, //'modelDiv',
-                    turtles: { meshClass: 'Obj3DMesh' },
-                    drawOptions,
-                })
+                const view = new ThreeDraw(
+                    model,
+                    {
+                        div: document.body, //'modelDiv',
+                        turtles: { meshClass: 'Obj3DMesh', useAxes: true },
+                    },
+                    drawOptions
+                )
 
                 util.toWindow({ util, model, view })
 
@@ -42,7 +54,7 @@
                 view.perspectiveCam.position.set(0, 0, 1.5 * model.world.width)
                 view.helpers.controls.update()
 
-                const step = runGui(turtle, target)
+                const step = runGui(turtle)
 
                 await util.timeoutLoop(
                     () => {
@@ -55,11 +67,14 @@
             }
             run()
 
-            function runGui(turtle, target) {
+            function runGui(turtle) {
                 const gui = new dat.GUI()
                 const reset = () => {
                     turtle.reset()
+                    // turtle.left(degToRad(90))
                 }
+                const target = utils3.addMesh(view.scene, 'Sphere')
+                target.position.set(10, -10, 10)
 
                 reset()
                 const controls = {
@@ -73,7 +88,7 @@
                     reset: () => reset(),
                     forward: () => turtle.forward(controls.speed),
                     backward: () => turtle.forward(-controls.speed),
-                    lookAt: () => turtle.face(target),
+                    lookAt: () => turtle.face(target.position),
 
                     right: () => turtle.right(degToRad(controls.angle)),
                     left: () => turtle.left(degToRad(controls.angle)),
@@ -125,8 +140,8 @@
                     controls.ThetaPhiPsi = fmt(
                         radToDegAll(turtle.getThetaPhiPsi())
                     )
-                    // controls.ThetaPhiPsi = fmt(turtle.getThetaPhiPsi())
                     controls.Position = fmt(turtle.getxyz())
+                    // controls.DxDyDz = fmt(radToDegAll(turtle.getDxDyDz()))
                     controls.DxDyDz = fmt(turtle.getDxDyDz())
                 }
                 return step

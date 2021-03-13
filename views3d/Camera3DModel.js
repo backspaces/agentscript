@@ -1,28 +1,22 @@
 import * as util from '../src/utils.js'
 import Model3D from '../src/Model3D.js'
 
-const toRad = Math.PI / 180
-
 export default class Camera3DModel extends Model3D {
-    static defaultOptions() {
-        return {
-            width: 32,
-            height: 24,
-            sphereRadius: 8,
-            pan: 0,
-            tilt: 0,
-            roll: 0,
-            fieldOfView: 90,
-        }
-    }
+    width = 32
+    height = 24
+    heading = 0
+    tilt = 0
+    roll = 0
+    sphereRadius = 8
+    fieldOfView = 90
 
     // ======================
 
-    constructor(worldDptions) {
-        super(worldDptions) // default world options if "undefined"
-        Object.assign(this, Camera3DModel.defaultOptions())
-    }
+    // constructor(worldDptions) { // not needed
+    //     super(worldDptions) // default world options if "undefined"
+    // }
     setup() {
+        this.setGeometry('degrees')
         this.turtleBreeds('cameras pixels')
 
         this.camera = this.cameras.createOne()
@@ -47,7 +41,9 @@ export default class Camera3DModel extends Model3D {
         }
     }
     reset() {
-        Object.assign(this, Camera3DModel.defaultOptions())
+        this.heading = this.tilt = this.roll = 0
+        this.sphereRadius = 8
+        this.fieldOfView = 90
         this.moveCamera()
     }
 
@@ -58,19 +54,19 @@ export default class Camera3DModel extends Model3D {
     moveCamera() {
         const aspectRatio = this.width / this.height
 
-        this.camera.theta = this.pan * toRad
-        this.camera.pitch = this.tilt * toRad
-        this.camera.roll = this.roll * toRad
+        this.camera.heading = this.heading
+        this.camera.pitch = this.tilt
+        this.camera.roll = this.roll
 
         this.pixels.ask(p => {
             p.moveTo(this.camera)
 
-            p.roll = this.camera.roll
-            p.theta = this.camera.theta
+            p.heading = this.camera.heading
             p.pitch = this.camera.pitch
+            p.roll = this.camera.roll
 
-            p.right((p.u * this.fieldOfView * toRad) / 2)
-            p.tiltUp((p.v * this.fieldOfView * toRad) / 2 / aspectRatio)
+            p.right((p.u * this.fieldOfView) / 2)
+            p.tiltUp((p.v * this.fieldOfView) / 2 / aspectRatio)
 
             p.forward(this.sphereRadius)
         })

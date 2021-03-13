@@ -20,6 +20,7 @@
                 const model = new Model()
                 model.population = 2
                 model.linksToo = false
+                // model.setGeometry('degrees') // works fine, euclidean
                 await model.startup()
                 model.setup()
                 const turtle = model.turtles[0]
@@ -69,7 +70,6 @@
                     reset: () => reset(),
                     forward: () => turtle.forward(controls.speed),
                     backward: () => turtle.forward(-controls.speed),
-                    // lookAt: () => turtle.face(target.position),
                     lookAt: () => turtle.face(target),
 
                     right: () => turtle.right(controls.angle),

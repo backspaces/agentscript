@@ -16,11 +16,8 @@
             import * as util from '../src/utils.js'
             import Color from '../src/Color.js'
             import ThreeDraw from '../src/ThreeDraw.js'
-            // import PlotXY from './PlotXY.js'
-            // import Chart from '../vendor/chart.esm.js'
             import Chart from 'https://cdn.skypack.dev/chart.js'
             import Model from './Camera3DModel.js'
-            // import dat from '../vendor/dat.gui.esm.min.js'
             import dat from 'https://cdn.skypack.dev/dat.gui'
 
             const toDeg = 180 / Math.PI
@@ -45,13 +42,10 @@
                 await model.startup()
                 model.setup()
 
-                const view = new ThreeDraw(
-                    model,
-                    {
-                        div: 'modelDiv',
-                    },
-                    drawOptions
-                )
+                const view = new ThreeDraw(model, {
+                    div: 'modelDiv',
+                    drawOptions,
+                })
 
                 util.toWindow({ util, model, view })
 
@@ -85,7 +79,7 @@
                         })
                 }
 
-                guiAddVal(model, 'pan', -180, 180, 5)
+                guiAddVal(model, 'heading', -180, 180, 5)
                 guiAddVal(model, 'tilt', -180, 180, 5)
                 guiAddVal(model, 'roll', -180, 180, 5)
                 guiAddVal(model, 'sphereRadius', 0, 16, 1)
