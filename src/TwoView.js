@@ -9,6 +9,7 @@ export default class TwoView {
             div: document.body,
             useSprites: false,
             patchSize: 10,
+            // width: null,
         }
     }
 
@@ -16,6 +17,10 @@ export default class TwoView {
 
     // Note: world can be a model, who'd model.world will be used
     constructor(world, options = {}) {
+        if (options.width) {
+            options.patchSize = options.width / world.width
+            delete options.width
+        }
         // options: override defaults, assign to this
         Object.assign(this, TwoView.defaultOptions(), options)
 
@@ -46,7 +51,17 @@ export default class TwoView {
     get canvas() {
         return this.ctx.canvas
     }
+    setPatchSize(patchSize) {
+        this.reset(patchSize)
+    }
+    setWidth(width) {
+        this.reset(width / this.world.width)
+    }
     reset(patchSize, useSprites = this.useSprites) {
+        // if (this.width) this.width = patchSizeOrWidth
+        // this.patchSize = this.width
+        //     ? this.width / this.world.width
+        //     : patchSizeOrWidth
         this.patchSize = patchSize
         this.useSprites = useSprites
         this.turtlesView.reset(patchSize, useSprites)

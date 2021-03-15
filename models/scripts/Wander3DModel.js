@@ -6,7 +6,7 @@ class Wander3DModel extends Model3D {
         return {
             population: 25,
             speed: 0.1, // patches per step
-            wiggleAngle: util.degToRad(30),
+            wiggleAngle: 30, // degrees
             rotateEvery: 15,
         }
     }

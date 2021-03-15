@@ -41,14 +41,12 @@
                 await model.startup()
                 model.setup()
 
-                const view = new TwoDraw(
-                    model,
-                    {
-                        div: 'modelDiv',
-                        useSprites: true, // ant shape difficult to draw
-                    },
-                    drawOptions
-                )
+                const view = new TwoDraw(model, {
+                    div: 'modelDiv',
+                    useSprites: true, // ant shape difficult to draw
+                    width: 700,
+                    drawOptions,
+                })
 
                 util.toWindow({ util, model, view })
 

@@ -4,23 +4,13 @@ var Model3D = AS.Model3D
 class Hello3DModel extends Model3D {
     population = 100
     speed = 0.1 // patches per step
-    wiggleAngle = 10 //util.degToRad(10)
+    wiggleAngle = 10 // degrees
     linksToo = true // handy to show just turtles if false
-
-    // static defaultOptions() {
-    //     return {
-    //         population: 100,
-    //         speed: 0.1, // patches per step
-    //         wiggleAngle: util.degToRad(10),
-    //         linksToo: true, // handy to show just turtles if false
-    //     }
-    // }
 
     // ======================
 
     constructor(worldDptions) {
         super(worldDptions) // default world options if "undefined"
-        // Object.assign(this, Hello3DModel.defaultOptions())
     }
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')

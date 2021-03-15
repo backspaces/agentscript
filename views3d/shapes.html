@@ -22,14 +22,11 @@
                 await model.startup()
                 model.setup()
 
-                const view = new ThreeDraw(
-                    model,
-                    {
-                        div: 'modelDiv',
-                        turtles: { meshClass: 'Obj3DMesh', useAxes: true },
-                    },
-                    drawOptions
-                )
+                const view = new ThreeDraw(model, {
+                    div: 'modelDiv',
+                    turtles: { meshClass: 'Obj3DMesh', useAxes: true },
+                    drawOptions,
+                })
 
                 util.toWindow({ util, model, view, ThreeDraw })
 
