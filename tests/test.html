@@ -23,8 +23,44 @@
         <script type="module">
             import * as util from '../src/utils.js'
 
-            import AgentArray from '../src/AgentArray.js'
-            window.aa = AgentArray
+            // window.steps = 100
+            // window.fcn = () => {
+            //     console.log('steps', steps--)
+            //     if (steps <= 0) clearInterval(iid)
+            // }
+            // window.iid = setInterval(fcn, steps)
+
+            import Animator from '../src/Animator.js'
+            const anim = new Animator(
+                () => console.log('step'),
+                -1, // steps
+                30 // fps
+            ).startStats()
+            util.toWindow({ util, anim })
+
+            // If there is a possibility that your logic could take longer to execute than the interval time, it is recommended that you recursively call a named function using setTimeout(). For example, if using setInterval() to poll a remote server every 5 seconds, network latency, an unresponsive server, and a host of other issues could prevent the request from completing in its allotted time. As such, you may find yourself with queued up XHR requests that won't necessarily return in order.
+            // In these cases, a recursive setTimeout() pattern is preferred:
+            // ;(function loop() {
+            //     setTimeout(function () {
+            //         // Your logic here
+            //         loop()
+            //     }, delay)
+            // })()
+
+            // import Animator from '../src/Animator.js'
+            // import TwoDraw from '../src/TwoDraw.js'
+            // import Model from '../models/HelloModel.js'
+            // const model = new Model()
+            // model.setup()
+            // const view = new TwoDraw(model, { div: 'modelDiv' })
+            // const anim = new Animator(() => {
+            //     model.step()
+            //     view.draw()
+            // }, 500)
+            // util.toWindow({ util, Model, model, view, anim })
+
+            // import AgentArray from '../src/AgentArray.js'
+            // window.aa = AgentArray
 
             // import Model from '../models/HelloModel.js'
             // import TwoDraw from '../src/TwoDraw.js'

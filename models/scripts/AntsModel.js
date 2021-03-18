@@ -8,8 +8,7 @@ class AntsModel extends Model {
     maxPheromone = 35
     diffusionRate = 0.3
     evaporationRate = 0.01
-    // wiggleAngle = 30 // util.degToRad(30)
-    wiggleAngle = util.degToRad(30)
+    wiggleAngle = 30 // degrees
     foodX = world => world.minX + 6
     foodY = () => 0
     nestX = world => world.maxX - 6
@@ -90,7 +89,7 @@ class AntsModel extends Model {
         } else {
             // Note: neighbors is an AgentArray who's inCone uses radians.
             // const nAhead = p.neighbors.inCone(p, 2, Math.PI, t.theta)
-            const nAhead = p.neighbors.inCone(p, 2, 90, t.heading)
+            const nAhead = p.neighbors.inCone(p, 2, 180, t.heading)
             const pheromone = t.carryingFood ? 'nestPheromone' : 'foodPheromone'
             const [n, max] = nAhead.maxValOf(pheromone)
             if (max > 0.001 / this.maxPheromone) t.face(n)

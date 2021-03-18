@@ -12,6 +12,7 @@
             import Color from '../src/Color.js'
             import ColorMap from '../src/ColorMap.js'
             import Model from '../models/AntsModel.js'
+            import Stats from 'https://cdn.skypack.dev/stats.js'
 
             // Define colors and colormaps
             const nestColor = Color.typedColor('yellow')
@@ -52,10 +53,13 @@
 
                 util.toWindow({ util, model, view })
 
+                const stats = new Stats()
+                document.body.appendChild(stats.dom)
                 await util.timeoutLoop(
                     () => {
                         model.step()
                         view.draw()
+                        stats.update()
                     },
                     500,
                     33
