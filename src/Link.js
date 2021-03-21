@@ -7,6 +7,8 @@ import AgentArray from './AgentArray.js'
 /**
  * Class Link instances form a link between two {@link Turtle}s, forming a graph
  * with the Turtles being the nodes, and the Links the edges.
+ *
+ * **TODO: Document Link properties and methods.**
  */
 class Link {
     // Set by AgentSet

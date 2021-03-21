@@ -18,6 +18,8 @@ import AgentList from './AgentList.js'
  * that are in the patches the turtles live on.  The set of all patches
  * is the world on which the turtles live and the model runs.
  *
+ * **TODO: Document Patch properties and methods.**
+ *
  * @export
  * @class
  */
