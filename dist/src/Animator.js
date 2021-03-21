@@ -1,25 +1,24 @@
-// The Animator runs a function via Promises.
-// You can have multiple animators.
-
 export default class Animator {
     constructor(fcn, steps = -1, fps = 30) {
-        Object.assign(this, { fcn, steps, fps, timeoutHandle: null })
+        Object.assign(this, { fcn, steps, fps, timeoutID: null })
         this.start()
     }
     start() {
-        if (this.timeoutHandle) return // avoid multiple starts
-        this.timeoutHandle = setInterval(() => this.step(), 1000 / this.fps)
-        // this.timeoutHandle = setInterval(this.step, 1000 / this.fps)
+        if (this.timeoutID) return // avoid multiple starts
+        this.timeoutID = setInterval(() => this.step(), 1000 / this.fps)
+        return this // chaining off ctor
     }
     stop() {
-        if (this.timeoutHandle) clearInterval(this.timeoutHandle)
-        this.timeoutHandle = null
+        if (this.timeoutID) clearInterval(this.timeoutID)
+        this.timeoutID = null
+        return this // chaining off ctor
     }
     step() {
         if (this.steps === 0) return this.stop()
         this.steps--
         this.fcn()
         if (this.stats) this.stats.update()
+        return this // chaining off ctor
     }
 
     startStats() {
@@ -31,16 +30,18 @@ export default class Animator {
         return this // chaining off ctor
     }
 
-    // Stop and restart with the new fps, no-op if fps not changed
-    resetRate(fps) {
-        if (fps === this.fps) return
+    // Stop and restart with the new steps & fps
+    reset(steps = -1, fps = this.fps) {
         this.stop()
+        this.steps = steps
         this.fps = fps
         this.start()
     }
     // stop if running, start otherwise
+    // if starting and steps === 0, reset with steps = -1, forever.
     toggle() {
-        if (this.timeoutHandle) this.stop()
+        if (this.timeoutID) this.stop()
+        else if (this.steps === 0) this.reset()
         else this.start()
     }
     // call the fcn once. stops if currently running

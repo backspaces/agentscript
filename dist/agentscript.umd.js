@@ -601,10 +601,14 @@ out;`;
     const { PI: PI$1 } = Math;
 
     // Return random int/float in [0,max) or [min,max) or [-r/2,r/2)
+    /** Returns a random int in [0, max) */
     const randomInt = max => Math.floor(Math.random() * max);
+    /** Returns a random int in [min, max) */
     const randomInt2 = (min, max) =>
         min + Math.floor(Math.random() * (max - min));
+    /** Returns a random float in [0, max) */
     const randomFloat = max => Math.random() * max;
+    /** Returns a random float in [min, max) */
     const randomFloat2 = (min, max) => min + Math.random() * (max - min);
     const randomCentered = r => randomFloat2(-r / 2, r / 2);
 
@@ -2757,6 +2761,8 @@ out;`;
     /**
      * Class Link instances form a link between two {@link Turtle}s, forming a graph
      * with the Turtles being the nodes, and the Links the edges.
+     *
+     * **TODO: Document Link properties and methods.**
      */
     class Link {
         // Set by AgentSet
@@ -3645,6 +3651,8 @@ out;`;
      * that are in the patches the turtles live on.  The set of all patches
      * is the world on which the turtles live and the model runs.
      *
+     * **TODO: Document Patch properties and methods.**
+     *
      * @export
      * @class
      */
@@ -3687,12 +3695,18 @@ out;`;
         // To avoid promotion, use `patches.neighbors(this)`.
         // Promotion makes getters accessed only once.
         // defineProperty required: can't set this.neighbors when getter defined.
+        /**
+         * A list of this patch's 8 [Moore neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood).
+         */
         get neighbors() {
             // lazy promote neighbors from getter to instance prop.
             const n = this.patches.neighbors(this);
             Object.defineProperty(this, 'neighbors', { value: n, enumerable: true });
             return n
         }
+        /**
+         * A list of this patch's 4 [Von Neumann neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood) (north, south, east, west).
+         */
         get neighbors4() {
             const n = this.patches.neighbors4(this);
             Object.defineProperty(this, 'neighbors4', {
@@ -3895,6 +3909,8 @@ out;`;
      * Class Turtle instances represent the dynamic, behavioral element of modeling.
      * Each turtle knows the patch it is on, and interacts with that and other
      * patches, as well as other turtles.
+     *
+     * **TODO: Document Turtle properties and methods.**
      */
     class Turtle {
         atEdge = 'wrap'

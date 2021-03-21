@@ -13,6 +13,8 @@ import * as util from './utils.js'
  * Class Turtle instances represent the dynamic, behavioral element of modeling.
  * Each turtle knows the patch it is on, and interacts with that and other
  * patches, as well as other turtles.
+ *
+ * **TODO: Document Turtle properties and methods.**
  */
 class Turtle {
     atEdge = 'wrap'

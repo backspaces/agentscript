@@ -1,172 +1,6820 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Adding meta -->
-    
-
-    <!-- Adding external script-->
-    
-
-    <!-- Adding external style-->
-    
-
-    <!-- Adding scripts-->
-    
-
-    <!-- Adding style-->
-    
-
-    <!-- Adding overlay script-->
-    
-
-    <!-- Adding overlay style-->
-    
-
-
-    <title>Home</title>
-
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/third-party/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/third-party/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-base.css">
-    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-light.css">
-    
-<svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none">
-    <defs>
-        <symbol id="copy-icon" viewbox="0 0 488.3 488.3">
-            <g>
-                <path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/>
-                <path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/>
-            </g>
-        </symbol>
-    </defs>
-</svg>
-
-
-   <script src="../dist/agentscript.umd.js"></script>
-   <script>
-       Object.assign(window, AS)
-       
-   </script>
+  <meta charset='utf-8'>
+  <title>agentscript 0.9.0 | Documentation</title>
+  <meta name='description' content='AgentScript Model in Model/View architecture'>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' rel='stylesheet'>
+  <link href='assets/style.css' rel='stylesheet'>
+  <link href='assets/github.css' rel='stylesheet'>
+  <link href='assets/split.css' rel='stylesheet'>
 </head>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'>agentscript</h3>
+          <div class='mb1'><code>0.9.0</code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            spellcheck='false'
+            autocapitalize='off'
+            autocorrect='off'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#turtles-patches-and-links'
+                  class="h5 bold black caps">
+                  Turtles, Patches, and Links
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#turtle'
+                  class="">
+                  Turtle
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#turtles'
+                  class=" toggle-sibling">
+                  Turtles
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#turtlesinpatches'
+                        class='regular pre-open'>
+                        #inPatches
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#link'
+                  class="">
+                  Link
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#links'
+                  class="">
+                  Links
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#patch'
+                  class=" toggle-sibling">
+                  Patch
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#patchneighbors'
+                        class='regular pre-open'>
+                        #neighbors
+                      </a></li>
+                      
+                      <li><a
+                        href='#patchneighbors4'
+                        class='regular pre-open'>
+                        #neighbors4
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#patches'
+                  class=" toggle-sibling">
+                  Patches
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#patchesneighbors'
+                        class='regular pre-open'>
+                        #neighbors
+                      </a></li>
+                      
+                      <li><a
+                        href='#patchesneighbors4'
+                        class='regular pre-open'>
+                        #neighbors4
+                      </a></li>
+                      
+                      <li><a
+                        href='#patchesimportdataset'
+                        class='regular pre-open'>
+                        #importDataSet
+                      </a></li>
+                      
+                      <li><a
+                        href='#patchesexportdataset'
+                        class='regular pre-open'>
+                        #exportDataSet
+                      </a></li>
+                      
+                      <li><a
+                        href='#patchespatchindex'
+                        class='regular pre-open'>
+                        #patchIndex
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#agentset'
+                  class=" toggle-sibling">
+                  AgentSet
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#agentsetspecies'
+                        class='regular pre-open'>
+                        .species
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#agentsetprotomixin'
+                        class='regular pre-open'>
+                        #protoMixin
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetnewbreed'
+                        class='regular pre-open'>
+                        #newBreed
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetisbreedset'
+                        class='regular pre-open'>
+                        #isBreedSet
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetisbaseset'
+                        class='regular pre-open'>
+                        #isBaseSet
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetwithbreed'
+                        class='regular pre-open'>
+                        #withBreed
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetaddagent'
+                        class='regular pre-open'>
+                        #addAgent
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetclear'
+                        class='regular pre-open'>
+                        #clear
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetremoveagent'
+                        class='regular pre-open'>
+                        #removeAgent
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetsetdefault'
+                        class='regular pre-open'>
+                        #setDefault
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetgetdefault'
+                        class='regular pre-open'>
+                        #getDefault
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetsetbreed'
+                        class='regular pre-open'>
+                        #setBreed
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetask'
+                        class='regular pre-open'>
+                        #ask
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentsetaskset'
+                        class='regular pre-open'>
+                        #askSet
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#agentarray'
+                  class=" toggle-sibling">
+                  AgentArray
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#agentarrayspecies'
+                        class='regular pre-open'>
+                        .species
+                      </a></li>
+                    
+                      <li><a
+                        href='#agentarrayfromarray'
+                        class='regular pre-open'>
+                        .fromArray
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#agentarraytoarray'
+                        class='regular pre-open'>
+                        #toArray
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayisempty'
+                        class='regular pre-open'>
+                        #isEmpty
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayfirst'
+                        class='regular pre-open'>
+                        #first
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarraylast'
+                        class='regular pre-open'>
+                        #last
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayatindex'
+                        class='regular pre-open'>
+                        #atIndex
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayall'
+                        class='regular pre-open'>
+                        #all
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayprops'
+                        class='regular pre-open'>
+                        #props
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarraytypedsample'
+                        class='regular pre-open'>
+                        #typedSample
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayuniq'
+                        class='regular pre-open'>
+                        #uniq
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayforloop'
+                        class='regular pre-open'>
+                        #forLoop
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayask'
+                        class='regular pre-open'>
+                        #ask
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarraywith'
+                        class='regular pre-open'>
+                        #with
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarrayclone'
+                        class='regular pre-open'>
+                        #clone
+                      </a></li>
+                      
+                      <li><a
+                        href='#agentarraysortby'
+                        class='regular pre-open'>
+                        #sortBy
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#the-model'
+                  class="h5 bold black caps">
+                  The Model
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#model'
+                  class=" toggle-sibling">
+                  Model
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#modelreset'
+                        class='regular pre-open'>
+                        #reset
+                      </a></li>
+                      
+                      <li><a
+                        href='#modeltick'
+                        class='regular pre-open'>
+                        #tick
+                      </a></li>
+                      
+                      <li><a
+                        href='#modelstartup'
+                        class='regular pre-open'>
+                        #startup
+                      </a></li>
+                      
+                      <li><a
+                        href='#modelsetup'
+                        class='regular pre-open'>
+                        #setup
+                      </a></li>
+                      
+                      <li><a
+                        href='#modelstep'
+                        class='regular pre-open'>
+                        #step
+                      </a></li>
+                      
+                      <li><a
+                        href='#modelpatchbreeds'
+                        class='regular pre-open'>
+                        #patchBreeds
+                      </a></li>
+                      
+                      <li><a
+                        href='#modelturtlebreeds'
+                        class='regular pre-open'>
+                        #turtleBreeds
+                      </a></li>
+                      
+                      <li><a
+                        href='#modellinkbreeds'
+                        class='regular pre-open'>
+                        #linkBreeds
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#world'
+                  class=" toggle-sibling">
+                  World
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#worlddefaultoptions'
+                        class='regular pre-open'>
+                        .defaultOptions
+                      </a></li>
+                    
+                      <li><a
+                        href='#worlddefaultworld'
+                        class='regular pre-open'>
+                        .defaultWorld
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#worldrandompoint'
+                        class='regular pre-open'>
+                        #randomPoint
+                      </a></li>
+                      
+                      <li><a
+                        href='#worldrandom3dpoint'
+                        class='regular pre-open'>
+                        #random3DPoint
+                      </a></li>
+                      
+                      <li><a
+                        href='#worldrandompatchpoint'
+                        class='regular pre-open'>
+                        #randomPatchPoint
+                      </a></li>
+                      
+                      <li><a
+                        href='#worldisonworld'
+                        class='regular pre-open'>
+                        #isOnWorld
+                      </a></li>
+                      
+                      <li><a
+                        href='#worldbboxtransform'
+                        class='regular pre-open'>
+                        #bboxTransform
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#the-view'
+                  class="h5 bold black caps">
+                  The View
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#twodraw'
+                  class="">
+                  TwoDraw
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#threedraw'
+                  class="">
+                  ThreeDraw
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#color'
+                  class=" toggle-sibling">
+                  Color
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#colorrgbacsscolor'
+                        class='regular pre-open'>
+                        .rgbaCssColor
+                      </a></li>
+                    
+                      <li><a
+                        href='#colorhslcsscolor'
+                        class='regular pre-open'>
+                        .hslCssColor
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#interaction'
+                  class="h5 bold black caps">
+                  Interaction
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#mouse'
+                  class="">
+                  Mouse
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#utilities'
+                  class="h5 bold black caps">
+                  Utilities
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#randomint'
+                  class="">
+                  randomInt
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#randomint2'
+                  class="">
+                  randomInt2
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#randomfloat'
+                  class="">
+                  randomFloat
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#randomfloat2'
+                  class="">
+                  randomFloat2
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#other'
+                  class="h5 bold black caps">
+                  Other
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#dataset'
+                  class=" toggle-sibling">
+                  DataSet
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#datasetemptydataset'
+                        class='regular pre-open'>
+                        .emptyDataSet
+                      </a></li>
+                    
+                    </ul>
+                  
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#eventdispatcher'
+                  class="">
+                  EventDispatcher
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
 
-<body>
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
+  <h2 id='turtles-patches-and-links' class='mt0'>
+    Turtles, Patches, and Links
+  </h2>
 
-<label for="nav-trigger" class="overlay"></label>
-
-<nav>
-    <h2><a href="index.html"><div class="text">Home</div></a></h2><div class="search-box"><input type="text" placeholder="Search..." id="search-box" /><div class="search-item-container" id="search-item-container"><ul class="search-item-ul" id="search-item-ul"></ul></div></div><div class="sidebar-list-div"><h3>Tutorials</h3><ul><li class="" id=""><a href="tutorial-01-HelloModel.html">01-HelloModel</a></li><li class="" id=""><a href="tutorial-02-HelloHtml.html">02-HelloHtml</a></li><li class="" id=""><a href="tutorial-03-HelloServer.html">03-HelloServer</a></li><li class="" id=""><a href="tutorial-04-HelloView.html">04-HelloView</a></li><li class="" id=""><a href="tutorial-JavaScript.html">JavaScript</a></li></ul><h3>Classes</h3><ul><li class="accordion collapsed" id=2380348><div class="accordion-title"><a href="AgentArray.html">AgentArray</a><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-    <path 
-        fill-rule="evenodd" 
-        clip-rule="evenodd" 
-        d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z">
-    </path>
-</svg></div><ul class='methods accordion-content'><li data-type='method'><a href="AgentArray.html#.fromArray">fromArray</a></li><li data-type='method'><a href="AgentArray.html#all">all</a></li><li data-type='method'><a href="AgentArray.html#ask">ask</a></li><li data-type='method'><a href="AgentArray.html#atIndex">atIndex</a></li><li data-type='method'><a href="AgentArray.html#clone">clone</a></li><li data-type='method'><a href="AgentArray.html#first">first</a></li><li data-type='method'><a href="AgentArray.html#forLoop">forLoop</a></li><li data-type='method'><a href="AgentArray.html#isEmpty">isEmpty</a></li><li data-type='method'><a href="AgentArray.html#last">last</a></li><li data-type='method'><a href="AgentArray.html#props">props</a></li><li data-type='method'><a href="AgentArray.html#sortBy">sortBy</a></li><li data-type='method'><a href="AgentArray.html#toArray">toArray</a></li><li data-type='method'><a href="AgentArray.html#typedSample">typedSample</a></li><li data-type='method'><a href="AgentArray.html#uniq">uniq</a></li><li data-type='method'><a href="AgentArray.html#with">with</a></li></ul></li><li class="accordion collapsed" id=263234><div class="accordion-title"><a href="AgentSet.html">AgentSet</a><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-    <path 
-        fill-rule="evenodd" 
-        clip-rule="evenodd" 
-        d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z">
-    </path>
-</svg></div><ul class='methods accordion-content'><li data-type='method'><a href="AgentSet.html#addAgent">addAgent</a></li><li data-type='method'><a href="AgentSet.html#ask">ask</a></li><li data-type='method'><a href="AgentSet.html#askSet">askSet</a></li><li data-type='method'><a href="AgentSet.html#clear">clear</a></li><li data-type='method'><a href="AgentSet.html#getDefault">getDefault</a></li><li data-type='method'><a href="AgentSet.html#isBaseSet">isBaseSet</a></li><li data-type='method'><a href="AgentSet.html#isBreedSet">isBreedSet</a></li><li data-type='method'><a href="AgentSet.html#newBreed">newBreed</a></li><li data-type='method'><a href="AgentSet.html#protoMixin">protoMixin</a></li><li data-type='method'><a href="AgentSet.html#removeAgent">removeAgent</a></li><li data-type='method'><a href="AgentSet.html#setBreed">setBreed</a></li><li data-type='method'><a href="AgentSet.html#setDefault">setDefault</a></li><li data-type='method'><a href="AgentSet.html#withBreed">withBreed</a></li></ul></li><li class="accordion collapsed" id=8118162><div class="accordion-title"><a href="DataSet.html">DataSet</a><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-    <path 
-        fill-rule="evenodd" 
-        clip-rule="evenodd" 
-        d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z">
-    </path>
-</svg></div><ul class='methods accordion-content'><li data-type='method'><a href="DataSet.html#.emptyDataSet">emptyDataSet</a></li></ul></li><li class="" id=""><a href="Link.html">Link</a></li><li class="" id=""><a href="Links.html">Links</a></li><li class="accordion collapsed" id=6156039><div class="accordion-title"><a href="Model.html">Model</a><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-    <path 
-        fill-rule="evenodd" 
-        clip-rule="evenodd" 
-        d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z">
-    </path>
-</svg></div><ul class='methods accordion-content'><li data-type='method'><a href="Model.html#linkBreeds">linkBreeds</a></li><li data-type='method'><a href="Model.html#patchBreeds">patchBreeds</a></li><li data-type='method'><a href="Model.html#reset">reset</a></li><li data-type='method'><a href="Model.html#setup">setup</a></li><li data-type='method'><a href="Model.html#startup">startup</a></li><li data-type='method'><a href="Model.html#step">step</a></li><li data-type='method'><a href="Model.html#tick">tick</a></li><li data-type='method'><a href="Model.html#turtleBreeds">turtleBreeds</a></li></ul></li><li class="" id=""><a href="Patch.html">Patch</a></li><li class="accordion collapsed" id=4378920><div class="accordion-title"><a href="Patches.html">Patches</a><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-    <path 
-        fill-rule="evenodd" 
-        clip-rule="evenodd" 
-        d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z">
-    </path>
-</svg></div><ul class='methods accordion-content'><li data-type='method'><a href="Patches.html#exportDataSet">exportDataSet</a></li><li data-type='method'><a href="Patches.html#importDataSet">importDataSet</a></li><li data-type='method'><a href="Patches.html#neighbors">neighbors</a></li><li data-type='method'><a href="Patches.html#neighbors4">neighbors4</a></li><li data-type='method'><a href="Patches.html#patchIndex">patchIndex</a></li></ul></li><li class="" id=""><a href="Turtle.html">Turtle</a></li><li class="accordion collapsed" id=1820542><div class="accordion-title"><a href="Turtles.html">Turtles</a><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-    <path 
-        fill-rule="evenodd" 
-        clip-rule="evenodd" 
-        d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z">
-    </path>
-</svg></div><ul class='methods accordion-content'><li data-type='method'><a href="Turtles.html#addAgent">addAgent</a></li><li data-type='method'><a href="Turtles.html#ask">ask</a></li><li data-type='method'><a href="Turtles.html#askSet">askSet</a></li><li data-type='method'><a href="Turtles.html#clear">clear</a></li><li data-type='method'><a href="Turtles.html#getDefault">getDefault</a></li><li data-type='method'><a href="Turtles.html#inPatches">inPatches</a></li><li data-type='method'><a href="Turtles.html#isBaseSet">isBaseSet</a></li><li data-type='method'><a href="Turtles.html#isBreedSet">isBreedSet</a></li><li data-type='method'><a href="Turtles.html#newBreed">newBreed</a></li><li data-type='method'><a href="Turtles.html#protoMixin">protoMixin</a></li><li data-type='method'><a href="Turtles.html#removeAgent">removeAgent</a></li><li data-type='method'><a href="Turtles.html#setBreed">setBreed</a></li><li data-type='method'><a href="Turtles.html#setDefault">setDefault</a></li><li data-type='method'><a href="Turtles.html#withBreed">withBreed</a></li></ul></li><li class="accordion collapsed" id=4606082><div class="accordion-title"><a href="World.html">World</a><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-    <path 
-        fill-rule="evenodd" 
-        clip-rule="evenodd" 
-        d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z">
-    </path>
-</svg></div><ul class='methods accordion-content'><li data-type='method'><a href="World.html#.defaultOptions">defaultOptions</a></li><li data-type='method'><a href="World.html#.defaultWorld">defaultWorld</a></li><li data-type='method'><a href="World.html#bboxTransform">bboxTransform</a></li><li data-type='method'><a href="World.html#isOnWorld">isOnWorld</a></li><li data-type='method'><a href="World.html#random3DPoint">random3DPoint</a></li><li data-type='method'><a href="World.html#randomPatchPoint">randomPatchPoint</a></li><li data-type='method'><a href="World.html#randomPoint">randomPoint</a></li></ul></li></ul></div>
-</nav>
-
-<div id="main">
+  
     
 
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
     
-
-
-
+    <h3 class='fl m0' id='turtle'>
+      Turtle
+    </h3>
     
-
-
-
-
-
-
-
-
-
     
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Turtle.js#L19-L334'>
+      <span>src/Turtle.js</span>
+      </a>
+    
+  </div>
+  
 
+  <p>Class Turtle instances represent the dynamic, behavioral element of modeling.
+Each turtle knows the patch it is on, and interacts with that and other
+patches, as well as other turtles.</p>
+<p><strong>TODO: Document Turtle properties and methods.</strong></p>
 
-    <section class="readme">
-        <article><h1>This will be the readme</h1>
-<p>Magna qui nisi veniam non incididunt ipsum voluptate voluptate sit non cillum fugiat ullamco sint. Culpa elit ut id labore aliquip ex cillum. Anim incididunt enim eu eiusmod mollit laboris id irure in ad velit deserunt. Elit aliqua in in laborum ad adipisicing cillum amet in culpa ex culpa. Dolore minim pariatur labore velit aute exercitation veniam anim ex ad pariatur.</p></article>
-    </section>
+    <div class='pre p1 fill-light mt0'>new Turtle()</div>
+  
+  
 
+  
+  
+  
+  
+  
+  
 
+  
 
+  
 
+  
 
+  
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='turtles'>
+      Turtles
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Turtles.js#L14-L114'>
+      <span>src/Turtles.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Turtles are objects living on the <a href="#patches">Patches</a> world.
+Their coordinates are floats, unlike Patches with integer coordinates.</p>
+
+    <div class='pre p1 fill-light mt0'>new Turtles()</div>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#agentset">AgentSet</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='turtlesinpatches'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>inPatches(patches)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Turtles.js#L53-L60'>
+      <span>src/Turtles.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return an array of this breed within the array of patchs</p>
+
+    <div class='pre p1 fill-light mt0'>inPatches(patches: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#patch">Patch</a>>): AgentList</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>patches</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="#patch">Patch</a>>)</code>
+	    Array of patches
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>AgentList</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
 </div>
 
-<footer id="footer">
   
-</footer>
 
-<script src="scripts/third-party/prettify.js"></script>
-<script src="scripts/third-party/lang-css.js"></script>
-<script src="scripts/search.js"></script>
-<script src="scripts/third-party/fuse.js"></script>
-<script type="text/javascript" src="scripts/misc.js"></script>
+  
 
-<script>prettyPrint();</script>
-<script src="scripts/linenumber.js"></script>
-<script src="scripts/fix-code-block.js"></script>
-<script>
-  var list = [{"title":"01-HelloModel","link":"01-HelloModel"},{"title":"02-HelloHtml","link":"02-HelloHtml"},{"title":"03-HelloServer","link":"03-HelloServer"},{"title":"04-HelloView","link":"04-HelloView"},{"title":"JavaScript","link":"JavaScript"},{"title":"AgentArray","link":"<a href=\"AgentArray.html\">AgentArray</a>"},{"title":"AgentArray.fromArray","link":"<a href=\"AgentArray.html#.fromArray\">AgentArray.fromArray &rtrif; undefined</a>"},{"title":"AgentArray#all","link":"<a href=\"AgentArray.html#all\">AgentArray &rtrif; all</a>"},{"title":"AgentArray#ask","link":"<a href=\"AgentArray.html#ask\">AgentArray &rtrif; ask</a>"},{"title":"AgentArray#atIndex","link":"<a href=\"AgentArray.html#atIndex\">AgentArray &rtrif; atIndex</a>"},{"title":"AgentArray#clone","link":"<a href=\"AgentArray.html#clone\">AgentArray &rtrif; clone</a>"},{"title":"AgentArray#first","link":"<a href=\"AgentArray.html#first\">AgentArray &rtrif; first</a>"},{"title":"AgentArray#forLoop","link":"<a href=\"AgentArray.html#forLoop\">AgentArray &rtrif; forLoop</a>"},{"title":"AgentArray#isEmpty","link":"<a href=\"AgentArray.html#isEmpty\">AgentArray &rtrif; isEmpty</a>"},{"title":"AgentArray#last","link":"<a href=\"AgentArray.html#last\">AgentArray &rtrif; last</a>"},{"title":"AgentArray#props","link":"<a href=\"AgentArray.html#props\">AgentArray &rtrif; props</a>"},{"title":"AgentArray#sortBy","link":"<a href=\"AgentArray.html#sortBy\">AgentArray &rtrif; sortBy</a>"},{"title":"AgentArray#toArray","link":"<a href=\"AgentArray.html#toArray\">AgentArray &rtrif; toArray</a>"},{"title":"AgentArray#typedSample","link":"<a href=\"AgentArray.html#typedSample\">AgentArray &rtrif; typedSample</a>"},{"title":"AgentArray#uniq","link":"<a href=\"AgentArray.html#uniq\">AgentArray &rtrif; uniq</a>"},{"title":"AgentArray#with","link":"<a href=\"AgentArray.html#with\">AgentArray &rtrif; with</a>"},{"title":"AgentSet","link":"<a href=\"AgentSet.html\">AgentSet</a>"},{"title":"AgentSet#addAgent","link":"<a href=\"AgentSet.html#addAgent\">AgentSet &rtrif; addAgent</a>"},{"title":"AgentSet#ask","link":"<a href=\"AgentSet.html#ask\">AgentSet &rtrif; ask</a>"},{"title":"AgentSet#askSet","link":"<a href=\"AgentSet.html#askSet\">AgentSet &rtrif; askSet</a>"},{"title":"AgentSet#clear","link":"<a href=\"AgentSet.html#clear\">AgentSet &rtrif; clear</a>"},{"title":"AgentSet#getDefault","link":"<a href=\"AgentSet.html#getDefault\">AgentSet &rtrif; getDefault</a>"},{"title":"AgentSet#isBaseSet","link":"<a href=\"AgentSet.html#isBaseSet\">AgentSet &rtrif; isBaseSet</a>"},{"title":"AgentSet#isBreedSet","link":"<a href=\"AgentSet.html#isBreedSet\">AgentSet &rtrif; isBreedSet</a>"},{"title":"AgentSet#newBreed","link":"<a href=\"AgentSet.html#newBreed\">AgentSet &rtrif; newBreed</a>"},{"title":"AgentSet#protoMixin","link":"<a href=\"AgentSet.html#protoMixin\">AgentSet &rtrif; protoMixin</a>"},{"title":"AgentSet#removeAgent","link":"<a href=\"AgentSet.html#removeAgent\">AgentSet &rtrif; removeAgent</a>"},{"title":"AgentSet#setBreed","link":"<a href=\"AgentSet.html#setBreed\">AgentSet &rtrif; setBreed</a>"},{"title":"AgentSet#setDefault","link":"<a href=\"AgentSet.html#setDefault\">AgentSet &rtrif; setDefault</a>"},{"title":"AgentSet#withBreed","link":"<a href=\"AgentSet.html#withBreed\">AgentSet &rtrif; withBreed</a>"},{"title":"DataSet","link":"<a href=\"DataSet.html\">DataSet</a>"},{"title":"DataSet.emptyDataSet","link":"<a href=\"DataSet.html#.emptyDataSet\">DataSet.emptyDataSet &rtrif; undefined</a>"},{"title":"Link","link":"<a href=\"Link.html\">Link</a>"},{"title":"Links","link":"<a href=\"Links.html\">Links</a>"},{"title":"Model","link":"<a href=\"Model.html\">Model</a>"},{"title":"Model#linkBreeds","link":"<a href=\"Model.html#linkBreeds\">Model &rtrif; linkBreeds</a>"},{"title":"Model#patchBreeds","link":"<a href=\"Model.html#patchBreeds\">Model &rtrif; patchBreeds</a>"},{"title":"Model#reset","link":"<a href=\"Model.html#reset\">Model &rtrif; reset</a>"},{"title":"Model#setup","link":"<a href=\"Model.html#setup\">Model &rtrif; setup</a>"},{"title":"Model#startup","link":"<a href=\"Model.html#startup\">Model &rtrif; startup</a>"},{"title":"Model#step","link":"<a href=\"Model.html#step\">Model &rtrif; step</a>"},{"title":"Model#tick","link":"<a href=\"Model.html#tick\">Model &rtrif; tick</a>"},{"title":"Model#turtleBreeds","link":"<a href=\"Model.html#turtleBreeds\">Model &rtrif; turtleBreeds</a>"},{"title":"Patch","link":"<a href=\"Patch.html\">Patch</a>"},{"title":"Patches","link":"<a href=\"Patches.html\">Patches</a>"},{"title":"Patches#exportDataSet","link":"<a href=\"Patches.html#exportDataSet\">Patches &rtrif; exportDataSet</a>"},{"title":"Patches#importDataSet","link":"<a href=\"Patches.html#importDataSet\">Patches &rtrif; importDataSet</a>"},{"title":"Patches#neighbors","link":"<a href=\"Patches.html#neighbors\">Patches &rtrif; neighbors</a>"},{"title":"Patches#neighbors4","link":"<a href=\"Patches.html#neighbors4\">Patches &rtrif; neighbors4</a>"},{"title":"Patches#patchIndex","link":"<a href=\"Patches.html#patchIndex\">Patches &rtrif; patchIndex</a>"},{"title":"Turtle","link":"<a href=\"Turtle.html\">Turtle</a>"},{"title":"Turtles","link":"<a href=\"Turtles.html\">Turtles</a>"},{"title":"Turtles#addAgent","link":"<a href=\"Turtles.html#addAgent\">Turtles &rtrif; addAgent</a>"},{"title":"Turtles#ask","link":"<a href=\"Turtles.html#ask\">Turtles &rtrif; ask</a>"},{"title":"Turtles#askSet","link":"<a href=\"Turtles.html#askSet\">Turtles &rtrif; askSet</a>"},{"title":"Turtles#clear","link":"<a href=\"Turtles.html#clear\">Turtles &rtrif; clear</a>"},{"title":"Turtles#getDefault","link":"<a href=\"Turtles.html#getDefault\">Turtles &rtrif; getDefault</a>"},{"title":"Turtles#inPatches","link":"<a href=\"Turtles.html#inPatches\">Turtles &rtrif; inPatches</a>"},{"title":"Turtles#isBaseSet","link":"<a href=\"Turtles.html#isBaseSet\">Turtles &rtrif; isBaseSet</a>"},{"title":"Turtles#isBreedSet","link":"<a href=\"Turtles.html#isBreedSet\">Turtles &rtrif; isBreedSet</a>"},{"title":"Turtles#newBreed","link":"<a href=\"Turtles.html#newBreed\">Turtles &rtrif; newBreed</a>"},{"title":"Turtles#protoMixin","link":"<a href=\"Turtles.html#protoMixin\">Turtles &rtrif; protoMixin</a>"},{"title":"Turtles#removeAgent","link":"<a href=\"Turtles.html#removeAgent\">Turtles &rtrif; removeAgent</a>"},{"title":"Turtles#setBreed","link":"<a href=\"Turtles.html#setBreed\">Turtles &rtrif; setBreed</a>"},{"title":"Turtles#setDefault","link":"<a href=\"Turtles.html#setDefault\">Turtles &rtrif; setDefault</a>"},{"title":"Turtles#withBreed","link":"<a href=\"Turtles.html#withBreed\">Turtles &rtrif; withBreed</a>"},{"title":"World","link":"<a href=\"World.html\">World</a>"},{"title":"World.defaultOptions","link":"<a href=\"World.html#.defaultOptions\">World.defaultOptions &rtrif; undefined</a>"},{"title":"World.defaultWorld","link":"<a href=\"World.html#.defaultWorld\">World.defaultWorld &rtrif; undefined</a>"},{"title":"World#bboxTransform","link":"<a href=\"World.html#bboxTransform\">World &rtrif; bboxTransform</a>"},{"title":"World#isOnWorld","link":"<a href=\"World.html#isOnWorld\">World &rtrif; isOnWorld</a>"},{"title":"World#random3DPoint","link":"<a href=\"World.html#random3DPoint\">World &rtrif; random3DPoint</a>"},{"title":"World#randomPatchPoint","link":"<a href=\"World.html#randomPatchPoint\">World &rtrif; randomPatchPoint</a>"},{"title":"World#randomPoint","link":"<a href=\"World.html#randomPoint\">World &rtrif; randomPoint</a>"}];
-  var options = 
-  setupSearch(list, options)
-</script>
+  
+</section>
 
- 
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
 
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='link'>
+      Link
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Link.js#L13-L92'>
+      <span>src/Link.js</span>
+      </a>
+    
+  </div>
+  
 
+  <p>Class Link instances form a link between two <a href="#turtle">Turtle</a>s, forming a graph
+with the Turtles being the nodes, and the Links the edges.</p>
+<p><strong>TODO: Document Link properties and methods.</strong></p>
 
+    <div class='pre p1 fill-light mt0'>new Link()</div>
+  
+  
 
+  
+  
+  
+  
+  
+  
 
+  
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='links'>
+      Links
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Links.js#L8-L39'>
+      <span>src/Links.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Links are a collection of all the <a href="#link">Link</a> objects between turtles.</p>
+
+    <div class='pre p1 fill-light mt0'>new Links()</div>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#agentset">AgentSet</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='patch'>
+      Patch
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patch.js#L26-L155'>
+      <span>src/Patch.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Class Patch instances represent a square on the Patches grid.  They hold variables
+that are in the patches the turtles live on.  The set of all patches
+is the world on which the turtles live and the model runs.</p>
+<p><strong>TODO: Document Patch properties and methods.</strong></p>
+
+    <div class='pre p1 fill-light mt0'>new Patch()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='patchneighbors'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>neighbors</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patch.js#L68-L73'>
+      <span>src/Patch.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A list of this patch's 8 <a href="https://en.wikipedia.org/wiki/Moore_neighborhood">Moore neighbors</a>.</p>
+
+    <div class='pre p1 fill-light mt0'>neighbors</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='patchneighbors4'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>neighbors4</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patch.js#L77-L84'>
+      <span>src/Patch.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A list of this patch's 4 <a href="https://en.wikipedia.org/wiki/Von_Neumann_neighborhood">Von Neumann neighbors</a> (north, south, east, west).</p>
+
+    <div class='pre p1 fill-light mt0'>neighbors4</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='patches'>
+      Patches
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patches.js#L16-L315'>
+      <span>src/Patches.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Patches are the world other AgentSets live on.
+They define a coord system from the Model's World values:
+minX, maxX, minY, maxY, (minZ, maxZ) (z optional)
+Patches form a grid of Patch objects which can store world data
+(elevation, fires, ant pheromones, buildings, roads, gis spatial data, water and so on)</p>
+<p>Created by class Model. Used by modeler in their Model subclass</p>
+
+    <div class='pre p1 fill-light mt0'>new Patches(model: <a href="#model">Model</a>, AgentClass: <a href="#patch">Patch</a>, name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#agentset">AgentSet</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>model</span> <code class='quiet'>(<a href="#model">Model</a>)</code>
+	    An instance of class Model
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>AgentClass</span> <code class='quiet'>(<a href="#patch">Patch</a>)</code>
+	    The Patch class managed by Patches
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    Name of the AgentSet
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='patchesneighbors'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>neighbors(patch)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patches.js#L80-L89'>
+      <span>src/Patches.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return the 8 patch
+<a href="https://en.wikipedia.org/wiki/Moore_neighborhood">"Moore" neighbors</a>
+of the given patch.
+Will be less than 8 on the edge of the patches</p>
+
+    <div class='pre p1 fill-light mt0'>neighbors(patch: <a href="#patch">Patch</a>): AgentList</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>patch</span> <code class='quiet'>(<a href="#patch">Patch</a>)</code>
+	    a Patch instance
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>AgentList</code>:
+        An array of the neighboring patches
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='patchesneighbors4'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>neighbors4(patch)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patches.js#L100-L109'>
+      <span>src/Patches.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return the 4 patch
+<a href="https://en.wikipedia.org/wiki/Von_Neumann_neighborhood">"Van Neumann" neighbors</a>
+of the given patch.
+Will be less than 4 on the edge of the patches</p>
+
+    <div class='pre p1 fill-light mt0'>neighbors4(patch: <a href="#patch">Patch</a>): AgentList</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>patch</span> <code class='quiet'>(<a href="#patch">Patch</a>)</code>
+	    a Patch instance
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>AgentList</code>:
+        An array of the neighboring patches
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='patchesimportdataset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>importDataSet(dataSet, property, useNearest)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patches.js#L118-L130'>
+      <span>src/Patches.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Assign a DataSet's values into the patches as the given property name</p>
+
+    <div class='pre p1 fill-light mt0'>importDataSet(dataSet: <a href="#dataset">DataSet</a>, property: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, useNearest: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>dataSet</span> <code class='quiet'>(<a href="#dataset">DataSet</a>)</code>
+	    An instance of 
+<a href="./DataSet.html">DataSet</a>
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>property</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    A Patch property name
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>useNearest</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>false</code>)</code>
+	    Resample to nearest dataset value?
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='patchesexportdataset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>exportDataSet(property, Type)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patches.js#L138-L148'>
+      <span>src/Patches.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Extract a property from each Patch as a DataSet</p>
+
+    <div class='pre p1 fill-light mt0'>exportDataSet(property: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, Type: Type): <a href="#dataset">DataSet</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>property</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    The patch numeric property to extract
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>Type</span> <code class='quiet'>(Type
+            = <code>Array</code>)</code>
+	    The DataSet array's type
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#dataset">DataSet</a></code>:
+        A DataSet of the patche's values
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='patchespatchindex'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>patchIndex(x, y)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Patches.js#L158-L161'>
+      <span>src/Patches.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return index into Patches given valid x,y integers</p>
+
+    <div class='pre p1 fill-light mt0'>patchIndex(x: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    Integer X value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    Integer Y value
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></code>:
+        Integer index into Patches array
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='agentset'>
+      AgentSet
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L14-L332'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Subclass of AgentArray, used for Model Patches, Turtles, Links &#x26; Breeds.</p>
+<p>AgentSets are AgentArrays that are factories for their own Agents.</p>
+<p>Thus the Turtles AgentSet is a factory for class Turtle instances
+using the create() or addAgent() factory methods.</p>
+<p>AgentSets are not created directly by modelers, only other
+AgentSet subclasses: Patches, Turtles, Links &#x26; Breeds.</p>
+
+    <div class='pre p1 fill-light mt0'>new AgentSet(model: <a href="#model">Model</a>, AgentClass: (<a href="#patch">Patch</a> | <a href="#turtle">Turtle</a> | <a href="#link">Link</a>), name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, baseSet: (<a href="#patches">Patches</a> | <a href="#turtles">Turtles</a> | <a href="#links">Links</a>))</div>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#agentarray">AgentArray</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>model</span> <code class='quiet'>(<a href="#model">Model</a>)</code>
+	    Instance of Class Model to which I belong
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>AgentClass</span> <code class='quiet'>((<a href="#patch">Patch</a> | <a href="#turtle">Turtle</a> | <a href="#link">Link</a>))</code>
+	    Class of items stored in this AgentSet
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Name of this AgentSet. Ex: Patches
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>baseSet</span> <code class='quiet'>((<a href="#patches">Patches</a> | <a href="#turtles">Turtles</a> | <a href="#links">Links</a>)
+            = <code>null</code>)</code>
+	    If a Breed, it's parent AgentSet
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='agentsetspecies'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>species</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L27-L29'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Magic to return AgentArrays rather than AgentSets
+<a href="https://goo.gl/Zsxwxd">Symbol.species</a></p>
+
+    <div class='pre p1 fill-light mt0'>species</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='agentsetprotomixin'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>protoMixin(agentProto, AgentClass)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L77-L105'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Add common variables to an Agent being added to this AgentSet.</p>
+<p>Each Agent has it's AgentSet and the Model instance.
+It also has an id, set by the AgentSet's global ID.</p>
+<p>The Agent also has three methods added: setBreed, getBreed, isBreed.</p>
+
+    <div class='pre p1 fill-light mt0'>protoMixin(agentProto: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>, AgentClass: (<a href="#patch">Patch</a> | <a href="#turtle">Turtle</a> | <a href="#link">Link</a>))</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>agentProto</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    A new instance of the Agent being added
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>AgentClass</span> <code class='quiet'>((<a href="#patch">Patch</a> | <a href="#turtle">Turtle</a> | <a href="#link">Link</a>))</code>
+	    It's Class
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetnewbreed'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>newBreed(name)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L116-L118'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Create a subarray of this AgentSet.
+Example: create a people breed of Turtles:</p>
+<p><code>people = turtles.newBreed('people')</code></p>
+
+    <div class='pre p1 fill-light mt0'>newBreed(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#agentset">AgentSet</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The name of the new breed AgentSet
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#agentset">AgentSet</a></code>:
+        A subarray of me
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetisbreedset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isBreedSet()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L123-L125'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>isBreedSet(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        true if I am a baseSet subarray
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetisbaseset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isBaseSet()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L129-L131'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  
+    <div class='pre p1 fill-light mt0'>isBaseSet(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        true if I am a Patches, Turtles or Links AgentSet
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetwithbreed'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>withBreed(breed)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L141-L143'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return breeds in a subset of an AgentSet</p>
+<p>Ex: patches.inRect(5).withBreed(houses)</p>
+
+    <div class='pre p1 fill-light mt0'>withBreed(breed: <a href="#agentset">AgentSet</a>): <a href="#agentarray">AgentArray</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>breed</span> <code class='quiet'>(<a href="#agentset">AgentSet</a>)</code>
+	    A breed AgentSet
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#agentarray">AgentArray</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetaddagent'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addAgent(o)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L157-L168'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Add an Agent to this AgentSet.  Only used by factory methods.
+Adds the <code>id</code> property to Agent. Increment AgentSet <code>ID</code>.</p>
+
+    <div class='pre p1 fill-light mt0'>addAgent(o: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>o</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>
+            = <code>undefined</code>)</code>
+	    An Agent to be added to this AgentSet
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        The input Agent, bound to this AgentSet.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetclear'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clear()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L173-L176'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Remove all Agents from this AgentSet using agent.die() for each agent.</p>
+
+    <div class='pre p1 fill-light mt0'>clear()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetremoveagent'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>removeAgent(o)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L183-L192'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Remove an Agent from this AgentSet</p>
+
+    <div class='pre p1 fill-light mt0'>removeAgent(o: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="#agentset">AgentSet</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>o</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    The Agent to be removed
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#agentset">AgentSet</a></code>:
+        This AgentSet with the Agent removed
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetsetdefault'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setDefault(name, value)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L201-L204'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Set a default value shared by all Agents in this AgentSet</p>
+
+    <div class='pre p1 fill-light mt0'>setDefault(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, value: any): <a href="#agentset">AgentSet</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The name of the shared value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>value</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#agentset">AgentSet</a></code>:
+        This AgentSet
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetgetdefault'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getDefault(name)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L211-L213'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return a default, shared value</p>
+
+    <div class='pre p1 fill-light mt0'>getDefault(name: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>name</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    The name of the default
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        The default value
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetsetbreed'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setBreed(a)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L236-L258'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Move an agent from its AgentSet/breed to be in this AgentSet/breed</p>
+
+    <div class='pre p1 fill-light mt0'>setBreed(a: Agent): Agent</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>a</span> <code class='quiet'>(Agent)</code>
+	    An agent, a member of another AgentSet
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>Agent</code>:
+        The updated agent
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetask'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>ask(fcn)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L267-L274'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Call fcn(agent, index, array) for each item in AgentArray.
+Index &#x26; array optional. Overrides AgentArray's ask with
+additional guards for modifications in AgentSet's array.</p>
+
+    <div class='pre p1 fill-light mt0'>ask(fcn: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fcn</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</code>
+	    fcn(agent, index?, array?)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentsetaskset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>askSet(fcn)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentSet.js#L281-L288'>
+      <span>src/AgentSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A much stronger version of ask(fcn) with stronger mutability guards.</p>
+
+    <div class='pre p1 fill-light mt0'>askSet(fcn: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fcn</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</code>
+	    fcn(agent, index?, array?)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='agentarray'>
+      AgentArray
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L7-L448'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Subclass of Array with convenience methods used by NetLogo.
+Tipically the items in the array are Objects but can be any type.</p>
+
+    <div class='pre p1 fill-light mt0'>new AgentArray(args: any)</div>
+  
+  
+    <p>
+      Extends
+      
+        <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>args</span> <code class='quiet'>(any)</code>
+	    Zero or more items in Array
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='agentarrayspecies'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>species</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L15-L17'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Magic to return AgentArrays rather than AgentList
+or other AgentArray subclasses when using AA methods
+<a href="https://goo.gl/Zsxwxd">Symbol.species</a></p>
+
+    <div class='pre p1 fill-light mt0'>species</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayfromarray'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromArray(array)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L26-L29'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Convert an existing Array to an AgentArray "in place".
+Use array.slice() if a new array is wanted</p>
+
+    <div class='pre p1 fill-light mt0'>fromArray(array: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>): <a href="#agentarray">AgentArray</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>array</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</code>
+	    Array to convert to AgentArray
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#agentarray">AgentArray</a></code>:
+        array converted to AgentArray
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='agentarraytoarray'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>toArray()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L50-L53'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>See <a href="#world">World</a> and [MyClass's foo property]<a href="#worldbboxtransform">World#bboxTransform</a>.
+Convert this AgentArray to Array in-place</p>
+
+    <div class='pre p1 fill-light mt0'>toArray(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        This AgentArray converted to Array
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayisempty'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isEmpty()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L74-L76'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return true if there are no items in this Array</p>
+
+    <div class='pre p1 fill-light mt0'>isEmpty(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-keyword">new</span> AgentArray().isEmpty()
+ <span class="hljs-comment">//=&gt; true</span></pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>aa.isEmpty()
+ <span class="hljs-comment">//=&gt; false</span></pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayfirst'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>first()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L85-L87'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return first item in this array. Returns undefined if empty.</p>
+
+    <div class='pre p1 fill-light mt0'>first(): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>aa.first()
+ <span class="hljs-comment">//=&gt; { x: 0, y: 0 }</span></pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarraylast'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>last()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L96-L98'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return last item in this array. Returns undefined if empty.</p>
+
+    <div class='pre p1 fill-light mt0'>last(): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>aa.last()
+ <span class="hljs-comment">//=&gt;  { x: 1, y: 0 }</span></pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayatindex'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>atIndex(i)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L108-L112'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return at index. Returns undefined if empty.
+Wrap the index to be within the array.</p>
+
+    <div class='pre p1 fill-light mt0'>atIndex(i: any): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>i</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>aa.atIndex(aa.length)
+ <span class="hljs-comment">//=&gt;  { x: 0, y: 0 }</span></pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayall'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>all(fcn)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L121-L123'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return true if fcn(element) returns true for each element in this array.
+Same as Array.every, using NetLogo's name</p>
+
+    <div class='pre p1 fill-light mt0'>all(fcn: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fcn</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</code>
+	    fcn(element) return boolean
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        true if fcn returns true for all elements
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayprops'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>props(key, type)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L139-L145'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return array of property values from this array's objects.
+Array type is specified, defaults to AgentArray</p>
+
+    <div class='pre p1 fill-light mt0'>props(key: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, type: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>key</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Property name
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>type</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>
+            = <code>AgentArray</code>)</code>
+	    Type of array (Array, Uint8Array, ...)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        Array of given type
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>aa.props(<span class="hljs-string">&#x27;x&#x27;</span>)
+ <span class="hljs-comment">//=&gt; [0, 0, 1]</span></pre>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>aa.props(<span class="hljs-string">&#x27;y&#x27;</span>)
+ <span class="hljs-comment">//=&gt; [0, 1, 0]</span></pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarraytypedsample'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>typedSample(obj)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L160-L168'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Creates an Object of Arrays, one Array per each property in obj.
+Obj is key, arrayType pairs: x: Float32Array
+This is advanced, used for web workers, very large data sets, and remote communication</p>
+
+    <div class='pre p1 fill-light mt0'>typedSample(obj: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>obj</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    Object of prop, array type pairs
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>aa.typedSample({<span class="hljs-attr">x</span>: <span class="hljs-built_in">Uint8Array</span>, <span class="hljs-attr">y</span>: <span class="hljs-built_in">Uint8Array</span>})
+ <span class="hljs-comment">//=&gt; {x: new Uint8Array([0, 0, 1]), y: new Uint8Array([0, 1, 0])}</span></pre>
+    
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayuniq'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>uniq()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L186-L189'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return new AgentArray of the unique values of this array</p>
+
+    <div class='pre p1 fill-light mt0'>uniq(): <a href="#agentarray">AgentArray</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#agentarray">AgentArray</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayforloop'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>forLoop(fcn)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L200-L205'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Call fcn(agent, index, array) for each item in AgentArray.
+Index &#x26; array optional.
+Array assumed not mutable.
+Note: 5x+ faster than this.forEach(fcn)</p>
+
+    <div class='pre p1 fill-light mt0'>forLoop(fcn: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>): this</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fcn</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</code>
+	    fcn(agent, 
+[index]
+, 
+[array]
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>this</code>:
+        Return this for chaining.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayask'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>ask(fcn)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L215-L227'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Call fcn(agent, index, array) for each item in AgentArray.
+Index &#x26; array optional.
+Array can shrink. If it grows, will not visit beyond original length.
+"ask" is NetLogo term.</p>
+
+    <div class='pre p1 fill-light mt0'>ask(fcn: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fcn</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</code>
+	    fcn(agent, 
+[index]
+, 
+[array]
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarraywith'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>with(fcn)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L237-L239'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Use: turtles.with(t => t.foo > 20).ask(t => t.bar = true)</p>
+
+    <div class='pre p1 fill-light mt0'>with(fcn: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>): <a href="#agentarray">AgentArray</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>fcn</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</code>
+	    fcn(agent, 
+[index]
+, 
+[array]
+)
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#agentarray">AgentArray</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarrayclone'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>clone()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L295-L297'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Create copy of this AgentArray</p>
+
+    <div class='pre p1 fill-light mt0'>clone(): any</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>any</code>:
+        AgentArray
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='agentarraysortby'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>sortBy(reporter, ascending)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/AgentArray.js#L314-L317'>
+      <span>src/AgentArray.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return this AgentArray sorted by the reporter in ascending/descending order.
+If reporter is a string, convert to a fcn returning that property.</p>
+
+    <div class='pre p1 fill-light mt0'>sortBy(reporter: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>, ascending: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>): <a href="#agentarray">AgentArray</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>reporter</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function">function</a>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ascending</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#agentarray">AgentArray</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='the-model' class='mt0'>
+    The Model
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='model'>
+      Model
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L28-L161'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Class Model is the primary interface for modelers, integrating
+the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:</p>
+<ul>
+<li>model.Patches: an array (<a href="#patches">Patches</a>) of <a href="#patch">Patch</a> instances</li>
+<li>model.Turtles: an array (<a href="#turtles">Turtles</a>) of <a href="#turtle">Turtle</a> instances</li>
+<li>model.Links: an array (<a href="#links">Links</a>) of <a href="#link">Link</a> instances</li>
+<li>model.breed: a sub-array of any of the three above. See AgentSet's ct</li>
+<li>All of which are subclasses of (<a href="#agentset">AgentSet</a>)</li>
+</ul>
+<p>Convention: Three abstract methods are provided by the modeler</p>
+<ul>
+<li>Startup(): (Optional) Called once to import images, data etc</li>
+<li>Setup(): Called to initialize the model state.</li>
+<li>Step(): Step the model. Will advance ticks if autoTick = true in constructor.</li>
+</ul>
+<p>See tutorial <div>01-HelloModel</div></p>
+
+    <div class='pre p1 fill-light mt0'>new Model(worldOptions: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="#world">World</a>), autoTick: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>worldOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="#world">World</a>)
+            = <code>World.defaultOptions()</code>)</code>
+	    Can be Object of min/max X,Y,Z values or an instance of World
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>autoTick</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>
+            = <code>true</code>)</code>
+	    Automatically advancee tick count each step if true
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='modelreset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>reset(worldOptions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L72-L74'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Resets model to initial state w/ new Patches, Turtles, Links.
+The worldOptions will default to initial values but can be
+changed by modeler. Setup() often called after reset() to
+re-initialize the model.</p>
+
+    <div class='pre p1 fill-light mt0'>reset(worldOptions: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="#world">World</a>))</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>worldOptions</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> | <a href="#world">World</a>)
+            = <code>this.world</code>)</code>
+	    World object
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='modeltick'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>tick()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L79-L81'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Increment the tick cound. Generally not needed if autoTick true</p>
+
+    <div class='pre p1 fill-light mt0'>tick()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='modelstartup'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>startup()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L90-L90'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A method to perform one-time initialization</p>
+
+    <div class='pre p1 fill-light mt0'>startup()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='modelsetup'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>setup()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L102-L102'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A method for initializing the model</p>
+<p>Note: can be used with reset(). This will reinitialize
+the Patches, Turtles, Links for re-running the model</p>
+<ul>
+<li>reset()</li>
+<li>setup()</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>setup()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='modelstep'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>step()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L108-L108'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Run the model one step.</p>
+
+    <div class='pre p1 fill-light mt0'>step()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='modelpatchbreeds'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>patchBreeds(breedNames)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L126-L130'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Create breeds (sub-arrays) of Patches. Used in the Exit model:</p>
+<ul>
+<li>this.patchBreeds('exits inside wall')</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>patchBreeds(breedNames: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>breedNames</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    A string of space separated breeds names
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='modelturtlebreeds'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>turtleBreeds(breedNames)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L137-L141'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Create breeds (sub-arrays) of Turtles. Used in Wallfollower model:</p>
+<ul>
+<li>this.turtleBreeds('lefty righty')</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>turtleBreeds(breedNames: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>breedNames</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    A string of space separated breeds names
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='modellinkbreeds'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>linkBreeds(breedNames)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Model.js#L148-L152'>
+      <span>src/Model.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Create breeds (sub-arrays) of Links. Used in Roads model:</p>
+<ul>
+<li>this.linkBreeds('trips')</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>linkBreeds(breedNames: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>breedNames</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    A string of space separated breeds names
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='world'>
+      World
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/World.js#L36-L259'>
+      <span>src/World.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Class World defines the coordinate system for the model.
+It has transforms for multiple coordinate systems.</p>
+<p>The world is defined by an object with 6 properties:</p>
+<pre><code>     WorldOptions = {
+         minX: integer,
+         maxX: integer,
+         minY: integer,
+         maxY: integer,
+         minZ: integer,
+         maxZ: integer,
+     }
+</code></pre>
+
+    <div class='pre p1 fill-light mt0'>new World(options: (<a href="#world">World</a> | WorldOptions | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>))</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>options</span> <code class='quiet'>((<a href="#world">World</a> | WorldOptions | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)
+            = <code>{}</code>)</code>
+	    Object with overrides for class properties
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='worlddefaultoptions'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>defaultOptions(maxX, maxY, maxZ)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/World.js#L72-L81'>
+      <span>src/World.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return a default options object, origin at center.</p>
+
+    <div class='pre p1 fill-light mt0'>defaultOptions(maxX: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, maxY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, maxZ: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): WorldOptions</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxX</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>16</code>)</code>
+	    Integer max X value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>maxX</code>)</code>
+	    Integer max Y value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxZ</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>Math.max(maxX,maxY)</code>)</code>
+	    Integer max Z value
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>WorldOptions</code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='worlddefaultworld'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>defaultWorld(maxX, maxY, maxZ)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/World.js#L90-L92'>
+      <span>src/World.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Factory to create a default World instance.</p>
+
+    <div class='pre p1 fill-light mt0'>defaultWorld(maxX: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, maxY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, maxZ: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="#world">World</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxX</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>16</code>)</code>
+	    Integer max X value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>maxX</code>)</code>
+	    Integer max Y value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxZ</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>Math.max(maxX,maxY)</code>)</code>
+	    Integer max Z value
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#world">World</a></code>:
+        
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='worldrandompoint'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>randomPoint()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/World.js#L131-L136'>
+      <span>src/World.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return a random 2D point within the World</p>
+
+    <div class='pre p1 fill-light mt0'>randomPoint(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        A random x,y float array
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='worldrandom3dpoint'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>random3DPoint()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/World.js#L143-L149'>
+      <span>src/World.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return a random 3D point within the World</p>
+
+    <div class='pre p1 fill-light mt0'>random3DPoint(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        A random x,y,z float array
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='worldrandompatchpoint'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>randomPatchPoint()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/World.js#L156-L161'>
+      <span>src/World.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return a random Patch 2D integer point</p>
+
+    <div class='pre p1 fill-light mt0'>randomPatchPoint(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        A random x,y integer array
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='worldisonworld'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isOnWorld(x, y, z)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/World.js#L171-L182'>
+      <span>src/World.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Given x,y,z values return true if within the world</p>
+
+    <div class='pre p1 fill-light mt0'>isOnWorld(x: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, y: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, z: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>x</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    x value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>y</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    y value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>z</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>
+            = <code>this.centerZ</code>)</code>
+	    z value
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>:
+        Whether or not on-world
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='worldbboxtransform'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>bboxTransform(minX, minY, maxX, maxY)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/World.js#L201-L203'>
+      <span>src/World.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Return an instance of a bounding box 2D transform.
+It linearly interpolates between the given minX, minY, maxX, maxY,
+and the world's values of the same properties.</p>
+<p>The parameters are in the popular geojson order: west, south, east, north</p>
+<p>Useful for Canvas top-left transforms and geojson transforms.</p>
+
+    <div class='pre p1 fill-light mt0'>bboxTransform(minX: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, minY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, maxX: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, maxY: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>): BBoxTransform</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>minX</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    min bounding box x value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>minY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    min bounding box y value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxX</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    max bounding box x value
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>maxY</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    max bounding box y value
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>BBoxTransform</code>:
+        Instance of the BBoxTransform
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='the-view' class='mt0'>
+    The View
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='twodraw'>
+      TwoDraw
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/TwoDraw.js#L10-L167'>
+      <span>src/TwoDraw.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Basic 2D view.</p>
+<p><strong>TODO: Document this class</strong></p>
+
+    <div class='pre p1 fill-light mt0'>new TwoDraw(model: any, viewOptions: any, drawOptions: any)</div>
+  
+  
+    <p>
+      Extends
+      
+        TwoView
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>model</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>viewOptions</span> <code class='quiet'>(any
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>drawOptions</span> <code class='quiet'>(any
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='threedraw'>
+      ThreeDraw
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/ThreeDraw.js#L20-L235'>
+      <span>src/ThreeDraw.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Basic 3D view.</p>
+<p><strong>TODO: Document this class</strong></p>
+
+    <div class='pre p1 fill-light mt0'>new ThreeDraw(model: any, viewOptions: any, drawOptions: any)</div>
+  
+  
+    <p>
+      Extends
+      
+        ThreeView
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>model</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>viewOptions</span> <code class='quiet'>(any
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>drawOptions</span> <code class='quiet'>(any
+            = <code>{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='color'>
+      Color
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Color.js#L22-L190'>
+      <span>src/Color.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A general color module, supporting css string colors, canvas2d pixel
+colors, webgl and canvas2d Uint8ClampedArray r,g,b,a arrays.</p>
+<h3>CSS Color Strings.</h3>
+<p>CSS colors in HTML are strings, see <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value">Mozillas Color Reference</a>,
+taking one of 7 forms:</p>
+<ul>
+<li>Names: over 140 color case-insensitive names like
+Red, Green, CadetBlue, etc.</li>
+<li>Hex, short and long form: #0f0, #ff10a0</li>
+<li>RGB: rgb(255, 0, 0), rgba(255, 0, 0, 0.5)</li>
+<li>HSL: hsl(120, 100%, 50%), hsla(120, 100%, 50%, 0.8)</li>
+</ul>
+<p>See <a href="https://goo.gl/ev8Kw0">this wikipedia article</a>
+on differences between HSL and HSB/HSV.</p>
+
+    <div class='pre p1 fill-light mt0'>Color</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='colorrgbacsscolor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>rgbaCssColor(r, g, b, a)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Color.js#L29-L33'>
+      <span>src/Color.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Convert 4 r,g,b,a ints in [0-255] ("a" defaulted to 255) to a
+css color string.</p>
+
+    <div class='pre p1 fill-light mt0'>rgbaCssColor(r: any, g: any, b: any, a: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>r</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>g</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>b</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>a</span> <code class='quiet'>(any
+            = <code>255</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='colorhslcsscolor'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>hslCssColor(h, s, l, a)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Color.js#L42-L48'>
+      <span>src/Color.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Convert 4 ints, h,s,l,a, h in [0-360], s,l in [0-100]% a in [0-255] to a
+css color string.</p>
+<p>NOTE: h=0 and h=360 are the same, use h in 0-359 for unique colors.</p>
+
+    <div class='pre p1 fill-light mt0'>hslCssColor(h: any, s: any, l: any, a: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>h</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>s</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>l</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>a</span> <code class='quiet'>(any
+            = <code>255</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='interaction' class='mt0'>
+    Interaction
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='mouse'>
+      Mouse
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/Mouse.js#L6-L96'>
+      <span>src/Mouse.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A NetLogo-like mouse handler.</p>
+<p><strong>TODO: Example usage.</strong></p>
+
+    <div class='pre p1 fill-light mt0'>new Mouse(canvas: any, world: any, callback: any)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>canvas</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>world</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>callback</span> <code class='quiet'>(any
+            = <code>(evt,mouse)=&gt;{}</code>)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='utilities' class='mt0'>
+    Utilities
+  </h2>
+
+  
+    <p>An assortment of helper functions. To use: <code>import * as util from src/utils.js</code>.</p>
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='randomint'>
+      randomInt
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/utils.js#L465-L465'>
+      <span>src/utils.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns a random int in [0, max)</p>
+
+    <div class='pre p1 fill-light mt0'>randomInt</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>max</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='randomint2'>
+      randomInt2
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/utils.js#L467-L468'>
+      <span>src/utils.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns a random int in [min, max)</p>
+
+    <div class='pre p1 fill-light mt0'>randomInt2</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>min</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>max</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='randomfloat'>
+      randomFloat
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/utils.js#L470-L470'>
+      <span>src/utils.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns a random float in [0, max)</p>
+
+    <div class='pre p1 fill-light mt0'>randomFloat</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>max</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='randomfloat2'>
+      randomFloat2
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/utils.js#L472-L472'>
+      <span>src/utils.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Returns a random float in [min, max)</p>
+
+    <div class='pre p1 fill-light mt0'>randomFloat2</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>min</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>max</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <div class='keyline-top-not py2'><section class='py2 clearfix'>
+
+  <h2 id='other' class='mt0'>
+    Other
+  </h2>
+
+  
+    
+
+  
+</section></div>
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='dataset'>
+      DataSet
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/DataSet.js#L10-L438'>
+      <span>src/DataSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>A DataSet is an object with width/height and an array
+of numbers of length = width * height.</p>
+<p>The array can be a TypedArray or a JavaScript Array.</p>
+
+    <div class='pre p1 fill-light mt0'>new DataSet(width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, data: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The integer width of the array
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The integer height of the array
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>data</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">array</a>)</code>
+	    The array of numbers of length width * height
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='datasetemptydataset'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>emptyDataSet(width, height, Type)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/src/DataSet.js#L25-L27'>
+      <span>src/DataSet.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p>Factory method returning an empty dataset of given
+width, height, dataType</p>
+
+    <div class='pre p1 fill-light mt0'>emptyDataSet(width: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, height: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>, Type: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="#dataset">DataSet</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>width</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The integer width of the array
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>height</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>)</code>
+	    The integer height of the array
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>Type</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    Array or one of the typed array types
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#dataset">DataSet</a></code>:
+        The resulting DataSet with no values assigned
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='eventdispatcher'>
+      EventDispatcher
+    </h3>
+    
+    
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/backspaces/agentscript/blob/c1a0a772995fc180f9300a5599f27d50512261df/vendor/Object3D.esm.js#L2460-L2460'>
+      <span>vendor/Object3D.esm.js</span>
+      </a>
+    
+  </div>
+  
+
+  <p><a href="https://github.com/mrdoob/eventdispatcher.js/">https://github.com/mrdoob/eventdispatcher.js/</a></p>
+
+    <div class='pre p1 fill-light mt0'>new EventDispatcher()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+      </div>
+    </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
+  <script src='assets/site.js'></script>
 </body>
 </html>

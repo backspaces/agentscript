@@ -2,7 +2,11 @@ import * as util from './utils.js'
 import TwoView from '../src/TwoView.js'
 import ColorMap from '../src/ColorMap.js'
 
-// export default class TwoDraw {
+/**
+ * Basic 2D view.
+ *
+ * **TODO: Document this class**
+ */
 export default class TwoDraw extends TwoView {
     static defaultOptions() {
         return {

@@ -1,28 +1,30 @@
-// A general color module, supporting css string colors, canvas2d pixel
-// colors, webgl and canvas2d Uint8ClampedArray r,g,b,a arrays.
-// Notice a JavaScript Array is **not** a color!
-
 import * as util from './utils.js'
 
+/** 
+* A general color module, supporting css string colors, canvas2d pixel
+* colors, webgl and canvas2d Uint8ClampedArray r,g,b,a arrays.
+*
+* ### CSS Color Strings.
+*
+* CSS colors in HTML are strings, see [Mozillas Color Reference](
+* https://developer.mozilla.org/en-US/docs/Web/CSS/color_value),
+* taking one of 7 forms:
+*
+* * Names: over 140 color case-insensitive names like
+*   Red, Green, CadetBlue, etc.
+* * Hex, short and long form: #0f0, #ff10a0
+* * RGB: rgb(255, 0, 0), rgba(255, 0, 0, 0.5)
+* * HSL: hsl(120, 100%, 50%), hsla(120, 100%, 50%, 0.8)
+*
+* See [this wikipedia article](https://goo.gl/ev8Kw0)
+* on differences between HSL and HSB/HSV.
+*/
 const Color = {
-    // export default Color = {
-    // ### CSS Color Strings.
-
-    // CSS colors in HTML are strings, see [Mozillas Color Reference](
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value),
-    // taking one of 7 forms:
-    //
-    // * Names: over 140 color case-insensitive names like
-    //   Red, Green, CadetBlue, etc.
-    // * Hex, short and long form: #0f0, #ff10a0
-    // * RGB: rgb(255, 0, 0), rgba(255, 0, 0, 0.5)
-    // * HSL: hsl(120, 100%, 50%), hsla(120, 100%, 50%, 0.8)
-    //
-    // See [this wikipedia article](https://goo.gl/ev8Kw0)
-    // on differences between HSL and HSB/HSV.
-
-    // Convert 4 r,g,b,a ints in [0-255] ("a" defaulted to 255) to a
-    // css color string. Alpha "a" is converted to float in 0-1 for css string.
+    /** 
+    * Convert 4 r,g,b,a ints in [0-255] ("a" defaulted to 255) to a
+    * css color string.
+    */
+    // Alpha "a" is converted to float in 0-1 for css string.
     // We use alpha in [0-255] to be compatible with TypedArray conventions.
     rgbaCssColor(r, g, b, a = 255) {
         a = a / 255
@@ -30,10 +32,13 @@ const Color = {
         return a === 1 ? `rgb(${r},${g},${b})` : `rgba(${r},${g},${b},${a2})`
     },
 
-    // Convert 4 ints, h,s,l,a, h in [0-360], s,l in [0-100]% a in [0-255] to a
-    // css color string. Alpha "a" is converted to float in 0-1 for css string.
-    //
-    // NOTE: h=0 and h=360 are the same, use h in 0-359 for unique colors.
+    /**
+    * Convert 4 ints, h,s,l,a, h in [0-360], s,l in [0-100]% a in [0-255] to a
+    * css color string.
+    *
+    * NOTE: h=0 and h=360 are the same, use h in 0-359 for unique colors.
+    */
+    // Alpha "a" is converted to float in 0-1 for css string.
     hslCssColor(h, s, l, a = 255) {
         a = a / 255
         const a4 = a.toPrecision(4)
