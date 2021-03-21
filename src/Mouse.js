@@ -1,4 +1,8 @@
-// A NetLogo-like mouse handler.
+/**
+* A NetLogo-like mouse handler.
+*
+* **TODO: Example usage.**
+*/
 export default class Mouse {
     // Create and start mouse obj, args: a model, and a callback method.
     constructor(canvas, world, callback = (evt, mouse) => {}) {

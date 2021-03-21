@@ -60,12 +60,18 @@ class Patch {
     // To avoid promotion, use `patches.neighbors(this)`.
     // Promotion makes getters accessed only once.
     // defineProperty required: can't set this.neighbors when getter defined.
+    /**
+     * A list of this patch's 8 [Moore neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood).
+     */
     get neighbors() {
         // lazy promote neighbors from getter to instance prop.
         const n = this.patches.neighbors(this)
         Object.defineProperty(this, 'neighbors', { value: n, enumerable: true })
         return n
     }
+    /**
+     * A list of this patch's 4 [Von Neumann neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood) (north, south, east, west).
+     */
     get neighbors4() {
         const n = this.patches.neighbors4(this)
         Object.defineProperty(this, 'neighbors4', {

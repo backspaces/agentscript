@@ -12,6 +12,11 @@ function isDynamicColor(color) {
     )
 }
 
+/**
+ * Basic 3D view.
+ *
+ * **TODO: Document this class**
+ */
 export default class ThreeDraw extends ThreeView {
     static defaultOptions() {
         return {
