@@ -48,13 +48,12 @@
         "build-scripts": "node bin/models2scripts",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c workflow/rollup.vendor.js",
         "build-md": "bin/src2md 'models views2 views3 views3d gis' > /dev/null",
-        "build-docs": "npm run clean-docs && jsdoc -c workflow/jsdoc.config.js && bin/docsmod && cp tutorials/data/* docs/data",
-        "update-docs": "jsdoc -c workflow/jsdoc.config.js && bin/docsmod",
-        "clean-docs": "shx rm -f docs/*.html docs/data/*",
+        "build-docs": "npm run clean-docs && documentation build src/** --config documentation.yml --github -f html -o docs",
+        "clean-docs": "shx rm -r docs/",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
-        "watch-docs": "chokidar 'src/*.js' 'tutorials/*.md' -c 'npm run update-docs' &",
+        "watch-docs": "documentation serve --config documentation.yml --github --watch src/**",
         "watch": "npm-run-all watch-src watch-models",
         "run1": "bin/runmodels models",
         "run1s": "bin/runmodels models/scripts",
@@ -69,9 +68,7 @@
         "run3w": "bin/runmodels workers3",
         "runnode": "bin/runnodemodels",
         "chrome": "bin/modelsinbrowser models",
-        "safari": "bin/modelsinbrowser models Safari",
-        "foo": "bin/docsmod",
-        "temp": "documentation build src/*.js --shallow -f html -o temp"
+        "safari": "bin/modelsinbrowser models Safari"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
@@ -80,9 +77,8 @@
     "devDependencies": {
         "ava": "^2.1.0",
         "chokidar-cli": "^1.2.1",
-        "clean-jsdoc-theme": "*",
+        "documentation": "^13.2.0",
         "esm": "^3.2.25",
-        "jsdoc": "*",
         "live-server": "latest",
         "npm-run-all": "4.1.2",
         "prettier": "^2.1.2",

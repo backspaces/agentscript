@@ -461,10 +461,14 @@ export function fcnToWorker(fcn) {
 const { PI } = Math
 
 // Return random int/float in [0,max) or [min,max) or [-r/2,r/2)
+/** Returns a random int in [0, max) */
 export const randomInt = max => Math.floor(Math.random() * max)
+/** Returns a random int in [min, max) */
 export const randomInt2 = (min, max) =>
     min + Math.floor(Math.random() * (max - min))
+/** Returns a random float in [0, max) */
 export const randomFloat = max => Math.random() * max
+/** Returns a random float in [min, max) */
 export const randomFloat2 = (min, max) => min + Math.random() * (max - min)
 export const randomCentered = r => randomFloat2(-r / 2, r / 2)
 
