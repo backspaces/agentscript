@@ -13,22 +13,6 @@ export default class AntsModel extends Model {
     foodY = () => 0
     nestX = world => world.maxX - 6
     nestY = () => 0
-    // geometry = 'heading'
-
-    // static defaultOptions() {
-    //     return {
-    //         // population: 255,
-    //         // speed: 1.0,
-    //         // maxPheromone: 35,
-    //         // diffusionRate: 0.3,
-    //         // evaporationRate: 0.01,
-    //         // wiggleAngle: util.degToRad(30),
-    //         // foodX: world => world.minX + 6,
-    //         // foodY: () => 0,
-    //         // nestX: world => world.maxX - 6,
-    //         // nestY: () => 0,
-    //     }
-    // }
 
     // ======================
 

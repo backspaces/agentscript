@@ -3891,8 +3891,6 @@ class Turtles extends AgentSet {
     }
 }
 
-// import Color from './Color.js'
-
 // Flyweight object creation, see Patch/Patches.
 
 // Class Turtle instances represent the dynamic, behavioral element of modeling.
@@ -3995,6 +3993,13 @@ class Turtle {
     }
     set heading(heading) {
         this.theta = this.model.toRads(heading);
+    }
+    subtractHeadings(heading1, heading2) {
+        if (this.model.geometry === 'radians') {
+            return subtractRadians(heading1, heading2)
+        } else {
+            return undefined(heading1, heading2)
+        }
     }
     // Get/put direction using the current geometry
     get direction() {
@@ -4222,6 +4227,8 @@ class Turtle {
         return t in this.linkNeighbors()
     }
 }
+
+// export default Turtle
 
 /**
  * @description

@@ -5,32 +5,17 @@ class FlockModel extends Model {
     population = 1000
     vision = 3
     speed = 0.25
-    maxTurn = util.degToRad(3.0)
+    maxTurn = util.degToRad(3.0) // using radian geometry
     minSeparation = 0.75
-    geometry = 'radians' // could be tricky to use heading, later
-
-    // static defaultOptions() {
-    //     return {
-    //         population: 1000,
-    //         vision: 3,
-    //         speed: 0.25,
-    //         maxTurn: util.degToRad(3.0),
-    //         minSeparation: 0.75,
-    //     }
-    // }
+    geometry = 'radians' // Using radians due to trig functions usage
 
     // ======================
 
     constructor(worldDptions) {
-        // this.geometry = 'radians' // this not defined 'til after super()
         super(worldDptions) // default world options if "undefined"
         this.setGeometry(this.geometry)
-        // Object.assign(this, FlockModel.defaultOptions())
     }
 
-    // setMaxTurn(maxTurnDegrees) {
-    //     this.maxTurn = util.degToRad(maxTurnDegrees)
-    // }
     setup() {
         this.turtles.setDefault('speed', this.speed)
         this.patches.cacheRect(this.vision)
@@ -47,8 +32,6 @@ class FlockModel extends Model {
     }
     flock(t) {
         const flockmates = this.turtles.inRadius(t, this.vision, false)
-        // const vision = this.vision
-        // const flockmates = this.turtles.inPatchRect(t, vision, vision, false)
         if (flockmates.length !== 0) {
             const nearest = flockmates.minOneOf(f => f.distance(t))
             if (t.distance(nearest) < this.minSeparation) {
@@ -72,8 +55,8 @@ class FlockModel extends Model {
     }
 
     turnTowards(t, theta) {
-        let turn = util.subtractRadians(theta, t.theta) // angle from h to t
-        turn = util.clamp(turn, -this.maxTurn, this.maxTurn) // limit the turn
+        let turn = util.subtractRadians(theta, t.theta)
+        turn = util.clamp(turn, -this.maxTurn, this.maxTurn)
         t.rotate(turn)
     }
     averageHeading(flockmates) {

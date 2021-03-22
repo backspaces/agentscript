@@ -2,14 +2,18 @@
     <head>
         <title>ants</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="./view2.css" />
     </head>
     <body>
         <script type="module">
             import * as util from '../src/utils.js'
+            import Model from '../models/AntsModel.js'
             import TwoDraw from '../src/TwoDraw.js'
             import Color from '../src/Color.js'
             import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/AntsModel.js'
+            import Animator from '../src/Animator.js'
+            import dat from 'https://cdn.skypack.dev/dat.gui'
 
             // Define colors and colormaps
             const nestColor = Color.typedColor('yellow')
@@ -34,32 +38,33 @@
                 turtlesSize: 3,
                 turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
             }
+
             // ==============================
 
-            async function run() {
-                const model = new Model()
-                await model.startup()
-                model.setup()
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-                const view = new TwoDraw(model, {
-                    div: 'modelDiv',
-                    useSprites: true, // ant shape difficult to draw
-                    width: 700,
-                    drawOptions,
-                })
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                useSprites: true, // ant shape difficult to draw
+                width: 700,
+                drawOptions,
+            })
 
-                util.toWindow({ util, model, view })
+            const anim = new Animator(() => {
+                model.step()
+                view.draw()
+            }, 500).startStats()
 
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    500,
-                    33
-                )
-            }
-            run()
+            util.toWindow({ util, model, view, anim })
+
+            const gui = new dat.GUI()
+            gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
+            gui.add(anim, 'toggle')
+            gui.add(anim, 'once')
+            gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
+            gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
         </script>
         <div id="modelDiv"></div>
     </body>

@@ -1,5 +1,3 @@
-// import Color from './Color.js'
-// import AgentArray from './AgentArray.js'
 import AgentList from './AgentList.js'
 import * as util from './utils.js'
 
@@ -16,7 +14,7 @@ import * as util from './utils.js'
  *
  * **TODO: Document Turtle properties and methods.**
  */
-class Turtle {
+export default class Turtle {
     atEdge = 'wrap'
     // Set by AgentSet
     agentSet
@@ -105,6 +103,13 @@ class Turtle {
     }
     set heading(heading) {
         this.theta = this.model.toRads(heading)
+    }
+    subtractHeadings(heading1, heading2) {
+        if (this.model.geometry === 'radians') {
+            return util.subtractRadians(heading1, heading2)
+        } else {
+            return util.subtractDegreees(heading1, heading2)
+        }
     }
     // Get/put direction using the current geometry
     get direction() {
@@ -333,4 +338,4 @@ class Turtle {
     }
 }
 
-export default Turtle
+// export default Turtle
