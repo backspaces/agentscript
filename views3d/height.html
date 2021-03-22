@@ -9,7 +9,10 @@
     </body>
     <!-- Greggman sez put scripts after body -->
     <script type="module">
-        import { THREE, OrbitControls, GUI } from '../vendor/three.esm.js'
+        import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
+        import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
+        import dat from 'https://cdn.skypack.dev/dat.gui'
+
         import * as util from '../src/utils.js'
         import * as utils3 from './threeUtils.js'
 

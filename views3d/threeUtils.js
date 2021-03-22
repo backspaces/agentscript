@@ -1,4 +1,7 @@
-import { THREE, OrbitControls, Stats } from '../vendor/three.esm.js'
+import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
+import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
+import Stats from 'https://cdn.skypack.dev/stats.js'
+
 import * as util from '../src/utils.js'
 const degToRad = util.degToRad
 const radToDeg = util.radToDeg

@@ -1,4 +1,3 @@
-// import * as turf from '../vendor/turf.esm.js'
 import * as turf from 'https://cdn.skypack.dev/@turf/turf'
 import * as gis from '../src/gis.js'
 

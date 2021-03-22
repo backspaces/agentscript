@@ -56,9 +56,8 @@ Our directory layout is:
 -   [models/scripts/](https://github.com/backspaces/agentscript/tree/master/models/scripts): `<script>` versions of models/.<br>
     Used by legacy models, test/, and workers. test/ uses workers for speed.
 -   [test/](https://github.com/backspaces/agentscript/tree/master/test): testing in browser for all models/ using [Puppeteer](https://github.com/puppeteer/puppeteer#puppeteer)
--   [vendor/](https://github.com/backspaces/agentscript/tree/master/vendor): es6 versions of third party libraries used by onepagers.
--   [workflow/](https://github.com/backspaces/agentscript/tree/master/workflow): tools for creating "bundles".<br>
-    Note that many of these will be removed as es6 modules fully supported by our dependencies. For example models/scripts will be removed when workers can use import statements in all browsers. Safari, we're talking about you! Ditto for vendor/ as all dependencies offer es6 modules.
+-   [config/](https://github.com/backspaces/agentscript/tree/master/config): tools for creating "bundles".<br>
+    Note that many of these will be removed as es6 modules fully supported by our dependencies. For example models/scripts will be removed when workers can use import statements in all browsers. Safari, we're talking about you!
 
 Click on the directory name to see it on github. Click on the individual file names to see them nicely formatted.
 

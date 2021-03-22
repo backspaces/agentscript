@@ -1,4 +1,3 @@
-// import Chart from '../vendor/chart.esm.js'
 import Chart from 'https://cdn.skypack.dev/chart.js'
 import * as util from './utils.js'
 

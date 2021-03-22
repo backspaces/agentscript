@@ -9,7 +9,9 @@
     </body>
     <!-- Greggman sez put scripts after body -->
     <script type="module">
-        import { THREE, OrbitControls, GUI } from '../vendor/three.esm.js'
+        import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
+        import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
+        import dat from 'https://cdn.skypack.dev/dat.gui'
         import Model from '../models/Hello3DModel.js'
         import * as util from '../src/utils.js'
         import * as utils3 from './threeUtils.js'
@@ -63,7 +65,7 @@
             mesh.rotation.set(...turtle.getRotation())
         })
 
-        const gui = new GUI()
+        const gui = new dat.GUI()
         const reset = () => {
             // setup for NL
             turtle.reset()
