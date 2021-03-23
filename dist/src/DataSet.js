@@ -7,7 +7,7 @@ import * as util from './utils.js'
  * The array can be a TypedArray or a JavaScript Array.
  */
 
-class DataSet {
+export default class DataSet {
     // **Static methods:** called via DataSet.foo(), similar to Math.foo().
     // Generally useful utilities for use with TypedArrays & JS Arrays
 
@@ -437,7 +437,7 @@ class DataSet {
     }
 }
 
-export default DataSet
+// export default DataSet
 
 // REMIND: limit to data that can be 24 bit. Error otherwise.
 // DataType of Int8, 16, Int24 OK, others need testing.

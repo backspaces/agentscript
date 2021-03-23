@@ -10,7 +10,7 @@ import AgentArray from './AgentArray.js'
  *
  * **TODO: Document Link properties and methods.**
  */
-class Link {
+export default class Link {
     // Set by AgentSet
     agentSet
     model
@@ -91,4 +91,4 @@ class Link {
     }
 }
 
-export default Link
+// export default Link

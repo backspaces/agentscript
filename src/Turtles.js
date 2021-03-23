@@ -11,7 +11,7 @@ import AgentSet from './AgentSet.js'
  *
  * @extends {AgentSet}
  */
-class Turtles extends AgentSet {
+export default class Turtles extends AgentSet {
     // Factories:
     // Add 1 or more turtles.
     // Can be a single turtle or an array of turtles. The optional init
@@ -113,4 +113,4 @@ class Turtles extends AgentSet {
     }
 }
 
-export default Turtles
+// export default Turtles

@@ -1911,6 +1911,8 @@ out;`;
         }
     }
 
+    // export default AgentArray
+
     // // Return shallow copy of a portion of this AgentArray
     // // [See Array.slice](https://goo.gl/Ilgsok)
     // // Default is to clone entire AgentArray
@@ -2248,6 +2250,8 @@ out;`;
             }
         }
     }
+
+    // export default AgentSet
 
     /**
      * A DataSet is an object with width/height and an array
@@ -2686,6 +2690,8 @@ out;`;
         }
     }
 
+    // export default DataSet
+
     // REMIND: limit to data that can be 24 bit. Error otherwise.
     // DataType of Int8, 16, Int24 OK, others need testing.
     // Possibly use precision to minimize byte size to 3, rgb?
@@ -2845,6 +2851,8 @@ out;`;
         }
     }
 
+    // export default Link
+
     // Links are a collection of all the Link objects between turtles.
     /**
      * Links are a collection of all the {@link Link} objects between turtles.
@@ -2882,6 +2890,8 @@ out;`;
             }) // REMIND: return single link if to not an array?
         }
     }
+
+    // export default Links
 
     // class World defines the coordinate system for the model.
     // It will be  upgraded with methods converting from other
@@ -3211,6 +3221,8 @@ out;`;
             return [x, y]
         }
     }
+
+    // export default World
 
     // The midpoints of the world, in world coords.
     // (0, 0) for the centered default worlds. REMIND: remove?
@@ -3787,6 +3799,8 @@ out;`;
         }
     }
 
+    // export default Patch
+
     // Turtles are the world other agentsets live on. They create a coord system
     // from Model's world values: size, minX, maxX, minY, maxY
     /**
@@ -3896,6 +3910,8 @@ out;`;
             });
         }
     }
+
+    // export default Turtles
 
     // Flyweight object creation, see Patch/Patches.
 
@@ -4420,6 +4436,8 @@ out;`;
             // fromDeltaRads: rads => -rads * toDeg,
         },
     };
+
+    // export default Model
 
     // The mapbox elevation formula:
     // https://blog.mapbox.com/global-elevation-data-6689f1d0ba65

@@ -25,7 +25,7 @@ import Link from './Link.js'
  *
  * See tutorial {@tutorial 01-HelloModel}
  */
-class Model {
+export default class Model {
     world
     patches
     turtles
@@ -195,4 +195,4 @@ const geometries = {
     },
 }
 
-export default Model
+// export default Model

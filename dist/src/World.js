@@ -33,7 +33,7 @@ import * as util from './utils.js'
  *              maxZ: integer,
  *          }
  */
-class World {
+export default class World {
     maxX = 16
     maxY = 16
     maxZ = 16
@@ -329,7 +329,7 @@ class BBoxTransform {
     }
 }
 
-export default World
+// export default World
 
 // The midpoints of the world, in world coords.
 // (0, 0) for the centered default worlds. REMIND: remove?

@@ -11,7 +11,7 @@ import AgentArray from './AgentArray.js'
  * AgentSets are not created directly by modelers, only other
  * AgentSet subclasses: Patches, Turtles, Links & Breeds.
  */
-class AgentSet extends AgentArray {
+export default class AgentSet extends AgentArray {
     // Inherited by Patches, Turtles, Links
     model
     name
@@ -331,4 +331,4 @@ class AgentSet extends AgentArray {
     }
 }
 
-export default AgentSet
+// export default AgentSet

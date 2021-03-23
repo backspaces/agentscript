@@ -23,7 +23,7 @@ import AgentList from './AgentList.js'
  * @export
  * @class
  */
-class Patch {
+export default class Patch {
     // Set by AgentSet
     agentSet
     model
@@ -154,4 +154,4 @@ class Patch {
     }
 }
 
-export default Patch
+// export default Patch

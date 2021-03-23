@@ -108,7 +108,7 @@ export default class Turtle {
         if (this.model.geometry === 'radians') {
             return util.subtractRadians(heading1, heading2)
         } else {
-            return util.subtractDegreees(heading1, heading2)
+            return util.subtractDegrees(heading1, heading2)
         }
     }
     // Get/put direction using the current geometry

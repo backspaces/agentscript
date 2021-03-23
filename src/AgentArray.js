@@ -4,7 +4,7 @@ import * as util from './utils.js'
  * Subclass of Array with convenience methods used by NetLogo.
  * Tipically the items in the array are Objects but can be any type.
  */
-class AgentArray extends Array {
+export default class AgentArray extends Array {
     /**
      * Magic to return AgentArrays rather than AgentList
      * or other AgentArray subclasses when using AA methods
@@ -447,7 +447,7 @@ class AgentArray extends Array {
     }
 }
 
-export default AgentArray
+// export default AgentArray
 
 // // Return shallow copy of a portion of this AgentArray
 // // [See Array.slice](https://goo.gl/Ilgsok)
