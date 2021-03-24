@@ -93,7 +93,7 @@ layout: base.html
 
       <p>Read this code before you run it. What do you think will happen?</p>
       <div code-block forever-button>model.turtles.ask(turtle => {
-  turtle.face(util.oneOf(model.turtles))
+  turtle.face(model.turtles.oneOf())
   turtle.forward(1)
 })</div>
 
