@@ -21,7 +21,7 @@ export default class AgentArray extends Array {
      * Use array.slice() if a new array is wanted
      *
      * @param {Array} array Array to convert to AgentArray
-     * @return {AgentArray} array converted to AgentArray
+     * @returns {AgentArray} array converted to AgentArray
      */
     static fromArray(array) {
         const aarray = Object.setPrototypeOf(array, AgentArray.prototype)
@@ -45,7 +45,7 @@ export default class AgentArray extends Array {
      * See {@link World} and [MyClass's foo property]{@link World#bboxTransform}.
      * Convert this AgentArray to Array in-place
      *
-     * @return {Array} This AgentArray converted to Array
+     * @returns {Array} This AgentArray converted to Array
      */
     toArray() {
         Object.setPrototypeOf(this, Array.prototype)
@@ -63,7 +63,7 @@ export default class AgentArray extends Array {
     /**
      * Return true if there are no items in this Array
      *
-     * @return {boolean}
+     * @returns {boolean}
      * @example
      *  new AgentArray().isEmpty()
      *  //=> true
@@ -77,7 +77,7 @@ export default class AgentArray extends Array {
     /**
      * Return first item in this array. Returns undefined if empty.
      *
-     * @return {any}
+     * @returns {any}
      * @example
      *  aa.first()
      *  //=> { x: 0, y: 0 }
@@ -88,7 +88,7 @@ export default class AgentArray extends Array {
     /**
      * Return last item in this array. Returns undefined if empty.
      *
-     * @return {any}
+     * @returns {any}
      * @example
      *  aa.last()
      *  //=>  { x: 1, y: 0 }
@@ -100,7 +100,7 @@ export default class AgentArray extends Array {
      * Return at index. Returns undefined if empty.
      * Wrap the index to be within the array.
      *
-     * @return {any}
+     * @returns {any}
      * @example
      *  aa.atIndex(aa.length)
      *  //=>  { x: 0, y: 0 }
@@ -116,7 +116,7 @@ export default class AgentArray extends Array {
      * Same as Array.every, using NetLogo's name
      *
      * @param {Function} fcn fcn(element) return boolean
-     * @return {boolean} true if fcn returns true for all elements
+     * @returns {boolean} true if fcn returns true for all elements
      */
     all(fcn) {
         return this.every(fcn)
@@ -128,7 +128,7 @@ export default class AgentArray extends Array {
      *
      * @param {String} key Property name
      * @param {Array} [type=AgentArray] Type of array (Array, Uint8Array, ...)
-     * @return {Array} Array of given type
+     * @returns {Array} Array of given type
      * @example
      *  aa.props('x')
      *  //=> [0, 0, 1]
@@ -152,7 +152,7 @@ export default class AgentArray extends Array {
      * This is advanced, used for web workers, very large data sets, and remote communication
      *
      * @param {Object} obj Object of prop, array type pairs
-     * @return {Object}
+     * @returns {Object}
      * @example
      *  aa.typedSample({x: Uint8Array, y: Uint8Array})
      *  //=> {x: new Uint8Array([0, 0, 1]), y: new Uint8Array([0, 1, 0])}
@@ -181,7 +181,7 @@ export default class AgentArray extends Array {
     /**
      * Return new AgentArray of the unique values of this array
      *
-     * @return {AgentArray}
+     * @returns {AgentArray}
      */
     uniq() {
         // return AgentArray.fromArray(Array.from(new Set(this)))
@@ -195,7 +195,7 @@ export default class AgentArray extends Array {
      * Note: 5x+ faster than this.forEach(fcn)
      *
      * @param {Function} fcn fcn(agent, [index], [array])
-     * @return {this} Return this for chaining.
+     * @returns {this} Return this for chaining.
      */
     forLoop(fcn) {
         for (let i = 0, len = this.length; i < len; i++) {
@@ -230,7 +230,7 @@ export default class AgentArray extends Array {
      * NetLogo term, simply calls this.filter(fcn)
      *
      * @param {Function} fcn fcn(agent, [index], [array])
-     * @return {AgentArray}
+     * @returns {AgentArray}
      * @description
      * Use: turtles.with(t => t.foo > 20).ask(t => t.bar = true)
      */
@@ -290,7 +290,7 @@ export default class AgentArray extends Array {
 
     /**
      * Create copy of this AgentArray
-     * @return AgentArray
+     * @returns AgentArray
      */
     clone() {
         return this.slice(0) // Returns an AgentArray rather than Array!
@@ -309,7 +309,7 @@ export default class AgentArray extends Array {
      *
      * @param {function} reporter
      * @param {boolean} [ascending=true]
-     * @return {AgentArray}
+     * @returns {AgentArray}
      */
     sortBy(reporter, ascending = true) {
         util.sortObjs(this, reporter, ascending)

@@ -1,16 +1,28 @@
 import AgentArray from './AgentArray.js'
 
 /**
- * Subclass of AgentArray, used for Model Patches, Turtles, Links & Breeds.
+ * A model's {@link Patches}, {@link Turtles}, {@link Links},
+ * are all subclasses of AgentSet.
  *
- * AgentSets are AgentArrays that are factories for their own Agents.
+ * AgentSets are {@link AgentArray}s that are factories for their own Agents.
+ * That means you do *not* call `new Turtle()`, rather Turtles
+ * will create the Turtle instances, adding them to itself.
  *
- * Thus the Turtles AgentSet is a factory for class Turtle instances
- * using the create() or addAgent() factory methods.
+ * Finally, a Breed is simply a subarray of Patches, Turtles, Links.
+ * Patches could have a Streets breed, Turtles could have Cops and Robbers
+ * breeds, and Links Spokes and Rim breeds
  *
- * AgentSets are not created directly by modelers, only other
- * AgentSet subclasses: Patches, Turtles, Links & Breeds.
+ * AgentSets are not created directly by modelers.
+ * Instead, class {@link Model} creates them along with their Breeds.
+ * You can easily skip this initially, instead simply understand AgentSets
+ * are the basis for Patches, Turtles, Links & Breeds
+ *
+ * @param {Model} model Instance of Class Model to which I belong
+ * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
+ * @param {String} name Name of this AgentSet. Ex: Patches
+ * @param {(Patches|Turtles|Links)} [baseSet=null] If a Breed, it's parent AgentSet
  */
+
 export default class AgentSet extends AgentArray {
     // Inherited by Patches, Turtles, Links
     model
@@ -28,14 +40,6 @@ export default class AgentSet extends AgentArray {
         return AgentArray
     }
 
-    /**
-     * Create an empty AgentSet and initialize the `ID` counter for add().
-     * If baseSet is supplied, the new agentset is a "breed" of baseSet
-     * @param {Model} model Instance of Class Model to which I belong
-     * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
-     * @param {String} name Name of this AgentSet. Ex: Patches
-     * @param {(Patches|Turtles|Links)} [baseSet=null] If a Breed, it's parent AgentSet
-     */
     constructor(model, AgentClass, name, baseSet = null) {
         super() // create empty AgentArray
         baseSet = baseSet || this // if not a breed, set baseSet to this
@@ -58,11 +62,6 @@ export default class AgentSet extends AgentArray {
         this.protoMixin(this.agentProto, AgentClass)
         // }
     }
-    // All agents have:
-    // vars: id, agentSet, model, world, breed (getter)
-    //   baseSet by name: turtles/patches/links
-    // methods: setBreed, getBreed, isBreed
-    // getter/setter: breed
     /**
      * Add common variables to an Agent being added to this AgentSet.
      *
@@ -111,20 +110,20 @@ export default class AgentSet extends AgentArray {
      * `people = turtles.newBreed('people')`
      *
      * @param {String} name The name of the new breed AgentSet
-     * @return {AgentSet} A subarray of me
+     * @returns {AgentSet} A subarray of me
      */
     newBreed(name) {
         return new AgentSet(this.model, this.AgentClass, name, this)
     }
 
     /**
-     * @return {boolean} true if I am a baseSet subarray
+     * @returns {boolean} true if I am a baseSet subarray
      */
     isBreedSet() {
         return this.baseSet !== this
     }
     /**
-     * @return {boolean} true if I am a Patches, Turtles or Links AgentSet
+     * @returns {boolean} true if I am a Patches, Turtles or Links AgentSet
      */
     isBaseSet() {
         return this.baseSet === this
@@ -136,7 +135,7 @@ export default class AgentSet extends AgentArray {
      * Ex: patches.inRect(5).withBreed(houses)
      *
      * @param {AgentSet} breed A breed AgentSet
-     * @return {AgentArray}
+     * @returns {AgentArray}
      */
     withBreed(breed) {
         return this.filter(a => a.agentSet === breed)
@@ -149,7 +148,7 @@ export default class AgentSet extends AgentArray {
 
     /**
      * @param {Object} o An Agent to be added to this AgentSet
-     * @return {Object} The input Agent, bound to this AgentSet.
+     * @returns {Object} The input Agent, bound to this AgentSet.
      * @description
      * Add an Agent to this AgentSet.  Only used by factory methods.
      * Adds the `id` property to Agent. Increment AgentSet `ID`.
@@ -178,7 +177,7 @@ export default class AgentSet extends AgentArray {
      * Remove an Agent from this AgentSet
      *
      * @param {Object} o The Agent to be removed
-     * @return {AgentSet} This AgentSet with the Agent removed
+     * @returns {AgentSet} This AgentSet with the Agent removed
      */
     removeAgent(o) {
         // Note removeAgent(agent) different than remove(agent) which
@@ -196,7 +195,7 @@ export default class AgentSet extends AgentArray {
      *
      * @param {String} name The name of the shared value
      * @param {any} value
-     * @return {AgentSet} This AgentSet
+     * @returns {AgentSet} This AgentSet
      */
     setDefault(name, value) {
         this.agentProto[name] = value
@@ -206,7 +205,7 @@ export default class AgentSet extends AgentArray {
      * Return a default, shared value
      *
      * @param {String} name The name of the default
-     * @return {any} The default value
+     * @returns {any} The default value
      */
     getDefault(name) {
         return this.agentProto[name]
@@ -231,7 +230,7 @@ export default class AgentSet extends AgentArray {
      * Move an agent from its AgentSet/breed to be in this AgentSet/breed
      *
      * @param {Agent} a An agent, a member of another AgentSet
-     * @return {Agent} The updated agent
+     * @returns {Agent} The updated agent
      */
     setBreed(a) {
         // change agent a to be in this breed

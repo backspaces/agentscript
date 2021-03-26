@@ -67,7 +67,7 @@ export default class World {
      * @param {number} [maxX=16] Integer max X value
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-     * @return {WorldOptions}
+     * @returns {WorldOptions}
      */
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
         return {
@@ -85,7 +85,7 @@ export default class World {
      * @param {number} [maxX=16] Integer max X value
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-     * @return {World}
+     * @returns {World}
      */
     static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
         return new World(World.defaultOptions(maxX, maxY, maxZ))
@@ -126,7 +126,7 @@ export default class World {
     /**
      * Return a random 2D point within the World
      *
-     * @return {Array} A random x,y float array
+     * @returns {Array} A random x,y float array
      */
     randomPoint() {
         return [
@@ -138,7 +138,7 @@ export default class World {
     /**
      * Return a random 3D point within the World
      *
-     * @return {Array} A random x,y,z float array
+     * @returns {Array} A random x,y,z float array
      */
     random3DPoint() {
         return [
@@ -151,7 +151,7 @@ export default class World {
     /**
      * Return a random Patch 2D integer point
      *
-     * @return {Array}  A random x,y integer array
+     * @returns {Array}  A random x,y integer array
      */
     randomPatchPoint() {
         return [
@@ -166,7 +166,7 @@ export default class World {
      * @param {number} x x value
      * @param {number} y y value
      * @param {number} [z=this.centerZ] z value
-     * @return {boolean} Whether or not on-world
+     * @returns {boolean} Whether or not on-world
      */
     isOnWorld(x, y, z = this.centerZ) {
         return (
@@ -196,7 +196,7 @@ export default class World {
      * @param {number} minY min bounding box y value
      * @param {number} maxX max bounding box x value
      * @param {number} maxY max bounding box y value
-     * @return {BBoxTransform} Instance of the BBoxTransform
+     * @returns {BBoxTransform} Instance of the BBoxTransform
      */
     bboxTransform(minX, minY, maxX, maxY) {
         return new BBoxTransform(minX, minY, maxX, maxY, this)
@@ -304,7 +304,7 @@ class BBoxTransform {
      * Convert from bbox point to world point
      *
      * @param {Array} bboxPoint A point in the bbox coordinates
-     * @return {Array} A point in the world coordinates
+     * @returns {Array} A point in the world coordinates
      */
     toWorld(bboxPoint) {
         const { mx, my, bx, by } = this
@@ -318,7 +318,7 @@ class BBoxTransform {
      * Convert from world point to bbox point
      *
      * @param {Array} worldPoint A point in the world coordinates
-     * @return {Array} A point in the bbox coordinates
+     * @returns {Array} A point in the bbox coordinates
      */
     toBBox(worldPoint) {
         const { mx, my, bx, by } = this

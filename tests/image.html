@@ -5,7 +5,7 @@
     <body>
         <script type="module">
             import * as util from '../src/utils.js'
-            util.toWindow(util)
+            util.toWindow({ util })
 
             const url =
                 document.location.search.substring(1) ||
@@ -17,6 +17,7 @@
             util.printToPage(``)
 
             async function test(url) {
+                // tile size download: 128K = 128*1024 = 131072
                 const imgBuffer = await util.xhrPromise(url, 'arraybuffer') // 131,309
 
                 const img = await util.imagePromise(url)
@@ -56,6 +57,17 @@
                 const imagebitmap = await createImageBitmap(ctx.canvas)
                 console.log('ctx ImageBitMap', imagebitmap)
 
+                const thumbNail = util.resizeCanvas(can, 64)
+                const file = await util.canvasFilePromise(thumbNail)
+                const fileBitmap = await createImageBitmap(file)
+                const fileCtx = util.createCtx(
+                    fileBitmap.width,
+                    fileBitmap.height
+                )
+                fileCtx.drawImage(fileBitmap, 0, 0)
+                const fileURL = URL.createObjectURL(file)
+                const fileImg = await util.imagePromise(fileURL)
+
                 const vars = {
                     url,
                     imgBuffer,
@@ -69,6 +81,12 @@
                     dataurlimg,
                     dataurlimgsize,
                     imagebitmap,
+                    thumbNail,
+                    file,
+                    fileBitmap,
+                    fileCtx,
+                    fileURL,
+                    fileImg,
                 }
                 return vars
             }
@@ -81,11 +99,14 @@
                 util.printToPage(`done.`)
                 util.printToPage(``)
                 util.printToPage(`Image Size on Disk: ${imgBuffer.byteLength}`)
+                util.printToPage(
+                    `Image width, height: ${img.width}, ${img.height}`
+                )
                 util.printToPage(`Image Size: ${imgsize}   (width*length*4)`)
 
                 util.printToPage(``)
                 util.printToPage(
-                    `Canvas: width/height ${can.width}/${can.height}`
+                    `Canvas: width, height ${can.width}, ${can.height}`
                 )
                 util.printToPage(
                     `Canvas ctx imageData: length ${imageData.data.length}`
@@ -105,6 +126,9 @@
                 util.printToPage(`>   ${Object.keys(vars)}`)
                 util.printToPage(``)
                 document.body.appendChild(img)
+                document.body.appendChild(thumbNail)
+                document.body.appendChild(fileCtx.canvas)
+                document.body.appendChild(fileImg)
             })
         </script>
         <div id="modelDiv"></div>

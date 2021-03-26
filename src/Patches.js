@@ -75,7 +75,7 @@ class Patches extends AgentSet {
      * Will be less than 8 on the edge of the patches
      *
      * @param {Patch} patch a Patch instance
-     * @return {AgentList} An array of the neighboring patches
+     * @returns {AgentList} An array of the neighboring patches
      */
     neighbors(patch) {
         const { id, x, y } = patch
@@ -95,7 +95,7 @@ class Patches extends AgentSet {
      * Will be less than 4 on the edge of the patches
      *
      * @param {Patch} patch a Patch instance
-     * @return {AgentList} An array of the neighboring patches
+     * @returns {AgentList} An array of the neighboring patches
      */
     neighbors4(patch) {
         const { id, x, y } = patch
@@ -133,7 +133,7 @@ class Patches extends AgentSet {
      *
      * @param {string} property The patch numeric property to extract
      * @param {Type} [Type=Array] The DataSet array's type
-     * @return {DataSet} A DataSet of the patche's values
+     * @returns {DataSet} A DataSet of the patche's values
      */
     exportDataSet(property, Type = Array) {
         if (this.isBreedSet()) {
@@ -153,7 +153,7 @@ class Patches extends AgentSet {
      *
      * @param {number} x Integer X value
      * @param {number} y Integer Y value
-     * @return {number} Integer index into Patches array
+     * @returns {number} Integer index into Patches array
      */
     patchIndex(x, y) {
         const { minX, maxY, numX } = this.model.world

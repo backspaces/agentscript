@@ -42,7 +42,7 @@
     },
     "scripts": {
         "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "start": "./node_modules/.bin/live-server --watch=docs&",
+        "start": "live-server",
         "build": "npm-run-all clean build-scripts build-dist build-md build-docs",
         "build-dist": "rollup -c config/rollup.config.js && rollup -c config/rollup.vendor.js && cp -R src dist",
         "build-scripts": "node bin/models2scripts",

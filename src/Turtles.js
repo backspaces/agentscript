@@ -48,7 +48,7 @@ export default class Turtles extends AgentSet {
      * Return an array of this breed within the array of patchs
      *
      * @param {Patch[]} patches Array of patches
-     * @return {AgentList}
+     * @returns {AgentList}
      */
     inPatches(patches) {
         // let array = new AgentArray()

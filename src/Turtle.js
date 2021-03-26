@@ -1,18 +1,14 @@
 import AgentList from './AgentList.js'
 import * as util from './utils.js'
 
-// Flyweight object creation, see Patch/Patches.
-
-// Class Turtle instances represent the dynamic, behavioral element of modeling.
-// Each turtle knows the patch it is on, and interacts with that and other
-// patches, as well as other turtles.
-
 /**
  * Class Turtle instances represent the dynamic, behavioral element of modeling.
  * Each turtle knows the patch it is on, and interacts with that and other
- * patches, as well as other turtles.
+ * patches, as well as other turtles. They are also the end points of Links.
  *
- * **TODO: Document Turtle properties and methods.**
+ * You do not call `new Turtle()`, instead class Turtles
+ * creates it's Turtle instances. I.e. class Turtles is a factory
+ * for all of it's Turtle instances. So *don't* do this:
  */
 export default class Turtle {
     atEdge = 'wrap'
@@ -21,22 +17,9 @@ export default class Turtle {
     model
     name
 
-    // static defaultVariables() {
-    //     return {
-    //         // Core variables for turtles.
-    //         // turtle's position: x, y, z.
-    //         // Generally z set to constant via turtles.setDefault('z', num)
-    //         // x: 0,
-    //         // y: 0,
-    //         // z: 0,
-    //         // my euclidean direction, radians from x axis, counter-clockwise
-    //         // theta: null, // set to random if default not set by modeler
-    //         // What to do if I wander off world. Can be 'clamp', 'wrap'
-    //         // 'bounce', or a function, see handleEdge() method
-    //         atEdge: 'wrap',
-    //     }
-    // }
-    // Initialize a Turtle given its Turtles AgentSet.
+    // /**
+    //  * @ignore
+    //  */
     constructor() {
         // this.agentSet = this.atEdge = this.model = null // needed by jsDoc
         // Object.assign(this, Turtle.defaultVariables())
@@ -48,6 +31,13 @@ export default class Turtle {
         this.agentSet.setDefault('z', null)
     }
 
+    /**
+     * Ask this turtle to "die"
+     * - Removes itself from the Turtles array
+     * - Removes all my Links if any exist
+     * - Removes me from my Patch list of turtles on it
+     * - Set it's id to -1
+     */
     die() {
         this.agentSet.removeAgent(this) // remove me from my baseSet and breed
         // Remove my links if any exist.
@@ -69,6 +59,17 @@ export default class Turtle {
 
     // Factory: create num new turtles at this turtle's location. The optional init
     // proc is called on the new turtle after inserting in its agentSet.
+    /**
+     * Factory method: create num new turtles at this turtle's location.
+     *
+     * @param {number} [num=1] The number of new turtles to create
+     * @param {AgentSet} [breed=this.agentSet] The type of turtles to create,
+     * defaults to my type
+     * @param {Function} [init=turtle => {}] A function to initialize the new
+     * turtles, defaults to no-op
+     * @returns {Array} An Array of the new Turtles, generally ignored
+     * due to the init function
+     */
     hatch(num = 1, breed = this.agentSet, init = turtle => {}) {
         return breed.create(num, turtle => {
             // turtle.setxy(this.x, this.y)
@@ -84,6 +85,10 @@ export default class Turtle {
     // Getter for links for this turtle. REMIND: use new AgentSet(0)?
     // Uses lazy evaluation to promote links to instance variables.
     // REMIND: Let links create the array as needed, less "tricky"
+    /**
+     * A property of the Links that have me as one of the end turtles
+     * @returns {Array} An AgentList Array of my Links
+     */
     get links() {
         // lazy promote links from getter to instance prop.
         Object.defineProperty(this, 'links', {
@@ -121,19 +126,6 @@ export default class Turtle {
         this.theta = util.mod2pi(this.model.toRads(direction))
         // this.theta = util.mod2pi(this.model.toRads(direction))
     }
-
-    // get theta() {
-    //     return this.theta
-    // }
-    // set theta(theta) {
-    //     this.theta = theta
-    // }
-    // get degrees() {
-    //     return this.theta * toDeg
-    // }
-    // set degrees(deg) {
-    //     this.theta = deg * toRad
-    // }
 
     // Set x, y position. If z given, override default z.
     // Call handleEdge(x, y) if x, y off-world.
