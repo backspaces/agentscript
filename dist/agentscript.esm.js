@@ -3836,6 +3836,16 @@ class Turtles extends AgentSet {
     // Add 1 or more turtles.
     // Can be a single turtle or an array of turtles. The optional init
     // proc is called on the new link after inserting in the agentSet.
+    /**
+     * Creates an instance of Turtles.
+     * @param {*} model
+     * @param {*} AgentClass
+     * @param {*} name
+     * @param {*} [baseSet=null]
+     */
+    constructor(model, AgentClass, name, baseSet = null) {
+        super(model, AgentClass, name, baseSet);
+    }
 
     // Return a single turtle
     createOne(initFcn = turtle => {}) {

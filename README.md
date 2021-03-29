@@ -111,7 +111,7 @@ All workflow is npm run scripts. See package.json's scripts, or use `yarn/npm ru
 
 ## License
 
-Copyright Owen Densmore, RedfishGroup LLC, 2012-2020<br>
+Copyright Owen Densmore, RedfishGroup LLC, 2012-2021<br>
 AgentScript may be freely distributed under the GPLv3 license:
 
 AgentScript is free software: you can redistribute it and/or modify

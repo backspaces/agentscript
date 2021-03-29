@@ -29,7 +29,6 @@
     "bugs": {
         "url": "https://github.com/backspaces/agentscript/issues"
     },
-    "mkdirs": "dist",
     "scripts comments": {
         "name": "@redfish/agentscript",
         "ava": "0.25.0",
@@ -38,21 +37,23 @@
         "Node settig for esm: ": "type: module",
         "three": "^0.89.0",
         "build-dist": "rollup -c config/rollup.config.js && cp -R src models views2 views3  dist",
-        "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js"
+        "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
+        "watch-docs": "documentation serve --config config/documentation.yml --github --watch src/**",
+        "mkdirs": "dist",
+        "clean-docs": "shx rm -r docs/"
     },
     "scripts": {
-        "clean": "shx rm -rf $npm_package_mkdirs && shx mkdir $npm_package_mkdirs",
-        "start": "live-server",
+        "clean": "shx rm -rf dist && shx mkdir dist",
+        "start": "live-server &",
         "build": "npm-run-all clean build-scripts build-dist build-md build-docs",
         "build-dist": "rollup -c config/rollup.config.js && rollup -c config/rollup.vendor.js && cp -R src dist",
         "build-scripts": "node bin/models2scripts",
         "build-md": "bin/src2md 'models views2 views3 views3d gis' > /dev/null",
-        "build-docs": "npm run clean-docs && documentation build src/** --config config/documentation.yml --github -f html -o docs",
-        "clean-docs": "shx rm -r docs/",
+        "build-docs": "documentation build src/** --config config/documentation.yml --github -f html -o docs",
         "test": "ava test/*.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
-        "watch-docs": "documentation serve --config config/documentation.yml --github --watch src/**",
+        "watch-docs": "chokidar 'src/*.js' -c 'npm run build-docs' &",
         "watch": "npm-run-all watch-src watch-models",
         "run1": "bin/runmodels models",
         "run1s": "bin/runmodels models/scripts",
