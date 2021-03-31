@@ -3823,31 +3823,40 @@ class Patch {
 
 // export default Patch
 
-// Turtles are the world other agentsets live on. They create a coord system
-// from Model's world values: size, minX, maxX, minY, maxY
 /**
- * Turtles are objects living on the {@link Patches} world.
+ * A {@link Turtle} is an object living on the {@link Patches} world.
  * Their coordinates are floats, unlike Patches with integer coordinates.
+ * They can morph between types of turtles (breeds) and storee information,
+ * both within themselves but also on Patches and Links.
+ *
+ * The Turtles (plural) array, (AgentSet) is a collection of Turtle objects
+ * that the Turtles array creates and manages.
+ *
+ * You do not create either individual Turtle objects, the Turtles array does.
+ * You also do not create the Turtles array, class {@link Model} does.
+ *
+ * You use both, however, using the methods they both provide.
  *
  * @extends {AgentSet}
+ *
+ * @param {Model} model The model I belong to
+ * @param {Turtle|Turtle3d} AgentClass The Turtle class
+ * @param {string} name The name of this new Turtles instance
+ * @param {null|Turtles} [baseSet=null] Used to create a breed subclass
  */
 class Turtles extends AgentSet {
-    // Factories:
-    // Add 1 or more turtles.
-    // Can be a single turtle or an array of turtles. The optional init
-    // proc is called on the new link after inserting in the agentSet.
-    /**
-     * Creates an instance of Turtles.
-     * @param {*} model
-     * @param {*} AgentClass
-     * @param {*} name
-     * @param {*} [baseSet=null]
-     */
     constructor(model, AgentClass, name, baseSet = null) {
         super(model, AgentClass, name, baseSet);
     }
 
-    // Return a single turtle
+    /**
+     * Create a single Turtle, adding it to this Turtles array.
+     * The init function is called to initialize the new Turtle.
+     * Returns the new Turtle.
+     *
+     * @param {Function} [initFcn=turtle => {}]
+     * @return {Turtle} The newly created Turtle
+     */
     createOne(initFcn = turtle => {}) {
         const turtle = this.addAgent();
         // NetLogo docs: Creates number new turtles at the origin.
@@ -3857,16 +3866,30 @@ class Turtles extends AgentSet {
         initFcn(turtle);
         return turtle
     }
-    // Create num turtles, returning an array.
-    // If num == 1, return array with single turtle
+    /**
+     * Create num Turtles, adding them to this Turtles array.
+     * The init function is called to initialize the new Turtle.
+     * Returns an array of the new Turtles
+     *
+     * @param {Function} [initFcn=turtle => {}]
+     * @return {Array} The newly created Turtles
+     */
     create(num, initFcn = turtle => {}) {
         return repeat(num, (i, a) => {
             a.push(this.createOne(initFcn));
         })
     }
 
-    // Return the closest turtle within radius distance of x,y
-    // Return null if no turtles within radius
+    /**
+     * Return the closest turtle within radius distance of x,y.
+     * Return null if no turtles within radius.
+     * If I am a breed, return the closest fellow breed.
+     *
+     * @param {number} x X coordinate
+     * @param {number} y Y coordinate
+     * @param {number} radius Radius in patches units
+     * @return {Turtle} The closest Turtle
+     */
     closestTurtle(x, y, radius) {
         const ts = this.inPatchRectXY(x, y, radius);
         if (ts.length === 0) return null
@@ -3875,13 +3898,13 @@ class Turtles extends AgentSet {
     }
 
     /**
-     * Return an array of this breed within the array of patchs
+     * Return an array of Turtles within the array of patchs.
+     * If I am a breed, return only the Turtles of my breed.
      *
      * @param {Patch[]} patches Array of patches
-     * @returns {AgentList}
+     * @returns {AgentList} The turtles withn the Patches array.
      */
     inPatches(patches) {
-        // let array = new AgentArray()
         let array = new AgentList(this.model);
         for (const p of patches) array.push(...p.turtlesHere());
         // REMIND: can't use withBreed .. its not an AgentSet. Move to AgentArray?
@@ -3889,47 +3912,73 @@ class Turtles extends AgentSet {
         return array
     }
 
-    // Return an array of turtles/breeds within the patchRect, dx/y integers
-    // Note: will return turtle too. Also slightly inaccurate due to being
-    // patch based, not turtle based.
+    /**
+     * Return an array of Turtles within the dx,dy patchRect centered on turtle.
+     * If I am a breed, return only the Turtles of my breed.
+     *
+     * @param {Turtle} turtle The Turtle at the patchRect center.
+     * @param {number} dx The integer x radius of the patchRect
+     * @param {number} [dy=dx] The integer y radius of the patchRect
+     * @param {boolean} [meToo=false] Whether or not to return me as well
+     * @return {AgentList} The turtles within the patchRect
+     */
     inPatchRect(turtle, dx, dy = dx, meToo = false) {
-        // meToo: true for patches, could have several turtles on patch
-        // const patches = this.model.patches.inRect(turtle.patch, dx, dy, true)
-        // const agents = this.inPatches(patches)
         const agents = this.inPatchRectXY(turtle.x, turtle.y, dx, dy);
-        // don't use agents.removeAgent: breeds
         if (!meToo) removeArrayItem(agents, turtle);
-        // if (!meToo) util.removeItem(agents, turtle)
-        return agents // this.inPatches(patches)
-        // return this.inPatchRect(turtle.x, turtle.y, dx, dy, meToo)
+        return agents
     }
+    /**
+     * Return an array of Turtles within the dx,dy patchRect centered on x,y.
+     * If I am a breed, return only the Turtles of my breed.
+     *
+     * @param {number} x the patchRect center's integer x value
+     * @param {number} y the patchRect center's integer y value
+     * @param {number} dx The integer x radius of the patchRect
+     * @param {number} [dy=dx] The integer y radius of the patchRect
+     * @param {boolean} [meToo=false] Whether or not to return me as well
+     * @return {AgentList} The turtles within the patchRect
+     */
     inPatchRectXY(x, y, dx, dy = dx) {
         const patches = this.model.patches.patchRectXY(x, y, dx, dy, true);
         return this.inPatches(patches)
     }
 
-    // Return the members of this agentset that are within radius distance
-    // from me, using a patch rect.
-    // inRadiusXY(x, y, radius, meToo = false) {
-    //     const agents = this.inPatchRectXY(x, y, radius)
-    //     return agents.inRadius(turtle, radius, meToo)
-    // }
+    /**
+     * Return all the Turtles within radius of me.
+     * If I am a breed, return only fellow breeds.
+     *
+     * @param {Turtle} turtle
+     * @param {number} radius
+     * @param {boolean} [meToo=false] Whether or not to return me as well
+     * @return {AgentList} The turtles within radius of me
+     */
     inRadius(turtle, radius, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true);
         return agents.inRadius(turtle, radius, meToo)
     }
+    /**
+     * Return all the Turtles with a cone of me.
+     * The cone is coneAngle wide, centered on my heading.
+     * If I am a breed, return only fellow breeds.
+     *
+     * @param {Turtle} turtle
+     * @param {number} radius
+     * @param {boolean} [meToo=false] Whether or not to return me as well
+     * @return {AgentList} The turtles within the cone.
+     */
     inCone(turtle, radius, coneAngle, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true);
-        // const direction = this.model.toRads(turtle.direction)
-        // coneAngle = this.model.toRads(direction)
-        // coneAngle = this.model.toAngleRads(coneAngle)
-        // Calls AgentArray's radian based method
-        // return agents.inCone(turtle, radius, coneAngle, turtle.theta, meToo)
         return agents.inCone(turtle, radius, coneAngle, turtle.heading, meToo)
     }
 
-    // Circle Layout: position the turtles in this breed in an equally
-    // spaced circle of the given center and radius
+    /**
+     * Position the Turtles in this breed in an equally spaced circle
+     * of the given center and radius.
+     * The turtle headings will be away from the center.
+     *
+     * @param {number} [radius=this.model.world.maxX * 0.9] The circle's radius
+     * @param {Array} [center=[0, 0]] An x,y array
+     */
     layoutCircle(radius = this.model.world.maxX * 0.9, center = [0, 0]) {
         const startAngle = Math.PI / 2; // up
         const direction = -1; // Clockwise
