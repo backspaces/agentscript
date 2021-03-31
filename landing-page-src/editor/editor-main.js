@@ -1,51 +1,7 @@
-// Option 1
-// Load the example js file, dump it to the text area,
-// first time: import the contents of the text area,
-// on change: replace the runtime methods
-
-
-// Option 1
-// interpret textarea as js module; use import()
-
-// Option 2
-// interpret textarea as function bodies; use new Function() or eval()
-
-
-// import Model
-
-// class SomeModel extends Model {
-//   constructor() {
-
-//   }
-
-//   setup() {
-
-//   }
-
-//   step() {
-
-//   }
-
-//   helperFn() {
-
-//   }
-// }
-
-// textarea.value = code
-
-
-// import {
-//   Model,
-//   modelOpts,
-//   View,
-//   viewOpts,
-//   drawOpts
-// } from './flock-example-for-editor.js'
-
-import {EditorState, basicSetup} from "@codemirror/basic-setup"
-import {EditorView, keymap} from "@codemirror/view"
-import {defaultTabBinding} from "@codemirror/commands"
-import {javascript} from "@codemirror/lang-javascript"
+import {EditorState, basicSetup} from "../snowpack/pkg/@codemirror/basic-setup.js"
+import {EditorView, keymap} from "../snowpack/pkg/@codemirror/view.js"
+import {defaultTabBinding} from "../snowpack/pkg/@codemirror/commands.js"
+import {javascript} from "../snowpack/pkg/@codemirror/lang-javascript.js"
 import _ from "../vendor/underscore-esm-min.js"
 import html from '../vendor/nanohtml.es6.js';
 
@@ -102,17 +58,26 @@ let editor = window.editor = new EditorView({
 let model
 let view
 
+let src = {
+  model: null,
+  view: null
+}
+
+let currentTab = 'model'
+
 async function initEditor() {
-  let code = await fetch('./flock-example-for-editor.js').then(res => res.text())
+  src.model = await fetch('./flock.model.js').then(res => res.text())
+  src.view = await fetch('./flock.view.js').then(res => res.text())
 
   let urlParams = new URLSearchParams(window.location.search)
-  if (urlParams.get('code')) {
-    code = decodeURIComponent(atob(urlParams.get('code')))
+  if (urlParams.get('src.model')) {
+    src.model = decodeURIComponent(atob(urlParams.get('src.model')))
+  }
+  if (urlParams.get('src.view')) {
+    src.view = decodeURIComponent(atob(urlParams.get('src.view')))
   }
 
-  console.log(code)
-
-  editor.setState(EditorState.create({ doc: code, extensions: editorExtensions }))
+  editor.setState(EditorState.create({ doc: src.model, extensions: editorExtensions }))
 
   await rebuildModel()
 
@@ -133,69 +98,74 @@ async function initEditor() {
 
 }
 
+async function importSrcString(src) {
+  const uri = 'data:text/javascript;charset=utf-8,'
+    + encodeURIComponent(src)
+  return await import(uri)
+}
+
 async function rebuildModel() {
-  let code = editor.state.doc
+  window.history.replaceState(null, null, `?src.model=${btoa(encodeURIComponent(src.model))}&src.view=${btoa(encodeURIComponent(src.view))}`)
+  
+  let Model = (await importSrcString(src.model)).default
 
-  window.history.replaceState(null, null, `?code=${btoa(encodeURIComponent(editor.state.doc))}`)
-  
-  const dataUri = 'data:text/javascript;charset=utf-8,'
-    + encodeURIComponent(code)
-  
   let {
-    Model,
-    modelOpts,
+    worldOpts,
     View,
-    viewOpts,
-    drawOpts
-  } = await import(dataUri)
+    viewOpts
+  } = await importSrcString(src.view)
 
+  // debug
   window.Model = Model
 
-  model = window.model = new Model(modelOpts)
+  model = window.model = new Model(worldOpts)
 
   viewOpts.div = 'ide-canvas-container'
   document.querySelector(`#${viewOpts.div}`).innerHTML = ''
   
-  view = new View(model, viewOpts, drawOpts)
+  view = new View(model, viewOpts)
 
   model.setup()
 }
 
-let prevModelOpts
-let prevViewOpts
-async function reloadModel() {
+let lastWorldOpts
+async function reloadModel(forceRebuild = false) {
   try {
-    let code = editor.state.doc
+    if (currentTab === 'model') {
+      src.model = editor.state.doc
+    } else if (currentTab === 'view') {
+      src.view = editor.state.doc
+    }
 
-    window.history.replaceState(null, null, `?code=${btoa(encodeURIComponent(editor.state.doc))}`)
-  
-    const dataUri = 'data:text/javascript;charset=utf-8,'
-      + encodeURIComponent(code)
+    window.history.replaceState(null, null, `?src.model=${btoa(encodeURIComponent(src.model))}&src.view=${btoa(encodeURIComponent(src.view))}`)
     
+    let Model = (await importSrcString(src.model)).default
+
     let {
-      Model,
-      modelOpts,
+      worldOpts,
       View,
-      viewOpts,
-      drawOpts
-    } = await import(dataUri)
+      viewOpts
+    } = await importSrcString(src.view)
 
     for (let key of Object.getOwnPropertyNames(Model.prototype)) {
       window.model[key] = Model.prototype[key].bind(window.model)
     }
 
-    if (Model.prototype['setup'].toString() !== Object.getPrototypeOf(model).setup.toString() ||
-        JSON.stringify(modelOpts)) {
-      console.log('setup changed')
-      model = window.model = new Model(modelOpts)
+    let setupChanged = Model.prototype['setup'].toString() !== Object.getPrototypeOf(model).setup.toString()
+    let worldOptsChanged = lastWorldOpts && (JSON.stringify(worldOpts) !== JSON.stringify(lastWorldOpts))
+    if (forceRebuild || setupChanged || worldOptsChanged) {
+      console.log('rebuilding model and view')
+      model = window.model = new Model(worldOpts)
 
       viewOpts.div = 'ide-canvas-container'
       document.querySelector(`#${viewOpts.div}`).innerHTML = ''
       
-      view = new View(model, viewOpts, drawOpts)
+      view = new View(model, viewOpts)
 
       model.setup()
     }
+
+    lastWorldOpts = worldOpts
 
     renderError({ setupError: null })
   } catch (e) {
