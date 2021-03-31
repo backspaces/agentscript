@@ -1,7 +1,8 @@
 import * as util from '../src/utils.js'
-import Model3D from '../src/Model3D.js'
+// import Model3D from '../src/Model3D.js'
+import Model from '../src/Model.js'
 
-export default class Camera3DModel extends Model3D {
+export default class Camera3DModel extends Model {
     width = 32
     height = 24
     heading = 0
@@ -16,7 +17,8 @@ export default class Camera3DModel extends Model3D {
     //     super(worldDptions) // default world options if "undefined"
     // }
     setup() {
-        this.setGeometry('degrees')
+        // this.setGeometry('degrees')
+        util.setGeometry(this, 'degrees')
         this.turtleBreeds('cameras pixels')
 
         this.camera = this.cameras.createOne()

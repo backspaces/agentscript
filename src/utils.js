@@ -642,6 +642,41 @@ export function degreesTowardXY(x, y, x1, y1) {
     return radToDeg(radiansTowardXY(x, y, x1, y1))
 }
 
+const toDeg = 180 / Math.PI
+const toRad = Math.PI / 180
+const geometries = {
+    radians: {
+        toRads: rads => rads,
+        fromRads: rads => rads,
+        toAngleRads: rads => rads,
+        toCCW: angle => angle,
+        // toDeltaRads: rads => rads,
+        // fromDeltaRads: rads => rads,
+    },
+    degrees: {
+        toRads: deg => deg * toRad,
+        fromRads: rads => rads * toDeg,
+        toAngleRads: deg => deg * toRad,
+        toCCW: angle => angle,
+        // toDeltaRads: deg => deg * toRad,
+        // fromDeltaRads: rads => rads * toDeg,
+    },
+    heading: {
+        toRads: deg => (90 - deg) * toRad,
+        fromRads: rads => 90 - rads * toDeg,
+        toAngleRads: deg => deg * toRad,
+        toCCW: angle => -angle,
+        // toDeltaRads: deg => -deg * toRad,
+        // fromDeltaRads: rads => -rads * toDeg,
+    },
+}
+export function setGeometry(model, name) {
+    const geometry = geometries[name]
+    if (!geometry) throw Error(`util.setGeometry: ${name} geometry not defined`)
+    Object.assign(model, geometry)
+    model.geometry = name
+}
+
 // AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
 // We choose Phi radians from xy plane, "math" is often from Z axis
 // REMIND: some prefer -90, 90

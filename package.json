@@ -46,7 +46,7 @@
         "clean": "shx rm -rf dist && shx mkdir dist",
         "start": "live-server &",
         "build": "npm-run-all clean build-scripts build-dist build-md build-docs",
-        "build-dist": "rollup -c config/rollup.config.js && rollup -c config/rollup.vendor.js && cp -R src dist",
+        "build-dist": "rollup -c config/rollup.vendor.js && rollup -c config/rollup.config.js &&  cp -R src dist",
         "build-scripts": "node bin/models2scripts",
         "build-md": "bin/src2md 'models views2 views3 views3d gis' > /dev/null",
         "build-docs": "documentation build src/** --config config/documentation.yml --github -f html -o docs",

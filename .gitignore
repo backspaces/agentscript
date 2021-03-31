@@ -10,6 +10,8 @@ test.html
 .vscode
 **/.DS_Store
 
+FlockModel0.js
+
 Attic
 temp
 test/samples.txt

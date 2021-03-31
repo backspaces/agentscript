@@ -1,7 +1,8 @@
 import * as util from '../src/utils.js'
-import Model3D from '../src/Model3D.js'
+// import Model3D from '../src/Model3D.js'
+import Model from '../src/Model.js'
 
-export default class Hello3DModel extends Model3D {
+export default class Hello3DModel extends Model {
     population = 100
     speed = 0.1 // patches per step
     wiggleAngle = 10 // degrees

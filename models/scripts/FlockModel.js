@@ -7,13 +7,12 @@ class FlockModel extends Model {
     speed = 0.25
     maxTurn = util.degToRad(3.0) // using radian geometry
     minSeparation = 0.75
-    geometry = 'radians' // Using radians due to trig functions usage
 
     // ======================
 
     constructor(worldDptions) {
         super(worldDptions) // default world options if "undefined"
-        this.setGeometry(this.geometry)
+        util.setGeometry(this, 'radians')
     }
 
     setup() {

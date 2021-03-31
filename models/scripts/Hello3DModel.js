@@ -1,7 +1,8 @@
 var util = AS.util
-var Model3D = AS.Model3D
+// import Model3D from '../src/Model3D.js'
+var Model = AS.Model
 
-class Hello3DModel extends Model3D {
+class Hello3DModel extends Model {
     population = 100
     speed = 0.1 // patches per step
     wiggleAngle = 10 // degrees

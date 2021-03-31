@@ -93,7 +93,7 @@ export default class Turtle3D extends Turtle {
     }
     set theta(rad) {
         // util.warn('theta is deprecated, use heading instead')
-        this.obj3d.rotation.z = rad
+        if (this.obj3d) this.obj3d.rotation.z = rad
     }
 
     get heading() {
