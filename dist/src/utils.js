@@ -19,10 +19,25 @@ export async function imageBitmapPromise(url) {
 
 // Convert canvas.toBlob to a promise
 export function canvasBlobPromise(can, mimeType = 'image/png', quality = 0.95) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         can.toBlob(blob => resolve(blob), mimeType, quality)
     })
 }
+// Convert canvas to .png File blob
+export function canvasFilePromise(can, name = 'canvas.png') {
+    return new Promise(resolve => {
+        can.toBlob(blob => {
+            var file = new File([blob], name, { type: 'image/png' })
+            resolve(file)
+        })
+    })
+}
+// Convert File blob (actually any blob) to Image
+export function blobImagePromise(blob) {
+    const url = URL.createObjectURL(blob)
+    return imagePromise(url)
+}
+
 // Return Promise for ajax/xhr data.
 // - type: 'arraybuffer', 'blob', 'document', 'json', 'text'.
 // - method: 'GET', 'POST'
@@ -52,8 +67,6 @@ export function timeoutPromise(ms = 1000) {
 export async function timeoutLoop(fcn, steps = -1, ms = 0) {
     let i = 0
     while (i++ !== steps) {
-        // let state = fcn(i - 1)
-        // if (state === 'cancel') break // 'done' too?
         fcn(i - 1)
         await timeoutPromise(ms)
     }
@@ -124,12 +137,22 @@ export function cloneCanvas(can, offscreen = offscreenOK()) {
     ctx.drawImage(can, 0, 0)
     return ctx.canvas
 }
-// Resize a ctx/canvas and preserve data.
+// Resize a ctx in-place and preserve image.
 export function resizeCtx(ctx, width, height) {
     const copy = cloneCanvas(ctx.canvas)
     ctx.canvas.width = width
     ctx.canvas.height = height
     ctx.drawImage(copy, 0, 0)
+}
+// Return new canvas scaled by width, height and preserve image.
+export function resizeCanvas(
+    can,
+    width,
+    height = (width / can.width) * can.height
+) {
+    const ctx = createCtx(width, height)
+    ctx.drawImage(can, 0, 0, width, height)
+    return ctx.canvas
 }
 
 // Set the ctx/canvas size if differs from width/height.

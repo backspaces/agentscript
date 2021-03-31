@@ -159,10 +159,25 @@ out;`;
 
     // Convert canvas.toBlob to a promise
     function canvasBlobPromise(can, mimeType = 'image/png', quality = 0.95) {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             can.toBlob(blob => resolve(blob), mimeType, quality);
         })
     }
+    // Convert canvas to .png File blob
+    function canvasFilePromise(can, name = 'canvas.png') {
+        return new Promise(resolve => {
+            can.toBlob(blob => {
+                var file = new File([blob], name, { type: 'image/png' });
+                resolve(file);
+            });
+        })
+    }
+    // Convert File blob (actually any blob) to Image
+    function blobImagePromise(blob) {
+        const url = URL.createObjectURL(blob);
+        return imagePromise(url)
+    }
+
     // Return Promise for ajax/xhr data.
     // - type: 'arraybuffer', 'blob', 'document', 'json', 'text'.
     // - method: 'GET', 'POST'
@@ -192,8 +207,6 @@ out;`;
     async function timeoutLoop(fcn, steps = -1, ms = 0) {
         let i = 0;
         while (i++ !== steps) {
-            // let state = fcn(i - 1)
-            // if (state === 'cancel') break // 'done' too?
             fcn(i - 1);
             await timeoutPromise(ms);
         }
@@ -264,12 +277,22 @@ out;`;
         ctx.drawImage(can, 0, 0);
         return ctx.canvas
     }
-    // Resize a ctx/canvas and preserve data.
+    // Resize a ctx in-place and preserve image.
     function resizeCtx(ctx, width, height) {
         const copy = cloneCanvas(ctx.canvas);
         ctx.canvas.width = width;
         ctx.canvas.height = height;
         ctx.drawImage(copy, 0, 0);
+    }
+    // Return new canvas scaled by width, height and preserve image.
+    function resizeCanvas(
+        can,
+        width,
+        height = (width / can.width) * can.height
+    ) {
+        const ctx = createCtx(width, height);
+        ctx.drawImage(can, 0, 0, width, height);
+        return ctx.canvas
     }
 
     // Set the ctx/canvas size if differs from width/height.
@@ -1335,6 +1358,8 @@ out;`;
         imagePromise: imagePromise,
         imageBitmapPromise: imageBitmapPromise,
         canvasBlobPromise: canvasBlobPromise,
+        canvasFilePromise: canvasFilePromise,
+        blobImagePromise: blobImagePromise,
         xhrPromise: xhrPromise,
         timeoutPromise: timeoutPromise,
         timeoutLoop: timeoutLoop,
@@ -1344,6 +1369,7 @@ out;`;
         createCtx: createCtx,
         cloneCanvas: cloneCanvas,
         resizeCtx: resizeCtx,
+        resizeCanvas: resizeCanvas,
         setCanvasSize: setCanvasSize,
         setIdentity: setIdentity,
         setTextProperties: setTextProperties,
@@ -1485,7 +1511,7 @@ out;`;
          * Use array.slice() if a new array is wanted
          *
          * @param {Array} array Array to convert to AgentArray
-         * @return {AgentArray} array converted to AgentArray
+         * @returns {AgentArray} array converted to AgentArray
          */
         static fromArray(array) {
             const aarray = Object.setPrototypeOf(array, AgentArray.prototype);
@@ -1509,7 +1535,7 @@ out;`;
          * See {@link World} and [MyClass's foo property]{@link World#bboxTransform}.
          * Convert this AgentArray to Array in-place
          *
-         * @return {Array} This AgentArray converted to Array
+         * @returns {Array} This AgentArray converted to Array
          */
         toArray() {
             Object.setPrototypeOf(this, Array.prototype);
@@ -1527,7 +1553,7 @@ out;`;
         /**
          * Return true if there are no items in this Array
          *
-         * @return {boolean}
+         * @returns {boolean}
          * @example
          *  new AgentArray().isEmpty()
          *  //=> true
@@ -1541,7 +1567,7 @@ out;`;
         /**
          * Return first item in this array. Returns undefined if empty.
          *
-         * @return {any}
+         * @returns {any}
          * @example
          *  aa.first()
          *  //=> { x: 0, y: 0 }
@@ -1552,7 +1578,7 @@ out;`;
         /**
          * Return last item in this array. Returns undefined if empty.
          *
-         * @return {any}
+         * @returns {any}
          * @example
          *  aa.last()
          *  //=>  { x: 1, y: 0 }
@@ -1564,7 +1590,7 @@ out;`;
          * Return at index. Returns undefined if empty.
          * Wrap the index to be within the array.
          *
-         * @return {any}
+         * @returns {any}
          * @example
          *  aa.atIndex(aa.length)
          *  //=>  { x: 0, y: 0 }
@@ -1580,7 +1606,7 @@ out;`;
          * Same as Array.every, using NetLogo's name
          *
          * @param {Function} fcn fcn(element) return boolean
-         * @return {boolean} true if fcn returns true for all elements
+         * @returns {boolean} true if fcn returns true for all elements
          */
         all(fcn) {
             return this.every(fcn)
@@ -1592,7 +1618,7 @@ out;`;
          *
          * @param {String} key Property name
          * @param {Array} [type=AgentArray] Type of array (Array, Uint8Array, ...)
-         * @return {Array} Array of given type
+         * @returns {Array} Array of given type
          * @example
          *  aa.props('x')
          *  //=> [0, 0, 1]
@@ -1616,7 +1642,7 @@ out;`;
          * This is advanced, used for web workers, very large data sets, and remote communication
          *
          * @param {Object} obj Object of prop, array type pairs
-         * @return {Object}
+         * @returns {Object}
          * @example
          *  aa.typedSample({x: Uint8Array, y: Uint8Array})
          *  //=> {x: new Uint8Array([0, 0, 1]), y: new Uint8Array([0, 1, 0])}
@@ -1645,7 +1671,7 @@ out;`;
         /**
          * Return new AgentArray of the unique values of this array
          *
-         * @return {AgentArray}
+         * @returns {AgentArray}
          */
         uniq() {
             // return AgentArray.fromArray(Array.from(new Set(this)))
@@ -1659,7 +1685,7 @@ out;`;
          * Note: 5x+ faster than this.forEach(fcn)
          *
          * @param {Function} fcn fcn(agent, [index], [array])
-         * @return {this} Return this for chaining.
+         * @returns {this} Return this for chaining.
          */
         forLoop(fcn) {
             for (let i = 0, len = this.length; i < len; i++) {
@@ -1694,7 +1720,7 @@ out;`;
          * NetLogo term, simply calls this.filter(fcn)
          *
          * @param {Function} fcn fcn(agent, [index], [array])
-         * @return {AgentArray}
+         * @returns {AgentArray}
          * @description
          * Use: turtles.with(t => t.foo > 20).ask(t => t.bar = true)
          */
@@ -1754,7 +1780,7 @@ out;`;
 
         /**
          * Create copy of this AgentArray
-         * @return AgentArray
+         * @returns AgentArray
          */
         clone() {
             return this.slice(0) // Returns an AgentArray rather than Array!
@@ -1773,7 +1799,7 @@ out;`;
          *
          * @param {function} reporter
          * @param {boolean} [ascending=true]
-         * @return {AgentArray}
+         * @returns {AgentArray}
          */
         sortBy(reporter, ascending = true) {
             sortObjs(this, reporter, ascending);
@@ -1921,16 +1947,28 @@ out;`;
     // }
 
     /**
-     * Subclass of AgentArray, used for Model Patches, Turtles, Links & Breeds.
+     * A model's {@link Patches}, {@link Turtles}, {@link Links},
+     * are all subclasses of AgentSet.
      *
-     * AgentSets are AgentArrays that are factories for their own Agents.
+     * AgentSets are {@link AgentArray}s that are factories for their own Agents.
+     * That means you do *not* call `new Turtle()`, rather Turtles
+     * will create the Turtle instances, adding them to itself.
      *
-     * Thus the Turtles AgentSet is a factory for class Turtle instances
-     * using the create() or addAgent() factory methods.
+     * Finally, a Breed is simply a subarray of Patches, Turtles, Links.
+     * Patches could have a Streets breed, Turtles could have Cops and Robbers
+     * breeds, and Links Spokes and Rim breeds
      *
-     * AgentSets are not created directly by modelers, only other
-     * AgentSet subclasses: Patches, Turtles, Links & Breeds.
+     * AgentSets are not created directly by modelers.
+     * Instead, class {@link Model} creates them along with their Breeds.
+     * You can easily skip this initially, instead simply understand AgentSets
+     * are the basis for Patches, Turtles, Links & Breeds
+     *
+     * @param {Model} model Instance of Class Model to which I belong
+     * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
+     * @param {String} name Name of this AgentSet. Ex: Patches
+     * @param {(Patches|Turtles|Links)} [baseSet=null] If a Breed, it's parent AgentSet
      */
+
     class AgentSet extends AgentArray {
         // Inherited by Patches, Turtles, Links
         model
@@ -1948,14 +1986,6 @@ out;`;
             return AgentArray
         }
 
-        /**
-         * Create an empty AgentSet and initialize the `ID` counter for add().
-         * If baseSet is supplied, the new agentset is a "breed" of baseSet
-         * @param {Model} model Instance of Class Model to which I belong
-         * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
-         * @param {String} name Name of this AgentSet. Ex: Patches
-         * @param {(Patches|Turtles|Links)} [baseSet=null] If a Breed, it's parent AgentSet
-         */
         constructor(model, AgentClass, name, baseSet = null) {
             super(); // create empty AgentArray
             baseSet = baseSet || this; // if not a breed, set baseSet to this
@@ -1978,11 +2008,6 @@ out;`;
             this.protoMixin(this.agentProto, AgentClass);
             // }
         }
-        // All agents have:
-        // vars: id, agentSet, model, world, breed (getter)
-        //   baseSet by name: turtles/patches/links
-        // methods: setBreed, getBreed, isBreed
-        // getter/setter: breed
         /**
          * Add common variables to an Agent being added to this AgentSet.
          *
@@ -2031,20 +2056,20 @@ out;`;
          * `people = turtles.newBreed('people')`
          *
          * @param {String} name The name of the new breed AgentSet
-         * @return {AgentSet} A subarray of me
+         * @returns {AgentSet} A subarray of me
          */
         newBreed(name) {
             return new AgentSet(this.model, this.AgentClass, name, this)
         }
 
         /**
-         * @return {boolean} true if I am a baseSet subarray
+         * @returns {boolean} true if I am a baseSet subarray
          */
         isBreedSet() {
             return this.baseSet !== this
         }
         /**
-         * @return {boolean} true if I am a Patches, Turtles or Links AgentSet
+         * @returns {boolean} true if I am a Patches, Turtles or Links AgentSet
          */
         isBaseSet() {
             return this.baseSet === this
@@ -2056,7 +2081,7 @@ out;`;
          * Ex: patches.inRect(5).withBreed(houses)
          *
          * @param {AgentSet} breed A breed AgentSet
-         * @return {AgentArray}
+         * @returns {AgentArray}
          */
         withBreed(breed) {
             return this.filter(a => a.agentSet === breed)
@@ -2069,7 +2094,7 @@ out;`;
 
         /**
          * @param {Object} o An Agent to be added to this AgentSet
-         * @return {Object} The input Agent, bound to this AgentSet.
+         * @returns {Object} The input Agent, bound to this AgentSet.
          * @description
          * Add an Agent to this AgentSet.  Only used by factory methods.
          * Adds the `id` property to Agent. Increment AgentSet `ID`.
@@ -2098,7 +2123,7 @@ out;`;
          * Remove an Agent from this AgentSet
          *
          * @param {Object} o The Agent to be removed
-         * @return {AgentSet} This AgentSet with the Agent removed
+         * @returns {AgentSet} This AgentSet with the Agent removed
          */
         removeAgent(o) {
             // Note removeAgent(agent) different than remove(agent) which
@@ -2116,7 +2141,7 @@ out;`;
          *
          * @param {String} name The name of the shared value
          * @param {any} value
-         * @return {AgentSet} This AgentSet
+         * @returns {AgentSet} This AgentSet
          */
         setDefault(name, value) {
             this.agentProto[name] = value;
@@ -2126,7 +2151,7 @@ out;`;
          * Return a default, shared value
          *
          * @param {String} name The name of the default
-         * @return {any} The default value
+         * @returns {any} The default value
          */
         getDefault(name) {
             return this.agentProto[name]
@@ -2151,7 +2176,7 @@ out;`;
          * Move an agent from its AgentSet/breed to be in this AgentSet/breed
          *
          * @param {Agent} a An agent, a member of another AgentSet
-         * @return {Agent} The updated agent
+         * @returns {Agent} The updated agent
          */
         setBreed(a) {
             // change agent a to be in this breed
@@ -2273,7 +2298,7 @@ out;`;
          * @param {number} width The integer width of the array
          * @param {number} height The integer height of the array
          * @param {Object} Type Array or one of the typed array types
-         * @return {DataSet} The resulting DataSet with no values assigned
+         * @returns {DataSet} The resulting DataSet with no values assigned
          */
         static emptyDataSet(width, height, Type) {
             return new DataSet(width, height, new Type(width * height))
@@ -2960,7 +2985,7 @@ out;`;
          * @param {number} [maxX=16] Integer max X value
          * @param {number} [maxY=maxX] Integer max Y value
          * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-         * @return {WorldOptions}
+         * @returns {WorldOptions}
          */
         static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
             return {
@@ -2978,7 +3003,7 @@ out;`;
          * @param {number} [maxX=16] Integer max X value
          * @param {number} [maxY=maxX] Integer max Y value
          * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-         * @return {World}
+         * @returns {World}
          */
         static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
             return new World(World.defaultOptions(maxX, maxY, maxZ))
@@ -3019,7 +3044,7 @@ out;`;
         /**
          * Return a random 2D point within the World
          *
-         * @return {Array} A random x,y float array
+         * @returns {Array} A random x,y float array
          */
         randomPoint() {
             return [
@@ -3031,7 +3056,7 @@ out;`;
         /**
          * Return a random 3D point within the World
          *
-         * @return {Array} A random x,y,z float array
+         * @returns {Array} A random x,y,z float array
          */
         random3DPoint() {
             return [
@@ -3044,7 +3069,7 @@ out;`;
         /**
          * Return a random Patch 2D integer point
          *
-         * @return {Array}  A random x,y integer array
+         * @returns {Array}  A random x,y integer array
          */
         randomPatchPoint() {
             return [
@@ -3059,7 +3084,7 @@ out;`;
          * @param {number} x x value
          * @param {number} y y value
          * @param {number} [z=this.centerZ] z value
-         * @return {boolean} Whether or not on-world
+         * @returns {boolean} Whether or not on-world
          */
         isOnWorld(x, y, z = this.centerZ) {
             return (
@@ -3089,7 +3114,7 @@ out;`;
          * @param {number} minY min bounding box y value
          * @param {number} maxX max bounding box x value
          * @param {number} maxY max bounding box y value
-         * @return {BBoxTransform} Instance of the BBoxTransform
+         * @returns {BBoxTransform} Instance of the BBoxTransform
          */
         bboxTransform(minX, minY, maxX, maxY) {
             return new BBoxTransform(minX, minY, maxX, maxY, this)
@@ -3197,7 +3222,7 @@ out;`;
          * Convert from bbox point to world point
          *
          * @param {Array} bboxPoint A point in the bbox coordinates
-         * @return {Array} A point in the world coordinates
+         * @returns {Array} A point in the world coordinates
          */
         toWorld(bboxPoint) {
             const { mx, my, bx, by } = this;
@@ -3211,7 +3236,7 @@ out;`;
          * Convert from world point to bbox point
          *
          * @param {Array} worldPoint A point in the world coordinates
-         * @return {Array} A point in the bbox coordinates
+         * @returns {Array} A point in the bbox coordinates
          */
         toBBox(worldPoint) {
             const { mx, my, bx, by } = this;
@@ -3407,7 +3432,7 @@ out;`;
          * Will be less than 8 on the edge of the patches
          *
          * @param {Patch} patch a Patch instance
-         * @return {AgentList} An array of the neighboring patches
+         * @returns {AgentList} An array of the neighboring patches
          */
         neighbors(patch) {
             const { id, x, y } = patch;
@@ -3427,7 +3452,7 @@ out;`;
          * Will be less than 4 on the edge of the patches
          *
          * @param {Patch} patch a Patch instance
-         * @return {AgentList} An array of the neighboring patches
+         * @returns {AgentList} An array of the neighboring patches
          */
         neighbors4(patch) {
             const { id, x, y } = patch;
@@ -3465,7 +3490,7 @@ out;`;
          *
          * @param {string} property The patch numeric property to extract
          * @param {Type} [Type=Array] The DataSet array's type
-         * @return {DataSet} A DataSet of the patche's values
+         * @returns {DataSet} A DataSet of the patche's values
          */
         exportDataSet(property, Type = Array) {
             if (this.isBreedSet()) {
@@ -3485,7 +3510,7 @@ out;`;
          *
          * @param {number} x Integer X value
          * @param {number} y Integer Y value
-         * @return {number} Integer index into Patches array
+         * @returns {number} Integer index into Patches array
          */
         patchIndex(x, y) {
             const { minX, maxY, numX } = this.model.world;
@@ -3708,7 +3733,8 @@ out;`;
         // Promotion makes getters accessed only once.
         // defineProperty required: can't set this.neighbors when getter defined.
         /**
-         * A list of this patch's 8 [Moore neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood).
+         * A list of this patch's 8
+         * [Moore neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood).
          */
         get neighbors() {
             // lazy promote neighbors from getter to instance prop.
@@ -3717,7 +3743,9 @@ out;`;
             return n
         }
         /**
-         * A list of this patch's 4 [Von Neumann neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood) (north, south, east, west).
+         * A list of this patch's 4
+         * [Von Neumann neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood)
+         * (north, south, east, west).
          */
         get neighbors4() {
             const n = this.patches.neighbors4(this);
@@ -3814,6 +3842,16 @@ out;`;
         // Add 1 or more turtles.
         // Can be a single turtle or an array of turtles. The optional init
         // proc is called on the new link after inserting in the agentSet.
+        /**
+         * Creates an instance of Turtles.
+         * @param {*} model
+         * @param {*} AgentClass
+         * @param {*} name
+         * @param {*} [baseSet=null]
+         */
+        constructor(model, AgentClass, name, baseSet = null) {
+            super(model, AgentClass, name, baseSet);
+        }
 
         // Return a single turtle
         createOne(initFcn = turtle => {}) {
@@ -3846,7 +3884,7 @@ out;`;
          * Return an array of this breed within the array of patchs
          *
          * @param {Patch[]} patches Array of patches
-         * @return {AgentList}
+         * @returns {AgentList}
          */
         inPatches(patches) {
             // let array = new AgentArray()
@@ -3913,18 +3951,14 @@ out;`;
 
     // export default Turtles
 
-    // Flyweight object creation, see Patch/Patches.
-
-    // Class Turtle instances represent the dynamic, behavioral element of modeling.
-    // Each turtle knows the patch it is on, and interacts with that and other
-    // patches, as well as other turtles.
-
     /**
      * Class Turtle instances represent the dynamic, behavioral element of modeling.
      * Each turtle knows the patch it is on, and interacts with that and other
-     * patches, as well as other turtles.
+     * patches, as well as other turtles. They are also the end points of Links.
      *
-     * **TODO: Document Turtle properties and methods.**
+     * You do not call `new Turtle()`, instead class Turtles
+     * creates it's Turtle instances. I.e. class Turtles is a factory
+     * for all of it's Turtle instances. So *don't* do this:
      */
     class Turtle {
         atEdge = 'wrap'
@@ -3933,22 +3967,10 @@ out;`;
         model
         name
 
-        // static defaultVariables() {
-        //     return {
-        //         // Core variables for turtles.
-        //         // turtle's position: x, y, z.
-        //         // Generally z set to constant via turtles.setDefault('z', num)
-        //         // x: 0,
-        //         // y: 0,
-        //         // z: 0,
-        //         // my euclidean direction, radians from x axis, counter-clockwise
-        //         // theta: null, // set to random if default not set by modeler
-        //         // What to do if I wander off world. Can be 'clamp', 'wrap'
-        //         // 'bounce', or a function, see handleEdge() method
-        //         atEdge: 'wrap',
-        //     }
-        // }
-        // Initialize a Turtle given its Turtles AgentSet.
+        // Alas doesn't work
+        // /**
+        //  * @ignore
+        //  */
         constructor() {
             // this.agentSet = this.atEdge = this.model = null // needed by jsDoc
             // Object.assign(this, Turtle.defaultVariables())
@@ -3960,6 +3982,14 @@ out;`;
             this.agentSet.setDefault('z', null);
         }
 
+        /**
+         * Ask this turtle to "die"
+         * - Removes itself from the Turtles array
+         * - Removes itself from any Turtles breeds
+         * - Removes all my Links if any exist
+         * - Removes me from my Patch list of turtles on it
+         * - Set it's id to -1 to indicate to others it's gone
+         */
         die() {
             this.agentSet.removeAgent(this); // remove me from my baseSet and breed
             // Remove my links if any exist.
@@ -3979,8 +4009,17 @@ out;`;
             this.id = -1;
         }
 
-        // Factory: create num new turtles at this turtle's location. The optional init
-        // proc is called on the new turtle after inserting in its agentSet.
+        /**
+         * Factory method: create num new turtles at this turtle's location.
+         *
+         * @param {number} [num=1] The number of new turtles to create
+         * @param {AgentSet} [breed=this.agentSet] The type of turtles to create,
+         * defaults to my type
+         * @param {Function} [init=turtle => {}] A function to initialize the new
+         * turtles, defaults to no-op
+         * @returns {Array} An Array of the new Turtles, generally ignored
+         * due to the init function
+         */
         hatch(num = 1, breed = this.agentSet, init = turtle => {}) {
             return breed.create(num, turtle => {
                 // turtle.setxy(this.x, this.y)
@@ -3993,9 +4032,12 @@ out;`;
                 init(turtle);
             })
         }
-        // Getter for links for this turtle. REMIND: use new AgentSet(0)?
+        // Getter for links for this turtle.
         // Uses lazy evaluation to promote links to instance variables.
-        // REMIND: Let links create the array as needed, less "tricky"
+        /**
+         * Returns an array of the Links that have this Turtle as one of the end points
+         * @returns {Array} An AgentList Array of my Links
+         */
         get links() {
             // lazy promote links from getter to instance prop.
             Object.defineProperty(this, 'links', {
@@ -4004,23 +4046,38 @@ out;`;
             });
             return this.links
         }
-        // Getter for the patch I'm on. Return null if off-world.
+        /**
+         * Return the patch this Turtle is on. Return null if Turtle off-world.
+         */
         get patch() {
             return this.model.patches.patch(this.x, this.y)
         }
 
-        // Heading vs Euclidean Absolute Angles.
+        /**
+         * Return this Turtle's heading
+         */
         get heading() {
             return this.model.fromRads(this.theta)
         }
+        /**
+         * Sets this Turtle's heading
+         */
         set heading(heading) {
             this.theta = this.model.toRads(heading);
         }
+        /**
+         * Computes the difference between the given headings, that is,
+         * the smallest angle by which heading2 could be rotated to produce heading1
+         *
+         * @param {Angle} heading1 First heading
+         * @param {Angle} heading2 Second heading
+         * @return {Angle}
+         */
         subtractHeadings(heading1, heading2) {
             if (this.model.geometry === 'radians') {
                 return subtractRadians(heading1, heading2)
             } else {
-                return undefined(heading1, heading2)
+                return subtractDegrees(heading1, heading2)
             }
         }
         // Get/put direction using the current geometry
@@ -4034,24 +4091,15 @@ out;`;
             // this.theta = util.mod2pi(this.model.toRads(direction))
         }
 
-        // get theta() {
-        //     return this.theta
-        // }
-        // set theta(theta) {
-        //     this.theta = theta
-        // }
-        // get degrees() {
-        //     return this.theta * toDeg
-        // }
-        // set degrees(deg) {
-        //     this.theta = deg * toRad
-        // }
-
-        // Set x, y position. If z given, override default z.
-        // Call handleEdge(x, y) if x, y off-world.
+        /**
+         * Set Turtles x, y position. If z given, override default z of 0.
+         *
+         * @param {number} x Turtle's x coord, a Float in patch space
+         * @param {number} y Turtle's Y coord, a Float in patch space
+         * @param {number|undefined} [z=undefined] Turtle's Z coord if given
+         */
         setxy(x, y, z = undefined) {
             const p0 = this.patch;
-
             this.x = x;
             this.y = y;
             if (z != null) this.z = z;
@@ -4082,7 +4130,21 @@ out;`;
             //     p.turtles.push(this)
             // }
         }
-        // Handle turtle x,y,z if turtle off-world
+        /**
+         * Handle turtle x,y,z if turtle off-world.
+         * Uses the Turtle's atEdge property to determine how to manage the Turtle.
+         * Defaults to 'wrap', wrapping the x,y,z to the opposite edge.
+         *
+         * atEdge can be:
+         * - 'wrap'
+         * - 'bounce'
+         * - 'clamp'
+         * - a function called with the Turtle as it's argument
+         *
+         * @param {number} x Turtle's x coord
+         * @param {number} y Turtle's y coord
+         * @param {number|undefined} [z=undefined] Turtle's z coord if not undefined
+         */
         handleEdge(x, y, z = undefined) {
             let atEdge = this.atEdge;
 
@@ -4125,12 +4187,20 @@ out;`;
                 this.atEdge(this);
             }
         }
-        // Place the turtle at the given patch/turtle location
+        /**
+         * Place the turtle at the given patch/turtle location
+         *
+         * @param {Patch|Turtle} agent A Patch or Turtle who's location is used
+         */
         moveTo(agent) {
             // this.setxy(agent.x, agent.y)
             this.setxy(agent.x, agent.y, agent.z);
         }
-        // Move forward (along theta) d units (patch coords),
+        /**
+         * Move forward, along the Turtle's heading d units in Patch coordinates
+         *
+         * @param {number} d The distance to move
+         */
         forward(d) {
             this.setxy(
                 this.x + d * Math.cos(this.theta),
@@ -4138,93 +4208,177 @@ out;`;
             );
         }
 
-        // Change current direction by relative angle in current geometry
-        // Angle can be positive or negative
+        /**
+         * Change Turtle's heading by angle
+         *
+         * @param {number} angle The angle to rotate by
+         */
         rotate(angle) {
             angle = this.model.toCCW(angle);
             this.heading += angle;
         }
+        /**
+         * Turn Turtle right by angle
+         *
+         * @param {number} angle The angle to rotate by
+         */
         right(angle) {
             this.rotate(-angle);
         }
+        /**
+         * Turn Turtle left by angle
+         *
+         * @param {number} angle The angle to rotate by
+         */
         left(angle) {
             this.rotate(angle);
         }
 
-        // Set my direction towards turtle/patch or x,y.
+        /**
+         * Turn turtle so at to be facing the given Turtle or Patch
+         *
+         * @param {Patch|Turtle} agent The agent to face towards
+         */
         face(agent) {
             // this.theta = this.towards(agent)
             this.heading = this.towards(agent);
         }
+        /**
+         * Turn turtle so at to be facing the given x, y patch coordinate
+         *
+         * @param {number} x The x coordinate
+         * @param {number} y The y coordinate
+         */
         facexy(x, y) {
             // this.theta = this.towardsXY(x, y)
             this.heading = this.towardsXY(x, y);
         }
 
-        // Return the patch ahead of this turtle by distance (patchSize units).
-        // Return undefined if off-world.
+        /**
+         * Return the patch ahead of this turtle by distance.
+         * Return undefined if the distance puts the patch off-world
+         * @param {number} distance The distance ahead
+         * @return {Patch|undefined} The patch at the distance ahead of this Turtle
+         */
         patchAhead(distance) {
             return this.patchAtHeadingAndDistance(this.heading, distance)
         }
+        /**
+         * Return the patch angle to the right and ahead by distance
+         * Return undefined if the distance puts the patch off-world
+         * @param {number} angle The angle to the right
+         * @param {number} distance The distance ahead
+         * @return {Patch|undefined} The patch found, or undefined if off-world
+         */
         patchRightAndAhead(angle, distance) {
             // if (this.model.geometry === 'heading') angle = -angle
             angle = this.model.toCCW(angle);
             return this.patchAtHeadingAndDistance(this.heading - angle, distance)
         }
+        /**
+         * Return the patch angle to the left and ahead by distance
+         * Return undefined if the distance puts the patch off-world
+         * @param {number} angle The angle to the left
+         * @param {number} distance The distance ahead
+         * @return {Patch|undefined} The patch found, or undefined if off-world
+         */
         patchLeftAndAhead(angle, distance) {
             return this.patchRightAndAhead(-angle, distance)
         }
-        // Use patchAhead to determine if this turtle can move forward by distance.
+        /**
+         * Can I move forward by distance and not be off-world?
+         * @param {number} distance The distance ahead
+         * @return {Boolean} True if moving forward by distance is on-world
+         */
         canMove(distance) {
             return this.patchAhead(distance) != null
         }
 
-        // 6 methods in both Patch & Turtle modules
-        // Distance from me to x, y.
-        // 2.5D: use z too if both z & this.z exist.
-        // REMIND: No off-world test done
+        /**
+         * Distance from this turtle to x, y
+         * No off-world test done.
+         *
+         * 2.5D: use z too if both z & this.z exist.
+         * @param {number} x
+         * @param {number} y
+         * @param {number|undefined} [z=null]
+         * @return {*}
+         */
         distanceXY(x, y, z = null) {
             const useZ = z != null && this.z != null;
             return useZ
                 ? distance3(this.x, this.y, this.z, x, y, z)
                 : distance(this.x, this.y, x, y)
         }
-        // Return distance from me to object having an x,y pair (turtle, patch, ...)
-        // 2.5D: use z too if both agent.z and this.z exist
-        // distance (agent) { this.distanceXY(agent.x, agent.y) }
+        /**
+         * Return distance from me to the Patch or Turtle
+         *
+         * 2.5D: use z too if both agent.z and this.z exist
+         * @param {*} agent
+         * @return {*}
+         */
         distance(agent) {
             const { x, y, z } = agent;
             return this.distanceXY(x, y, z)
         }
-        // sqDistance(agent) {
-        //     return util.sqDistance(this.x, this.y, agent.x, agent.y)
-        // }
+        /**
+         * A property for the x-increment if the turtle were to take one step
+         * forward in its current heading.
+         * @readonly
+         */
         get dx() {
             return Math.cos(this.theta)
         }
+        /**
+         * A property for the y-increment if the turtle were to take one step
+         * forward in its current heading.
+         * @readonly
+         */
         get dy() {
             return Math.sin(this.theta)
         }
 
-        // Return direction towards agent/x,y using current geometry
+        /**
+         * Return the heading towards the Patch or Turtle given.
+         * @param {Patch|Turtle} agent The agent who's angle from this Turtle we use
+         * @return {number} The angle towards the agent
+         */
         towards(agent) {
             return this.towardsXY(agent.x, agent.y)
         }
+        /**
+         * Return the heading towards the given x,y coordinates.
+         * @param {number} x The x coordinarte
+         * @param {number} y The y coordinarte
+         * @return {number} The angle towards x,y
+         */
         towardsXY(x, y) {
             // return util.radiansTowardXY(this.x, this.y, x, y)
             let rads = radiansTowardXY(this.x, this.y, x, y);
             // rads = this.model.toCCW(rads)
             return this.model.fromRads(rads)
         }
-        // Return patch w/ given parameters. Return undefined if off-world.
-        // Return patch dx, dy from my position.
+        /**
+         * The patch at dx, dy from my current position.
+         * Return undefined if off-world
+         * @param {number} dx The delta x ahead
+         * @param {number} dy The delta y ahead
+         * @return {Patch|undefined} The patch dx, dy ahead; undefined if off-world
+         */
         patchAt(dx, dy) {
             return this.model.patches.patch(this.x + dx, this.y + dy)
         }
-        // Note: heading is absolute, w/o regard to existing angle of turtle.
-        // Use Left/Right versions for relative angles.
+
+        /**
+         * Return the patch at the absolute, not relative heading and distance
+         * from this turtle. Return undefined if off-world
+         *
+         * Use the Left/Right versions for relative heading.
+         * @param {number} heading The absolute angle from this turtle
+         * @param {number} distance The distance ahead
+         * @return {Patch|undefined} The Patch, or undefined if off-world
+         */
         patchAtHeadingAndDistance(heading, distance) {
-            // direction = this.model.toRads(direction)
             return this.model.patches.patchAtHeadingAndDistance(
                 this,
                 heading,
@@ -4232,44 +4386,53 @@ out;`;
             )
         }
 
-        // Link methods. Note: this.links returns all links linked to me.
-        // See links getter above.
-
-        // Return other end of link from me. Link must include me!
+        /**
+         * Return the other end of this link from me. Link must include me!
+         *
+         * See links property for all my links, if any.
+         * @param {Link} l
+         * @return {Turtle} The other turtle making this Link
+         */
         otherEnd(l) {
             return l.end0 === this ? l.end1 : l.end0
         }
         // Return all turtles linked to me
+        /**
+         * Return all turtles linked to me. Basically me.otherEnd of all my links.
+         * @return {Array} All the turtles linked to me
+         */
         linkNeighbors() {
             return this.links.map(l => this.otherEnd(l))
         }
-
+        /**
+         * Is the given Turtle linked to me?
+         * @param {Turtle} t
+         * @return {Boolean}
+         */
         isLinkNeighbor(t) {
-            // const linkNeighbors = this.linkNeighbors()
             return t in this.linkNeighbors()
         }
     }
 
-    // export default Turtle
-
     /**
-     * @description
      * Class Model is the primary interface for modelers, integrating
      * the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:
      *
      * - model.Patches: an array ({@link Patches}) of {@link Patch} instances
      * - model.Turtles: an array ({@link Turtles}) of {@link Turtle} instances
      * - model.Links: an array ({@link Links}) of {@link Link} instances
-     * - model.breed: a sub-array of any of the three above. See AgentSet's ct
-     * - All of which are subclasses of ({@link AgentSet})
+     * - model.breed: a sub-array of any of the three above.
+     * - All of which are subclasses of ({@link AgentSet}).
      *
      * Convention: Three abstract methods are provided by the modeler
      *
-     * * Startup(): (Optional) Called once to import images, data etc
-     * * Setup(): Called to initialize the model state.
-     * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
+     * - Startup(): (Optional) Called once to import images, data etc
+     * - Setup(): Called to initialize the model state.
+     * - Step(): Step the model. Will advance ticks if autoTick = true in constructor.
      *
-     * See tutorial {@tutorial 01-HelloModel}
+     * @param {Object|World} [worldOptions=World.defaultOptions()]
+     * Can be Object of min/max X,Y,Z values or an instance of World
+     * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
      */
     class Model {
         world
@@ -4277,13 +4440,8 @@ out;`;
         turtles
         links
         ticks
-        geometry = 'heading' // 'radians'
+        geometry = 'heading'
 
-        /**
-         * Creates an instance of Model.
-         * @param {Object|World} [worldOptions=World.defaultOptions()] Can be Object of min/max X,Y,Z values or an instance of World
-         * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
-         */
         constructor(worldOptions = World.defaultOptions(), autoTick = true) {
             this.resetModel(worldOptions);
             if (autoTick) this.autoTick();
@@ -4320,23 +4478,21 @@ out;`;
         }
 
         /**
-         * Increment the tick cound. Generally not needed if autoTick true
+         * Increment the tick cound. Not needed if autoTick true
          */
         tick() {
             this.ticks++;
         }
 
-        // ### User Model Creation
-
         /**
-         * A method to perform one-time initialization
+         * An abstract method to perform one-time initialization.
          *
          * @abstract
          */
         async startup() {}
 
         /**
-         * A method for initializing the model
+         * An abstract method for initializing the model
          *
          * Note: can be used with reset(). This will reinitialize
          * the Patches, Turtles, Links for re-running the model
@@ -4347,7 +4503,7 @@ out;`;
          */
         setup() {}
         /**
-         * Run the model one step.
+         * An abstract method to run the model one step.
          *
          * @abstract
          */
@@ -4396,7 +4552,16 @@ out;`;
                 this[breedName] = this.links.newBreed(breedName);
             }
         }
-
+        /**
+         * Set the Geometry of this Model
+         * * radians: Set the model to use native Javascript angles.<br>
+         *   [See Math module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math#converting_between_degrees_and_radians)
+         * * degrees: Use degrees rather than radians. <br>
+         *   The above with degree<>radian conversions done for you.
+         * * heading: Use "Clock" geometry:<br>
+         *   Degrees with 0 "up" and angles Clockwise.
+         * @param {string} name One of 'radians', 'degrees', 'heading'
+         */
         setGeometry(name) {
             const geometry = geometries[name];
             if (!geometry)

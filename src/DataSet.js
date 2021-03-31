@@ -20,7 +20,7 @@ export default class DataSet {
      * @param {number} width The integer width of the array
      * @param {number} height The integer height of the array
      * @param {Object} Type Array or one of the typed array types
-     * @return {DataSet} The resulting DataSet with no values assigned
+     * @returns {DataSet} The resulting DataSet with no values assigned
      */
     static emptyDataSet(width, height, Type) {
         return new DataSet(width, height, new Type(width * height))

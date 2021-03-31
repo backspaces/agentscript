@@ -7,23 +7,24 @@ import Links from './Links.js'
 import Link from './Link.js'
 
 /**
- * @description
  * Class Model is the primary interface for modelers, integrating
  * the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:
  *
  * - model.Patches: an array ({@link Patches}) of {@link Patch} instances
  * - model.Turtles: an array ({@link Turtles}) of {@link Turtle} instances
  * - model.Links: an array ({@link Links}) of {@link Link} instances
- * - model.breed: a sub-array of any of the three above. See AgentSet's ct
- * - All of which are subclasses of ({@link AgentSet})
+ * - model.breed: a sub-array of any of the three above.
+ * - All of which are subclasses of ({@link AgentSet}).
  *
  * Convention: Three abstract methods are provided by the modeler
  *
- * * Startup(): (Optional) Called once to import images, data etc
- * * Setup(): Called to initialize the model state.
- * * Step(): Step the model. Will advance ticks if autoTick = true in constructor.
+ * - Startup(): (Optional) Called once to import images, data etc
+ * - Setup(): Called to initialize the model state.
+ * - Step(): Step the model. Will advance ticks if autoTick = true in constructor.
  *
- * See tutorial {@tutorial 01-HelloModel}
+ * @param {Object|World} [worldOptions=World.defaultOptions()]
+ * Can be Object of min/max X,Y,Z values or an instance of World
+ * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
  */
 export default class Model {
     world
@@ -31,13 +32,8 @@ export default class Model {
     turtles
     links
     ticks
-    geometry = 'heading' // 'radians'
+    geometry = 'heading'
 
-    /**
-     * Creates an instance of Model.
-     * @param {Object|World} [worldOptions=World.defaultOptions()] Can be Object of min/max X,Y,Z values or an instance of World
-     * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
-     */
     constructor(worldOptions = World.defaultOptions(), autoTick = true) {
         this.resetModel(worldOptions)
         if (autoTick) this.autoTick()
@@ -74,23 +70,21 @@ export default class Model {
     }
 
     /**
-     * Increment the tick cound. Generally not needed if autoTick true
+     * Increment the tick cound. Not needed if autoTick true
      */
     tick() {
         this.ticks++
     }
 
-    // ### User Model Creation
-
     /**
-     * A method to perform one-time initialization
+     * An abstract method to perform one-time initialization.
      *
      * @abstract
      */
     async startup() {}
 
     /**
-     * A method for initializing the model
+     * An abstract method for initializing the model
      *
      * Note: can be used with reset(). This will reinitialize
      * the Patches, Turtles, Links for re-running the model
@@ -101,7 +95,7 @@ export default class Model {
      */
     setup() {}
     /**
-     * Run the model one step.
+     * An abstract method to run the model one step.
      *
      * @abstract
      */
@@ -150,7 +144,16 @@ export default class Model {
             this[breedName] = this.links.newBreed(breedName)
         }
     }
-
+    /**
+     * Set the Geometry of this Model
+     * * radians: Set the model to use native Javascript angles.<br>
+     *   [See Math module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math#converting_between_degrees_and_radians)
+     * * degrees: Use degrees rather than radians. <br>
+     *   The above with degree<>radian conversions done for you.
+     * * heading: Use "Clock" geometry:<br>
+     *   Degrees with 0 "up" and angles Clockwise.
+     * @param {string} name One of 'radians', 'degrees', 'heading'
+     */
     setGeometry(name) {
         const geometry = geometries[name]
         if (!geometry)
