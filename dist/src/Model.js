@@ -163,6 +163,7 @@ export default class Model {
     toRads = deg => (90 - deg) * toRad
     fromRads = rads => 90 - rads * toDeg
     toAngleRads = deg => deg * toRad
+    fromAngleRads = rads => rads * toDeg
     toCCW = angle => -angle
 }
 

@@ -103,16 +103,20 @@ export default class Turtle3D extends Turtle {
         this.obj3d.rotation.z = this.model.toRads(angle)
     }
     get pitch() {
-        return -this.model.fromRads(this.obj3d.rotation.y)
+        // return -this.model.fromRads(this.obj3d.rotation.y)
+        return -this.model.fromAngleRads(this.obj3d.rotation.y)
     }
     set pitch(angle) {
-        this.obj3d.rotation.y = -this.model.toRads(angle)
+        // this.obj3d.rotation.y = -this.model.toRads(angle)
+        this.obj3d.rotation.y = -this.model.toAngleRads(angle)
     }
     get roll() {
-        return this.model.fromRads(this.obj3d.rotation.x)
+        // return this.model.fromRads(this.obj3d.rotation.x)
+        return this.model.fromAngleRads(this.obj3d.rotation.x)
     }
     set roll(angle) {
-        this.obj3d.rotation.x = this.model.toRads(angle)
+        // this.obj3d.rotation.x = this.model.toRads(angle)
+        this.obj3d.rotation.x = this.model.toAngleRads(angle)
     }
 
     // Move along the turtle's X axis
@@ -135,10 +139,12 @@ export default class Turtle3D extends Turtle {
         // this.right(-angle)
     }
     tiltUp(angle) {
-        this.obj3d.rotateY(-this.model.toAngleRads(angle))
+        // this.obj3d.rotateY(-this.model.toAngleRads(angle))
+        this.tiltDown(-angle)
     }
     tiltDown(angle) {
-        this.tiltUp(-angle)
+        this.obj3d.rotateY(this.model.toAngleRads(angle))
+        // this.tiltUp(-angle)
     }
     rollRight(angle) {
         this.obj3d.rotateX(this.model.toAngleRads(angle))

@@ -789,6 +789,7 @@ out;`;
             toRads: rads => rads,
             fromRads: rads => rads,
             toAngleRads: rads => rads,
+            fromAngleRads: rads => rads,
             toCCW: angle => angle,
             // toDeltaRads: rads => rads,
             // fromDeltaRads: rads => rads,
@@ -797,6 +798,7 @@ out;`;
             toRads: deg => deg * toRad,
             fromRads: rads => rads * toDeg,
             toAngleRads: deg => deg * toRad,
+            fromAngleRads: rads => rads * toDeg,
             toCCW: angle => angle,
             // toDeltaRads: deg => deg * toRad,
             // fromDeltaRads: rads => rads * toDeg,
@@ -805,6 +807,7 @@ out;`;
             toRads: deg => (90 - deg) * toRad,
             fromRads: rads => 90 - rads * toDeg,
             toAngleRads: deg => deg * toRad,
+            fromAngleRads: rads => rads * toDeg,
             toCCW: angle => -angle,
             // toDeltaRads: deg => -deg * toRad,
             // fromDeltaRads: rads => -rads * toDeg,
@@ -8709,16 +8712,20 @@ out;`;
             this.obj3d.rotation.z = this.model.toRads(angle);
         }
         get pitch() {
-            return -this.model.fromRads(this.obj3d.rotation.y)
+            // return -this.model.fromRads(this.obj3d.rotation.y)
+            return -this.model.fromAngleRads(this.obj3d.rotation.y)
         }
         set pitch(angle) {
-            this.obj3d.rotation.y = -this.model.toRads(angle);
+            // this.obj3d.rotation.y = -this.model.toRads(angle)
+            this.obj3d.rotation.y = -this.model.toAngleRads(angle);
         }
         get roll() {
-            return this.model.fromRads(this.obj3d.rotation.x)
+            // return this.model.fromRads(this.obj3d.rotation.x)
+            return this.model.fromAngleRads(this.obj3d.rotation.x)
         }
         set roll(angle) {
-            this.obj3d.rotation.x = this.model.toRads(angle);
+            // this.obj3d.rotation.x = this.model.toRads(angle)
+            this.obj3d.rotation.x = this.model.toAngleRads(angle);
         }
 
         // Move along the turtle's X axis
@@ -8741,10 +8748,12 @@ out;`;
             // this.right(-angle)
         }
         tiltUp(angle) {
-            this.obj3d.rotateY(-this.model.toAngleRads(angle));
+            // this.obj3d.rotateY(-this.model.toAngleRads(angle))
+            this.tiltDown(-angle);
         }
         tiltDown(angle) {
-            this.tiltUp(-angle);
+            this.obj3d.rotateY(this.model.toAngleRads(angle));
+            // this.tiltUp(-angle)
         }
         rollRight(angle) {
             this.obj3d.rotateX(this.model.toAngleRads(angle));
@@ -8968,6 +8977,7 @@ out;`;
         toRads = deg => (90 - deg) * toRad$1
         fromRads = rads => 90 - rads * toDeg$1
         toAngleRads = deg => deg * toRad$1
+        fromAngleRads = rads => rads * toDeg$1
         toCCW = angle => -angle
     }
 

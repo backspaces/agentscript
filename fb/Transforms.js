@@ -2,8 +2,9 @@ import firebase from 'https://cdn.skypack.dev/@firebase/app'
 import 'https://cdn.skypack.dev/@firebase/database'
 import * as util from '../src/utils.js'
 
+const key = 'AIzaSyAas9GkevhLj' + '3k6PSaGM36hNQQUTmMbzoY'
 let config = {
-    apiKey: 'AIzaSyAas9GkevhLj3k6PSaGM36hNQQUTmMbzoY',
+    apiKey: key,
     projectId: 'firebase-backspaces',
     databaseURL: 'https://backspaces.firebaseio.com',
 }

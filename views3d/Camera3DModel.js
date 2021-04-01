@@ -18,7 +18,7 @@ export default class Camera3DModel extends Model {
     // }
     setup() {
         // this.setGeometry('degrees')
-        util.setGeometry(this, 'degrees')
+        // util.setGeometry(this, 'degrees')
         this.turtleBreeds('cameras pixels')
 
         this.camera = this.cameras.createOne()
