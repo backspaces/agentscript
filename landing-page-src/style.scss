@@ -144,7 +144,7 @@ $header-height: 70px;
 }
 
 .center-column {
-  padding-top: $header-height;
+  padding-top: calc(#{$header-height} + 60px);
   width: 1000px;
   margin: 0px auto;
 }
