@@ -8,13 +8,17 @@
 </head>
 <body>
   <main class="editor-main-container">
-    <div class="left-column ide-container">
-      <!-- code mirror goes here -->
+    <div class="left-column">
+      <div class="tabs">
+        <div class="tab">Model</div>
+        <div class="tab">View</div>
+      </div>
+      <div class="ide-container"></div>
     </div>
     <div class="right-column">
       <div id="ide-canvas-container"></div>
       <div class="buttons-container">
-        <div class="button" onclick="rebuildModel()">reset</div>
+        <div class="button" onclick="reloadModel(true)">reset</div>
       </div>
       <div class="setup-error-container"></div>
       <div class="step-error-container"></div>

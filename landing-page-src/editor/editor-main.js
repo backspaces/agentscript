@@ -4,6 +4,7 @@ import {defaultTabBinding} from "../snowpack/pkg/@codemirror/commands.js"
 import {javascript} from "../snowpack/pkg/@codemirror/lang-javascript.js"
 import _ from "../vendor/underscore-esm-min.js"
 import html from '../vendor/nanohtml.es6.js';
+import morph from '../vendor/nanomorph.es6.js';
 
 let editorExtensions = [
   basicSetup,
@@ -77,7 +78,7 @@ async function initEditor() {
     src.view = decodeURIComponent(atob(urlParams.get('src.view')))
   }
 
-  editor.setState(EditorState.create({ doc: src.model, extensions: editorExtensions }))
+  renderEditor()
 
   await rebuildModel()
 
@@ -152,7 +153,7 @@ async function reloadModel(forceRebuild = false) {
     }
 
     let setupChanged = Model.prototype['setup'].toString() !== Object.getPrototypeOf(model).setup.toString()
-    let worldOptsChanged = lastWorldOpts && (JSON.stringify(worldOpts) !== JSON.stringify(lastWorldOpts))
+    let worldOptsChanged = !lastWorldOpts || (JSON.stringify(worldOpts) !== JSON.stringify(lastWorldOpts))
     if (forceRebuild || setupChanged || worldOptsChanged) {
       console.log('rebuilding model and view')
       model = window.model = new Model(worldOpts)
@@ -174,6 +175,28 @@ async function reloadModel(forceRebuild = false) {
   }
 }
 
+function renderEditor() {
+  // render code
+  if (currentTab === 'model') {
+    editor.setState(EditorState.create({ doc: src.model, extensions: editorExtensions }))
+  } else {
+    editor.setState(EditorState.create({ doc: src.view, extensions: editorExtensions }))
+  }
+
+  // render tabs
+  function setTab(tab) {
+    currentTab = tab
+    renderEditor()
+  }
+  
+  morph(document.querySelector('.tabs'), html`
+    <div class="tabs">
+      <div class="tab ${currentTab === 'model' ? 'active' : ''}" onclick=${() => setTab('model')}>Model</div>
+      <div class="tab ${currentTab === 'view' ? 'active' : ''}" onclick=${() => setTab('view')}>View</div>
+    </div>
+  `)
+}
+
 initEditor()
 
-window.rebuildModel = rebuildModel
+window.reloadModel = reloadModel
