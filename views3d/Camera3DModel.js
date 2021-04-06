@@ -25,9 +25,9 @@ export default class Camera3DModel extends Model {
 
         for (const y of util.range(this.height)) {
             for (const x of util.range(this.width)) {
-                this.pixels.createOne(p => {
-                    p.u = (x / this.width) * 2 - 1
-                    p.v = (y / this.height) * 2 - 1
+                this.pixels.createOne(px => {
+                    px.u = (x / this.width) * 2 - 1
+                    px.v = (y / this.height) * 2 - 1
                 })
             }
         }
@@ -37,7 +37,7 @@ export default class Camera3DModel extends Model {
 
     toggleLinks() {
         if (this.links.length === 0) {
-            this.pixels.ask(p => this.links.createOne(p, this.camera))
+            this.pixels.ask(px => this.links.createOne(px, this.camera))
         } else {
             this.links.clear()
         }
@@ -60,17 +60,17 @@ export default class Camera3DModel extends Model {
         this.camera.pitch = this.tilt
         this.camera.roll = this.roll
 
-        this.pixels.ask(p => {
-            p.moveTo(this.camera)
+        this.pixels.ask(px => {
+            px.moveTo(this.camera)
 
-            p.heading = this.camera.heading
-            p.pitch = this.camera.pitch
-            p.roll = this.camera.roll
+            px.heading = this.camera.heading
+            px.pitch = this.camera.pitch
+            px.roll = this.camera.roll
 
-            p.right((p.u * this.fieldOfView) / 2)
-            p.tiltUp((p.v * this.fieldOfView) / 2 / aspectRatio)
+            px.right((px.u * this.fieldOfView) / 2)
+            px.tiltUp((px.v * this.fieldOfView) / 2 / aspectRatio)
 
-            p.forward(this.sphereRadius)
+            px.forward(this.sphereRadius)
         })
     }
 }

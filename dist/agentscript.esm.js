@@ -760,7 +760,9 @@ function subtractDegrees(deg1, deg0) {
     if (dAngle > 180) dAngle = dAngle - 360;
     return dAngle
 }
-const subtractHeadings = subtractDegrees;
+// export const subtractHeadings = (head1, head0) =>
+//     degToHeading(subtractDegrees(headingToDeg(head1), headingToDeg(head0)))
+const subtractHeadings = (head1, head0) => -subtractDegrees(head1, head0);
 
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
 // [See: Math.atan2](http://goo.gl/JS8DF)
@@ -4155,23 +4157,27 @@ class Turtle {
      * @param {Angle} heading2 Second heading
      * @return {Angle}
      */
-    subtractHeadings(heading1, heading2) {
-        if (this.model.geometry === 'radians') {
-            return subtractRadians(heading1, heading2)
-        } else {
-            return subtractDegrees(heading1, heading2)
-        }
+    subtractHeading(heading) {
+        // if (this.model.geometry === 'radians') {
+        //     return util.subtractRadians(heading1, heading2)
+        // } else {
+        //     return util.subtractDegrees(heading1, heading2)
+        // }
+        const rads1 = this.model.toRads(this.heading);
+        const rads2 = this.model.toRads(heading);
+        const diff = subtractRadians(rads1, rads2);
+        return this.model.fromRads(diff)
     }
     // Get/put direction using the current geometry
-    get direction() {
-        warn('Turtle.direction is deprecated, use heading instead');
-        return this.model.fromRads(this.theta)
-    }
-    set direction(direction) {
-        warn('Turtle.direction is deprecated, use heading instead');
-        this.theta = mod2pi(this.model.toRads(direction));
-        // this.theta = util.mod2pi(this.model.toRads(direction))
-    }
+    // get direction() {
+    //     util.warn('Turtle.direction is deprecated, use heading instead')
+    //     return this.model.fromRads(this.theta)
+    // }
+    // set direction(direction) {
+    //     util.warn('Turtle.direction is deprecated, use heading instead')
+    //     this.theta = util.mod2pi(this.model.toRads(direction))
+    //     // this.theta = util.mod2pi(this.model.toRads(direction))
+    // }
 
     /**
      * Set Turtles x, y position. If z given, override default z of 0.

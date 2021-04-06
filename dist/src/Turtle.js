@@ -123,23 +123,27 @@ export default class Turtle {
      * @param {Angle} heading2 Second heading
      * @return {Angle}
      */
-    subtractHeadings(heading1, heading2) {
-        if (this.model.geometry === 'radians') {
-            return util.subtractRadians(heading1, heading2)
-        } else {
-            return util.subtractDegrees(heading1, heading2)
-        }
+    subtractHeading(heading) {
+        // if (this.model.geometry === 'radians') {
+        //     return util.subtractRadians(heading1, heading2)
+        // } else {
+        //     return util.subtractDegrees(heading1, heading2)
+        // }
+        const rads1 = this.model.toRads(this.heading)
+        const rads2 = this.model.toRads(heading)
+        const diff = util.subtractRadians(rads1, rads2)
+        return this.model.fromRads(diff)
     }
     // Get/put direction using the current geometry
-    get direction() {
-        util.warn('Turtle.direction is deprecated, use heading instead')
-        return this.model.fromRads(this.theta)
-    }
-    set direction(direction) {
-        util.warn('Turtle.direction is deprecated, use heading instead')
-        this.theta = util.mod2pi(this.model.toRads(direction))
-        // this.theta = util.mod2pi(this.model.toRads(direction))
-    }
+    // get direction() {
+    //     util.warn('Turtle.direction is deprecated, use heading instead')
+    //     return this.model.fromRads(this.theta)
+    // }
+    // set direction(direction) {
+    //     util.warn('Turtle.direction is deprecated, use heading instead')
+    //     this.theta = util.mod2pi(this.model.toRads(direction))
+    //     // this.theta = util.mod2pi(this.model.toRads(direction))
+    // }
 
     /**
      * Set Turtles x, y position. If z given, override default z of 0.

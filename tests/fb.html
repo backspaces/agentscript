@@ -11,22 +11,9 @@
         <script type="module">
             import firebase from 'https://cdn.skypack.dev/@firebase/app'
             import 'https://cdn.skypack.dev/@firebase/database'
+            import config from '../fb/Config.js'
             // // import * as fbdb from 'https://cdn.skypack.dev/@firebase/database'
 
-            // prettier-ignore
-            const key = 'AIzaSyAas9GkevhLj'
-                .concat('3k6PSaGM36hNQQUTmMbzoY')
-
-            const config = {
-                apiKey: key,
-                projectId: 'acequia',
-                databaseURL: 'https://acequia.firebaseio.com/',
-
-                // authDomain: 'agentscript.firebaseapp.com',
-                // storageBucket: 'firebase-agentscript.appspot.com',
-                // messagingSenderId: '263611724738',
-                // appId: '1:263611724738:web:aa68ebf876b18412aadc5b',
-            }
             firebase.initializeApp(config)
             const db = firebase.database()
             const aGoodPlace = db.ref().child('agentscript')

@@ -14,7 +14,8 @@
             import TwoDraw from '../src/TwoDraw.js'
 
             const model = new Model()
-            model.setGeometry('heading')
+            // model.setGeometry('heading')
+            util.setGeometry(model, 'heading')
             model.population = 1000
             model.noLinks = true
             model.setup()
@@ -37,10 +38,13 @@
             // window.draw = () => view.draw()
             window.pi = Math.PI
             window.clear = () => model.patches.ask(p => (p.mark = false))
-            window.head = () => model.setGeometry('heading')
-            window.deg = () => model.setGeometry('degrees')
-            window.rad = () => model.setGeometry('radians')
-            window.geom = () => model.geometry
+            // window.head = () => model.setGeometry('heading')
+            // window.deg = () => model.setGeometry('degrees')
+            // window.rad = () => model.setGeometry('radians')
+            window.head = () => util.setGeometry(model, 'heading')
+            window.deg = () => util.setGeometry(model, 'degrees')
+            window.rad = () => util.setGeometry(model, 'radians')
+            // window.geom = () => model.geometry
             // window.mark = a => ((a.patch || a).mark = true)
             window.mark = a => (a.mark = true)
             window.markall = aset => aset.ask(a => mark(a))

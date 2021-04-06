@@ -1,24 +1,6 @@
 import firebase from 'https://cdn.skypack.dev/@firebase/app'
 import 'https://cdn.skypack.dev/@firebase/database'
-
-const key = 'AIzaSyAas9GkevhLj' + '3k6PSaGM36hNQQUTmMbzoY'
-let config = {
-    apiKey: key,
-    projectId: 'firebase-backspaces',
-    databaseURL: 'https://backspaces.firebaseio.com',
-
-    // authDomain: 'backspaces.firebaseapp.com',
-    // storageBucket: 'firebase-backspaces.appspot.com',
-    // messagingSenderId: '175924217435',
-    // appId: '1:175924217435:web:60d29eec0872eac3cce17e',
-}
-
-export function setConfig(cfg) {
-    config = cfg
-}
-export function getConfig() {
-    return config
-}
+import config from './Config.js'
 
 export default class DefineTransform {
     constructor(root = '') {

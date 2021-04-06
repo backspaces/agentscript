@@ -626,7 +626,9 @@ export function subtractDegrees(deg1, deg0) {
     if (dAngle > 180) dAngle = dAngle - 360
     return dAngle
 }
-export const subtractHeadings = subtractDegrees
+// export const subtractHeadings = (head1, head0) =>
+//     degToHeading(subtractDegrees(headingToDeg(head1), headingToDeg(head0)))
+export const subtractHeadings = (head1, head0) => -subtractDegrees(head1, head0)
 
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
 // [See: Math.atan2](http://goo.gl/JS8DF)

@@ -5,8 +5,8 @@ const puppeteer = require('puppeteer')
 const shell = require('shelljs')
 
 const port = 9008
-const useWorkers = true
-// const useWorkers = false // debug
+// const useWorkers = true
+const useWorkers = false // debug
 const compareSamples = true
 
 liveServer.start({
