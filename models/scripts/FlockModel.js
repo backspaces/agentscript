@@ -1,7 +1,6 @@
 var Model = AS.Model
 var util = AS.util
 
-util.randomSeed()
 class FlockModel extends Model {
     population = 1000
     vision = 3 // radius in patches
@@ -13,7 +12,6 @@ class FlockModel extends Model {
 
     constructor(worldDptions) {
         super(worldDptions) // default world options if "undefined"
-        // this.setGeometry(this.geometry)
     }
 
     setup() {
@@ -23,12 +21,9 @@ class FlockModel extends Model {
         util.repeat(this.population, () => {
             this.patches.oneOf().sprout()
         })
-        window.t = this.turtles[1]
     }
 
     step() {
-        // console.log(t.heading, t.getxyz())
-        console.log(t.theta, t.getxyz())
         this.turtles.ask(t => {
             this.flock(t)
         })
@@ -42,8 +37,6 @@ class FlockModel extends Model {
         const flockmates = this.turtles.inRadius(t, this.vision, false)
         if (flockmates.length !== 0) {
             const nearest = flockmates.minOneOf(f => f.distance(t))
-            if (t.id === 1)
-                console.log('nearest', nearest.id, 'mates', flockmates.length)
             if (t.distance(nearest) < this.minSeparation) {
                 this.separate(t, nearest)
             } else {
@@ -57,21 +50,17 @@ class FlockModel extends Model {
         // heading is *away* from t towaards nearest, so separates the two
         const heading = nearest.towards(t)
         this.turnTowards(t, heading)
-        if (t.id === 1) console.log('separate', t.theta)
     }
     align(t, flockmates) {
         this.turnTowards(t, this.averageHeading(flockmates))
-        if (t.id === 1) console.log('align', t.theta)
     }
     cohere(t, flockmates) {
         this.turnTowards(t, this.averageHeadingTowards(t, flockmates))
-        if (t.id === 1) console.log('cohere', t.theta)
     }
 
     turnTowards(t, heading) {
-        // let turn = util.subtractRadians(theta, t.theta)
-        let turn = util.subtractHeadings(heading, t.heading)
-        // let turn = t.subtractHeading(heading)
+        // let turn = util.subtractHeadings(heading, t.heading)
+        let turn = t.subtractHeading(heading)
         turn = util.clamp(turn, -this.maxTurn, this.maxTurn)
         t.rotate(turn)
     }
