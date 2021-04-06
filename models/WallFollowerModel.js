@@ -29,6 +29,7 @@ export default class WallFollowerModel extends Model {
     constructor(worldDptions = World.defaultOptions(35)) {
         super(worldDptions)
         Object.assign(this, WallFollowerModel.defaultOptions())
+        util.setGeometry(this, 'degrees')
     }
 
     setup() {
@@ -75,30 +76,27 @@ export default class WallFollowerModel extends Model {
             this.walk(t)
         })
     }
-    walk(turtle) {
+    walk(t) {
         // Calculate a right turn angle for lefty/righty
         const rtAngle = 90 // Math.PI / 2
-        const turnAngle = rtAngle * turtle.turn
+        const turnAngle = rtAngle * t.turn
 
         // Keeps me on the wall when drifting off: If a wall to my west/east and
         // a space to my south west/east, rotate towards wall
-        if (
-            !this.wallAt(turtle, turnAngle) &&
-            this.wallAt(turtle, 1.5 * turnAngle)
-        ) {
-            turtle.rotate(turnAngle)
+        if (!this.wallAt(t, turnAngle) && this.wallAt(t, 1.5 * turnAngle)) {
+            t.rotate(turnAngle)
         }
         // Turn Turn left/right if wall is ahead.
-        while (this.wallAt(turtle, 0)) turtle.rotate(-turnAngle)
+        while (this.wallAt(t, 0)) t.rotate(-turnAngle)
 
         // After all that, move forward, still on patch centers.
-        turtle.forward(1)
+        t.forward(1)
     }
-    wallAt(turtle, angle) {
+    wallAt(t, angle) {
         // Note that angle may be positive or negative.  if angle is
         // positive, the turtle looks right, if negative, left.
         // Return true if wall is ahead.
-        const p = turtle.patchLeftAndAhead(angle, 1)
+        const p = t.patchLeftAndAhead(angle, 1)
         return p && p.isBreed(this.walls)
     }
 }
