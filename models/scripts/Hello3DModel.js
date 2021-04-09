@@ -1,5 +1,4 @@
 var util = AS.util
-// import Model3D from '../src/Model3D.js'
 var Model = AS.Model
 
 class Hello3DModel extends Model {

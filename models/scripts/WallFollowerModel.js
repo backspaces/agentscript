@@ -29,7 +29,7 @@ class WallFollowerModel extends Model {
     constructor(worldDptions = World.defaultOptions(35)) {
         super(worldDptions)
         Object.assign(this, WallFollowerModel.defaultOptions())
-        util.setGeometry(this, 'degrees')
+        // util.setGeometry(this, 'degrees')
     }
 
     setup() {

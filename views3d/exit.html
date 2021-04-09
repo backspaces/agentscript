@@ -14,17 +14,18 @@
             // import Model from './Exit3DModel.js'
 
             import Turtle3D from '../src/Turtle3D.js'
-            import ExitModel from '../models/ExitModel.js'
+            import Model from '../models/ExitModel.js'
 
-            class Model extends ExitModel {
-                initAgentSet(name, AgentsetClass, AgentClass) {
-                    if (name === 'turtles') AgentClass = Turtle3D
-                    super.initAgentSet(name, AgentsetClass, AgentClass)
-                }
-                // constructor(worldDefaults) {
-                //     super(worldDefaults)
-                // }
-            }
+            // import ExitModel from '../models/ExitModel.js'
+            // class Model extends ExitModel {
+            //     initAgentSet(name, AgentsetClass, AgentClass) {
+            //         if (name === 'turtles') AgentClass = Turtle3D
+            //         super.initAgentSet(name, AgentsetClass, AgentClass)
+            //     }
+            //     // constructor(worldDefaults) {
+            //     //     super(worldDefaults)
+            //     // }
+            // }
 
             async function run() {
                 const model = new Model()

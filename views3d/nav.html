@@ -81,7 +81,7 @@
                     rollRight: () => turtle.rollRight(controls.angle),
                     rollLeft: () => turtle.rollLeft(controls.angle),
                 }
-                util.toWindow({ target, gui, controls })
+                util.toWindow({ t: turtle, target, gui, controls })
 
                 gui.add(controls, 'ThetaPhiPsi').listen()
                 gui.add(controls, 'HeadingPitchRoll').listen()

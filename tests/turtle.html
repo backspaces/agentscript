@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+    </head>
+
+    <body>
+        <div id="modelDiv"></div>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import Model from '../src/Model.js'
+            import ThreeDraw from '../src/ThreeDraw.js'
+            import Animator from '../src/Animator.js'
+
+            class Turtle extends Model {
+                setup() {
+                    const t = this.turtles.createOne()
+                    t.heading = 0
+                }
+            }
+            const model = new Turtle()
+            model.setup()
+            const t = model.turtles.first()
+            t.heading = 0
+
+            const view = new ThreeDraw(model, {
+                drawOptions: {
+                    turtlesMesh: 'Obj3DMesh',
+                    turtlesShape: 'Dart',
+                    turtlesColor: 'red',
+                    turtlesSize: 4,
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    // model.step()
+                    view.draw()
+                },
+                -1, // steps
+                10 // fps
+            ).startStats()
+
+            util.toWindow({ util, anim, model, view, t })
+        </script>
+    </body>
+</html>

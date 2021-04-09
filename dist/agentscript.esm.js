@@ -8699,18 +8699,22 @@ class Turtle3D extends Turtle {
     }
     get pitch() {
         // return -this.model.fromRads(this.obj3d.rotation.y)
+        // return -this.model.fromAngleRads(this.obj3d.rotation.y)
         return -this.model.fromAngleRads(this.obj3d.rotation.y)
     }
     set pitch(angle) {
         // this.obj3d.rotation.y = -this.model.toRads(angle)
+        // this.obj3d.rotation.y = -this.model.toAngleRads(angle)
         this.obj3d.rotation.y = -this.model.toAngleRads(angle);
     }
     get roll() {
         // return this.model.fromRads(this.obj3d.rotation.x)
+        // return this.model.fromAngleRads(this.obj3d.rotation.x)
         return this.model.fromAngleRads(this.obj3d.rotation.x)
     }
     set roll(angle) {
         // this.obj3d.rotation.x = this.model.toRads(angle)
+        // this.obj3d.rotation.x = this.model.toAngleRads(angle)
         this.obj3d.rotation.x = this.model.toAngleRads(angle);
     }
 
@@ -8769,9 +8773,8 @@ class Turtle3D extends Turtle {
         const [x, y, z] = this.getxyz();
         const [dx, dy, dz] = [x1 - x, y1 - y, z1 - z];
         const xyhypot = Math.hypot(dx, dy);
-        // const headingTowards = Math.atan2(dy, dx)
-        // const pitchTowards = Math.atan2(dz, xyhypot)
-        return this.model.fromRads(Math.atan2(dz, xyhypot))
+        const pitchRads = Math.atan2(dz, xyhypot);
+        return this.model.fromAngleRads(pitchRads)
     }
     towardsPitch(agent) {
         const { x, y, z } = agent;
