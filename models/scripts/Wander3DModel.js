@@ -1,7 +1,8 @@
 var util = AS.util
-var Model3D = AS.Model3D
+// import Model3D from '../src/Model3D.js'
+var Model = AS.Model
 
-class Wander3DModel extends Model3D {
+class Wander3DModel extends Model {
     static defaultOptions() {
         return {
             population: 25,

@@ -1,27 +1,28 @@
 toc:
-  - name: Turtles, Patches, and Links
-  - Turtle
-  - Turtles
-  - Link
-  - Links
-  - Patch
-  - Patches
-  - AgentSet
-  - AgentArray
-  - name: The Model
-  - Model
-  - World
-  - name: The View
-  - TwoDraw
-  - ThreeDraw
-  - Color
-  - name: Interaction
-  - Mouse
-  - name: Utilities
-    description: |
-      An assortment of helper functions. To use: `import * as util from src/utils.js`.
-  - randomInt
-  - randomInt2
-  - randomFloat
-  - randomFloat2
-  - name: Other
+    - name: Turtles, Patches, and Links
+    - Turtle
+    - Turtles
+    - Link
+    - Links
+    - Patch
+    - Patches
+    - AgentSet
+    - AgentArray
+    - name: The Model
+    - Model
+    - World
+    - name: The View
+    - TwoDraw
+    - ThreeDraw
+    - Color
+    - name: Interaction
+    - Mouse
+    - name: Utilities
+      description: |
+          An assortment of helper functions. To use: `import * as util from src/utils.js`.
+    - randomInt
+    - randomInt2
+    - randomFloat
+    - randomFloat2
+    - name: Other
+    - DataSet

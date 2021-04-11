@@ -1,7 +1,8 @@
 import * as util from '../src/utils.js'
-import Model3D from '../src/Model3D.js'
+// import Model3D from '../src/Model3D.js'
+import Model from '../src/Model.js'
 
-export default class Camera3DModel extends Model3D {
+export default class Camera3DModel extends Model {
     width = 32
     height = 24
     heading = 0
@@ -16,16 +17,17 @@ export default class Camera3DModel extends Model3D {
     //     super(worldDptions) // default world options if "undefined"
     // }
     setup() {
-        this.setGeometry('degrees')
+        // this.setGeometry('degrees')
+        // util.setGeometry(this, 'degrees')
         this.turtleBreeds('cameras pixels')
 
         this.camera = this.cameras.createOne()
 
         for (const y of util.range(this.height)) {
             for (const x of util.range(this.width)) {
-                this.pixels.createOne(p => {
-                    p.u = (x / this.width) * 2 - 1
-                    p.v = (y / this.height) * 2 - 1
+                this.pixels.createOne(px => {
+                    px.u = (x / this.width) * 2 - 1
+                    px.v = (y / this.height) * 2 - 1
                 })
             }
         }
@@ -35,7 +37,7 @@ export default class Camera3DModel extends Model3D {
 
     toggleLinks() {
         if (this.links.length === 0) {
-            this.pixels.ask(p => this.links.createOne(p, this.camera))
+            this.pixels.ask(px => this.links.createOne(px, this.camera))
         } else {
             this.links.clear()
         }
@@ -58,17 +60,17 @@ export default class Camera3DModel extends Model3D {
         this.camera.pitch = this.tilt
         this.camera.roll = this.roll
 
-        this.pixels.ask(p => {
-            p.moveTo(this.camera)
+        this.pixels.ask(px => {
+            px.moveTo(this.camera)
 
-            p.heading = this.camera.heading
-            p.pitch = this.camera.pitch
-            p.roll = this.camera.roll
+            px.heading = this.camera.heading
+            px.pitch = this.camera.pitch
+            px.roll = this.camera.roll
 
-            p.right((p.u * this.fieldOfView) / 2)
-            p.tiltUp((p.v * this.fieldOfView) / 2 / aspectRatio)
+            px.right((px.u * this.fieldOfView) / 2)
+            px.tiltUp((px.v * this.fieldOfView) / 2 / aspectRatio)
 
-            p.forward(this.sphereRadius)
+            px.forward(this.sphereRadius)
         })
     }
 }

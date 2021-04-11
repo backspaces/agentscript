@@ -626,7 +626,9 @@ export function subtractDegrees(deg1, deg0) {
     if (dAngle > 180) dAngle = dAngle - 360
     return dAngle
 }
-export const subtractHeadings = subtractDegrees
+// export const subtractHeadings = (head1, head0) =>
+//     degToHeading(subtractDegrees(headingToDeg(head1), headingToDeg(head0)))
+export const subtractHeadings = (head1, head0) => -subtractDegrees(head1, head0)
 
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
 // [See: Math.atan2](http://goo.gl/JS8DF)
@@ -640,6 +642,44 @@ export function headingTowardXY(x, y, x1, y1) {
 // Above using degrees returning degrees in [-90, 90]
 export function degreesTowardXY(x, y, x1, y1) {
     return radToDeg(radiansTowardXY(x, y, x1, y1))
+}
+
+const toDeg = 180 / Math.PI
+const toRad = Math.PI / 180
+const geometries = {
+    radians: {
+        toRads: rads => rads,
+        fromRads: rads => rads,
+        toAngleRads: rads => rads,
+        fromAngleRads: rads => rads,
+        toCCW: angle => angle,
+        // toDeltaRads: rads => rads,
+        // fromDeltaRads: rads => rads,
+    },
+    degrees: {
+        toRads: deg => deg * toRad,
+        fromRads: rads => rads * toDeg,
+        toAngleRads: deg => deg * toRad,
+        fromAngleRads: rads => rads * toDeg,
+        toCCW: angle => angle,
+        // toDeltaRads: deg => deg * toRad,
+        // fromDeltaRads: rads => rads * toDeg,
+    },
+    heading: {
+        toRads: deg => (90 - deg) * toRad,
+        fromRads: rads => 90 - rads * toDeg,
+        toAngleRads: deg => deg * toRad,
+        fromAngleRads: rads => rads * toDeg,
+        toCCW: angle => -angle,
+        // toDeltaRads: deg => -deg * toRad,
+        // fromDeltaRads: rads => -rads * toDeg,
+    },
+}
+export function setGeometry(model, name) {
+    const geometry = geometries[name]
+    if (!geometry) throw Error(`util.setGeometry: ${name} geometry not defined`)
+    Object.assign(model, geometry)
+    model.geometry = name
 }
 
 // AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading

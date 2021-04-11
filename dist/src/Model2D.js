@@ -2,7 +2,7 @@ import World from './World.js'
 import Patches from './Patches.js'
 import Patch from './Patch.js'
 import Turtles from './Turtles.js'
-import Turtle from './Turtle3D.js'
+import Turtle from './Turtle.js'
 import Links from './Links.js'
 import Link from './Link.js'
 
@@ -32,11 +32,12 @@ export default class Model {
     turtles
     links
     ticks
+    geometry = 'heading'
 
     constructor(worldOptions = World.defaultOptions(), autoTick = true) {
         this.resetModel(worldOptions)
         if (autoTick) this.autoTick()
-        // this.setGeometry(this.geometry)
+        this.setGeometry(this.geometry)
     }
 
     initAgentSet(name, AgentsetClass, AgentClass) {
@@ -142,29 +143,23 @@ export default class Model {
             this[breedName] = this.links.newBreed(breedName)
         }
     }
-    // /**
-    //  * Set the Geometry of this Model
-    //  * * radians: Set the model to use native Javascript angles.<br>
-    //  *   [See Math module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math#converting_between_degrees_and_radians)
-    //  * * degrees: Use degrees rather than radians. <br>
-    //  *   The above with degree<>radian conversions done for you.
-    //  * * heading: Use "Clock" geometry:<br>
-    //  *   Degrees with 0 "up" and angles Clockwise.
-    //  * @param {string} name One of 'radians', 'degrees', 'heading'
-    //  */
-    // setGeometry(name) {
-    //     const geometry = geometries[name]
-    //     if (!geometry)
-    //         throw Error(`model.setGeometry: ${name} geometry not defined`)
-    //     Object.assign(this, geometry)
-    //     this.geometry = name
-    // }
-
-    toRads = deg => (90 - deg) * toRad
-    fromRads = rads => 90 - rads * toDeg
-    toAngleRads = deg => deg * toRad
-    fromAngleRads = rads => rads * toDeg
-    toCCW = angle => -angle
+    /**
+     * Set the Geometry of this Model
+     * * radians: Set the model to use native Javascript angles.<br>
+     *   [See Math module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math#converting_between_degrees_and_radians)
+     * * degrees: Use degrees rather than radians. <br>
+     *   The above with degree<>radian conversions done for you.
+     * * heading: Use "Clock" geometry:<br>
+     *   Degrees with 0 "up" and angles Clockwise.
+     * @param {string} name One of 'radians', 'degrees', 'heading'
+     */
+    setGeometry(name) {
+        const geometry = geometries[name]
+        if (!geometry)
+            throw Error(`model.setGeometry: ${name} geometry not defined`)
+        Object.assign(this, geometry)
+        this.geometry = name
+    }
 }
 
 const mod = (val, n) => ((val % n) + n) % n // believe it or not!
@@ -175,36 +170,31 @@ const mod2pi = radians => mod(radians, 2 * Math.PI)
 const toDeg = 180 / Math.PI
 const toRad = Math.PI / 180
 
-// let toRads = deg => (90 - deg) * toRad
-// let fromRads = rads => 90 - rads * toDeg
-// let toAngleRads = deg => deg * toRad
-// let toCCW = angle => -angle
-
-// const geometries = {
-//     radians: {
-//         toRads: rads => rads,
-//         fromRads: rads => rads,
-//         toAngleRads: rads => rads,
-//         toCCW: angle => angle,
-//         // toDeltaRads: rads => rads,
-//         // fromDeltaRads: rads => rads,
-//     },
-//     degrees: {
-//         toRads: deg => deg * toRad,
-//         fromRads: rads => rads * toDeg,
-//         toAngleRads: deg => deg * toRad,
-//         toCCW: angle => angle,
-//         // toDeltaRads: deg => deg * toRad,
-//         // fromDeltaRads: rads => rads * toDeg,
-//     },
-//     heading: {
-//         toRads: deg => (90 - deg) * toRad,
-//         fromRads: rads => 90 - rads * toDeg,
-//         toAngleRads: deg => deg * toRad,
-//         toCCW: angle => -angle,
-//         // toDeltaRads: deg => -deg * toRad,
-//         // fromDeltaRads: rads => -rads * toDeg,
-//     },
-// }
+const geometries = {
+    radians: {
+        toRads: rads => rads,
+        fromRads: rads => rads,
+        toAngleRads: rads => rads,
+        toCCW: angle => angle,
+        // toDeltaRads: rads => rads,
+        // fromDeltaRads: rads => rads,
+    },
+    degrees: {
+        toRads: deg => deg * toRad,
+        fromRads: rads => rads * toDeg,
+        toAngleRads: deg => deg * toRad,
+        toCCW: angle => angle,
+        // toDeltaRads: deg => deg * toRad,
+        // fromDeltaRads: rads => rads * toDeg,
+    },
+    heading: {
+        toRads: deg => (90 - deg) * toRad,
+        fromRads: rads => 90 - rads * toDeg,
+        toAngleRads: deg => deg * toRad,
+        toCCW: angle => -angle,
+        // toDeltaRads: deg => -deg * toRad,
+        // fromDeltaRads: rads => -rads * toDeg,
+    },
+}
 
 // export default Model

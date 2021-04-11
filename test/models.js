@@ -29,6 +29,7 @@ let models = shell
     .split('\n')
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
+// models = ['flock'] // debug. Also headless below
 // models = ['droplets'] // debug. Also headless below
 // models = models.filter(m => m !== 'droplets')
 // models = models.filter(m => !['droplets', 'gridPath'].includes(m))

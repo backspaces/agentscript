@@ -93,7 +93,7 @@ export default class Turtle3D extends Turtle {
     }
     set theta(rad) {
         // util.warn('theta is deprecated, use heading instead')
-        this.obj3d.rotation.z = rad
+        if (this.obj3d) this.obj3d.rotation.z = rad
     }
 
     get heading() {
@@ -103,16 +103,24 @@ export default class Turtle3D extends Turtle {
         this.obj3d.rotation.z = this.model.toRads(angle)
     }
     get pitch() {
-        return -this.model.fromRads(this.obj3d.rotation.y)
+        // return -this.model.fromRads(this.obj3d.rotation.y)
+        // return -this.model.fromAngleRads(this.obj3d.rotation.y)
+        return -this.model.fromAngleRads(this.obj3d.rotation.y)
     }
     set pitch(angle) {
-        this.obj3d.rotation.y = -this.model.toRads(angle)
+        // this.obj3d.rotation.y = -this.model.toRads(angle)
+        // this.obj3d.rotation.y = -this.model.toAngleRads(angle)
+        this.obj3d.rotation.y = -this.model.toAngleRads(angle)
     }
     get roll() {
-        return this.model.fromRads(this.obj3d.rotation.x)
+        // return this.model.fromRads(this.obj3d.rotation.x)
+        // return this.model.fromAngleRads(this.obj3d.rotation.x)
+        return this.model.fromAngleRads(this.obj3d.rotation.x)
     }
     set roll(angle) {
-        this.obj3d.rotation.x = this.model.toRads(angle)
+        // this.obj3d.rotation.x = this.model.toRads(angle)
+        // this.obj3d.rotation.x = this.model.toAngleRads(angle)
+        this.obj3d.rotation.x = this.model.toAngleRads(angle)
     }
 
     // Move along the turtle's X axis
@@ -135,10 +143,12 @@ export default class Turtle3D extends Turtle {
         // this.right(-angle)
     }
     tiltUp(angle) {
-        this.obj3d.rotateY(-this.model.toAngleRads(angle))
+        // this.obj3d.rotateY(-this.model.toAngleRads(angle))
+        this.tiltDown(-angle)
     }
     tiltDown(angle) {
-        this.tiltUp(-angle)
+        this.obj3d.rotateY(this.model.toAngleRads(angle))
+        // this.tiltUp(-angle)
     }
     rollRight(angle) {
         this.obj3d.rotateX(this.model.toAngleRads(angle))
@@ -168,9 +178,8 @@ export default class Turtle3D extends Turtle {
         const [x, y, z] = this.getxyz()
         const [dx, dy, dz] = [x1 - x, y1 - y, z1 - z]
         const xyhypot = Math.hypot(dx, dy)
-        // const headingTowards = Math.atan2(dy, dx)
-        // const pitchTowards = Math.atan2(dz, xyhypot)
-        return this.model.fromRads(Math.atan2(dz, xyhypot))
+        const pitchRads = Math.atan2(dz, xyhypot)
+        return this.model.fromAngleRads(pitchRads)
     }
     towardsPitch(agent) {
         const { x, y, z } = agent

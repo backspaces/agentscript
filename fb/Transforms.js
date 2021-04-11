@@ -1,19 +1,8 @@
 import firebase from 'https://cdn.skypack.dev/@firebase/app'
 import 'https://cdn.skypack.dev/@firebase/database'
 import * as util from '../src/utils.js'
+import config from './Config.js'
 
-let config = {
-    apiKey: 'AIzaSyAas9GkevhLj3k6PSaGM36hNQQUTmMbzoY',
-    projectId: 'firebase-backspaces',
-    databaseURL: 'https://backspaces.firebaseio.com',
-}
-
-export function setConfig(cfg) {
-    config = cfg
-}
-export function getConfig() {
-    return config
-}
 export default class Transforms {
     constructor(modelName, root = '') {
         firebase.initializeApp(config)
