@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+    <head>
+        <title></title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import Animator from '../src/Animator.js'
+
+            async function run() {
+                const queryParams = new URLSearchParams(window.location.search)
+                const modelPath = queryParams.get('modelPath')
+                const viewPath = queryParams.get('viewPath')
+
+                document.title = `views2: ${modelPath.split('/').pop()}`
+
+                const Model = (await import(modelPath)).default
+
+                let {
+                  worldOpts,
+                  View,
+                  viewOpts,
+                  initApp
+                } = await import(viewPath)
+
+                const defaultInitApp = async (Model, divEl) => {
+                    const model = new Model(worldOpts)
+                    await model.startup()
+                    model.setup()
+
+                    viewOpts.div = divEl
+                    
+                    const view = new View(model, viewOpts)
+                    const anim = new Animator(() => {
+                        model.step()
+                        view.draw()
+                    })
+
+                    util.toWindow({ util, model, view })
+                }
+
+                if (!initApp) {
+                    initApp = defaultInitApp
+                }
+                
+                initApp(Model, document.querySelector('#modelDiv'))
+            }
+            run()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>
