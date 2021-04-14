@@ -13,6 +13,7 @@ Code    | Run demo
 [hello](https://github.com/backspaces/agentscript/tree/master/models/HelloModel.js#L1) | [https://agentscript.org/models/run.html?hello](https://agentscript.org/models/run.html?hello)
 [helloPlus](https://github.com/backspaces/agentscript/tree/master/models/HelloPlusModel.js#L1) | [https://agentscript.org/models/run.html?helloPlus](https://agentscript.org/models/run.html?helloPlus)
 [linkTravel](https://github.com/backspaces/agentscript/tree/master/models/LinkTravelModel.js#L1) | [https://agentscript.org/models/run.html?linkTravel](https://agentscript.org/models/run.html?linkTravel)
+[mouse](https://github.com/backspaces/agentscript/tree/master/models/MouseModel.js#L1) | [https://agentscript.org/models/run.html?mouse](https://agentscript.org/models/run.html?mouse)
 [roads](https://github.com/backspaces/agentscript/tree/master/models/RoadsModel.js#L1) | [https://agentscript.org/models/run.html?roads](https://agentscript.org/models/run.html?roads)
 [tsp](https://github.com/backspaces/agentscript/tree/master/models/TspModel.js#L1) | [https://agentscript.org/models/run.html?tsp](https://agentscript.org/models/run.html?tsp)
 [virus](https://github.com/backspaces/agentscript/tree/master/models/VirusModel.js#L1) | [https://agentscript.org/models/run.html?virus](https://agentscript.org/models/run.html?virus)

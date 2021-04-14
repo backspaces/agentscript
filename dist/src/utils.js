@@ -481,7 +481,7 @@ export function fcnToWorker(fcn) {
 // ### Math
 
 // const { PI, floor, cos, sin, atan2, log, log2, sqrt } = Math
-const { PI } = Math
+export const PI = Math.PI
 
 // Return random int/float in [0,max) or [min,max) or [-r/2,r/2)
 /** Returns a random int in [0, max) */
@@ -515,7 +515,8 @@ export function randomSeed(seed = 123456) {
 
 // num can be numeric array
 export function precision(num, digits = 4) {
-    if (Array.isArray(num)) return num.map(val => this.precision(val, digits))
+    if(num === -0) return 0
+    if (Array.isArray(num)) return num.map(val => precision(val, digits))
     const mult = 10 ** digits
     return Math.round(num * mult) / mult
 }
@@ -644,8 +645,8 @@ export function degreesTowardXY(x, y, x1, y1) {
     return radToDeg(radiansTowardXY(x, y, x1, y1))
 }
 
-const toDeg = 180 / Math.PI
-const toRad = Math.PI / 180
+export const toDeg = 180 / Math.PI
+export const toRad = Math.PI / 180
 const geometries = {
     radians: {
         toRads: rads => rads,
@@ -653,8 +654,6 @@ const geometries = {
         toAngleRads: rads => rads,
         fromAngleRads: rads => rads,
         toCCW: angle => angle,
-        // toDeltaRads: rads => rads,
-        // fromDeltaRads: rads => rads,
     },
     degrees: {
         toRads: deg => deg * toRad,
@@ -662,8 +661,6 @@ const geometries = {
         toAngleRads: deg => deg * toRad,
         fromAngleRads: rads => rads * toDeg,
         toCCW: angle => angle,
-        // toDeltaRads: deg => deg * toRad,
-        // fromDeltaRads: rads => rads * toDeg,
     },
     heading: {
         toRads: deg => (90 - deg) * toRad,
@@ -671,8 +668,6 @@ const geometries = {
         toAngleRads: deg => deg * toRad,
         fromAngleRads: rads => rads * toDeg,
         toCCW: angle => -angle,
-        // toDeltaRads: deg => -deg * toRad,
-        // fromDeltaRads: rads => -rads * toDeg,
     },
 }
 export function setGeometry(model, name) {

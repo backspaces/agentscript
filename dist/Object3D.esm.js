@@ -1085,13 +1085,13 @@ class Vector3 {
 
 		}
 
-		return this.applyQuaternion( _quaternion.setFromEuler( euler ) );
+		return this.applyQuaternion( _quaternion$2.setFromEuler( euler ) );
 
 	}
 
 	applyAxisAngle( axis, angle ) {
 
-		return this.applyQuaternion( _quaternion.setFromAxisAngle( axis, angle ) );
+		return this.applyQuaternion( _quaternion$2.setFromAxisAngle( axis, angle ) );
 
 	}
 
@@ -1574,7 +1574,7 @@ class Vector3 {
 }
 
 const _vector = new Vector3();
-const _quaternion = new Quaternion();
+const _quaternion$2 = new Quaternion();
 
 class Matrix4 {
 
@@ -1689,9 +1689,9 @@ class Matrix4 {
 		const te = this.elements;
 		const me = m.elements;
 
-		const scaleX = 1 / _v1.setFromMatrixColumn( m, 0 ).length();
-		const scaleY = 1 / _v1.setFromMatrixColumn( m, 1 ).length();
-		const scaleZ = 1 / _v1.setFromMatrixColumn( m, 2 ).length();
+		const scaleX = 1 / _v1$1.setFromMatrixColumn( m, 0 ).length();
+		const scaleY = 1 / _v1$1.setFromMatrixColumn( m, 1 ).length();
+		const scaleZ = 1 / _v1$1.setFromMatrixColumn( m, 2 ).length();
 
 		te[ 0 ] = me[ 0 ] * scaleX;
 		te[ 1 ] = me[ 1 ] * scaleX;
@@ -2296,9 +2296,9 @@ class Matrix4 {
 
 		const te = this.elements;
 
-		let sx = _v1.set( te[ 0 ], te[ 1 ], te[ 2 ] ).length();
-		const sy = _v1.set( te[ 4 ], te[ 5 ], te[ 6 ] ).length();
-		const sz = _v1.set( te[ 8 ], te[ 9 ], te[ 10 ] ).length();
+		let sx = _v1$1.set( te[ 0 ], te[ 1 ], te[ 2 ] ).length();
+		const sy = _v1$1.set( te[ 4 ], te[ 5 ], te[ 6 ] ).length();
+		const sz = _v1$1.set( te[ 8 ], te[ 9 ], te[ 10 ] ).length();
 
 		// if determine is negative, we need to invert one scale
 		const det = this.determinant();
@@ -2309,25 +2309,25 @@ class Matrix4 {
 		position.z = te[ 14 ];
 
 		// scale the rotation part
-		_m1.copy( this );
+		_m1$1.copy( this );
 
 		const invSX = 1 / sx;
 		const invSY = 1 / sy;
 		const invSZ = 1 / sz;
 
-		_m1.elements[ 0 ] *= invSX;
-		_m1.elements[ 1 ] *= invSX;
-		_m1.elements[ 2 ] *= invSX;
+		_m1$1.elements[ 0 ] *= invSX;
+		_m1$1.elements[ 1 ] *= invSX;
+		_m1$1.elements[ 2 ] *= invSX;
 
-		_m1.elements[ 4 ] *= invSY;
-		_m1.elements[ 5 ] *= invSY;
-		_m1.elements[ 6 ] *= invSY;
+		_m1$1.elements[ 4 ] *= invSY;
+		_m1$1.elements[ 5 ] *= invSY;
+		_m1$1.elements[ 6 ] *= invSY;
 
-		_m1.elements[ 8 ] *= invSZ;
-		_m1.elements[ 9 ] *= invSZ;
-		_m1.elements[ 10 ] *= invSZ;
+		_m1$1.elements[ 8 ] *= invSZ;
+		_m1$1.elements[ 9 ] *= invSZ;
+		_m1$1.elements[ 10 ] *= invSZ;
 
-		quaternion.setFromRotationMatrix( _m1 );
+		quaternion.setFromRotationMatrix( _m1$1 );
 
 		scale.x = sx;
 		scale.y = sy;
@@ -2445,8 +2445,8 @@ class Matrix4 {
 
 }
 
-const _v1 = new Vector3();
-const _m1 = new Matrix4();
+const _v1$1 = new Vector3();
+const _m1$1 = new Matrix4();
 const _zero = new Vector3( 0, 0, 0 );
 const _one = new Vector3( 1, 1, 1 );
 const _x = new Vector3();
@@ -3263,14 +3263,14 @@ class Matrix3 {
 
 let _object3DId = 0;
 
-const _v1$1 = new Vector3();
+const _v1 = new Vector3();
 const _q1 = new Quaternion();
-const _m1$1 = new Matrix4();
+const _m1 = new Matrix4();
 const _target = new Vector3();
 
 const _position = new Vector3();
 const _scale = new Vector3();
-const _quaternion$2 = new Quaternion();
+const _quaternion = new Quaternion();
 
 const _xAxis = new Vector3( 1, 0, 0 );
 const _yAxis = new Vector3( 0, 1, 0 );
@@ -3471,9 +3471,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 		// translate object by distance along axis in object space
 		// axis is assumed to be normalized
 
-		_v1$1.copy( axis ).applyQuaternion( this.quaternion );
+		_v1.copy( axis ).applyQuaternion( this.quaternion );
 
-		this.position.add( _v1$1.multiplyScalar( distance ) );
+		this.position.add( _v1.multiplyScalar( distance ) );
 
 		return this;
 
@@ -3505,7 +3505,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	worldToLocal: function ( vector ) {
 
-		return vector.applyMatrix4( _m1$1.getInverse( this.matrixWorld ) );
+		return vector.applyMatrix4( _m1.getInverse( this.matrixWorld ) );
 
 	},
 
@@ -3531,20 +3531,20 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		if ( this.isCamera || this.isLight ) {
 
-			_m1$1.lookAt( _position, _target, this.up );
+			_m1.lookAt( _position, _target, this.up );
 
 		} else {
 
-			_m1$1.lookAt( _target, _position, this.up );
+			_m1.lookAt( _target, _position, this.up );
 
 		}
 
-		this.quaternion.setFromRotationMatrix( _m1$1 );
+		this.quaternion.setFromRotationMatrix( _m1 );
 
 		if ( parent ) {
 
-			_m1$1.extractRotation( parent.matrixWorld );
-			_q1.setFromRotationMatrix( _m1$1 );
+			_m1.extractRotation( parent.matrixWorld );
+			_q1.setFromRotationMatrix( _m1 );
 			this.quaternion.premultiply( _q1.inverse() );
 
 		}
@@ -3630,17 +3630,17 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		this.updateWorldMatrix( true, false );
 
-		_m1$1.getInverse( this.matrixWorld );
+		_m1.getInverse( this.matrixWorld );
 
 		if ( object.parent !== null ) {
 
 			object.parent.updateWorldMatrix( true, false );
 
-			_m1$1.multiply( object.parent.matrixWorld );
+			_m1.multiply( object.parent.matrixWorld );
 
 		}
 
-		object.applyMatrix4( _m1$1 );
+		object.applyMatrix4( _m1 );
 
 		object.updateWorldMatrix( false, false );
 
@@ -3726,7 +3726,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		this.updateMatrixWorld( true );
 
-		this.matrixWorld.decompose( _position, _quaternion$2, target );
+		this.matrixWorld.decompose( _position, _quaternion, target );
 
 		return target;
 

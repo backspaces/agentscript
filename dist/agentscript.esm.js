@@ -1,9 +1,9 @@
 /* eslint-disable */
 // import * as util from '../src/utils.js'
 
-const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan } = Math;
-const radians = degrees => (degrees * PI) / 180;
-const degrees = radians => (radians * 180) / PI;
+const { PI: PI$1, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan } = Math;
+const radians = degrees => (degrees * PI$1) / 180;
+const degrees = radians => (radians * 180) / PI$1;
 
 // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 function lon2x(lon, z) {
@@ -12,7 +12,7 @@ function lon2x(lon, z) {
 function lat2y(lat, z) {
     const latRads = radians(lat);
     return floor(
-        (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
+        (1 - log(tan(latRads) + 1 / cos(latRads)) / PI$1) * pow(2, z - 1)
     )
 }
 function lonlat2xy(lon, lat, z) {
@@ -23,7 +23,7 @@ function x2lon(x, z) {
     return (x / pow(2, z)) * 360 - 180
 }
 function y2lat(y, z) {
-    const rads = atan(sinh(PI - (2 * PI * y) / pow(2, z)));
+    const rads = atan(sinh(PI$1 - (2 * PI$1 * y) / pow(2, z)));
     return degrees(rads)
 }
 function xy2lonlat(x, y, z) {
@@ -615,7 +615,7 @@ function fcnToWorker(fcn) {
 // ### Math
 
 // const { PI, floor, cos, sin, atan2, log, log2, sqrt } = Math
-const { PI: PI$1 } = Math;
+const PI = Math.PI;
 
 // Return random int/float in [0,max) or [min,max) or [-r/2,r/2)
 /** Returns a random int in [0, max) */
@@ -633,7 +633,7 @@ const randomCentered = r => randomFloat2(-r / 2, r / 2);
 function randomNormal(mean = 0.0, sigma = 1.0) {
     // Box-Muller
     const [u1, u2] = [1.0 - Math.random(), Math.random()]; // ui in 0,1
-    const norm = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * PI$1 * u2);
+    const norm = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * PI * u2);
     return norm * sigma + mean
 }
 
@@ -649,7 +649,8 @@ function randomSeed(seed = 123456) {
 
 // num can be numeric array
 function precision(num, digits = 4) {
-    if (Array.isArray(num)) return num.map(val => this.precision(val, digits))
+    if(num === -0) return 0
+    if (Array.isArray(num)) return num.map(val => precision(val, digits))
     const mult = 10 ** digits;
     return Math.round(num * mult) / mult
 }
@@ -694,8 +695,8 @@ function lerpScale(number, lo, hi) {
 
 // Degrees & Radians
 // Note: quantity, not coord system xfm
-const toDegrees = 180 / PI$1;
-const toRadians = PI$1 / 180;
+const toDegrees = 180 / PI;
+const toRadians = PI / 180;
 
 // Better names and format for arrays. Change above?
 const degToRad = degrees => mod2pi(degrees * toRadians);
@@ -729,10 +730,10 @@ function mod360(degrees) {
     return mod(degrees, 360)
 }
 function mod2pi(radians) {
-    return mod(radians, 2 * PI$1)
+    return mod(radians, 2 * PI)
 }
 function modpipi(radians) {
-    return mod(radians, 2 * PI$1) - PI$1
+    return mod(radians, 2 * PI) - PI
 }
 function mod180180(degrees) {
     return mod360(degrees) - 180
@@ -751,7 +752,7 @@ const headingsEq = degreesEqual;
 // See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
 function subtractRadians(rad1, rad0) {
     let dr = mod2pi(rad1 - rad0); // - PI
-    if (dr > PI$1) dr = dr - 2 * PI$1;
+    if (dr > PI) dr = dr - 2 * PI;
     return dr
 }
 // Above using headings (degrees) returning degrees in (-180, 180]
@@ -778,8 +779,8 @@ function degreesTowardXY(x, y, x1, y1) {
     return radToDeg(radiansTowardXY(x, y, x1, y1))
 }
 
-const toDeg = 180 / Math.PI;
-const toRad = Math.PI / 180;
+const toDeg$1 = 180 / Math.PI;
+const toRad$1 = Math.PI / 180;
 const geometries = {
     radians: {
         toRads: rads => rads,
@@ -787,26 +788,20 @@ const geometries = {
         toAngleRads: rads => rads,
         fromAngleRads: rads => rads,
         toCCW: angle => angle,
-        // toDeltaRads: rads => rads,
-        // fromDeltaRads: rads => rads,
     },
     degrees: {
-        toRads: deg => deg * toRad,
-        fromRads: rads => rads * toDeg,
-        toAngleRads: deg => deg * toRad,
-        fromAngleRads: rads => rads * toDeg,
+        toRads: deg => deg * toRad$1,
+        fromRads: rads => rads * toDeg$1,
+        toAngleRads: deg => deg * toRad$1,
+        fromAngleRads: rads => rads * toDeg$1,
         toCCW: angle => angle,
-        // toDeltaRads: deg => deg * toRad,
-        // fromDeltaRads: rads => rads * toDeg,
     },
     heading: {
-        toRads: deg => (90 - deg) * toRad,
-        fromRads: rads => 90 - rads * toDeg,
-        toAngleRads: deg => deg * toRad,
-        fromAngleRads: rads => rads * toDeg,
+        toRads: deg => (90 - deg) * toRad$1,
+        fromRads: rads => 90 - rads * toDeg$1,
+        toAngleRads: deg => deg * toRad$1,
+        fromAngleRads: rads => rads * toDeg$1,
         toCCW: angle => -angle,
-        // toDeltaRads: deg => -deg * toRad,
-        // fromDeltaRads: rads => -rads * toDeg,
     },
 };
 function setGeometry(model, name) {
@@ -1387,7 +1382,7 @@ function convertArrayType(array, Type) {
 // Return array's type (Array or TypedArray variant)
 // typeName: obj => obj.constructor.name
 
-var util = /*#__PURE__*/Object.freeze({
+var utils = /*#__PURE__*/Object.freeze({
     __proto__: null,
     imagePromise: imagePromise,
     imageBitmapPromise: imageBitmapPromise,
@@ -1429,6 +1424,7 @@ var util = /*#__PURE__*/Object.freeze({
     printToPage: printToPage,
     getEventXY: getEventXY,
     fcnToWorker: fcnToWorker,
+    PI: PI,
     randomInt: randomInt,
     randomInt2: randomInt2,
     randomFloat: randomFloat,
@@ -1466,6 +1462,8 @@ var util = /*#__PURE__*/Object.freeze({
     radiansTowardXY: radiansTowardXY,
     headingTowardXY: headingTowardXY,
     degreesTowardXY: degreesTowardXY,
+    toDeg: toDeg$1,
+    toRad: toRad$1,
     setGeometry: setGeometry,
     sqDistance: sqDistance,
     distance: distance,
@@ -2312,6 +2310,75 @@ class AgentSet extends AgentArray {
 }
 
 // export default AgentSet
+
+class AgentList extends AgentArray {
+    // /**
+    //  * Magic to return AgentArrays rather than AgentList
+    //  * [Symbol.species](https://goo.gl/Zsxwxd)
+    //  *
+    //  * @readonly
+    //  */
+    // static get [Symbol.species]() {
+    //     return AgentArray
+    // }
+
+    constructor(model, ...args) {
+        if (!model) throw Error('AgentList requires model')
+        super(...args);
+        this.model = model;
+    }
+
+    // Geometry methods for patches, turtles, and other AgentArrays which have x,y.
+    // Return all agents within rect, radius, cone from given agent o.
+    // If meToo, include given object, default excludes it
+    // Typically the AgentArray is a subset of larger sets, reducing
+    // the size, then uses these inRect, inRadius or inCone methods
+
+    // Return all agents within rectangle from given agent o.
+    // dx & dy are (float) half width/height of rect
+    inRect(o, dx, dy = dx, meToo = false) {
+        const agents = new AgentList(this.model);
+        const minX = o.x - dx; // ok if max/min off-world, o, a are in-world
+        const maxX = o.x + dx;
+        const minY = o.y - dy;
+        const maxY = o.y + dy;
+        this.ask(a => {
+            if (minX <= a.x && a.x <= maxX && minY <= a.y && a.y <= maxY) {
+                if (meToo || o !== a) agents.push(a);
+            }
+        });
+        return agents
+    }
+
+    // Return all agents in AgentArray within d distance from given object.
+    inRadius(o, radius, meToo = false) {
+        const agents = new AgentList(this.model);
+        // const {x, y} = o // perf?
+        const d2 = radius * radius;
+        const sqDistance$1 = sqDistance; // Local function 2-3x faster, inlined?
+        this.ask(a => {
+            if (sqDistance$1(o.x, o.y, a.x, a.y) <= d2) {
+                if (meToo || o !== a) agents.push(a);
+            }
+        });
+        return agents
+    }
+
+    // As above, but also limited to the angle `coneAngle` around
+    // a `angle` from object `o`. coneAngle and direction in radians.
+    inCone(o, radius, coneAngle, heading, meToo = false) {
+        heading = this.model.toRads(heading);
+        coneAngle = this.model.toAngleRads(coneAngle);
+
+        const agents = new AgentList(this.model);
+        this.ask(a => {
+            if (inCone(a.x, a.y, radius, coneAngle, heading, o.x, o.y)) {
+                if (meToo || o !== a) agents.push(a);
+            }
+        });
+        return agents
+    }
+}
 
 /**
  * A DataSet is an object with width/height and an array
@@ -3326,75 +3393,6 @@ class BBoxTransform {
 // /** @type {number} */ my
 // /** @type {number} */ bx
 // /** @type {number} */ by
-
-class AgentList extends AgentArray {
-    // /**
-    //  * Magic to return AgentArrays rather than AgentList
-    //  * [Symbol.species](https://goo.gl/Zsxwxd)
-    //  *
-    //  * @readonly
-    //  */
-    // static get [Symbol.species]() {
-    //     return AgentArray
-    // }
-
-    constructor(model, ...args) {
-        if (!model) throw Error('AgentList requires model')
-        super(...args);
-        this.model = model;
-    }
-
-    // Geometry methods for patches, turtles, and other AgentArrays which have x,y.
-    // Return all agents within rect, radius, cone from given agent o.
-    // If meToo, include given object, default excludes it
-    // Typically the AgentArray is a subset of larger sets, reducing
-    // the size, then uses these inRect, inRadius or inCone methods
-
-    // Return all agents within rectangle from given agent o.
-    // dx & dy are (float) half width/height of rect
-    inRect(o, dx, dy = dx, meToo = false) {
-        const agents = new AgentList(this.model);
-        const minX = o.x - dx; // ok if max/min off-world, o, a are in-world
-        const maxX = o.x + dx;
-        const minY = o.y - dy;
-        const maxY = o.y + dy;
-        this.ask(a => {
-            if (minX <= a.x && a.x <= maxX && minY <= a.y && a.y <= maxY) {
-                if (meToo || o !== a) agents.push(a);
-            }
-        });
-        return agents
-    }
-
-    // Return all agents in AgentArray within d distance from given object.
-    inRadius(o, radius, meToo = false) {
-        const agents = new AgentList(this.model);
-        // const {x, y} = o // perf?
-        const d2 = radius * radius;
-        const sqDistance$1 = sqDistance; // Local function 2-3x faster, inlined?
-        this.ask(a => {
-            if (sqDistance$1(o.x, o.y, a.x, a.y) <= d2) {
-                if (meToo || o !== a) agents.push(a);
-            }
-        });
-        return agents
-    }
-
-    // As above, but also limited to the angle `coneAngle` around
-    // a `angle` from object `o`. coneAngle and direction in radians.
-    inCone(o, radius, coneAngle, heading, meToo = false) {
-        heading = this.model.toRads(heading);
-        coneAngle = this.model.toAngleRads(coneAngle);
-
-        const agents = new AgentList(this.model);
-        this.ask(a => {
-            if (inCone(a.x, a.y, radius, coneAngle, heading, o.x, o.y)) {
-                if (meToo || o !== a) agents.push(a);
-            }
-        });
-        return agents
-    }
-}
 
 /**
  * Patches are the world other AgentSets live on.
@@ -5575,13 +5573,13 @@ class Vector3 {
 
 		}
 
-		return this.applyQuaternion( _quaternion.setFromEuler( euler ) );
+		return this.applyQuaternion( _quaternion$2.setFromEuler( euler ) );
 
 	}
 
 	applyAxisAngle( axis, angle ) {
 
-		return this.applyQuaternion( _quaternion.setFromAxisAngle( axis, angle ) );
+		return this.applyQuaternion( _quaternion$2.setFromAxisAngle( axis, angle ) );
 
 	}
 
@@ -6064,7 +6062,7 @@ class Vector3 {
 }
 
 const _vector = new Vector3();
-const _quaternion = new Quaternion();
+const _quaternion$2 = new Quaternion();
 
 class Matrix4 {
 
@@ -6179,9 +6177,9 @@ class Matrix4 {
 		const te = this.elements;
 		const me = m.elements;
 
-		const scaleX = 1 / _v1.setFromMatrixColumn( m, 0 ).length();
-		const scaleY = 1 / _v1.setFromMatrixColumn( m, 1 ).length();
-		const scaleZ = 1 / _v1.setFromMatrixColumn( m, 2 ).length();
+		const scaleX = 1 / _v1$1.setFromMatrixColumn( m, 0 ).length();
+		const scaleY = 1 / _v1$1.setFromMatrixColumn( m, 1 ).length();
+		const scaleZ = 1 / _v1$1.setFromMatrixColumn( m, 2 ).length();
 
 		te[ 0 ] = me[ 0 ] * scaleX;
 		te[ 1 ] = me[ 1 ] * scaleX;
@@ -6786,9 +6784,9 @@ class Matrix4 {
 
 		const te = this.elements;
 
-		let sx = _v1.set( te[ 0 ], te[ 1 ], te[ 2 ] ).length();
-		const sy = _v1.set( te[ 4 ], te[ 5 ], te[ 6 ] ).length();
-		const sz = _v1.set( te[ 8 ], te[ 9 ], te[ 10 ] ).length();
+		let sx = _v1$1.set( te[ 0 ], te[ 1 ], te[ 2 ] ).length();
+		const sy = _v1$1.set( te[ 4 ], te[ 5 ], te[ 6 ] ).length();
+		const sz = _v1$1.set( te[ 8 ], te[ 9 ], te[ 10 ] ).length();
 
 		// if determine is negative, we need to invert one scale
 		const det = this.determinant();
@@ -6799,25 +6797,25 @@ class Matrix4 {
 		position.z = te[ 14 ];
 
 		// scale the rotation part
-		_m1.copy( this );
+		_m1$1.copy( this );
 
 		const invSX = 1 / sx;
 		const invSY = 1 / sy;
 		const invSZ = 1 / sz;
 
-		_m1.elements[ 0 ] *= invSX;
-		_m1.elements[ 1 ] *= invSX;
-		_m1.elements[ 2 ] *= invSX;
+		_m1$1.elements[ 0 ] *= invSX;
+		_m1$1.elements[ 1 ] *= invSX;
+		_m1$1.elements[ 2 ] *= invSX;
 
-		_m1.elements[ 4 ] *= invSY;
-		_m1.elements[ 5 ] *= invSY;
-		_m1.elements[ 6 ] *= invSY;
+		_m1$1.elements[ 4 ] *= invSY;
+		_m1$1.elements[ 5 ] *= invSY;
+		_m1$1.elements[ 6 ] *= invSY;
 
-		_m1.elements[ 8 ] *= invSZ;
-		_m1.elements[ 9 ] *= invSZ;
-		_m1.elements[ 10 ] *= invSZ;
+		_m1$1.elements[ 8 ] *= invSZ;
+		_m1$1.elements[ 9 ] *= invSZ;
+		_m1$1.elements[ 10 ] *= invSZ;
 
-		quaternion.setFromRotationMatrix( _m1 );
+		quaternion.setFromRotationMatrix( _m1$1 );
 
 		scale.x = sx;
 		scale.y = sy;
@@ -6935,8 +6933,8 @@ class Matrix4 {
 
 }
 
-const _v1 = new Vector3();
-const _m1 = new Matrix4();
+const _v1$1 = new Vector3();
+const _m1$1 = new Matrix4();
 const _zero = new Vector3( 0, 0, 0 );
 const _one = new Vector3( 1, 1, 1 );
 const _x = new Vector3();
@@ -7753,14 +7751,14 @@ class Matrix3 {
 
 let _object3DId = 0;
 
-const _v1$1 = new Vector3();
+const _v1 = new Vector3();
 const _q1 = new Quaternion();
-const _m1$1 = new Matrix4();
+const _m1 = new Matrix4();
 const _target = new Vector3();
 
 const _position = new Vector3();
 const _scale = new Vector3();
-const _quaternion$2 = new Quaternion();
+const _quaternion = new Quaternion();
 
 const _xAxis = new Vector3( 1, 0, 0 );
 const _yAxis = new Vector3( 0, 1, 0 );
@@ -7961,9 +7959,9 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 		// translate object by distance along axis in object space
 		// axis is assumed to be normalized
 
-		_v1$1.copy( axis ).applyQuaternion( this.quaternion );
+		_v1.copy( axis ).applyQuaternion( this.quaternion );
 
-		this.position.add( _v1$1.multiplyScalar( distance ) );
+		this.position.add( _v1.multiplyScalar( distance ) );
 
 		return this;
 
@@ -7995,7 +7993,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 	worldToLocal: function ( vector ) {
 
-		return vector.applyMatrix4( _m1$1.getInverse( this.matrixWorld ) );
+		return vector.applyMatrix4( _m1.getInverse( this.matrixWorld ) );
 
 	},
 
@@ -8021,20 +8019,20 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		if ( this.isCamera || this.isLight ) {
 
-			_m1$1.lookAt( _position, _target, this.up );
+			_m1.lookAt( _position, _target, this.up );
 
 		} else {
 
-			_m1$1.lookAt( _target, _position, this.up );
+			_m1.lookAt( _target, _position, this.up );
 
 		}
 
-		this.quaternion.setFromRotationMatrix( _m1$1 );
+		this.quaternion.setFromRotationMatrix( _m1 );
 
 		if ( parent ) {
 
-			_m1$1.extractRotation( parent.matrixWorld );
-			_q1.setFromRotationMatrix( _m1$1 );
+			_m1.extractRotation( parent.matrixWorld );
+			_q1.setFromRotationMatrix( _m1 );
 			this.quaternion.premultiply( _q1.inverse() );
 
 		}
@@ -8120,17 +8118,17 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		this.updateWorldMatrix( true, false );
 
-		_m1$1.getInverse( this.matrixWorld );
+		_m1.getInverse( this.matrixWorld );
 
 		if ( object.parent !== null ) {
 
 			object.parent.updateWorldMatrix( true, false );
 
-			_m1$1.multiply( object.parent.matrixWorld );
+			_m1.multiply( object.parent.matrixWorld );
 
 		}
 
-		object.applyMatrix4( _m1$1 );
+		object.applyMatrix4( _m1 );
 
 		object.updateWorldMatrix( false, false );
 
@@ -8216,7 +8214,7 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 
 		this.updateMatrixWorld( true );
 
-		this.matrixWorld.decompose( _position, _quaternion$2, target );
+		this.matrixWorld.decompose( _position, _quaternion, target );
 
 		return target;
 
@@ -8963,16 +8961,16 @@ class Model {
     //     this.geometry = name
     // }
 
-    toRads = deg => (90 - deg) * toRad$1
-    fromRads = rads => 90 - rads * toDeg$1
-    toAngleRads = deg => deg * toRad$1
-    fromAngleRads = rads => rads * toDeg$1
+    toRads = deg => (90 - deg) * toRad
+    fromRads = rads => 90 - rads * toDeg
+    toAngleRads = deg => deg * toRad
+    fromAngleRads = rads => rads * toDeg
     toCCW = angle => -angle
 }
 
 // Add mod2pi & mod360
-const toDeg$1 = 180 / Math.PI;
-const toRad$1 = Math.PI / 180;
+const toDeg = 180 / Math.PI;
+const toRad = Math.PI / 180;
 
 // let toRads = deg => (90 - deg) * toRad
 // let fromRads = rads => 90 - rads * toDeg
@@ -9054,10 +9052,4 @@ class RGBDataSet extends DataSet {
 
 // export default RGBDataSet
 
-console.warn(
-    `util.js is deprecated, please use utils.js which has individual exports
-    To replace: import util from src/util.js
-    Use: import * as util from src/utils.js`
-);
-
-export { AgentArray, AgentSet, DataSet, Link, Links, Model, Patch, Patches, RGBDataSet, Turtle, Turtles, World, gis, util };
+export { AgentArray, AgentList, AgentSet, DataSet, Link, Links, Model, Patch, Patches, RGBDataSet, Turtle, Turtles, World, gis, utils as util };
