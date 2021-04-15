@@ -1,5 +1,6 @@
-import Chart from 'https://cdn.skypack.dev/chart.js'
-import * as util from './utils.js'
+// import Chart from 'https://cdn.skypack.dev/chart.js'
+import Chart from 'https://cdn.skypack.dev/chart.js@2.9.4'
+import * as util from '../src/utils.js'
 
 // Using https://github.com/chartjs/Chart.js
 // https://github.com/leeoniya/uPlot

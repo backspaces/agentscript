@@ -1,21 +1,21 @@
 # Local ignores, also see ~/.gitignore
+# https://git-scm.com/docs/gitignore
 
 # Derived files other than docs/
-# /dist/
+/dist/
+
+# test.html
+# temp
+# deno
 
 node_modules
 npm-debug.log
 yarn-error.log
-test.html
-.vscode
+/.vscode/
 **/.DS_Store
 
-Turtle3D0.js
-
-Attic
-temp
-test/samples.txt
-deno
+/Attic/
+/test/samples.txt
 
 # package-lock.json
 # yarn.lock

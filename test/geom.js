@@ -47,6 +47,26 @@ Deno.test('reset', () => {
     areAllEqual([0, 0, PI / 2], t.getRotation())
 })
 
+Deno.test('heading pitch roll', () => {
+    t.reset()
+
+    t.heading = 45
+    areEqual(t.theta, PI / 4)
+    areEqual(t.heading, 45)
+    areEqual(t.pitch, 0)
+    areEqual(t.roll, 0)
+
+    t.pitch = 45
+    areEqual(t.heading, 45)
+    areEqual(t.pitch, 45)
+    areEqual(t.roll, 0)
+
+    t.roll = 45
+    areEqual(t.heading, 45)
+    areEqual(t.pitch, 45)
+    areEqual(t.roll, 45)
+})
+
 Deno.test('left & right', () => {
     t.reset()
     t.left(45)
