@@ -1,8 +1,0 @@
-{
-  "imports": {
-    "@codemirror/basic-setup": "./@codemirror/basic-setup.js",
-    "@codemirror/commands": "./@codemirror/commands.js",
-    "@codemirror/lang-javascript": "./@codemirror/lang-javascript.js",
-    "@codemirror/view": "./@codemirror/view.js"
-  }
-}
