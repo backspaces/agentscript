@@ -4,8 +4,8 @@
     "description": "AgentScript Model in Model/View architecture",
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
-    "main": "dist/agentscript.umd.min.js",
-    "module": "dist/agentscript.esm.min.js",
+    "main": "dist/agentscript.umd.js",
+    "module": "dist/agentscript.js",
     "files": [
         "/dist/",
         "/src/",
@@ -37,7 +37,7 @@
         "postinstall": "rollup -c rollup.three.js",
         "Node settig for esm: ": "type: module",
         "three": "^0.89.0",
-        "build-dist": "rollup -c config/rollup.config.js && cp -R src models views2 views3  dist",
+        "build-dist": "rollup -c config/rollup.dist.js && cp -R src models views2 views3  dist",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
         "watch-docs": "documentation serve --config config/documentation.yml --github --watch src/**",
         "mkdirs": "dist",
@@ -45,10 +45,11 @@
         "clean-docs": "shx rm -r docs/"
     },
     "scripts": {
-        "clean": "shx rm -rf dist && shx mkdir dist",
+        "clean": "shx rm -rf dist vendor && shx mkdir dist vendor",
         "start": "live-server --ignore=node_modules,.git &",
-        "build": "npm-run-all clean build-scripts build-dist build-md build-docs",
-        "build-dist": "rollup -c config/rollup.vendor.js && rollup -c config/rollup.config.js &&  cp -R src dist",
+        "build": "npm-run-all clean build-scripts build-vendor build-dist build-md build-docs",
+        "build-dist": "rollup -c config/rollup.dist.js &&  cp -R src dist",
+        "build-vendor": "rollup -c config/rollup.vendor.js",
         "build-scripts": "node bin/models2scripts",
         "build-md": "bin/src2md 'models views2 views3 views3d gis' > /dev/null",
         "build-docs": "documentation build src/** --config config/documentation.yml --github -f html -o docs",
@@ -86,6 +87,7 @@
         "puppeteer": "*",
         "rollup": "^2.33.1",
         "rollup-plugin-terser": "^5.0.0",
+        "rollup-plugin-copy": "",
         "shx": "0.3"
     }
 }

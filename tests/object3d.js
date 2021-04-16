@@ -1,4 +1,4 @@
-import { Object3D } from '../dist/Object3D.esm.js'
+import { Object3D } from '../vendor/Object3D.js'
 
 const degToRad = degrees => degrees * (Math.PI / 180)
 const radToDeg = radians => radians * (180 / Math.PI)

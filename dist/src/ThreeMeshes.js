@@ -1,6 +1,7 @@
 // Meshes used by the Three.js view module
 
-import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
+// import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
+import * as THREE from '../vendor/three.js'
 import AgentArray from './AgentArray.js'
 // import Color from './Color.js'
 import * as util from './utils.js'

@@ -22,7 +22,14 @@
         <div id="modelDiv"></div>
         <script type="module">
             import * as util from '../src/utils.js'
-            import AS from 'https://cdn.skypack.dev/agentscript/dist/agentscript.esm.js'
+            // import AS from 'https://cdn.skypack.dev/agentscript/dist/agentscript.js'
+            import AS from 'https://unpkg.com/agentscript@0.9.1/dist/agentscript.js'
+            util.toWindow({ AS })
+
+            util.fetchType(
+                // 'https://cdn.skypack.dev/agentscript/dist/agentscript.js'
+                'https://unpkg.com/agentscript@0.9.1/dist/agentscript.js'
+            ).then(as => util.toWindow({ as }))
 
             // window.steps = 100
             // window.fcn = () => {
@@ -31,13 +38,13 @@
             // }
             // window.iid = setInterval(fcn, steps)
 
-            import Animator from '../src/Animator.js'
-            const anim = new Animator(
-                () => console.log('step'),
-                -1, // steps
-                30 // fps
-            ).startStats()
-            util.toWindow({ util, anim })
+            // import Animator from '../src/Animator.js'
+            // const anim = new Animator(
+            //     () => console.log('step'),
+            //     -1, // steps
+            //     30 // fps
+            // ).startStats()
+            // util.toWindow({ util, anim })
 
             // If there is a possibility that your logic could take longer to execute than the interval time, it is recommended that you recursively call a named function using setTimeout(). For example, if using setInterval() to poll a remote server every 5 seconds, network latency, an unresponsive server, and a host of other issues could prevent the request from completing in its allotted time. As such, you may find yourself with queued up XHR requests that won't necessarily return in order.
             // In these cases, a recursive setTimeout() pattern is preferred:
