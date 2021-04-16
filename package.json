@@ -1,6 +1,6 @@
 {
     "name": "agentscript",
-    "version": "0.9.1",
+    "version": "0.10.0",
     "description": "AgentScript Model in Model/View architecture",
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
@@ -86,8 +86,8 @@
         "npm-run-all": "4.1.2",
         "puppeteer": "*",
         "rollup": "^2.33.1",
-        "rollup-plugin-terser": "^5.0.0",
         "rollup-plugin-copy": "",
+        "rollup-plugin-terser": "^5.0.0",
         "shx": "0.3"
     }
 }
