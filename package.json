@@ -41,7 +41,6 @@
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
         "watch-docs": "documentation serve --config config/documentation.yml --github --watch src/**",
         "mkdirs": "dist",
-        "test3d": "deno test test/geom.js",
         "clean-docs": "shx rm -r docs/"
     },
     "scripts": {
@@ -53,7 +52,9 @@
         "build-scripts": "node bin/models2scripts",
         "build-md": "bin/src2md 'models views2 views3 views3d gis' > /dev/null",
         "build-docs": "documentation build src/** --config config/documentation.yml --github -f html -o docs",
-        "test": "ava test/models.js && deno test test/geom.js",
+        "test0": "ava test/models.js && npm run test3d",
+        "test": "ava test/models.js",
+        "test3d": "deno test test/geom.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
         "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
         "watch-docs": "chokidar 'src/*.js' -c 'npm run build-docs' &",
@@ -78,6 +79,7 @@
         "three": "^0.120.0"
     },
     "devDependencies": {
+        "@rollup/plugin-url": "^6.0.0",
         "ava": "^2.1.0",
         "chokidar-cli": "^1.2.1",
         "documentation": "^13.2.0",
@@ -88,6 +90,7 @@
         "rollup": "^2.33.1",
         "rollup-plugin-copy": "",
         "rollup-plugin-terser": "^5.0.0",
+        "rollup-plugin-url-resolve": "^0.1.1",
         "shx": "0.3"
     }
 }

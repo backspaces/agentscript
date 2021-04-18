@@ -7,7 +7,7 @@ import ThreeMeshes from './ThreeMeshes.js'
 // import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
 // import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
 // import Stats from 'https://cdn.skypack.dev/stats.js'
-import { THREE, OrbitControls, Stats } from '../vendor/three.all.js'
+import { THREE, OrbitControls } from '../vendor/three.all.js'
 
 export default class ThreeView {
     static shapeNames() {
@@ -21,9 +21,9 @@ export default class ThreeView {
             // clearColor: new THREE.Color(0x000000), // clear to black
             useAxes: useThreeHelpers, // show x,y,z axes
             useGrid: useThreeHelpers, // show x,y plane
-            useControls: useThreeHelpers, // navigation. REMIND: control name?
+            // useControls: useThreeHelpers, // navigation. REMIND: control name?
             useWorldOutline: useThreeHelpers,
-            useStats: useThreeHelpers, // stats fps ui
+            // useStats: useThreeHelpers, // stats fps ui
             useLights: true, // maybe should be mesh option? not view?
             // REMIND: put in quadsprite options, defaulting to 64
             spriteSize: 64,
@@ -150,6 +150,8 @@ export default class ThreeView {
         // if (!isCanvas) this.div.appendChild(renderer.domElement)
         this.div.appendChild(renderer.domElement)
 
+        this.orbitControls = new OrbitControls(camera, renderer.domElement)
+
         // window.addEventListener('resize', () => {
         //   const {clientWidth, clientHeight} = this.model.div
         //   camera.aspect = clientWidth / clientHeight
@@ -212,8 +214,8 @@ export default class ThreeView {
         const {
             useAxes,
             useGrid,
-            useControls,
-            useStats,
+            // useControls,
+            // useStats,
             useLights,
             useWorldOutline,
         } = this.options
@@ -230,14 +232,14 @@ export default class ThreeView {
             helpers.grid.position.z = minZ
             scene.add(helpers.grid)
         }
-        if (useControls) {
-            // helpers.controls = new THREE.OrbitControls(
-            helpers.controls = new OrbitControls(camera, renderer.domElement)
-        }
-        if (useStats) {
-            helpers.stats = new Stats()
-            document.body.appendChild(helpers.stats.dom)
-        }
+        // if (useControls) {
+        //     // helpers.controls = new THREE.OrbitControls(
+        //     helpers.controls = new OrbitControls(camera, renderer.domElement)
+        // }
+        // if (useStats) {
+        //     helpers.stats = new Stats()
+        //     document.body.appendChild(helpers.stats.dom)
+        // }
         if (useLights) {
             const width = world.width
 
@@ -292,7 +294,7 @@ export default class ThreeView {
         // REMIND: generalize.
         this.renderer.render(this.scene, this.camera)
         this.ticks++
-        if (this.helpers.stats) this.helpers.stats.update()
+        // if (this.helpers.stats) this.helpers.stats.update()
         // if (this.view.stats) this.view.stats.update()
     }
 

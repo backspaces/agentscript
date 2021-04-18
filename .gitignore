@@ -2,7 +2,7 @@
 # https://git-scm.com/docs/gitignore
 
 # Derived files other than docs/
-# /dist/
+/dist/
 
 # test.html
 # temp
