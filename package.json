@@ -4,7 +4,8 @@
     "description": "AgentScript Model in Model/View architecture",
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
-    "main": "dist/agentscript.umd.js",
+    "main": "dist/agentscript.js",
+    "browser": "dist/agentscript.js",
     "module": "dist/agentscript.js",
     "files": [
         "/dist/",
@@ -35,7 +36,7 @@
         "ava": "0.25.0",
         "build-bin": "rollup -f umd -n gis src/gis.js > bin/gis.umd.js",
         "postinstall": "rollup -c rollup.three.js",
-        "Node settig for esm: ": "type: module",
+        "Node settig for esm, causes error, sigh: ": "type: module",
         "three": "^0.89.0",
         "build-dist": "rollup -c config/rollup.dist.js && cp -R src models views2 views3  dist",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",

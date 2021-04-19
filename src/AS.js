@@ -22,7 +22,7 @@ export { default as Turtles } from './Turtles.js'
 export { default as World } from './World.js'
 export { util }
 
-// export { default as TwoView } from './TwoView.js'
-// export { default as TwoDraw } from './TwoDraw.js'
-// export { default as ThreeView } from './ThreeView.js'
-// export { default as ThreeDraw } from './ThreeDraw.js'
+export { default as TwoView } from './TwoView.js'
+export { default as TwoDraw } from './TwoDraw.js'
+export { default as ThreeView } from './ThreeView.js'
+export { default as ThreeDraw } from './ThreeDraw.js'
