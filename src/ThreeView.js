@@ -7,7 +7,7 @@ import ThreeMeshes from './ThreeMeshes.js'
 // import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
 // import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
 // import Stats from 'https://cdn.skypack.dev/stats.js'
-import { THREE, OrbitControls } from '../vendor/three.all.js'
+import { THREE, OrbitControls } from '../vendor/three.js'
 
 export default class ThreeView {
     static shapeNames() {

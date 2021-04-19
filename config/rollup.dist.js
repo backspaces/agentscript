@@ -1,4 +1,5 @@
 // import { terser } from 'rollup-plugin-terser'
+import cleanup from 'rollup-plugin-cleanup'
 
 export default [
     // {
@@ -33,5 +34,6 @@ export default [
                 // banner: '/* eslint-disable */',
             },
         ],
+        plugins: [cleanup()],
     },
 ]
