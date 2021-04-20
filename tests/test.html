@@ -16,20 +16,26 @@
                 height: 100vh;
             }
         </style> -->
+        <!-- <script src="../dist/agentscript.umd.js"></script> -->
+        <!-- <script src="https://cdn.skypack.dev/agentscript/dist/agentscript.umd.js"></script> -->
+        <script src="https://unpkg.com/agentscript/dist/agentscript.umd.js"></script>
     </head>
 
     <body>
         <div id="modelDiv"></div>
         <script type="module">
             import * as util from '../src/utils.js'
-            // import AS from 'https://cdn.skypack.dev/agentscript/dist/agentscript.js'
-            import AS from 'https://unpkg.com/agentscript@0.9.1/dist/agentscript.js'
-            util.toWindow({ AS })
 
-            util.fetchType(
-                // 'https://cdn.skypack.dev/agentscript/dist/agentscript.js'
-                'https://unpkg.com/agentscript@0.9.1/dist/agentscript.js'
-            ).then(as => util.toWindow({ as }))
+            import * as AS1 from 'https://cdn.skypack.dev/agentscript'
+            util.toWindow({ AS1 })
+            import * as AS2 from 'https://unpkg.com/agentscript'
+            util.toWindow({ AS2 })
+            util.fetchType('https://cdn.skypack.dev/agentscript').then(as1 =>
+                util.toWindow({ as1 })
+            )
+            util.fetchType('https://unpkg.com/agentscript').then(as2 =>
+                util.toWindow({ as2 })
+            )
 
             // window.steps = 100
             // window.fcn = () => {

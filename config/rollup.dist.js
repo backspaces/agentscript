@@ -35,5 +35,6 @@ export default [
             },
         ],
         plugins: [cleanup()],
+        external: ['https://cdn.skypack.dev/stats.js'],
     },
 ]
