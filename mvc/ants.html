@@ -2,17 +2,15 @@
     <head>
         <title>ants</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" type="text/css" href="./view2.css" />
     </head>
     <body>
         <script type="module">
             import * as util from '../src/utils.js'
-            import Model from '../models/AntsModel.js'
             import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
             import Color from '../src/Color.js'
             import ColorMap from '../src/ColorMap.js'
-            import Animator from '../src/Animator.js'
+            import Model from '../models/AntsModel.js'
             import dat from 'https://cdn.skypack.dev/dat.gui'
 
             // Define colors and colormaps
@@ -38,7 +36,6 @@
                 turtlesSize: 3,
                 turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
             }
-
             // ==============================
 
             const model = new Model()
@@ -52,10 +49,14 @@
                 drawOptions,
             })
 
-            const anim = new Animator(() => {
-                model.step()
-                view.draw()
-            }, 500).startStats()
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            ).startStats()
 
             util.toWindow({ util, model, view, anim })
 
