@@ -7,6 +7,7 @@
         <script type="module">
             import * as util from '../src/utils.js'
             import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
             import Model from '../models/HelloModel.js'
             import World from '../src/World.js'
             import Shapes from '../src/Shapes.js'
@@ -27,36 +28,35 @@
                 return shapes.nameAtIndex(t.id)
             }
 
-            async function run() {
-                await addImages()
+            await addImages()
 
-                const model = new Model(World.defaultOptions(25, 16))
-                model.population = 100
-                await model.startup()
-                model.setup()
+            const model = new Model(World.defaultOptions(25, 16))
+            model.population = 100
+            await model.startup()
+            model.setup()
 
-                const view = new TwoDraw(
-                    model,
-                    {
-                        div: 'modelDiv',
-                        patchSize: 20,
-                    },
-                    {
-                        turtlesShape: t => turtleName(t),
-                        turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
-                    }
-                )
+            const view = new TwoDraw(
+                model,
+                {
+                    div: 'modelDiv',
+                    patchSize: 20,
+                },
+                {
+                    turtlesShape: t => turtleName(t),
+                    turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
+                }
+            )
 
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    500,
-                    33
-                )
-            }
-            run()
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            )
+
+            util.toWindow({ util, model, view, anim })
         </script>
         <div id="modelDiv"></div>
     </body>

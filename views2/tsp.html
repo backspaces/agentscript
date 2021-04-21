@@ -7,6 +7,7 @@
         <script type="module">
             import * as util from '../src/utils.js'
             import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
             import Model from '../models/TspModel.js'
 
             const drawOptions = {
@@ -19,29 +20,26 @@
                 linksColor: 'red',
             }
 
-            async function run() {
-                const model = new Model()
-                await model.startup()
-                model.setup()
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-                const view = new TwoDraw(
-                    model,
-                    { div: 'modelDiv', patchSize: 6 },
-                    drawOptions
-                )
+            const view = new TwoDraw(
+                model,
+                { div: 'modelDiv', patchSize: 6 },
+                drawOptions
+            )
 
-                util.toWindow({ util, model, view })
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            )
 
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    500,
-                    33
-                )
-            }
-            run()
+            util.toWindow({ util, model, view, anim })
         </script>
         <div id="modelDiv"></div>
     </body>

@@ -8,6 +8,7 @@
             import * as util from '../src/utils.js'
             import Color from '../src/Color.js'
             import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
             import Model from '../models/WallFollowerModel.js'
 
             const wallsColor = Color.typedColor(222, 184, 135)
@@ -20,29 +21,22 @@
                 turtlesColor: t => (t.breed.name === 'lefty' ? 'green' : 'red'),
             }
 
-            async function run() {
-                const model = new Model()
-                await model.startup()
-                model.setup()
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-                const view = new TwoDraw(
-                    model,
-                    { div: 'modelDiv' },
-                    drawOptions
-                )
+            const view = new TwoDraw(model, { div: 'modelDiv' }, drawOptions)
 
-                util.toWindow({ util, model, view })
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                10 // 10fps, 30fps way too fast!
+            )
 
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    500,
-                    100 // 10fps, 30fps way too fast!
-                )
-            }
-            run()
+            util.toWindow({ util, model, view, anim })
         </script>
         <div id="modelDiv"></div>
     </body>

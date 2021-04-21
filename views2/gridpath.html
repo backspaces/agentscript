@@ -7,6 +7,7 @@
         <script type="module">
             import * as util from '../src/utils.js'
             import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
             import Model from '../models/GridPathModel.js'
 
             const drawOptions = {
@@ -20,29 +21,26 @@
                 textSize: 0.3,
             }
 
-            async function run() {
-                const model = new Model()
-                await model.startup()
-                model.setup()
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-                const view = new TwoDraw(
-                    model,
-                    { div: 'modelDiv', patchSize: 50 },
-                    drawOptions
-                )
+            const view = new TwoDraw(
+                model,
+                { div: 'modelDiv', patchSize: 50 },
+                drawOptions
+            )
 
-                util.toWindow({ util, model, view })
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                100 // 10fps, 30fps way too fast!
+            )
 
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    500,
-                    100 // 10fps, 30fps way too fast!
-                )
-            }
-            run()
+            util.toWindow({ util, model, view, anim })
         </script>
         <div id="modelDiv"></div>
     </body>

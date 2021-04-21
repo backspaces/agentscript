@@ -39,8 +39,6 @@
                 }
             )
 
-            util.toWindow({ model, view, util })
-
             let selectedTurtle, selectedLink
             function handleMouse(mouse) {
                 const { x, y, action } = mouse
@@ -71,7 +69,8 @@
 
             view.draw() // Draw once to get started
 
-            // Note: don't use the usual timeout loop, run by mouse events! YaY!
+            // Note: don't use the usual Animator, run by mouse events! YaY!
+            util.toWindow({ util, model, view, mouse })
         </script>
         <div id="modelDiv"></div>
     </body>

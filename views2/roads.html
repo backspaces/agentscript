@@ -7,43 +7,41 @@
         <script type="module">
             import * as util from '../src/utils.js'
             import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
             import Model from '../models/RoadsModel.js'
 
-            async function run() {
-                const model = new Model()
-                await model.startup()
-                model.setup()
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-                const { Z, X, Y } = model.zxy
-                const baseUrl = `https://tile.openstreetmap.org/${Z}/${X}/${Y}.png`
-                const baseMapTile = await util.imagePromise(baseUrl)
-                const isIntersection = t => t.breed.name === 'intersections'
-                const drawOptions = {
-                    patchesColor: baseMapTile,
-                    turtlesShape: 'circle',
-                    turtlesColor: t => (isIntersection(t) ? 'blue' : 'red'),
-                    turtlesSize: t => (isIntersection(t) ? 2 : 1),
-                    linksColor: 'black',
-                }
-
-                const view = new TwoDraw(
-                    model,
-                    { div: 'modelDiv', patchSize: 4 },
-                    drawOptions
-                )
-
-                util.toWindow({ util, model, view })
-
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    500,
-                    33
-                )
+            const { Z, X, Y } = model.zxy
+            const baseUrl = `https://tile.openstreetmap.org/${Z}/${X}/${Y}.png`
+            const baseMapTile = await util.imagePromise(baseUrl)
+            const isIntersection = t => t.breed.name === 'intersections'
+            const drawOptions = {
+                patchesColor: baseMapTile,
+                turtlesShape: 'circle',
+                turtlesColor: t => (isIntersection(t) ? 'blue' : 'red'),
+                turtlesSize: t => (isIntersection(t) ? 2 : 1),
+                linksColor: 'black',
             }
-            run()
+
+            const view = new TwoDraw(
+                model,
+                { div: 'modelDiv', patchSize: 4 },
+                drawOptions
+            )
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            )
+
+            util.toWindow({ util, model, view, anim })
         </script>
         <div id="modelDiv"></div>
     </body>
