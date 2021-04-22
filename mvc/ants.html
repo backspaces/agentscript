@@ -61,11 +61,16 @@
             util.toWindow({ util, model, view, anim })
 
             const gui = new dat.GUI()
+            const vals = { width: 700 }
             gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
             gui.add(anim, 'toggle')
             gui.add(anim, 'once')
+            gui.add(vals, 'width', 100, 1000, 100).onChange(() => {
+                view.setWidth(vals.width)
+            })
             gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+            util.toWindow({ gui, vals })
         </script>
         <div id="modelDiv"></div>
     </body>

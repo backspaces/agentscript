@@ -9,6 +9,7 @@
     "module": "dist/agentscript.js",
     "files": [
         "/dist/",
+        "/vendor/",
         "/src/",
         "/docs/",
         "/models/",
