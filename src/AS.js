@@ -19,6 +19,7 @@ export { Object3D }
 export { default as Patch } from './Patch.js'
 export { default as Patches } from './Patches.js'
 export { default as RGBDataSet } from './RGBDataSet.js'
+export * as TileDataSet from './TileDataSet.js'
 export { default as Turtle } from './Turtle.js'
 export { default as Turtles } from './Turtles.js'
 export { default as World } from './World.js'
@@ -35,3 +36,4 @@ export { default as ThreeDraw } from './ThreeDraw.js'
 
 // Controls
 export { default as Animator } from './Animator.js'
+export { default as Mouse } from './Mouse.js'

@@ -11,12 +11,16 @@
             import Model from '../models/FlockModel.js'
 
             const model = new Model()
+            // model.population = 100
             await model.startup()
             model.setup()
 
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
                 patchSize: 15,
+                // drawOptions: {
+                //     turtlesSize: 2,
+                // },
             }) // defalt drawOptions!
 
             const anim = new Animator(

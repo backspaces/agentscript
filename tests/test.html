@@ -18,7 +18,7 @@
         </style> -->
         <!-- <script src="../dist/agentscript.umd.js"></script> -->
         <!-- <script src="https://cdn.skypack.dev/agentscript/dist/agentscript.umd.js"></script> -->
-        <script src="https://unpkg.com/agentscript/dist/agentscript.umd.js"></script>
+        <!-- <script src="https://unpkg.com/agentscript/dist/agentscript.umd.js"></script> -->
     </head>
 
     <body>
@@ -26,17 +26,50 @@
         <script type="module">
             import * as util from '../src/utils.js'
 
-            import * as AS1 from 'https://cdn.skypack.dev/agentscript'
-            import * as AS2 from 'https://unpkg.com/agentscript'
-            // import Model from 'https://cdn.skypack.dev/agentscript/dist/src/Model.js'
-            // import Model from 'https://unpkg.com/agentscript/dist/src/Model.js'
-            util.toWindow({ AS1, AS2 })
-            util.fetchType('https://cdn.skypack.dev/agentscript').then(as1 =>
-                util.toWindow({ as1 })
-            )
-            util.fetchType('https://unpkg.com/agentscript').then(as2 =>
-                util.toWindow({ as2 })
-            )
+            // import * as AS from 'https://cdn.skypack.dev/agentscript'
+            // import * as AS from '../src/AS'
+            // Object.assign(window, AS)
+            // util.toWindow(AS)
+
+            // import jsfeat from 'https://cdn.skypack.dev/jsfeat'
+            // util.toWindow({jsfeat})
+
+            // import dat from 'https://cdn.skypack.dev/dat.gui'
+            // const gui = new dat.GUI()
+            // const controls = {
+            //     color1: '#FF0000', // CSS string
+            //     color2: [0, 128, 255], // RGB array
+            //     color3: [0, 128, 255, 0.3], // RGB with alpha
+            //     color4: { h: 350, s: 0.9, v: 0.3 }, // Hue, saturation, value
+            // }
+            // gui.addColor(controls, 'color1')
+            // gui.addColor(controls, 'color2')
+            // gui.addColor(controls, 'color3')
+            // gui.addColor(controls, 'color4')
+            //
+            // var FizzyText = function () {
+            //     this.color = 'red' // CSS string
+            // }
+            // const controls = new FizzyText()
+            // gui.addColor(controls, 'color') // fail
+            //
+            // const controls = { color1: 'red' } // fail!
+            // const controls = { color1: '#FF0000' }
+            // gui.addColor(controls, 'color1')
+
+            // import * as AS1 from 'https://cdn.skypack.dev/agentscript'
+            // import * as AS2 from 'https://unpkg.com/agentscript'
+            // import Model1 from 'https://cdn.skypack.dev/agentscript/src/Model.js'
+            // import Model2 from 'https://unpkg.com/agentscript/src/Model.js'
+            // import * as AS3 from 'https://cdn.skypack.dev/agentscript/dist/agentscript.js'
+            // import * as AS4 from 'https://unpkg.com/agentscript/dist/agentscript.js'
+            // util.toWindow({ AS1, AS2, Model1, Model2, AS3, AS4 })
+            // util.fetchType('https://cdn.skypack.dev/agentscript').then(as1 =>
+            //     util.toWindow({ as1 })
+            // )
+            // util.fetchType('https://unpkg.com/agentscript').then(as2 =>
+            //     util.toWindow({ as2 })
+            // )
 
             // window.steps = 100
             // window.fcn = () => {

@@ -1,0 +1,99 @@
+<html>
+    <head>
+        <title>tsp</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
+            import Model from '../models/TspModel.js'
+            import Mouse from '../src/Mouse.js'
+            // import Color from '../src/Color.js'
+            // import ColorMap from '../src/ColorMap.js'
+            import dat from 'https://cdn.skypack.dev/dat.gui'
+
+            const drawOptions = {
+                patchesColor: 'black',
+                turtlesShape: 'circle',
+                // turtlesSize of 0 will skip drawing this turle
+                // here "travelers" are skipped
+                turtlesSize: t => (t.breed.name === 'nodes' ? 1.25 : 0),
+                turtlesColor: 'yellow',
+                linksColor: 'red',
+
+                turtlesSize: 3,
+            }
+
+            // ==============================
+
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new TwoDraw(
+                model,
+                { div: 'modelDiv', patchSize: 6 },
+                drawOptions
+            )
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            ).startStats()
+
+            // ==============================
+
+            const gui = new dat.GUI()
+            gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
+            gui.add(anim, 'toggle')
+            gui.add(anim, 'once')
+            gui.add({ width: 700 }, 'width', 100, 1000, 25).onChange(val => {
+                view.setWidth(val)
+            })
+            gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+
+            // gui.addColor(view.drawOptions, 'patchesColor')
+
+            // ==============================
+
+            let selectedTurtle, selectedLink
+            function handleMouse(mouse) {
+                const { x, y, action } = mouse
+                switch (action) {
+                    case 'down':
+                        selectedTurtle = model.turtles.closestTurtle(x, y, 2)
+                        break
+                    case 'drag':
+                        if (selectedTurtle) selectedTurtle.setxy(x, y)
+                        break
+                    case 'move':
+                        selectedLink = model.links.minOneOf(l =>
+                            l.distanceXY(x, y)
+                        )
+                        break
+                    case 'up':
+                        selectedTurtle = null
+                        break
+                }
+                view.draw() // Draw whenever mouse has an event
+            }
+
+            const mouse = new Mouse(
+                view.canvas,
+                model.world,
+                handleMouse
+            ).start()
+
+            view.draw() // Draw once to get started
+
+            util.toWindow({ util, model, view, anim, gui })
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>flock</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
+            import Model from '../models/FlockModel.js'
+            import dat from 'https://cdn.skypack.dev/dat.gui'
+
+            // ==============================
+
+            const model = new Model()
+            model.setPopulation = function (population) {
+                const diff = population - this.population
+                if (diff > 0) {
+                    this.turtles.create(diff)
+                } else {
+                    util.repeat(-diff, () => this.turtles.oneOf().die())
+                }
+                this.population = this.turtles.length
+            }
+            await model.startup()
+            model.setup()
+
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 15,
+            }) // defalt drawOptions!
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            ).startStats()
+
+            // ==============================
+
+            const gui = new dat.GUI()
+            const vals = {
+                population: model.population,
+                width: view.drawOptions.width,
+            }
+            gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
+            gui.add(anim, 'toggle')
+            gui.add(anim, 'once')
+            gui.add(vals, 'population', 100, 1000, 100).onChange(val => {
+                model.setPopulation(val)
+            })
+            // gui.add(vals, 'width', 100, 1000, 25).onChange(val => {
+            //     view.setWidth(val)
+            // })
+            // gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
+            gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+
+            // ==============================
+
+            util.toWindow({ util, model, view, anim, vals, gui })
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

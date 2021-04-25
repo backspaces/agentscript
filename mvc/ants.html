@@ -13,6 +13,8 @@
             import Model from '../models/AntsModel.js'
             import dat from 'https://cdn.skypack.dev/dat.gui'
 
+            // ==============================
+
             // Define colors and colormaps
             const nestColor = Color.typedColor('yellow')
             const foodColor = Color.typedColor('blue')
@@ -58,19 +60,21 @@
                 30 // 30 fps
             ).startStats()
 
-            util.toWindow({ util, model, view, anim })
+            // ==============================
 
             const gui = new dat.GUI()
-            const vals = { width: 700 }
             gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
             gui.add(anim, 'toggle')
             gui.add(anim, 'once')
-            gui.add(vals, 'width', 100, 1000, 100).onChange(() => {
-                view.setWidth(vals.width)
+            gui.add({ width: 700 }, 'width', 100, 1000, 25).onChange(val => {
+                view.setWidth(val)
             })
             gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
-            util.toWindow({ gui, vals })
+
+            // ==============================
+
+            util.toWindow({ util, model, view, anim, gui })
         </script>
         <div id="modelDiv"></div>
     </body>
