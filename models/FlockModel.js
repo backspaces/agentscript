@@ -2,7 +2,7 @@ import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
 export default class FlockModel extends Model {
-    population = 1000
+    population = 100
     vision = 3 // radius in patches
     speed = 0.25 // distance per step in patches
     maxTurn = 3.0 // max turn in degrees
