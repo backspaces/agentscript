@@ -6,6 +6,7 @@ export default class Turtle3D extends Turtle {
     static defaultVariables() {
         return {
             atEdge: 'wrap',
+            hidden: false,
         }
     }
     // Initialize a Turtle given its Turtles AgentSet.

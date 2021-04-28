@@ -54,6 +54,7 @@ export default class TurtlesView {
         })
     }
     drawTurtle(turtle, viewData) {
+        if (turtle.hidden) return
         if (viewData.size === 0) return // skip this turtle if size === 0
         if (this.useSprites) {
             let { sprite, noRotate } = viewData

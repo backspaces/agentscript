@@ -12,6 +12,7 @@ import * as util from './utils.js'
  */
 export default class Turtle {
     atEdge = 'wrap'
+    hidden = false
     // Set by AgentSet
     agentSet
     model
@@ -41,6 +42,7 @@ export default class Turtle {
      * - Set it's id to -1 to indicate to others it's gone
      */
     die() {
+        if (this.id === -1) return
         this.agentSet.removeAgent(this) // remove me from my baseSet and breed
         // Remove my links if any exist.
         // Careful: don't promote links

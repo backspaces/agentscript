@@ -11,6 +11,7 @@ import AgentArray from './AgentArray.js'
  * **TODO: Document Link properties and methods.**
  */
 export default class Link {
+    hidden = false
     // Set by AgentSet
     agentSet
     model
@@ -39,6 +40,7 @@ export default class Link {
     }
     // Remove this link from its agentset
     die() {
+        if (this.id === -1) return
         this.agentSet.removeAgent(this)
         util.removeArrayItem(this.end0.links, this)
         util.removeArrayItem(this.end1.links, this)

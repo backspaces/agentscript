@@ -244,6 +244,8 @@ export class QuadSpritesMesh extends BaseMesh {
         // for (let i = 0; i < turtles.length; i++) {
         util.forLoop(turtles, (turtle, i) => {
             // const turtle = turtles[i]
+            if (turtle.hidden) return
+
             let { x, y, z, theta } = turtle
             // if (!z) z = 0
 
@@ -342,6 +344,8 @@ export class PointsMesh extends BaseMesh {
         const colors = this.fixedColor ? null : []
 
         util.forLoop(agents, (agent, i) => {
+            if (agent.hidden) return
+
             let { x, y, z } = agent
             // if (!z) z = 0
             vertices.push(x, y, z)
@@ -401,9 +405,13 @@ export class LinksMesh extends BaseMesh {
     // update takes any array of objects with color & end0, end1 having x,y,z
     // REMIND: optimize by flags for position/uvs need updates
     update(links, viewFcn) {
+        // if (links.hidden) return // all links
+
         const vertices = []
         const colors = this.fixedColor ? null : []
         util.forLoop(links, (link, i) => {
+            // if (link.hidden) return // just this link
+
             let { x0, y0, z0, x1, y1, z1 } = link
             if (!z0) z0 = 0
             if (!z1) z1 = 0
@@ -413,6 +421,8 @@ export class LinksMesh extends BaseMesh {
                 colors.push(...color, ...color)
             }
         })
+
+        // if (vertices.length === 0) return // possible?
         this.mesh.geometry.setAttribute(
             'position',
             new THREE.Float32BufferAttribute(vertices, 3)
@@ -515,8 +525,11 @@ export class Obj3DMesh extends BaseMesh {
     }
     update(agents, viewFcn) {
         this.checkDeadAgents(agents)
+        if (agents.hidden) return // all agents
 
         util.forLoop(agents, agent => {
+            if (agent.hidden) return // just this agent
+
             const view = viewFcn(agent)
             let mesh = this.meshes.get(agent)
 

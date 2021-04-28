@@ -44,7 +44,9 @@
                 const { x, y, action } = mouse
                 switch (action) {
                     case 'down':
-                        selectedTurtle = model.turtles.closestTurtle(x, y, 2)
+                        selectedTurtle = model.turtles.minOneOf(t =>
+                            t.distanceXY(x, y)
+                        )
                         break
                     case 'drag':
                         if (selectedTurtle) selectedTurtle.setxy(x, y)

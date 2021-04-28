@@ -28,7 +28,7 @@
 
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
-                patchSize: 15,
+                width: 700,
             }) // defalt drawOptions!
 
             const anim = new Animator(
@@ -45,7 +45,7 @@
             const gui = new dat.GUI()
             const vals = {
                 population: model.population,
-                width: view.drawOptions.width,
+                width: view.canvas.width,
             }
             gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
             gui.add(anim, 'toggle')
@@ -53,9 +53,9 @@
             gui.add(vals, 'population', 100, 1000, 100).onChange(val => {
                 model.setPopulation(val)
             })
-            // gui.add(vals, 'width', 100, 1000, 25).onChange(val => {
-            //     view.setWidth(val)
-            // })
+            gui.add(vals, 'width', 100, 1000, 25).onChange(val => {
+                view.setWidth(val)
+            })
             // gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
 

@@ -20,7 +20,9 @@
                 // turtlesSize of 0 will skip drawing this turle
                 // here "travelers" are skipped
                 turtlesSize: t => (t.breed.name === 'nodes' ? 1.25 : 0),
-                turtlesColor: 'yellow',
+                turtlesColor: t =>
+                    t.breed.name === 'nodes' ? 'yellow' : 'blue',
+                // turtlesColor: 'yellow',
                 linksColor: 'red',
 
                 turtlesSize: 3,
@@ -32,18 +34,18 @@
             await model.startup()
             model.setup()
 
-            const view = new TwoDraw(
-                model,
-                { div: 'modelDiv', patchSize: 6 },
-                drawOptions
-            )
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                width: 600,
+                drawOptions,
+            })
 
             const anim = new Animator(
                 () => {
                     model.step()
                     view.draw()
                 },
-                500, // run 500 steps
+                -1, // run until model stops: best tour constant for 500 steps
                 30 // 30 fps
             ).startStats()
 
@@ -53,7 +55,7 @@
             gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
             gui.add(anim, 'toggle')
             gui.add(anim, 'once')
-            gui.add({ width: 700 }, 'width', 100, 1000, 25).onChange(val => {
+            gui.add({ width: 600 }, 'width', 100, 1000, 50).onChange(val => {
                 view.setWidth(val)
             })
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
@@ -62,23 +64,18 @@
 
             // ==============================
 
-            let selectedTurtle, selectedLink
+            let dragNode
             function handleMouse(mouse) {
                 const { x, y, action } = mouse
                 switch (action) {
                     case 'down':
-                        selectedTurtle = model.turtles.closestTurtle(x, y, 2)
+                        dragNode = model.nodes.minOneOf(t => t.distanceXY(x, y))
                         break
                     case 'drag':
-                        if (selectedTurtle) selectedTurtle.setxy(x, y)
-                        break
-                    case 'move':
-                        selectedLink = model.links.minOneOf(l =>
-                            l.distanceXY(x, y)
-                        )
+                        if (dragNode) model.moveNode(dragNode, x, y)
                         break
                     case 'up':
-                        selectedTurtle = null
+                        dragNode = null
                         break
                 }
                 view.draw() // Draw whenever mouse has an event

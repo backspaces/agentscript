@@ -22,15 +22,14 @@ class TSPModel extends Model {
 
     setup() {
         this.turtleBreeds('nodes travelers')
+        this.travelers.setDefault('hidden', true)
+        this.nodes.setDefault('theta', 0) // override promotion to random angle
 
         // globals
         this.done = false
         this.bestTourNodes = []
         this.bestTourLength = 0
         this.bestTourTick = 0
-
-        this.nodes.setDefault('theta', 0) // override promotion to random angle
-        // this.travelers.setDefault('hidden', true) // REMIND
 
         this.nodes.create(this.nodeCount, node => {
             this.setupNode(node)
@@ -132,6 +131,16 @@ class TSPModel extends Model {
     reportNewTour() {
         console.log(
             `new best tour at tick ${this.ticks}: ${this.bestTourLength}`
+        )
+    }
+
+    moveNode(node, x, y) {
+        node.setxy(x, y)
+        this.bestTourLength = this.links.reduce((sum, l) => sum + l.length(), 0)
+        // node.tourLength = this.lengthFromNodes(this.nodes)
+        // a.tourLength = @lengthFromNodes a.tourNodes for a in @travelers
+        this.travelers.ask(
+            t => (t.tourLength = this.lengthFromNodes(t.tourNodes))
         )
     }
 }

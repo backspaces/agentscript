@@ -515,7 +515,7 @@ export function randomSeed(seed = 123456) {
 
 // num can be numeric array
 export function precision(num, digits = 4) {
-    if(num === -0) return 0
+    if (num === -0) return 0
     if (Array.isArray(num)) return num.map(val => precision(val, digits))
     const mult = 10 ** digits
     return Math.round(num * mult) / mult
@@ -850,9 +850,12 @@ export function arraysEqual(a1, a2) {
 }
 export function removeArrayItem(array, item) {
     const ix = array.indexOf(item)
-    if (ix !== -1) array.splice(ix, 1)
-    // else throw Error(`removeArrayItem: ${item} not in array`)
-    else console.log(`removeArrayItem: ${item} not in array`)
+    if (ix !== -1) {
+        array.splice(ix, 1)
+    } else {
+        throw Error(`removeArrayItem: ${item} not in array`)
+    }
+    // else console.log(`removeArrayItem: ${item} not in array`)
     return array // for chaining
 }
 // Return a string representation of an array of arrays

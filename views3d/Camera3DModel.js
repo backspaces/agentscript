@@ -20,6 +20,7 @@ export default class Camera3DModel extends Model {
         // this.setGeometry('degrees')
         // util.setGeometry(this, 'degrees')
         this.turtleBreeds('cameras pixels')
+        // this.links.setDefault('hidden', true)
 
         this.camera = this.cameras.createOne()
 
@@ -32,10 +33,13 @@ export default class Camera3DModel extends Model {
             }
         }
 
+        // this.pixels.ask(px => this.links.createOne(px, this.camera))
+
         this.moveCamera()
     }
 
     toggleLinks() {
+        // this.links.setDefault('hidden', !this.links.getDefault('hidden'))
         if (this.links.length === 0) {
             this.pixels.ask(px => this.links.createOne(px, this.camera))
         } else {
