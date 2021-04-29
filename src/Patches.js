@@ -161,17 +161,9 @@ class Patches extends AgentSet {
     }
 
     // Return patch at x,y float values
-    // Return undefined if off-world
     patch(x, y) {
-        if (!this.model.world.isOnWorld(x, y)) return undefined
-        const intX =
-            x === this.model.world.maxXcor
-                ? this.model.world.maxX
-                : Math.round(x) // handle n.5 round up to n + 1
-        const intY =
-            y === this.model.world.maxYcor
-                ? this.model.world.maxY
-                : Math.round(y)
+        const intX = Math.round(util.wrap(x, this.model.world.minXcor, this.model.world.maxXcor))
+        const intY = Math.round(util.wrap(y, this.model.world.minYcor, this.model.world.maxYcor))
         return this.patchXY(intX, intY)
     }
     // Return the patch at x,y where both are valid integer patch coordinates.
