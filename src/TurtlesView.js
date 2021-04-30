@@ -111,6 +111,7 @@ export default class TurtlesView {
         // note: neither may be needed! image needs none, no-stroke only fill.
         ctx.fillStyle = cssColor(fill) // fill.css || fill
         ctx.strokeStyle = cssColor(stroke) // stroke.css || stroke
+        ctx.lineWidth = 0.05
 
         ctx.translate(x, y)
         ctx.scale(size, size)
@@ -119,6 +120,7 @@ export default class TurtlesView {
         this.shapes.paths[name](ctx)
         ctx.closePath()
         ctx.fill()
+        ctx.stroke()
 
         ctx.restore()
     }

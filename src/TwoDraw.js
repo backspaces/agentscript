@@ -145,10 +145,10 @@ export default class TwoDraw extends TwoView {
                     : turtlesColor,
             strokeColor:
                 turtlesStrokeColor === 'random'
-                    ? turtlesMap.atIndex(t.id + 4).css
-                    : typeof turtlesColor === 'function'
-                    ? checkColor(t, turtlesColor(t))
-                    : turtlesColor,
+                    ? turtlesMap.atIndex(t.id).css
+                    : typeof turtlesStrokeColor === 'function'
+                    ? checkColor(t, turtlesStrokeColor(t))
+                    : turtlesStrokeColor,
             size:
                 typeof turtlesSize === 'function'
                     ? turtlesSize(t)
