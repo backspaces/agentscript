@@ -1,6 +1,6 @@
 export default class Animator {
     constructor(fcn, steps = -1, fps = 30) {
-        Object.assign(this, { fcn, steps, fps, timeoutID: null })
+        Object.assign(this, { fcn, steps, fps, timeoutID: null, ticks: 0 })
         this.start()
     }
     start() {
@@ -15,6 +15,7 @@ export default class Animator {
     }
     step() {
         if (this.steps === 0) return this.stop()
+        this.ticks++
         this.steps--
         this.fcn()
         if (this.stats) this.stats.update()
@@ -34,6 +35,7 @@ export default class Animator {
     reset(steps = -1, fps = this.fps) {
         this.stop()
         this.steps = steps
+        this.ticks = 0
         this.fps = fps
         this.start()
     }

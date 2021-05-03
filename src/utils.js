@@ -238,6 +238,15 @@ export function setCtxImage(ctx, img) {
     fillCtxWithImage(ctx, img)
 }
 
+// download canvas as png. canvas can be a dataURL.
+export function downloadCanvas(can, name = 'canvas.png') {
+    const url = typeof can === 'string' ? can : can.toDataURL()
+    const link = document.createElement('a')
+    link.download = name
+    link.href = url
+    link.click()
+}
+
 // ### Debug
 
 // Print a message just once.

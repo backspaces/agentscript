@@ -29,9 +29,12 @@ export * as util from './utils.js'
 // Views
 export { default as Color } from './Color.js'
 export { default as ColorMap } from './ColorMap.js'
+export { default as Shapes } from './Shapes.js'
+export { default as SpriteSheet } from './SpriteSheet.js'
 export { default as TwoView } from './TwoView.js'
 export { default as TwoDraw } from './TwoDraw.js'
 export { default as ThreeView } from './ThreeView.js'
+export { default as ThreeMeshes } from './ThreeMeshes.js'
 export { default as ThreeDraw } from './ThreeDraw.js'
 
 // Controls

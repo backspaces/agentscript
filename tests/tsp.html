@@ -1,0 +1,129 @@
+<html>
+    <head>
+        <title>tsp</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+        <!-- <script src="../Attic/steganography1.js"></script> -->
+    </head>
+    <body>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
+            import Model from '../models/TspModel.js'
+            import Mouse from '../src/Mouse.js'
+            // import Color from '../src/Color.js'
+            // import ColorMap from '../src/ColorMap.js'
+            import dat from 'https://cdn.skypack.dev/dat.gui'
+
+            const drawOptions = {
+                patchesColor: 'black',
+                turtlesShape: 'circle',
+                // turtlesSize of 0 will skip drawing this turle
+                // here "travelers" are skipped
+                turtlesSize: t => (t.breed.name === 'nodes' ? 1.25 : 0),
+                turtlesColor: t =>
+                    t.breed.name === 'nodes' ? 'yellow' : 'blue',
+                // turtlesColor: 'yellow',
+                linksColor: 'red',
+
+                turtlesSize: 3,
+            }
+
+            // ==============================
+
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                width: 600,
+                drawOptions,
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // run until model stops: best tour constant for 500 steps
+                30 // 30 fps
+            ).startStats()
+
+            // ==============================
+
+            // async function stegifyCanvas(text, can = view.canvas) {
+            //     const url = can.toDataURL()
+            //     const opts = { width: can.width, height: can.height }
+            //     const img = await util.imagePromise(url)
+            //     const shhUrl = steg.encode('hello world', img, opts)
+            //     const shhImage = await util.imagePromise(shhUrl)
+            //     const ctx = util.createCtx(shhImage.width, shhImage.height)
+            //     return util.setCtxImage(ctx, shhImage).canvas
+            // }
+            // async function getStegText(stegURL) {
+            //     const img = await util.imagePromise(stegURL)
+            //     return steg.decode(img, {
+            //         width: img.width,
+            //         height: img.height,
+            //     })
+            // }
+            // function stegifyCanvas(text, can = view.canvas) {
+            //     const durl = can.toDataURL()
+            //     return steg.encode(text, durl, {
+            //         width: can.width,
+            //         height: can.height,
+            //     })
+            // }
+            async function saveCanvas(can = view.canvas) {
+                // const durl = stegifyCanvas('hello world', can)
+                // const msg = await getStegText(durl)
+                // console.log(msg)
+                //
+                util.downloadCanvas(can, `tsp-${anim.ticks}.png`)
+            }
+
+            const gui = new dat.GUI()
+            gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
+            gui.add(anim, 'toggle')
+            gui.add(anim, 'once')
+            gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+            gui.add({ width: 600 }, 'width', 100, 1000, 50).onChange(val => {
+                view.setWidth(val)
+            })
+            gui.add({ save: saveCanvas }, 'save')
+
+            // gui.addColor(view.drawOptions, 'patchesColor')
+
+            // ==============================
+
+            let dragNode
+            function handleMouse(mouse) {
+                const { x, y, action } = mouse
+                switch (action) {
+                    case 'down':
+                        dragNode = model.nodes.minOneOf(t => t.distanceXY(x, y))
+                        break
+                    case 'drag':
+                        if (dragNode) model.moveNode(dragNode, x, y)
+                        break
+                    case 'up':
+                        dragNode = null
+                        break
+                }
+                view.draw() // Draw whenever mouse has an event
+            }
+
+            const mouse = new Mouse(
+                view.canvas,
+                model.world,
+                handleMouse
+            ).start()
+
+            view.draw() // Draw once to get started
+
+            util.toWindow({ util, model, view, anim, gui })
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>
