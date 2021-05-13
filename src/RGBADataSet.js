@@ -1,11 +1,10 @@
-// import * as util from '../src/utils.js'
-
+import * as util from '../src/utils.js'
 import DataSet from './DataSet.js'
 
 // Parse an RGBA image to a DataSet of the given type.
 // We use all 4 bytes of the pixels, thus map exactly onto
 // multiples all [TypedArray](https://goo.gl/3OOQzy) sizes.
-export default class RGBADataSet extends DataSet {
+export class RGBADataSet extends DataSet {
     constructor(img, Type = Float32Array, options = {}) {
         const bytes = imageToBytes(img)
         const data = new Type(bytes.buffer) // Parse via a Type view on the buffer
@@ -24,11 +23,11 @@ export default class RGBADataSet extends DataSet {
 // REMIND: use webgl12 if it works .. allows all imagables, not just Image.
 // REMIND: use imagebitmap when available in safari!
 // https://dev.to/nektro/createimagebitmap-polyfill-for-safari-and-edge-228
-const imageToBytesCtx = null
-function imageToBytes(img, flipY = false, imgFormat = 'RGBA') {
+let imageToBytesCtx = null
+export function imageToBytes(img, flipY = false, imgFormat = 'RGBA') {
     // Create the gl context using the image width and height
     if (!imageToBytesCtx) {
-        const can = createCanvas(0, 0)
+        const can = util.createCanvas(0, 0)
         imageToBytesCtx = can.getContext('webgl', {
             premultipliedAlpha: false,
         })

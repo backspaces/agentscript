@@ -1,5 +1,5 @@
-// This is the importer/exporter of our modules w/o dependencies.
-// I.e. 2D/3D Models and 2D views
+// This is the importer/exporter of our modules w/ dependencies.
+// I.e. 2D/3D Models and 2D/3D views
 // It is only used by Rollup for bundling.
 import { Object3D } from '../vendor/Object3D.js'
 
@@ -33,9 +33,9 @@ export { default as Shapes } from './Shapes.js'
 export { default as SpriteSheet } from './SpriteSheet.js'
 export { default as TwoView } from './TwoView.js'
 export { default as TwoDraw } from './TwoDraw.js'
-export { default as ThreeView } from './ThreeView.js'
-export { default as ThreeMeshes } from './ThreeMeshes.js'
-export { default as ThreeDraw } from './ThreeDraw.js'
+// export { default as ThreeView } from './ThreeView.js'
+// export { default as ThreeMeshes } from './ThreeMeshes.js'
+// export { default as ThreeDraw } from './ThreeDraw.js'
 
 // Controls
 export { default as Animator } from './Animator.js'

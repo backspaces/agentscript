@@ -226,6 +226,11 @@ export function clearCtx(ctx, cssColor) {
 // These image functions use "imagable" objects: Image, ImageBitmap, Canvas ...
 // https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
 
+export function createCtxFromImage(img) {
+    const ctx = createCtx(img.width, img.height)
+    fillCtxWithImage(ctx, img)
+    return ctx
+}
 // Fill this context with the given image. Will scale image to fit ctx size.
 export function fillCtxWithImage(ctx, img) {
     setIdentity(ctx) // set/restore identity
@@ -248,6 +253,19 @@ export function downloadCanvas(can, name = 'canvas.png') {
 }
 
 // ### Debug
+
+// error checking:
+export function checkArg(arg, type = 'number', name = 'Function') {
+    if (typeof arg !== type) {
+        throw new Error(`${name} expected a ${type}, got ${arg}`)
+    }
+}
+export function checkArgs(argsArray, type = 'number', name = 'Function') {
+    if (typeOf(argsArray) === 'arguments') argsArray = Array.from(argsArray)
+    argsArray.forEach((val, i) => {
+        checkArg(val, type, name)
+    })
+}
 
 // Print a message just once.
 const logOnceMsgSet = new Set()
@@ -376,6 +394,16 @@ export async function setCssStyle(url) {
     if (!response.ok) throw Error(`Not found: ${url}`)
     const css = await response.text()
     document.head.innerHTML += `<style>${css}</style>`
+}
+
+// Return a dataURL for the given data.
+// type is a mime type: https://t.ly/vzKm
+// If data is a canvas, return data.toDataURL(type), defaulting to image/png
+// Otherwise, use btoa/base64, default type text/plain;charset=US-ASCII
+export function toDataURL(data, type = undefined) {
+    if (data.toDataURL) return data.toDataURL(type)
+    if (!type) type = 'text/plain;charset=US-ASCII'
+    return `data:${type};base64,${btoa(data)}}`
 }
 
 // REST:
@@ -853,10 +881,12 @@ export const propFcn = prop => o => o[prop]
 export function arraysEqual(a1, a2) {
     if (a1.length !== a2.length) return false
     for (let i = 0; i < a1.length; i++) {
+        // if (a1[i] !== a2[i]) console.log('arraysEqual: unequal at', i)
         if (a1[i] !== a2[i]) return false
     }
     return true
 }
+
 export function removeArrayItem(array, item) {
     const ix = array.indexOf(item)
     if (ix !== -1) {
@@ -1144,9 +1174,18 @@ export function integerRamp(
 
 // export const arrayFirst = array => array[0]
 export const arrayLast = array => array[array.length - 1]
-// export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
-// export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
-// export const arrayExtent = array => [arrayMin(array), arrayMax(array)]
+export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
+export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
+export const arrayExtent = array => [arrayMin(array), arrayMax(array)]
+export const arraysDiff = (a1, a2) => {
+    if (a1.length !== a2.length)
+        return console.log('lengths differ', a1.length, a2.length)
+    const diffs = []
+    for (let i = 0; i < a1.length; i++) {
+        if (a1[i] !== a2[i]) diffs.push([i, a1[i], a2[i]])
+    }
+    return diffs
+}
 
 // // Return a new shallow of array (either Array or TypedArray)
 // export function clone(array) {
