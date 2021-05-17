@@ -7,8 +7,8 @@
 # test.html
 # temp
 # deno
-landing-page
-landing-page-src
+# landing-page
+# landing-page-src
 
 node_modules
 npm-debug.log
