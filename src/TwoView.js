@@ -17,14 +17,16 @@ export default class TwoView {
 
     // Note: world can be a model, who'd model.world will be used
     constructor(world, options = {}) {
+        // options: override defaults, assign to this
+        // Object.assign(this, TwoView.defaultOptions(), options)
+        options = Object.assign(TwoView.defaultOptions(), options)
         if (options.width) {
             options.patchSize = options.width / world.width
             delete options.width
         }
-        // options: override defaults, assign to this
-        Object.assign(this, TwoView.defaultOptions(), options)
 
-        let div = this.div
+        // let div = this.div
+        let div = options.div
         div = util.isString(div) ? document.getElementById(div) : div
         if (!util.isCanvas(div)) {
             const can = util.createCanvas(0, 0, false) // not offscreen
@@ -51,35 +53,44 @@ export default class TwoView {
     get canvas() {
         return this.ctx.canvas
     }
-    setPatchSize(patchSize) {
-        this.reset(patchSize)
-    }
-    setWidth(width) {
-        this.reset(width / this.world.width)
-    }
+    // setPatchSize(patchSize) {
+    //     this.reset(patchSize)
+    // }
+    // setWidth(width) {
+    //     this.reset(width / this.world.width)
+    // }
+    // get patchSize() {
+    //     this.turtlesView.patchSize
+    // }
     reset(patchSize, useSprites = this.useSprites) {
         // if (this.width) this.width = patchSizeOrWidth
         // this.patchSize = this.width
         //     ? this.width / this.world.width
         //     : patchSizeOrWidth
-        this.patchSize = patchSize
-        this.useSprites = useSprites
+        // this.patchSize = patchSize
+        // this.useSprites = useSprites
         this.turtlesView.reset(patchSize, useSprites)
     }
 
-    // Oops! Already variable names:
-    // get patchSize() {
-    //     return this.turtlesView.patchSize
-    // }
-    // set patchSize(val) {
-    //     this.reset(val)
-    // }
-    // get useSprites() {
-    //     return this.turtlesView.useSprites
-    // }
-    // set useSprites(val) {
-    //     this.reset(this.patchSize, val)
-    // }
+    get width() {
+        // return this.world.width * this.turtlesView.patchSize // this.patchSize
+        return this.world.width * this.patchSize
+    }
+    set width(val) {
+        this.reset(val / this.world.width)
+    }
+    get patchSize() {
+        return this.turtlesView.patchSize
+    }
+    set patchSize(val) {
+        this.reset(val)
+    }
+    get useSprites() {
+        return this.turtlesView.useSprites
+    }
+    set useSprites(val) {
+        this.reset(this.patchSize, val)
+    }
 
     // Clear the view.canvas.
     // If no color, or 'transparent', make transparent via clearCtx.

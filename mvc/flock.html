@@ -14,21 +14,12 @@
             // ==============================
 
             const model = new Model()
-            model.setPopulation = function (population) {
-                const diff = population - this.population
-                if (diff > 0) {
-                    this.turtles.create(diff)
-                } else {
-                    util.repeat(-diff, () => this.turtles.oneOf().die())
-                }
-                this.population = this.turtles.length
-            }
             await model.startup()
             model.setup()
 
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
-                width: 700,
+                width: 600,
             }) // defalt drawOptions!
 
             const anim = new Animator(
@@ -43,25 +34,21 @@
             // ==============================
 
             const gui = new dat.GUI()
-            const vals = {
-                population: model.population,
-                width: view.canvas.width,
-            }
             gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
             gui.add(anim, 'toggle')
             gui.add(anim, 'once')
-            gui.add(vals, 'population', 100, 1000, 100).onChange(val => {
-                model.setPopulation(val)
+            gui.add(model, 'population', 100, 1000, 100).onChange(val => {
+                model.reset()
+                model.setup()
             })
-            gui.add(vals, 'width', 100, 1000, 25).onChange(val => {
-                view.setWidth(val)
-            })
+            gui.add(view, 'width', 100, 1000, 25)
             // gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+            gui.add(view, 'downloadCanvas')
 
             // ==============================
 
-            util.toWindow({ util, model, view, anim, vals, gui })
+            util.toWindow({ util, model, view, anim, gui })
         </script>
         <div id="modelDiv"></div>
     </body>

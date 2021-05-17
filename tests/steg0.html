@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Steg0</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import * as fastPng from 'https://cdn.skypack.dev/fast-png'
+            import * as fflate from 'https://cdn.skypack.dev/fflate'
+
+            let inpng = 'flock.png'
+                // inpng = 'tiny.png'
+                let outpng = inpng.replace('.png', `${util.randomInt(1000)}.png`)
+
+                // img = await util.imagePromise(inpng)
+                // let {width, height} = img
+                // data = RGBADataSet.imageToBytes(img)
+
+                // png = fastPng.encode({ width, height, data })
+                // pngid = fastPng.decode(png)
+                // util.arraysEqual(data, pngid.data)
+
+                let pngImage = await util.imagePromise(inpng)
+                document.body.append(pngImage)
+
+                let pngArrayBuffer = await util.fetchType(inpng, 'arrayBuffer')
+                // pngBlob = new Blob([pngArrayBuffer], { type: 'image/png' })
+                let pngImageData = fastPng.decode(pngArrayBuffer)
+                console.log(pngImageData)
+                // util.arraysEqual(data, fid.data)
+
+                // pngBlob = new Blob([pngArrayBuffer], { type: 'image/png' })
+                // pngUrl = URL.createObjectURL(pngBlob)
+                // pngImage = await util.imagePromise(pngUrl)
+                // document.body.append(pngImage)
+                // URL.revokeObjectURL(pngUrl)
+
+                // pngImageData.data = pngImageData.data.map(val => (val >> 2) << 2)
+                let pngImageData.data = pngImageData.data.map(val =>
+                    // (val & 0b11111100) + util.randomInt(4)
+                    // (val & 0b11110000) + util.randomInt(16)
+                    // (val >> 6) << 6
+                    (val >> 4) << 4
+                )
+
+                let pngUint8 = fastPng.encode(pngImageData)
+                let pngBlob = new Blob([pngUint8], { type: 'image/png' })
+                util.downloadBlob(pngBlob, outpng)
+                await util.timeoutPromise(1000) // pause a bit so image saved
+
+                // fpng = fastPng.encode(fid)
+                // fblob = new Blob([fpng], { type: 'image/png' })
+                // util.downloadBlob(fblob, outpng)
+                // await util.timeoutPromise(1000) // pause a bit so image saved
+
+                let out = await util.fetchType(`http://localhost/Downloads/${outpng}`, 'arrayBuffer')
+                let outdata = fastPng.decode(out)
+                util.arraysEqual(pngImageData.data, outdata.data)
+
+        </script>
+    </body>
+</html>

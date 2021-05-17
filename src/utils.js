@@ -251,16 +251,31 @@ export function downloadCanvas(can, name = 'canvas.png') {
     link.href = url
     link.click()
 }
+// Ditto for blobs
+export function downloadBlob(blob, name = 'blob.png') {
+    // canvas.toBlob(callback, mimeType, qualityArgument) ?
+    let link = document.createElement('a')
+    link.download = name
+    link.href = URL.createObjectURL(blob)
+    link.click()
+    URL.revokeObjectURL(link.href)
+}
 
 // ### Debug
 
 // error checking:
+let skipChecks = false
+export function skipErrorChecks(bool) {
+    skipChecks = bool
+}
 export function checkArg(arg, type = 'number', name = 'Function') {
+    if (skipChecks) return
     if (typeof arg !== type) {
         throw new Error(`${name} expected a ${type}, got ${arg}`)
     }
 }
 export function checkArgs(argsArray, type = 'number', name = 'Function') {
+    if (skipChecks) return
     if (typeOf(argsArray) === 'arguments') argsArray = Array.from(argsArray)
     argsArray.forEach((val, i) => {
         checkArg(val, type, name)

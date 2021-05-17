@@ -36,7 +36,7 @@
 
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
-                width: 600,
+                width: 500,
                 drawOptions,
             })
 
@@ -55,10 +55,9 @@
             gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
             gui.add(anim, 'toggle')
             gui.add(anim, 'once')
-            gui.add({ width: 600 }, 'width', 100, 1000, 50).onChange(val => {
-                view.setWidth(val)
-            })
+            gui.add(view, 'width', 100, 1000, 25)
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+            gui.add(view, 'downloadCanvas')
 
             // gui.addColor(view.drawOptions, 'patchesColor')
 

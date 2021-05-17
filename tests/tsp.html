@@ -88,9 +88,7 @@
             gui.add(anim, 'toggle')
             gui.add(anim, 'once')
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
-            gui.add({ width: 600 }, 'width', 100, 1000, 50).onChange(val => {
-                view.setWidth(val)
-            })
+            gui.add(view, 'width', 100, 1000, 25)
             gui.add({ save: saveCanvas }, 'save')
 
             // gui.addColor(view.drawOptions, 'patchesColor')
