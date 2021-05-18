@@ -44,16 +44,7 @@ Our directory layout is:
 
 -   [models/](https://github.com/backspaces/agentscript/tree/master/models): simple sample/demo models. All are es6 modules used in onepagers below
 -   [src/](https://github.com/backspaces/agentscript/tree/master/src): all the agentscript source code. All are es6 modules
-
-### Use of the models in one-page html demos, called "onepagers"
-
--   [docs/](https://github.com/backspaces/agentscript/tree/master/docs): tutorial examples
--   [gis/](https://github.com/backspaces/agentscript/tree/master/gis): Sample gis examples, inserting models into maps
--   [views2/](https://github.com/backspaces/agentscript/tree/master/views2): 2D Canvas views of all the models/
--   [views3/](https://github.com/backspaces/agentscript/tree/master/views3): Three.js views of all the models/
--   [views3d/](https://github.com/backspaces/agentscript/tree/master/views3d): Three.js views of all the models/ using true 3D methods and Three 3D meshes.
--   [mvc/](https://github.com/backspaces/agentscript/tree/master/mvc): Complete "apps" with Model, View, Controllers
-
+-   [docs](https://agentscript.org/docs/index.html) Documentation for all the individual modules used by the programmer
 
 ### Developer directories:
 
@@ -62,8 +53,6 @@ Our directory layout is:
 -   [test/](https://github.com/backspaces/agentscript/tree/master/test): testing in browser for all models/ using [Puppeteer](https://github.com/puppeteer/puppeteer#puppeteer)
 -   [config/](https://github.com/backspaces/agentscript/tree/master/config): tools for creating "bundles".<br>
     Note that many of these will be removed as es6 modules fully supported by our dependencies. For example models/scripts will be removed when workers can use import statements in all browsers. Safari, we're talking about you!
-
-Click on the directory name to see it on github. Click on the individual file names to see them nicely formatted.
 
 ## Run demos
 
@@ -92,10 +81,6 @@ The mvc onepagers are combine Models, Views, and Controls into "apps".
 [gis](./gis/README.md)
 
 The gis onepagers use gis & mapbox utilities to create and view models running on maps with geojson data.
-
-[docs](./docs/README.md)
-
-The docs onepagers are a series of tutorials, showing how to build, view and control simple models.
 
 [fb](./fb/README.md)
 
