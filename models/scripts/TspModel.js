@@ -3,21 +3,16 @@ var Model = AS.Model
 var util = AS.util
 
 class TSPModel extends Model {
-    static defaultOptions() {
-        return {
-            nodeCount: 50,
-            travelersCount: 100,
-            growPopulation: true,
-            useInversion: true,
-            stopTickDifference: 500,
-        }
-    }
+    nodeCount = 50
+    travelersCount = 100
+    growPopulation = true
+    useInversion = true
+    stopTickDifference = 500
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        Object.assign(this, TSPModel.defaultOptions())
     }
 
     setup() {

@@ -4,20 +4,15 @@ var util = AS.util
 // Here is a simple modification that allows setting the population dynamically.
 // Note that speed & wiggle are already dynamic.
 class HelloPlusModel extends HelloModel {
-    static defaultOptions() {
-        return {
-            population: 200, // override HelloModel
-            minPopulation: 10,
-            maxPopulation: 500,
-            changeTick: 100, // set to null to avoid auto population changes
-        }
-    }
+    population = 200 // override HelloModel
+    minPopulation = 10
+    maxPopulation = 500
+    changeTick = 50 // set to null to avoid auto population changes
 
     // ======================
 
     constructor(worldDptions) {
         super(worldDptions) // default world options if "undefined"
-        Object.assign(this, HelloPlusModel.defaultOptions())
     }
 
     step() {

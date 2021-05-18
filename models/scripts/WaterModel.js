@@ -3,20 +3,15 @@ var Model = AS.Model
 
 // Derived from Cody's water model.
 class WaterModel extends Model {
-    static defaultOptions() {
-        return {
-            strength: 100,
-            surfaceTension: 56,
-            friction: 0.99,
-            drip: 50,
-        }
-    }
+    strength = 100
+    surfaceTension = 56
+    friction = 0.99
+    drip = 50
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        Object.assign(this, WaterModel.defaultOptions())
     }
     setup() {
         this.patches.ask(p => {

@@ -4,17 +4,11 @@ import * as util from '../src/utils.js'
 
 export default class FireModel extends Model {
     density = 60 // percent of patches with tree
-    // static defaultOptions() {
-    //     return {
-    //         density: 60, // percent
-    //     }
-    // }
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(125)) {
         super(worldDptions)
-        // Object.assign(this, FireModel.defaultOptions())
     }
 
     setup() {
@@ -34,8 +28,6 @@ export default class FireModel extends Model {
         this.treeType = this.patchTypes[1]
         this.fireType = this.patchTypes[2]
 
-        // this.density = 60 // percent
-        // this.patches.askSet(p => { // patches static, askSet === ask
         this.patches.ask(p => {
             if (p.x === this.world.minX) this.ignite(p)
             else if (util.randomInt(100) < this.density) p.type = this.treeType
@@ -47,9 +39,7 @@ export default class FireModel extends Model {
     }
 
     step() {
-        // this.fires.askSet(p => {
         this.fires.ask(p => {
-            // AgentArray, vanilla ask
             p.neighbors4.ask(n => {
                 if (this.isTree(n)) this.ignite(n)
             })
@@ -75,11 +65,9 @@ export default class FireModel extends Model {
     }
 
     fadeEmbers() {
-        // this.embers.askSet(p => { // same stats, done faster! 500 mutations
         this.embers.ask(p => {
             const type = p.type
             const ix = this.patchTypes.indexOf(type)
-            // if (ix === this.patchTypes.length - 1)
             if (type === 'ember0') p.setBreed(this.patches)
             // sorta like die, removes from breed.
             else p.type = this.patchTypes[ix + 1]

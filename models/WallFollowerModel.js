@@ -17,19 +17,13 @@ import * as util from '../src/utils.js'
 // by a +/-1 direction turtle variable.
 
 export default class WallFollowerModel extends Model {
-    static defaultOptions() {
-        return {
-            population: 40,
-            wallPercent: 0.04,
-        }
-    }
+    population = 40
+    wallPercent = 0.04
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(35)) {
         super(worldDptions)
-        Object.assign(this, WallFollowerModel.defaultOptions())
-        // util.setGeometry(this, 'degrees')
     }
 
     setup() {

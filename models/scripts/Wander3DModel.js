@@ -3,20 +3,15 @@ var util = AS.util
 var Model = AS.Model
 
 class Wander3DModel extends Model {
-    static defaultOptions() {
-        return {
-            population: 25,
-            speed: 0.1, // patches per step
-            wiggleAngle: 30, // degrees
-            rotateEvery: 15,
-        }
-    }
+    population = 25
+    speed = 0.1 // patches per step
+    wiggleAngle = 30 // degrees
+    rotateEvery = 15
 
     // ======================
 
     constructor(worldDptions) {
         super(worldDptions) // default world options if "undefined"
-        Object.assign(this, Wander3DModel.defaultOptions())
     }
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')

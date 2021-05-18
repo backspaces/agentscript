@@ -3,26 +3,19 @@ var Model = AS.Model
 var util = AS.util
 
 // A port of the NetLogo "Virus on a Network" model
-// http://www.netlogoweb.org/launch#http://www.netlogoweb.org/assets/modelslib/Sample%20Models/Networks/Virus%20on%20a%20Network.nlogo
 class VirusModel extends Model {
-    static defaultOptions() {
-        return {
-            population: 150,
-            averageNodeDegree: 6,
-            outbreakSize: 3,
-
-            virusSpreadPercent: 2.5,
-            virusCheckFrequency: 1,
-            recoveryPercent: 5.0,
-            gainResistancePercent: 5.0,
-        }
-    }
+    population = 150
+    averageNodeDegree = 6
+    outbreakSize = 3
+    virusSpreadPercent = 2.5
+    virusCheckFrequency = 1
+    recoveryPercent = 5.0
+    gainResistancePercent = 5.0
 
     // ======================
 
     constructor(worldOptions = World.defaultOptions(40)) {
         super(worldOptions) // default world options if "undefined"
-        Object.assign(this, VirusModel.defaultOptions())
     }
     setup() {
         this.done = false
@@ -54,7 +47,6 @@ class VirusModel extends Model {
     }
 
     step() {
-        // REMIND: Runners need to be able to be stopped.
         if (this.done) return
 
         this.turtles.ask(t => {

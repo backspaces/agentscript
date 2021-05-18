@@ -8,8 +8,9 @@ import * as util from './utils.js'
  */
 
 export default class DataSet {
-    // **Static methods:** called via DataSet.foo(), similar to Math.foo().
-    // Generally useful utilities for use with TypedArrays & JS Arrays
+    width
+    height
+    data
 
     // Return an empty dataset of given width, height, dataType
     /**

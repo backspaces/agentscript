@@ -2,14 +2,6 @@ var AgentArray = AS.AgentArray
 var Model = AS.Model
 
 class GridPathModel extends Model {
-    // static defaultOptions() {
-    //     return {
-    //         // No programmable variables
-    //     }
-    // }
-
-    // ======================
-
     constructor(
         worldOptions = {
             minX: 0,
@@ -21,7 +13,6 @@ class GridPathModel extends Model {
         }
     ) {
         super(worldOptions) // default world options if "undefined"
-        // Object.assign(this, GridPathModel.defaultOptions())
     }
 
     setup() {

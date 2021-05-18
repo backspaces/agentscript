@@ -3,36 +3,20 @@ var Model = AS.Model
 var util = AS.util
 
 class LinkTravelModel extends Model {
-    static defaultOptions() {
-        return {
-            layoutCircle: true,
-            numNodes: 30,
-            numDrivers: 100,
-            speed: 0.1,
-            speedDelta: 0.1,
-        }
-    }
+    layoutCircle = true
+    numNodes = 30
+    numDrivers = 100
+    speed = 0.1
+    speedDelta = 0.1
 
     // ======================
 
     constructor(worldDptions) {
         super(worldDptions) // default world options if "undefined"
-        Object.assign(this, LinkTravelModel.defaultOptions())
     }
 
     setup() {
         this.turtleBreeds('nodes drivers')
-        // this.nodes.setDefault('shape', 'circle')
-        // this.nodes.setDefault('size', 0.3)
-        // this.drivers.setDefault('size', 1.5)
-
-        // this.refreshPatches = this.refreshLinks = false
-
-        // if (!this.transparentPatches) {
-        //     this.patches.ask(p => {
-        //         p.color = ColorMap.LightGray.randomColor()
-        //     })
-        // }
 
         // Create the graph node turtles
         this.patches.nOf(this.numNodes).ask(p => {

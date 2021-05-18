@@ -51,16 +51,6 @@ export default class World {
         this.setWorld() // convert these to rest of world parameters
     }
 
-    // Until class properties universally, this approach is used:
-    // setClassProperties() {
-    //     this.maxX = 16
-    //     this.maxY = 16
-    //     this.maxZ = 16
-    //     this.minX = -this.maxX
-    //     this.minY = -this.maxY
-    //     this.minZ = -this.maxZ
-    // }
-
     /**
      * Return a default options object, origin at center.
      *

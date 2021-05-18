@@ -3,21 +3,16 @@ import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
 export default class TSPModel extends Model {
-    static defaultOptions() {
-        return {
-            nodeCount: 50,
-            travelersCount: 100,
-            growPopulation: true,
-            useInversion: true,
-            stopTickDifference: 500,
-        }
-    }
+    nodeCount = 50
+    travelersCount = 100
+    growPopulation = true
+    useInversion = true
+    stopTickDifference = 500
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(50)) {
         super(worldDptions)
-        Object.assign(this, TSPModel.defaultOptions())
     }
 
     setup() {

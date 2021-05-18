@@ -1,6 +1,7 @@
 // import * as util from '../src/utils.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
+
 // Current tile dataSet functions:
 //   redfishUSDataSet
 //   redfishWorldDataSet
@@ -20,6 +21,11 @@ export default class DropletsModel extends Model {
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
     stepType = 'dataSetAspectNearest'
+    elevation
+    dzdx
+    dzdy
+    slope
+    aspect
 
     // ======================
 

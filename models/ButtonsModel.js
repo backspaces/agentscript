@@ -3,17 +3,10 @@ import Model from '../src/Model.js'
 export default class ButtonsModel extends Model {
     population = 200 // number of buttons
 
-    // static defaultOptions() {
-    //     return {
-    //         population: 200, // number of buttons
-    //     }
-    // }
-
     // ======================
 
     constructor(worldOptions) {
         super(worldOptions) // default world options if "undefined"
-        // Object.assign(this, ButtonsModel.defaultOptions())
     }
 
     setup() {

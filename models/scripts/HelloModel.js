@@ -7,7 +7,10 @@ class HelloModel extends Model {
     wiggleAngle = 10 // util.degToRad(10)
     noLinks = false
 
-    // We can use Model's constructor, due to using Model's default World
+    // ======================
+
+    // We can use Model's constructor, due to using Model's default World.
+    // JavaScript oddity so to speak
     // constructor() {
     //     super() // use default world options.
     // }

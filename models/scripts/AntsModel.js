@@ -18,7 +18,6 @@ class AntsModel extends Model {
 
     constructor(worldOptions = World.defaultOptions(40)) {
         super(worldOptions)
-        // Object.assign(this, AntsModel.defaultOptions())
     }
 
     setup() {

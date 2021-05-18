@@ -12,6 +12,10 @@ import AgentArray from './AgentArray.js'
  */
 export default class Link {
     hidden = false
+    end0 = null // Turtles: end0 & 1 are turtle ends of the link
+    end1 = null
+    width = 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
+
     // Set by AgentSet
     agentSet
     model
@@ -20,18 +24,19 @@ export default class Link {
     // The core default variables needed by a Link.
     // Use links.setDefault(name, val) to change
     // Modelers add additional "own variables" as needed.
-    static defaultVariables() {
-        // Core variables for patches. Not 'own' variables.
-        return {
-            end0: null, // Turtles: end0 & 1 are turtle ends of the link
-            end1: null,
-            width: 1, // THREE: must be 1. Canvas2D (unsupported) has widths.
-        }
-    }
+    // static defaultVariables() {
+    //     // Core variables for patches. Not 'own' variables.
+    //     return {
+    //         end0: null, // Turtles: end0 & 1 are turtle ends of the link
+    //         end1: null,
+    //         width: 1, // THREE: must be 1. Canvas2D (unsupported) has widths.
+    //     }
+    // }
     // Initialize a Link
     constructor() {
-        Object.assign(this, Link.defaultVariables())
+        // Object.assign(this, Link.defaultVariables())
     }
+
     init(from, to) {
         this.end0 = from
         this.end1 = to

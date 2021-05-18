@@ -5,29 +5,19 @@ var util = AS.util
 // import AgentArray from '../src/AgentArray.js'
 
 class RoadsModel extends Model {
-    static defaultOptions() {
-        const { Z, X, Y } = { Z: 14, X: 3370, Y: 6451 }
-        return {
-            zxy: { Z, X, Y },
-            // jsonUrl: `https://backspaces.github.io/agentscript/models/roads${Z}vt.json`,
-            // Absolute urls have CORS issues: '../models' ok for
-            //   test/, views2/, views3/, gis/, workers3/
-            jsonUrl: `../../models/roads${Z}vt.json`,
-        }
-    }
+    zxy = { Z: 14, X: 3370, Y: 6451 }
+    // Absolute urls have CORS issues: '../models' ok for
+    //   test/, views2/, views3/, gis/, workers3/
+    jsonUrl = `../../models/roads${this.zxy.Z}vt.json`
+    nodeCache = {}
 
     // ======================
 
     constructor(worldDptions = World.defaultOptions(100)) {
         super(worldDptions)
-        Object.assign(this, RoadsModel.defaultOptions())
-        this.nodeCache = {}
-        // this.trips = []
     }
 
     async startup() {
-        // const json = await util.xhrPromise(this.jsonUrl)
-        // this.geojson = JSON.parse(json)
         this.geojson = await util.xhrPromise(this.jsonUrl, 'json')
     }
 
