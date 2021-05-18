@@ -23,6 +23,10 @@ Example: to import Class Model for building your own model, use:
 -   local: [./src/Model.js](./src/Model.js)
 -   agentscript.org: [https://agentscript.org/src/Model.js](https://agentscript.org/src/Model.js)
 -   unpkg.com: [https://unpkg.com/agentscript/src/Model.js](https://unpkg.com/agentscript/src/Model.js)
+-   skypack.dev: [https://cdn.skypack.dev/agentscript/src/Model.js](https://cdn.skypack.dev/agentscript/src/Model.js)
+
+There are bundles as well of all the agentscript modules as a single file from the usual NPM-based CDNs:
+-   unpkg.com: [https://unpkg.com/agentscript@0.10.6/dist/agentscript.js](https://unpkg.com/agentscript@0.10.6/dist/agentscript.js)
 
 To create your own local agentscript files:
 
@@ -48,13 +52,13 @@ Our directory layout is:
 -   [views2/](https://github.com/backspaces/agentscript/tree/master/views2): 2D Canvas views of all the models/
 -   [views3/](https://github.com/backspaces/agentscript/tree/master/views3): Three.js views of all the models/
 -   [views3d/](https://github.com/backspaces/agentscript/tree/master/views3d): Three.js views of all the models/ using true 3D methods and Three 3D meshes.
+-   [mvc/](https://github.com/backspaces/agentscript/tree/master/mvc): Complete "apps" with Model, View, Controllers
+
 
 ### Developer directories:
 
 -   [bin/](https://github.com/backspaces/agentscript/tree/master/bin): workflow scripts
 -   [dist/](https://github.com/backspaces/agentscript/tree/master/dist): the umd and esm bundles with their min.js versions and src/.
--   [models/scripts/](https://github.com/backspaces/agentscript/tree/master/models/scripts): `<script>` versions of models/.<br>
-    Used by legacy models, test/, and workers. test/ uses workers for speed.
 -   [test/](https://github.com/backspaces/agentscript/tree/master/test): testing in browser for all models/ using [Puppeteer](https://github.com/puppeteer/puppeteer#puppeteer)
 -   [config/](https://github.com/backspaces/agentscript/tree/master/config): tools for creating "bundles".<br>
     Note that many of these will be removed as es6 modules fully supported by our dependencies. For example models/scripts will be removed when workers can use import statements in all browsers. Safari, we're talking about you!
@@ -80,6 +84,10 @@ The views3d onepagers import models from the models/ dir and add a Three.js webg
 [views3d](./views3d/README.md)
 
 The views3d onepagers are similar to the views3 onepagers. It differs from views3 in that these use true 3D via [src/Model3D.js](https://github.com/backspaces/agentscript/blob/master/src/Model3D.js) and [src/Turtle3D.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle3D.js) subclasses.
+
+[mvc](./mvc/README.md)
+
+The mvc onepagers are combine Models, Views, and Controls into "apps".
 
 [gis](./gis/README.md)
 

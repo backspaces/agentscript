@@ -15,6 +15,7 @@
             import * as util from '../src/utils.js'
             import * as fastPng from 'https://cdn.skypack.dev/fast-png'
             import dat from 'https://cdn.skypack.dev/dat.gui'
+            util.toWindow({ util, fastPng, dat })
 
             let inDiv = document.getElementById('in')
             let outDiv = document.getElementById('out')
