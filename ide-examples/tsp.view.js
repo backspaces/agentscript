@@ -1,4 +1,6 @@
-import View from '../src/TwoDraw.js'
+import TwoDraw from '../src/TwoDraw.js'
+
+const View = TwoDraw
 
 const viewOpts = {
     patchSize: 6,

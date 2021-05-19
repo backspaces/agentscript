@@ -27,12 +27,12 @@ const initApp = async (Model, divEl) => {
         }
     )
 
-    const anim = new Animator(() => {
+    const animator = new Animator(() => {
         model.step()
         view.draw()
     })
 
-    util.toWindow({ util, model, view })
+    return { model, view, animator }
 }
 
 export { initApp }

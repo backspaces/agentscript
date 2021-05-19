@@ -8,8 +8,8 @@ import Model from '../src/Model.js'
 //   mapzenDataSet
 //   mapboxDataSet
 // Use mapzenDataSet for free amazon elevation, redfishUSDataSet for high rez
-import { mapzenDataSet as getElevation } from '../src/TileDataSet.js'
-// import { redfishUSDataSet as getElevation } from '../src/TileDataSet.js'
+import TileDataSet from '../src/TileDataSet.js'
+const { mapzenDataSet, redfishUSDataSet } = TileDataSet
 
 export default class DropletsModel extends Model {
     zxy = [13, 1594, 3339]
@@ -34,7 +34,7 @@ export default class DropletsModel extends Model {
     }
 
     async startup() {
-        const elevation = await getElevation(...this.zxy)
+        const elevation = await mapzenDataSet(...this.zxy)
         this.installDataSets(elevation)
     }
     installDataSets(elevation) {

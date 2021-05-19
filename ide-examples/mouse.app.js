@@ -9,6 +9,7 @@ const initApp = (MouseModel, divEl) => {
     const view = new TwoDraw(
         model,
         {
+            div: divEl,
             patchSize: 15,
             drawOptions: {
                 patchesColor: 'black',
@@ -51,6 +52,8 @@ const initApp = (MouseModel, divEl) => {
     ).start()
 
     view.draw() // Draw once to get started
+
+    return { model, view }
 }
 
 export { initApp }

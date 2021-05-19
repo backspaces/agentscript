@@ -1,6 +1,8 @@
-import View from '../src/TwoDraw.js'
+import TwoDraw from '../src/TwoDraw.js'
 import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
+
+const View = TwoDraw
 
 let cachedColors
 const patchColors = model => {

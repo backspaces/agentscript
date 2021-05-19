@@ -7,7 +7,12 @@ const patchColors = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
 const maxZ = 10
 
 const initApp = async (Model, divEl) => {
-    const model = new Model()
+    const model = new Model({
+      minX: 0,
+      maxX: 60,
+      minY: 0,
+      maxY: 60
+    })
     await model.startup()
     model.setup()
 
@@ -22,12 +27,12 @@ const initApp = async (Model, divEl) => {
     const view = new TwoDraw(model, viewOpts)
     view.setPatchesSmoothing(true) // make water smoother
     
-    const anim = new Animator(() => {
+    const animator = new Animator(() => {
         model.step()
         view.draw()
     })
 
-    util.toWindow({ util, model, view })
+    return { model, view, animator }
 }
 
 export { initApp }

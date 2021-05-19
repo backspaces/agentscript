@@ -1,15 +1,20 @@
-import View from '../src/TwoDraw.js'
+import TwoDraw from '../src/TwoDraw.js'
+
+const View = TwoDraw
 
 const viewOpts = {
-    patchSize: 15,
-    useSprites: true
+    patchSize: 30,
+    useSprites: true,
+    drawOptions: {
+      turtlesSize: 1
+    }
 }
 
 const worldOpts = {
-    minX: -16,
-    maxX: 16,
-    minY: -16,
-    maxY: 16
+    minX: -10,
+    maxX: 10,
+    minY: -10,
+    maxY: 10
 }
 
 export { View, viewOpts, worldOpts }

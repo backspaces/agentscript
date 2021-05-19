@@ -1,5 +1,7 @@
 import Color from '../src/Color.js'
-import View from '../src/TwoDraw.js'
+import TwoDraw from '../src/TwoDraw.js'
+
+const View = TwoDraw
 
 const wallsColor = Color.typedColor(222, 184, 135)
 const backgroundColor = Color.typedColor('black')

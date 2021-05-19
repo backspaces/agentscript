@@ -1,5 +1,7 @@
-import View from '../src/TwoDraw.js'
+import TwoDraw from '../src/TwoDraw.js'
 import Color from '../src/Color.js'
+
+const View = TwoDraw
 
 const typeColors = {
     dirt: Color.cssToPixel('yellow'),
