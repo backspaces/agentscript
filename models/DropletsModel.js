@@ -8,8 +8,8 @@ import Model from '../src/Model.js'
 //   mapzenDataSet
 //   mapboxDataSet
 // Use mapzenDataSet for free amazon elevation, redfishUSDataSet for high rez
-import TileDataSet from '../src/TileDataSet.js'
-const { mapzenDataSet, redfishUSDataSet } = TileDataSet
+import { mapzenDataSet } from '../src/TileDataSet.js'
+// const { mapzenDataSet, redfishUSDataSet } = TileDataSet
 
 export default class DropletsModel extends Model {
     zxy = [13, 1594, 3339]

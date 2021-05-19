@@ -24,18 +24,20 @@ export default class TwoView {
             options.patchSize = options.width / world.width
             delete options.width
         }
+        this.div = options.div
 
         // let div = this.div
         let div = options.div
+        let can = div
         div = util.isString(div) ? document.getElementById(div) : div
-        if (!util.isCanvas(div)) {
-            const can = util.createCanvas(0, 0, false) // not offscreen
+        if (!util.isCanvas(can)) {
+            can = util.createCanvas(0, 0, false) // not offscreen
             div.appendChild(can)
-            div = can
+            // div = can
         }
         // this.div = div
 
-        this.ctx = div.getContext('2d')
+        this.ctx = can.getContext('2d')
         this.world = new World(world.world || world) // world can be model
 
         // Object.assign(this, { ctx, world }, options)

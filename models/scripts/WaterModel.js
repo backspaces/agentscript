@@ -10,8 +10,8 @@ class WaterModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(50)) {
-        super(worldDptions)
+    constructor(worldOptions = World.defaultOptions(50)) {
+        super(worldOptions)
     }
     setup() {
         this.patches.ask(p => {
