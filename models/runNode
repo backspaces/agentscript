@@ -22,16 +22,3 @@ async function run() {
 run().catch(e => {
     console.log(`\n!Error: ${className} failed to run: ${e}\n`)
 })
-
-// try {
-//     model.startup().then(() => {
-//         model.setup()
-//         util.repeat(500, () => {
-//             model.step()
-//         })
-//     })
-//     const sample = util.sampleModel(model)
-//     console.log(sample)
-// } catch (error) {
-//     console.log(`!Error: ${className} failed to run: ${error}`)
-// }

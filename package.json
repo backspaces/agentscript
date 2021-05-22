@@ -55,7 +55,6 @@
         "build-scripts": "node bin/models2scripts",
         "build-md": "bin/src2md 'models views2 views3 views3d mvc gis' > /dev/null",
         "build-docs": "documentation build src/** --config config/documentation.yml --github -f html -o docs",
-        "test0": "ava test/models.js && npm run test3d",
         "test": "ava test/models.js && npm run test3d",
         "test3d": "deno test test/geom.js",
         "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
