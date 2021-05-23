@@ -2,7 +2,13 @@ var Model = AS.Model
 
 class MouseModel extends Model {
     population = 20
-    // constructor not needed, using default ctor & population defined here
+
+    // We can use Model's constructor, due to using Model's default World.
+    // If you pass in world options, super will use them
+    // constructor() {
+    //     super() // use default world options.
+    // }
+
     setup() {
         const { patches, turtles, links } = this
         // this is sorta slick NL use. Can easily be two liner.
@@ -11,7 +17,8 @@ class MouseModel extends Model {
         // again, kinda slick, can be broken into a couple of lines.
         turtles.ask(t => links.create(t, turtles.otherOneOf(t)))
     }
-    // step() {} .. not needed, driven by mouse
+
+    // step() {} .. not needed, will be driven by mouse events
 }
 const defaultModel = MouseModel
 

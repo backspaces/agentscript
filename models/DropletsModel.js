@@ -1,13 +1,13 @@
 // import * as util from '../src/utils.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-
 // Current tile dataSet functions:
 //   redfishUSDataSet
 //   redfishWorldDataSet
 //   mapzenDataSet
 //   mapboxDataSet
-// Use mapzenDataSet for free amazon elevation, redfishUSDataSet for high rez
+// Use mapzenDataSet for free amazon elevation,
+// redfishUSDataSet for high rez, mapboxDataSet for mapbox
 import * as TileDataSet from '../src/TileDataSet.js'
 
 export default class DropletsModel extends Model {

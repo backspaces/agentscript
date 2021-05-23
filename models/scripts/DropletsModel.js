@@ -1,13 +1,13 @@
 // import * as util from '../src/utils.js'
 var World = AS.World
 var Model = AS.Model
-
 // Current tile dataSet functions:
 //   redfishUSDataSet
 //   redfishWorldDataSet
 //   mapzenDataSet
 //   mapboxDataSet
-// Use mapzenDataSet for free amazon elevation, redfishUSDataSet for high rez
+// Use mapzenDataSet for free amazon elevation,
+// redfishUSDataSet for high rez, mapboxDataSet for mapbox
 var TileDataSet = AS.TileDataSet
 
 class DropletsModel extends Model {

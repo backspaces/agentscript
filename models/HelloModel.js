@@ -10,7 +10,7 @@ class HelloModel extends Model {
     // ======================
 
     // We can use Model's constructor, due to using Model's default World.
-    // JavaScript oddity so to speak
+    // If you pass in world options, super will use them
     // constructor() {
     //     super() // use default world options.
     // }

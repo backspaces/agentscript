@@ -8,23 +8,18 @@
             import * as util from '../src/utils.js'
             import Mouse from '../src/Mouse.js'
             import TwoDraw from '../src/TwoDraw.js'
-            import Model from '../src/Model.js'
+            import Model from '../models/MouseModel.js'
 
-            class MouseModel extends Model {
-                population = 20
-                // constructor not needed, using default ctor & population defined here
-                setup() {
-                    const { patches, turtles, links } = this
-                    // this is sorta slick NL use. Can easily be two liner.
-                    patches.nOf(20).ask(p => p.sprout(1))
+            // const worldOptions = {
+            //     minX: 0,
+            //     maxX: 40,
+            //     minY: 0,
+            //     maxY: 30,
+            // }
+            // const worldOptions = { minX: 1, maxX: 9, minY: 1, maxY: 5 }
+            // const model = new Model(worldOptions)
 
-                    // again, kinda slick, can be broken into a couple of lines.
-                    turtles.ask(t => links.create(t, turtles.otherOneOf(t)))
-                }
-                // step() {} .. not needed, driven by mouse
-            }
-
-            const model = new MouseModel()
+            const model = new Model()
             model.setup()
 
             const view = new TwoDraw(

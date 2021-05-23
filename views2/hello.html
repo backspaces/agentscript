@@ -10,14 +10,16 @@
             import Animator from '../src/Animator.js'
             import Model from '../models/HelloModel.js'
 
+            // use model's default world options
             const model = new Model()
             await model.startup()
             model.setup()
 
+            // use defalt drawOptions
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
                 patchSize: 20,
-            }) // defalt drawOptions!
+            })
 
             const anim = new Animator(
                 () => {
