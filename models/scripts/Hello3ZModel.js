@@ -5,14 +5,21 @@ class HelloModel extends Model {
     population = 100
     speed = 0.1 // patches per step
     wiggleAngle = 10 //util.degToRad(10)
+    radius
 
     // ======================
 
-    constructor(worldDptions) {
-        super(worldDptions) // default world options if "undefined"
-        this.radius = this.world.maxX * 0.85
-    }
+    // We can use Model's constructor, due to using Model's default World.
+    // If you pass in world options, Model will use them
+    // constructor() {
+    //     super() // use default world options.
+    // }
+
+    // Not needed, inherit default world options from Model
+    // static worldOptions = World.defaultOptions()
+
     setup() {
+        this.radius = this.world.maxX * 0.85
         this.turtles.setDefault('atEdge', 'bounce')
 
         this.turtles.create(this.population, t => {

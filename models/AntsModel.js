@@ -16,9 +16,11 @@ export default class AntsModel extends Model {
 
     // ======================
 
-    constructor(worldOptions = World.defaultOptions(40)) {
+    constructor(worldOptions = AntsModel.worldOptions) {
         super(worldOptions)
     }
+
+    static worldOptions = World.defaultOptions(40)
 
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')

@@ -2,17 +2,17 @@ var AgentArray = AS.AgentArray
 var Model = AS.Model
 
 class GridPathModel extends Model {
-    constructor(
-        worldOptions = {
-            minX: 0,
-            minY: 0,
-            maxX: 9,
-            maxY: 9,
-            minZ: 0,
-            maxZ: 2,
-        }
-    ) {
+    constructor(worldOptions = GridPathModel.worldOptions) {
         super(worldOptions) // default world options if "undefined"
+    }
+
+    static worldOptions = {
+        minX: 0,
+        minY: 0,
+        minZ: 0,
+        maxX: 9,
+        maxY: 9,
+        maxZ: 2,
     }
 
     setup() {

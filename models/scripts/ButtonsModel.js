@@ -5,9 +5,14 @@ class ButtonsModel extends Model {
 
     // ======================
 
-    constructor(worldOptions) {
-        super(worldOptions) // default world options if "undefined"
-    }
+    // We can use Model's constructor, due to using Model's default World.
+    // If you pass in world options, Model will use them
+    // constructor() {
+    //     super() // use default world options.
+    // }
+
+    // Not needed, inherit default world options from Model
+    // static worldOptions = World.defaultOptions()
 
     setup() {
         this.turtles.setDefault('theta', 0) // override promotion to random angle

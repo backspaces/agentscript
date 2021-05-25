@@ -4,10 +4,13 @@ class MouseModel extends Model {
     population = 20
 
     // We can use Model's constructor, due to using Model's default World.
-    // If you pass in world options, super will use them
+    // If you pass in world options, Model will use them
     // constructor() {
     //     super() // use default world options.
     // }
+
+    // Not needed, inherit default world options from Model
+    // static worldOptions = World.defaultOptions()
 
     setup() {
         const { patches, turtles, links } = this

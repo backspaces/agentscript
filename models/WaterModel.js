@@ -10,9 +10,12 @@ export default class WaterModel extends Model {
 
     // ======================
 
-    constructor(worldOptions = World.defaultOptions(50)) {
+    constructor(worldOptions = WaterModel.worldOptions) {
         super(worldOptions)
     }
+
+    static worldOptions = World.defaultOptions(50)
+
     setup() {
         this.patches.ask(p => {
             p.zpos = 0

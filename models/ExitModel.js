@@ -7,9 +7,11 @@ export default class ExitModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(35, 35, 1)) {
+    constructor(worldDptions = ExitModel.worldOptions) {
         super(worldDptions)
     }
+
+    static worldOptions = World.defaultOptions(35, 35, 1)
 
     setup() {
         this.patchBreeds('exits inside wall')

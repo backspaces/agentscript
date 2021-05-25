@@ -6,8 +6,9 @@ const shell = require('shelljs')
 
 const debug = false
 const port = 9008
-const useWorkers = !debug
+const useWorkers = true // !debug
 const compareSamples = true
+const nonWorker = model => ['droplets'].includes(model)
 
 liveServer.start({
     open: false,
@@ -29,12 +30,13 @@ let models = shell
     .split('\n')
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
-if (debug) models = ['ants'] // debug. Also headless below
+if (debug) models = ['droplets', 'mouse'] // debug. Also headless below
 // models = ['droplets'] // debug. Also headless below
 // models = models.filter(m => m !== 'droplets')
 // models = models.filter(m => !['droplets', 'gridPath'].includes(m))
 
 shell.echo(models)
+shell.echo('using Workers:', useWorkers)
 
 async function runModels() {
     for (const model of models) {
@@ -66,7 +68,7 @@ runModels()
 
 async function runModel(model) {
     const url =
-        useWorkers && model !== 'droplets' // use list of non-worker models
+        useWorkers && !nonWorker(model) // use list of non-worker models
             ? `http://127.0.0.1:${port}/models/worker.html?${model}`
             : `http://127.0.0.1:${port}/models/test.html?${model}`
 

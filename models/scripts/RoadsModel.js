@@ -13,9 +13,11 @@ class RoadsModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(100)) {
+    constructor(worldOptions = RoadsModel.worldOptions) {
         super(worldDptions)
     }
+
+    static worldOptions = World.defaultOptions(100)
 
     async startup() {
         this.geojson = await util.xhrPromise(this.jsonUrl, 'json')

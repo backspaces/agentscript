@@ -3,7 +3,7 @@ Code    | Run demo
 [camera](https://github.com/backspaces/agentscript/tree/master/views3d/camera.html#L1) | [https://agentscript.org/views3d/camera.html](https://agentscript.org/views3d/camera.html)
 [exit](https://github.com/backspaces/agentscript/tree/master/views3d/exit.html#L1) | [https://agentscript.org/views3d/exit.html](https://agentscript.org/views3d/exit.html)
 [height](https://github.com/backspaces/agentscript/tree/master/views3d/height.html#L1) | [https://agentscript.org/views3d/height.html](https://agentscript.org/views3d/height.html)
-[hello](https://github.com/backspaces/agentscript/tree/master/views3d/hello.html#L1) | [https://agentscript.org/views3d/hello.html](https://agentscript.org/views3d/hello.html)
+[hello3d](https://github.com/backspaces/agentscript/tree/master/views3d/hello3d.html#L1) | [https://agentscript.org/views3d/hello3d.html](https://agentscript.org/views3d/hello3d.html)
 [nav](https://github.com/backspaces/agentscript/tree/master/views3d/nav.html#L1) | [https://agentscript.org/views3d/nav.html](https://agentscript.org/views3d/nav.html)
 [plot](https://github.com/backspaces/agentscript/tree/master/views3d/plot.html#L1) | [https://agentscript.org/views3d/plot.html](https://agentscript.org/views3d/plot.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views3d/shapes.html#L1) | [https://agentscript.org/views3d/shapes.html](https://agentscript.org/views3d/shapes.html)

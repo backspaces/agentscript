@@ -28,9 +28,11 @@ export default class DropletsModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(50)) {
-        super(worldDptions)
+    constructor(worldOptions = DropletsModel.worldOptions) {
+        super(worldOptions)
     }
+
+    static worldOptions = World.defaultOptions(50)
 
     async startup() {
         const elevation = await TileDataSet.mapzenDataSet(...this.zxy)

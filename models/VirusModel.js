@@ -14,9 +14,12 @@ export default class VirusModel extends Model {
 
     // ======================
 
-    constructor(worldOptions = World.defaultOptions(40)) {
-        super(worldOptions) // default world options if "undefined"
+    constructor(worldOptions = VirusModel.worldOptions) {
+        super(worldOptions)
     }
+
+    static worldOptions = World.defaultOptions(40)
+
     setup() {
         this.done = false
         this.setupNodes()

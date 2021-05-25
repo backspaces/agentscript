@@ -11,9 +11,11 @@ export default class TSPModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(50)) {
+    constructor(worldDptions = TSPModel.worldOptions) {
         super(worldDptions)
     }
+
+    static worldOptions = World.defaultOptions(50)
 
     setup() {
         this.turtleBreeds('nodes travelers')

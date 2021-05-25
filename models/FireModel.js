@@ -7,9 +7,11 @@ export default class FireModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(125)) {
+    constructor(worldDptions = FireModel.worldOptions) {
         super(worldDptions)
     }
+
+    static worldOptions = World.defaultOptions(125)
 
     setup() {
         this.patchBreeds('fires embers')
