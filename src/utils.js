@@ -2,6 +2,14 @@
 
 // Return Promise for getting an image.
 // - use: imagePromise('./path/to/img').then(img => imageFcn(img))
+/**
+ * Return a Promise for getting an image.
+ *
+ * use: imagePromise('./path/to/img').then(img => imageFcn(img))
+ *
+ * @param {URL} url string for path to image
+ * @return {Promise} A promise resolving to the image
+ */
 export function imagePromise(url) {
     return new Promise((resolve, reject) => {
         const img = new Image()
@@ -42,6 +50,18 @@ export function blobImagePromise(blob) {
 // - type: 'arraybuffer', 'blob', 'document', 'json', 'text'.
 // - method: 'GET', 'POST'
 // - use: xhrPromise('./path/to/data').then(data => dataFcn(data))
+/**
+ * Return Promise for ajax/xhr data.
+ *
+ * type: 'arraybuffer', 'blob', 'document', 'json', 'text'.
+ * method: 'GET', 'POST'
+ * use: xhrPromise('./path/to/data').then(data => dataFcn(data))
+ *
+ * @param {UTL} url A URL path to the data to be retrieved
+ * @param {string} [type='text'] The type of the data
+ * @param {string} [method='GET'] The retrieval method
+ * @return {any} The resulting data of the given type
+ */
 export function xhrPromise(url, type = 'text', method = 'GET') {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
@@ -54,8 +74,13 @@ export function xhrPromise(url, type = 'text', method = 'GET') {
     })
 }
 
-// Return promise for pause of ms. Use:
-// timeoutPromise(2000).then(()=>console.log('foo'))
+/**
+ * Return promise for pause of ms.
+ * Use: await timeoutPromise(ms)
+ *
+ * @param {number} [ms=1000] Number of ms to pause
+ * @return {Promise} A promise to wait this number of ms
+ */
 export function timeoutPromise(ms = 1000) {
     return new Promise(resolve => {
         setTimeout(resolve, ms)
@@ -64,6 +89,15 @@ export function timeoutPromise(ms = 1000) {
 // Use above for an animation loop.
 // steps < 0: forever (default), steps === 0 is no-op
 // Returns a promise for when done. If forever, no need to use it.
+/**
+ * Use timeoutPromise for an animation loop.
+ * Calls the fcn each step
+ * Stops after steps calls, negative means run forever
+ *
+ * @param {function} fcn The function to be called.
+ * @param {number} [steps=-1] How many times.
+ * @param {number} [ms=0] Number of ms between calls.
+ */
 export async function timeoutLoop(fcn, steps = -1, ms = 0) {
     let i = 0
     while (i++ !== steps) {
@@ -113,10 +147,14 @@ function offscreenOK() {
     return inWorker()
 }
 
-// Create a blank 2D canvas of a given width/height
-// width/height defaulted so can be modified later by caller
-// Default to off-screen canvas.
-// export function createCanvas(width = 0, height = 0, offscreen = true) {
+/**
+ * Create a blank 2D canvas of a given width/height.
+ *
+ * @param {number} width The canvas height in pixels
+ * @param {number} height The canvas width in pixels
+ * @param {boolean} [offscreen=offscreenOK()] If true, return "Offscreen" canvas
+ * @return {Canvas} The resulting Canvas object
+ */
 export function createCanvas(width, height, offscreen = offscreenOK()) {
     if (offscreen) return new OffscreenCanvas(width, height)
     const can = document.createElement('canvas')
@@ -124,8 +162,15 @@ export function createCanvas(width, height, offscreen = offscreenOK()) {
     can.height = height
     return can
 }
-// As above, but returing the 2D context object.
-// NOTE: ctx.canvas is the canvas for the ctx, and can be use as an image.
+/**
+ * As above, but returing the 2D context object instead of the canvas.
+ * Note ctx.canvas is the canvas for the ctx, and can be use as an image.
+ *
+ * @param {number} width The canvas height in pixels
+ * @param {number} height The canvas width in pixels
+ * @param {boolean} [offscreen=offscreenOK()] If true, return "Offscreen" canvas
+ * @return {Context2D} The resulting Canvas's 2D context
+ */
 export function createCtx(width, height, offscreen = offscreenOK()) {
     const can = createCanvas(width, height, offscreen)
     return can.getContext('2d')
@@ -237,7 +282,13 @@ export function fillCtxWithImage(ctx, img) {
     ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.restore()
 }
-// Fill this context with the given image, resizing it to img size if needed.
+
+/**
+ * Fill this context with the given image, resizing it to img size if needed.
+ *
+ * @param {Context3D} ctx a canvas 2D context
+ * @param {Image} img the Image to install in this ctx
+ */
 export function setCtxImage(ctx, img) {
     setCanvasSize(ctx.canvas, img.width, img.height)
     fillCtxWithImage(ctx, img)
@@ -352,13 +403,19 @@ export function pps(obj, title = '') {
     }
 }
 
-// Merge from's key/val pairs into to the global/window namespace
-export function toWindow(obj, logToo = false) {
+/**
+ * Merge a module's obj key/val pairs into to the global/window namespace.
+ * Primary use is to make console logging easier when debugging
+ * modules.
+ *
+ * @param {Object} obj Object who's key/val pairs will be installed in window.
+ */
+export function toWindow(obj) {
     Object.assign(window, obj)
     console.log('toWindow:', Object.keys(obj).join(', '))
-    if (logToo) {
-        Object.keys(obj).forEach(key => console.log('  ', key, obj[key]))
-    }
+    // if (logToo) {
+    //     Object.keys(obj).forEach(key => console.log('  ', key, obj[key]))
+    // }
 }
 
 // Dump model's patches turtles links to window
@@ -536,15 +593,46 @@ export function fcnToWorker(fcn) {
 export const PI = Math.PI
 
 // Return random int/float in [0,max) or [min,max) or [-r/2,r/2)
-/** Returns a random int in [0, max) */
+/**
+ * Returns an int in [0, max), equal or grater than 0, less than max
+ *
+ * @param {number} max The max integer to return
+ * @return {number} an integer in  [0, max)
+ */
 export const randomInt = max => Math.floor(Math.random() * max)
-/** Returns a random int in [min, max) */
+
+/**
+ * Returns an int in [min, max), equal or grater than min, less than max
+ *
+ * @param {number} min The min integer to return
+ * @param {number} max The max integer to return
+ * @return {number} an integer in  [min, max)
+ */
 export const randomInt2 = (min, max) =>
     min + Math.floor(Math.random() * (max - min))
-/** Returns a random float in [0, max) */
+
+/**
+ * Returns a random float in [0, max)
+ *
+ * @param {number} max The max float to return
+ * @return {number} a float in [0, max)
+ */
 export const randomFloat = max => Math.random() * max
-/** Returns a random float in [min, max) */
+
+/**
+ * Returns a random float in [min, max)
+ *
+ * @param {number} min The min float to return
+ * @param {number} max The max float to return
+ * @return {number} a float in [min, max)
+ */
 export const randomFloat2 = (min, max) => min + Math.random() * (max - min)
+
+/**
+ * Return a random float centered around r, in [-r/2, r/2)
+ * @param {number} r The center float
+ * @return {number} a float in [-r/2, r/2)
+ */
 export const randomCentered = r => randomFloat2(-r / 2, r / 2)
 
 // Return float Gaussian normal with given mean, std deviation.
@@ -555,6 +643,16 @@ export function randomNormal(mean = 0.0, sigma = 1.0) {
     return norm * sigma + mean
 }
 
+/**
+ * Install a seeded random generator as Math.random
+ * Uses an optimized version of the Park-Miller PRNG.
+ *
+ * Math.random will return a sequence of "random" numbers in a known
+ * sequence. Useful for testing to see if the same results
+ * occur in multiple runs of a model with the same parameters.
+ *
+ * @param {number} [seed=123456]
+ */
 export function randomSeed(seed = 123456) {
     // doesn't repeat b4 JS dies.
     // https://gist.github.com/blixt/f17b47c62508be59987b
@@ -565,7 +663,14 @@ export function randomSeed(seed = 123456) {
     }
 }
 
-// num can be numeric array
+/**
+ * Round a number to be of a given decimal precision.
+ * If the number is an array, round each item in the array
+ *
+ * @param {number|Array} num The number to convert/shorten
+ * @param {number} [digits=4] The number of decimal digits
+ * @return {number} The resulting number
+ */
 export function precision(num, digits = 4) {
     if (num === -0) return 0
     if (Array.isArray(num)) return num.map(val => precision(val, digits))
@@ -582,11 +687,26 @@ export const nextPowerOf2 = num => Math.pow(2, Math.ceil(Math.log2(num)))
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
 // The modulus is defined as: x - y * floor(x / y)
 // It is not %, the remainder function.
+/**
+ * A true modulus function, differing from the % remainder operation.
+ *
+ * @param {number} v The value to calculate the modulus of
+ * @param {number} n The number relative to which the modulus is calculated.
+ * @returns {number} The value of v mod n
+ */
 export const mod = (v, n) => ((v % n) + n) % n // v - n * Math.floor(v / n)
+
 // Wrap v around min, max values if v outside min, max
 export const wrap = (v, min, max) => min + mod(v - min, max - min)
-// Clamp a number to be between min/max.
-// Much faster than Math.max(Math.min(v, max), min)
+
+/**
+ * Clamp a float to be between [min, max).
+ *
+ * @param {number} v value to clamp between min & max
+ * @param {number} min min value
+ * @param {number} max max value
+ * @return {number} a float between min/max
+ */
 export function clamp(v, min, max) {
     if (v < min) return min
     if (v > max) return max
@@ -617,20 +737,49 @@ const toDegrees = 180 / PI
 const toRadians = PI / 180
 
 // Better names and format for arrays. Change above?
+/**
+ * Convert from degrees to radians
+ *
+ * @param {number} degrees a value in degrees: in [0, 360)
+ * @returns {number} the value as radians: in [0, 2PI)
+ */
 export const degToRad = degrees => mod2pi(degrees * toRadians)
+
+/**
+ * Convert from radians to degrees
+ *
+ * @param {number} radians a value in radians: in [0, 2PI)
+ * @returns {number} the value as degrees: in [0, 360)
+ */
 export const radToDeg = radians => mod360(radians * toDegrees)
 
 // Heading & Radians: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
 // * Rad is euclidean: 0-right (x-axis), counterclockwise in radians
+/**
+ * Convert from radians to heading
+ *
+ * Heading is 0-up (y-axis), clockwise angle measured in degrees.
+ * Radians is euclidean: 0-right (x-axis), counterclockwise in radians
+ *
+ * @param {number} radians a value in radians: in [0, 2PI)
+ * @return {number} a value in degrees: in [0, 360)
+ */
 export function radToHeading(radians) {
     const deg = radians * toDegrees
     return mod360(90 - deg)
 }
+/**
+ * Convert from heading to radians
+ *
+ * @param {number} heading a value in degrees: in [0, 360)
+ * @return {number} a value in radians: in [0, 2PI)
+ */
 export function headingToRad(heading) {
     const deg = mod360(90 - heading)
     return deg * toRadians
 }
+
 // Relative angles in heading space: deg Heading => -deg Eucledian
 export function radToHeadingAngle(radians) {
     return -radToDeg(radians)
@@ -681,6 +830,18 @@ export function subtractDegrees(deg1, deg0) {
 }
 // export const subtractHeadings = (head1, head0) =>
 //     degToHeading(subtractDegrees(headingToDeg(head1), headingToDeg(head0)))
+
+/**
+ * Subtract two headings, returning the smaller difference.
+ *
+ * Computes the difference between the given headings, that is,
+ * the number of degrees in the smallest angle by which heading2
+ * could be rotated to produce heading1
+ * See NetLogo's [subtract-headings](http://goo.gl/CjoHuV) for explanation
+ * @param {number} head1 The first heading in degrees
+ * @param {number} head0 The second heading in degrees
+ * @returns {number} The smallest andle from head0 to head1
+ */
 export const subtractHeadings = (head1, head0) => -subtractDegrees(head1, head0)
 
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
@@ -834,6 +995,13 @@ function toJSON(obj, indent = 0, topLevelArrayOK = true) {
     return json
 }
 
+/**
+ * Return an object with samples of the models components.
+ * Useful for testing Models without needing a View, just data.
+ *
+ * @param {Model} model A model to sample
+ * @return {Object} An object with all the samples
+ */
 export function sampleModel(model) {
     const obj = {
         ticks: model.ticks,
@@ -935,6 +1103,16 @@ export function forLoop(arrayOrObj, fcn) {
 // Repeat function f(i, a) n times, i in 0, n-1
 // a is optional array, default a new Array.
 // Return a.
+/**
+ * Repeats the function f(i, a) i in 0, n-1.
+ * a is an optional array, default a new empty Array
+ * returns a, only needed if f() places data in a
+ *
+ * @param {number} n An integer number of times to run f()
+ * @param {function} f The function called.
+ * @param {Array} [a=[]] An optional array for use by f()
+ * @return {Array} The result of calling f() n times
+ */
 export function repeat(n, f, a = []) {
     for (let i = 0; i < n; i++) f(i, a)
     return a
@@ -992,6 +1170,12 @@ export function objectToString(obj, indent = 2, jsKeys = true) {
 // Compare Objects or Arrays via JSON string. Note: TypedArrays !== Arrays
 export const objectsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 
+/**
+ * Return random item from an array
+ *
+ * @param {Array} An array to choose from
+ * @returns {any} The chosen item
+ */
 // Return random one of array items.
 export const oneOf = array => array[randomInt(array.length)]
 export function otherOneOf(array, item) {
