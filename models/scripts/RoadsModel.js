@@ -14,7 +14,7 @@ class RoadsModel extends Model {
     // ======================
 
     constructor(worldOptions = RoadsModel.worldOptions) {
-        super(worldDptions)
+        super(worldOptions)
     }
 
     static worldOptions = World.defaultOptions(100)

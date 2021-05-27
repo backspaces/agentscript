@@ -1,7 +1,9 @@
 export default class Evented {
-    constructor() {
-        this.events = {}
-    }
+    events = {}
+
+    // constructor() {
+    //     this.events = {}
+    // }
 
     on(name, callback) {
         if (!this.events[name]) {

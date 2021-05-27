@@ -51,7 +51,7 @@
         "start": "live-server --ignore=node_modules,.git &",
         "build": "npm-run-all clean build-scripts build-vendor build-dist build-md build-docs",
         "build-dist": "rollup -c config/rollup.dist.js",
-        "build-vendor": "rollup -c config/rollup.vendor.js",
+        "build-vendor": "rollup -c config/rollup.vendor.js && cp tests/steganography.esm.js vendor/steganography.js",
         "build-scripts": "node bin/models2scripts",
         "build-md": "bin/src2md 'models views2 views3 views3d mvc gis' > /dev/null",
         "build-docs": "documentation build src/** --config config/documentation.yml --github -f html -o docs",

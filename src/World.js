@@ -114,6 +114,16 @@ export default class World {
     }
 
     /**
+     * Return the options (minX, maxX, ..) used to create this world.
+     *
+     * @returns {Object} A WorldOptions object
+     */
+    getOptions() {
+        const {minX, minY, minZ, maxX, maxY, maxZ} = this
+        return {minX, minY, minZ, maxX, maxY, maxZ}
+    }
+
+    /**
      * Return a random 2D point within the World
      *
      * @returns {Array} A random x,y float array
