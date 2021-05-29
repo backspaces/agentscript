@@ -22,7 +22,7 @@ toc:
     - name: Utilities
       description: |
           An assortment of helper functions. To use: `import * as util from src/utils.js`.
-    # - utils.js
+    # - utils
 
     # - randomInt
     # - randomInt2

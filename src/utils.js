@@ -286,7 +286,7 @@ export function fillCtxWithImage(ctx, img) {
 /**
  * Fill this context with the given image, resizing it to img size if needed.
  *
- * @param {Context3D} ctx a canvas 2D context
+ * @param {Context2D} ctx a canvas 2D context
  * @param {Image} img the Image to install in this ctx
  */
 export function setCtxImage(ctx, img) {
