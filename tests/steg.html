@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Steg</title>
+        <style>
+            div {
+                display: inline;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="in"></div>
+        <div id="out"></div>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import steg from '../src/steg.js'
+            util.toWindow({ util, steg })
+
+            let msg =
+                'Sunt labore proident anim sunt reprehenderit consectetur laborum eiusmod. Occaecat irure reprehenderit dolore nisi velit ipsum ea elit veniam nulla labore nisi irure voluptate. Pariatur elit consequat veniam anim sit et qui esse eiusmod. Nostrud anim laboris adipisicing quis sit occaecat ut sunt. Occaecat elit magna eu ut aliqua mollit.'
+            util.repeat(9, () => {
+                msg += msg
+            })
+
+            const img = await util.imagePromise('flock.png')
+            const ctx = await steg.encode(img, msg)
+
+            document.getElementById('in').append(img)
+            document.getElementById('out').append(ctx.canvas)
+
+            const stegMsg = await steg.decode(ctx)
+            console.log('msg === stegMsg', msg === stegMsg)
+        </script>
+    </body>
+</html>
