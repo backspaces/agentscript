@@ -1,4 +1,13 @@
-import * as asutils from '../src/utils.js'
+function imagePromise(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.crossOrigin = 'Anonymous'
+        img.onload = () => resolve(img)
+        // img.onerror = () => reject(Error(`Could not load image ${url}`))
+        img.onerror = () => reject(`Could not load image ${url}`)
+        img.src = url
+    })
+}
 
 function buildSteg() {
     var Cover = function Cover() {}
@@ -38,7 +47,7 @@ function buildSteg() {
             return ret
         },
         loadImg: async function (url) {
-            var image = await asutils.imagePromise(url)
+            var image = await imagePromise(url)
             return image
         },
     }
