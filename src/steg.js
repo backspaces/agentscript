@@ -96,7 +96,7 @@ async function encode(img, msg) {
     return ctx
 }
 
-async function decode(img) {
+async function decode(img, returnU8 = false) {
     const ctx = await toContext(img)
     const { width, height } = ctx.canvas
     const data = ctx.getImageData(0, 0, width, height).data
@@ -113,8 +113,10 @@ async function decode(img) {
     })
     console.log('decode msgArray', msgArray)
 
-    const msg = new TextDecoder().decode(msgArray)
-    return msg
+    if (returnU8) return msgArray
+    return new TextDecoder().decode(msgArray)
+    // const msg = new TextDecoder().decode(msgArray)
+    // return msg
 }
 
 export default { encode, decode }
