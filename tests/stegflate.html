@@ -22,21 +22,19 @@
             let msg = await util.fetchType(url)
             console.log('msg size', msg.length)
 
+            const img = await util.imagePromise('./flock600.png')
+            console.log('img size', img.width * img.height)
+
             const buf = fflate.strToU8(msg)
             const cbuf = fflate.compressSync(buf)
             console.log('compressed msg size', cbuf.length)
-
-            const img = await util.imagePromise('./flock600.png')
-            console.log('img size', img.width * img.height)
 
             const ctx = await steg.encode(img, cbuf)
 
             document.getElementById('in').append(img)
             document.getElementById('out').append(ctx.canvas)
 
-            // const stegBuf = await steg.decode(ctx, true)
-            const stegStr = await steg.decode(ctx)
-            const stegBuf = fflate.strToU8(stegStr)
+            const stegBuf = await steg.decode(ctx, true)
             const dbuf = fflate.decompressSync(stegBuf)
             const dmsg = fflate.strFromU8(dbuf)
 

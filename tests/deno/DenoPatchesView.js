@@ -1,4 +1,4 @@
-import * as util from 'https://agentscript.org/src/utils.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
 import { createCanvas } from 'https://raw.githubusercontent.com/DjDeveloperr/deno-canvas/master/mod.ts'
 
 function rgbaToPixel(r, g, b, a = 255) {

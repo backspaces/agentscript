@@ -1,5 +1,5 @@
 // deno run --allow-read --allow-net deno/image.js
-import * as util from 'http://agentscript.org/src/utils.js'
+import * as util from 'http://code.agentscript.org/src/utils.js'
 import { Image } from 'https://deno.land/x/imagescript@1.1.13/mod.ts'
 
 // const file = await Deno.open('./deno/data/redfish.png')

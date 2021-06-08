@@ -1,5 +1,5 @@
-import * as util from 'https://agentscript.org/src/utils.js'
-import HelloModel from 'https://agentscript.org/models/HelloModel.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
+import HelloModel from 'https://code.agentscript.org/models/HelloModel.js'
 import {
     createCanvas,
     dataURLtoFile,

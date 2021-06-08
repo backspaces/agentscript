@@ -21,7 +21,7 @@ Example: to import Class Model for building your own model, use:
 .. where path/to/agentscript is a local file system path or a url to a server:
 
 -   local: [./src/Model.js](./src/Model.js)
--   agentscript.org: [https://agentscript.org/src/Model.js](https://agentscript.org/src/Model.js)
+-   code.agentscript.org: [https://code.agentscript.org/src/Model.js](https://code.agentscript.org/src/Model.js)
 -   unpkg.com: [https://unpkg.com/agentscript/src/Model.js](https://unpkg.com/agentscript/src/Model.js)
 -   skypack.dev: [https://cdn.skypack.dev/agentscript/src/Model.js](https://cdn.skypack.dev/agentscript/src/Model.js)
 
@@ -44,7 +44,7 @@ Our directory layout is:
 
 -   [models/](https://github.com/backspaces/agentscript/tree/master/models): simple sample/demo models. All are es6 modules used in onepagers below
 -   [src/](https://github.com/backspaces/agentscript/tree/master/src): all the agentscript source code. All are es6 modules
--   [docs/](https://agentscript.org/docs/index.html) Documentation for all the individual modules used by the programmer
+-   [docs/](https://code.agentscript.org/docs/index.html) Documentation for all the individual modules used by the programmer
 
 ### Developer directories:
 

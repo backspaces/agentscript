@@ -3,8 +3,8 @@ This is a simple Hello World example of class Model.
 ### The HelloModel.js file:
 
 ``` javascript
-import * as util from 'https://agentscript.org/src/utils.js'
-import Model from 'https://agentscript.org/src/Model.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
 
 class HelloModel extends Model {
     population = 10 // number of turtles
@@ -48,8 +48,8 @@ First, as this is a Module system, we have two imports to the files src/utils.js
 
 Our code creates a subclass of class Model, then exports it
 ``` javascript
-import * as util from 'https://agentscript.org/src/utils.js'
-import Model from 'https://agentscript.org/src/Model.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
 
 class HelloModel extends Model {
   ...
@@ -58,7 +58,7 @@ class HelloModel extends Model {
 export default HelloModel
 ```
 
-The imports are on our home repository, https://agentscript.org, so can be run without any workflow or downloads.
+The imports are on our home repository, https://code.agentscript.org, so can be run without any workflow or downloads.
 
 Our single default export is the HelloModel ready to be used in the browser via html.
 
@@ -151,6 +151,6 @@ This takes two steps:
 * Create a local server to run that html file.
 
 To get a peak at what this looks like, we can run it on our server:
-[http://agentscript.org/tutorials/examples/hello.html](http://agentscript.org/tutorials/examples/hello.html)
+[http://code.agentscript.org/tutorials/examples/hello.html](http://code.agentscript.org/tutorials/examples/hello.html)
 
 Next, {@tutorial 02-HelloHtml}: creating an html file to run HelloModel.js

@@ -2,8 +2,15 @@
 <html>
     <head>
         <title>StegEsm</title>
+        <style>
+            div {
+                display: inline;
+            }
+        </style>
     </head>
     <body>
+        <div id="in"></div>
+        <div id="out"></div>
         <script type="module">
             import * as util from '../src/utils.js'
             import steg from '../vendor/steganography.js'
@@ -16,6 +23,10 @@
                 util.toWindow({ png, msg })
                 const durl = await steg.encode(msg, png)
                 util.toWindow({ durl })
+
+                document.getElementById('in').append(png)
+                const img = await util.imagePromise(durl)
+                document.getElementById('out').append(img)
 
                 const msg1 = await steg.decode(durl)
                 util.toWindow({ msg1 })

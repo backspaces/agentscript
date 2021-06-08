@@ -24,8 +24,10 @@
     <body>
         <div id="modelDiv"></div>
         <script type="module">
-            // import * as util from '../src/utils.js'
-            import * as Plot from 'https://cdn.skypack.dev/@observablehq/plot@0.1'
+            import * as util from '../src/utils.js'
+
+            import * as leaflet from 'https://cdn.skypack.dev/leaflet'
+            util.toWindow({ leaflet })
 
             // import * as AS from 'https://cdn.skypack.dev/agentscript'
             // import * as AS from '../src/AS'
@@ -209,7 +211,7 @@
 
             // // import TestClass from './test.js'
             // // import './test.js'
-            // import Model from 'https://agentscript.org/models/LinkTravelModel.js'
+            // import Model from 'https://code.agentscript.org/models/LinkTravelModel.js'
 
             // import DataSet from '../src/DataSet.js'
             // let range = size => [...Array(size)].map((_, i) => i)
@@ -225,12 +227,12 @@
             // let lerp = util.lerp
             // import { lerp } from '../src/utils.js'
 
-            // import * as util from 'https://agentscript.org/src/utils.js'
+            // import * as util from 'https://code.agentscript.org/src/utils.js'
             // let lerp = util.lerp
-            // import * as util from 'https://agentscript.org/tests/utils.js'
+            // import * as util from 'https://code.agentscript.org/tests/utils.js'
             // let lerp = util.lerp
-            // import { lerp } from 'https://agentscript.org/src/utils.js'
-            // import { lerp } from 'https://agentscript.org/tests/utils.js'
+            // import { lerp } from 'https://code.agentscript.org/src/utils.js'
+            // import { lerp } from 'https://code.agentscript.org/tests/utils.js'
 
             // import util from 'https://unpkg.com/agentscript@0.8.2/src/util.js'
             // let lerp = util.lerp

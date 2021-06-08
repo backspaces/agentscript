@@ -14,7 +14,7 @@ dirs.forEach(dir => {
     shell.cd(dir)
 
     const files = dir === 'models' ? shell.ls('*Model.js') : shell.ls('*html')
-    const urlRoot = `https://agentscript.org/${dir}/`
+    const urlRoot = `https://code.agentscript.org/${dir}/`
     const srcRoot = `https://github.com/backspaces/agentscript/tree/master/${dir}/`
     shell.echo('Code    | Run demo').to('README.md')
     shell.echo('------- | ------').toEnd('README.md')

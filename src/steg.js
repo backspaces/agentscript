@@ -61,7 +61,7 @@ function stegMsgSize(data) {
 
 // ============== encode/decode ==============
 
-// img can be png image, url, dataurl, context2d, canvas
+// img can be png/jpeg image, url, dataurl, context2d, canvas
 // msg is a string or a Uint8 array
 async function encode(img, msg) {
     const ctx = await toContext(img)
@@ -69,16 +69,15 @@ async function encode(img, msg) {
     checkSize(msg, width, height)
 
     const msgArray = toUint8Array(msg)
-    console.log('msg', msgArray, bits)
+    console.log('msg buffer', msgArray)
 
     const imageData = ctx.getImageData(0, 0, width, height)
     const data = imageData.data
-    console.log(data)
+    console.log('imgageData.data', data)
 
     let ix
     msgArray.forEach((char, i) => {
         const [ch0, ch1, ch2] = charToBits(char)
-        // console.log(ch0, ch1, ch2)
         ix = i * 4
         data[ix] = (data[ix++] & bits[0].dataMask) + ch0
         data[ix] = (data[ix++] & bits[1].dataMask) + ch1
@@ -87,7 +86,7 @@ async function encode(img, msg) {
     })
     data[ix + 4] = 254 // use alpha to terminate message
 
-    console.log(data)
+    console.log('encoded imgageData.data', data)
     ctx.putImageData(imageData, 0, 0)
 
     console.log('msg length', msg.length)
@@ -96,6 +95,8 @@ async function encode(img, msg) {
     return ctx
 }
 
+// img can be png/jpeg image, url, dataurl, context2d, canvas
+// returnU8: return a UintTypedArray; default return string
 async function decode(img, returnU8 = false) {
     const ctx = await toContext(img)
     const { width, height } = ctx.canvas

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!-- <html> -->
+<head>
+    <title>Flate</title>
+</head>
+<body>
+    <script type="module">
+        import * as fflate from 'https://cdn.skypack.dev/fflate'
+
+        const url = '../dist/agentscript.js'
+        const text = await fetch(url).then(resp => resp.text())
+
+        const buf = fflate.strToU8(text)
+        const cbuf = fflate.compressSync(buf)
+
+        console.log('text', text.length, 'cbuf', cbuf.length)
+        console.log('compression:', text.length / cbuf.length)
+
+        const dbuf = fflate.decompressSync(cbuf)
+        const dtext = fflate.strFromU8(dbuf)
+
+        console.log('dbuf', dbuf.length, 'dtext', dtext.length)
+        console.log('text equals decoded text:', text === dtext)
+    </script>
+</body>
+<!-- </html> -->

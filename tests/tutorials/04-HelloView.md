@@ -10,8 +10,8 @@ Copy hello.html to helloview.html, and remove all the comments and the util.prin
     </head>
     <body>
         <script type="module">
-            import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
-            import * as util from 'https://agentscript.org/src/utils.js'
+            import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import * as util from 'https://code.agentscript.org/src/utils.js'
             import Model from './HelloModel.js'
 
             async function run() {
@@ -35,7 +35,7 @@ Not much left!
 There are several Views available for us to use. We'll use the simplest HTML Canvas version, src/TwoDraw.js. It is a subclass of a more basic src/TwoView.js with easy to use drawing options.
 
 ```javascript
-import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
+import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 ```
 
 We'll then create an instance of TwoDraw just underneath ` model.setup()`
@@ -132,9 +132,9 @@ This looks like:
 
 Separating the Model from the View gives us a lot of options for integrating Models into different environments. This is the goal of the MVC architecture.
 
-Here's an example of a Model running in a [Three.js View](https://agentscript.org/views3d/hello.html). (We've modified the HelloModel slightly to use the z coordinates)
+Here's an example of a Model running in a [Three.js View](https://code.agentscript.org/views3d/hello.html). (We've modified the HelloModel slightly to use the z coordinates)
 
-And here's an example of running a Model in [Mapbox](https://agentscript.org/gis/countywalker.html), a GIS library. If you open the browser's console, you'll see the Model has been slightly modified to report the county when a turtle goes from one county to another.
+And here's an example of running a Model in [Mapbox](https://code.agentscript.org/gis/countywalker.html), a GIS library. If you open the browser's console, you'll see the Model has been slightly modified to report the county when a turtle goes from one county to another.
 
 The Models can also be run in two interesting environments due to their simplicity:
 * [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API): Because the Models have no drawing, they do not need to access the browser's DOM (Document Object Model). Workers can run much faster because they do not use the DOM's shared threads. Our use of the async timeoutLoop is an example of sharing the DOM's thread, stepping the model and view then pausing so as to not block the browser's other pages.

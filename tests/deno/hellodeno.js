@@ -1,6 +1,6 @@
 // deno [OPTIONS] [SUBCOMMAND]
-import * as util from 'https://agentscript.org/src/utils.js'
-import HelloModel from 'https://agentscript.org/models/HelloModel.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
+import HelloModel from 'https://code.agentscript.org/models/HelloModel.js'
 
 async function run() {
     console.log(`Running for 500 steps. Takes a while!`)
