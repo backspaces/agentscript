@@ -98,16 +98,16 @@ export function lonLat2meters(pt1, pt2) {
     return d * 1000 // meters
 }
 
-// geojson utilities
-export function cloneJson(json) {
-    return JSON.parse(JSON.stringify(json))
-}
-export function areEqual(json0, json1) {
-    return JSON.stringify(json0) === JSON.stringify(json1)
-}
-// bin/minifyjson
-export function minify(json) {
-    const str = JSON.stringify(json) // compact form
-    // newline for each feature
-    return str.replace(/,{"type":"Feature"/g, '\n,\n{"type":"Feature"')
-}
+// geojson utilities: use src/geojson.js
+// export function cloneJson(json) {
+//     return JSON.parse(JSON.stringify(json))
+// }
+// export function areEqual(json0, json1) {
+//     return JSON.stringify(json0) === JSON.stringify(json1)
+// }
+// // bin/minifyjson
+// export function minify(json) {
+//     const str = JSON.stringify(json) // compact form
+//     // newline for each feature
+//     return str.replace(/,{"type":"Feature"/g, '\n,\n{"type":"Feature"')
+// }

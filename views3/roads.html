@@ -14,8 +14,7 @@
                 await model.startup()
                 model.setup()
 
-                const { Z, X, Y } = model.zxy
-                const baseUrl = `https://tile.openstreetmap.org/${Z}/${X}/${Y}.png`
+                const baseUrl = `../models/data/roads14.png`
                 const baseMapTile = await util.imagePromise(baseUrl)
                 const isIntersection = t => t.breed.name === 'intersections'
                 const drawOptions = {

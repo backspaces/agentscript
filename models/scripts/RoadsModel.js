@@ -1,102 +1,30 @@
 var gis = AS.gis
-var World = AS.World
+var GeoWorld = AS.GeoWorld
 var Model = AS.Model
-var util = AS.util
-// import AgentArray from '../src/AgentArray.js'
+var geojson = AS.geojson
+
+// This model is "static", in that these cannot be dynamic.
+// This is due to the json data being very difficult to compute
+// thus done off=line via node/deno
+const zxy = { Z: 14, X: 3370, Y: 6451 }
+const bbox = gis.xy2bbox(zxy.X, zxy.Y, zxy.Z)
+const jsonUrl = `../../models/data/roads${zxy.Z}vt.json`
 
 class RoadsModel extends Model {
-    zxy = { Z: 14, X: 3370, Y: 6451 }
-    // Absolute urls have CORS issues: '../models' ok for
-    //   test/, views2/, views3/, gis/, workers3/
-    jsonUrl = `../../models/roads${this.zxy.Z}vt.json`
-    nodeCache = {}
-
-    // ======================
-
-    constructor(worldOptions = RoadsModel.worldOptions) {
+    constructor(worldOptions = new GeoWorld(bbox, 200)) {
         super(worldOptions)
     }
 
-    static worldOptions = World.defaultOptions(100)
-
     async startup() {
-        this.geojson = await util.xhrPromise(this.jsonUrl, 'json')
+        this.geojson = await fetch(jsonUrl).then(resp => resp.json())
     }
 
-    getNode(pt) {
-        const key = pt.toString()
-        let node = this.nodeCache[key]
-        if (node) return node
-
-        node = this.turtles.createOne(t => {
-            t.setxy(...this.xfm.toWorld(pt))
-            t.lon = pt[0]
-            t.lat = pt[1]
-        })
-        this.nodeCache[key] = node
-        return node
-    }
-    newLink(pt0, pt1) {
-        const t0 = this.getNode(pt0)
-        const t1 = this.getNode(pt1)
-        return this.links.createOne(t0, t1)
-    }
-    lineStringToLinks(lineString) {
-        // const lineLinks =
-        lineString.reduce((acc, pt, i, a) => {
-            // const link = [a[i - 1], pt]
-            const link = this.newLink(a[i - 1], pt)
-            if (i === 1) {
-                acc = [link]
-                acc.properties = lineString.properties
-            } else {
-                acc.push(link)
-            }
-            link.lineString = acc
-            return acc
-        })
-        // lineLinks.forEach(link => link.)
-    }
     setup() {
         this.turtleBreeds('intersections')
         // this.linkBreeds('trips')
         this.turtles.setDefault('atEdge', 'OK')
 
-        const { Z, X, Y } = this.zxy
-        const bbox = gis.xy2bbox(X, Y, Z)
-        console.log('bbox', bbox.toString())
-        const [west, south, east, north] = bbox
-
-        this.xfm = this.world.bboxTransform(...bbox)
-        console.log(
-            'bbox diagonal size',
-            gis.lonLat2meters([west, south], [east, north])
-        )
-
-        const features = this.geojson.features
-        // note index is shared amongst the MultiLineStrings
-        features.forEach((obj, i) => {
-            obj.properties.featureIndex = i
-            obj.properties.featureID = obj.id
-        })
-
-        this.lineStrings = features.reduce((acc, obj, i) => {
-            const geom = obj.geometry
-            if (geom.type === 'LineString') {
-                geom.coordinates.properties = obj.properties
-                acc.push(geom.coordinates)
-            } else if (geom.type === 'MultiLineString') {
-                geom.coordinates.forEach(a => {
-                    a.properties = obj.properties
-                    acc.push(a)
-                })
-            }
-            return acc
-        }, [])
-
-        this.lineStrings.forEach(lineString =>
-            this.lineStringToLinks(lineString)
-        )
+        geojson.lineStringsToLinks(this, this.geojson)
 
         this.turtles.ask(t => {
             if (t.links.length > 2) this.intersections.setBreed(t)

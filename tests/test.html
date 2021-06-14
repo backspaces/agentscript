@@ -26,8 +26,21 @@
         <script type="module">
             import * as util from '../src/utils.js'
 
-            import * as leaflet from 'https://cdn.skypack.dev/leaflet'
-            util.toWindow({ leaflet })
+            // import * as tds from '../src/TileDataSet.js'
+            // const { z, x, y } = { z: 14, x: 3370, y: 6451 }
+            // //https://tile.thunderforest.com/cycle/14/3370/6451.png?apikey=690f61bc23a34b409ebd97d7891521b3
+            // const img = await util.imagePromise(
+            //     // tds.stamenUrl(z, x, y, 'toner')
+            //     // tds.stamenUrl(z, x, y)
+            //     // tds.osmUrl(z, x, y)
+            //     // `https://tile.openstreetmap.org/${z}/${x}/${y}.png`
+            //     `http://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v8/14/3370/6451.mvt?access_token=pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ`
+            // )
+            // document.body.append(img)
+
+            import * as L from 'https://cdn.skypack.dev/leaflet'
+            // util.toWindow({ L })
+            // import * as L from 'https://unpkg.com/leaflet?module'
 
             // import * as AS from 'https://cdn.skypack.dev/agentscript'
             // import * as AS from '../src/AS'

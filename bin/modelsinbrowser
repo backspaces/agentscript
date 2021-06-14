@@ -10,7 +10,7 @@ dir=$1
 # browser=$2 || 'Google Chrome'
 
 root='http://localhost/src/agentscript/'
-# root='https://agentscript.org/'
+# root='https://code.agentscript.org/'
 
 cd ~/src/agentscript
 
