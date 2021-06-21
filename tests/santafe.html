@@ -17,11 +17,14 @@
             const world = World.defaultWorld(10, 20)
             util.toWindow({ util, World, world })
 
+            const modelParams = util.parseQueryString()
+            const name = Object.keys(modelParams)[0] || 'santafe14roads'
+            const url = `../models/data/${name}.json`
+
             async function run() {
-                const geojson = await util.xhrPromise(
-                    '../models/roads14vt.json'
-                )
-                window.json = JSON.parse(geojson)
+                const json = await fetch(url).then(res => res.json())
+                console.log(json)
+
                 // Could use external json filtered by bin/geofilters.js
                 const roadTypes = [
                     'primary',
@@ -42,7 +45,7 @@
                 const provider = 'tile.openstreetmap.org'
                 const mapUrl = 'https://{s}.' + provider + '/{z}/{x}/{y}.png'
 
-                const map = L.map('map').setView([35.67514, -105.94116], 12)
+                const map = L.map('map').setView([35.67514, -105.94116], 13)
 
                 const mapAttr =
                     '<a href="https://openstreetmap.org">OpenStreetMap</a>'

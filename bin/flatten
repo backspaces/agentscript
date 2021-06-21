@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const process = require('process')
-
 const esmImport = require('esm')(module)
 const geojson = esmImport('../src/geojson.js')
 
@@ -18,5 +17,6 @@ process.stdin.on('end', () => {
 
 function processData(data) {
     const json = JSON.parse(data)
-    return geojson.minify(json)
+    geojson.flatten(json)
+    return JSON.stringify(json, null, 2)
 }

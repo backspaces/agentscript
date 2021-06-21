@@ -21,15 +21,15 @@
                     patchesColor: baseMapTile,
                     turtlesShape: 'circle',
                     turtlesColor: t => (isIntersection(t) ? 'blue' : 'red'),
+                    // turtlesSize: t => (isIntersection(t) ? 0.5 : 0.5), //2:1
                     turtlesSize: t => (isIntersection(t) ? 2 : 1),
                     linksColor: 'black',
                 }
 
-                const view = new ThreeDraw(
-                    model,
-                    { div: 'modelDiv' },
-                    drawOptions
-                )
+                const view = new ThreeDraw(model, {
+                    // div: 'modelDiv',
+                    drawOptions,
+                })
 
                 util.toWindow({ util, model, view })
 

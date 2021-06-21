@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GeoJson</title>
+    </head>
+    <body>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import * as geojson from '../src/geojson.js'
+
+            const jsonurl = './test.json'
+            const json = await fetch(jsonurl).then(rsp => rsp.json())
+            util.toWindow({ util, geojson, json })
+
+            const coords = geojson.getCoordinates(json)
+            util.printToPage(coords)
+
+            const bbox = geojson.bbox(json)
+            util.printToPage(bbox)
+
+            const flat = geojson.flatten(geojson.clone(json))
+            util.printToPage(util.objectToString(flat))
+
+            util.toWindow({ coords, bbox, flat })
+
+            // debugger
+        </script>
+    </body>
+</html>

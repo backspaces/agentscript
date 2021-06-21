@@ -1,22 +1,12 @@
 #!/usr/bin/env node
 
-// const gis = require('./gis.umd.js')
 const esmImport = require('esm')(module)
-// const gis = esmImport('../src/gis.js').default
 const gis = esmImport('../src/gis.js')
-
 const https = require('https')
 
 const zxy = process.argv[2]
-
-// const [, z, x, y] = zxy.match(/(\d+)\/(\d+)\/(\d+)/)
 const [z, x, y] = zxy.split('/').map(Number)
-
-// convert to numbers!
-// const [topleft, bottomright] = gis.xy2bbox(+x, +y, +z)
-// const [west, north] = topleft
-// const [east, south] = bottomright
-const [west, south, east, north] = gis.xy2bbox(+x, +y, +z)
+const [west, south, east, north] = gis.xy2bbox(x, y, z)
 
 const url = gis.getOsmURL(south, west, north, east)
 

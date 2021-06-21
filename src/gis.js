@@ -32,21 +32,9 @@ export function xy2lonlat(x, y, z) {
 // We use the usual convention of
 //   [minX, minY, maxX, maxY] or [west, south, east, north]
 export function xy2bbox(x, y, z) {
-    // REMIND: error check at 180, 0 etc
-    // const [lon0, lat0] = this.xy2lonlat(x, y, z)
     const [west, north] = this.xy2lonlat(x, y, z)
-    // console.log('west, north', west, north)
-    // tile Y increases "down" like pixel coords
-    // const [lon1, lat1] = this.xy2lonlat(x + 1, y + 1, z)
     const [east, south] = this.xy2lonlat(x + 1, y + 1, z)
-    // console.log('south, east', south, east)
-    // west, south, east, north
-    // lon0, lat1, lon1, lat0
     return [west, south, east, north]
-    // return [
-    //     [lon0, lat0],
-    //     [lon1, lat1],
-    // ]
 }
 export function lonLat2bbox(lon, lat, z) {
     const [x, y] = this.lonlat2xy(lon, lat, z)
@@ -73,7 +61,7 @@ export function bboxCoords(bbox) {
 export function getOsmURL(south, west, north, east) {
     const url = 'https://overpass-api.de/api/interpreter?data='
     const params = `\
-[out:json][timeout:180][bbox:${south}${west}${north}${east}];
+[out:json][timeout:180][bbox:${south},${west},${north},${east}];
 way[highway];
 (._;>;);
 out;`

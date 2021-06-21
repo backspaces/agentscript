@@ -1,5 +1,5 @@
 import * as gis from '../src/gis.js'
-import GeoWorld from '../src/GeoWorld.js'
+import World from '../src/World.js'
 import Model from '../src/Model.js'
 import * as geojson from '../src/geojson.js'
 
@@ -8,10 +8,14 @@ import * as geojson from '../src/geojson.js'
 // thus done off=line via node/deno
 const zxy = { Z: 14, X: 3370, Y: 6451 }
 const bbox = gis.xy2bbox(zxy.X, zxy.Y, zxy.Z)
-const jsonUrl = `../models/data/roads${zxy.Z}vt.json`
+// const jsonUrl = '../models/data/roads14vt.json'
+const jsonUrl = '../models/data/santafe14roads.json'
+// const jsonUrl = '../models/data/santafe14roads0.json'
+
+console.log(bbox.toString())
 
 export default class RoadsModel extends Model {
-    constructor(worldOptions = new GeoWorld(bbox, 200)) {
+    constructor(worldOptions = World.defaultOptions(100)) {
         super(worldOptions)
     }
 
@@ -21,22 +25,13 @@ export default class RoadsModel extends Model {
 
     setup() {
         this.turtleBreeds('intersections')
-        // this.linkBreeds('trips')
         this.turtles.setDefault('atEdge', 'OK')
-
-        geojson.lineStringsToLinks(this, this.geojson)
-
+        geojson.lineStringsToLinks(this, bbox, this.geojson)
         this.turtles.ask(t => {
             if (t.links.length > 2) this.intersections.setBreed(t)
         })
     }
     step() {
-        // const int1 = this.intersections.oneOf()
-        // let int2 = this.intersections.oneOf()
-        // while (int1.distance(int2) < 10) int2 = this.intersections.oneOf()
-        // const trip = this.trips.createOne(int1, int2, l => {
-        //     l.date = new Date()
-        // })
-        // if (this.trips.length > 15) this.trips.otherOneOf(trip).die()
+        // static for now
     }
 }

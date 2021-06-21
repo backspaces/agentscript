@@ -1,0 +1,432 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "1-Point"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30,
+          10
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "2-LineString"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            30,
+            10
+          ],
+          [
+            10,
+            30
+          ],
+          [
+            40,
+            40
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "3-Polygon"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              30,
+              10
+            ],
+            [
+              40,
+              40
+            ],
+            [
+              20,
+              40
+            ],
+            [
+              10,
+              20
+            ],
+            [
+              30,
+              10
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "4-Polygon w/ hole "
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              35,
+              10
+            ],
+            [
+              45,
+              45
+            ],
+            [
+              15,
+              40
+            ],
+            [
+              10,
+              20
+            ],
+            [
+              35,
+              10
+            ]
+          ],
+          [
+            [
+              20,
+              30
+            ],
+            [
+              35,
+              35
+            ],
+            [
+              30,
+              20
+            ],
+            [
+              20,
+              30
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "5-MultiPoint"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10,
+          40
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "5-MultiPoint"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          40,
+          30
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "5-MultiPoint"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          20,
+          20
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "5-MultiPoint"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30,
+          10
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "6-MultiLineString"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            10,
+            10
+          ],
+          [
+            20,
+            20
+          ],
+          [
+            10,
+            40
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "6-MultiLineString"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            40,
+            40
+          ],
+          [
+            30,
+            30
+          ],
+          [
+            40,
+            20
+          ],
+          [
+            30,
+            10
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "7-MultiPolygon"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              30,
+              20
+            ],
+            [
+              45,
+              40
+            ],
+            [
+              10,
+              40
+            ],
+            [
+              30,
+              20
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "7-MultiPolygon"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              15,
+              5
+            ],
+            [
+              40,
+              10
+            ],
+            [
+              10,
+              20
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              15,
+              5
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "8-MultiPolygon with hole in one of them"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              40,
+              40
+            ],
+            [
+              20,
+              45
+            ],
+            [
+              45,
+              30
+            ],
+            [
+              40,
+              40
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "8-MultiPolygon with hole in one of them"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              20,
+              35
+            ],
+            [
+              10,
+              30
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              30,
+              5
+            ],
+            [
+              45,
+              20
+            ],
+            [
+              20,
+              35
+            ]
+          ],
+          [
+            [
+              30,
+              20
+            ],
+            [
+              20,
+              15
+            ],
+            [
+              20,
+              25
+            ],
+            [
+              30,
+              20
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "9-GeometryCollection: Point & MultiLineString"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10,
+          30
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "9-GeometryCollection: Point & MultiLineString"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            10,
+            10
+          ],
+          [
+            20,
+            20
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "9-GeometryCollection: Point & MultiLineString"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            40,
+            40
+          ],
+          [
+            30,
+            30
+          ],
+          [
+            40,
+            20
+          ],
+          [
+            30,
+            10
+          ]
+        ]
+      }
+    }
+  ]
+}

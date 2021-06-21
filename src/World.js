@@ -119,8 +119,8 @@ export default class World {
      * @returns {Object} A WorldOptions object
      */
     getOptions() {
-        const {minX, minY, minZ, maxX, maxY, maxZ} = this
-        return {minX, minY, minZ, maxX, maxY, maxZ}
+        const { minX, minY, minZ, maxX, maxY, maxZ } = this
+        return { minX, minY, minZ, maxX, maxY, maxZ }
     }
 
     /**
@@ -265,11 +265,11 @@ export default class World {
  * @private
  */
 class BBoxTransform {
-    // geo bbox definition:
-    //    https://tools.ietf.org/html/rfc7946#section-5
-    //    [west, south, east, north]
     /**
      * Creates an instance of BBoxTransform.
+     * See https://tools.ietf.org/html/rfc7946#section-5
+     * .. which defines bbox as [west, south, east, north]
+     * .. which is the bbox [minX, minY, maxX, maxY]
      * @param {number} minX min bounding box x value
      * @param {number} minY max bounding box x value
      * @param {number} maxX min bounding box y value
@@ -290,14 +290,7 @@ class BBoxTransform {
         const bx = (minX + maxX - mx * (maxXcor + minXcor)) / 2
         const by = (maxY + minY - my * (maxYcor + minYcor)) / 2
 
-        // Object.assign(this, { mx, my, bx, by })
-        this.setClassProperties({ mx, my, bx, by })
-    }
-    setClassProperties(obj) {
-        this.mx = obj.mx
-        this.my = obj.my
-        this.bx = obj.bx
-        this.by = obj.by
+        Object.assign(this, { mx, my, bx, by })
     }
 
     /**
@@ -328,48 +321,3 @@ class BBoxTransform {
         return [x, y]
     }
 }
-
-// export default World
-
-// The midpoints of the world, in world coords.
-// (0, 0) for the centered default worlds. REMIND: remove?
-// this.centerX = (this.minX + this.maxX) / 2
-// this.centerY = (this.minY + this.maxY) / 2
-
-// Calculate patchSize from canvas (any imagable) dimensions
-// canvasPatchSize(canvas) {
-//     // const [width, height] = canvas
-//     return canvas.width / this.numX
-// }
-// canvasSize(patchSize) {
-//     return [this.numX * patchSize, this.numY * patchSize]
-// }
-
-// Other ways to specify class properties:
-// maxX = 16
-// maxY = 16
-// maxZ = 16
-// minX = -this.maxX
-// minY = -this.maxY
-// minZ = -this.maxZ
-
-// Note: this is es7 class properties.
-// /** @type {number} Max patch x value */ maxX = 16
-// /** @type {number} */ maxY = this.maxX
-// /** @type {number} */ maxZ = Math.max(this.maxX, this.maxY)
-// /** @type {number} */ minX = -this.maxX
-// /** @type {number} */ minY = -this.maxY
-// /** @type {number} */ minZ = -this.maxZ
-
-//  * @property {number} maxX = 16
-//  * @property {number} maxY = this.maxX
-//  * @property {number} maxZ = Math.max(this.maxX, this.maxY)
-//  * @property {number} minX = -this.maxX
-//  * @property {number} minY = -this.maxY
-//  * @property {number} minZ = -this.maxZ
-
-// Note: this is es7 class properties.
-// /** @type {number} */ mx
-// /** @type {number} */ my
-// /** @type {number} */ bx
-// /** @type {number} */ by
