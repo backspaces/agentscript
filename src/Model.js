@@ -33,13 +33,13 @@ export default class Model {
     links
     ticks
 
-    constructor(worldOptions = Model.worldOptions, autoTick = true) {
+    constructor(worldOptions = World.defaultOptions(), autoTick = true) {
         this.resetModel(worldOptions)
         if (autoTick) this.autoTick()
         // this.setGeometry(this.geometry)
     }
 
-    static worldOptions = World.defaultOptions()
+    // static worldOptions = World.defaultOptions()
 
     initAgentSet(name, AgentsetClass, AgentClass) {
         this[name] = new AgentsetClass(this, AgentClass, name)

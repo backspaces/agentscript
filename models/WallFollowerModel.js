@@ -22,11 +22,11 @@ export default class WallFollowerModel extends Model {
 
     // ======================
 
-    constructor(worldOptions = WallFollowerModel.worldOptions) {
+    constructor(worldOptions = World.defaultOptions(35)) {
         super(worldOptions)
     }
 
-    static worldOptions = World.defaultOptions(35)
+    // static worldOptions = World.defaultOptions(35)
 
     setup() {
         this.patchBreeds('walls')

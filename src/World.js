@@ -277,6 +277,8 @@ class BBoxTransform {
      * @param {World} world instance of a World object
      */
     constructor(minX, minY, maxX, maxY, world) {
+        this.bbox = [minX, minY, maxX, maxY]
+
         if (minX < maxX) console.log('flipX')
         if (maxY < minY) console.log('flipY')
 
@@ -319,5 +321,26 @@ class BBoxTransform {
         const x = mx * worldX + bx
         const y = my * worldY + by
         return [x, y]
+    }
+
+    // aspectRatio() {
+    //     const [west, south, east, north] = this.bbox
+    //     return Math.abs((east - west) / (north - south))
+    // }
+
+    // Return center [x,y] of bbox in bbox coords.
+    bboxCenter() {
+        const [west, south, east, north] = this.bbox
+        return [(west + east) / 2, (south + north) / 2]
+    }
+    // Return 4 coordinate points of bbox corners, from topLeft, clockwise.
+    bboxCoords() {
+        const [west, south, east, north] = this.bbox
+        return [
+            [west, north],
+            [east, north],
+            [east, south],
+            [west, south],
+        ]
     }
 }

@@ -9,6 +9,11 @@ export function xfmFromZXY(model, Z, X, Y) {
     return model.world.bboxTransform(...bbox)
 }
 
+export function aspectRatio(bbox) {
+    const [west, south, east, north] = bbox
+    return Math.abs((east - west) / (north - south))
+}
+
 // Return deep copy of the given json file.
 export function clone(json) {
     return JSON.parse(JSON.stringify(json))

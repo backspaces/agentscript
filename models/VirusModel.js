@@ -14,11 +14,11 @@ export default class VirusModel extends Model {
 
     // ======================
 
-    constructor(worldOptions = VirusModel.worldOptions) {
+    constructor(worldOptions = World.defaultOptions(40)) {
         super(worldOptions)
     }
 
-    static worldOptions = World.defaultOptions(40)
+    // static worldOptions = World.defaultOptions(40)
 
     setup() {
         this.done = false

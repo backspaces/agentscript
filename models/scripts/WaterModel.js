@@ -10,11 +10,11 @@ class WaterModel extends Model {
 
     // ======================
 
-    constructor(worldOptions = WaterModel.worldOptions) {
+    constructor(worldOptions = World.defaultOptions(50)) {
         super(worldOptions)
     }
 
-    static worldOptions = World.defaultOptions(50)
+    // static worldOptions = World.defaultOptions(50)
 
     setup() {
         this.patches.ask(p => {
