@@ -9,14 +9,17 @@
             import TwoDraw from '../src/TwoDraw.js'
             import Animator from '../src/Animator.js'
             import Model from '../models/LifeModel.js'
+            import Color from '../src/Color.js'
 
             // use model's default world options
             const model = new Model()
             await model.startup()
             model.setup()
 
+            const livingColor = Color.typedColor('red')
+            const blankColor = Color.typedColor('white')
             const drawOptions = {
-                patchesColor: p => (p.living ? 'red' : 'white'),
+                patchesColor: p => (p.living ? livingColor : blankColor),
             }
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
@@ -31,7 +34,7 @@
                 },
                 500, // run 500 steps
                 30 // 30 fps
-            )
+            ) //.startStats()
 
             util.toWindow({ util, model, view, anim })
         </script>
