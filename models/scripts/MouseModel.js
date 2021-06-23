@@ -9,9 +9,6 @@ class MouseModel extends Model {
     //     super() // use default world options.
     // }
 
-    // Not needed, inherit default world options from Model
-    // static worldOptions = World.defaultOptions()
-
     setup() {
         const { patches, turtles, links } = this
         // this is sorta slick NL use. Can easily be two liner.

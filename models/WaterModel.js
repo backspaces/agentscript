@@ -14,8 +14,6 @@ export default class WaterModel extends Model {
         super(worldOptions)
     }
 
-    // static worldOptions = World.defaultOptions(50)
-
     setup() {
         this.patches.ask(p => {
             p.zpos = 0

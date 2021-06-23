@@ -39,8 +39,6 @@ export default class Model {
         // this.setGeometry(this.geometry)
     }
 
-    // static worldOptions = World.defaultOptions()
-
     initAgentSet(name, AgentsetClass, AgentClass) {
         this[name] = new AgentsetClass(this, AgentClass, name)
     }

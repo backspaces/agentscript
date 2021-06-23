@@ -26,8 +26,6 @@ class WallFollowerModel extends Model {
         super(worldOptions)
     }
 
-    // static worldOptions = World.defaultOptions(35)
-
     setup() {
         this.patchBreeds('walls')
         this.turtleBreeds('lefty righty')

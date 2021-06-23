@@ -18,8 +18,6 @@ export default class VirusModel extends Model {
         super(worldOptions)
     }
 
-    // static worldOptions = World.defaultOptions(40)
-
     setup() {
         this.done = false
         this.setupNodes()

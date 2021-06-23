@@ -11,8 +11,6 @@ class FireModel extends Model {
         super(worldDptions)
     }
 
-    // static worldOptions = World.defaultOptions(125)
-
     setup() {
         this.patchBreeds('fires embers')
 

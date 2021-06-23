@@ -15,9 +15,6 @@ export default class FlockModel extends Model {
     // constructor() {
     //     super() // use default world options.
     // }
-    //
-    // Not needed, inherit default world options from Model
-    // static worldOptions = World.defaultOptions()
 
     setup() {
         this.turtles.setDefault('speed', this.speed)

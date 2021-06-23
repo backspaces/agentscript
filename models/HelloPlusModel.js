@@ -17,9 +17,6 @@ export default class HelloPlusModel extends HelloModel {
     //     super() // use default world options.
     // }
 
-    // Not needed, inherit default world options from Model
-    // static worldOptions = World.defaultOptions()
-
     step() {
         if (
             this.changeTick & (this.ticks !== 0) &&

@@ -17,8 +17,6 @@ class DiffuseModel extends Model {
         super(worldOptions)
     }
 
-    // static worldOptions = World.defaultOptions(200, 100)
-
     setup() {
         this.turtles.setDefault('speed', this.speed)
 

@@ -6,12 +6,13 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.1.0/leaflet.css"
         />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.1.0/leaflet.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.1.0/leaflet.js"></script> -->
     </head>
     <body>
         <div id="map" style="height: 800px"></div>
         <!-- <script src="play0.js"></script> -->
         <script type="module">
+            import * as L from 'https://cdn.skypack.dev/leaflet'
             import * as util from '../src/utils.js'
             import World from '../src/World.js'
             const world = World.defaultWorld(10, 20)

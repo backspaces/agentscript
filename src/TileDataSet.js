@@ -12,6 +12,7 @@ export function rgbScaleFunction(min, scale) {
 
 // ============= OSM (Open Street Map)
 export function osmUrl(z, x, y) {
+    if (!z) return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
     return `https://tile.openstreetmap.org/${z}/${x}/${y}.png`
 }
 

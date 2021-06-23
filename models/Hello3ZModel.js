@@ -15,9 +15,6 @@ export default class HelloModel extends Model {
     //     super() // use default world options.
     // }
 
-    // Not needed, inherit default world options from Model
-    // static worldOptions = World.defaultOptions()
-
     setup() {
         this.radius = this.world.maxX * 0.85
         this.turtles.setDefault('atEdge', 'bounce')

@@ -12,6 +12,7 @@ Code    | Run demo
 [hello3Z](https://github.com/backspaces/agentscript/tree/master/models/Hello3ZModel.js#L1) | [https://code.agentscript.org/models/run.html?hello3Z](https://code.agentscript.org/models/run.html?hello3Z)
 [hello](https://github.com/backspaces/agentscript/tree/master/models/HelloModel.js#L1) | [https://code.agentscript.org/models/run.html?hello](https://code.agentscript.org/models/run.html?hello)
 [helloPlus](https://github.com/backspaces/agentscript/tree/master/models/HelloPlusModel.js#L1) | [https://code.agentscript.org/models/run.html?helloPlus](https://code.agentscript.org/models/run.html?helloPlus)
+[life](https://github.com/backspaces/agentscript/tree/master/models/LifeModel.js#L1) | [https://code.agentscript.org/models/run.html?life](https://code.agentscript.org/models/run.html?life)
 [linkTravel](https://github.com/backspaces/agentscript/tree/master/models/LinkTravelModel.js#L1) | [https://code.agentscript.org/models/run.html?linkTravel](https://code.agentscript.org/models/run.html?linkTravel)
 [mouse](https://github.com/backspaces/agentscript/tree/master/models/MouseModel.js#L1) | [https://code.agentscript.org/models/run.html?mouse](https://code.agentscript.org/models/run.html?mouse)
 [roads](https://github.com/backspaces/agentscript/tree/master/models/RoadsModel.js#L1) | [https://code.agentscript.org/models/run.html?roads](https://code.agentscript.org/models/run.html?roads)

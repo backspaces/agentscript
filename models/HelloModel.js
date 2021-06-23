@@ -15,9 +15,6 @@ class HelloModel extends Model {
     //     super() // use default world options.
     // }
 
-    // Not needed, inherit default world options from Model
-    // static worldOptions = World.defaultOptions()
-
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')
 

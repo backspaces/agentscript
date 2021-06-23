@@ -11,8 +11,6 @@ export default class ExitModel extends Model {
         super(worldDptions)
     }
 
-    // static worldOptions = World.defaultOptions(35, 35, 1)
-
     setup() {
         this.patchBreeds('exits inside wall')
         this.turtles.setDefault('atEdge', turtle => turtle.die())

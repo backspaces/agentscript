@@ -32,8 +32,6 @@ class DropletsModel extends Model {
         super(worldOptions)
     }
 
-    // static worldOptions = World.defaultOptions(50)
-
     async startup() {
         const elevation = await TileDataSet.mapzenDataSet(...this.zxy)
         this.installDataSets(elevation)

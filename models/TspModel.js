@@ -15,8 +15,6 @@ export default class TSPModel extends Model {
         super(worldDptions)
     }
 
-    // static worldOptions = World.defaultOptions(50)
-
     setup() {
         this.turtleBreeds('nodes travelers')
         this.travelers.setDefault('hidden', true)
