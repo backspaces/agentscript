@@ -1,7 +1,7 @@
 import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
-class HelloModel extends Model {
+export default class HelloModel extends Model {
     population = 10 // number of turtles
     speed = 0.1 // step size in patch units
     wiggleAngle = 10 // util.degToRad(10)
@@ -37,4 +37,4 @@ class HelloModel extends Model {
     }
 }
 
-export default HelloModel
+// export default HelloModel

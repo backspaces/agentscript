@@ -13,7 +13,7 @@ import DataSet from './DataSet.js'
  *
  * Created by class Model. Used by modeler in their Model subclass
  */
-class Patches extends AgentSet {
+export default class Patches extends AgentSet {
     /**
      * Creates an instance of Patches.
      * @param {Model} model An instance of class Model
@@ -314,4 +314,4 @@ class Patches extends AgentSet {
     }
 }
 
-export default Patches
+// export default Patches

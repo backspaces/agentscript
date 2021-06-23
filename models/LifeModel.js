@@ -2,7 +2,7 @@ import Model from '../src/Model.js'
 import World from '../src/World.js'
 import * as util from '../src/utils.js'
 
-class LifeModel extends Model {
+export default class LifeModel extends Model {
     population = 10 // number of turtles
     initialDensity = 30 // percent of active cells
 
@@ -38,4 +38,4 @@ class LifeModel extends Model {
     }
 }
 
-export default LifeModel
+// export default LifeModel

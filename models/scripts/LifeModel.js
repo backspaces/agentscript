@@ -38,6 +38,7 @@ class LifeModel extends Model {
     }
 }
 
-LifeModel
-const defaultModel = export
+// LifeModel
+const defaultModel = LifeModel
+// export default LifeModel
 

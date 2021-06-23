@@ -1,7 +1,7 @@
 import * as util from 'https://code.agentscript.org/src/utils.js'
 import Model from 'https://code.agentscript.org/src/Model.js'
 
-class HelloModel extends Model {
+export default class HelloModel extends Model {
     population = 10 // number of turtles
     speed = 0.1 // step size in patch units
     wiggleAngle = util.degToRad(10) // Wiggle angle in radians
@@ -32,4 +32,4 @@ class HelloModel extends Model {
     }
 }
 
-export default HelloModel
+// export default HelloModel

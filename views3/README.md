@@ -11,6 +11,7 @@ Code    | Run demo
 [hello3d](https://github.com/backspaces/agentscript/tree/master/views3/hello3d.html#L1) | [https://code.agentscript.org/views3/hello3d.html](https://code.agentscript.org/views3/hello3d.html)
 [hello3z](https://github.com/backspaces/agentscript/tree/master/views3/hello3z.html#L1) | [https://code.agentscript.org/views3/hello3z.html](https://code.agentscript.org/views3/hello3z.html)
 [helloplus](https://github.com/backspaces/agentscript/tree/master/views3/helloplus.html#L1) | [https://code.agentscript.org/views3/helloplus.html](https://code.agentscript.org/views3/helloplus.html)
+[life](https://github.com/backspaces/agentscript/tree/master/views3/life.html#L1) | [https://code.agentscript.org/views3/life.html](https://code.agentscript.org/views3/life.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views3/linktravel.html#L1) | [https://code.agentscript.org/views3/linktravel.html](https://code.agentscript.org/views3/linktravel.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views3/roads.html#L1) | [https://code.agentscript.org/views3/roads.html](https://code.agentscript.org/views3/roads.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views3/shapes.html#L1) | [https://code.agentscript.org/views3/shapes.html](https://code.agentscript.org/views3/shapes.html)
