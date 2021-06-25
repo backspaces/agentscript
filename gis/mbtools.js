@@ -50,11 +50,11 @@ export function worldFromBBox(width, bbox) {
 // BBox of a tile, rounding to smaller integer zxy
 export function tileBBox(map, lon, lat) {
     const z = Math.ceil(map.getZoom())
-    return gis.lonLat2bbox(lon, lat, z)
+    return gis.lonLatz2bbox(lon, lat, z)
 }
 export function tileZxy(map, lon, lat) {
     const z = Math.ceil(map.getZoom())
-    const [x, y] = gis.lonlat2xy(lon, lat, z)
+    const [x, y] = gis.lonlatz2xy(lon, lat, z)
     return [z, x, y]
 }
 export function mapCenter(map) {

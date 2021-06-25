@@ -6,7 +6,7 @@ const https = require('https')
 
 const zxy = process.argv[2]
 const [z, x, y] = zxy.split('/').map(Number)
-const [west, south, east, north] = gis.xy2bbox(x, y, z)
+const [west, south, east, north] = gis.xyz2bbox(x, y, z)
 
 const url = gis.getOsmURL(south, west, north, east)
 

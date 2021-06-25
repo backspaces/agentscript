@@ -1,0 +1,236 @@
+<html>
+    <head>
+        <title>Overlay</title>
+        <!-- <script src="https://npmcdn.com/leaflet@1.0.3/dist/leaflet.js"></script> -->
+        <!-- <script src="https://npmcdn.com/leaflet/dist/leaflet.js"></script> -->
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="../LeafletElementOverlay/elementOverlay.js"></script>
+        <script src="../LeafletElementOverlay/worldFile.js"></script>
+        <script src="../LeafletElementOverlay/progressionLayer.js"></script>
+        <script src="../LeafletElementOverlay/staticLayer.js"></script>
+        <!-- <link
+            rel="stylesheet"
+            href="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.css"
+        /> -->
+        <link
+            rel="stylesheet"
+            href="http://unpkg.com/leaflet/dist/leaflet.css"
+        />
+        <style>
+            #map {
+                width: 100%;
+                height: 100%;
+                border: 2px solid blue;
+                float: left;
+            }
+
+            /* #fooo {
+                border-radius: 10px;
+                border: 5px solid #8ac007;
+                padding: 20px;
+                width: 200px;
+                height: 150px;
+            }
+            #fooo2 {
+                background-color: yellow;
+                border-radius: 10px;
+                border: 5px solid #8ac007;
+                padding: 20px;
+                width: 200px;
+                height: 150px;
+            } */
+        </style>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('ready')
+                var map = (window.map = init_map('map'))
+                map.setView([36, -106], 8)
+                //
+                //normal image overlay
+                var bounds = new L.LatLngBounds(
+                    new L.LatLng(35.5, -108.5),
+                    new L.LatLng(35, -108.1)
+                )
+                var layer = L.elementOverlay(
+                    // 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/images/layers.png',
+                    'https://unpkg.com/leaflet/dist/images/layers.png',
+                    bounds
+                ).addTo(map)
+                //
+                //div overlay
+                var bounds2 = new L.LatLngBounds(
+                    new L.LatLng(35.5, -107.5),
+                    new L.LatLng(35, -107)
+                )
+                var div = document.createElement('div')
+                div.id = 'fooo'
+                div.style.background = 'rgba(255,255,255,0.5)'
+                div.innerHTML =
+                    '<h3>This is a div element</h3> in an element overlay'
+                var layer2 = L.elementOverlay(div, bounds2).addTo(map)
+                //
+                // add static layer
+                addStaticLayer()
+                //
+                //canvas overlay
+                var bounds2 = new L.LatLngBounds(
+                    new L.LatLng(35.5, -108),
+                    new L.LatLng(35, -107.6)
+                )
+                var canvas = document.createElement('canvas')
+                canvas.width = canvas.height = 300
+                var ctx = canvas.getContext('2d')
+                ctx.fillStyle = '#000'
+                ctx.fillRect(0, 0, 300, 300)
+                canvas.id = 'foocan'
+                var layer3 = L.elementOverlay(canvas, bounds2).addTo(map)
+                //add some animation to prove its a canvas
+                setInterval(function () {
+                    var can = document.getElementById('foocan')
+                    var ctx = can.getContext('2d')
+                    ctx.fillStyle = 'rgba(0,0,0,0.1)'
+                    ctx.fillRect(0, 0, can.width, can.height)
+                    ctx.fillStyle = '#0f0'
+                    ctx.fillRect(
+                        Math.floor(Math.random() * can.width),
+                        Math.floor(Math.random() * can.height),
+                        Math.floor(Math.random() * 80),
+                        Math.floor(Math.random() * 80)
+                    )
+                }, 200)
+                loadUpworldFile()
+                loadUpProgression()
+                return
+            })
+
+            function loadUpworldFile() {
+                var paramTest = new L.WorldFile({
+                    imageUrl: '../LeafletElementOverlay/data/splat.png',
+                    params: {
+                        a: 0.0039,
+                        b: 0,
+                        c: -106,
+                        d: 0,
+                        e: 0.0019,
+                        f: 35,
+                    },
+                    opacity: 0.4,
+                })
+                paramTest.addTo(map)
+                //load from url
+                var urlTest = new L.WorldFile({
+                    imageUrl: '../LeafletElementOverlay/data/NM-N6S-F5PS.png',
+                    textUrl: '../LeafletElementOverlay/data/NM-N6S-F5PS.pgw',
+                    opacity: 0.4,
+                })
+                urlTest.addTo(map)
+                //
+                // preloaded image
+                var img = new Image()
+                img.onload = function () {
+                    console.log('preload test running')
+                    var w = 8 / this.width
+                    var h = -6 / this.height
+                    preload = new L.WorldFile({
+                        imageUrl: this,
+                        params: {
+                            a: 0.002,
+                            b: 0.001,
+                            c: -106,
+                            d: 0,
+                            e: -0.001,
+                            f: 36.6,
+                        },
+                        opacity: 0.7,
+                    })
+                    preload.addTo(map)
+                }
+                img.src = '../LeafletElementOverlay/data/dog.jpg'
+                //
+                // test changing the image every so often
+                setInterval(function () {
+                    var imgurl = '../LeafletElementOverlay/data/splat.png'
+                    if (Math.random() > 0.5) {
+                        imgurl = '../LeafletElementOverlay/data/NM-N6S-F5PS.png'
+                    }
+                    paramTest.refreshWorldFile({
+                        imageUrl: imgurl,
+                        params: {
+                            a: 0.0039,
+                            b: 0,
+                            c: -106,
+                            d: 0.0001,
+                            e: 0.0019,
+                            f: 35 + Math.random() / 10,
+                        },
+                        opacity: 0.4,
+                    })
+                }, 1000)
+                //
+                // test div with world file
+                var div = document.createElement('div')
+                div.id = 'fooo2'
+                div.innerHTML = '<h1>Div Element with worldfile</h1>'
+                var divLayer2 = new L.WorldFile({
+                    image: div,
+                    params: {
+                        a: 0.002,
+                        b: 0.003,
+                        c: -107,
+                        d: 0.001,
+                        e: -0.001,
+                        f: 35.8,
+                    },
+                    opacity: 0.7,
+                })
+                divLayer2.addTo(map)
+            }
+
+            function loadUpProgression() {
+                console.log('progression')
+                prgTest = new L.ProgresionLayer({
+                    imageUrl: '../LeafletElementOverlay/data/NM-N6S-F5PS.png',
+                    textUrl: '../LeafletElementOverlay/data/NM-N6S-F5PS.pgw',
+                })
+                prgTest.addTo(map)
+                var prgTime = 0
+                setInterval(function () {
+                    if (prgTest.stats) {
+                        prgTime = (prgTime + 10000) % prgTest.stats.max
+                        prgTest.redrawCanvas(prgTime)
+                    }
+                }, 100)
+            }
+
+            function addStaticLayer() {
+                var div = document.createElement('div')
+                div.innerHTML = '<h1>Static Div</h1>'
+                //div overlay
+                var layer2 = new L.StaticLayer(div).addTo(map)
+                //for debugging
+                window.statLay = layer2
+            }
+
+            function init_map(map_div) {
+                var map = new L.Map(map_div)
+                var tiles = L.tileLayer(
+                    'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+                    {
+                        //'http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png', {
+                        attribution:
+                            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                        maxZoom: 18,
+                    }
+                )
+                map.setView([0, 0], 5).addLayer(tiles)
+
+                return map
+            }
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="map"></div>
+        </div>
+    </body>
+</html>

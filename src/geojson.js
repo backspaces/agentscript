@@ -5,7 +5,7 @@ export function xfmFromBBox(model, bbox) {
     return model.world.bboxTransform(...bbox)
 }
 export function xfmFromZXY(model, Z, X, Y) {
-    const bbox = gis.xy2bbox(X, Y, Z)
+    const bbox = gis.xyz2bbox(X, Y, Z)
     return model.world.bboxTransform(...bbox)
 }
 

@@ -1,16 +1,12 @@
 <html>
     <head>
-        <title>Leaflet</title>
+        <title>Leaflet0</title>
     </head>
     <body>
         <div id="map" style="height: 600px"></div>
         <script type="module">
-            // import * as L from 'https://cdn.skypack.dev/leaflet'
-            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            import ElementOverlay from './elementOverlay.js'
+            import * as L from 'https://cdn.skypack.dev/leaflet'
             import * as util from '../src/utils.js'
-
-            // elementOverlay = new ElementOverlay(url, bounds, options)
 
             await util.setCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
             util.toWindow({ L, util })
@@ -22,6 +18,7 @@
             const map = L.map('map').setView([35.67514, -105.94116], 13)
             L.tileLayer(mapUrl, {
                 attribution: 'Map data &copy; ' + mapAttr,
+                // maxZoom: 18,
             }).addTo(map)
         </script>
     </body>

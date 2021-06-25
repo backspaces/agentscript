@@ -5,45 +5,49 @@ const radians = degrees => (degrees * PI) / 180
 const degrees = radians => (radians * 180) / PI
 
 // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
-export function lon2x(lon, z) {
+export function lonz2x(lon, z) {
     return floor(((lon + 180) / 360) * pow(2, z))
 }
-export function lat2y(lat, z) {
+export function latz2y(lat, z) {
     const latRads = radians(lat)
     return floor(
         (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
     )
 }
-export function lonlat2xy(lon, lat, z) {
-    return [this.lon2x(lon, z), this.lat2y(lat, z)]
+export function lonlatz2xy(lon, lat, z) {
+    return [this.lonz2x(lon, z), this.latz2y(lat, z)]
 }
 
-export function x2lon(x, z) {
+export function xz2lon(x, z) {
     return (x / pow(2, z)) * 360 - 180
 }
-export function y2lat(y, z) {
+export function yz2lat(y, z) {
     const rads = atan(sinh(PI - (2 * PI * y) / pow(2, z)))
     return degrees(rads)
 }
-export function xy2lonlat(x, y, z) {
-    return [this.x2lon(x, z), this.y2lat(y, z)]
+export function xyz2lonlat(x, y, z) {
+    return [this.xz2lon(x, z), this.yz2lat(y, z)]
 }
 // Return two lon/lat points for bbox of tile
 // We use the usual convention of
 //   [minX, minY, maxX, maxY] or [west, south, east, north]
-export function xy2bbox(x, y, z) {
-    const [west, north] = this.xy2lonlat(x, y, z)
-    const [east, south] = this.xy2lonlat(x + 1, y + 1, z)
+export function xyz2bbox(x, y, z) {
+    const [west, north] = this.xyz2lonlat(x, y, z)
+    const [east, south] = this.xyz2lonlat(x + 1, y + 1, z)
     return [west, south, east, north]
 }
-export function lonLat2bbox(lon, lat, z) {
-    const [x, y] = this.lonlat2xy(lon, lat, z)
-    return this.xy2bbox(x, y, z)
+export function lonLatz2bbox(lon, lat, z) {
+    const [x, y] = this.lonlatz2xy(lon, lat, z)
+    return this.xyz2bbox(x, y, z)
 }
 
-export function bboxCenter(bbox) {
+export function bboxCenter(bbox, point = 'lonlat') {
     const [west, south, east, north] = bbox
-    return [(west + east) / 2, (south + north) / 2]
+    if (point === 'lonlat') {
+        return [(west + east) / 2, (south + north) / 2]
+    } else {
+        return [(south + north) / 2, (west + east) / 2]
+    }
 }
 export function bboxCoords(bbox) {
     const [west, south, east, north] = bbox
@@ -84,6 +88,22 @@ export function lonLat2meters(pt1, pt2) {
     const c = 2 * atan2(sqrt(a), sqrt(1 - a))
     const d = R * c
     return d * 1000 // meters
+}
+
+export function attribution(who = 'osm') {
+    const prefix = 'Map data &copy; '
+    switch (who) {
+        case 'osm':
+            return (
+                prefix + '<a href="https://openstreetmap.org">OpenStreetMap</a>'
+            )
+    }
+}
+export function template(who = 'osm') {
+    switch (who) {
+        case 'osm':
+            return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+    }
 }
 
 // geojson utilities: use src/geojson.js

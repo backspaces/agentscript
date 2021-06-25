@@ -13,7 +13,7 @@ const zxy = process.argv[2]
 const [z, x, y] = zxy.split('/').map(Number)
 
 // Our bbox is minX, minY, maxX, maxY
-const [west, south, east, north] = gis.xy2bbox(+x, +y, +z)
+const [west, south, east, north] = gis.xyz2bbox(+x, +y, +z)
 
 // Use OSM's bbox
 // const url = gis.getOsmURL(south, west, north, east)

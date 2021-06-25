@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Overlay</title>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="../LeafletElementOverlay/elementOverlay.js"></script>
+        <!-- <script src="https://raw.githubusercontent.com/RedfishGroup/LeafletElementOverlay/gh-pages/elementOverlay.js"></script> -->
+    </head>
+    <body>
+        <div id="map" style="height: 600px"></div>
+        <script type="module">
+            import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
+            import Model from '../models/HelloModel.js'
+            import * as gis from '../src/gis.js'
+            import * as util from '../src/utils.js'
+
+            await util.setCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
+            util.toWindow({ L, util })
+
+            // const zxy = { Z: 14, X: 3370, Y: 6451 }
+            const xyz = [3370, 6451, 14]
+            const bbox = gis.xyz2bbox(...xyz)
+            const center = gis.bboxCenter(bbox, 'latlon')
+
+            const map = L.map('map').setView(center, 15)
+            L.tileLayer(gis.template('osm'), {
+                attribution: gis.attribution('osm'),
+            }).addTo(map)
+
+            const model = new Model()
+            await model.startup()
+            model.setup()
+            // model.wiggleAngle = 0 //40
+            const view = new TwoDraw(model, {
+                // div: 'modelDiv',
+                div: util.createCanvas(0, 0), // the view will resize
+                patchSize: 20,
+                drawOptions: {
+                    patchesColor: 'transparent',
+                    turtlesSize: 3,
+                },
+            })
+
+            const [west, south, east, north] = bbox
+            var bounds = new L.LatLngBounds(
+                new L.LatLng(north, west),
+                new L.LatLng(south, east)
+            )
+            var layer = L.elementOverlay(view.canvas, bounds).addTo(map)
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // 500, // run 500 steps
+                10 // 30 // 30 fps
+            )
+        </script>
+    </body>
+</html>
