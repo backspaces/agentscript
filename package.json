@@ -4,9 +4,8 @@
     "description": "AgentScript Model in Model/View architecture",
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
-    "main": "dist/agentscript.js",
-    "browser": "dist/agentscript.js",
-    "module": "dist/agentscript.js",
+    "main": "dist/agentscript.umd.js",
+    "module": "dist/agentscript.esm.js",
     "files": [
         "/dist/",
         "/vendor/",

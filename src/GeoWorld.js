@@ -28,10 +28,18 @@ export default class GeoWorld extends World {
         return this.xfm.toWorld([geoX, geoY])
     }
     // Return center [x,y] of bbox in geo coords.
-    bboxCenter() {
+    bboxCenter(point = 'lonlat') {
         const [west, south, east, north] = this.bbox
-        return [(west + east) / 2, (south + north) / 2]
+        if (point === 'lonlat') {
+            return [(west + east) / 2, (south + north) / 2]
+        } else {
+            return [(south + north) / 2, (west + east) / 2]
+        }
     }
+    // bboxCenter() {
+    //     const [west, south, east, north] = this.bbox
+    //     return [(west + east) / 2, (south + north) / 2]
+    // }
     // Return geo coords of bbox corners, from topLeft, clockwise.
     bboxCoords() {
         const [west, south, east, north] = this.bbox

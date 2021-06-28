@@ -2,10 +2,10 @@
  * L.ElementOverlay is used to overlay images over the map (to specific geographical bounds).
  *    Basically the same as an image overlay, but it takes any element
  */
+
 // import * as L from 'https://cdn.skypack.dev/leaflet'
 import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
 
-// L.ElementOverlay = L.ImageOverlay.extend({
 const ElementOverlay = L.ImageOverlay.extend({
     _initImage: function () {
         var img
@@ -62,10 +62,5 @@ const ElementOverlay = L.ImageOverlay.extend({
         this._reset()
     },
 })
-
-// L.elementOverlay = function (url, bounds, options) {
-//     // return new L.ElementOverlay(url, bounds, options)
-//     return new ElementOverlay(url, bounds, options)
-// }
 
 export default ElementOverlay
