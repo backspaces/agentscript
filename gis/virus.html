@@ -75,7 +75,7 @@
                     'https://cdn.skypack.dev/mapbox-gl/dist/mapbox-gl.css'
                 )
                 const counties = await util.xhrPromise(
-                    './data/nmcounties.geojson',
+                    './data/nmcounties.json',
                     'json'
                 )
                 const bbox = turf.bbox(counties)

@@ -1,3 +1,5 @@
+// import { MathUtils } from 'three'
+// import { typeOf } from './utils.js'
 import * as gis from './gis.js'
 
 // Create the world.bboxTransform
@@ -12,6 +14,10 @@ export function xfmFromZXY(model, Z, X, Y) {
 export function aspectRatio(bbox) {
     const [west, south, east, north] = bbox
     return Math.abs((east - west) / (north - south))
+}
+
+export function isGeojson(obj) {
+    return typeof obj === 'object' && obj.type === 'FeatureCollection'
 }
 
 // Return deep copy of the given json file.
@@ -36,6 +42,17 @@ export function featureCollection(features = []) {
     return {
         type: 'FeatureCollection',
         features: features,
+    }
+}
+export function bboxFeature(bbox, properties = {}) {
+    const coords = gis.bboxCoords(bbox)
+    return {
+        type: 'feature',
+        geometry: {
+            cordinates: coords,
+            type: 'Polygon',
+        },
+        properties,
     }
 }
 

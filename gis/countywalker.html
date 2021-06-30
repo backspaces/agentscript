@@ -7,15 +7,17 @@
     <body>
         <!-- <div id="map"></div> -->
         <script type="module">
+            import * as util from '../src/utils.js'
+            import * as mbox from './mbtools.js'
+
             import mapboxgl from 'https://cdn.skypack.dev/mapbox-gl'
             // import * as turf from 'https://cdn.skypack.dev/@turf/turf'
 
-            import * as mbox from './mbtools.js'
-
-            import * as util from '../src/utils.js'
-            import CountiesModel from './CountiesModel.js'
+            import GeoWorld from '../src/GeoWorld.js'
+            import Model from '../models/HelloModel.js'
             import TwoDraw from '../src/TwoDraw.js'
-            import ColorMap from '../src/ColorMap.js'
+            import Animator from '../src/Animator.js'
+            import CountiesModel from './CountiesModel.js'
 
             mapboxgl.accessToken =
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
@@ -34,16 +36,15 @@
                     'https://cdn.skypack.dev/mapbox-gl/dist/mapbox-gl.css'
                 )
 
-                const counties = await util.xhrPromise(
-                    './data/nmcounties.geojson',
-                    'json'
-                )
-                const model = new CountiesModel(counties)
-                const bbox = model.world.bbox
-                console.log('bbox', bbox)
+                const counties = await fetch(
+                    '../gis/data/nmcounties.json'
+                ).then(resp => resp.json())
 
+                const world = new GeoWorld(counties, 100)
+                const model = new CountiesModel(world)
                 await model.startup()
                 model.setup()
+                console.log('bbox', world.bbox)
 
                 const view = new TwoDraw(model, {
                     div: util.createCanvas(0, 0), // the view will resize
@@ -54,23 +55,23 @@
 
                 const map = mbox.newMap(mapboxgl, {
                     zoom: 5.5,
-                    center: model.world.bboxCenter(),
+                    center: world.bboxCenter(),
                 })
                 await mbox.mapLoadPromise(map)
 
                 mbox.addGeoLines(map, 'counties', counties, 'red', 3)
 
-                mbox.addBBoxLayer(map, 'bbox', bbox, 'red')
+                mbox.addBBoxLayer(map, 'bbox', world.bbox, 'red')
 
-                mbox.addViewLayer(map, 'model', bbox, view)
+                mbox.addViewLayer(map, 'model', world.bbox, view)
 
-                util.timeoutLoop(
+                const anim = new Animator(
                     () => {
                         model.step()
                         view.draw()
                     },
-                    -1, // forever
-                    33 // 33ms => 30fps
+                    -1, // 500, // run 500 steps
+                    10 // 30 // 30 fps
                 )
             }
             run()

@@ -1,20 +1,14 @@
 import * as turf from 'https://cdn.skypack.dev/@turf/turf'
 import * as util from '../src/utils.js'
-import GeoWorld from '../src/GeoWorld.js'
 import HelloModel from '../models/HelloModel.js'
 
 export default class CountiesModel extends HelloModel {
-    constructor(counties) {
-        const bbox = turf.bbox(counties)
-        const world = new GeoWorld(bbox, 100)
-        super(world)
-        this.counties = counties
-    }
+    // Constructor not needed, called with GeoWorld options, passed to super
     setup() {
         super.setup()
         this.patches.ask(p => {
             const pt = this.world.toGeo(p.x, p.y)
-            util.forLoop(this.counties.features, (f, i) => {
+            util.forLoop(this.world.geojson.features, (f, i) => {
                 if (turf.booleanPointInPolygon(pt, f)) {
                     if (p.feature) console.log('p.feature exists', p)
                     p.feature = f

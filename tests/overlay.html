@@ -3,7 +3,7 @@
         <title>Overlay</title>
     </head>
     <body>
-        <div id="map" style="height: 600px"></div>
+        <!-- <div id="map" style="height: 600px"></div> -->
         <script type="module">
             import TwoDraw from '../src/TwoDraw.js'
             import Animator from '../src/Animator.js'
@@ -12,51 +12,57 @@
             import * as util from '../src/utils.js'
 
             import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            import ElementOverlay from './elementOverlay.esm.js'
+            // import ElementOverlay from './elementOverlay.esm.js'
+            // import ElementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+            import ElementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
-            await util.setCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
-            util.toWindow({ L, util })
+            async function run() {
+                await util.setCssStyle(
+                    'https://unpkg.com/leaflet/dist/leaflet.css'
+                )
 
-            // const zxy = { Z: 14, X: 3370, Y: 6451 }
-            const xyz = [3370, 6451, 14]
-            const bbox = gis.xyz2bbox(...xyz)
-            const center = gis.bboxCenter(bbox, 'latlon')
+                const xyz = [3370, 6451, 14]
+                const bbox = gis.xyz2bbox(...xyz)
+                const bboxCenter = gis.bboxCenter(bbox, 'latlon')
+                const zoom = 15
+                console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
 
-            const map = L.map('map').setView(center, 15)
-            L.tileLayer(gis.template('osm'), {
-                attribution: gis.attribution('osm'),
-            }).addTo(map)
+                const model = new Model()
+                await model.startup()
+                model.setup()
+                const view = new TwoDraw(model, {
+                    div: util.createCanvas(0, 0), // the view will resize
+                    patchSize: 20,
+                    drawOptions: {
+                        patchesColor: 'transparent',
+                        turtlesSize: 3,
+                    },
+                })
 
-            const model = new Model()
-            await model.startup()
-            model.setup()
-            // model.wiggleAngle = 0 //40
-            const view = new TwoDraw(model, {
-                // div: 'modelDiv',
-                div: util.createCanvas(0, 0), // the view will resize
-                patchSize: 20,
-                drawOptions: {
-                    patchesColor: 'transparent',
-                    turtlesSize: 3,
-                },
-            })
+                const map = L.map(document.body).setView(bboxCenter, zoom)
+                L.tileLayer(gis.template('osm'), {
+                    attribution: gis.attribution('osm'),
+                }).addTo(map)
 
-            const [west, south, east, north] = bbox
-            var bounds = new L.LatLngBounds(
-                new L.LatLng(north, west),
-                new L.LatLng(south, east)
-            )
-            // var layer = L.elementOverlay(view.canvas, bounds).addTo(map)
-            var layer = new ElementOverlay(view.canvas, bounds).addTo(map)
+                const [west, south, east, north] = bbox
+                const bounds = new L.LatLngBounds(
+                    new L.LatLng(north, west),
+                    new L.LatLng(south, east)
+                )
+                const layer = new ElementOverlay(view.canvas, bounds).addTo(map)
 
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                -1, // 500, // run 500 steps
-                10 // 30 // 30 fps
-            )
+                const anim = new Animator(
+                    () => {
+                        model.step()
+                        view.draw()
+                    },
+                    -1, // 500, // run 500 steps
+                    10 // 30 // 30 fps
+                )
+
+                util.toWindow({ util, model, view, map, layer, anim })
+            }
+            run()
         </script>
     </body>
 </html>

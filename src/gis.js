@@ -41,22 +41,45 @@ export function lonLatz2bbox(lon, lat, z) {
     return this.xyz2bbox(x, y, z)
 }
 
-export function bboxCenter(bbox, point = 'lonlat') {
-    const [west, south, east, north] = bbox
-    if (point === 'lonlat') {
-        return [(west + east) / 2, (south + north) / 2]
-    } else {
-        return [(south + north) / 2, (west + east) / 2]
-    }
+export function lonlat2latlon(lonlat) {
+    const [lon, lat] = lonlat
+    return [lat, lon]
 }
-export function bboxCoords(bbox) {
+export function bboxCenter(bbox, type = 'lonlat') {
     const [west, south, east, north] = bbox
-    return [
+    let center = [(west + east) / 2, (south + north) / 2]
+    if (type !== 'lonlat') center = lonlat2latlon(center)
+    return center
+    // if (point === 'lonlat') {
+    //     return [(west + east) / 2, (south + north) / 2]
+    // } else {
+    //     return [(south + north) / 2, (west + east) / 2]
+    // }
+}
+export function bboxCoords(bbox, type = 'lonlat') {
+    const [west, south, east, north] = bbox
+    let coords = [
         [west, north],
         [east, north],
         [east, south],
         [west, south],
     ]
+    if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
+    return coords
+
+    // return (point = 'lonlat'
+    //     ? [
+    //           [west, north],
+    //           [east, north],
+    //           [east, south],
+    //           [west, south],
+    //       ]
+    //     : [
+    //           [north, west],
+    //           [north, east],
+    //           [south, east],
+    //           [south, west],
+    //       ])
 }
 
 // Create a url for OSM json data.
@@ -90,6 +113,7 @@ export function lonLat2meters(pt1, pt2) {
     return d * 1000 // meters
 }
 
+// https://github.com/leaflet-extras/leaflet-providers/blob/master/leaflet-providers.js
 export function attribution(who = 'osm') {
     const prefix = 'Map data &copy; '
     switch (who) {
@@ -97,12 +121,20 @@ export function attribution(who = 'osm') {
             return (
                 prefix + '<a href="https://openstreetmap.org">OpenStreetMap</a>'
             )
+        case 'topo':
+            return prefix + '<a https://opentopomap.org">OpenTopoMap</a>'
+        case 'smooth':
+            return prefix + '<a href="https://stadiamaps.com/">Stadia Maps</a>'
     }
 }
 export function template(who = 'osm') {
     switch (who) {
         case 'osm':
-            return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+            return 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        case 'topo':
+            return 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
+        case 'smooth':
+            return 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png'
     }
 }
 

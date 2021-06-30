@@ -1,4 +1,5 @@
 import World from './World.js'
+import * as geojson from './geojson.js'
 
 // class World defines the coordinate system for the model.
 // It has been upgraded with methods converting from other
@@ -8,7 +9,12 @@ import World from './World.js'
 export default class GeoWorld extends World {
     // Use the geojson object's bbox & width to create a World object
     // bbox: [west, south, east, north]
-    constructor(bbox, width) {
+    constructor(bbox, width = 100) {
+        let json
+        if (!Array.isArray(bbox)) {
+            json = bbox
+            bbox = geojson.bbox(json)
+        }
         const [west, south, east, north] = bbox
         const aspect = (east - west) / (north - south)
         super({
@@ -18,6 +24,7 @@ export default class GeoWorld extends World {
             maxY: Math.round(width / aspect),
         })
         this.bbox = bbox
+        if (json) this.geojson = json
         this.xfm = this.bboxTransform(...bbox)
     }
     // Convert to/from geo coords.

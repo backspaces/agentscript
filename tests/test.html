@@ -26,6 +26,13 @@
         <script type="module">
             import * as util from '../src/utils.js'
 
+            import * as L0 from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
+            import * as L from 'https://cdn.skypack.dev/leaflet'
+            import elem0 from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
+            import elem from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+            import elem1 from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
+            util.toWindow({ L0, L, elem0, elem, elem1 })
+
             // import * as tds from '../src/TileDataSet.js'
             // const { z, x, y } = { z: 14, x: 3370, y: 6451 }
             // //https://tile.thunderforest.com/cycle/14/3370/6451.png?apikey=690f61bc23a34b409ebd97d7891521b3
@@ -38,7 +45,7 @@
             // )
             // document.body.append(img)
 
-            // import * as L from 'https://cdn.skypack.dev/leaflet'
+            // c
             // util.toWindow({ L })
 
             // import * as AS from 'https://cdn.skypack.dev/agentscript'
