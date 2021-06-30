@@ -3,7 +3,8 @@
         <title>Overlay</title>
     </head>
     <body>
-        <!-- <div id="map" style="height: 600px"></div> -->
+        <div id="map" style="width: 100vw; height: 100vh"></div>
+
         <script type="module">
             import TwoDraw from '../src/TwoDraw.js'
             import Animator from '../src/Animator.js'
@@ -39,7 +40,7 @@
                     },
                 })
 
-                const map = L.map(document.body).setView(bboxCenter, zoom)
+                const map = L.map('map').setView(bboxCenter, zoom)
                 L.tileLayer(gis.template('osm'), {
                     attribution: gis.attribution('osm'),
                 }).addTo(map)

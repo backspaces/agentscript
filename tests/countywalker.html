@@ -34,14 +34,14 @@
 
                 const bbox = geojson.bbox(counties)
                 const bboxCenter = gis.bboxCenter(bbox, 'latlon')
-                const zoom = 6
+                const zoom = 7
                 console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
 
                 const world = new GeoWorld(counties, 100)
                 const model = new CountiesModel(world)
                 await model.startup()
                 model.setup()
-                console.log('world bbox', world.bbox)
+
                 const drawOptions = {
                     patchesColor: 'transparent',
                     linksColor: 'gray',
@@ -94,6 +94,7 @@
                     -1, // 500, // run 500 steps
                     20 // 30 // 30 fps
                 )
+
                 util.toWindow({ util, model, view, map, counties, anim })
             }
             run()
