@@ -5,18 +5,17 @@
         <title>CountyWalker0</title>
     </head>
     <body>
-        <!-- <div id="map" style="height: 100vw"></div> -->
-        <div id="map" style="height: 600px"></div>
+        <div id="map" style="width: 100vw; height: 100vh"></div>
 
         <script type="module">
             import * as util from '../src/utils.js'
             import * as gis from '../src/gis.js'
             import * as geojson from '../src/geojson.js'
 
-            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            // import * as L from 'https://cdn.skypack.dev/leaflet/dist/leaflet-src.esm.js'
             // import ElementOverlay from './elementOverlay.esm.js'
+            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
             import ElementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+            // import * as L from 'https://cdn.skypack.dev/leaflet/dist/leaflet-src.esm.js'
             // import ElementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
             import GeoWorld from '../src/GeoWorld.js'
@@ -56,7 +55,8 @@
                     drawOptions,
                 })
 
-                const map = L.map(document.body).setView(bboxCenter, zoom)
+                const map = L.map('map').setView(bboxCenter, zoom)
+
                 L.tileLayer(gis.template('osm'), {
                     attribution: gis.attribution('osm'),
                 }).addTo(map)
