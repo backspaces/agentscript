@@ -10,8 +10,8 @@ export { default as AgentList } from './AgentList.js'
 export { default as DataSet } from './DataSet.js'
 export { default as Link } from './Link.js'
 export { default as Links } from './Links.js'
-// export { gis }
 export * as gis from './gis.js'
+export * as geojson from './gis.js'
 export { default as Model } from './Model.js'
 export { default as Model2D } from './Model2D.js'
 export { Object3D }
@@ -23,7 +23,6 @@ export * as TileDataSet from './TileDataSet.js'
 export { default as Turtle } from './Turtle.js'
 export { default as Turtles } from './Turtles.js'
 export { default as World } from './World.js'
-// export { util }
 export * as util from './utils.js'
 
 // Views

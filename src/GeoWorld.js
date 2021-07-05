@@ -1,5 +1,6 @@
 import World from './World.js'
-import * as geojson from './geojson.js'
+import { geojsonBBox } from './geojson.js'
+import { bboxMetricAspect } from './gis.js'
 
 // class World defines the coordinate system for the model.
 // It has been upgraded with methods converting from other
@@ -13,10 +14,9 @@ export default class GeoWorld extends World {
         let json
         if (!Array.isArray(bbox)) {
             json = bbox
-            bbox = geojson.bbox(json)
+            bbox = geojsonBBox(json)
         }
-        const [west, south, east, north] = bbox
-        const aspect = (east - west) / (north - south)
+        const aspect = bboxMetricAspect(bbox)
         super({
             minX: 0,
             minY: 0,

@@ -1,16 +1,14 @@
 import * as gis from '../src/gis.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
-import * as geojson from '../src/geojson.js'
+import { lineStringsToLinks } from '../src/geojson.js'
 
 // This model is "static", in that these cannot be dynamic.
 // This is due to the json data being very difficult to compute
 // thus done off=line via node/deno
-const zxy = { Z: 14, X: 3370, Y: 6451 }
-const bbox = gis.xyz2bbox(zxy.X, zxy.Y, zxy.Z)
-// const jsonUrl = '../models/data/roads14vt.json'
+const xyz = [3370, 6451, 14]
+const bbox = gis.xyz2bbox(...xyz)
 const jsonUrl = '../models/data/santafe14roads.json'
-// const jsonUrl = '../models/data/santafe14roads0.json'
 
 console.log(bbox.toString())
 
@@ -26,7 +24,7 @@ export default class RoadsModel extends Model {
     setup() {
         this.turtleBreeds('intersections')
         this.turtles.setDefault('atEdge', 'OK')
-        geojson.lineStringsToLinks(this, bbox, this.geojson)
+        lineStringsToLinks(this, bbox, this.geojson)
         this.turtles.ask(t => {
             if (t.links.length > 2) this.intersections.setBreed(t)
         })

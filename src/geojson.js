@@ -2,20 +2,6 @@
 // import { typeOf } from './utils.js'
 import * as gis from './gis.js'
 
-// Create the world.bboxTransform
-export function xfmFromBBox(model, bbox) {
-    return model.world.bboxTransform(...bbox)
-}
-export function xfmFromZXY(model, Z, X, Y) {
-    const bbox = gis.xyz2bbox(X, Y, Z)
-    return model.world.bboxTransform(...bbox)
-}
-
-export function aspectRatio(bbox) {
-    const [west, south, east, north] = bbox
-    return Math.abs((east - west) / (north - south))
-}
-
 export function isGeojson(obj) {
     return typeof obj === 'object' && obj.type === 'FeatureCollection'
 }
@@ -24,15 +10,11 @@ export function isGeojson(obj) {
 export function clone(json) {
     return JSON.parse(JSON.stringify(json))
 }
-// export function areEqual(json0, json1) {
-//     return JSON.stringify(json0) === JSON.stringify(json1)
-// }
-// bin/minifyjson
+
 export function minify(json) {
     if (typeof json === 'string') json = JSON.parse(json)
     const str = JSON.stringify(json) // compact form
     // newline for each feature
-    // return str.replace(/,{"type":"Feature"/g, '\n,\n{"type":"Feature"')
     return str.replace(/{"type":"Feature"/g, '\n\n{"type":"Feature"')
 }
 
@@ -46,6 +28,7 @@ export function featureCollection(features = []) {
 }
 export function bboxFeature(bbox, properties = {}) {
     const coords = gis.bboxCoords(bbox)
+    coords.push(coords[0]) // polys are closed, repeat first coord
     return {
         type: 'feature',
         geometry: {
@@ -81,7 +64,8 @@ export function flattenMultiLineStrings(geojson) {
 // Input can be a FeatureCollection or a Features array
 // Return an array of new Turtles & Links
 export function lineStringsToLinks(model, bbox, lineStrings) {
-    const xfm = xfmFromBBox(model, bbox)
+    // const xfm = xfmFromBBox(model, bbox)
+    const xfm = model.world.bboxTransform(...bbox)
     lineStrings = flattenMultiLineStrings(lineStrings)
     const nodeCache = {}
     const newTurtles = []
@@ -169,7 +153,7 @@ export function flatten(gj) {
 }
 
 // https://github.com/geosquare/geojson-bbox
-export function bbox(gj) {
+export function geojsonBBox(gj) {
     var coords, bbox
     if (!gj.hasOwnProperty('type')) return
     coords = getCoordinates(gj)
@@ -188,6 +172,7 @@ export function bbox(gj) {
         ]
     }, bbox)
 }
+
 export function getCoordinates(gj) {
     switch (gj.type) {
         case 'Point':

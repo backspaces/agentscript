@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>CountyWalker</title>
+        <title>Virus</title>
     </head>
     <body>
         <div id="map" style="width: 100vw; height: 100vh"></div>
@@ -11,14 +11,31 @@
             import * as util from '../src/utils.js'
             import * as gis from '../src/gis.js'
             import { geojsonBBox } from '../src/geojson.js'
+            // import Color from '../src/Color.js'
 
             import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
             import ElementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+            // import * as L from 'https://cdn.skypack.dev/leaflet/dist/leaflet-src.esm.js'
+            // import ElementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay/elementOverlay.esm.js'
 
             import GeoWorld from '../src/GeoWorld.js'
             import TwoDraw from '../src/TwoDraw.js'
             import Animator from '../src/Animator.js'
-            import CountiesModel from '../gis/CountiesModel.js'
+            import VirusModel from '../models/VirusModel.js'
+            util.toWindow({ util, gis, L, ElementOverlay })
+
+            const turtleColors = {
+                infected: 'red',
+                susceptible: 'blue',
+                resistant: 'gray',
+            }
+            const drawOptions = {
+                patchesColor: 'transparent',
+                turtlesShape: 'circle',
+                turtlesSize: 3,
+                turtlesColor: t => turtleColors[t.state],
+                linksColor: 'red',
+            }
 
             async function run() {
                 await util.setCssStyle(
@@ -35,18 +52,10 @@
                 console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
 
                 const world = new GeoWorld(counties, 100)
-                const model = new CountiesModel(world)
+                const model = new VirusModel(world)
                 await model.startup()
                 model.setup()
 
-                const drawOptions = {
-                    patchesColor: 'transparent',
-                    linksColor: 'gray',
-                    linksWidth: 4,
-                    turtlesSize: 6,
-                    turtlesColor: t =>
-                        view.drawOptions.turtlesMap.atIndex(t.county + 1),
-                }
                 const view = new TwoDraw(model, {
                     div: util.createCanvas(0, 0), // the view will resize
                     drawOptions,
@@ -72,12 +81,12 @@
                         weight: 2,
                     }),
                 })
-                    .bindPopup(
-                        layer =>
-                            layer.feature.properties.NAME +
-                            ', pop: ' +
-                            layer.feature.properties.population.toLocaleString()
-                    )
+                    // .bindPopup(
+                    //     layer =>
+                    //         layer.feature.properties.NAME +
+                    //         ', pop: ' +
+                    //         layer.feature.properties.population.toLocaleString()
+                    // )
                     .addTo(map)
 
                 const latlngs = gis.bboxCoords(bbox, 'latlon')
@@ -92,7 +101,7 @@
                     20 // 30 // 30 fps
                 )
 
-                util.toWindow({ util, model, view, map, counties, anim })
+                util.toWindow({ model, view, bbox, map, counties, anim })
             }
             run()
         </script>

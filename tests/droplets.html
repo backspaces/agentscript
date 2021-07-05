@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Droplets</title>
+    </head>
+    <body>
+        <div id="map" style="width: 100vw; height: 100vh"></div>
+
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import * as gis from '../src/gis.js'
+            import * as geojson from '../src/geojson.js'
+
+            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
+            import ElementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+
+            import GeoWorld from '../src/GeoWorld.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
+            import DropletsModel from '../models/DropletsModel.js'
+
+            async function run() {
+                await util.setCssStyle(
+                    'https://unpkg.com/leaflet/dist/leaflet.css'
+                )
+
+                // let xyz = [3370, 6451, 14]
+                // let bbox = gis.xyz2bbox(...xyz)
+                // let bboxCenter = gis.bboxCenter(bbox, 'latlon')
+                // let zoom = 10
+                // console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
+
+                // Santa Fe:
+                let lonlatz = [-105.93, 35.67, 10]
+
+                const model = new DropletsModel()
+                model.zxy = gis.xyz2zxy(gis.lonlatz2xyz(...lonlatz))
+                await model.startup()
+                model.setup()
+                const view = new TwoDraw(model, {
+                    div: util.createCanvas(0, 0), // the view will resize
+                    patchSize: 20,
+                    drawOptions: {
+                        patchesColor: 'transparent',
+                        turtlesShape: 'circle',
+                        turtlesColor: 'blue',
+                        turtlesSize: 0.8,
+                    },
+                })
+
+                // const map = L.map('map').setView([lonlatz[0], lonlatz[1]], lonlatz[2])
+                const map = L.map('map').setView(
+                    L.latLng(lonlatz.slice(0, 2)),
+                    lonlatz[2]
+                )
+                L.tileLayer(gis.template('osm'), {
+                    attribution: gis.attribution('osm'),
+                }).addTo(map)
+
+                // const [west, south, east, north] = gis.lonLatz2bbox(...lonlatz)
+                // const bounds = new L.LatLngBounds(
+                //     new L.LatLng(north, west),
+                //     new L.LatLng(south, east)
+                // )
+                // const layer = new ElementOverlay(view.canvas, bounds).addTo(map)
+
+                // const anim = new Animator(
+                //     () => {
+                //         model.step()
+                //         view.draw()
+                //     },
+                //     500, // -1, // 500, // run 500 steps
+                //     10 // 30 // 30 fps
+                // )
+
+                // util.toWindow({ util, model, view, L, map, layer, anim })
+
+                // async function update() {
+                //     const tileBBox = centerTileBBox()
+                //     if (!util.arraysEqual(bbox, tileBBox)) {
+                //         bbox = tileBBox
+                //         model.reset()
+                //         model.zxy = centerTileZxy()
+
+                //         try {
+                //             await model.startup()
+                //         } catch (error) {
+                //             model.elevation = null
+                //         }
+
+                //         mbox.updateBBoxSource(map, 'bbox', bbox)
+                //         const bboxColor = model.elevation ? 'gray' : 'red'
+                //         mbox.updateGeojsonPaint(map, 'bbox', bboxColor)
+
+                //         logCenterTile()
+                //     }
+                // }
+
+                // function centerTileBBox() {
+                //     const [lat, lon] = map.getCenter()
+                //     const z = map.getZoom()
+                //     const [x, y] = gis.lonlatz2xy(lon, lat, z)
+                //     const xyz = (bbox = gis.xyz2bbox(...xyz))
+                //     // return mbox.tileBBox(map, lon, lat)
+                // }
+                function map2xyz() {
+                    const [lon, lat, z] = map2lonlatz()
+                    return gis.lonlatz2xyz(lon, lat, z)
+                }
+                function map2lonlatz() {
+                    const [lat, lon] = map.getCenter()
+                    const z = map.getZoom()
+                    return [lon, lat, z]
+                }
+            }
+            run()
+        </script>
+    </body>
+</html>

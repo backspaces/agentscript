@@ -21,7 +21,7 @@
             // util.printToPage(coords)
             console.log('coords', coords)
 
-            const bbox = geojson.bbox(json)
+            const bbox = geojson.geojsonBBox(json)
             // util.printToPage(bbox)
             console.log('bbox', bbox)
 
@@ -40,7 +40,7 @@
             const NMurl = '../gis/data/nmcounties.json'
             const NMjson = await fetch(NMurl).then(rsp => rsp.json())
             console.log('NMjson', NMjson)
-            const NMbbox = geojson.bbox(NMjson)
+            const NMbbox = geojson.geojsonBBox(NMjson)
             console.log('NMbbox', NMbbox)
             const NMcenter = gis.bboxCenter(NMbbox, 'latlon')
             console.log('NMcenter', NMcenter)

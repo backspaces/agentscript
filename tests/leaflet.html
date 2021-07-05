@@ -9,18 +9,56 @@
             import * as util from '../src/utils.js'
             import * as gis from '../src/gis.js'
             import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-
-            await util.setCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
             util.toWindow({ L, util })
 
-            const mapUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-            const mapAttr =
-                '<a href="https://openstreetmap.org">OpenStreetMap</a>'
+            await util.setCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
 
-            const map = L.map('map').setView([35.67514, -105.94116], 13)
+            let [lon, lat, Z] = [-105.941109, 35.68222, 13]
+            const map = L.map('map').setView([lat, lon], Z)
+            // const map = L.map('map', {
+            //     zoomDelta: 0.1,
+            //     zoomSnap: 0,
+            // }).setView([lat, lon], Z)
+
             L.tileLayer(gis.template('osm'), {
                 attribution: gis.attribution('osm'),
             }).addTo(map)
+
+            const bounds = getTileBounds()
+            const rectangle = L.rectangle(bounds, { color: 'black' })
+                .bindPopup(layer => getTileString())
+                .addTo(map)
+
+            map.on('zoomend', ev => {
+                update(ev)
+            })
+            map.on('moveend', ev => {
+                update(ev)
+            })
+
+            function getTileString() {
+                const [X, Y, Z] = getTileXYZ()
+                return `X:${X},  Y:${Y}, Z:${Z}`
+            }
+            function getTileXYZ() {
+                const { lat, lng: lon } = map.getCenter()
+                const Z = map.getZoom()
+                // const Z = Math.round(map.getZoom()) // if fractional zoom
+                const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
+                return [X, Y, Z]
+            }
+            function getTileBounds() {
+                const [X, Y, Z] = getTileXYZ()
+                const bbox = gis.xyz2bbox(X, Y, Z)
+                return gis.bboxBounds(bbox, 'latlon')
+            }
+            function update(ev) {
+                // if (ev.type === 'moveend') console.log('moved')
+                // console.log('event', ev.type)
+                rectangle.closePopup()
+                const bounds = getTileBounds()
+                rectangle.setBounds(bounds)
+            }
         </script>
     </body>
 </html>

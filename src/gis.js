@@ -1,6 +1,7 @@
 // import * as util from '../src/utils.js'
 
-const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan } = Math
+const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan, abs } =
+    Math
 const radians = degrees => (degrees * PI) / 180
 const degrees = radians => (radians * 180) / PI
 
@@ -16,6 +17,9 @@ export function latz2y(lat, z) {
 }
 export function lonlatz2xy(lon, lat, z) {
     return [this.lonz2x(lon, z), this.latz2y(lat, z)]
+}
+export function lonlatz2xyz(lon, lat, z) {
+    return [this.lonz2x(lon, z), this.latz2y(lat, z), z]
 }
 
 export function xz2lon(x, z) {
@@ -41,45 +45,65 @@ export function lonLatz2bbox(lon, lat, z) {
     return this.xyz2bbox(x, y, z)
 }
 
+export function xyz2zxy(xyz) {
+    const [x, y, z] = xyz
+    return [z, x, y]
+}
 export function lonlat2latlon(lonlat) {
     const [lon, lat] = lonlat
     return [lat, lon]
 }
+
 export function bboxCenter(bbox, type = 'lonlat') {
     const [west, south, east, north] = bbox
     let center = [(west + east) / 2, (south + north) / 2]
     if (type !== 'lonlat') center = lonlat2latlon(center)
     return center
-    // if (point === 'lonlat') {
-    //     return [(west + east) / 2, (south + north) / 2]
-    // } else {
-    //     return [(south + north) / 2, (west + east) / 2]
-    // }
 }
+
+export function bboxSize(bbox) {
+    const [west, south, east, north] = bbox
+    const width = abs(west - east)
+    const height = abs(north - south)
+    return [width, height]
+}
+export function bboxAspect(bbox) {
+    const [width, height] = bboxSize(bbox)
+    return width / height
+}
+export function bboxMetricSize(bbox) {
+    const [west, south, east, north] = bbox
+    const topLeft = [west, north]
+    const botLeft = [west, south]
+    const topRight = [east, north]
+    const width = lonLat2meters(topLeft, topRight)
+    const height = lonLat2meters(topLeft, botLeft)
+    return [width, height]
+}
+export function bboxMetricAspect(bbox) {
+    const [width, height] = bboxMetricSize(bbox)
+    return width / height
+}
+
 export function bboxCoords(bbox, type = 'lonlat') {
     const [west, south, east, north] = bbox
     let coords = [
-        [west, north],
-        [east, north],
-        [east, south],
-        [west, south],
+        [west, north], // topLeft
+        [east, north], // topRight
+        [east, south], // botRight
+        [west, south], // botLeft
     ]
     if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
     return coords
-
-    // return (point = 'lonlat'
-    //     ? [
-    //           [west, north],
-    //           [east, north],
-    //           [east, south],
-    //           [west, south],
-    //       ]
-    //     : [
-    //           [north, west],
-    //           [north, east],
-    //           [south, east],
-    //           [south, west],
-    //       ])
+}
+export function bboxBounds(bbox, type = 'lonlat') {
+    const [west, south, east, north] = bbox
+    let coords = [
+        [west, north], // topLeft
+        [east, south], // botRight
+    ]
+    if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
+    return coords
 }
 
 // Create a url for OSM json data.
@@ -137,17 +161,3 @@ export function template(who = 'osm') {
             return 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png'
     }
 }
-
-// geojson utilities: use src/geojson.js
-// export function cloneJson(json) {
-//     return JSON.parse(JSON.stringify(json))
-// }
-// export function areEqual(json0, json1) {
-//     return JSON.stringify(json0) === JSON.stringify(json1)
-// }
-// // bin/minifyjson
-// export function minify(json) {
-//     const str = JSON.stringify(json) // compact form
-//     // newline for each feature
-//     return str.replace(/,{"type":"Feature"/g, '\n,\n{"type":"Feature"')
-// }

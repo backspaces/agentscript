@@ -1,5 +1,4 @@
 import * as util from '../src/utils.js'
-// import Model3D from '../src/Model3D.js'
 import Model from '../src/Model.js'
 
 export default class Camera3DModel extends Model {
