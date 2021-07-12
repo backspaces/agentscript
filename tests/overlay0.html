@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Overlay</title>
+        <title>Overlay0</title>
     </head>
     <body>
         <div id="map" style="width: 100vw; height: 100vh"></div>
@@ -13,11 +13,9 @@
             import * as util from '../src/utils.js'
 
             import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
-            const ElementOverlay = elementOverlay(L)
-
-            // import elementOverlay from './elementOverlay.esm.js'
-            // import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
+            // import ElementOverlay from './elementOverlay.esm.js'
+            import ElementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+            // import ElementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
             async function run() {
                 await util.setCssStyle(
