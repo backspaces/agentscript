@@ -10,31 +10,38 @@
             import * as util from '../src/utils.js'
             import * as gis from '../src/gis.js'
             import * as geojson from '../src/geojson.js'
-
-            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            import ElementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
-
             import GeoWorld from '../src/GeoWorld.js'
+
             import TwoDraw from '../src/TwoDraw.js'
             import Animator from '../src/Animator.js'
             import DropletsModel from '../models/DropletsModel.js'
+            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
+            import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+
+            const ElementOverlay = elementOverlay(L)
 
             async function run() {
                 await util.setCssStyle(
                     'https://unpkg.com/leaflet/dist/leaflet.css'
                 )
 
-                // let xyz = [3370, 6451, 14]
-                // let bbox = gis.xyz2bbox(...xyz)
-                // let bboxCenter = gis.bboxCenter(bbox, 'latlon')
-                // let zoom = 10
-                // console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
-
                 // Santa Fe:
-                let lonlatz = [-105.93, 35.67, 10]
+                const [lon, lat, Z] = [-105.93, 35.67, 10]
+                const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
+
+                const map = L.map('map').setView([lat, lon], Z)
+                L.tileLayer(gis.template('topo'), {
+                    attribution: gis.attribution('topo'),
+                }).addTo(map)
+                const centerTile = L.rectangle(centerTileBounds(), {
+                    color: 'black',
+                })
+                    .bindPopup(layer => centerTileString())
+                    .addTo(map)
+                centerTile.openPopup(centerTileLatLon())
 
                 const model = new DropletsModel()
-                model.zxy = gis.xyz2zxy(gis.lonlatz2xyz(...lonlatz))
+                model.zxy = [Z, X, Y]
                 await model.startup()
                 model.setup()
                 const view = new TwoDraw(model, {
@@ -48,69 +55,72 @@
                     },
                 })
 
-                // const map = L.map('map').setView([lonlatz[0], lonlatz[1]], lonlatz[2])
-                const map = L.map('map').setView(
-                    L.latLng(lonlatz.slice(0, 2)),
-                    lonlatz[2]
-                )
-                L.tileLayer(gis.template('osm'), {
-                    attribution: gis.attribution('osm'),
-                }).addTo(map)
+                const centerTileOverlay = new ElementOverlay(
+                    view.canvas,
+                    centerTileBounds()
+                ).addTo(map)
 
-                // const [west, south, east, north] = gis.lonLatz2bbox(...lonlatz)
-                // const bounds = new L.LatLngBounds(
-                //     new L.LatLng(north, west),
-                //     new L.LatLng(south, east)
-                // )
-                // const layer = new ElementOverlay(view.canvas, bounds).addTo(map)
+                const anim = new Animator(
+                    () => {
+                        model.step()
+                        view.draw()
+                    },
+                    -1, // 500, // run 500 steps
+                    10 // 30 // 30 fps
+                ).stop()
+                // anim.stop()
 
-                // const anim = new Animator(
-                //     () => {
-                //         model.step()
-                //         view.draw()
-                //     },
-                //     500, // -1, // 500, // run 500 steps
-                //     10 // 30 // 30 fps
-                // )
+                map.on('zoomend', update)
+                map.on('moveend', update)
+                centerTile.on('click', restartModel)
 
-                // util.toWindow({ util, model, view, L, map, layer, anim })
+                function update(ev) {
+                    anim.stop()
+                    util.clearCtx(view.ctx)
 
-                // async function update() {
-                //     const tileBBox = centerTileBBox()
-                //     if (!util.arraysEqual(bbox, tileBBox)) {
-                //         bbox = tileBBox
-                //         model.reset()
-                //         model.zxy = centerTileZxy()
+                    centerTile.openPopup(centerTileLatLon())
 
-                //         try {
-                //             await model.startup()
-                //         } catch (error) {
-                //             model.elevation = null
-                //         }
-
-                //         mbox.updateBBoxSource(map, 'bbox', bbox)
-                //         const bboxColor = model.elevation ? 'gray' : 'red'
-                //         mbox.updateGeojsonPaint(map, 'bbox', bboxColor)
-
-                //         logCenterTile()
-                //     }
-                // }
-
-                // function centerTileBBox() {
-                //     const [lat, lon] = map.getCenter()
-                //     const z = map.getZoom()
-                //     const [x, y] = gis.lonlatz2xy(lon, lat, z)
-                //     const xyz = (bbox = gis.xyz2bbox(...xyz))
-                //     // return mbox.tileBBox(map, lon, lat)
-                // }
-                function map2xyz() {
-                    const [lon, lat, z] = map2lonlatz()
-                    return gis.lonlatz2xyz(lon, lat, z)
+                    const bounds = centerTileBounds()
+                    centerTile.setBounds(bounds)
+                    centerTileOverlay.setBounds(bounds)
                 }
-                function map2lonlatz() {
-                    const [lat, lon] = map.getCenter()
-                    const z = map.getZoom()
-                    return [lon, lat, z]
+                async function restartModel(ev) {
+                    console.log(ev)
+                    centerTile.closePopup()
+                    anim.stop()
+                    const [X, Y, Z] = centerTileXYZ()
+                    model.zxy = [Z, X, Y]
+                    model.reset()
+                    await model.startup()
+                    model.setup()
+                    anim.start()
+                }
+
+                function centerTileXYZ() {
+                    const { lat, lng: lon } = map.getCenter()
+                    const Z = map.getZoom()
+                    const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
+                    return [X, Y, Z]
+                }
+                function centerTileBBox() {
+                    const [X, Y, Z] = centerTileXYZ()
+                    return gis.xyz2bbox(X, Y, Z)
+                }
+                function centerTileBounds() {
+                    // const [X, Y, Z] = centerTileXYZ()
+                    // const bbox = gis.xyz2bbox(X, Y, Z)
+                    const bbox = centerTileBBox()
+                    return gis.bboxBounds(bbox, 'latlon')
+                }
+                function centerTileLatLon() {
+                    // const [X, Y, Z] = centerTileXYZ()
+                    // const bbox = gis.xyz2bbox(X, Y, Z)
+                    const bbox = centerTileBBox()
+                    return gis.bboxCenter(bbox, 'latlon')
+                }
+                function centerTileString() {
+                    const [X, Y, Z] = centerTileXYZ()
+                    return `X:${X},  Y:${Y}, Z:${Z}`
                 }
             }
             run()

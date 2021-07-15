@@ -8,6 +8,7 @@
             // import * as L from 'https://cdn.skypack.dev/leaflet'
             import * as util from '../src/utils.js'
             import * as gis from '../src/gis.js'
+
             import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
             util.toWindow({ L, util })
 
@@ -24,9 +25,9 @@
                 attribution: gis.attribution('osm'),
             }).addTo(map)
 
-            const bounds = getTileBounds()
+            const bounds = centerTileBounds()
             const rectangle = L.rectangle(bounds, { color: 'black' })
-                .bindPopup(layer => getTileString())
+                .bindPopup(layer => centerTileString())
                 .addTo(map)
 
             map.on('zoomend', ev => {
@@ -36,19 +37,19 @@
                 update(ev)
             })
 
-            function getTileString() {
-                const [X, Y, Z] = getTileXYZ()
+            function centerTileString() {
+                const [X, Y, Z] = centerTileXYZ()
                 return `X:${X},  Y:${Y}, Z:${Z}`
             }
-            function getTileXYZ() {
+            function centerTileXYZ() {
                 const { lat, lng: lon } = map.getCenter()
                 const Z = map.getZoom()
                 // const Z = Math.round(map.getZoom()) // if fractional zoom
                 const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
                 return [X, Y, Z]
             }
-            function getTileBounds() {
-                const [X, Y, Z] = getTileXYZ()
+            function centerTileBounds() {
+                const [X, Y, Z] = centerTileXYZ()
                 const bbox = gis.xyz2bbox(X, Y, Z)
                 return gis.bboxBounds(bbox, 'latlon')
             }
@@ -56,7 +57,7 @@
                 // if (ev.type === 'moveend') console.log('moved')
                 // console.log('event', ev.type)
                 rectangle.closePopup()
-                const bounds = getTileBounds()
+                const bounds = centerTileBounds()
                 rectangle.setBounds(bounds)
             }
         </script>

@@ -24,14 +24,26 @@
     <body>
         <div id="modelDiv"></div>
         <script type="module">
-            import * as util from '../src/utils.js'
+            // import * as util from '../src/utils.js'
 
-            import * as L0 from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            import * as L from 'https://cdn.skypack.dev/leaflet'
-            import elem0 from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
-            import elem from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
-            import elem1 from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
-            util.toWindow({ L0, L, elem0, elem, elem1 })
+            // Uncaught TypeError: Failed to resolve module specifier "@turf/isolines". Relative references must start with either "/", "./", or "../".
+            // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0/dist/es/index.js'
+            // import * as turf from 'https://unpkg.com/@turf/turf@6.2.0/dist/es/index.js'
+            // import * as turf from 'https://unpkg.com/@turf/turf@6.3.0/dist/es/index.js'
+            import * as turf from 'https://unpkg.com/@turf/turf@6.3.0/dist/es/index.js'
+
+            // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0'
+            // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0/dist/es/index.js'
+            // import * as turf from 'https://unpkg.com/@turf/turf@6.5.0?module'
+            // import * as turf from 'https://unpkg.com/@turf/turf@6.3.0?module'
+            // import * as turf from 'https://unpkg.com/@turf/turf@6.3.0/dist/es/index.js'
+
+            // import * as L0 from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
+            // import * as L from 'https://cdn.skypack.dev/leaflet'
+            // import elem0 from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
+            // import elem from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+            // import elem1 from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
+            // util.toWindow({ L0, L, elem0, elem, elem1 })
 
             // import * as tds from '../src/TileDataSet.js'
             // const { z, x, y } = { z: 14, x: 3370, y: 6451 }

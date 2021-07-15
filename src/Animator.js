@@ -22,6 +22,10 @@ export default class Animator {
         return this // chaining off ctor
     }
 
+    isRunning() {
+        return this.timeoutID != null
+    }
+
     startStats() {
         if (this.stats) return console.log('startStats: already running')
         import('https://cdn.skypack.dev/stats.js').then(m => {
