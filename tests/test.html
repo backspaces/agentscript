@@ -24,13 +24,18 @@
     <body>
         <div id="modelDiv"></div>
         <script type="module">
-            // import * as util from '../src/utils.js'
+            import * as util from '../src/utils.js'
 
             // Uncaught TypeError: Failed to resolve module specifier "@turf/isolines". Relative references must start with either "/", "./", or "../".
             // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0/dist/es/index.js'
             // import * as turf from 'https://unpkg.com/@turf/turf@6.2.0/dist/es/index.js'
             // import * as turf from 'https://unpkg.com/@turf/turf@6.3.0/dist/es/index.js'
-            import * as turf from 'https://unpkg.com/@turf/turf@6.3.0/dist/es/index.js'
+            // import * as turf from 'https://unpkg.com/@turf/turf@6.3.0/dist/es/index.js'
+
+            // import * as turf from 'https://unpkg.com/@turf/turf/dist/es/index.js?module'
+            // import * as turf from 'https://unpkg.com/@turf/turf?module'
+            import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon@6.5.0?module'
+            util.toWindow({ booleanPointInPolygon })
 
             // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0'
             // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0/dist/es/index.js'

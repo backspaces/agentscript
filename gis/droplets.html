@@ -2,129 +2,128 @@
 <html>
     <head>
         <title>Droplets</title>
-        <meta charset="utf-8" />
     </head>
     <body>
-        <!-- <div id="map"></div> -->
+        <div id="map" style="width: 100vw; height: 100vh"></div>
+
         <script type="module">
-            import mapboxgl from 'https://cdn.skypack.dev/mapbox-gl'
-            import * as turf from 'https://cdn.skypack.dev/@turf/turf'
-            import * as mbox from './mbtools.js'
-            import TwoDraw from '../src/TwoDraw.js'
             import * as util from '../src/utils.js'
-            import Model from '../models/DropletsModel.js'
+            import * as gis from '../src/gis.js'
+            import * as geojson from '../src/geojson.js'
+            import GeoWorld from '../src/GeoWorld.js'
 
-            mbox.setDefaultStyle() // installs mapboxgl css
+            import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
+            import DropletsModel from '../models/DropletsModel.js'
+            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
+            import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
 
-            mapboxgl.accessToken =
-                'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
+            const ElementOverlay = elementOverlay(L)
 
-            const map = mbox.newMap(mapboxgl, {
-                zoom: 10, // Santa Fe:
-                center: [-105.9328154405269, 35.67745581409039],
-            })
-            const model = new Model()
-            util.toWindow({ mapboxgl, mbox, turf, util, map, model })
-
-            let bbox = []
-            let bboxView
-
-            async function initMapbox() {
+            async function run() {
                 await util.setCssStyle(
-                    'https://cdn.skypack.dev/mapbox-gl/dist/mapbox-gl.css'
+                    'https://unpkg.com/leaflet/dist/leaflet.css'
                 )
-                await mbox.mapLoadPromise(map)
-                mbox.addDemLayer(map, 'raster')
-                mbox.addBBoxLayer(map, 'bbox', centerTileBBox(), 'gray', 3)
-                await update()
 
-                map.on('dragend', async function (e) {
-                    await update()
-                })
-                map.on('zoomend', async function (e) {
-                    await update()
-                })
-                map.on('click', function (e) {
-                    if (mbox.isInBBox(e.lngLat, bbox)) {
-                        runModel()
-                    }
-                })
-            }
-            initMapbox()
+                // Santa Fe:
+                const [lon, lat, Z] = [-105.93, 35.67, 10]
+                const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
 
-            const drawOptions = {
-                patchesColor: 'transparent',
-                turtlesShape: 'circle',
-                turtlesColor: 'blue',
-                turtlesSize: 0.8,
-            }
+                const map = L.map('map').setView([lat, lon], Z)
+                L.tileLayer(gis.template('topo'), {
+                    attribution: gis.attribution('topo'),
+                }).addTo(map)
+                const centerTile = L.rectangle(centerTileBounds(), {
+                    color: 'black',
+                })
+                    .bindPopup(layer => centerTileString())
+                    .addTo(map)
+                centerTile.openPopup(centerTileLatLon())
 
-            async function runModel() {
-                model.reset()
-                model.zxy = centerTileZxy()
+                const model = new DropletsModel()
+                model.zxy = [Z, X, Y]
                 await model.startup()
                 model.setup()
-
-                if (!bboxView) {
-                    bboxView = new TwoDraw(
-                        model,
-                        { div: util.createCanvas(0, 0) },
-                        drawOptions
-                    )
-                    mbox.addViewLayer(map, 'model', bbox, bboxView)
-                } else {
-                    mbox.updateViewSource(map, 'model', bbox)
-                }
-
-                util.timeoutLoop(
-                    step => {
-                        if (step === 499)
-                            console.log('500 steps done; stopping')
-                        //  console.log('500 steps done; coasting')
-                        // if (step >= 499) return
-
-                        model.step()
-                        bboxView.draw()
+                const view = new TwoDraw(model, {
+                    div: util.createCanvas(0, 0), // the view will resize
+                    patchSize: 20,
+                    drawOptions: {
+                        patchesColor: 'transparent',
+                        turtlesShape: 'circle',
+                        turtlesColor: 'blue',
+                        turtlesSize: 0.8,
                     },
-                    500,
-                    33
-                )
-            }
-            async function update() {
-                const tileBBox = centerTileBBox()
-                if (!util.arraysEqual(bbox, tileBBox)) {
-                    bbox = tileBBox
+                })
+
+                const centerTileOverlay = new ElementOverlay(
+                    view.canvas,
+                    centerTileBounds()
+                ).addTo(map)
+
+                const anim = new Animator(
+                    () => {
+                        model.step()
+                        view.draw()
+                    },
+                    -1, // 500, // run 500 steps
+                    10 // 30 // 30 fps
+                ).stop()
+                // anim.stop()
+
+                map.on('zoomend', update)
+                map.on('moveend', update)
+                centerTile.on('click', restartModel)
+
+                function update(ev) {
+                    anim.stop()
+                    util.clearCtx(view.ctx)
+
+                    centerTile.openPopup(centerTileLatLon())
+
+                    const bounds = centerTileBounds()
+                    centerTile.setBounds(bounds)
+                    centerTileOverlay.setBounds(bounds)
+                }
+                async function restartModel(ev) {
+                    console.log(ev)
+                    centerTile.closePopup()
+                    anim.stop()
+                    const [X, Y, Z] = centerTileXYZ()
+                    model.zxy = [Z, X, Y]
                     model.reset()
-                    model.zxy = centerTileZxy()
+                    await model.startup()
+                    model.setup()
+                    anim.start()
+                }
 
-                    try {
-                        await model.startup()
-                    } catch (error) {
-                        model.elevation = null
-                    }
-
-                    mbox.updateBBoxSource(map, 'bbox', bbox)
-                    const bboxColor = model.elevation ? 'gray' : 'red'
-                    mbox.updateGeojsonPaint(map, 'bbox', bboxColor)
-
-                    logCenterTile()
+                function centerTileXYZ() {
+                    const { lat, lng: lon } = map.getCenter()
+                    const Z = map.getZoom()
+                    const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
+                    return [X, Y, Z]
+                }
+                function centerTileBBox() {
+                    const [X, Y, Z] = centerTileXYZ()
+                    return gis.xyz2bbox(X, Y, Z)
+                }
+                function centerTileBounds() {
+                    // const [X, Y, Z] = centerTileXYZ()
+                    // const bbox = gis.xyz2bbox(X, Y, Z)
+                    const bbox = centerTileBBox()
+                    return gis.bboxBounds(bbox, 'latlon')
+                }
+                function centerTileLatLon() {
+                    // const [X, Y, Z] = centerTileXYZ()
+                    // const bbox = gis.xyz2bbox(X, Y, Z)
+                    const bbox = centerTileBBox()
+                    return gis.bboxCenter(bbox, 'latlon')
+                }
+                function centerTileString() {
+                    const [X, Y, Z] = centerTileXYZ()
+                    return `X:${X},  Y:${Y}, Z:${Z}`
                 }
             }
-            function centerTileBBox() {
-                const [lon, lat] = mbox.mapCenter(map)
-                return mbox.tileBBox(map, lon, lat)
-            }
-            function centerTileZxy() {
-                const [lon, lat] = mbox.mapCenter(map)
-                return mbox.tileZxy(map, lon, lat)
-            }
-            function logCenterTile() {
-                console.log(
-                    'center tile:',
-                    ...centerTileZxy(),
-                    centerTileBBox()
-                )
-            }
+            run()
         </script>
     </body>
 </html>

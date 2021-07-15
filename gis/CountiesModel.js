@@ -1,4 +1,5 @@
-import * as turf from 'https://cdn.skypack.dev/@turf/turf'
+// import * as turf from 'https://cdn.skypack.dev/@turf/turf'
+import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon?module'
 import * as util from '../src/utils.js'
 import HelloModel from '../models/HelloModel.js'
 
@@ -9,7 +10,8 @@ export default class CountiesModel extends HelloModel {
         this.patches.ask(p => {
             const pt = this.world.toGeo(p.x, p.y)
             util.forLoop(this.world.geojson.features, (f, i) => {
-                if (turf.booleanPointInPolygon(pt, f)) {
+                // if (turf.booleanPointInPolygon(pt, f)) {
+                if (booleanPointInPolygon(pt, f)) {
                     if (p.feature) console.log('p.feature exists', p)
                     p.feature = f
                 }

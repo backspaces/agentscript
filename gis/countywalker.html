@@ -5,65 +5,84 @@
         <title>CountyWalker</title>
     </head>
     <body>
-        <!-- <div id="map"></div> -->
+        <div id="map" style="width: 100vw; height: 100vh"></div>
+
         <script type="module">
             import * as util from '../src/utils.js'
-            import * as mbox from './mbtools.js'
-
-            import mapboxgl from 'https://cdn.skypack.dev/mapbox-gl'
-            // import * as turf from 'https://cdn.skypack.dev/@turf/turf'
+            import * as gis from '../src/gis.js'
+            import { geojsonBBox } from '../src/geojson.js'
 
             import GeoWorld from '../src/GeoWorld.js'
-            import Model from '../models/HelloModel.js'
             import TwoDraw from '../src/TwoDraw.js'
             import Animator from '../src/Animator.js'
-            import CountiesModel from './CountiesModel.js'
+            import CountiesModel from '../gis/CountiesModel.js'
 
-            mapboxgl.accessToken =
-                'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
-            mbox.setDefaultStyle()
-
-            const drawOptions = {
-                patchesColor: 'transparent',
-                linksColor: 'gray',
-                turtlesSize: 5,
-                turtlesColor: t =>
-                    view.drawOptions.turtlesMap.atIndex(t.county),
-            }
+            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
+            import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
+            const ElementOverlay = elementOverlay(L)
 
             async function run() {
                 await util.setCssStyle(
-                    'https://cdn.skypack.dev/mapbox-gl/dist/mapbox-gl.css'
+                    'https://unpkg.com/leaflet/dist/leaflet.css'
                 )
 
                 const counties = await fetch(
                     '../gis/data/nmcounties.json'
                 ).then(resp => resp.json())
 
+                const bbox = geojsonBBox(counties)
+                const bboxCenter = gis.bboxCenter(bbox, 'latlon')
+                const zoom = 7
+                console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
+
                 const world = new GeoWorld(counties, 100)
                 const model = new CountiesModel(world)
                 await model.startup()
                 model.setup()
-                console.log('bbox', world.bbox)
 
+                const drawOptions = {
+                    patchesColor: 'transparent',
+                    linksColor: 'gray',
+                    linksWidth: 4,
+                    turtlesSize: 6,
+                    turtlesColor: t =>
+                        view.drawOptions.turtlesMap.atIndex(t.county + 1),
+                }
                 const view = new TwoDraw(model, {
                     div: util.createCanvas(0, 0), // the view will resize
                     drawOptions,
                 })
 
-                util.toWindow({ util, model, view })
+                const map = L.map('map').setView(bboxCenter, zoom)
 
-                const map = mbox.newMap(mapboxgl, {
-                    zoom: 5.5,
-                    center: world.bboxCenter(),
+                L.tileLayer(gis.template('osm'), {
+                    attribution: gis.attribution('osm'),
+                }).addTo(map)
+
+                const [west, south, east, north] = bbox
+                const bounds = new L.LatLngBounds(
+                    new L.LatLng(north, west),
+                    new L.LatLng(south, east)
+                )
+                new ElementOverlay(view.canvas, bounds).addTo(map)
+
+                L.geoJSON(counties, {
+                    style: () => ({
+                        color: 'red',
+                        fillOpacity: 0.025,
+                        weight: 2,
+                    }),
                 })
-                await mbox.mapLoadPromise(map)
+                    .bindPopup(
+                        layer =>
+                            layer.feature.properties.NAME +
+                            ', pop: ' +
+                            layer.feature.properties.population.toLocaleString()
+                    )
+                    .addTo(map)
 
-                mbox.addGeoLines(map, 'counties', counties, 'red', 3)
-
-                mbox.addBBoxLayer(map, 'bbox', world.bbox, 'red')
-
-                mbox.addViewLayer(map, 'model', world.bbox, view)
+                const latlngs = gis.bboxCoords(bbox, 'latlon')
+                L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
 
                 const anim = new Animator(
                     () => {
@@ -71,8 +90,10 @@
                         view.draw()
                     },
                     -1, // 500, // run 500 steps
-                    10 // 30 // 30 fps
+                    20 // 30 // 30 fps
                 )
+
+                util.toWindow({ util, model, view, map, counties, anim })
             }
             run()
         </script>
