@@ -34,8 +34,24 @@
 
             // import * as turf from 'https://unpkg.com/@turf/turf/dist/es/index.js?module'
             // import * as turf from 'https://unpkg.com/@turf/turf?module'
-            import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon@6.5.0?module'
-            util.toWindow({ booleanPointInPolygon })
+
+            // import turfTurf from 'https://cdn.skypack.dev/@turf/turf'
+            // import featureCollection from 'https://unpkg.com/@turf/featureCollection?module'
+            // import bboxPolygon from 'https://unpkg.com/@turf/bboxPolygon?module'
+            // import { helpers } from 'https://unpkg.com/@turf/helpers?module'
+            // import { helpers } from 'https://unpkg.com/@turf/helpers?module'
+            // import * as helpers from 'https://unpkg.com/@turf/helpers?module'
+            // import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon?module'
+            // util.toWindow({ booleanPointInPolygon, helpers })
+
+            import * as helpers from 'https://unpkg.com/@turf/helpers?module'
+            import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon?module'
+            const turf = {}
+            Object.assign(turf, helpers, { booleanPointInPolygon })
+            util.toWindow({ turf })
+
+            import * as turf1 from '../vendor/turf.js'
+            util.toWindow({ turf1 })
 
             // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0'
             // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0/dist/es/index.js'

@@ -1,7 +1,6 @@
-// import commonjs from 'rollup-plugin-commonjs'
 // import { terser } from 'rollup-plugin-terser'
-// import copy from 'rollup-plugin-copy'
-// import { nodeResolve } from '@rollup/plugin-node-resolve'
+// import urlResolve from 'rollup-plugin-url-resolve'
+// import prettier from 'rollup-plugin-prettier'
 import cleanup from 'rollup-plugin-cleanup'
 
 export default [
@@ -23,6 +22,14 @@ export default [
         },
         plugins: [cleanup()],
     },
+    // {
+    //     input: './config/turf.js',
+    //     output: {
+    //         file: 'tests/vendor/turf.js',
+    //         format: 'esm',
+    //     },
+    //     plugins: [nodeResolve(), urlResolve(), cleanup()],
+    // },
     // {
     //     input: './tests/steganography.js',
     //     output: {

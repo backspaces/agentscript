@@ -5,7 +5,7 @@ AgentScript is a minimalist Agent Based modeling system based on [NetLogo](https
 It has a Model/View/Control (MVC) architecture which cleanly separates the three components.
 
 -   **Model**: Provides NetLogo-like semantics for Patches, Turtles and Links. It has no colors, shapes, sizes etc for viewing the model.
--   **View**: Use the Model properties to create a view. There can be many Views. We provide a [2D Canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) view and a [Three.js](https://threejs.org/) 3D view. There is also GIS support via a general [gis module](https://github.com/backspaces/agentscript/blob/master/src/gis.js), as well as [MapBox GL GS support](https://github.com/backspaces/agentscript/blob/master/gis/mbtools.js). Plot views are also available.
+-   **View**: Use the Model properties to create a view. There can be many Views. We provide a [2D Canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) view and a [Three.js](https://threejs.org/) 3D view. There is also GIS support via a [gis module](https://github.com/backspaces/agentscript/blob/master/src/gis.js), a [geojson module](https://github.com/backspaces/agentscript/blob/master/src/geojson.js), as well as [Leaflet](https://leafletjs.com/) based demos. Plot views are also available.
 -   **Controls**: We use [dat.gui](https://github.com/dataarts/dat.gui) for a menu UI, a [Mouse module](https://github.com/backspaces/agentscript/blob/master/src/Mouse.js) for selecting Model objects (Patches, Turtles and Links), an [Animator](https://github.com/backspaces/agentscript/blob/master/src/Animator.js) for fine control over the Model/Draw steps.
 
 ## Modern JavaScript
@@ -80,7 +80,7 @@ The mvc onepagers are combine Models, Views, and Controls into "apps".
 
 [gis](./gis/README.md)
 
-The gis onepagers use gis & mapbox utilities to create and view models running on maps with geojson data.
+The gis onepagers use gis & geojson utilities to create and view models running on [Leaflet](https://leafletjs.com/) maps with geojson data.
 
 [fb](./fb/README.md)
 

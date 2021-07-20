@@ -1,5 +1,15 @@
-import * as turf from 'https://cdn.skypack.dev/@turf/turf'
-import * as gis from '../src/gis.js'
+// import * as turf from 'https://cdn.skypack.dev/@turf/turf'
+import * as util from '../../src/utils.js'
+import * as gis from '../../src/gis.js'
+
+// import { featureCollection } from 'https://cdn.skypack.dev/@turf/helpers'
+// import booleanPointInPolygon from 'https://cdn.skypack.dev/@turf/boolean-point-in-polygon'
+// import bboxPolygon from 'https://cdn.skypack.dev/@turf/bbox-polygon'
+// const turf = { booleanPointInPolygon, bboxPolygon, featureCollection }
+
+import * as turf from './turf.js'
+
+util.toWindow({ turf })
 
 export function mapLoadPromise(map) {
     return new Promise((resolve, reject) => {

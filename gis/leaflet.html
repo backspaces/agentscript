@@ -15,11 +15,11 @@
             await util.setCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
 
             let [lon, lat, Z] = [-105.941109, 35.68222, 13]
-            const map = L.map('map').setView([lat, lon], Z)
-            // const map = L.map('map', {
-            //     zoomDelta: 0.1,
-            //     zoomSnap: 0,
-            // }).setView([lat, lon], Z)
+            // const map = L.map('map').setView([lat, lon], Z)
+            const map = L.map('map', {
+                zoomDelta: 0.25, //0.1
+                zoomSnap: 0,
+            }).setView([lat, lon], Z)
 
             L.tileLayer(gis.template('osm'), {
                 attribution: gis.attribution('osm'),
@@ -43,7 +43,7 @@
             }
             function centerTileXYZ() {
                 const { lat, lng: lon } = map.getCenter()
-                const Z = map.getZoom()
+                const Z = Math.round(map.getZoom())
                 // const Z = Math.round(map.getZoom()) // if fractional zoom
                 const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
                 return [X, Y, Z]

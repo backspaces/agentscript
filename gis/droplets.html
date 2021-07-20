@@ -29,7 +29,11 @@
                 const [lon, lat, Z] = [-105.93, 35.67, 10]
                 const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
 
-                const map = L.map('map').setView([lat, lon], Z)
+                // const map = L.map('map').setView([lat, lon], Z)
+                const map = L.map('map', {
+                    zoomDelta: 0.25, //0.1
+                    zoomSnap: 0,
+                }).setView([lat, lon], Z)
                 L.tileLayer(gis.template('topo'), {
                     attribution: gis.attribution('topo'),
                 }).addTo(map)
@@ -98,7 +102,7 @@
 
                 function centerTileXYZ() {
                     const { lat, lng: lon } = map.getCenter()
-                    const Z = map.getZoom()
+                    const Z = Math.floor(map.getZoom())
                     const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
                     return [X, Y, Z]
                 }

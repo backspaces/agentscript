@@ -8,11 +8,11 @@
         <!-- <div id="map"></div> -->
         <script type="module">
             import mapboxgl from 'https://cdn.skypack.dev/mapbox-gl'
-            import * as turf from 'https://cdn.skypack.dev/@turf/turf'
+            // import * as turf from 'https://cdn.skypack.dev/@turf/turf'
             import * as mbox from './mbtools.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import * as util from '../src/utils.js'
-            import Model from '../models/DropletsModel.js'
+            import TwoDraw from '../../src/TwoDraw.js'
+            import * as util from '../../src/utils.js'
+            import Model from '../../models/DropletsModel.js'
 
             mbox.setDefaultStyle() // installs mapboxgl css
 
@@ -24,7 +24,7 @@
                 center: [-105.9328154405269, 35.67745581409039],
             })
             const model = new Model()
-            util.toWindow({ mapboxgl, mbox, turf, util, map, model })
+            util.toWindow({ mapboxgl, mbox, util, map, model })
 
             let bbox = []
             let bboxView

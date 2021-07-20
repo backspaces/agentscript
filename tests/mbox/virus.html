@@ -8,14 +8,14 @@
         <!-- <div id="map"></div> -->
         <script type="module">
             import mapboxgl from 'https://cdn.skypack.dev/mapbox-gl'
-            import * as turf from 'https://cdn.skypack.dev/@turf/turf'
+            // import * as turf from 'https://cdn.skypack.dev/@turf/turf'
             import * as mbox from './mbtools.js'
 
-            import * as util from '../src/utils.js'
-            import GeoWorld from '../src/GeoWorld.js'
-            import Model from '../models/VirusModel.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import ColorMap from '../src/ColorMap.js'
+            import * as util from '../../src/utils.js'
+            import GeoWorld from '../../src/GeoWorld.js'
+            import Model from '../../models/VirusModel.js'
+            import TwoDraw from '../../src/TwoDraw.js'
+            import ColorMap from '../../src/ColorMap.js'
 
             mapboxgl.accessToken =
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
@@ -39,13 +39,13 @@
                     'https://cdn.skypack.dev/mapbox-gl/dist/mapbox-gl.css'
                 )
                 const counties = await util.xhrPromise(
-                    './data/nmcounties.json',
+                    '../../gis/data/nmcounties.json',
                     'json'
                 )
-                const bbox = turf.bbox(counties)
-                console.log('bbox', bbox)
+                // const bbox = turf.bbox(counties)
+                // console.log('bbox', bbox)
 
-                const world = new GeoWorld(bbox, 100)
+                const world = new GeoWorld(counties, 100)
                 const model = new Model(world)
 
                 await model.startup()
@@ -67,9 +67,9 @@
 
                 mbox.addGeoLines(map, 'counties', counties, 'red', 3)
 
-                mbox.addBBoxLayer(map, 'bbox', bbox, 'red')
+                mbox.addBBoxLayer(map, 'bbox', world.bbox, 'red')
 
-                mbox.addViewLayer(map, 'model', bbox, view)
+                mbox.addViewLayer(map, 'model', world.bbox, view)
 
                 util.timeoutLoop(
                     () => {
