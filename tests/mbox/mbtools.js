@@ -7,7 +7,9 @@ import * as gis from '../../src/gis.js'
 // import bboxPolygon from 'https://cdn.skypack.dev/@turf/bbox-polygon'
 // const turf = { booleanPointInPolygon, bboxPolygon, featureCollection }
 
-import * as turf from './turf.js'
+// import * as turf from './turf.js'
+// import * as turf from '../../vendor/turf.js'
+import * as turf from '../../vendor/turf.all.js'
 
 util.toWindow({ turf })
 

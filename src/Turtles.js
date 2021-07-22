@@ -43,6 +43,10 @@ export default class Turtles extends AgentSet {
         // New turtles have random integer headings
         // turtle.theta = util.randomFloat(Math.PI * 2)
         turtle.heading = this.model.fromRads(util.randomFloat(Math.PI * 2))
+        const p = turtle.patch
+        if (p.turtles != null) {
+            p.turtles.push(turtle)
+        }
         initFcn(turtle)
         return turtle
     }

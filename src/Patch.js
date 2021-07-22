@@ -90,7 +90,6 @@ export default class Patch {
     turtlesHere() {
         if (this.turtles == null) {
             this.patches.ask(p => {
-                // p.turtles = new AgentArray()
                 p.turtles = new AgentList(this.model)
             })
             this.model.turtles.ask(t => {
