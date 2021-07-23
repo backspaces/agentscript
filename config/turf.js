@@ -1,19 +1,19 @@
-//  jsDelivr
-// import { featureCollection } from 'https://esm.run/@turf/helpers'
-// import booleanPointInPolygon from 'https://esm.run/@turf/boolean-point-in-polygon'
-// import bboxPolygon from 'https://esm.run/@turf/bbox-polygon'
-
 // skypack
 import { featureCollection } from 'https://cdn.skypack.dev/@turf/helpers'
 import booleanPointInPolygon from 'https://cdn.skypack.dev/@turf/boolean-point-in-polygon'
 import bboxPolygon from 'https://cdn.skypack.dev/@turf/bbox-polygon'
 
+export { booleanPointInPolygon, bboxPolygon, featureCollection }
+
+//  jsDelivr
+// import { featureCollection } from 'https://esm.run/@turf/helpers'
+// import booleanPointInPolygon from 'https://esm.run/@turf/boolean-point-in-polygon'
+// import bboxPolygon from 'https://esm.run/@turf/bbox-polygon'
+
 // unpkg
 // import { featureCollection } from 'https://unpkg.com/@turf/helpers?module'
 // import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon?module'
 // import bboxPolygon from 'https://unpkg.com/@turf/bbox-polygon?module'
-
-export { booleanPointInPolygon, bboxPolygon, featureCollection }
 
 // local npm, direct file access
 // export { default as bboxPolygon } from '../node_modules/@turf/bbox-polygon/dist/es/index.js'
