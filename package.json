@@ -9,6 +9,7 @@
     "files": [
         "/dist/",
         "/vendor/",
+        "/vendorx/",
         "/src/",
         "/docs/",
         "/models/",

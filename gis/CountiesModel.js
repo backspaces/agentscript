@@ -1,5 +1,6 @@
 // import * as turf from 'https://cdn.skypack.dev/@turf/turf'
-import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon?module'
+// import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon?module'
+import { booleanPointInPolygon } from '../vendor/turf.js'
 import * as util from '../src/utils.js'
 import HelloModel from '../models/HelloModel.js'
 

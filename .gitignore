@@ -3,7 +3,7 @@
 
 # Derived files other than docs/
 /dist/
-/vendor/
+/vendorx/
 
 # test.html
 # temp

@@ -17,7 +17,7 @@ export default [
     {
         input: './node_modules/@turf/turf/dist/es/index.js',
         output: {
-            file: 'vendor/turf.all.js',
+            file: 'vendorx/turf.all.js',
             format: 'esm',
         },
         plugins: [nodeResolve(), commonjs(), cleanup()],
@@ -26,7 +26,7 @@ export default [
     {
         input: './node_modules/@turf/turf/dist/es/index.js',
         output: {
-            file: 'vendor/turf.all.min.js',
+            file: 'vendorx/turf.all.min.js',
             format: 'esm',
         },
         plugins: [nodeResolve(), commonjs(), terser()],
