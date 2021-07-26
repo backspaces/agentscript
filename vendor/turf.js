@@ -13,6 +13,27 @@ function feature(geom, properties, options) {
   feat.geometry = geom;
   return feat;
 }
+function point(coordinates, properties, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  if (!coordinates) {
+    throw new Error("coordinates is required");
+  }
+  if (!Array.isArray(coordinates)) {
+    throw new Error("coordinates must be an Array");
+  }
+  if (coordinates.length < 2) {
+    throw new Error("coordinates must be at least 2 numbers long");
+  }
+  if (!isNumber(coordinates[0]) || !isNumber(coordinates[1])) {
+    throw new Error("coordinates must contain numbers");
+  }
+  var geom = {
+    type: "Point",
+    coordinates };
+  return feature(geom, properties, options);
+}
 function polygon(coordinates, properties, options) {
   if (options === void 0) {
     options = {};
@@ -33,6 +54,18 @@ function polygon(coordinates, properties, options) {
     coordinates };
   return feature(geom, properties, options);
 }
+function lineString(coordinates, properties, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  if (coordinates.length < 2) {
+    throw new Error("coordinates must be an array of two or more positions");
+  }
+  var geom = {
+    type: "LineString",
+    coordinates };
+  return feature(geom, properties, options);
+}
 function featureCollection(features, options) {
   if (options === void 0) {
     options = {};
@@ -46,6 +79,63 @@ function featureCollection(features, options) {
   }
   fc.features = features;
   return fc;
+}
+function multiLineString(coordinates, properties, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var geom = {
+    type: "MultiLineString",
+    coordinates };
+  return feature(geom, properties, options);
+}
+function multiPoint(coordinates, properties, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var geom = {
+    type: "MultiPoint",
+    coordinates };
+  return feature(geom, properties, options);
+}
+function multiPolygon(coordinates, properties, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var geom = {
+    type: "MultiPolygon",
+    coordinates };
+  return feature(geom, properties, options);
+}
+function geometryCollection(geometries, properties, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var geom = {
+    type: "GeometryCollection",
+    geometries };
+  return feature(geom, properties, options);
+}
+function isNumber(num) {
+  return !isNaN(num) && num !== null && !Array.isArray(num);
+}
+
+function bboxPolygon(bbox, options) {
+  if (options === void 0) {
+    options = {};
+  }
+  var west = Number(bbox[0]);
+  var south = Number(bbox[1]);
+  var east = Number(bbox[2]);
+  var north = Number(bbox[3]);
+  if (bbox.length === 6) {
+    throw new Error("@turf/bbox-polygon does not support BBox with 6 positions");
+  }
+  var lowLeft = [west, south];
+  var topLeft = [west, north];
+  var topRight = [east, north];
+  var lowRight = [east, south];
+  return polygon([[lowLeft, lowRight, topRight, topLeft, lowLeft]], options.properties, { bbox, id: options.id });
 }
 
 function getCoord(coord) {
@@ -136,22 +226,4 @@ function inBBox(pt, bbox) {
   return bbox[0] <= pt[0] && bbox[1] <= pt[1] && bbox[2] >= pt[0] && bbox[3] >= pt[1];
 }
 
-function bboxPolygon(bbox, options) {
-  if (options === void 0) {
-    options = {};
-  }
-  var west = Number(bbox[0]);
-  var south = Number(bbox[1]);
-  var east = Number(bbox[2]);
-  var north = Number(bbox[3]);
-  if (bbox.length === 6) {
-    throw new Error("@turf/bbox-polygon does not support BBox with 6 positions");
-  }
-  var lowLeft = [west, south];
-  var topLeft = [west, north];
-  var topRight = [east, north];
-  var lowRight = [east, south];
-  return polygon([[lowLeft, lowRight, topRight, topLeft, lowLeft]], options.properties, { bbox, id: options.id });
-}
-
-export { bboxPolygon, booleanPointInPolygon, featureCollection };
+export { bboxPolygon, booleanPointInPolygon, feature, featureCollection, geometryCollection, getCoord, getGeom, lineString, multiLineString, multiPoint, multiPolygon, point, polygon };

@@ -100,7 +100,8 @@ export default class DropletsModel extends Model {
     }
     turtlesOnLocalMins() {
         return this.localMins.reduce(
-            (acc, p) => acc + p.turtlesHere().length,
+            // (acc, p) => acc + p.turtlesHere().length,
+            (acc, p) => acc + p.turtlesHere.length,
             0
         )
     }

@@ -29,17 +29,20 @@ export default class Patch {
     model
     name
 
-    static defaultVariables() {
-        // Core variables for patches.
-        return {
-            turtles: undefined, // the turtles on me. Lazy evalued, see turtlesHere
-            z: 0, // default shared z val. Can be overridden
-        }
-    }
-    // Initialize a Patch given its Patches AgentSet.
-    constructor() {
-        Object.assign(this, Patch.defaultVariables())
-    }
+    turtles
+    z = 0
+
+    // static defaultVariables() {
+    //     // Core variables for patches.
+    //     return {
+    //         turtles: undefined, // the turtles on me. Lazy evalued, see turtlesHere
+    //         z: 0, // default shared z val. Can be overridden
+    //     }
+    // }
+    // // Initialize a Patch given its Patches AgentSet.
+    // constructor() {
+    //     Object.assign(this, Patch.defaultVariables())
+    // }
     // Getter for x,y derived from patch id, thus no setter.
     get x() {
         return (this.id % this.model.world.width) + this.model.world.minX
@@ -87,7 +90,7 @@ export default class Patch {
     }
 
     // Promote this.turtles on first call to turtlesHere.
-    turtlesHere() {
+    get turtlesHere() {
         if (this.turtles == null) {
             this.patches.ask(p => {
                 p.turtles = new AgentList(this.model)
@@ -100,7 +103,8 @@ export default class Patch {
     }
     // Returns above but returning only turtles of this breed.
     breedsHere(breed) {
-        const turtles = this.turtlesHere()
+        // const turtles = this.turtlesHere()
+        const turtles = this.turtlesHere
         return turtles.withBreed(breed)
     }
 

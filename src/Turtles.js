@@ -90,7 +90,8 @@ export default class Turtles extends AgentSet {
      */
     inPatches(patches) {
         let array = new AgentList(this.model)
-        for (const p of patches) array.push(...p.turtlesHere())
+        // for (const p of patches) array.push(...p.turtlesHere())
+        for (const p of patches) array.push(...p.turtlesHere)
         // REMIND: can't use withBreed .. its not an AgentSet. Move to AgentArray?
         if (this.isBreedSet()) array = array.filter(a => a.agentSet === this)
         return array

@@ -20,12 +20,12 @@ export function minify(json) {
 
 // ========== features
 
-export function featureCollection(features = []) {
-    return {
-        type: 'FeatureCollection',
-        features: features,
-    }
-}
+// export function featureCollection(features = []) {
+//     return {
+//         type: 'FeatureCollection',
+//         features: features,
+//     }
+// }
 export function bboxFeature(bbox, properties = {}) {
     const coords = gis.bboxCoords(bbox)
     coords.push(coords[0]) // polys are closed, repeat first coord

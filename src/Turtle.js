@@ -166,11 +166,6 @@ export default class Turtle {
             if (p0 && p0.turtles) util.removeArrayItem(p0.turtles, this)
             if (p && p.turtles) p.turtles.push(this)
         }
-        // if (p && p.turtles != null && p !== p0) {
-        //     // util.removeItem(p0.turtles, this)
-        //     if (p0) util.removeArrayItem(p0.turtles, this)
-        //     p.turtles.push(this)
-        // }
     }
     /**
      * Handle turtle x,y,z if turtle off-world.
@@ -191,14 +186,8 @@ export default class Turtle {
         let atEdge = this.atEdge
 
         if (util.isString(atEdge)) {
-            const {
-                minXcor,
-                maxXcor,
-                minYcor,
-                maxYcor,
-                minZcor,
-                maxZcor,
-            } = this.model.world
+            const { minXcor, maxXcor, minYcor, maxYcor, minZcor, maxZcor } =
+                this.model.world
 
             if (atEdge === 'wrap') {
                 this.x = util.wrap(x, minXcor, maxXcor)

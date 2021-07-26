@@ -2,11 +2,6 @@
 import * as util from '../../src/utils.js'
 import * as gis from '../../src/gis.js'
 
-// import { featureCollection } from 'https://cdn.skypack.dev/@turf/helpers'
-// import booleanPointInPolygon from 'https://cdn.skypack.dev/@turf/boolean-point-in-polygon'
-// import bboxPolygon from 'https://cdn.skypack.dev/@turf/bbox-polygon'
-// const turf = { booleanPointInPolygon, bboxPolygon, featureCollection }
-
 // import * as turf from '../../config/turf.js'
 import * as turf from '../../vendor/turf.js'
 // import * as turf from '../../vendor/turf.all.js'

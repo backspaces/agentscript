@@ -58,16 +58,15 @@ export default [
         },
         plugins: [cleanup()],
     },
+
     // {
     //     input: './tests/steganography.js',
     //     output: {
     //         file: 'vendor/steganography.esm.js',
     //         format: 'esm',
-    //         // banner: '/* eslint-disable */',
     //     },
     //     plugins: [cleanup()],
     // },
-
     // {
     //     input: './node_modules/three/build/three.module.js',
     //     output: {
