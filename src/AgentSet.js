@@ -18,9 +18,9 @@ import AgentArray from './AgentArray.js'
  * are the basis for Patches, Turtles, Links & Breeds
  *
  * @param {Model} model Instance of Class Model to which I belong
- * @param {(Patch|Turtle|Link)} AgentClass Class of items stored in this AgentSet
+ * @param {Patch|Turtle|Link} AgentClass Class of items stored in this AgentSet
  * @param {String} name Name of this AgentSet. Ex: Patches
- * @param {(Patches|Turtles|Links)} [baseSet=null] If a Breed, it's parent AgentSet
+ * @param {Patches|Turtles|Links} [baseSet=null] If a Breed, it's parent AgentSet
  */
 
 export default class AgentSet extends AgentArray {
@@ -71,7 +71,7 @@ export default class AgentSet extends AgentArray {
      * The Agent also has three methods added: setBreed, getBreed, isBreed.
      *
      * @param {Object} agentProto A new instance of the Agent being added
-     * @param {(Patch|Turtle|Link)} AgentClass It's Class
+     * @param {Patch|Turtle|Link} AgentClass It's Class
      */
     protoMixin(agentProto, AgentClass) {
         Object.assign(agentProto, {

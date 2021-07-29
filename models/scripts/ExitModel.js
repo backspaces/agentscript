@@ -51,7 +51,6 @@ class ExitModel extends Model {
     step() {
         const emptyNeighbors = turtle =>
             turtle.patch.neighbors.filter(
-                // n => n.breed !== this.wall && n.turtlesHere().length === 0
                 n => n.breed !== this.wall && n.turtlesHere.length === 0
             )
         this.turtles.ask(t => {

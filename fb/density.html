@@ -11,7 +11,7 @@
             const onValue = transform.defineTransform(
                 'hello',
                 'density',
-                `return model.patches.map(p => p.turtlesHere().length).toString()`
+                `return model.patches.map(p => p.turtlesHere.length).toString()`
             )
 
             onValue(value => console.log('hello', 'density', value))

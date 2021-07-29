@@ -4,12 +4,15 @@ import * as util from './utils.js'
 /**
  * Class Turtle instances represent the dynamic, behavioral element of modeling.
  * Each turtle knows the patch it is on, and interacts with that and other
- * patches, as well as other turtles. They are also the end points of Links.
+ * patches, as well as other turtles. Turtles are also the end points of Links.
  *
- * You do not call `new Turtle()`, instead class Turtles
- * creates it's Turtle instances. I.e. class Turtles is a factory
- * for all of it's Turtle instances. So *don't* do this:
+ * You do not call `new Turtle()`, instead class Turtles creates Turtle instances
+ * via {@link Turtles#create} or  {@link Turtles#createOne}
+ *
+ * I.e. class Turtles is a factory for all of it's Turtle instances.
+ * So *don't* do this:
  */
+
 export default class Turtle {
     atEdge = 'wrap'
     hidden = false
@@ -22,10 +25,8 @@ export default class Turtle {
     // /**
     //  * @ignore
     //  */
-    constructor() {
-        // this.agentSet = this.atEdge = this.model = null // needed by jsDoc
-        // Object.assign(this, Turtle.defaultVariables())
-    }
+    // constructor() {
+    // }
     agentConstructor() {
         this.theta = null
         this.x = 0
@@ -333,7 +334,7 @@ export default class Turtle {
      * @param {number} x
      * @param {number} y
      * @param {number|undefined} [z=null]
-     * @return {*}
+     * @return {number} distance in patch coordinates.
      */
     distanceXY(x, y, z = null) {
         const useZ = z != null && this.z != null
@@ -345,8 +346,8 @@ export default class Turtle {
      * Return distance from me to the Patch or Turtle
      *
      * 2.5D: use z too if both agent.z and this.z exist
-     * @param {*} agent
-     * @return {*}
+     * @param {Patch|Turtle} agent
+     * @return {number} distance in patch coordinates.
      */
     distance(agent) {
         const { x, y, z } = agent

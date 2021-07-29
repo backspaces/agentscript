@@ -52,10 +52,11 @@ export default class Turtles extends AgentSet {
     }
     /**
      * Create num Turtles, adding them to this Turtles array.
-     * The init function is called to initialize the new Turtle.
+     * The init function is called to initialize each new Turtle.
      * Returns an array of the new Turtles
      *
-     * @param {Function} [initFcn=turtle => {}]
+     * @param {number} number Number of Turtles to create
+     * @param {Function} [initFcn=turtle => {}] A function to initialize new turtles.
      * @return {Array} The newly created Turtles
      */
     create(num, initFcn = turtle => {}) {
@@ -90,7 +91,6 @@ export default class Turtles extends AgentSet {
      */
     inPatches(patches) {
         let array = new AgentList(this.model)
-        // for (const p of patches) array.push(...p.turtlesHere())
         for (const p of patches) array.push(...p.turtlesHere)
         // REMIND: can't use withBreed .. its not an AgentSet. Move to AgentArray?
         if (this.isBreedSet()) array = array.filter(a => a.agentSet === this)

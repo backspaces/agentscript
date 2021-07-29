@@ -14,14 +14,16 @@ import AgentList from './AgentList.js'
 // https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
 
 /**
- * Class Patch instances represent a square on the Patches grid.  They hold variables
+ * Class Patch instances represent a square on the {@link Patches} grid.
+ * They hold variables
  * that are in the patches the turtles live on.  The set of all patches
  * is the world on which the turtles live and the model runs.
  *
- * **TODO: Document Patch properties and methods.**
+ * You do not use `new Patch`, rather Class {@link Model} creates the patches
+ * for you, using the {@link World} data passed to the Model.
  *
- * @export
- * @class
+ * You *never* do this:
+ *
  */
 export default class Patch {
     // Set by AgentSet
@@ -56,6 +58,12 @@ export default class Patch {
     //     return 0
     // }
     // set z(z) {}
+
+    /**
+     * Return whether or not this patch is on the edge of the atches.
+     *
+     * @return {boolean}
+     */
     isOnEdge() {
         return this.patches.isOnEdge(this)
     }
@@ -66,8 +74,10 @@ export default class Patch {
     // Promotion makes getters accessed only once.
     // defineProperty required: can't set this.neighbors when getter defined.
     /**
-     * A list of this patch's 8
+     * Return an array of this patch's 8
      * [Moore neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood).
+     *
+     * @return {AgentArray}
      */
     get neighbors() {
         // lazy promote neighbors from getter to instance prop.
@@ -76,9 +86,11 @@ export default class Patch {
         return n
     }
     /**
-     * A list of this patch's 4
+     * Return an array of this patch's 4
      * [Von Neumann neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood)
      * (north, south, east, west).
+     *
+     * @return {AgentArray}
      */
     get neighbors4() {
         const n = this.patches.neighbors4(this)
@@ -90,6 +102,11 @@ export default class Patch {
     }
 
     // Promote this.turtles on first call to turtlesHere.
+    /**
+     * Return an Array of the turtles on this patch.
+     *
+     * @return {AgentArray}
+     */
     get turtlesHere() {
         if (this.turtles == null) {
             this.patches.ask(p => {
@@ -102,8 +119,13 @@ export default class Patch {
         return this.turtles
     }
     // Returns above but returning only turtles of this breed.
+    /**
+     * Returns an Array of the particular breed on this patch.
+     *
+     * @param {String} breed
+     * @return {AgentArray}
+     */
     breedsHere(breed) {
-        // const turtles = this.turtlesHere()
         const turtles = this.turtlesHere
         return turtles.withBreed(breed)
     }
