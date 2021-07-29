@@ -1,6 +1,6 @@
 {
     "name": "agentscript",
-    "version": "0.10.14",
+    "version": "0.10.15",
     "description": "AgentScript Model in Model/View architecture",
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
