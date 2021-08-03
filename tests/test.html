@@ -26,6 +26,16 @@
         <script type="module">
             import * as util from '../src/utils.js'
 
+            import Model from '../src/Model.js'
+            class Turtle extends Model {
+                setup() {
+                    const t = this.turtles.createOne()
+                }
+            }
+            const model = new Turtle()
+            model.setup()
+            const t = model.turtles.first()
+
             // import * as helpers from 'https://unpkg.com/@turf/helpers?module'
             // import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon?module'
             // import bboxPolygon from 'https://unpkg.com/@turf/bbox-polygon?module'

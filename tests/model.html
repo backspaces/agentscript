@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <title>Model</title>
+        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    </head>
+    <body>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import TwoDraw from '../src/TwoDraw.js'
+            import Animator from '../src/Animator.js'
+            import Model from '../src/Model2D.js'
+
+            export default class Test extends Model {
+                setup() {
+                    this.setGeometry('degrees')
+                    this.setAutoTick(false)
+
+                    this.turtles.setDefault('atEdge', 'bounce')
+                    this.turtles.create(10, t => {
+                        const patch = this.patches.oneOf()
+                        t.setxy(patch.x, patch.y)
+                    })
+                    this.turtles.ask(t => {
+                        this.links.create(t, this.turtles.otherOneOf(t))
+                    })
+                }
+                step() {
+                    this.turtles.ask(t => {
+                        t.heading += util.randomCentered(10)
+                        t.forward(0.2)
+                    })
+                }
+            }
+
+            // use model's default world options
+            const model = new Test()
+            await model.startup()
+            model.setup()
+
+            // use defalt drawOptions
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            )
+
+            util.toWindow({ util, model, view, anim })
+            util.dump()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>
+
+<!--
+    // let p = model.patches[0]
+    // console.log(p)
+    // p.turtlesHere
+    // console.log(p)
+    // let t = model.turtles.createOne()
+    // console.log(t, t.patch)
+
+
+
+ -->

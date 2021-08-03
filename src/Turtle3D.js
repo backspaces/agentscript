@@ -1,10 +1,26 @@
-import Turtle from './Turtle.js'
+import Turtle2D from './Turtle2D.js'
 import { Object3D } from '../vendor/Object3D.js'
 import * as util from './utils.js'
 
 const { checkArg, checkArgs } = util
 
-export default class Turtle3D extends Turtle {
+/**
+ * Class Turtle3D subclasses  {@link Turtles}, adding 3D methods using
+ * Three.js's Object3D module.
+ * See [NetLogo](https://ccl.northwestern.edu/netlogo/docs/3d.html)
+ * who's 3D semantics we follow.
+ *
+ * Just as with Turtle, you do not call `new Turtle3D()`,
+ * instead class Turtles creates Turtle3D instances via
+ * {@link Model} modifying the Turtles/Turtle3D initialization.
+ *
+ * 3D is the default. To revert to 2D, see {@link Model2D}
+ *
+ * Again, class Turtles is a factory for all of it's Turtle3D instances.
+ * So *don't* do this:
+ */
+
+export default class Turtle3D extends Turtle2D {
     static defaultVariables() {
         return {
             atEdge: 'wrap',

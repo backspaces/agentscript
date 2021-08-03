@@ -2,7 +2,7 @@ import World from './World.js'
 import Patches from './Patches.js'
 import Patch from './Patch.js'
 import Turtles from './Turtles.js'
-import Turtle from './Turtle3D.js'
+import Turtle3D from './Turtle3D.js'
 import Links from './Links.js'
 import Link from './Link.js'
 
@@ -11,7 +11,7 @@ import Link from './Link.js'
  * the Patches/Patch Turtles/Turtle and Links/Link AgentSets .. i.e.:
  *
  * - model.Patches: an array ({@link Patches}) of {@link Patch} instances
- * - model.Turtles: an array ({@link Turtles}) of {@link Turtle} instances
+ * - model.Turtles: an array ({@link Turtles}) of {@link Turtle3D} instances
  * - model.Links: an array ({@link Links}) of {@link Link} instances
  * - model.breed: a sub-array of any of the three above.
  * - All of which are subclasses of ({@link AgentSet}).
@@ -20,12 +20,13 @@ import Link from './Link.js'
  *
  * - Startup(): (Optional) Called once to import images, data etc
  * - Setup(): Called to initialize the model state.
- * - Step(): Step the model. Will advance ticks if autoTick = true in constructor.
+ * - Step(): Step the model. Will advance ticks.
  *
  * @param {Object|World} [worldOptions=World.defaultOptions()]
  * Can be Object of min/max X,Y,Z values or an instance of World
- * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
  */
+//  * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
+
 export default class Model {
     world
     patches
@@ -33,10 +34,10 @@ export default class Model {
     links
     ticks
 
-    constructor(worldOptions = World.defaultOptions(), autoTick = true) {
+    constructor(worldOptions = World.defaultOptions()) {
         this.resetModel(worldOptions)
-        if (autoTick) this.autoTick()
-        // this.setGeometry(this.geometry)
+        this.setAutoTick(true)
+        this.setGeometry('heading')
     }
 
     initAgentSet(name, AgentsetClass, AgentClass) {
@@ -51,7 +52,7 @@ export default class Model {
                 : worldOptions
         // Base AgentSets setup here. Breeds handled by setup
         this.initAgentSet('patches', Patches, Patch)
-        this.initAgentSet('turtles', Turtles, Turtle)
+        this.initAgentSet('turtles', Turtles, Turtle3D)
         this.initAgentSet('links', Links, Link)
     }
 
@@ -68,7 +69,7 @@ export default class Model {
     }
 
     /**
-     * Increment the tick cound. Not needed if autoTick true
+     * Increment the tick cound. Not needed if autoTick true, the default
      */
     tick() {
         this.ticks++
@@ -100,13 +101,21 @@ export default class Model {
     step() {}
 
     // A trick to auto advance ticks every step
+    setAutoTick(autoTick = true) {
+        const isAutoTick = this.hasOwnProperty('step')
+        if (autoTick) {
+            if (isAutoTick) return
+            this.step0 = this.step
+            this.step = this.stepAndTick
+        } else {
+            delete this.step
+            delete this.step0
+        }
+    }
     stepAndTick() {
         this.step0()
+        // super.step()
         this.tick()
-    }
-    autoTick() {
-        this.step0 = this.step
-        this.step = this.stepAndTick
     }
 
     /**
@@ -142,69 +151,41 @@ export default class Model {
             this[breedName] = this.links.newBreed(breedName)
         }
     }
-    // /**
-    //  * Set the Geometry of this Model
-    //  * * radians: Set the model to use native Javascript angles.<br>
-    //  *   [See Math module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math#converting_between_degrees_and_radians)
-    //  * * degrees: Use degrees rather than radians. <br>
-    //  *   The above with degree<>radian conversions done for you.
-    //  * * heading: Use "Clock" geometry:<br>
-    //  *   Degrees with 0 "up" and angles Clockwise.
-    //  * @param {string} name One of 'radians', 'degrees', 'heading'
-    //  */
-    // setGeometry(name) {
-    //     const geometry = geometries[name]
-    //     if (!geometry)
-    //         throw Error(`model.setGeometry: ${name} geometry not defined`)
-    //     Object.assign(this, geometry)
-    //     this.geometry = name
-    // }
 
-    toRads = deg => (90 - deg) * toRad
-    fromRads = rads => 90 - rads * toDeg
-    toAngleRads = deg => deg * toRad
-    fromAngleRads = rads => rads * toDeg
-    toCCW = angle => -angle
+    setGeometry(name = 'heading') {
+        const geometry = geometries[name]
+        if (!geometry)
+            throw Error(`util.setGeometry: ${name} geometry not defined`)
+        Object.assign(this, geometry)
+    }
 }
-
-const mod = (val, n) => ((val % n) + n) % n // believe it or not!
-const mod360 = degrees => mod(degrees, 360)
-const mod2pi = radians => mod(radians, 2 * Math.PI)
-
-// Add mod2pi & mod360
+// Five geometry functions converting to the JavaScript
+// standard: radians counter-clockwise from the x-axis.
+// The default set is for "heading" or "clock" geometry,
+// Degrees clockwise from the y-axis.
+// Add mod2pi & mod360?
 const toDeg = 180 / Math.PI
 const toRad = Math.PI / 180
-
-// let toRads = deg => (90 - deg) * toRad
-// let fromRads = rads => 90 - rads * toDeg
-// let toAngleRads = deg => deg * toRad
-// let toCCW = angle => -angle
-
-// const geometries = {
-//     radians: {
-//         toRads: rads => rads,
-//         fromRads: rads => rads,
-//         toAngleRads: rads => rads,
-//         toCCW: angle => angle,
-//         // toDeltaRads: rads => rads,
-//         // fromDeltaRads: rads => rads,
-//     },
-//     degrees: {
-//         toRads: deg => deg * toRad,
-//         fromRads: rads => rads * toDeg,
-//         toAngleRads: deg => deg * toRad,
-//         toCCW: angle => angle,
-//         // toDeltaRads: deg => deg * toRad,
-//         // fromDeltaRads: rads => rads * toDeg,
-//     },
-//     heading: {
-//         toRads: deg => (90 - deg) * toRad,
-//         fromRads: rads => 90 - rads * toDeg,
-//         toAngleRads: deg => deg * toRad,
-//         toCCW: angle => -angle,
-//         // toDeltaRads: deg => -deg * toRad,
-//         // fromDeltaRads: rads => -rads * toDeg,
-//     },
-// }
-
-// export default Model
+const geometries = {
+    radians: {
+        toRads: rads => rads,
+        fromRads: rads => rads,
+        toAngleRads: rads => rads,
+        fromAngleRads: rads => rads,
+        toCCW: angle => angle,
+    },
+    degrees: {
+        toRads: deg => deg * toRad,
+        fromRads: rads => rads * toDeg,
+        toAngleRads: deg => deg * toRad,
+        fromAngleRads: rads => rads * toDeg,
+        toCCW: angle => angle,
+    },
+    heading: {
+        toRads: deg => (90 - deg) * toRad,
+        fromRads: rads => 90 - rads * toDeg,
+        toAngleRads: deg => deg * toRad,
+        fromAngleRads: rads => rads * toDeg,
+        toCCW: angle => -angle,
+    },
+}

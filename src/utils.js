@@ -733,8 +733,10 @@ export function lerpScale(number, lo, hi) {
 
 // Degrees & Radians
 // Note: quantity, not coord system xfm
-const toDegrees = 180 / PI
-const toRadians = PI / 180
+// const toDegrees = 180 / PI
+// const toRadians = PI / 180
+export const toDeg = 180 / Math.PI
+export const toRad = Math.PI / 180
 
 // Better names and format for arrays. Change above?
 /**
@@ -743,7 +745,7 @@ const toRadians = PI / 180
  * @param {number} degrees a value in degrees: in [0, 360)
  * @returns {number} the value as radians: in [0, 2PI)
  */
-export const degToRad = degrees => mod2pi(degrees * toRadians)
+export const degToRad = degrees => mod2pi(degrees * toRad)
 
 /**
  * Convert from radians to degrees
@@ -751,7 +753,7 @@ export const degToRad = degrees => mod2pi(degrees * toRadians)
  * @param {number} radians a value in radians: in [0, 2PI)
  * @returns {number} the value as degrees: in [0, 360)
  */
-export const radToDeg = radians => mod360(radians * toDegrees)
+export const radToDeg = radians => mod360(radians * toDeg)
 
 // Heading & Radians: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
@@ -766,7 +768,7 @@ export const radToDeg = radians => mod360(radians * toDegrees)
  * @return {number} a value in degrees: in [0, 360)
  */
 export function radToHeading(radians) {
-    const deg = radians * toDegrees
+    const deg = radians * toDeg
     return mod360(90 - deg)
 }
 /**
@@ -777,7 +779,7 @@ export function radToHeading(radians) {
  */
 export function headingToRad(heading) {
     const deg = mod360(90 - heading)
-    return deg * toRadians
+    return deg * toRad
 }
 
 // Relative angles in heading space: deg Heading => -deg Eucledian
@@ -858,49 +860,17 @@ export function degreesTowardXY(x, y, x1, y1) {
     return radToDeg(radiansTowardXY(x, y, x1, y1))
 }
 
-export const toDeg = 180 / Math.PI
-export const toRad = Math.PI / 180
-const geometries = {
-    radians: {
-        toRads: rads => rads,
-        fromRads: rads => rads,
-        toAngleRads: rads => rads,
-        fromAngleRads: rads => rads,
-        toCCW: angle => angle,
-    },
-    degrees: {
-        toRads: deg => deg * toRad,
-        fromRads: rads => rads * toDeg,
-        toAngleRads: deg => deg * toRad,
-        fromAngleRads: rads => rads * toDeg,
-        toCCW: angle => angle,
-    },
-    heading: {
-        toRads: deg => (90 - deg) * toRad,
-        fromRads: rads => 90 - rads * toDeg,
-        toAngleRads: deg => deg * toRad,
-        fromAngleRads: rads => rads * toDeg,
-        toCCW: angle => -angle,
-    },
-}
-export function setGeometry(model, name) {
-    const geometry = geometries[name]
-    if (!geometry) throw Error(`util.setGeometry: ${name} geometry not defined`)
-    Object.assign(model, geometry)
-    model.geometry = name
-}
-
 // AltAz: Alt is deg from xy plane, 180 up, -180 down, Az is heading
 // We choose Phi radians from xy plane, "math" is often from Z axis
 // REMIND: some prefer -90, 90
 // export function altAzToAnglePhi(alt, az) {
 //     const angle = headingToRad(az)
-//     const phi = modpipi(alt * toRadians)
+//     const phi = modpipi(alt * toRad)
 //     return [angle, phi]
 // }
 // export function anglePhiToAltAz(angle, phi) {
 //     const az = radToHeading(angle)
-//     const alt = mod180180(phi * toDegrees)
+//     const alt = mod180180(phi * toDeg)
 //     return [alt, az]
 // }
 // export function mod180180(degrees) {
@@ -928,8 +898,8 @@ export function inCone(x, y, radius, coneAngle, direction, x0, y0) {
     return coneAngle / 2 >= Math.abs(subtractRadians(direction, angle12))
 }
 
-// export const radians = degrees => mod2pi(degrees * toRadians)
-// export const degrees = radians => mod360(radians * toDegrees)
+// export const radians = degrees => mod2pi(degrees * toRad)
+// export const degrees = radians => mod360(radians * toDeg)
 
 // export function precision(num, digits = 4) {
 //     const mult = 10 ** digits
