@@ -9,6 +9,8 @@ toc:
     - AgentSet
     - AgentArray
     - name: The Model
+    - Model2D
+    - Model3D
     - Model
     - World
     - name: The View

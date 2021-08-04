@@ -3,6 +3,7 @@
 // It is generally only used by Rollup for bundling.
 
 export * as util from './utils.js'
+export * as steg from './steg.js'
 
 // Models:
 export { default as AgentArray } from './AgentArray.js'
@@ -13,6 +14,7 @@ export { default as Link } from './Link.js'
 export { default as Links } from './Links.js'
 export { default as Model } from './Model.js'
 export { default as Model2D } from './Model2D.js'
+export { default as Model3D } from './Model3D.js'
 export { Object3D } from '../vendor/Object3D.js'
 export { default as Patch } from './Patch.js'
 export { default as Patches } from './Patches.js'
