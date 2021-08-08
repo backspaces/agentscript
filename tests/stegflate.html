@@ -2,28 +2,23 @@
 <html>
     <head>
         <title>StegFlate</title>
-        <style>
-            div {
-                display: inline;
-            }
-        </style>
     </head>
     <body>
-        <div id="in"></div>
-        <div id="out"></div>
+        <div id="in" style="display: inline"></div>
+        <div id="out" style="display: inline"></div>
         <script type="module">
             import * as util from '../src/utils.js'
-            import steg from '../src/steg.js'
+            import * as steg from '../src/steg.js'
             import * as fflate from 'https://cdn.skypack.dev/fflate'
 
-            util.toWindow({ util, steg, fflate })
+            const imgName = 'flock.png' // 250,000 px
+            // const imgName = 'flock600.png' // 360,000 px
+            // const msgUrl = '../dist/agentscript.js'
+            const msgUrl = '../dist/agentscript.min.js'
 
-            const url = 'https://unpkg.com/agentscript/dist/agentscript.js'
-            let msg = await util.fetchType(url)
-            console.log('msg size', msg.length)
-
-            const img = await util.imagePromise('./flock600.png')
-            console.log('img size', img.width * img.height)
+            let msg = await fetch(msgUrl).then(resp => resp.text())
+            const img = await util.imagePromise(imgName)
+            console.log('size: msg', msg.length, 'img', img.width * img.height)
 
             const buf = fflate.strToU8(msg)
             const cbuf = fflate.compressSync(buf)

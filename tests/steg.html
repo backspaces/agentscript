@@ -2,27 +2,20 @@
 <html>
     <head>
         <title>Steg</title>
-        <style>
-            div {
-                display: inline;
-            }
-        </style>
     </head>
     <body>
-        <div id="in"></div>
-        <div id="out"></div>
+        <div id="in" style="display: inline"></div>
+        <div id="out" style="display: inline"></div>
         <script type="module">
             import * as util from '../src/utils.js'
-            import steg from '../src/steg.js'
-            util.toWindow({ util, steg })
+            import * as steg from '../src/steg.js'
+            const imgName = 'flock.png'
 
-            let msg =
-                'Sunt labore proident anim sunt reprehenderit consectetur laborum eiusmod. Occaecat irure reprehenderit dolore nisi velit ipsum ea elit veniam nulla labore nisi irure voluptate. Pariatur elit consequat veniam anim sit et qui esse eiusmod. Nostrud anim laboris adipisicing quis sit occaecat ut sunt. Occaecat elit magna eu ut aliqua mollit.'
-            util.repeat(9, () => {
-                msg += msg
-            })
+            const msgPath = '../dist/agentscript0.js'
+            // const msgPath = '../dist/agentscript.min.js'
+            const msg = await fetch(msgPath).then(resp => resp.text())
 
-            const img = await util.imagePromise('flock.png')
+            const img = await util.imagePromise(imgName)
             const ctx = await steg.encode(img, msg)
 
             document.getElementById('in').append(img)

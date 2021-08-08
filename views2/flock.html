@@ -10,14 +10,15 @@
             import Animator from '../src/Animator.js'
             import Model from '../models/FlockModel.js'
 
-            const model = new Model()
+            const model = new Model() // default world options
             await model.startup()
             model.setup()
 
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
                 patchSize: 15,
-            }) // defalt drawOptions!
+                // defalt drawOptions!
+            })
 
             const anim = new Animator(
                 () => {
