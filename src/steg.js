@@ -48,9 +48,9 @@ function charToBits(char) {
     ]
 }
 const bits = [
-    { shift: 5, msgMask: 0b00000111, dataMask: 0b11111000, bits: 3 },
-    { shift: 3, msgMask: 0b00000011, dataMask: 0b11111100, bits: 2 },
-    { shift: 0, msgMask: 0b00000111, dataMask: 0b11111000, bits: 3 },
+    { shift: 5, msgMask: 0b00000111, dataMask: 0b11111000 }, // bits: 3
+    { shift: 3, msgMask: 0b00000011, dataMask: 0b11111100 }, // bits: 2
+    { shift: 0, msgMask: 0b00000111, dataMask: 0b11111000 }, // bits: 3
 ]
 function checkSize(msg, width, height) {
     const imgSize = width * height // 1 px = 1 byte
@@ -124,8 +124,4 @@ export async function decode(img, returnU8 = false) {
 
     if (returnU8) return msgArray
     return new TextDecoder().decode(msgArray)
-    // const msg = new TextDecoder().decode(msgArray)
-    // return msg
 }
-
-// export default { encode, decode }

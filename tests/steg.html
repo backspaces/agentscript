@@ -11,8 +11,8 @@
             import * as steg from '../src/steg.js'
             const imgName = 'flock.png'
 
-            const msgPath = '../dist/agentscript0.js'
-            // const msgPath = '../dist/agentscript.min.js'
+            const msgPath = 'https://unpkg.com/agentscript/dist/agentscript0.js'
+            // const msgPath = 'https://unpkg.com/agentscript/dist/agentscript.min.js'
             const msg = await fetch(msgPath).then(resp => resp.text())
 
             const img = await util.imagePromise(imgName)
