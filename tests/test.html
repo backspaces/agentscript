@@ -2,312 +2,87 @@
 <html>
     <head>
         <title>Test</title>
-        <!-- <style>
-            html,
-            body,
-            #modelDiv,
-            canvas {
-                margin: 0;
-                padding: 0;
-                border: 0;
-            }
-            #modelDiv canvas {
-                width: 100vw;
-                height: 100vh;
-            }
-        </style> -->
-        <!-- <script src="../dist/agentscript.umd.js"></script> -->
-        <!-- <script src="https://cdn.skypack.dev/agentscript/dist/agentscript.umd.js"></script> -->
-        <!-- <script src="https://unpkg.com/agentscript/dist/agentscript.umd.js"></script> -->
-    </head>
-
     <body>
-        <div id="modelDiv"></div>
+        <div id="testDiv"></div>
         <script type="module">
             import * as util from '../src/utils.js'
 
-            import Model from '../src/Model.js'
-            class Turtle extends Model {
-                setup() {
-                    const t = this.turtles.createOne()
-                }
+            let url = './flock.png' // 500x500: 250K pixels, 1MB
+            let img = await util.imagePromise(url)
+            let ctx = util.imageToCtx(img)
+            let can = ctx.canvas
+            util.toWindow({util, url, img, ctx, can})
+            console.log('can', can)
+            console.log('imageData', ctx.getImageData(0, 0, can.width, can.height))
+
+            let canBlobPng = await util.canvasToBlob(can, 'png')
+            console.log('canBlobPng', canBlobPng)
+            let canBlobJpeg = await util.canvasToBlob(can, 'jpeg')
+            console.log('canBlobJpeg', canBlobJpeg)
+            let canBlobJpeg1 = await util.canvasToBlob(can, 'jpeg', 1)
+            console.log('canBlobJpeg1', canBlobJpeg1)
+
+            let canBlobUrl = await util.blobToData(canBlobPng, 'dataURL')
+            console.log('canBlobUrl', canBlobUrl.slice(0,100))
+            let canBlobText = await util.blobToData(canBlobPng, 'text')
+            console.log('canBlobText', canBlobText.slice(0,200))
+            let canBlobBuffer = await util.blobToData(canBlobPng, 'arrayBuffer')
+            console.log('canBlobBuffer', canBlobBuffer)
+
+            let urlDataBlob = await util.urlToData(url, 'blob')
+            console.log('urlDataBlob', urlDataBlob)
+            let urlDataText = await util.urlToData(url, 'text')
+            console.log('urlDataText', urlDataText.slice(0,100))
+            let urlDataBuffer = await util.urlToData(url, 'arrayBuffer')
+            console.log('urlDataBuffer', new Uint8Array(urlDataBuffer.slice(0,32)))
+
+            let blobsEqual = await util.blobsEqual(canBlobPng, urlDataBlob)
+            console.log('canBlobPng === urlDataBlob', blobsEqual) // false, can usage
+
+            // img: image, canvas, video, blob, imageData
+            let imageBitmap = await util.imageToImageBitmap(img)
+            console.log('imageBitmap', imageBitmap)
+            let imageBitmapCtx = await util.imageBitmapCtx(imageBitmap)
+            console.log('imageBitmapCtx', imageBitmapCtx)
+            imageBitmap = await util.imageToImageBitmap(img) // recreate!
+            let imageBitmapCan = await util.imageBitmapCanvas(imageBitmap)
+            console.log('imageBitmapCan', imageBitmapCan)
+            imageBitmap = await util.imageToImageBitmap(img) // recreate!
+            let imageBitmapData = await util.imageBitmapData(imageBitmap)
+            console.log('imageBitmapData', imageBitmapData)
+
+            imageBitmap = await util.imageToImageBitmap(img) // recreate!
+            util.toWindow({imageBitmap, imageBitmapCtx, imageBitmapCan})
+
+
+/*
+            const canvas = document.createElement("canvas");
+            canvas.width = canvas.height = 1;
+
+            const bitmapCtx = canvas.getContext("bitmaprenderer");
+            if (bitmapCtx === null) {
+                return false;
             }
-            const model = new Turtle()
-            model.setup()
-            const t = model.turtles.first()
 
-            // import * as helpers from 'https://unpkg.com/@turf/helpers?module'
-            // import booleanPointInPolygon from 'https://unpkg.com/@turf/boolean-point-in-polygon?module'
-            // import bboxPolygon from 'https://unpkg.com/@turf/bbox-polygon?module'
-            // const turf0 = { helpers, booleanPointInPolygon, bboxPolygon }
-            // util.toWindow({ turf0 })
+            const bitmap = await createImageBitmap(imageData);
+            bitmapCtx.transferFromImageBitmap(bitmap);
 
-            // import * as turf1 from '../vendor/turf.js'
-            // util.toWindow({ turf1 })
+            const blob = await new Promise((resolve) => canvas.toBlob(resolve));
+            blobURL = URL.createObjectURL(blob);
+*/
+            // let nomime = 'application/octet-stream'
+            // console.log('int', new Blob([1], {type: nomime+';type=integer'}))
+            // console.log('float', new Blob([1.0], {type: nomime}))
+            // console.log('array', new Blob([[1,2]], {type: nomime}))
+            // console.log('typedarray', new Blob([new Uint8Array([1,2])], {type: nomime}))
+            // console.log('obj', new Blob([{one:1, two:2}], {type: nomime}))
 
-            // import * as turf2 from 'https://unpkg.com/@turf/turf?module'
-            // import * as turf2 from 'https://unpkg.com/@turf/turf/dist/es/index.js?module'
+            // console.log('json', new Blob([JSON.stringify({one:1, two:2})], {type: 'application/json'}))
 
-            // import * as turf2 from 'https://cdn.skypack.dev/@turf/turf'
-            // import * as turf2 from 'https://cdn.skypack.dev/@turf/turf/dist/es/index.js'
 
-            // import * as turf2 from 'https://esm.run/@turf/turf'
-            // import * as turf2 from 'https://esm.run/@turf/turf/dist/es/index.js'
 
-            // import * as turf2 from 'https://cdn.skypack.dev/-/@turf/turf@v6.5.0-Uj3hJZjk6HbZfQOGMa7n/dist=es2020,mode=imports/optimized/@turf/turf.js'
 
-            // util.toWindow({ turf2 })
-
-            // Uncaught TypeError: Failed to resolve module specifier "@turf/isolines". Relative references must start with either "/", "./", or "../".
-            // import * as turf from 'https://cdn.skypack.dev/@turf/turf@6.3.0/dist/es/index.js'
-            // import * as turf from 'https://unpkg.com/@turf/turf@6.2.0/dist/es/index.js'
-            // import * as turf from 'https://unpkg.com/@turf/turf@6.3.0/dist/es/index.js'
-            // import * as turf from 'https://unpkg.com/@turf/turf@6.3.0/dist/es/index.js'
-
-            // import * as L0 from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            // import * as L from 'https://cdn.skypack.dev/leaflet'
-            // import elem0 from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
-            // import elem from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
-            // import elem1 from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
-            // util.toWindow({ L0, L, elem0, elem, elem1 })
-
-            // import * as tds from '../src/TileDataSet.js'
-            // const { z, x, y } = { z: 14, x: 3370, y: 6451 }
-            // //https://tile.thunderforest.com/cycle/14/3370/6451.png?apikey=690f61bc23a34b409ebd97d7891521b3
-            // const img = await util.imagePromise(
-            //     // tds.stamenUrl(z, x, y, 'toner')
-            //     // tds.stamenUrl(z, x, y)
-            //     // tds.osmUrl(z, x, y)
-            //     // `https://tile.openstreetmap.org/${z}/${x}/${y}.png`
-            //     `http://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v8/14/3370/6451.mvt?access_token=pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ`
-            // )
-            // document.body.append(img)
-
-            // c
-            // util.toWindow({ L })
-
-            // import * as AS from 'https://cdn.skypack.dev/agentscript'
-            // import * as AS from '../src/AS'
-            // Object.assign(window, AS)
-            // util.toWindow(AS)
-
-            // import jsfeat from 'https://cdn.skypack.dev/jsfeat'
-            // util.toWindow({jsfeat})
-
-            // import dat from 'https://cdn.skypack.dev/dat.gui'
-            // const gui = new dat.GUI()
-            // const controls = {
-            //     color1: '#FF0000', // CSS string
-            //     color2: [0, 128, 255], // RGB array
-            //     color3: [0, 128, 255, 0.3], // RGB with alpha
-            //     color4: { h: 350, s: 0.9, v: 0.3 }, // Hue, saturation, value
-            // }
-            // gui.addColor(controls, 'color1')
-            // gui.addColor(controls, 'color2')
-            // gui.addColor(controls, 'color3')
-            // gui.addColor(controls, 'color4')
-            //
-            // var FizzyText = function () {
-            //     this.color = 'red' // CSS string
-            // }
-            // const controls = new FizzyText()
-            // gui.addColor(controls, 'color') // fail
-            //
-            // const controls = { color1: 'red' } // fail!
-            // const controls = { color1: '#FF0000' }
-            // gui.addColor(controls, 'color1')
-
-            // import * as AS1 from 'https://cdn.skypack.dev/agentscript'
-            // import * as AS2 from 'https://unpkg.com/agentscript'
-            // import Model1 from 'https://cdn.skypack.dev/agentscript/src/Model.js'
-            // import Model2 from 'https://unpkg.com/agentscript/src/Model.js'
-            // import * as AS3 from 'https://cdn.skypack.dev/agentscript/dist/agentscript.js'
-            // import * as AS4 from 'https://unpkg.com/agentscript/dist/agentscript.js'
-            // util.toWindow({ AS1, AS2, Model1, Model2, AS3, AS4 })
-            // util.fetchType('https://cdn.skypack.dev/agentscript').then(as1 =>
-            //     util.toWindow({ as1 })
-            // )
-            // util.fetchType('https://unpkg.com/agentscript').then(as2 =>
-            //     util.toWindow({ as2 })
-            // )
-
-            // window.steps = 100
-            // window.fcn = () => {
-            //     console.log('steps', steps--)
-            //     if (steps <= 0) clearInterval(iid)
-            // }
-            // window.iid = setInterval(fcn, steps)
-
-            // import Animator from '../src/Animator.js'
-            // const anim = new Animator(
-            //     () => console.log('step'),
-            //     -1, // steps
-            //     30 // fps
-            // ).startStats()
-            // util.toWindow({ util, anim })
-
-            // If there is a possibility that your logic could take longer to execute than the interval time, it is recommended that you recursively call a named function using setTimeout(). For example, if using setInterval() to poll a remote server every 5 seconds, network latency, an unresponsive server, and a host of other issues could prevent the request from completing in its allotted time. As such, you may find yourself with queued up XHR requests that won't necessarily return in order.
-            // In these cases, a recursive setTimeout() pattern is preferred:
-            // ;(function loop() {
-            //     setTimeout(function () {
-            //         // Your logic here
-            //         loop()
-            //     }, delay)
-            // })()
-
-            // import Animator from '../src/Animator.js'
-            // import TwoDraw from '../src/TwoDraw.js'
-            // import Model from '../models/HelloModel.js'
-            // const model = new Model()
-            // model.setup()
-            // const view = new TwoDraw(model, { div: 'modelDiv' })
-            // const anim = new Animator(() => {
-            //     model.step()
-            //     view.draw()
-            // }, 500)
-            // util.toWindow({ util, Model, model, view, anim })
-
-            // import AgentArray from '../src/AgentArray.js'
-            // window.aa = AgentArray
-
-            // import Model from '../models/HelloModel.js'
-            // import TwoDraw from '../src/TwoDraw.js'
-            // const model = new Model()
-            // model.setGeometry('heading')
-            // model.population = 1
-            // model.setup()
-            // const view = new TwoDraw(
-            //     model,
-            //     {
-            //         div: 'modelDiv',
-            //         patchSize: 20,
-            //     },
-            //     {
-            //         //
-            //     }
-            // )
-            // util.toWindow({ util, Model, model, view })
-            // util.dump()
-            // // window.draw = () => view.draw()
-            // window.pi = Math.PI
-            // t.setxy(0, 0)
-            // t.heading = 0
-
-            // util.timeoutLoop(
-            //     () => {
-            //         view.draw()
-            //     },
-            //     -1,
-            //     100
-            // )
-
-            // Object.assign(window, util)
-            // const obj = {
-            //     r2d: radToDeg,
-            //     d2r: degToRad,
-            //     r2h: radToHeading,
-            //     h2r: headingToRad,
-            //     d2h: degToHeading,
-            //     h2d: headingToDeg,
-            //     deq: degreesEqual,
-            //     req: radsEqual,
-            //     heq: headingsEq,
-            //     sr: subtractRadians,
-            //     sh: subtractHeadings,
-            //     sd: subtractDegrees,
-            //     rtw: radiansTowardXY,
-            //     htw: headingTowardXY,
-            //     dtw: degreesTowardXY,
-            //     md: mod360,
-            //     mp: mod2pi,
-            //     mpp: modpipi,
-            //     pi: Math.PI,
-            //     pi2: 2 * Math.PI,
-            // } // = util
-            // Object.assign(window, obj)
-
-            // import Color from '../src/Color.js'
-            // import Model from '../models/HelloModel.js'
-            // import TwoDraw from '../src/TwoDraw.js'
-            // const model = new Model({ maxX: 16 })
-            // model.setup()
-            // const view = new TwoDraw(
-            //     model,
-            //     {
-            //         div: 'modelDiv',
-            //         patchSize: 15,
-            //     },
-            //     {
-            //         // patchesColor: 'black',
-            //         patchesColor: Color.typedColor('black'),
-            //         turtlesColor: Color.typedColor('white'),
-            //     }
-            // ) // defalt drawOptions!
-            // view.draw()
-
-            // import * as THREE from 'https://cdn.skypack.dev/three@0.120.0'
-            // import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
-
-            // import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
-            // import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
-            // import AS from 'https://jspm.dev/agentscript'
-            // import utils from 'https://jspm.dev/agentscript/src/utils.js'
-            // util.toWindow({ AS, utils })
-
-            // import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
-            // import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
-
-            // util.toWindow({ THREE, OrbitControls })
-
-            // import mapboxGl from 'https://cdn.skypack.dev/mapbox-gl'
-            // console.log(util.typeOf(mapboxGl))
-            // util.toWindow({ mapboxGl })
-
-            // import util from './util.js'
-            // console.log(util, util.lerp)
-
-            // // import TestClass from './test.js'
-            // // import './test.js'
-            // import Model from 'https://code.agentscript.org/models/LinkTravelModel.js'
-
-            // import DataSet from '../src/DataSet.js'
-            // let range = size => [...Array(size)].map((_, i) => i)
-            // // let range = size => Array.from({ length: size }, (x, i) => i)
-            // let range2 = (size, start = 0, step = 1) =>
-            //     [...Array(size)].map((_, i) => start + i * step)
-            // let ds = new DataSet(5, 10, range2(50, 0, 10))
-            // let dsn = ds.normalize(0, 1)
-            // console.log(dsn.data)
-
-            // let lerp = util.lerp
-            // import * as util from '../src/utils.js'
-            // let lerp = util.lerp
-            // import { lerp } from '../src/utils.js'
-
-            // import * as util from 'https://code.agentscript.org/src/utils.js'
-            // let lerp = util.lerp
-            // import * as util from 'https://code.agentscript.org/tests/utils.js'
-            // let lerp = util.lerp
-            // import { lerp } from 'https://code.agentscript.org/src/utils.js'
-            // import { lerp } from 'https://code.agentscript.org/tests/utils.js'
-
-            // import util from 'https://unpkg.com/agentscript@0.8.2/src/util.js'
-            // let lerp = util.lerp
-            // import * as util from 'https://unpkg.com/agentscript@0.8.2/tests/utils.js'
-            // let lerp = util.lerp
-            // import util from 'https://unpkg.com/agentscript@0.8.2/tests/util.js'
-            // let lerp = util.lerp
-            // import { lerp } from 'https://unpkg.com/agentscript@0.8.2/src/utils.js'
-            // import { lerp } from 'https://unpkg.com/agentscript@0.8.2/tests/utils.js'
-
-            // import util from 'https://cdn.skypack.dev/agentscript@0.8.2/src/util.js'
-            // let lerp = util.lerp
-            // import * as util from 'https://cdn.skypack.dev/agentscript@0.8.2/tests/utils.js'
-            // let lerp = util.lerp
-            // import { lerp } from 'https://cdn.skypack.dev/agentscript@0.8.2/src/utils.js'
-            // import { lerp } from 'https://cdn.skypack.dev/agentscript@0.8.2/tests/utils.js'
-
-            // console.log(lerp)
+            // debugger
         </script>
     </body>
 </html>

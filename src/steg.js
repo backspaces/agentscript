@@ -8,7 +8,7 @@ async function toContext(img) {
         case 'string': // Note: drop thru to image
             img = await util.imagePromise(img)
         case 'htmlimageelement':
-            return util.createCtxFromImage(img)
+            return util.imageToCtx(img)
 
         // canvas
         case 'htmlcanvaselement':

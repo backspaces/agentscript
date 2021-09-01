@@ -53,15 +53,16 @@ export default class TwoDraw extends TwoView {
         this.checkParams(drawOptions)
         this.drawOptions = drawOptions
     }
-    // name should not have ".png" terminator, just 'foo' is fine.
+
+    // name need not end ".png", will be added if needed.
     // if name undefined use model name, lowerCase'd w/ "Model" removed
-    downloadCanvas(name = undefined) {
-        if (!name)
-            name = this.model.constructor.name
-                .toLowerCase()
-                .replace(/model$/, '')
-        util.downloadCanvas(this.canvas, name + '.png')
-    }
+    // downloadCanvas(name = undefined) {
+    //     if (!name)
+    //         name = this.model.constructor.name
+    //             .toLowerCase()
+    //             .replace(/model$/, '')
+    //     util.downloadCanvas(this.canvas, name)
+    // }
 
     // The parameters are easily mistaken: check they are all in the defaults.
     checkParams(params) {

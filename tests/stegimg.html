@@ -12,13 +12,14 @@
 
             const inDiv = document.getElementById('in')
             const outDiv = document.getElementById('out')
-            const imgName = 'flock.png'
+            // const imgName = 'flock.png'
+            const imgName = '../Attic/flock.jpeg'
 
             const imgIn = await util.imagePromise(imgName)
             inDiv.append(imgIn)
 
             function stegify(img, bits) {
-                const ctx = util.createCtxFromImage(img)
+                const ctx = util.imageToCtx(img)
                 const imgData = util.ctxImageData(ctx)
                 imgData.data.forEach((val, i) => {
                     // Don't change alpha, just RGB
@@ -31,10 +32,22 @@
             }
 
             const gui = new dat.GUI()
-            gui.add({ bits: 2 }, 'bits', 0, 8, 1).onFinishChange(bits => {
-                const can = stegify(imgIn, bits)
+            const download = () => {
+                stegInstall()
+                util.downloadCanvas(
+                    outDiv.firstChild,
+                    'steg.' + UI.bits + '.jpeg',
+                    // 'steg.' + UI.bits + '.png',
+                    1 // highest quality.
+                )
+            }
+            const stegInstall = () => {
+                const can = stegify(imgIn, UI.bits)
                 outDiv.replaceChildren(can)
-            })
+            }
+            const UI = { bits: 2, download }
+            gui.add(UI, 'bits', 0, 8, 1).onFinishChange(stegInstall)
+            gui.add(UI, 'download')
         </script>
     </body>
 </html>

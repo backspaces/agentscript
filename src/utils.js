@@ -1,4 +1,4 @@
-// ### Async
+// ### Async & I/O
 
 // Return Promise for getting an image.
 // - use: imagePromise('./path/to/img').then(img => imageFcn(img))
@@ -6,6 +6,7 @@
  * Return a Promise for getting an image.
  *
  * use: imagePromise('./path/to/img').then(img => imageFcn(img))
+ * or: await imagePromise('./path/to/img')
  *
  * @param {URL} url string for path to image
  * @return {Promise} A promise resolving to the image
@@ -20,30 +21,142 @@ export function imagePromise(url) {
         img.src = url
     })
 }
-export async function imageBitmapPromise(url) {
-    const blob = await xhrPromise(url, 'blob')
-    return createImageBitmap(blob)
+// // Convert File blob (actually any blob) to Image
+// export function blobImagePromise(blob) {
+//     const url = URL.createObjectURL(blob)
+//     return imagePromise(url)
+// }
+
+// See https://javascript.info/binary for great blob, dataUrl, objUrl discussion.
+
+// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/createImageBitmap#parameters
+// export async function imageBitmapPromise(urlOrBlob, options = {}) {
+//     // const blob = await xhrPromise(url, 'blob')
+//     if (typeof urlOrBlob === 'string')
+//         urlOrBlob = await fetch(urlOrBlob).then(res => res.blob())
+//     return createImageBitmap(urlOrBlob, options)
+// }
+
+// createImageBitmap(img) with lossless parameters.
+// img: image, canvas, video, blob, imageData
+export async function imageToImageBitmap(img) {
+    return createImageBitmap(img, {
+        premultiplyAlpha: 'none',
+        colorSpaceConversion: 'none',
+    })
+}
+// https://stackoverflow.com/questions/52959839/convert-imagebitmap-to-blob
+// https://stackoverflow.com/questions/60031536/difference-between-imagebitmap-and-imagedata
+// Return an ImageBitmapRenderingContext from the imageBitmap
+// The imageBitmap will have transferred its "ownership" to the ctx.canvas.
+// The ctx will NOT have the getImageData function.
+// Nor will the ctx.canvas be able to getContext('2d')
+// The ctx.canvas can be used to draw on a vanilla canvas
+// export async function imageBitmapCtx(imageBitmap) {
+//     const { width, height } = imageBitmap
+//     const can = createCanvas(width, height)
+//     // const can = createCanvas(width, height, true)
+//     const ctx = can.getContext('bitmaprenderer')
+//     ctx.transferFromImageBitmap(imageBitmap)
+//     // downloadCanvas(ctx.canvas) // debug
+//     return ctx // ctx.getImageData(0, 0, width, height)
+// }
+export async function imageBitmapRendererCtx(imageBitmap) {
+    const { width, height } = imageBitmap
+    const can = new OffscreenCanvas(width, height)
+    const ctx = can.getContext('bitmaprenderer')
+    ctx.transferFromImageBitmap(imageBitmap)
+    return ctx // ctx.getImageData(0, 0, width, height)
+}
+// Use above to create a new canvas filled with the imageBitmap
+// export async function imageBitmapCanvas(imageBitmap) {
+//     // const ctx = await imageBitmapCtx(imageBitmap)
+//     // return cloneCanvas(ctx.canvas) // Safe from premultiply?
+//     return imageBitmapCanvasCtx(imageBitmap).canvas
+// }
+export function imageBitmap2dCtx(imageBitmap) {
+    const { width, height } = imageBitmap
+    const can = new OffscreenCanvas(width, height)
+    const ctx = can.getContext('2d')
+    ctx.drawImage(imageBitmap, 0, 0)
+    return ctx
+}
+export async function imageBitmapData(imageBitmap) {
+    const ctx = imageBitmap2dCtx(imageBitmap)
+    return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
 }
 
-// Convert canvas.toBlob to a promise
-export function canvasBlobPromise(can, mimeType = 'image/png', quality = 0.95) {
+// Convert canvas.toBlob callback style to a promise
+export async function canvasToBlob(can, mimeType = 'png', quality = undefined) {
+    if (!mimeType.startsWith('image/')) mimeType = 'image/' + mimeType
     return new Promise(resolve => {
         can.toBlob(blob => resolve(blob), mimeType, quality)
     })
 }
-// Convert canvas to .png File blob
-export function canvasFilePromise(can, name = 'canvas.png') {
-    return new Promise(resolve => {
-        can.toBlob(blob => {
-            var file = new File([blob], name, { type: 'image/png' })
-            resolve(file)
-        })
+// ^^ditto for canvasToDataURL()
+// export async function imageToBlob(img) {
+//     return fetch(url).then(res => res[type]())
+// }
+
+// Async convert blob to one of three types:
+// Type can be one of Text, ArrayBuffer, DataURL
+// Camel case ok: text, arrayBuffer, dataURL
+export async function blobToData(blob, type = 'dataURL') {
+    type = type[0].toUpperCase() + type.slice(1)
+    const types = ['Text', 'ArrayBuffer', 'DataURL']
+    if (!types.includes(type))
+        throw Error('blobToData: data must be one of ' + types.toString())
+    const reader = new FileReader()
+    return new Promise((resolve, reject) => {
+        reader.addEventListener('load', () => resolve(reader.result))
+        reader.addEventListener('error', e => reject(e))
+        reader['readAs' + type](blob)
     })
 }
-// Convert File blob (actually any blob) to Image
-export function blobImagePromise(blob) {
-    const url = URL.createObjectURL(blob)
-    return imagePromise(url)
+// Async Fetch of a url with the response of the given type
+// types: arrayBuffer, blob, json, text; default is blob
+// See https://developer.mozilla.org/en-US/docs/Web/API/Response#methods
+export async function urlToData(url, type = 'blob') {
+    const types = ['arrayBuffer', 'blob', 'json', 'text']
+    if (!types.includes(type))
+        throw Error('urlToData: data must be one of ' + types.toString())
+    return fetch(url).then(res => res[type]())
+}
+// Return a dataURL for the given data. type is a mime type: https://t.ly/vzKm
+// If data is a canvas, return data.toDataURL(type), defaulting to image/png
+// Otherwise, use btoa/base64, default type text/plain;charset=US-ASCII
+export function toDataURL(data, type = undefined) {
+    if (data.toDataURL) return data.toDataURL(type, type)
+    if (!type) type = 'text/plain;charset=US-ASCII'
+    return `data:${type};base64,${btoa(data)}}`
+}
+export async function blobsEqual(blob0, blob1) {
+    const text0 = await blob0.text()
+    const text1 = await blob1.text()
+    return text0 === text1
+}
+
+// download canvas as png or jpeg. Canvas can be a dataURL.
+// name must end in .png or .jpeg.
+// quality is default. For lossless jpeg, set to 1
+export function downloadCanvas(can, name = 'download.png', quality = null) {
+    if (!(name.endsWith('.png') || name.endsWith('.jpeg')))
+        throw Error('downloadCanvas: name must end with .png or .jpeg')
+    const type = name.endsWith('.png') ? 'image/png' : 'image/jpeg'
+    const url = typeof can === 'string' ? can : can.toDataURL(type, quality)
+    const link = document.createElement('a')
+    link.download = name
+    link.href = url
+    link.click()
+}
+// Ditto for blobs
+export function downloadBlob(blob, name = 'blob.png') {
+    // canvas.toBlob(callback, mimeType, qualityArgument) ?
+    let link = document.createElement('a')
+    link.download = name
+    link.href = URL.createObjectURL(blob)
+    link.click()
+    URL.revokeObjectURL(link.href)
 }
 
 // Return Promise for ajax/xhr data.
@@ -116,13 +229,15 @@ export function waitPromise(done, ms = 10) {
     })
 }
 
+// deprecated, use: await fetch(url).then(res => res.<type>())
+// https://developer.mozilla.org/en-US/docs/Web/API/Response#methods
 // type = "arrayBuffer" "blob" "formData" "json" "text"
-export async function fetchType(url, type = 'text') {
-    const response = await fetch(url)
-    if (!response.ok) throw Error(`Not found: ${url}`)
-    const value = await response[type]()
-    return value
-}
+// export async function fetchType(url, type = 'text') {
+//     const response = await fetch(url)
+//     if (!response.ok) throw Error(`Not found: ${url}`)
+//     const value = await response[type]()
+//     return value
+// }
 
 // // Similar pair for requestAnimationFrame
 // export function rafPromise() {
@@ -254,9 +369,8 @@ export function ctxImageData(ctx) {
 }
 // Clear this context using the cssColor.
 // If no color or if color === 'transparent', clear to transparent.
-export function clearCtx(ctx, cssColor) {
+export function clearCtx(ctx, cssColor = undefined) {
     const { width, height } = ctx.canvas
-
     setIdentity(ctx)
     if (!cssColor || cssColor === 'transparent') {
         ctx.clearRect(0, 0, width, height)
@@ -271,10 +385,13 @@ export function clearCtx(ctx, cssColor) {
 // These image functions use "imagable" objects: Image, ImageBitmap, Canvas ...
 // https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
 
-export function createCtxFromImage(img) {
+export function imageToCtx(img) {
     const ctx = createCtx(img.width, img.height)
     fillCtxWithImage(ctx, img)
     return ctx
+}
+export function imageToCanvas(img) {
+    return imageToCtx(img).canvas
 }
 // Fill this context with the given image. Will scale image to fit ctx size.
 export function fillCtxWithImage(ctx, img) {
@@ -292,24 +409,6 @@ export function fillCtxWithImage(ctx, img) {
 export function setCtxImage(ctx, img) {
     setCanvasSize(ctx.canvas, img.width, img.height)
     fillCtxWithImage(ctx, img)
-}
-
-// download canvas as png. canvas can be a dataURL.
-export function downloadCanvas(can, name = 'canvas.png') {
-    const url = typeof can === 'string' ? can : can.toDataURL()
-    const link = document.createElement('a')
-    link.download = name
-    link.href = url
-    link.click()
-}
-// Ditto for blobs
-export function downloadBlob(blob, name = 'blob.png') {
-    // canvas.toBlob(callback, mimeType, qualityArgument) ?
-    let link = document.createElement('a')
-    link.download = name
-    link.href = URL.createObjectURL(blob)
-    link.click()
-    URL.revokeObjectURL(link.href)
 }
 
 // ### Debug
@@ -417,6 +516,9 @@ export function toWindow(obj) {
     //     Object.keys(obj).forEach(key => console.log('  ', key, obj[key]))
     // }
 }
+export function logAll(obj) {
+    Object.keys(obj).forEach(key => console.log('  ', key, obj[key]))
+}
 
 // Dump model's patches turtles links to window
 export function dump(model = window.model) {
@@ -466,16 +568,6 @@ export async function setCssStyle(url) {
     if (!response.ok) throw Error(`Not found: ${url}`)
     const css = await response.text()
     document.head.innerHTML += `<style>${css}</style>`
-}
-
-// Return a dataURL for the given data.
-// type is a mime type: https://t.ly/vzKm
-// If data is a canvas, return data.toDataURL(type), defaulting to image/png
-// Otherwise, use btoa/base64, default type text/plain;charset=US-ASCII
-export function toDataURL(data, type = undefined) {
-    if (data.toDataURL) return data.toDataURL(type)
-    if (!type) type = 'text/plain;charset=US-ASCII'
-    return `data:${type};base64,${btoa(data)}}`
 }
 
 // REST:
@@ -1346,12 +1438,12 @@ export const arrayLast = array => array[array.length - 1]
 export const arrayMax = array => array.reduce((a, b) => Math.max(a, b))
 export const arrayMin = array => array.reduce((a, b) => Math.min(a, b))
 export const arrayExtent = array => [arrayMin(array), arrayMax(array)]
-export const arraysDiff = (a1, a2) => {
+export const arraysDiff = (a1, a2, ifcn = i => i) => {
     if (a1.length !== a2.length)
         return console.log('lengths differ', a1.length, a2.length)
     const diffs = []
     for (let i = 0; i < a1.length; i++) {
-        if (a1[i] !== a2[i]) diffs.push([i, a1[i], a2[i]])
+        if (a1[i] !== a2[i]) diffs.push([ifcn(i), a1[i], a2[i]])
     }
     return diffs
 }

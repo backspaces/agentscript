@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>IBM</title>
+    <body>
+        <div id="testDiv"></div>
+        <script type="module">
+            import * as util from '../src/utils.js'
+            import {imageToBytes} from '../src/RGBADataSet.js'
+
+            let urlctx = util.createCtx(10,10)
+            util.clearCtx(urlctx, 'yellow')
+            urlctx.fillStyle = 'rgba(255,0,0,0.25)'
+            urlctx.fillRect(3, 0, 4, 10)
+            urlctx.fillStyle = 'rgba(0,0,255,0,0.5)'
+            urlctx.fillRect(0, 3, 10, 4)
+            document.body.appendChild(urlctx.canvas)
+            util.downloadCanvas(urlctx.canvas, 'alphatest.png')
+
+
+            // let url = 'https://httpbin.org/image/png'
+            // let url = '../Attic/alphatest.png'
+            let url = '../../../dl/alphatest.png'
+            // let url = '../Attic/alphatest.jpg'
+            // let url =  urlctx.canvas.toDataURL()
+
+            let img = await util.imagePromise(url)
+            let {width, height} = img
+            let ctx0 = util.imageToCtx(img)
+            let ctx = util.imageToCtx(ctx0.canvas)
+            let ctxdata = ctx.getImageData(0, 0, width, height)
+            let bytes = imageToBytes(img)
+
+            util.toWindow({util, url, img, ctx, ctxdata, bytes})
+            util.logAll({url, img, ctx, ctxdata, bytes})
+
+            // let alphas = bytes.filter((val, i) => i % 4 === 3 )
+            // let reds = bytes.filter((val, i) => i % 4 === 0 )
+            let diff = util.arraysDiff(ctxdata.data, bytes, i => i / 4)
+            console.log(diff)
+
+            let ibm = await util.imageToImageBitmap(img)
+            let ibmdata = (await util.imageBitmapData(ibm))
+            diff = util.arraysDiff(ctxdata.data, ibmdata.data, i => i / 4)
+            // let ibmctx = util.imageBitmap2dCtx(ibm)
+            console.log(diff)
+            diff = util.arraysDiff(bytes, ibmdata.data, i => i / 4)
+            console.log(diff)
+
+
+            // console.log('can', can)
+            // console.log('imageData', ctx.getImageData(0, 0, can.width, can.height))
+
+            // // img: image, canvas, video, blob, imageData
+            // let imageBitmap = await util.imageToImageBitmap(img)
+            // console.log('imageBitmap', imageBitmap)
+            // let imageBitmapCtx = await util.imageBitmapCtx(imageBitmap)
+            // console.log('imageBitmapCtx', imageBitmapCtx)
+            // imageBitmap = await util.imageToImageBitmap(img) // recreate!
+            // let imageBitmapCan = await util.imageBitmapCanvas(imageBitmap)
+            // console.log('imageBitmapCan', imageBitmapCan)
+            // imageBitmap = await util.imageToImageBitmap(img) // recreate!
+            // let imageBitmapData = await util.imageBitmapData(imageBitmap)
+            // console.log('imageBitmapData', imageBitmapData)
+
+            // imageBitmap = await util.imageToImageBitmap(img) // recreate!
+            // util.toWindow({imageBitmap, imageBitmapCtx, imageBitmapCan})
+
+
+/*
+            const canvas = document.createElement("canvas");
+            canvas.width = canvas.height = 1;
+
+            const bitmapCtx = canvas.getContext("bitmaprenderer");
+            if (bitmapCtx === null) {
+                return false;
+            }
+
+            const bitmap = await createImageBitmap(imageData);
+            bitmapCtx.transferFromImageBitmap(bitmap);
+
+            const blob = await new Promise((resolve) => canvas.toBlob(resolve));
+            blobURL = URL.createObjectURL(blob);
+*/
+            // let nomime = 'application/octet-stream'
+            // console.log('int', new Blob([1], {type: nomime+';type=integer'}))
+            // console.log('float', new Blob([1.0], {type: nomime}))
+            // console.log('array', new Blob([[1,2]], {type: nomime}))
+            // console.log('typedarray', new Blob([new Uint8Array([1,2])], {type: nomime}))
+            // console.log('obj', new Blob([{one:1, two:2}], {type: nomime}))
+
+            // console.log('json', new Blob([JSON.stringify({one:1, two:2})], {type: 'application/json'}))
+
+
+
+
+            // debugger
+        </script>
+    </body>
+</html>

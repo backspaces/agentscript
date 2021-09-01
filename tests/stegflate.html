@@ -11,11 +11,11 @@
             import * as steg from '../src/steg.js'
             import * as fflate from 'https://cdn.skypack.dev/fflate'
 
-            // const imgName = 'flock.png' // 250,000 px
-            const imgName = 'flock600.png' // 360,000 px
-            const msgUrl = 'https://unpkg.com/agentscript/dist/agentscript.js'
-            // const msgUrl =
-            //     'https://unpkg.com/agentscript/dist/agentscript.min.js'
+            const imgName = 'flock.png' // 250,000 px
+            // const imgName = 'flock600.png' // 360,000 px
+            // const msgUrl = 'https://unpkg.com/agentscript/dist/agentscript.js'
+            const msgUrl =
+                'https://unpkg.com/agentscript/dist/agentscript.min.js'
 
             let msg = await fetch(msgUrl).then(resp => resp.text())
             const img = await util.imagePromise(imgName)
