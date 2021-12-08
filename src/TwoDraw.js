@@ -54,16 +54,6 @@ export default class TwoDraw extends TwoView {
         this.drawOptions = drawOptions
     }
 
-    // name need not end ".png", will be added if needed.
-    // if name undefined use model name, lowerCase'd w/ "Model" removed
-    // downloadCanvas(name = undefined) {
-    //     if (!name)
-    //         name = this.model.constructor.name
-    //             .toLowerCase()
-    //             .replace(/model$/, '')
-    //     util.downloadCanvas(this.canvas, name)
-    // }
-
     // The parameters are easily mistaken: check they are all in the defaults.
     checkParams(params) {
         const keys = Object.keys(params)
@@ -127,10 +117,6 @@ export default class TwoDraw extends TwoView {
 
         const checkColor = (agent, color) =>
             color === 'random' ? turtlesMap.atIndex(agent.id).css : color
-        // const checkColor = (agent, color) => {
-        //     if (!turtlesMap) debugger
-        //     color === 'random' ? turtlesMap.atIndex(agent.id).css : color
-        // }
 
         view.drawLinks(model.links, l => ({
             color:

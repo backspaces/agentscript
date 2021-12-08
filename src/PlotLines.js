@@ -1,9 +1,6 @@
-// import Chart from 'https://cdn.skypack.dev/chart.js'
-import Chart from 'https://cdn.skypack.dev/chart.js@2.9.4'
-import * as util from '../../src/utils.js'
+import Chart from 'https://unpkg.com/chart.js@3.6.1/auto/auto.esm.js'
+import * as util from '../src/utils.js'
 
-// Using https://github.com/chartjs/Chart.js
-// https://github.com/leeoniya/uPlot
 export default class Plot {
     static defaultOptions() {
         return {

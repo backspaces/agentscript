@@ -7,17 +7,14 @@
         <canvas id="chart"></canvas>
 
         <script type="module">
-            // import Chart from 'https://cdn.skypack.dev/chart.js'
-            import Chart from 'https://cdn.skypack.dev/chart.js@2.9.4'
+            import Chart from 'https://unpkg.com/chart.js@3.6.1/auto/auto.esm.js'
             import { util } from '../../dist/agentscript.js'
             util.toWindow({ Chart, util })
 
-            // const ticks = [0]
-            // const data1 = [0]
-            // const data2 = [0]
             const ticks = []
             const data1 = []
             const data2 = []
+            const data3 = []
             const chart = new Chart('chart', {
                 type: 'line',
                 data: {
@@ -36,10 +33,11 @@
                             data: data2,
                             label: 'Data2',
                             borderColor: 'blue',
-                            // tension: 0, // disables bezier curves
-                            // showLine: false, // disable for a single dataset
-                            // fill: false,
-                            // pointRadius: 2.5,
+                        },
+                        {
+                            data: data3,
+                            label: 'Data2',
+                            borderColor: 'black',
                         },
                     ],
                 },
@@ -72,16 +70,16 @@
             util.timeoutLoop(() => {
                 ticks.push(ticks.length)
                 if (ticks.length === 1) {
-                    // data1.push(100)
-                    // data2.push(50)
-                    data1.push(ranIncr())
-                    data2.push(ranIncr())
+                    data1.push(0)
+                    data2.push(0)
+                    data3.push(0)
                 } else {
                     data1.push(util.arrayLast(data1) + ranIncr())
                     data2.push(util.arrayLast(data2) + ranIncr())
+                    data3.push(util.arrayLast(data3) + ranIncr())
                 }
                 chart.update()
-            }, 10)
+            }, 100)
         </script>
     </body>
 </html>

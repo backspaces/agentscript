@@ -9,6 +9,8 @@ export default class TSPModel extends Model {
     useInversion = true
     stopTickDifference = 500
 
+    onChange = (length, changes, ticks) => {} // called whenever a tour changes
+
     // ======================
 
     constructor(worldDptions = World.defaultOptions(50)) {
@@ -25,6 +27,7 @@ export default class TSPModel extends Model {
         this.bestTourNodes = []
         this.bestTourLength = 0
         this.bestTourTick = 0
+        this.tourChanges = 0
 
         this.nodes.create(this.nodeCount, node => {
             this.setupNode(node)
@@ -77,7 +80,8 @@ export default class TSPModel extends Model {
             this.bestTourLength = a.tourLength
             this.bestTourNodes = a.tourNodes
             this.bestTourTick = this.ticks
-            this.reportNewTour()
+            this.onChange(a.tourLength, this.tourChanges, this.ticks)
+            this.tourChanges++
             this.createTourLinks(this.bestTourNodes)
         }
     }
@@ -123,11 +127,6 @@ export default class TSPModel extends Model {
             this.done = true
         }
     }
-    reportNewTour() {
-        console.log(
-            `new best tour at tick ${this.ticks}: ${this.bestTourLength}`
-        )
-    }
 
     moveNode(node, x, y) {
         node.setxy(x, y)
@@ -137,5 +136,6 @@ export default class TSPModel extends Model {
         this.travelers.ask(
             t => (t.tourLength = this.lengthFromNodes(t.tourNodes))
         )
+        this.done = false
     }
 }

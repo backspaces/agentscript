@@ -75,7 +75,8 @@
             //         height: can.height,
             //     })
             // }
-            async function saveCanvas(can = view.canvas) {
+            // async function saveCanvas(can = view.canvas) {
+            function saveCanvas(can = view.canvas) {
                 // const durl = stegifyCanvas('hello world', can)
                 // const msg = await getStegText(durl)
                 // console.log(msg)
@@ -89,7 +90,7 @@
             gui.add(anim, 'once')
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
             gui.add(view, 'width', 100, 1000, 25)
-            gui.add({ save: saveCanvas }, 'save')
+            gui.add(view, 'downloadCanvas')
 
             // gui.addColor(view.drawOptions, 'patchesColor')
 

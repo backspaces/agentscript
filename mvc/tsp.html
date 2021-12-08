@@ -10,25 +10,20 @@
             import Animator from '../src/Animator.js'
             import Model from '../models/TspModel.js'
             import Mouse from '../src/Mouse.js'
-            // import Color from '../src/Color.js'
-            // import ColorMap from '../src/ColorMap.js'
             import dat from 'https://cdn.skypack.dev/dat.gui'
+            import Plot from '../src/PlotLines.js'
 
             const drawOptions = {
                 patchesColor: 'black',
                 turtlesShape: 'circle',
                 // turtlesSize of 0 will skip drawing this turle
                 // here "travelers" are skipped
-                turtlesSize: t => (t.breed.name === 'nodes' ? 1.25 : 0),
-                turtlesColor: t =>
-                    t.breed.name === 'nodes' ? 'yellow' : 'blue',
-                // turtlesColor: 'yellow',
+                turtlesSize: t => (t.breed.name === 'nodes' ? 3 : 0),
+                turtlesColor: 'yellow',
                 linksColor: 'red',
-
-                turtlesSize: 3,
             }
 
-            // ==============================
+            // =========== Init Model, View, Animator ===================
 
             const model = new Model()
             await model.startup()
@@ -49,19 +44,22 @@
                 30 // 30 fps
             ).startStats()
 
-            // ==============================
+            // =========== UI Elements ===================
 
             const gui = new dat.GUI()
+            gui.width = 280 // increase dat.gui width
+
             gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
             gui.add(anim, 'toggle')
             gui.add(anim, 'once')
             gui.add(view, 'width', 100, 1000, 25)
             gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+            gui.add(model, 'bestTourLength').listen()
             gui.add(view, 'downloadCanvas')
 
             // gui.addColor(view.drawOptions, 'patchesColor')
 
-            // ==============================
+            // ============ Independent Mouse Handling ==================
 
             let dragNode
             function handleMouse(mouse) {
@@ -86,10 +84,29 @@
                 handleMouse
             ).start()
 
-            view.draw() // Draw once to get started
+            // view.draw() // Draw once to get started ??
 
-            util.toWindow({ util, model, view, anim, gui })
+            // ============ Plot new tours  ==================
+            const pens = {
+                tourLength: 'blue',
+            }
+            const plot = new Plot('plotCanvas', pens)
+            pens.tourLength = []
+
+            // ============ Tour Change Callback  ==================
+
+            model.onChange = (length, changes, ticks) => {
+                length = Math.round(length)
+                console.log(
+                    `new best tour at tick ${ticks}: ${length}, changes ${changes}`
+                )
+                pens.tourLength = length
+                plot.addPoints(pens)
+            }
+
+            util.toWindow({ util, model, view, anim, gui, plot, pens })
         </script>
         <div id="modelDiv"></div>
+        <canvas id="plotCanvas"></canvas>
     </body>
 </html>

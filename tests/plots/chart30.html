@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>plot</title>
+    </head>
+    <body>
+        <canvas id="myChart"></canvas>
+        <script type="module">
+            import Chart from 'https://unpkg.com/chart.js@3.6.1/auto/auto.esm.js'
+
+            const data = {
+                labels: [
+                    'January',
+                    'February',
+                    'March',
+                    'April',
+                    'May',
+                    'June',
+                    'July',
+                ],
+                datasets: [
+                    {
+                        label: 'My First dataset',
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: [0, 10, 5, 2, 20, 30, 45],
+                    },
+                ],
+            }
+            const config = {
+                type: 'line',
+                data: data,
+                options: {},
+            }
+
+            const myChart = new Chart('myChart', config)
+        </script>
+    </body>
+</html>

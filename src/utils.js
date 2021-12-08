@@ -137,11 +137,11 @@ export async function blobsEqual(blob0, blob1) {
 }
 
 // download canvas as png or jpeg. Canvas can be a dataURL.
-// name must end in .png or .jpeg.
 // quality is default. For lossless jpeg, set to 1
 export function downloadCanvas(can, name = 'download.png', quality = null) {
-    if (!(name.endsWith('.png') || name.endsWith('.jpeg')))
-        throw Error('downloadCanvas: name must end with .png or .jpeg')
+    // if (!(name.endsWith('.png') || name.endsWith('.jpeg')))
+    //     throw Error('downloadCanvas: name must end with .png or .jpeg')
+    if (!(name.endsWith('.png') || name.endsWith('.jpeg'))) name + '.png'
     const type = name.endsWith('.png') ? 'image/png' : 'image/jpeg'
     const url = typeof can === 'string' ? can : can.toDataURL(type, quality)
     const link = document.createElement('a')

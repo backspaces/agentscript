@@ -74,6 +74,16 @@ export default class TwoView {
         this.turtlesView.reset(patchSize, useSprites)
     }
 
+    // name need not end ".png", will be added if needed.
+    // if name undefined use model name, lowerCase'd w/ "Model" removed
+    downloadCanvas(name = undefined) {
+        if (!name)
+            name = this.model.constructor.name
+                .toLowerCase()
+                .replace(/model$/, '')
+        util.downloadCanvas(this.canvas, name)
+    }
+
     get width() {
         // return this.world.width * this.turtlesView.patchSize // this.patchSize
         return this.world.width * this.patchSize
