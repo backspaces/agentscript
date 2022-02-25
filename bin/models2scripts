@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+
+// Convert all our es6 models to es5 scripts in models/scripts
+// Useful for workers & models in the window object.
+// we may remove these scripts as unimportant
+
 const shell = require('shelljs')
 
 shell.cd('./models')

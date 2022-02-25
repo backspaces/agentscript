@@ -10,10 +10,16 @@ export default class Plot {
                 datasets: [],
             },
             options: {
-                // showLines: false,
-                animation: { duration: 0 },
-                hover: { animationDuration: 0 },
-                responsiveAnimationDuration: 0,
+                showLine: true,
+                animation: {
+                    duration: 0,
+                    active: {
+                        duration: 0,
+                    },
+                    resize: {
+                        duration: 0,
+                    },
+                },
                 elements: {
                     line: {
                         tension: 0, // disables bezier curves
@@ -21,8 +27,8 @@ export default class Plot {
                     },
                     point: {
                         // radius: 10, // default 3
-                        // pointStyle: 'cross',
-                        // borderWidth: 3,
+                        // pointStyle: 'cross', // default circle
+                        // borderWidth: 3, // default 1
                     },
                 },
             },
@@ -38,9 +44,9 @@ export default class Plot {
     //     resistant: 'gray',
     // },
     constructor(canvas, pens) {
-        const spec = Plot.defaultOptions()
+        const opts = Plot.defaultOptions()
         const dataArrays = {}
-        const ticks = spec.data.labels
+        const ticks = opts.data.labels
 
         util.forLoop(pens, (val, key) => {
             const dataset = {
@@ -49,11 +55,11 @@ export default class Plot {
                 borderColor: val,
             }
             dataArrays[key] = dataset.data
-            spec.data.datasets.push(dataset)
+            opts.data.datasets.push(dataset)
         })
 
-        const chart = new Chart(canvas, spec)
-        util.toWindow({ pens, dataArrays, spec, chart, plot: this })
+        const chart = new Chart(canvas, opts)
+        util.toWindow({ pens, dataArrays, opts, Chart, chart, plot: this })
         Object.assign(this, { chart, dataArrays, ticks })
     }
 
