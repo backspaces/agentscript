@@ -1,108 +1,108 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Virus</title>
-    </head>
-    <body>
-        <div id="map" style="width: 100vw; height: 100vh"></div>
 
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import * as gis from '../src/gis.js'
-            import { geojsonBBox } from '../src/geojson.js'
-            // import Color from '../src/Color.js'
-            import GeoWorld from '../src/GeoWorld.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import Animator from '../src/Animator.js'
-            import VirusModel from '../models/VirusModel.js'
+<head>
+    <title>Virus</title>
+    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
+</head>
 
-            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
-            const ElementOverlay = elementOverlay(L)
+<body>
+    <div id="map" style="width: 100vw; height: 100vh"></div>
 
-            util.toWindow({ util, gis, L, ElementOverlay })
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
+        import { geojsonBBox } from '../src/geojson.js'
+        // import Color from '../src/Color.js'
+        import GeoWorld from '../src/GeoWorld.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import VirusModel from '../models/VirusModel.js'
 
-            const turtleColors = {
-                infected: 'red',
-                susceptible: 'blue',
-                resistant: 'gray',
-            }
-            const drawOptions = {
-                patchesColor: 'transparent',
-                turtlesShape: 'circle',
-                turtlesSize: 3,
-                turtlesColor: t => turtleColors[t.state],
-                linksColor: 'red',
-            }
+        import L from 'https://cdn.skypack.dev/leaflet'
+        import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay';
 
-            async function run() {
-                await util.setCssStyle(
-                    'https://unpkg.com/leaflet/dist/leaflet.css'
-                )
+        const ElementOverlay = elementOverlay(L)
 
-                const counties = await fetch(
-                    '../gis/data/nmcounties.json'
-                ).then(resp => resp.json())
+        util.toWindow({ util, gis, L, ElementOverlay })
 
-                const bbox = geojsonBBox(counties)
-                const bboxCenter = gis.bboxCenter(bbox, 'latlon')
-                const zoom = 7
-                console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
+        const turtleColors = {
+            infected: 'red',
+            susceptible: 'blue',
+            resistant: 'gray',
+        }
+        const drawOptions = {
+            patchesColor: 'transparent',
+            turtlesShape: 'circle',
+            turtlesSize: 3,
+            turtlesColor: t => turtleColors[t.state],
+            linksColor: 'red',
+        }
 
-                const world = new GeoWorld(counties, 100)
-                const model = new VirusModel(world)
-                await model.startup()
-                model.setup()
+        async function run() {
+            const counties = await fetch(
+                '../gis/data/nmcounties.json'
+            ).then(resp => resp.json())
 
-                const view = new TwoDraw(model, {
-                    div: util.createCanvas(0, 0), // the view will resize
-                    drawOptions,
-                })
+            const bbox = geojsonBBox(counties)
+            const bboxCenter = gis.bboxCenter(bbox, 'latlon')
+            const zoom = 7
+            console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
 
-                const map = L.map('map').setView(bboxCenter, zoom)
+            const world = new GeoWorld(counties, 100)
+            const model = new VirusModel(world)
+            await model.startup()
+            model.setup()
 
-                L.tileLayer(gis.template('osm'), {
-                    attribution: gis.attribution('osm'),
-                }).addTo(map)
+            const view = new TwoDraw(model, {
+                div: util.createCanvas(0, 0), // the view will resize
+                drawOptions,
+            })
 
-                const [west, south, east, north] = bbox
-                const bounds = new L.LatLngBounds(
-                    new L.LatLng(north, west),
-                    new L.LatLng(south, east)
-                )
-                new ElementOverlay(view.canvas, bounds).addTo(map)
+            const map = L.map('map').setView(bboxCenter, zoom)
 
-                L.geoJSON(counties, {
-                    style: () => ({
-                        color: 'red',
-                        fillOpacity: 0.025,
-                        weight: 2,
-                    }),
-                })
-                    // .bindPopup(
-                    //     layer =>
-                    //         layer.feature.properties.NAME +
-                    //         ', pop: ' +
-                    //         layer.feature.properties.population.toLocaleString()
-                    // )
-                    .addTo(map)
+            L.tileLayer(gis.template('osm'), {
+                attribution: gis.attribution('osm'),
+            }).addTo(map)
 
-                const latlngs = gis.bboxCoords(bbox, 'latlon')
-                L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
+            const [west, south, east, north] = bbox
+            const bounds = new L.LatLngBounds(
+                new L.LatLng(north, west),
+                new L.LatLng(south, east)
+            )
+            new ElementOverlay(view.canvas, bounds).addTo(map)
 
-                const anim = new Animator(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    -1, // 500, // run 500 steps
-                    20 // 30 // 30 fps
-                )
+            L.geoJSON(counties, {
+                style: () => ({
+                    color: 'red',
+                    fillOpacity: 0.025,
+                    weight: 2,
+                }),
+            })
+                // .bindPopup(
+                //     layer =>
+                //         layer.feature.properties.NAME +
+                //         ', pop: ' +
+                //         layer.feature.properties.population.toLocaleString()
+                // )
+                .addTo(map)
 
-                // util.toWindow({ model, view, bbox, map, counties, anim })
-            }
-            run()
-        </script>
-    </body>
+            const latlngs = gis.bboxCoords(bbox, 'latlon')
+            L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // 500, // run 500 steps
+                20 // 30 // 30 fps
+            )
+
+            // util.toWindow({ model, view, bbox, map, counties, anim })
+        }
+        run()
+    </script>
+</body>
+
 </html>

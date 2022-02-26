@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
     <title>CountyWalker</title>
+    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
 </head>
 
 <body>
@@ -19,9 +19,6 @@
         import Animator from '../src/Animator.js'
         import CountiesModel from '../gis/CountiesModel.js'
 
-        // import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-        // import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
-
         import L from 'https://cdn.skypack.dev/leaflet'
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
@@ -30,10 +27,6 @@
         const ElementOverlay = elementOverlay(L)
 
         async function run() {
-            await util.setCssStyle(
-                'https://unpkg.com/leaflet/dist/leaflet.css'
-            )
-
             const counties = await fetch(
                 '../gis/data/nmcounties.json'
             ).then(resp => resp.json())

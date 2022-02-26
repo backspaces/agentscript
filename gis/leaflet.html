@@ -1,65 +1,67 @@
 <html>
-    <head>
-        <title>Leaflet</title>
-    </head>
-    <body>
-        <div id="map" style="height: 600px"></div>
-        <script type="module">
-            // import * as L from 'https://cdn.skypack.dev/leaflet'
-            import * as util from '../src/utils.js'
-            import * as gis from '../src/gis.js'
 
-            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            util.toWindow({ L, util })
+<head>
+    <title>Leaflet</title>
+    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
+</head>
 
-            await util.setCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
+<body>
+    <div id="map" style="height: 600px"></div>
+    <script type="module">
+        // import * as L from 'https://cdn.skypack.dev/leaflet'
+        import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
 
-            let [lon, lat, Z] = [-105.941109, 35.68222, 13]
-            // const map = L.map('map').setView([lat, lon], Z)
-            const map = L.map('map', {
-                zoomDelta: 0.25, //0.1
-                zoomSnap: 0,
-            }).setView([lat, lon], Z)
+        import L from 'https://cdn.skypack.dev/leaflet'
+        util.toWindow({ L, util })
 
-            L.tileLayer(gis.template('osm'), {
-                attribution: gis.attribution('osm'),
-            }).addTo(map)
+        let [lon, lat, Z] = [-105.941109, 35.68222, 13]
+        // const map = L.map('map').setView([lat, lon], Z)
+        const map = L.map('map', {
+            zoomDelta: 0.25, //0.1
+            zoomSnap: 0,
+        }).setView([lat, lon], Z)
 
+        L.tileLayer(gis.template('osm'), {
+            attribution: gis.attribution('osm'),
+        }).addTo(map)
+
+        const bounds = centerTileBounds()
+        const rectangle = L.rectangle(bounds, { color: 'black' })
+            .bindPopup(layer => centerTileString())
+            .addTo(map)
+
+        map.on('zoomend', ev => {
+            update(ev)
+        })
+        map.on('moveend', ev => {
+            update(ev)
+        })
+
+        function centerTileString() {
+            const [X, Y, Z] = centerTileXYZ()
+            return `X:${X},  Y:${Y}, Z:${Z}`
+        }
+        function centerTileXYZ() {
+            const { lat, lng: lon } = map.getCenter()
+            const Z = Math.round(map.getZoom())
+            // const Z = Math.round(map.getZoom()) // if fractional zoom
+            const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
+            return [X, Y, Z]
+        }
+        function centerTileBounds() {
+            const [X, Y, Z] = centerTileXYZ()
+            const bbox = gis.xyz2bbox(X, Y, Z)
+            return gis.bboxBounds(bbox, 'latlon')
+        }
+        function update(ev) {
+            // if (ev.type === 'moveend') console.log('moved')
+            // console.log('event', ev.type)
+            rectangle.closePopup()
             const bounds = centerTileBounds()
-            const rectangle = L.rectangle(bounds, { color: 'black' })
-                .bindPopup(layer => centerTileString())
-                .addTo(map)
+            rectangle.setBounds(bounds)
+        }
+    </script>
+</body>
 
-            map.on('zoomend', ev => {
-                update(ev)
-            })
-            map.on('moveend', ev => {
-                update(ev)
-            })
-
-            function centerTileString() {
-                const [X, Y, Z] = centerTileXYZ()
-                return `X:${X},  Y:${Y}, Z:${Z}`
-            }
-            function centerTileXYZ() {
-                const { lat, lng: lon } = map.getCenter()
-                const Z = Math.round(map.getZoom())
-                // const Z = Math.round(map.getZoom()) // if fractional zoom
-                const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
-                return [X, Y, Z]
-            }
-            function centerTileBounds() {
-                const [X, Y, Z] = centerTileXYZ()
-                const bbox = gis.xyz2bbox(X, Y, Z)
-                return gis.bboxBounds(bbox, 'latlon')
-            }
-            function update(ev) {
-                // if (ev.type === 'moveend') console.log('moved')
-                // console.log('event', ev.type)
-                rectangle.closePopup()
-                const bounds = centerTileBounds()
-                rectangle.setBounds(bounds)
-            }
-        </script>
-    </body>
 </html>

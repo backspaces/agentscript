@@ -2,6 +2,7 @@ import { terser } from 'rollup-plugin-terser'
 import cleanup from 'rollup-plugin-cleanup'
 
 export default [
+    // three.all.js = THREE & OrbitControls
     {
         input: './config/three.all.js',
         output: {
@@ -20,6 +21,7 @@ export default [
         plugins: [terser()],
     },
 
+    // Object3D.js = THREE's geometry mathematics, used by Model
     {
         input: 'node_modules/three/src/core/Object3D.js',
         output: {
@@ -27,5 +29,42 @@ export default [
             format: 'esm',
         },
         plugins: [cleanup()],
+    },
+
+    {
+        input: 'node_modules/three/src/core/Object3D.js',
+        output: {
+            file: 'vendor/Object3D.min.js',
+            format: 'esm',
+        },
+        plugins: [terser()],
+    },
+
+    // stats.js and dat.gui.js are included in THREE, so we use them
+    {
+        input: 'node_modules/three/examples/jsm/libs/stats.module.js',
+        output: {
+            file: 'vendor/stats.js',
+            format: 'esm',
+        },
+        plugins: [cleanup()],
+    },
+
+    {
+        input: 'node_modules/three/examples/jsm/libs/dat.gui.module.js',
+        output: {
+            file: 'vendor/dat.gui.js',
+            format: 'esm',
+        },
+        plugins: [cleanup()],
+    },
+
+    {
+        input: 'node_modules/three/examples/jsm/libs/dat.gui.module.js',
+        output: {
+            file: 'vendor/dat.gui.min.js',
+            format: 'esm',
+        },
+        plugins: [terser()],
     },
 ]

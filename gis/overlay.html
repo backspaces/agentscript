@@ -1,71 +1,71 @@
 <html>
-    <head>
-        <title>Overlay</title>
-    </head>
-    <body>
-        <div id="map" style="width: 100vw; height: 100vh"></div>
 
-        <script type="module">
-            import TwoDraw from '../src/TwoDraw.js'
-            import Animator from '../src/Animator.js'
-            import Model from '../models/HelloModel.js'
-            import * as gis from '../src/gis.js'
-            import * as util from '../src/utils.js'
+<head>
+    <title>Overlay</title>
+    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
+</head>
 
-            import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-            import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay?module'
-            const ElementOverlay = elementOverlay(L)
+<body>
+    <div id="map" style="width: 100vw; height: 100vh"></div>
 
-            // import elementOverlay from './elementOverlay.esm.js'
-            // import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
+    <script type="module">
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import Model from '../models/HelloModel.js'
+        import * as gis from '../src/gis.js'
+        import * as util from '../src/utils.js'
 
-            async function run() {
-                await util.setCssStyle(
-                    'https://unpkg.com/leaflet/dist/leaflet.css'
-                )
+        import L from 'https://cdn.skypack.dev/leaflet'
+        import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay';
+        const ElementOverlay = elementOverlay(L)
 
-                const xyz = [3370, 6451, 14]
-                const bbox = gis.xyz2bbox(...xyz)
-                const bboxCenter = gis.bboxCenter(bbox, 'latlon')
-                const zoom = 15
-                console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
+        // import elementOverlay from './elementOverlay.esm.js'
+        // import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
-                const model = new Model()
-                await model.startup()
-                model.setup()
-                const view = new TwoDraw(model, {
-                    div: util.createCanvas(0, 0), // the view will resize
-                    patchSize: 20,
-                    drawOptions: {
-                        patchesColor: 'transparent',
-                        turtlesSize: 3,
-                    },
-                })
+        async function run() {
+            const xyz = [3370, 6451, 14]
+            const bbox = gis.xyz2bbox(...xyz)
+            const bboxCenter = gis.bboxCenter(bbox, 'latlon')
+            const zoom = 15
+            console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
 
-                const map = L.map('map').setView(bboxCenter, zoom)
-                L.tileLayer(gis.template('osm'), {
-                    attribution: gis.attribution('osm'),
-                }).addTo(map)
+            const model = new Model()
+            await model.startup()
+            model.setup()
+            const view = new TwoDraw(model, {
+                div: util.createCanvas(0, 0), // the view will resize
+                patchSize: 20,
+                drawOptions: {
+                    patchesColor: 'transparent',
+                    turtlesSize: 3,
+                },
+            })
 
-                const [west, south, east, north] = bbox
-                const bounds = new L.LatLngBounds(
-                    new L.LatLng(north, west),
-                    new L.LatLng(south, east)
-                )
-                const layer = new ElementOverlay(view.canvas, bounds).addTo(map)
+            const map = L.map('map').setView(bboxCenter, zoom)
+            L.tileLayer(gis.template('osm'), {
+                attribution: gis.attribution('osm'),
+            }).addTo(map)
 
-                const anim = new Animator(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    -1, // 500, // run 500 steps
-                    10 // 30 // 30 fps
-                )
+            const [west, south, east, north] = bbox
+            const bounds = new L.LatLngBounds(
+                new L.LatLng(north, west),
+                new L.LatLng(south, east)
+            )
+            const layer = new ElementOverlay(view.canvas, bounds).addTo(map)
 
-                util.toWindow({ util, model, view, map, layer, anim })
-            }
-            run()
-        </script>
-    </body>
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // 500, // run 500 steps
+                10 // 30 // 30 fps
+            )
+
+            util.toWindow({ util, model, view, map, layer, anim })
+        }
+        run()
+    </script>
+</body>
+
 </html>

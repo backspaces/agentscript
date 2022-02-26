@@ -1,10 +1,9 @@
-# Do not include these in git. See
+# Files to not include in git. See
 # https://git-scm.com/docs/gitignore and
 # https://gist.github.com/octocat/9257657
 
 # Derived files other than docs/
 /dist/
-/vendorx/
 
 node_modules
 web_modules
@@ -13,13 +12,9 @@ yarn-error.log
 /.vscode/
 **/.DS_Store
 
-LeafletElementOverlay
-
 /Attic/
 /test/samples.txt
-
 /tests/
-/tests0/
 
 # package-lock.json
 # yarn.lock
