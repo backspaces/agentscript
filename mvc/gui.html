@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GUI</title>
+</head>
+
+<body>
+    <div id="modelDiv"></div>
+    <script type="module">
+        import Animator from '../src/Animator.js'
+        import GUI from '../src/GUI.js'
+        import Model from '../models/HelloModel.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import * as util from '../src/utils.js'
+
+        const model = new Model()
+        await model.startup()
+        model.setup()
+
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 20,
+            // defalt drawOptions!
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+                gui.update()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        ).startStats()
+
+        const gui = new GUI({
+            fps: { // slider
+                val: [30, [5, 60, 5]],
+                cmd: val => anim.setFps(val),
+            },
+            turtlesShape: { // chooser
+                val: ['bug', ['bug', 'dart', 'person']],
+                cmd: val => view.drawOptions.turtlesShape = val,
+            },
+            turtlesColor: { // color picker
+                val: '#ff0000',
+                cmd: val => view.drawOptions.turtlesColor = val,
+            },
+            downloadCanvas: { // button
+                cmd: () => view.downloadCanvas(),
+            },
+            stop: { // switch/toggle
+                val: false, // bool
+                cmd: val => { if (val) { anim.stop() } else { anim.start() } },
+            },
+            setTitle: { // input
+                val: 'Play',
+                cmd: val => document.title = val
+            },
+            modelTicks: { // monitor
+                val: 'listen',
+                cmd: () => model.ticks,
+            },
+        })
+
+        util.toWindow({ model, view, anim, GUI, gui })
+
+        console.log(gui)
+    </script>
+</body>
+
+</html>

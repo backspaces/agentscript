@@ -14,9 +14,10 @@ export default class Animator {
         return this // chaining off ctor
     }
     step() {
-        if (this.steps === 0) return this.stop()
+        // if (this.steps === 0) return this.stop()
+        if (this.ticks === this.steps) return this.stop()
         this.ticks++
-        this.steps--
+        // this.steps--
         this.fcn()
         if (this.stats) this.stats.update()
         return this // chaining off ctor
@@ -35,8 +36,14 @@ export default class Animator {
         return this // chaining off ctor
     }
 
+    setFps(fps) {
+        this.reset(this.steps, fps)
+    }
+    setSteps(steps) {
+        this.reset(steps, this.fps)
+    }
     // Stop and restart with the new steps & fps
-    reset(steps = -1, fps = this.fps) {
+    reset(steps = this.steps, fps = this.fps) {
         this.stop()
         this.steps = steps
         this.ticks = 0
