@@ -18,10 +18,14 @@
         await model.startup()
         model.setup()
 
+        const drawOptions = {
+            turtlesSize: 3,
+        }
+
         const view = new TwoDraw(model, {
             div: 'modelDiv',
             patchSize: 20,
-            // defalt drawOptions!
+            drawOptions
         })
 
         const anim = new Animator(
