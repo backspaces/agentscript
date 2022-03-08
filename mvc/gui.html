@@ -34,7 +34,7 @@
                 view.draw()
                 gui.update()
             },
-            500, // run 500 steps
+            -1, // run forever
             30 // 30 fps
         ).startStats()
 
@@ -48,13 +48,18 @@
                 cmd: val => view.drawOptions.turtlesShape = val,
             },
             turtlesColor: { // color picker
-                val: '#ff0000',
+                // val: '#ff0000',
+                // val: '#f00',
+                // val: 'rgb(255, 0, 0)',
+                val: 'rgba(255, 0, 0, 0.5)',
+                // val: [ 0, 128, 255, 0.3 ], // works, but not JS color
+                // val: { h: 350, s: 0.9, v: 0.3 }, // works, but not JS color
                 cmd: val => view.drawOptions.turtlesColor = val,
             },
             downloadCanvas: { // button
                 cmd: () => view.downloadCanvas(),
             },
-            stop: { // switch/toggle
+            pause: { // switch/toggle
                 val: false, // bool
                 cmd: val => { if (val) { anim.stop() } else { anim.start() } },
             },

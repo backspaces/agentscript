@@ -17,9 +17,10 @@ export default class GUI {
         const valType = util.typeOf(val)
         const cmdType = util.typeOf(cmd)
 
+        if (this.isDatColor(val)) return 'color'
         if (valType === 'undefined') return 'button'
         if (valType === 'boolean') return 'toggle'
-        if (valType === 'string') return val[0] === '#' ? 'color' : 'input'
+        if (valType === 'string') return 'input'
         if (val === 'listen') return 'monitor'
         if (valType === 'array' && val.length === 2) {
             if (util.typeOf(val[0]) === 'number') return 'slider'
@@ -77,6 +78,31 @@ export default class GUI {
         return control
     }
 
+    // isHexColor(val) {
+    //     if (util.typeOf(val) !== 'string') return false
+    //     if (val[0] !== '#') return false
+    //     if (!(val.length === 7 || val.length === 4)) return false
+    //     return (
+    //         val
+    //             .slice(1)
+    //             .split('')
+    //             .map(i => '0123456789abcdef'.includes(i))
+    //             .filter(b => !b).length === 0
+    //     )
+    // }
+    isDatColor(val) {
+        if (util.typeOf(val) === 'string') {
+            if (val[0] === '#') return val.length === 7 || val.length === 4
+            if (val.startsWith('rgb(') || val.startsWith('rgba('))
+                return val.endsWith(')')
+        }
+        if (util.typeOf(val) === 'object') return val.h && val.s && val.v
+        if (util.typeOf(val) === 'array') {
+            if (val.length === 3 || val.length === 4)
+                return val.every(i => util.typeOf(i) === 'number')
+        }
+        return false
+    }
     setListener(key, cmd) {
         this.values[key] = cmd()
     }
