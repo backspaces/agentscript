@@ -3,11 +3,27 @@
 
 <head>
     <title>CountyWalker</title>
-    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
+    <!-- <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0-beta.0/dist/leaflet.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #map {
+            height: 100vh
+        }
+
+        /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
+        .leaflet-tile {
+            border: solid black 1px;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="map" style="width: 100vw; height: 100vh"></div>
+    <div id="map"></div>
 
     <script type="module">
         import * as util from '../src/utils.js'
@@ -19,12 +35,13 @@
         import Animator from '../src/Animator.js'
         import CountiesModel from '../gis/CountiesModel.js'
 
-        import L from 'https://cdn.skypack.dev/leaflet'
+        // import L from 'https://cdn.skypack.dev/leaflet'
+        import * as L from 'https://unpkg.com/leaflet@1.8.0-beta.0/dist/leaflet-src.esm.js'
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
-        console.log(L)
-
         const ElementOverlay = elementOverlay(L)
+
+        // const latlon = gis.latlon
 
         async function run() {
             const counties = await fetch(
@@ -32,7 +49,7 @@
             ).then(resp => resp.json())
 
             const bbox = geojsonBBox(counties)
-            const bboxCenter = gis.bboxCenter(bbox, 'latlon')
+            const bboxCenter = gis.latlon(gis.bboxCenter(bbox))
             const zoom = 7
             console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
 
@@ -82,7 +99,7 @@
                 )
                 .addTo(map)
 
-            const latlngs = gis.bboxCoords(bbox, 'latlon')
+            const latlngs = gis.latlon(gis.bboxCoords(bbox))
             L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
 
             const anim = new Animator(

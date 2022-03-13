@@ -2,17 +2,35 @@
 
 <head>
     <title>Leaflet</title>
-    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
+    <!-- <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0-beta.0/dist/leaflet.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #map {
+            height: 100vh
+        }
+
+        /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
+        .leaflet-tile {
+            border: solid red 1px;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="map" style="height: 600px"></div>
+    <!-- <div id="map" style="height: 100vh"></div> -->
+    <div id="map"></div>
     <script type="module">
         import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
 
-        import L from 'https://cdn.skypack.dev/leaflet'
-        util.toWindow({ L, util })
+        // import L from 'https://cdn.skypack.dev/leaflet'
+        // import L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.0'
+        import * as L from 'https://unpkg.com/leaflet@1.8.0-beta.0/dist/leaflet-src.esm.js'
 
         let [lon, lat, Z] = [-105.941109, 35.68222, 13]
         // const map = L.map('map').setView([lat, lon], Z)
@@ -51,7 +69,7 @@
         function centerTileBounds() {
             const [X, Y, Z] = centerTileXYZ()
             const bbox = gis.xyz2bbox(X, Y, Z)
-            return gis.bboxBounds(bbox, 'latlon')
+            return gis.latlon(gis.bboxBounds(bbox))
         }
         function update(ev) {
             // if (ev.type === 'moveend') console.log('moved')
@@ -60,6 +78,9 @@
             const bounds = centerTileBounds()
             rectangle.setBounds(bounds)
         }
+
+        util.toWindow({ L, util, map })
+
     </script>
 </body>
 

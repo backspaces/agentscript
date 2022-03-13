@@ -3,11 +3,27 @@
 
 <head>
     <title>Droplets</title>
-    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
+    <!-- <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0-beta.0/dist/leaflet.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #map {
+            height: 100vh
+        }
+
+        /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
+        .leaflet-tile {
+            border: solid black 1px;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="map" style="width: 100vw; height: 100vh"></div>
+    <div id="map"></div>
 
     <script type="module">
         import * as util from '../src/utils.js'
@@ -19,7 +35,8 @@
         import Animator from '../src/Animator.js'
         import DropletsModel from '../models/DropletsModel.js'
 
-        import L from 'https://cdn.skypack.dev/leaflet'
+        // import L from 'https://cdn.skypack.dev/leaflet'
+        import * as L from 'https://unpkg.com/leaflet@1.8.0-beta.0/dist/leaflet-src.esm.js'
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay';
 
         const ElementOverlay = elementOverlay(L)
@@ -114,13 +131,13 @@
                 // const [X, Y, Z] = centerTileXYZ()
                 // const bbox = gis.xyz2bbox(X, Y, Z)
                 const bbox = centerTileBBox()
-                return gis.bboxBounds(bbox, 'latlon')
+                return gis.latlon(gis.bboxBounds(bbox))
             }
             function centerTileLatLon() {
                 // const [X, Y, Z] = centerTileXYZ()
                 // const bbox = gis.xyz2bbox(X, Y, Z)
                 const bbox = centerTileBBox()
-                return gis.bboxCenter(bbox, 'latlon')
+                return gis.latlon(gis.bboxCenter(bbox))
             }
             function centerTileString() {
                 const [X, Y, Z] = centerTileXYZ()

@@ -1,5 +1,7 @@
 import * as util from '../src/utils.js'
-import dat from 'https://cdn.skypack.dev/dat.gui'
+// import dat from 'https://cdn.skypack.dev/dat.gui'
+import dat from '../vendor/dat.gui.js'
+
 export default class GUI {
     constructor(template) {
         this.template = template
@@ -65,8 +67,8 @@ export default class GUI {
             default:
                 throw Error(`Controller.addUI: bad type: ${type}`)
         }
-        this.controllers[key] = control
 
+        // initialize: set AS values to the GUI vals
         if (cmd && val !== 'listen' && val) cmd(val)
         if (val === 'listen') this.setListener(key, cmd)
 
@@ -78,29 +80,19 @@ export default class GUI {
         return control
     }
 
-    // isHexColor(val) {
-    //     if (util.typeOf(val) !== 'string') return false
-    //     if (val[0] !== '#') return false
-    //     if (!(val.length === 7 || val.length === 4)) return false
-    //     return (
-    //         val
-    //             .slice(1)
-    //             .split('')
-    //             .map(i => '0123456789abcdef'.includes(i))
-    //             .filter(b => !b).length === 0
-    //     )
-    // }
     isDatColor(val) {
         if (util.typeOf(val) === 'string') {
             if (val[0] === '#') return val.length === 7 || val.length === 4
             if (val.startsWith('rgb(') || val.startsWith('rgba('))
                 return val.endsWith(')')
         }
-        if (util.typeOf(val) === 'object') return val.h && val.s && val.v
-        if (util.typeOf(val) === 'array') {
-            if (val.length === 3 || val.length === 4)
-                return val.every(i => util.typeOf(i) === 'number')
-        }
+
+        // if (util.typeOf(val) === 'object') return val.h && val.s && val.v
+        // if (util.typeOf(val) === 'array') {
+        //     if (val.length === 3 || val.length === 4)
+        //         return val.every(i => util.typeOf(i) === 'number')
+        // }
+
         return false
     }
     setListener(key, cmd) {

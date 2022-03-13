@@ -5,6 +5,14 @@ const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan, abs } =
 const radians = degrees => (degrees * PI) / 180
 const degrees = radians => (radians * 180) / PI
 
+// Current gis and geoJson uses lon/lat coords, i.e. x,y.
+// This converts to latlon.
+export function latlon(lonlat) {
+    if (typeof lonlat[0] !== 'number') return lonlat.map(val => latlon(val))
+    return [lonlat[1], lonlat[0]]
+}
+
+// Tiles use a ZXY corrd system. We use lower case below.
 // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 export function lonz2x(lon, z) {
     return floor(((lon + 180) / 360) * pow(2, z))
@@ -49,16 +57,16 @@ export function xyz2zxy(xyz) {
     const [x, y, z] = xyz
     return [z, x, y]
 }
-export function lonlat2latlon(lonlat) {
-    const [lon, lat] = lonlat
-    return [lat, lon]
-}
+// export function lonlat2latlon(lonlat) {
+//     const [lon, lat] = lonlat
+//     return [lat, lon]
+// }
 
 export function bboxCenter(bbox, type = 'lonlat') {
     const [west, south, east, north] = bbox
-    let center = [(west + east) / 2, (south + north) / 2]
-    if (type !== 'lonlat') center = lonlat2latlon(center)
-    return center
+    return [(west + east) / 2, (south + north) / 2]
+    // if (type !== 'lonlat') center = lonlat2latlon(center)
+    // return center
 }
 
 export function bboxSize(bbox) {
@@ -87,23 +95,23 @@ export function bboxMetricAspect(bbox) {
 
 export function bboxCoords(bbox, type = 'lonlat') {
     const [west, south, east, north] = bbox
-    let coords = [
+    return [
         [west, north], // topLeft
         [east, north], // topRight
         [east, south], // botRight
         [west, south], // botLeft
     ]
-    if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
-    return coords
+    // if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
+    // return coords
 }
 export function bboxBounds(bbox, type = 'lonlat') {
     const [west, south, east, north] = bbox
-    let coords = [
+    return [
         [west, north], // topLeft
         [east, south], // botRight
     ]
-    if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
-    return coords
+    // if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
+    // return coords
 }
 
 // Create a url for OSM json data.
