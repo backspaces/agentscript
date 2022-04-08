@@ -1,31 +1,34 @@
 <html>
-    <head>
-        <title>Hello</title>
-    </head>
-    <body>
-        <script type="module">
-            import Model from '../models/HelloModel.js'
-            import * as util from '../src/utils.js'
-            import Transforms from './Transforms.js'
 
-            const transforms = new Transforms('hello')
+<head>
+    <title>Hello</title>
+</head>
 
-            async function run() {
-                const model = new Model()
-                model.population = 1000
-                await model.startup()
-                model.setup()
+<body>
+    <script type="module">
+        import Model from '../models/HelloModel.js'
+        import * as util from '../src/utils.js'
+        import Transforms from './Transforms.js'
 
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        transforms.step(model)
-                    },
-                    -1, // 500,
-                    33
-                )
-            }
-            run()
-        </script>
-    </body>
+        const transforms = new Transforms('hello')
+
+        // async function run() {
+        const model = new Model()
+        model.population = 1000
+        await model.startup()
+        model.setup()
+
+        await util.timeoutLoop(
+            () => {
+                model.step()
+                transforms.step(model)
+            },
+            -1, // 500,
+            33
+        )
+            // }
+            // run()
+    </script>
+</body>
+
 </html>

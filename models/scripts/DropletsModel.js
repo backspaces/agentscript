@@ -6,12 +6,10 @@ var Model = AS.Model
 //   redfishWorldDataSet
 //   mapzenDataSet
 //   mapboxDataSet
-// Use mapzenDataSet for free amazon elevation,
-// redfishUSDataSet for high rez, mapboxDataSet for mapbox
-var TileDataSet = AS.TileDataSet
+// import { mapzen as provider } from '../src/TileData.js'
+import { mapzen as provider } from '../src/TileData.js'
 
 class DropletsModel extends Model {
-    zxy = [13, 1594, 3339]
     killOffworld = false // Kill vs clamp turtles when offworld.
     speed = 0.2
     // stepType choices:
@@ -20,7 +18,6 @@ class DropletsModel extends Model {
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
     stepType = 'dataSetAspectNearest'
-    elevation
     dzdx
     dzdy
     slope
@@ -32,8 +29,12 @@ class DropletsModel extends Model {
         super(worldOptions)
     }
 
-    async startup() {
-        const elevation = await TileDataSet.mapzenDataSet(...this.zxy)
+    // data can be gis zxy or a DataSet
+    async startup(data = [13, 1594, 3339]) {
+        const elevation = data.width
+            ? data
+            : await provider.zxyToDataSet(...data)
+        // const elevation = await mapzen.zxyToDataSet(...this.zxy)
         this.installDataSets(elevation)
     }
     installDataSets(elevation) {

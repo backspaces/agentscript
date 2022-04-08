@@ -85,6 +85,8 @@ export default class GUI {
             if (val[0] === '#') return val.length === 7 || val.length === 4
             if (val.startsWith('rgb(') || val.startsWith('rgba('))
                 return val.endsWith(')')
+            if (val.startsWith('hsl(') || val.startsWith('hsla('))
+                return val.endsWith(')')
         }
 
         // if (util.typeOf(val) === 'object') return val.h && val.s && val.v

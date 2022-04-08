@@ -48,13 +48,13 @@ export default class GeoWorld extends World {
     //     return [(west + east) / 2, (south + north) / 2]
     // }
     // Return geo coords of bbox corners, from topLeft, clockwise.
-    bboxCoords() {
-        const [west, south, east, north] = this.bbox
-        return [
-            [west, north],
-            [east, north],
-            [east, south],
-            [west, south],
-        ]
-    }
+    // bboxCoords() {
+    //     const [west, south, east, north] = this.bbox
+    //     return [
+    //         [west, north],
+    //         [east, north],
+    //         [east, south],
+    //         [west, south],
+    //     ]
+    // }
 }

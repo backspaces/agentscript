@@ -43,12 +43,17 @@ export function maptilerUrl(z, x, y, key, type = 'basic') {
 
 // ------------ MapZen
 // amazon/mapzen: https://registry.opendata.aws/tag/elevation/
-export function mapzenElevation() {
+// nextzen (long term mapzen): https://www.nextzen.org/
+// nextzen api key: YlK0KN77QEmlSTRFn5Fp7g
+//
+export function mapzenElevationFcn() {
     return rgbScaleFunction(-32768, 1 / 256)
 }
 export function mapzenUrl(z, x, y) {
     return `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`
 }
+export const mapzenUrlTemplate =
+    'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
 
 // ------------ MapBox
 // https://docs.mapbox.com/help/troubleshooting/access-elevation-data/
@@ -75,15 +80,31 @@ export function redfishWorldUrl(z, x, y) {
     return `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/${z}/${x}/${y}.png`
 }
 
-// ============= Simplified DataSet Factories =============
+// ============= Simplified Single Tile DataSet Factories =============
 
-export async function redfishUSDataSet(z, x, y, ArrayType = Float32Array) {
-    const tileUrl = redfishUSAUrl(z, x, y)
-    const tileDecoder = redfishElevation
+// ============= Mapzen
+export async function mapzenTile(z, x, y) {
+    const tileUrl = mapzenUrl(z, x, y)
     const img = await util.imagePromise(tileUrl)
+    return img
+}
+export function mapzenDataSet(img, ArrayType = Float32Array) {
+    const tileDecoder = mapzenElevationFcn()
     return new RGBDataSet(img, tileDecoder, ArrayType)
 }
 
+// ============= RedfishUSA
+export async function redfishUSATile(z, x, y) {
+    const tileUrl = redfishUSAUrl(z, x, y)
+    const img = await util.imagePromise(tileUrl)
+    return img
+}
+export function redfishUSADataSet(img, ArrayType = Float32Array) {
+    const tileDecoder = redfishElevation
+    return new RGBDataSet(img, tileDecoder, ArrayType)
+}
+
+// ============= RedfishWorld
 export async function redfishWorldDataSet(z, x, y, ArrayType = Float32Array) {
     const tileUrl = redfishWorldUrl(z, x, y)
     const tileDecoder = redfishElevation
@@ -91,16 +112,45 @@ export async function redfishWorldDataSet(z, x, y, ArrayType = Float32Array) {
     return new RGBDataSet(img, tileDecoder, ArrayType)
 }
 
-export async function mapzenDataSet(z, x, y, ArrayType = Float32Array) {
-    const tileUrl = mapzenUrl(z, x, y)
-    const tileDecoder = mapzenElevation()
-    const img = await util.imagePromise(tileUrl)
-    return new RGBDataSet(img, tileDecoder, ArrayType)
-}
-
+// ============= Mapbox
 export async function mapboxDataSet(z, x, y, token, ArrayType = Float32Array) {
     const tileUrl = mapboxUrl(z, x, y, token)
     const tileDecoder = mapboxElevation()
     const img = await util.imagePromise(tileUrl)
     return new RGBDataSet(img, tileDecoder, ArrayType)
 }
+
+// ============= Convenience "bundles" =============
+
+export const mapzen = {
+    elevationFcn: rgbScaleFunction(-32768, 1 / 256), // returns fcn(r,g,b)
+    zxyUrl: (z, x, y) =>
+        `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`,
+    zxyTemplate:
+        'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+    maxZoom: 15,
+
+    zxyToTile: async function (z, x, y) {
+        const tileUrl = this.zxyUrl(z, x, y)
+        const img = await util.imagePromise(tileUrl)
+        return img
+    },
+    zxyToDataSet: async function (z, x, y, ArrayType = Float32Array) {
+        const img = await zxyToTile(z, x, y)
+        return this.tileDataSet(img, ArrayType)
+    },
+    tileDataSet: function (img, ArrayType = Float32Array) {
+        const tileDecoder = this.elevationFcn()
+        return new RGBDataSet(img, tileDecoder, ArrayType)
+    },
+}
+
+// export async function mapzenTile(z, x, y) {
+//     const tileUrl = mapzenUrl(z, x, y)
+//     const img = await util.imagePromise(tileUrl)
+//     return img
+// }
+// export function mapzenDataSet(img, ArrayType = Float32Array) {
+//     const tileDecoder = mapzenElevationFcn()
+//     return new RGBDataSet(img, tileDecoder, ArrayType)
+// }

@@ -58,69 +58,69 @@
             linksColor: 'red',
         }
 
-        async function run() {
-            const counties = await fetch(
-                '../gis/data/nmcounties.json'
-            ).then(resp => resp.json())
+        // async function run() {
+        const counties = await fetch(
+            '../gis/data/nmcounties.json'
+        ).then(resp => resp.json())
 
-            const bbox = geojsonBBox(counties)
-            const bboxCenter = gis.latlon(gis.bboxCenter(bbox))
-            const zoom = 7
-            console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
+        const bbox = geojsonBBox(counties)
+        const bboxCenter = gis.latlon(gis.bboxCenter(bbox))
+        const zoom = 7
+        console.log('bbox', bbox, '\nbboxCenter', bboxCenter)
 
-            const world = new GeoWorld(counties, 100)
-            const model = new VirusModel(world)
-            await model.startup()
-            model.setup()
+        const world = new GeoWorld(counties, 100)
+        const model = new VirusModel(world)
+        await model.startup()
+        model.setup()
 
-            const view = new TwoDraw(model, {
-                div: util.createCanvas(0, 0), // the view will resize
-                drawOptions,
-            })
+        const view = new TwoDraw(model, {
+            div: util.createCanvas(0, 0), // the view will resize
+            drawOptions,
+        })
 
-            const map = L.map('map').setView(bboxCenter, zoom)
+        const map = L.map('map').setView(bboxCenter, zoom)
 
-            L.tileLayer(gis.template('osm'), {
-                attribution: gis.attribution('osm'),
-            }).addTo(map)
+        L.tileLayer(gis.template('osm'), {
+            attribution: gis.attribution('osm'),
+        }).addTo(map)
 
-            const [west, south, east, north] = bbox
-            const bounds = new L.LatLngBounds(
-                new L.LatLng(north, west),
-                new L.LatLng(south, east)
-            )
-            new ElementOverlay(view.canvas, bounds).addTo(map)
+        const [west, south, east, north] = bbox
+        const bounds = new L.LatLngBounds(
+            new L.LatLng(north, west),
+            new L.LatLng(south, east)
+        )
+        new ElementOverlay(view.canvas, bounds).addTo(map)
 
-            L.geoJSON(counties, {
-                style: () => ({
-                    color: 'red',
-                    fillOpacity: 0.025,
-                    weight: 2,
-                }),
-            })
-                // .bindPopup(
-                //     layer =>
-                //         layer.feature.properties.NAME +
-                //         ', pop: ' +
-                //         layer.feature.properties.population.toLocaleString()
-                // )
-                .addTo(map)
+        L.geoJSON(counties, {
+            style: () => ({
+                color: 'red',
+                fillOpacity: 0.025,
+                weight: 2,
+            }),
+        })
+            // .bindPopup(
+            //     layer =>
+            //         layer.feature.properties.NAME +
+            //         ', pop: ' +
+            //         layer.feature.properties.population.toLocaleString()
+            // )
+            .addTo(map)
 
-            const latlngs = gis.latlon(gis.bboxCoords(bbox))
-            L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
+        const latlngs = gis.latlon(gis.bboxCoords(bbox))
+        L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
 
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                -1, // 500, // run 500 steps
-                20 // 30 // 30 fps
-            )
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // 500, // run 500 steps
+            20 // 30 // 30 fps
+        )
 
             // util.toWindow({ model, view, bbox, map, counties, anim })
-        }
-        run()
+        // }
+        // run()
     </script>
 </body>
 

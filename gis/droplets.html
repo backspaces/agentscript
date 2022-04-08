@@ -17,7 +17,7 @@
 
         /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
         .leaflet-tile {
-            border: solid black 1px;
+            border: solid red 1px;
         }
     </style>
 </head>
@@ -28,8 +28,8 @@
     <script type="module">
         import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
-        import * as geojson from '../src/geojson.js'
-        import GeoWorld from '../src/GeoWorld.js'
+        // import * as geojson from '../src/geojson.js'
+        // import GeoWorld from '../src/GeoWorld.js'
 
         import TwoDraw from '../src/TwoDraw.js'
         import Animator from '../src/Animator.js'
@@ -41,110 +41,122 @@
 
         const ElementOverlay = elementOverlay(L)
 
-        async function run() {
-            // Santa Fe:
-            const [lon, lat, Z] = [-105.93, 35.67, 10]
-            const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
 
-            // const map = L.map('map').setView([lat, lon], Z)
-            const map = L.map('map', {
-                zoomDelta: 0.25, //0.1
-                zoomSnap: 0,
-            }).setView([lat, lon], Z)
-            L.tileLayer(gis.template('topo'), {
-                attribution: gis.attribution('topo'),
-            }).addTo(map)
-            const centerTile = L.rectangle(centerTileBounds(), {
-                color: 'black',
-            })
-                .bindPopup(layer => centerTileString())
-                .addTo(map)
+        // async function run() { // removed, using top level await
+
+        // ========== Setup map and layers
+
+        const [lon, lat, Z] = [-105.93, 35.67, 10] // Santa Fe:
+        const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
+
+        const map = L.map('map', {
+            zoomDelta: 0.25, //0.1
+            zoomSnap: 0,
+        }).setView([lat, lon], Z)
+
+        const style = 'usgs' // osm topo smooth usgs
+        L.tileLayer(gis.template(style), {
+            attribution: gis.attribution(style),
+        }).addTo(map)
+
+        const centerTile = L.rectangle(centerTileBounds(), {
+            color: 'black',
+        })
+            .bindPopup(layer => centerTileString())
+            .addTo(map)
+        centerTile.openPopup(centerTileLatLon())
+
+        // ========== Setup model, view & animator. Add view to map
+
+        const model = new DropletsModel()
+        // model.zxy = [Z, X, Y]
+        await model.startup([Z, X, Y])
+        model.setup()
+        const view = new TwoDraw(model, {
+            div: util.createCanvas(0, 0), // the view will resize
+            patchSize: 20,
+            drawOptions: {
+                patchesColor: 'transparent',
+                turtlesShape: 'circle',
+                turtlesColor: 'blue',
+                turtlesSize: 0.8,
+            },
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            10 // 30 // 30 fps
+        ).stop()
+        // anim.stop()
+
+        const centerTileOverlay = new ElementOverlay(
+            view.canvas,
+            centerTileBounds()
+        ).addTo(map)
+
+        // ========== Map interactions. Restarts model on new click
+
+        map.on('zoomend', update)
+        map.on('moveend', update)
+        centerTile.on('click', restartModel)
+
+        function update(ev) {
+            anim.stop()
+            util.clearCtx(view.ctx)
+
             centerTile.openPopup(centerTileLatLon())
 
-            const model = new DropletsModel()
-            model.zxy = [Z, X, Y]
-            await model.startup()
-            model.setup()
-            const view = new TwoDraw(model, {
-                div: util.createCanvas(0, 0), // the view will resize
-                patchSize: 20,
-                drawOptions: {
-                    patchesColor: 'transparent',
-                    turtlesShape: 'circle',
-                    turtlesColor: 'blue',
-                    turtlesSize: 0.8,
-                },
-            })
-
-            const centerTileOverlay = new ElementOverlay(
-                view.canvas,
-                centerTileBounds()
-            ).addTo(map)
-
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                -1, // 500, // run 500 steps
-                10 // 30 // 30 fps
-            ).stop()
-            // anim.stop()
-
-            map.on('zoomend', update)
-            map.on('moveend', update)
-            centerTile.on('click', restartModel)
-
-            function update(ev) {
-                anim.stop()
-                util.clearCtx(view.ctx)
-
-                centerTile.openPopup(centerTileLatLon())
-
-                const bounds = centerTileBounds()
-                centerTile.setBounds(bounds)
-                centerTileOverlay.setBounds(bounds)
-            }
-            async function restartModel(ev) {
-                console.log(ev)
-                centerTile.closePopup()
-                anim.stop()
-                const [X, Y, Z] = centerTileXYZ()
-                model.zxy = [Z, X, Y]
-                model.reset()
-                await model.startup()
-                model.setup()
-                anim.start()
-            }
-
-            function centerTileXYZ() {
-                const { lat, lng: lon } = map.getCenter()
-                const Z = Math.floor(map.getZoom())
-                const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
-                return [X, Y, Z]
-            }
-            function centerTileBBox() {
-                const [X, Y, Z] = centerTileXYZ()
-                return gis.xyz2bbox(X, Y, Z)
-            }
-            function centerTileBounds() {
-                // const [X, Y, Z] = centerTileXYZ()
-                // const bbox = gis.xyz2bbox(X, Y, Z)
-                const bbox = centerTileBBox()
-                return gis.latlon(gis.bboxBounds(bbox))
-            }
-            function centerTileLatLon() {
-                // const [X, Y, Z] = centerTileXYZ()
-                // const bbox = gis.xyz2bbox(X, Y, Z)
-                const bbox = centerTileBBox()
-                return gis.latlon(gis.bboxCenter(bbox))
-            }
-            function centerTileString() {
-                const [X, Y, Z] = centerTileXYZ()
-                return `X:${X},  Y:${Y}, Z:${Z}`
-            }
+            const bounds = centerTileBounds()
+            centerTile.setBounds(bounds)
+            centerTileOverlay.setBounds(bounds)
         }
-        run()
+        async function restartModel(ev) {
+            // console.log(ev)
+            centerTile.closePopup()
+            // anim.stop()
+            model.reset()
+            const [X, Y, Z] = centerTileXYZ()
+            await model.startup([Z, X, Y])
+            model.setup()
+            anim.reset()
+        }
+
+        // ========== Map utility functions
+
+        function centerTileXYZ() {
+            const { lat, lng: lon } = map.getCenter()
+            const Z = Math.round(map.getZoom())
+            // const Z = Math.floor(map.getZoom())
+            const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
+            return [X, Y, Z]
+        }
+        function centerTileBBox() {
+            const [X, Y, Z] = centerTileXYZ()
+            return gis.xyz2bbox(X, Y, Z)
+        }
+        function centerTileBounds() {
+            // const [X, Y, Z] = centerTileXYZ()
+            // const bbox = gis.xyz2bbox(X, Y, Z)
+            const bbox = centerTileBBox()
+            // return gis.latlon(gis.bbox2ArrayBounds(bbox))
+            return gis.bbox2ArrayBounds(bbox)
+        }
+        function centerTileLatLon() {
+            // const [X, Y, Z] = centerTileXYZ()
+            // const bbox = gis.xyz2bbox(X, Y, Z)
+            const bbox = centerTileBBox()
+            return gis.latlon(gis.bboxCenter(bbox))
+        }
+        function centerTileString() {
+            const [X, Y, Z] = centerTileXYZ()
+            return `X:${X},  Y:${Y}, Z:${Z}`
+        }
+        // }
+        // run()
     </script>
 </body>
 

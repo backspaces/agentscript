@@ -1,89 +1,90 @@
 <html>
-    <head>
-        <title>terrain2</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import World from '../src/World.js'
-            import {
-                redfishUSDataSet,
-                maptilerUrl,
-            } from '../src/TileDataSet.js'
-            import Model from '../models/HelloModel.js'
-            import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
-            import ThreeDraw from '../src/ThreeDraw.js'
 
-            async function run() {
-                const [Z, X, Y] = [13, 1594, 3339]
-                const elevation = await redfishUSDataSet(Z, X, Y)
-                const el0to10 = elevation.scale(0, 10)
+<head>
+    <title>terrain2</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-                const baseMapURL = maptilerUrl(
-                    Z,
-                    X,
-                    Y,
-                    'iQurAP6lArV1UP4gfSVs',
-                    'topo'
-                )
-                const baseMap = await util.imagePromise(baseMapURL)
-                // const baseCtx = util.createCtx(0, 0)
-                // util.setCtxImage(baseCtx, baseMap)
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import World from '../src/World.js'
+        import { redfishUSA, maptilerUrl } from '../src/TileData.js'
+        import Model from '../models/HelloModel.js'
+        import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
 
-                const model = new Model(World.defaultOptions(50))
-                model.population = 0
-                model.patches.importDataSet(el0to10, 'z')
+        async function run() {
+            const [Z, X, Y] = [13, 1594, 3339]
+            // const elevation = await redfishUSADataSet(Z, X, Y)
+            // const tile = await redfishUSATile(Z, X, Y)
+            const elevation = await redfishUSA.zxyToDataSet(Z, X, Y)
+            const el0to10 = elevation.scale(0, 10)
 
-                await model.startup()
-                model.setup()
+            const baseMapURL = maptilerUrl(
+                Z,
+                X,
+                Y,
+                'iQurAP6lArV1UP4gfSVs',
+                'topo'
+            )
+            const baseMap = await util.imagePromise(baseMapURL)
+            // const baseCtx = util.createCtx(0, 0)
+            // util.setCtxImage(baseCtx, baseMap)
 
-                // REMIND: fix patches to update only once
-                const drawOptions = {
-                    patchesMesh: {
-                        meshClass: 'PatchesMesh',
-                        useSegments: true,
-                        canvas: baseMap, //baseCtx.canvas,
-                    },
-                    // patchesSize: 5,
-                    // patchesMap: 'Jet',
-                    // patchesColor: baseCtx.canvas,
-                    // patchesColor: p => {
-                    //     const map = view.drawOptions.patchesMap
-                    //     const color = map.scaleColor(p.z, 0, 10)
-                    //     return color
-                    // },
-                }
+            const model = new Model(World.defaultOptions(50))
+            model.population = 0
+            model.patches.importDataSet(el0to10, 'z')
 
-                const view = new ThreeDraw(
-                    model,
-                    { div: 'modelDiv' },
-                    drawOptions
-                )
-                const data = el0to10.resample(102, 102).data
-                const geometry = view.meshes.patches.mesh.geometry
-                const pos = geometry.getAttribute('position')
-                const a = pos.array
-                util.repeat(a.length / 3, (i, a) => (a[i * 3 + 2] = data[i]), a)
-                geometry.setAttribute(
-                    'position',
-                    new THREE.BufferAttribute(a, 3)
-                )
+            await model.startup()
+            model.setup()
 
-                util.toWindow({ util, model, view })
-
-                util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    5, // 500, just draw once, is static
-                    33
-                )
-
-                view.idle()
+            // REMIND: fix patches to update only once
+            const drawOptions = {
+                patchesMesh: {
+                    meshClass: 'PatchesMesh',
+                    useSegments: true,
+                    canvas: baseMap, //baseCtx.canvas,
+                },
+                // patchesSize: 5,
+                // patchesMap: 'Jet',
+                // patchesColor: baseCtx.canvas,
+                // patchesColor: p => {
+                //     const map = view.drawOptions.patchesMap
+                //     const color = map.scaleColor(p.z, 0, 10)
+                //     return color
+                // },
             }
-            run()
+
+            const view = new ThreeDraw(
+                model,
+                { div: 'modelDiv' },
+                drawOptions
+            )
+            const data = el0to10.resample(102, 102).data
+            const geometry = view.meshes.patches.mesh.geometry
+            const pos = geometry.getAttribute('position')
+            const a = pos.array
+            util.repeat(a.length / 3, (i, a) => (a[i * 3 + 2] = data[i]), a)
+            geometry.setAttribute(
+                'position',
+                new THREE.BufferAttribute(a, 3)
+            )
+
+            util.toWindow({ util, model, view })
+
+            util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                5, // 500, just draw once, is static
+                33
+            )
+
+            view.idle()
+        }
+        run()
 
             // const drawOptions = {
             //     initPatches: (model, view) => {
@@ -97,7 +98,8 @@
             //         return colors
             //     },
             // }
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

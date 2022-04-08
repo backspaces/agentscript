@@ -20,10 +20,10 @@ export default class DataSet {
      * @static
      * @param {number} width The integer width of the array
      * @param {number} height The integer height of the array
-     * @param {Object} Type Array or one of the typed array types
+     * @param {Object} Type Array (default) or one of the typed array types
      * @returns {DataSet} The resulting DataSet with no values assigned
      */
-    static emptyDataSet(width, height, Type) {
+    static emptyDataSet(width, height, Type = Array) {
         return new DataSet(width, height, new Type(width * height))
     }
 
@@ -280,6 +280,20 @@ export default class DataSet {
         }
         const data1 = util.concatArrays(data, dataset.data)
         return new DataSet(w, h + dataset.height, data1)
+    }
+
+    // Crop this dataSet by removing top, bottom rows, left, right columns.
+    // You may pass in an obj with top, bottom, left, right key/val pairs
+    crop(top, bottom, left, right) {
+        if (bottom === undefined) {
+            // note var required, let/const have initialization error
+            var { top, bottom, left, right } = top
+        }
+
+        const width = this.width - left - right
+        const height = this.height - top - bottom
+
+        return this.subset(top, left, width, height)
     }
 
     // return dataset x,y given x,y in a euclidean space defined by tlx, tly, w, h

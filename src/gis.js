@@ -6,7 +6,7 @@ const radians = degrees => (degrees * PI) / 180
 const degrees = radians => (radians * 180) / PI
 
 // Current gis and geoJson uses lon/lat coords, i.e. x,y.
-// This converts to latlon.
+// This converts to latlon, i.e. y,x.
 export function latlon(lonlat) {
     if (typeof lonlat[0] !== 'number') return lonlat.map(val => latlon(val))
     return [lonlat[1], lonlat[0]]
@@ -14,6 +14,7 @@ export function latlon(lonlat) {
 
 // Tiles use a ZXY corrd system. We use lower case below.
 // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
+// Convert lon,lats to tile X,Ys
 export function lonz2x(lon, z) {
     return floor(((lon + 180) / 360) * pow(2, z))
 }
@@ -30,6 +31,8 @@ export function lonlatz2xyz(lon, lat, z) {
     return [this.lonz2x(lon, z), this.latz2y(lat, z), z]
 }
 
+// returns top-left, or north-west lon, lat of given tile X Y Z's
+// adding 1 to either x,y or both gives other corner lonlats
 export function xz2lon(x, z) {
     return (x / pow(2, z)) * 360 - 180
 }
@@ -40,8 +43,14 @@ export function yz2lat(y, z) {
 export function xyz2lonlat(x, y, z) {
     return [this.xz2lon(x, z), this.yz2lat(y, z)]
 }
-// Return two lon/lat points for bbox of tile
-// We use the usual convention of
+// adding 0.5 to x,y returns lonlat of center of tile
+export function xyz2centerLonlat(x, y, z) {
+    return [this.xz2lon(x + 0.5, z), this.yz2lat(y + 0.5, z)]
+}
+
+// Return a tile bbox for xyz tile.
+// x,y any point within the tile like center etc.
+// We use the usual bbox convention of
 //   [minX, minY, maxX, maxY] or [west, south, east, north]
 export function xyz2bbox(x, y, z) {
     const [west, north] = this.xyz2lonlat(x, y, z)
@@ -57,16 +66,65 @@ export function xyz2zxy(xyz) {
     const [x, y, z] = xyz
     return [z, x, y]
 }
-// export function lonlat2latlon(lonlat) {
-//     const [lon, lat] = lonlat
-//     return [lat, lon]
+
+// Leaflet style latlon corners to bbox
+// "bouonds" uses leaflet's latlon while "bbox" uses our lonlat
+export function bounds2bbox(leafletBounds) {
+    let { lng: east, lat: north } = leafletBounds.getNorthEast()
+    let { lng: west, lat: south } = leafletBounds.getSouthWest()
+    return [west, south, east, north]
+}
+export function bbox2bounds(L, bbox) {
+    const [west, south, east, north] = bbox
+    const corner1 = L.latLng(north, west),
+        corner2 = L.latLng(south, east)
+    return L.latLngBounds(corner1, corner2)
+}
+// All Leaflet methods that accept LatLngBounds objects also accept them in a
+// simple Array form (unless noted otherwise), so the bounds example above
+// can be passed like this:
+// Note this usees leaflet's latlon rather than lonlat
+export function bbox2ArrayBounds(bbox) {
+    const [west, south, east, north] = bbox
+    return [
+        // [west, north], // topLeft
+        // [east, south], // botRight
+        [north, west], // latlon topLeft
+        [south, east], //latlon botRight
+    ]
+}
+
+export function bboxCoords(bbox) {
+    const [west, south, east, north] = bbox
+    return [
+        [west, north], // topLeft
+        [east, north], // topRight
+        [east, south], // botRight
+        [west, south], // botLeft
+    ]
+}
+
+// export function pixelBounds2bbox(leafletPixelBounds) {
+//     let { lng: eastPx, lat: northPx } = leafletBounds.getNorthEast()
+//     let { lng: westPx, lat: southPx } = leafletBounds.getSouthWest()
+//     return [westPx, southPx, eastPx, northPx]
 // }
 
-export function bboxCenter(bbox, type = 'lonlat') {
+// LonLat corners to bbox: [west, south, east, north]
+export function topLeftBottomRight2bbox(topLeft, bottomRight) {
+    const [west, north] = topLeft
+    const [east, south] = bottomRight
+    return [west, south, east, north]
+}
+export function bottomLeftTopRight2bbox(bottomLeft, topRight) {
+    const [west, south] = bottomLeft
+    const [east, north] = topRight
+    return [west, south, east, north]
+}
+
+export function bboxCenter(bbox) {
     const [west, south, east, north] = bbox
     return [(west + east) / 2, (south + north) / 2]
-    // if (type !== 'lonlat') center = lonlat2latlon(center)
-    // return center
 }
 
 export function bboxSize(bbox) {
@@ -91,27 +149,6 @@ export function bboxMetricSize(bbox) {
 export function bboxMetricAspect(bbox) {
     const [width, height] = bboxMetricSize(bbox)
     return width / height
-}
-
-export function bboxCoords(bbox, type = 'lonlat') {
-    const [west, south, east, north] = bbox
-    return [
-        [west, north], // topLeft
-        [east, north], // topRight
-        [east, south], // botRight
-        [west, south], // botLeft
-    ]
-    // if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
-    // return coords
-}
-export function bboxBounds(bbox, type = 'lonlat') {
-    const [west, south, east, north] = bbox
-    return [
-        [west, north], // topLeft
-        [east, south], // botRight
-    ]
-    // if (type !== 'lonlat') coords = coords.map(coord => lonlat2latlon(coord))
-    // return coords
 }
 
 // Create a url for OSM json data.
@@ -145,6 +182,15 @@ export function lonLat2meters(pt1, pt2) {
     return d * 1000 // meters
 }
 
+// const terrainLayer = L.tileLayer(
+//     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // zoom 18
+//     // 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {  // zoom 17
+//     // 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg', { // zoom 18
+//     // 'http://tile.stamen.com/toner/{z}/{x}/{y}.png', { // zoom 17
+//     // 'https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', { // zoom 18
+//     // 'https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', { // zoom 18
+
+// https://github.com/leaflet-extras/leaflet-providers
 // https://github.com/leaflet-extras/leaflet-providers/blob/master/leaflet-providers.js
 export function attribution(who = 'osm') {
     const prefix = 'Map data &copy; '
@@ -157,6 +203,11 @@ export function attribution(who = 'osm') {
             return prefix + '<a https://opentopomap.org">OpenTopoMap</a>'
         case 'smooth':
             return prefix + '<a href="https://stadiamaps.com/">Stadia Maps</a>'
+        case 'usgs':
+            return (
+                prefix +
+                'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
+            )
     }
 }
 export function template(who = 'osm') {
@@ -167,5 +218,7 @@ export function template(who = 'osm') {
             return 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
         case 'smooth':
             return 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png'
+        case 'usgs':
+            return 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}'
     }
 }
