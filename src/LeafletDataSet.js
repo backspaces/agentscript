@@ -12,7 +12,7 @@ export default class LeafletDataSet {
             throw Error('LeafletDataSet: tileSize must be square: ' + tileSize)
         this.tileSize = tileSize.x
 
-        this.loading = false
+        // this.loading = true
         elevationLayer.on('loading', ev => (this.loading = true))
         elevationLayer.on('load', ev => (this.loading = false))
         elevationLayer.on('tileload', ev => this.addTile(ev.tile, ev.coords))
@@ -21,18 +21,23 @@ export default class LeafletDataSet {
     }
 
     getZoom() {
-        return Math.round(map.getZoom())
+        return Math.round(this.map.getZoom())
         // return Math.floor(map.getZoom())
     }
     tileName(coords) {
         const { x, y, z } = coords
-        return x + ':' + y + ':' + z
+        return z + '/' + x + '/' + y
+        // return x + ':' + y + ':' + z
     }
     addTile(tile, coords) {
         const dataSet = this.tileData.tileDataSet(tile)
 
-        dataSet.coords = coords
-        dataSet.tile = tile
+        if (dataSet.data.includes(0)) {
+            console.log('0 elev', dataSet)
+        }
+
+        // dataSet.coords = coords
+        // dataSet.tile = tile
 
         const key = this.tileName(coords)
         this.tiles[key] = dataSet
@@ -41,66 +46,98 @@ export default class LeafletDataSet {
         delete this.tiles[this.tileName(coords)]
     }
 
-    // mapBBox() {
-    //     return gis.bounds2bbox(map.getBounds())
-    // }
+    mapBBox() {
+        return gis.bounds2bbox(this.map.getBounds())
+    }
 
     async getBBoxDataSet(bbox = this.mapBBox()) {
         await util.waitPromise(() => this.loading === false)
 
-        const [west, south, east, north] = bbox
         const z = this.getZoom()
 
-        const [westX, northY] = gis.lonlatz2xy(west, north, z)
-        const [eastX, southY] = gis.lonlatz2xy(east, south, z)
-        const tilesXYs = [westX, southY, eastX, northY]
-
-        const tilesDataSets = this.dataSetsArray(tilesXYs, z)
-        const tilesDataSet = this.dataSetsToDataSet(tilesDataSets)
-        const cropParameters = this.getCropParameters(bbox, tilesXYs, z)
+        const tilesBBox = gis.tilesBBox(bbox, z) // in xy coords
+        const dataSetMatrix = this.dataSetsMatrix(tilesBBox, z)
+        const tilesDataSet = this.dataSetMatrixToDataSet(dataSetMatrix)
+        const cropParameters = this.getCropParameters(bbox, tilesBBox, z)
         const bboxDataSet = tilesDataSet.crop(cropParameters)
+        console.log('bbox', bbox)
+        console.log('tilesBBox', tilesBBox)
+        console.log('dataSetMatrix', dataSetMatrix)
+        console.log('tilesDataSet', tilesDataSet)
+        console.log('cropParameters', cropParameters)
+        console.log('bboxDataSet', bboxDataSet)
 
-        // return { bbox, dataSets, dataSet, cropParameters }
-        return {
-            bbox,
-            tilesDataSets,
-            tilesDataSet,
-            cropParameters,
-            bboxDataSet,
-        }
+        return bboxDataSet
     }
     // Return individual tile datasets as a row/col array
-    dataSetsArray(tilesXYs, z) {
-        const [westX, southY, eastX, northY] = tilesXYs
+    dataSetsMatrix(tilesBBox, z) {
+        const [westX, southY, eastX, northY] = tilesBBox
 
         const cols = []
         for (let y = northY; y <= southY; y++) {
             const row = []
-            for (let x = westX; x <= eastX; x++)
-                row.push(this.tiles[this.tileName({ x, y, z })])
+            for (let x = westX; x <= eastX; x++) {
+                const tileName = this.tileName({ x, y, z })
+                const dataSet = this.tiles[tileName]
+                if (dataSet.data.includes(0))
+                    console.log('0 in tile dataset ' + tileName, dataSet)
+                row.push(dataSet)
+            }
             cols.push(row)
         }
         return cols
     }
-    dataSetsToDataSet(cols) {
-        const rows = cols.map(
+    dataSetMatrixToDataSet(dataSetMatrix) {
+        const rows = dataSetMatrix.map(
             // col => col.reduce((prev, cur) => prev.concatEast(cur))
-
             col =>
                 col.reduce((prev, cur) => {
                     // if (!prev) throw Error('prev')
-                    if (!prev) console.log(cols, col, prev, cur)
+                    if (!prev)
+                        console.log('no prev', dataSetMatrix, col, prev, cur)
+                    if (prev.data.includes(0))
+                        console.log('0 elev', dataSetMatrix, col, prev, cur)
                     return prev.concatEast(cur)
                 })
         )
         const dataSet = rows.reduce((prev, cur) => prev.concatSouth(cur))
         return dataSet
     }
-    getCropParameters(bbox, tilesXYs, z) {
-        const [west, south, east, north] = bbox
-        const [westX, southY, eastX, northY] = tilesXYs
+    getCropParameters(bbox, tilesBBox, z) {
+        // bbox we want for our map
+        const [west, south, east, north] = bbox // geo coords
+        const map = this.map
 
-        const [dsWest, dsNorth] = gis.xyz2lonlat(westX, northY, z)
+        // tile bbox that contain our map bbox
+        const [westX, southY, eastX, northY] = tilesBBox // tile coords
+        // convert to geo coords
+        const [westXlon, northYlat] = gis.xyz2lonlat(westX, northY, z) // geo coords
+        const [eastXlon, southYlat] = gis.xyz2lonlat(eastX + 1, southY + 1, z)
+
+        // convert both bbox & tiles to pixels
+        const bboxTopLeft = map.latLngToLayerPoint([north, west])
+        const bboxBottomRight = map.latLngToLayerPoint([south, east])
+        const tilesTopLeft = map.latLngToLayerPoint([northYlat, westXlon])
+        const tilesBottomRight = map.latLngToLayerPoint([southYlat, eastXlon])
+
+        console.log(
+            'getCropParameters1',
+            this.getCropParameters1(bbox, tilesBBox, z)
+        )
+
+        return {
+            // use DataSet.crop(obj) names
+            top: bboxTopLeft.y - tilesTopLeft.y,
+            bottom: tilesBottomRight.y - bboxBottomRight.y,
+            left: bboxTopLeft.x - tilesTopLeft.x,
+            right: tilesBottomRight.x - bboxBottomRight.x,
+        }
+    }
+    getCropParameters1(bbox, tilesBBox, z) {
+        const [west, south, east, north] = bbox // geo coords
+
+        const [westX, southY, eastX, northY] = tilesBBox // tile coords
+        const [dsWest, dsNorth] = gis.xyz2lonlat(westX, northY, z) // geo coords
         const [dsEast, dsSouth] = gis.xyz2lonlat(eastX + 1, southY + 1, z)
 
         const [tWest, tSouth, tEast, tNorth] = gis.xyz2bbox(westX, northY, z)

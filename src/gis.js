@@ -56,6 +56,12 @@ export function xyz2bbox(x, y, z) {
     const [west, north] = this.xyz2lonlat(x, y, z)
     const [east, south] = this.xyz2lonlat(x + 1, y + 1, z)
     return [west, south, east, north]
+    // return [west, south, (east * 256) / 257, (north * 256) / 257]
+    // const dWidth = (east - west) / 256
+    // const dHeight = (north - south) / 256
+    // console.log('std', [west, south, east, north])
+    // console.log('clipped', [west, south, east - dWidth, north - dHeight])
+    // return [west, south, east - dWidth, north - dHeight]
 }
 export function lonLatz2bbox(lon, lat, z) {
     const [x, y] = this.lonlatz2xy(lon, lat, z)
@@ -74,26 +80,29 @@ export function bounds2bbox(leafletBounds) {
     let { lng: west, lat: south } = leafletBounds.getSouthWest()
     return [west, south, east, north]
 }
-export function bbox2bounds(L, bbox) {
-    const [west, south, east, north] = bbox
-    const corner1 = L.latLng(north, west),
-        corner2 = L.latLng(south, east)
-    return L.latLngBounds(corner1, corner2)
-}
-// All Leaflet methods that accept LatLngBounds objects also accept them in a
-// simple Array form (unless noted otherwise), so the bounds example above
-// can be passed like this:
+// export function bbox2Lbounds(L, bbox) {
+//     const [west, south, east, north] = bbox
+//     const corner1 = L.latLng(north, west),
+//         corner2 = L.latLng(south, east)
+//     return L.latLngBounds(corner1, corner2)
+// }
+// All Leaflet methods that accept LatLngBounds objects also accept
+// them in a simple Array form (unless noted otherwise),
+// So the bounds example above can be passed like this:
 // Note this usees leaflet's latlon rather than lonlat
-export function bbox2ArrayBounds(bbox) {
+export function bbox2bounds(bbox) {
     const [west, south, east, north] = bbox
     return [
-        // [west, north], // topLeft
-        // [east, south], // botRight
         [north, west], // latlon topLeft
         [south, east], //latlon botRight
     ]
 }
-
+export function tilesBBox(bbox, z) {
+    const [west, south, east, north] = bbox
+    const [westX, northY] = gis.lonlatz2xy(west, north, z)
+    const [eastX, southY] = gis.lonlatz2xy(east, south, z)
+    return [westX, southY, eastX, northY]
+}
 export function bboxCoords(bbox) {
     const [west, south, east, north] = bbox
     return [
@@ -102,24 +111,6 @@ export function bboxCoords(bbox) {
         [east, south], // botRight
         [west, south], // botLeft
     ]
-}
-
-// export function pixelBounds2bbox(leafletPixelBounds) {
-//     let { lng: eastPx, lat: northPx } = leafletBounds.getNorthEast()
-//     let { lng: westPx, lat: southPx } = leafletBounds.getSouthWest()
-//     return [westPx, southPx, eastPx, northPx]
-// }
-
-// LonLat corners to bbox: [west, south, east, north]
-export function topLeftBottomRight2bbox(topLeft, bottomRight) {
-    const [west, north] = topLeft
-    const [east, south] = bottomRight
-    return [west, south, east, north]
-}
-export function bottomLeftTopRight2bbox(bottomLeft, topRight) {
-    const [west, south] = bottomLeft
-    const [east, north] = topRight
-    return [west, south, east, north]
 }
 
 export function bboxCenter(bbox) {

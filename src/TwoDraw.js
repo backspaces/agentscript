@@ -17,6 +17,7 @@ export default class TwoDraw extends TwoView {
             turtlesStrokeColor: 'random',
             turtlesShape: 'dart',
             turtlesSize: 1,
+            turtlesRotate: true,
 
             linksColor: 'random',
             linksWidth: 1,
@@ -79,6 +80,7 @@ export default class TwoDraw extends TwoView {
             turtlesStrokeColor,
             turtlesShape,
             turtlesSize,
+            turtlesRotate,
 
             linksColor,
             linksWidth,
@@ -149,6 +151,10 @@ export default class TwoDraw extends TwoView {
                 typeof turtlesSize === 'function'
                     ? turtlesSize(t)
                     : turtlesSize,
+            noRotate:
+                typeof turtlesRotate === 'function'
+                    ? !turtlesRotate(t)
+                    : !turtlesRotate,
         }))
 
         if (textProperty) {

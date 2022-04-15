@@ -45,7 +45,7 @@
 
         const terrainLayer = L.tileLayer(gis.template('osm'), {
             attribution: gis.attribution('osm'),
-            // className: 'terrain-pane'
+            className: 'terrain-pane' // shows tiles borders
         }).addTo(map)
 
         const elevationLayer = L.tileLayer(
@@ -77,15 +77,17 @@
         function centerTileXYZ() {
             const { lat, lng: lon } = map.getCenter()
             const Z = Math.round(map.getZoom())
-            // const Z = Math.round(map.getZoom()) // if fractional zoom
             const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
             return [X, Y, Z]
         }
         function centerTileBounds() {
             const [X, Y, Z] = centerTileXYZ()
             const bbox = gis.xyz2bbox(X, Y, Z)
-            // return gis.latlon(gis.bbox2ArrayBounds(bbox))
-            return gis.bbox2ArrayBounds(bbox)
+            // console.log('bbox', bbox)
+            // console.log('bboxPixels', gis.bboxPixels(L, bbox, Z))
+            util.toWindow({ bbox, Z })
+            // return gis.latlon(gis.bbox2bounds(bbox))
+            return gis.bbox2bounds(bbox)
         }
         function update(ev) {
             // if (ev.type === 'moveend') console.log('moved')

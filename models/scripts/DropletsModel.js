@@ -17,7 +17,8 @@ class DropletsModel extends Model {
     //    'patchAspect',
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
-    stepType = 'dataSetAspectNearest'
+    // stepType = 'dataSetAspectNearest'
+    stepType = 'minNeighbor'
     dzdx
     dzdy
     slope
@@ -72,8 +73,13 @@ class DropletsModel extends Model {
                     // Face the best neighbor if better than me
                     t.face(n)
                 } else {
-                    // Otherwise place myself at my patch center
-                    t.setxy(t.patch.x, t.patch.y)
+                    if (t.patch.isOnEdge() && this.killOffworld) {
+                        // die if on edge
+                        t.die()
+                    } else {
+                        // otherwise place myself at my patch center
+                        t.setxy(t.patch.x, t.patch.y)
+                    }
                     move = false
                 }
             } else if (stepType === 'patchAspect') {

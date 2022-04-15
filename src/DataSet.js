@@ -162,7 +162,7 @@ export default class DataSet {
     // .. which had precision errors.
     // Multiplying first, then dividing more accurate.
     resample(width, height, useNearest = true, Type = Array) {
-        if (width === this.width && height === this.height) return this.copy()
+        if (width === this.width && height === this.height) return this.clone()
         const ds = DataSet.emptyDataSet(width, height, Type)
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
@@ -207,6 +207,13 @@ export default class DataSet {
     // Returned dataset is of same array type as this.
     subset(x, y, width, height) {
         if (x + width > this.width || y + height > this.height) {
+            console.log('subset: x+width', x + width, 'this.width', this.width)
+            console.log(
+                'subset: y+height',
+                y + height,
+                'this.height',
+                this.height
+            )
             throw Error('DataSet.subSet: params out of range')
         }
         const ds = this.emptyDataSet(width, height)
@@ -216,6 +223,24 @@ export default class DataSet {
             }
         }
         return ds
+    }
+    // Crop this dataSet by removing top, bottom rows, left, right columns.
+    // You may pass in an obj with top, bottom, left, right key/val pairs
+    crop(top, bottom, left, right) {
+        if (bottom === undefined) {
+            // note var required, let/const have initialization error
+            var { top, bottom, left, right } = top
+        }
+
+        const width = this.width - left - right
+        const height = this.height - top - bottom
+
+        // console.log('crop top bottom left right', top, bottom, left, right)
+        // console.log('crop height', this.height, '->', height)
+        // console.log('crop width', this.width, '->', width)
+        // console.log('crop this width/height', this.width, this.height)
+
+        return this.subset(left, top, width, height)
     }
 
     // Return maped dataset by applying f to each dataset element
@@ -255,14 +280,14 @@ export default class DataSet {
         if (h !== h1) throw Error(`concatEast: heights not equal ${h}, ${h1}`)
         const ds1 = this.emptyDataSet(w + w1, h)
         // copy this into new dataset
-        for (let x = 0; x < h; x++) {
-            for (let y = 0; y < w; y++) {
+        for (let x = 0; x < w; x++) {
+            for (let y = 0; y < h; y++) {
                 ds1.setXY(x, y, this.getXY(x, y))
             }
         }
         // copy ds to the left side
-        for (let x = 0; x < h1; x++) {
-            for (let y = 0; y < w1; y++) {
+        for (let x = 0; x < w1; x++) {
+            for (let y = 0; y < h1; y++) {
                 ds1.setXY(x + w, y, ds.getXY(x, y))
             }
         }
@@ -280,20 +305,6 @@ export default class DataSet {
         }
         const data1 = util.concatArrays(data, dataset.data)
         return new DataSet(w, h + dataset.height, data1)
-    }
-
-    // Crop this dataSet by removing top, bottom rows, left, right columns.
-    // You may pass in an obj with top, bottom, left, right key/val pairs
-    crop(top, bottom, left, right) {
-        if (bottom === undefined) {
-            // note var required, let/const have initialization error
-            var { top, bottom, left, right } = top
-        }
-
-        const width = this.width - left - right
-        const height = this.height - top - bottom
-
-        return this.subset(top, left, width, height)
     }
 
     // return dataset x,y given x,y in a euclidean space defined by tlx, tly, w, h
