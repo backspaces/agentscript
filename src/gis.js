@@ -25,10 +25,10 @@ export function latz2y(lat, z) {
     )
 }
 export function lonlatz2xy(lon, lat, z) {
-    return [this.lonz2x(lon, z), this.latz2y(lat, z)]
+    return [lonz2x(lon, z), latz2y(lat, z)]
 }
 export function lonlatz2xyz(lon, lat, z) {
-    return [this.lonz2x(lon, z), this.latz2y(lat, z), z]
+    return [lonz2x(lon, z), latz2y(lat, z), z]
 }
 
 // returns top-left, or north-west lon, lat of given tile X Y Z's
@@ -41,11 +41,11 @@ export function yz2lat(y, z) {
     return degrees(rads)
 }
 export function xyz2lonlat(x, y, z) {
-    return [this.xz2lon(x, z), this.yz2lat(y, z)]
+    return [xz2lon(x, z), yz2lat(y, z)]
 }
 // adding 0.5 to x,y returns lonlat of center of tile
 export function xyz2centerLonlat(x, y, z) {
-    return [this.xz2lon(x + 0.5, z), this.yz2lat(y + 0.5, z)]
+    return [xz2lon(x + 0.5, z), yz2lat(y + 0.5, z)]
 }
 
 // Return a tile bbox for xyz tile.
@@ -53,8 +53,8 @@ export function xyz2centerLonlat(x, y, z) {
 // We use the usual bbox convention of
 //   [minX, minY, maxX, maxY] or [west, south, east, north]
 export function xyz2bbox(x, y, z) {
-    const [west, north] = this.xyz2lonlat(x, y, z)
-    const [east, south] = this.xyz2lonlat(x + 1, y + 1, z)
+    const [west, north] = xyz2lonlat(x, y, z)
+    const [east, south] = xyz2lonlat(x + 1, y + 1, z)
     return [west, south, east, north]
     // return [west, south, (east * 256) / 257, (north * 256) / 257]
     // const dWidth = (east - west) / 256
@@ -64,8 +64,8 @@ export function xyz2bbox(x, y, z) {
     // return [west, south, east - dWidth, north - dHeight]
 }
 export function lonLatz2bbox(lon, lat, z) {
-    const [x, y] = this.lonlatz2xy(lon, lat, z)
-    return this.xyz2bbox(x, y, z)
+    const [x, y] = lonlatz2xy(lon, lat, z)
+    return xyz2bbox(x, y, z)
 }
 
 export function xyz2zxy(xyz) {
@@ -99,8 +99,8 @@ export function bbox2bounds(bbox) {
 }
 export function tilesBBox(bbox, z) {
     const [west, south, east, north] = bbox
-    const [westX, northY] = gis.lonlatz2xy(west, north, z)
-    const [eastX, southY] = gis.lonlatz2xy(east, south, z)
+    const [westX, northY] = lonlatz2xy(west, north, z)
+    const [eastX, southY] = lonlatz2xy(east, south, z)
     return [westX, southY, eastX, northY]
 }
 export function bboxCoords(bbox) {

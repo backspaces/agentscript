@@ -1,5 +1,6 @@
 // import * as TileData from './TileData.js'
-import * as gis from './gis.js'
+import * as util from '../src/utils.js'
+import * as gis from '../src/gis.js'
 // import RGBDataSet from './RGBDataSet.js'
 
 export default class LeafletDataSet {
