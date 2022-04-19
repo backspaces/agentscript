@@ -18,18 +18,18 @@ export function latlon(lonlat) {
 export function lonz2x(lon, z) {
     return floor(((lon + 180) / 360) * pow(2, z))
 }
-export function latz2y(lat, z) {
+export function latz2y(lat, z, roundInt = false) {
     const latRads = radians(lat)
-    return floor(
-        (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
-    )
+    let y = (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
+    if (roundInt && Number.isInteger(y)) return y - 1
+    return floor(y)
 }
-export function lonlatz2xy(lon, lat, z) {
-    return [lonz2x(lon, z), latz2y(lat, z)]
+export function lonlatz2xy(lon, lat, z, roundLat = false) {
+    return [lonz2x(lon, z), latz2y(lat, z, roundLat)]
 }
-export function lonlatz2xyz(lon, lat, z) {
-    return [lonz2x(lon, z), latz2y(lat, z), z]
-}
+// export function lonlatz2xyz(lon, lat, z) {
+//     return [lonz2x(lon, z), latz2y(lat, z), z]
+// }
 
 // returns top-left, or north-west lon, lat of given tile X Y Z's
 // adding 1 to either x,y or both gives other corner lonlats
@@ -63,15 +63,19 @@ export function xyz2bbox(x, y, z) {
     // console.log('clipped', [west, south, east - dWidth, north - dHeight])
     // return [west, south, east - dWidth, north - dHeight]
 }
-export function lonLatz2bbox(lon, lat, z) {
-    const [x, y] = lonlatz2xy(lon, lat, z)
-    return xyz2bbox(x, y, z)
-}
 
-export function xyz2zxy(xyz) {
-    const [x, y, z] = xyz
-    return [z, x, y]
-}
+// export function bbox2xyz(bbox) {
+//     const [west, south, east, north] = bbox
+//     const [x0, y0] = lonlatz2xy(west,)
+// }
+// export function lonLatz2bbox(lon, lat, z) {
+//     const [x, y] = lonlatz2xy(lon, lat, z)
+//     return xyz2bbox(x, y, z) ???
+// }
+// export function xyz2zxy(xyz) {
+//     const [x, y, z] = xyz
+//     return [z, x, y]
+// }
 
 // Leaflet style latlon corners to bbox
 // "bouonds" uses leaflet's latlon while "bbox" uses our lonlat
@@ -100,7 +104,9 @@ export function bbox2bounds(bbox) {
 export function tilesBBox(bbox, z) {
     const [west, south, east, north] = bbox
     const [westX, northY] = lonlatz2xy(west, north, z)
-    const [eastX, southY] = lonlatz2xy(east, south, z)
+    let [eastX, southY] = lonlatz2xy(east, south, z, true)
+    // if (Number.isInteger(eastX)) eastX--
+    // if (Number.isInteger(southY)) southY--
     return [westX, southY, eastX, northY]
 }
 export function bboxCoords(bbox) {

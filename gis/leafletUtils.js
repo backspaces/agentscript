@@ -36,7 +36,7 @@ export function testZooms(tileLayer) {
 }
 
 // https://stackoverflow.com/questions/18968986/leaflet-set-rectangle-coordinated-from-mouse-events
-export function mouseBounds(L, map, ev) {
+export function mouseBounds(L, map, ev, fcn) {
     let corner1, corner2, rect, bounds
 
     const down = ev => {
@@ -67,9 +67,12 @@ export function mouseBounds(L, map, ev) {
         map.off('mouseup', up)
 
         corner2 = ev.latlng
-        console.log('up:', ev.latlng)
+        // console.log('up:', ev.latlng)
         const bounds = L.latLngBounds(corner1, corner2)
-        console.log(bounds)
+        // console.log(bounds)
+
+        console.log('fcn', fcn, 'bounds', bounds)
+        fcn(bounds)
 
         rect.remove()
     }

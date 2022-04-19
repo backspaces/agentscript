@@ -26,14 +26,15 @@
     <div id="map"></div>
     <script type="module">
         import * as util from '../src/utils.js'
+
         import * as gis from '../src/gis.js'
         import * as TileData from '../src/TileData.js'
         import * as leafletUtils from './leafletUtils.js'
+        import LeafletDataSet from './LeafletDataSet.js'
 
         import TwoDraw from '../src/TwoDraw.js'
         import Animator from '../src/Animator.js'
         import Model from '../models/DropletsModel.js'
-
 
         // import L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.3'
         import * as L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
@@ -41,9 +42,7 @@
 
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
-        import LeafletDataSet from './LeafletDataSet.js'
-
-        // util.toWindow({ L, util, gis, LeafletDataSet, leafletUtils })
+        util.toWindow({ L, util, gis, LeafletDataSet, leafletUtils })
 
 
         const ElementOverlay = elementOverlay(L)
@@ -97,75 +96,83 @@
         leafletUtils.testEvents(map, elevationLayer)
         // leafletUtils.testZooms(elevationLayer)
 
-        // let [lon, lat, Z] = [-105.645, 35.889, 11]
-        // let bbox = gis.lonLatz2bbox(lon, lat, Z)
 
-        // let bboxDataSet = await leafletDataSet.getBBoxDataSet(bbox)
-        let bboxDataSet = await leafletDataSet.getBBoxDataSet()
+        // let elementBounds = map.getBounds() // use either gis.bbox or leaflet latlng elementBounds
+        // let bboxDataSet = await leafletDataSet.getBBoxDataSet(elementBounds)
 
-        // let tileName = leafletDataSet.tileName({ x: X, y: Y, z: Z })
-        // let tile = leafletDataSet.tiles[tileName]
-
-        // const [lon, lat] = gis.bboxCenter(bbox)
-        // const [x, y, z] = gis.lonlatz2xyz(lon, lat, this.getZoom())
-        // const name = this.tileName({ x, y, z })
-        // const dataSet = this.tiles[name]
-        // return dataSet
-
-        console.log('leafletDataSet', leafletDataSet, 'bboxDataSet', bboxDataSet)
-        util.toWindow({ leafletDataSet, bboxDataSet })
 
         // ================ create model using bbox dataset ================
 
-        const model = new Model({
-            minX: 0,
-            minY: 0,
-            maxX: Math.round(bboxDataSet.width / 4) - 1,
-            maxY: Math.round(bboxDataSet.height / 4) - 1,
-            // maxX: bboxDataSet.width - 1,
-            // maxY: bboxDataSet.height - 1,
-        })
-        model.killOffworld = true // see if faster
-        // await model.startup([Z, X, Y]) // TEST
-        await model.startup(bboxDataSet)
-        model.setup()
-        const view = new TwoDraw(model, {
-            div: util.createCanvas(0, 0), // the view will resize
-            patchSize: 4,
-            // useSprites: true,
-            drawOptions: {
-                patchesColor: 'transparent',
-                turtlesShape: 'square',
-                turtlesRotate: false,
-                turtlesColor: 'red',
-                turtlesSize: 0.5, //1,
-            },
-        })
-        // Note: when zooming happens after adding the canvas, remove the current one
-        // and draw it on a new larger canvas with ctx.imageSmoothingEnabled = false
-        const modelLayer = new ElementOverlay(view.canvas, map.getBounds()).addTo(map)
-        // const modelLayer = new ElementOverlay(view.canvas, gis.bbox2bounds(bbox)).addTo(map)
+        var modelLayer, elementBounds = map.getBounds()
+        async function setupModelView(elementBounds) {
+            let bboxDataSet = await leafletDataSet.getBBoxDataSet(elementBounds)
+            console.log('leafletDataSet', leafletDataSet, 'bboxDataSet', bboxDataSet)
+            util.toWindow({ leafletDataSet, bboxDataSet, elementBounds })
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-                // if (model.ticks === 10) view.downloadCanvas()
-            },
-            500,// -1, // 500, // run 500 steps
-            30 // 10 // 30 // 30 fps
-        ).startStats()
+            const model = new Model({
+                minX: 0,
+                minY: 0,
+                maxX: Math.round(bboxDataSet.width / 4) - 1,
+                maxY: Math.round(bboxDataSet.height / 4) - 1,
+            })
+            model.killOffworld = true // see if faster
+            // await model.startup([Z, X, Y]) // TEST
+            await model.startup(bboxDataSet)
+            model.setup()
+            const view = new TwoDraw(model, {
+                div: util.createCanvas(0, 0), // the view will resize
+                patchSize: 4,
+                // useSprites: true,
+                drawOptions: {
+                    patchesColor: 'transparent',
+                    turtlesShape: 'square',
+                    turtlesRotate: false,
+                    turtlesColor: 'red',
+                    turtlesSize: 0.5, //1,
+                },
+            })
+            // Note: when zooming happens after adding the canvas, remove the current one
+            // and draw it on a new larger canvas with ctx.imageSmoothingEnabled = false
+            if (modelLayer) modelLayer.remove()
+            view.canvas.style.border = '1px red solid'
+            modelLayer = new ElementOverlay(view.canvas, elementBounds).addTo(map)
+            // const modelLayer = new ElementOverlay(view.canvas, gis.bbox2bounds(bbox)).addTo(map)
 
-        util.toWindow({ model, view, modelLayer, anim })
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    // if (model.ticks === 10) view.downloadCanvas()
+                },
+                500,// -1, // 500, // run 500 steps
+                30 // 10 // 30 // 30 fps
+            ).startStats()
+
+            util.toWindow({ model, view, modelLayer, anim })
+        }
+        await setupModelView(elementBounds)
+
 
         // ================ mouse drag bbox rect ================
 
         const mapMouseDownFcn = (ev) => {
-            console.log('mapMouseDownFcn')
-            leafletUtils.eventKeys(ev)
-            if (ev.originalEvent.altKey) leafletUtils.mouseBounds(L, map, ev)
+            if (ev.originalEvent.altKey) {
+                leafletUtils.mouseBounds(L, map, ev, async (elementBounds) => {
+                    await setupModelView(elementBounds)
+                })
+            }
         }
         map.on('mousedown', mapMouseDownFcn)
+
+        const mapKeyFcn = async (ev) => {
+            console.log('key', ev.originalEvent)
+            if (ev.originalEvent.key === 'm') {
+                elementBounds = map.getBounds()
+                await setupModelView(elementBounds)
+
+            }
+        }
+        map.on('keypress', mapKeyFcn)
 
 
     </script>

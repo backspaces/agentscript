@@ -25,6 +25,34 @@ export default class LeafletDataSet {
         return Math.round(this.map.getZoom())
         // return Math.floor(map.getZoom())
     }
+
+    bboxToPixelBBox(bbox) {
+        const [west, south, east, north] = bbox // geo coords
+        const { x: northPx, y: eastPx } = map.latLngToContainerPoint([
+            north,
+            east,
+        ])
+        const { x: southPx, y: westPx } = map.latLngToContainerPoint([
+            south,
+            west,
+        ])
+        return [westPx, southPx, eastPx, northPx]
+    }
+    bboxPixelSize(bbox) {
+        const [westPx, southPx, eastPx, northPx] = this.bboxToPixelBBox(bbox)
+        return [eastPx - westPx + 1, northPx - southPx + 1]
+    }
+    bboxTiles(bbox) {
+        const [westPx, southPx, eastPx, northPx] = this.bboxToPixelBBox(bbox)
+        const tileSize = this.tileSize
+        return [
+            Math.floor(westPx / tileSize),
+            Math.floor(southPx / tileSize),
+            Math.floor(eastPx / tileSize),
+            Math.floor(northPx / tileSize),
+        ]
+    }
+
     tileName(coords) {
         const { x, y, z } = coords
         return z + '/' + x + '/' + y
@@ -51,7 +79,10 @@ export default class LeafletDataSet {
         return gis.bounds2bbox(this.map.getBounds())
     }
 
-    async getBBoxDataSet(bbox = this.mapBBox()) {
+    // bbox can be a gis.bbox or a leaflet latlng bounds
+    async getBBoxDataSet(bbox) {
+        if (!Array.isArray(bbox)) bbox = gis.bounds2bbox(bbox)
+
         await util.waitPromise(() => this.loading === false)
 
         const z = this.getZoom()
@@ -80,11 +111,17 @@ export default class LeafletDataSet {
             for (let x = westX; x <= eastX; x++) {
                 const tileName = this.tileName({ x, y, z })
                 const dataSet = this.tiles[tileName]
-                if (dataSet.data.includes(0))
-                    console.log('0 in tile dataset ' + tileName, dataSet)
-                row.push(dataSet)
+                if (!dataSet) {
+                    console.log('missing dataset', tileName)
+                } else {
+                    row.push(dataSet)
+                }
             }
-            cols.push(row)
+            if (row.length === 0) {
+                console.log('empty row, y =', y)
+            } else {
+                cols.push(row)
+            }
         }
         return cols
     }
@@ -94,10 +131,10 @@ export default class LeafletDataSet {
             col =>
                 col.reduce((prev, cur) => {
                     // if (!prev) throw Error('prev')
-                    if (!prev)
-                        console.log('no prev', dataSetMatrix, col, prev, cur)
-                    if (prev.data.includes(0))
-                        console.log('0 elev', dataSetMatrix, col, prev, cur)
+                    // if (!prev)
+                    //     console.log('no prev', dataSetMatrix, col, prev, cur)
+                    // if (prev.data.includes(0))
+                    //     console.log('0 elev', dataSetMatrix, col, prev, cur)
                     return prev.concatEast(cur)
                 })
         )
