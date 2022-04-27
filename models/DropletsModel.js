@@ -12,6 +12,7 @@ import { mapzen as provider } from '../src/TileData.js'
 export default class DropletsModel extends Model {
     killOffworld = false // Kill vs clamp turtles when offworld.
     speed = 0.2
+    puddleDepth = 5
     // stepType choices:
     //    'minNeighbor',
     //    'patchAspect',
@@ -19,6 +20,8 @@ export default class DropletsModel extends Model {
     //    'dataSetAspectBilinear',
     // stepType = 'dataSetAspectNearest'
     stepType = 'minNeighbor'
+    // Installed datasets:
+    elevation
     dzdx
     dzdy
     slope
@@ -64,24 +67,11 @@ export default class DropletsModel extends Model {
 
     step() {
         this.turtles.ask(t => {
-            let move = true
             const stepType = this.stepType
 
             if (stepType === 'minNeighbor') {
                 const n = t.patch.neighbors.minOneOf('elevation')
-                if (t.patch.elevation > n.elevation) {
-                    // Face the best neighbor if better than me
-                    t.face(n)
-                } else {
-                    if (t.patch.isOnEdge() && this.killOffworld) {
-                        // die if on edge
-                        t.die()
-                    } else {
-                        // otherwise place myself at my patch center
-                        t.setxy(t.patch.x, t.patch.y)
-                    }
-                    move = false
-                }
+                t.face(n) // Face the best neighbor if better than me
             } else if (stepType === 'patchAspect') {
                 t.theta = t.patch.aspect
             } else if (stepType.includes('dataSet')) {
@@ -102,7 +92,11 @@ export default class DropletsModel extends Model {
                 throw Error('bad stepType: ' + stepType)
             }
 
-            if (move) t.forward(this.speed)
+            let neighbors = t.patch.neighbors
+            let nAhead = t.patchAtHeadingAndDistance(t.heading, this.speed)
+
+            if (nAhead.turtlesHere.length < this.puddleDepth)
+                t.forward(this.speed)
         })
     }
     turtlesOnLocalMins() {

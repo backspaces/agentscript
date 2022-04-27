@@ -53,8 +53,11 @@
                 // val: 'rgb(255, 0, 0)',
                 val: 'rgba(255, 0, 0, 0.5)',
                 // val: 'hsv(360, 90%, 0%)', // doesn't work
-                // val: [ 0, 128, 255, 0.3 ], // works, but not JS color
+                // val: 'hsl(360, 100%, 50%)', // doesn't work
+                // val: [0, 128, 255, 0.3], // works, but not JS color
                 // val: { h: 350, s: 0.9, v: 0.3 }, // works, but not JS color
+                // gui.values.turtlesColor = { h: 350, s: 0.9, v: 0.3 }
+                // gui.values.turtlesColor // right color controller
                 cmd: val => view.drawOptions.turtlesColor = val,
             },
             downloadCanvas: { // button

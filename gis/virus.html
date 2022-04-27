@@ -4,7 +4,7 @@
 <head>
     <title>Virus</title>
     <!-- <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css"> -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0-beta.3/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css">
 
     <style>
         * {
@@ -38,7 +38,9 @@
         import VirusModel from '../models/VirusModel.js'
 
         // import L from 'https://cdn.skypack.dev/leaflet'
-        import * as L from 'https://unpkg.com/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
+        import * as L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
+        // import * as L from 'https://unpkg.com/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
+
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay';
 
         const ElementOverlay = elementOverlay(L)

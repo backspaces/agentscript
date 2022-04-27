@@ -139,25 +139,73 @@ export async function blobsEqual(blob0, blob1) {
 // download canvas as png or jpeg. Canvas can be a dataURL.
 // quality is default. For lossless jpeg, set to 1
 export function downloadCanvas(can, name = 'download.png', quality = null) {
-    // if (!(name.endsWith('.png') || name.endsWith('.jpeg')))
-    //     throw Error('downloadCanvas: name must end with .png or .jpeg')
     if (!(name.endsWith('.png') || name.endsWith('.jpeg'))) name + '.png'
+
     const type = name.endsWith('.png') ? 'image/png' : 'image/jpeg'
-    const url = typeof can === 'string' ? can : can.toDataURL(type, quality)
+    const url = typeOf(can) === 'string' ? can : can.toDataURL(type, quality)
+
     const link = document.createElement('a')
     link.download = name
     link.href = url
     link.click()
+
+    // download(url, name)
 }
-// Ditto for blobs
-export function downloadBlob(blob, name = 'blob.png') {
-    // canvas.toBlob(callback, mimeType, qualityArgument) ?
-    let link = document.createElement('a')
+// blobable = ArrayBuffer, ArrayBufferView, Blob, String
+// Objects & Arrays too, converted to json
+export function downloadBlob(blobable, name = 'download', format = true) {
+    if (isDataSet(blobable) && !Array.isArray(blobable.data))
+        blobable.data = Array.from(blobable.data)
+    if (isTypedArray(blobable)) blobable = Array.from(blobable)
+    if (isObject(blobable) || isArray(blobable))
+        blobable = format
+            ? JSON.stringify(blobable, null, 2)
+            : JSON.stringify(blobable)
+
+    let blob = typeOf(blobable) === 'blob' ? blobable : new Blob([blobable])
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
     link.download = name
-    link.href = URL.createObjectURL(blob)
+    link.href = url
     link.click()
-    URL.revokeObjectURL(link.href)
+
+    URL.revokeObjectURL(url)
 }
+
+// export function downloadDataSet(dataSet, name = 'download.txt') {
+//     if (!Array.isArray(dataSet.data)) dataSet.data = Array.from(dataSet.data)
+
+//     const type = name.endsWith('.png') ? 'image/png' : 'image/jpeg'
+//     const url = typeof can === 'string' ? can : can.toDataURL(type, quality)
+
+//     download(url, name)
+// }
+// Ditto for blobs
+// export function downloadBlob(blob, name = 'download.blob') {
+//     // canvas.toBlob(callback, mimeType, qualityArgument)
+//     const url = URL.createObjectURL(blob)
+//     download(url, name)
+//     URL.revokeObjectURL(url)
+
+//     // const link = document.createElement('a')
+//     // link.download = name
+//     // link.href = URL.createObjectURL(blob)
+//     // link.click()
+//     // URL.revokeObjectURL(link.href)
+// }
+// Ditto for strings like json, text and so on
+// export function downloadString(string, name = 'download.txt') {
+//     const base64 = 'data:text/plain;base64,' + string
+//     download(base64, name)
+// }
+// General download, w/ "legal" href
+// export function download(url, name) {
+//     const link = document.createElement('a')
+//     link.download = name
+//     link.href = url
+//     link.click()
+// }
 
 // Return Promise for ajax/xhr data.
 // - type: 'arraybuffer', 'blob', 'document', 'json', 'text'.
@@ -1030,7 +1078,7 @@ export function inCone(x, y, radius, coneAngle, direction, x0, y0) {
 // import { repeat } from './objects.js'
 // import { timeoutLoop } from './async.js'
 
-function toJSON(obj, indent = 0, topLevelArrayOK = true) {
+export function toJSON(obj, indent = 0, topLevelArrayOK = true) {
     let firstCall = topLevelArrayOK
     const blackList = ['rectCache']
     const json = JSON.stringify(
@@ -1547,6 +1595,10 @@ export function convertArrayType(array, Type) {
     const Type0 = array.constructor
     if (Type0 === Type) return array // return array if already same Type
     return Type.from(array) // Use .from (both TypedArrays and Arrays)
+}
+
+export function isDataSet(obj) {
+    return typeOf(obj) === 'object' && obj.width != null && obj.height != null
 }
 
 // Unused:

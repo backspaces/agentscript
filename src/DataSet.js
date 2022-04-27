@@ -441,14 +441,16 @@ export default class DataSet {
         return [this.min(), this.max()]
     }
     sum() {
-        return this.data.reduce((a, b) => a + b, 0)
+        return this.data.reduce((a, b) => a + b)
+        // return this.data.reduce((a, b) => a + b, 0)
     }
 
     // Return new dataset scaled between lo, hi values
-    normalize(lo = 0, hi = 1) {
+    normalize(lo = 0, hi = 1, round = false) {
         const [min, max] = this.extent()
         const scale = 1 / (max - min)
-        const data = this.data.map(n => util.lerp(lo, hi, scale * (n - min)))
+        let data = this.data.map(n => util.lerp(lo, hi, scale * (n - min)))
+        if (round) data = data.map(n => Math.round(n))
         return new DataSet(this.width, this.height, data)
     }
 

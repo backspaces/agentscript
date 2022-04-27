@@ -87,9 +87,12 @@ export default class GUI {
                 return val.endsWith(')')
             if (val.startsWith('hsl(') || val.startsWith('hsla('))
                 return val.endsWith(')')
+            if (val.startsWith('hsv(') || val.startsWith('hsva('))
+                return val.endsWith(')')
         }
 
-        // if (util.typeOf(val) === 'object') return val.h && val.s && val.v
+        if (util.typeOf(val) === 'object')
+            return val.h != null && val.s != null && val.v != null
         // if (util.typeOf(val) === 'array') {
         //     if (val.length === 3 || val.length === 4)
         //         return val.every(i => util.typeOf(i) === 'number')

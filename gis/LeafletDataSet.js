@@ -92,6 +92,7 @@ export default class LeafletDataSet {
         const tilesDataSet = this.dataSetMatrixToDataSet(dataSetMatrix)
         const cropParameters = this.getCropParameters(bbox, tilesBBox, z)
         const bboxDataSet = tilesDataSet.crop(cropParameters)
+        bboxDataSet.bbox = bbox
         console.log('bbox', bbox)
         console.log('tilesBBox', tilesBBox)
         console.log('dataSetMatrix', dataSetMatrix)

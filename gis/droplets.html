@@ -13,11 +13,16 @@
         }
 
         #map {
-            height: 100vh
+            height: 100vh;
+            /* z-index: -1; */
         }
 
         .terrain-pane .leaflet-tile {
             border: solid black 1px;
+        }
+
+        .leaflet-container {
+            isolation: isolate;
         }
     </style>
 </head>
@@ -34,9 +39,16 @@
 
         import TwoDraw from '../src/TwoDraw.js'
         import Animator from '../src/Animator.js'
+        import GUI from '../src/GUI.js'
+        // import dat from 'https://cdn.skypack.dev/dat.gui'
+
         import Model from '../models/DropletsModel.js'
 
-        // import L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.3'
+        // import leafletImage from 'https://cdn.skypack.dev/leaflet-image'
+        // import domtoimage from 'https://cdn.skypack.dev/dom-to-image'
+        // import html2canvas from 'https://cdn.skypack.dev/html2canvas'
+
+        // import L from 'https://cdn.skypack.dev/leaflet'
         import * as L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
         // import * as L from 'https://unpkg.com/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
 
@@ -44,29 +56,20 @@
 
         util.toWindow({ L, util, gis, LeafletDataSet, leafletUtils })
 
-
         const ElementOverlay = elementOverlay(L)
         const tileData = TileData['mapzen'] // redfishUSA/World, mapzen, mapbox
         const terrainName = 'topo'
-        util.toWindow({ TileData, tileData, leafletUtils })
-
-        // ================ setup parameters ================
-
-        // let { X, Y, Z } = { X: 210, Y: 403, Z: 10 }
-        // const bbox = gis.xyz2bbox(X, Y, Z)
-        // const bboxCenter = gis.latlon(gis.bboxCenter(bbox))
-        // console.log('XYZ', X, Y, Z, 'bbox', bbox, 'center', bboxCenter)
-        // util.toWindow({ X, Y, Z })
-
-        const center = [35.67, -105.93]
-        const Z = 10
+        util.toWindow({ ElementOverlay, TileData, tileData })
 
         // ================ create map with terrain & elevation ================
 
+        const center = [35.67, -105.93]
+        const Z = 10
         const map = L.map('map', {
             zoomDelta: 0.25, //0.1
             zoomSnap: 0,
-            // }).setView(bboxCenter, Z)
+            preferCanvas: true,
+            // renderer: L.canvas()
         }).setView(center, Z)
 
         const terrainLayer = L.tileLayer(gis.template(terrainName), {
@@ -77,8 +80,7 @@
         const elevationLayer = L.tileLayer(
             tileData.zxyTemplate,
             {
-                opacity: 0.1,
-                // opacity: 1,
+                opacity: 0.3,
                 attribution: 'Elevation Tiles',
                 crossOrigin: '',
                 maxZoom: tileData.maxZoom, // larger mapzen zoom yields tileerror
@@ -93,42 +95,45 @@
             elevationLayer,
             tileData
         )
-        leafletUtils.testEvents(map, elevationLayer)
+        // leafletUtils.testEvents(map, elevationLayer)
         // leafletUtils.testZooms(elevationLayer)
-
-
-        // let elementBounds = map.getBounds() // use either gis.bbox or leaflet latlng elementBounds
-        // let bboxDataSet = await leafletDataSet.getBBoxDataSet(elementBounds)
-
 
         // ================ create model using bbox dataset ================
 
-        var modelLayer, elementBounds = map.getBounds()
-        async function setupModelView(elementBounds) {
-            let bboxDataSet = await leafletDataSet.getBBoxDataSet(elementBounds)
+        let modelLayer, elementBounds // = map.getBounds()
+        let model, view
+        async function setupModelView(bounds = map.getBounds()) {
+            elementBounds = bounds
+            let bboxDataSet = await leafletDataSet.getBBoxDataSet(bounds)
             console.log('leafletDataSet', leafletDataSet, 'bboxDataSet', bboxDataSet)
-            util.toWindow({ leafletDataSet, bboxDataSet, elementBounds })
+            util.toWindow({ leafletDataSet, bboxDataSet, bounds })
 
-            const model = new Model({
+            const patchSize = 4
+
+            const worldOptions = {
                 minX: 0,
                 minY: 0,
-                maxX: Math.round(bboxDataSet.width / 4) - 1,
-                maxY: Math.round(bboxDataSet.height / 4) - 1,
-            })
+                maxX: Math.round(bboxDataSet.width / patchSize) - 1,
+                maxY: Math.round(bboxDataSet.height / patchSize) - 1,
+            }
+            if (model) model.reset(worldOptions)
+            else model = new Model(worldOptions)
+
             model.killOffworld = true // see if faster
             // await model.startup([Z, X, Y]) // TEST
             await model.startup(bboxDataSet)
             model.setup()
-            const view = new TwoDraw(model, {
+
+            view = new TwoDraw(model, {
                 div: util.createCanvas(0, 0), // the view will resize
-                patchSize: 4,
+                patchSize: patchSize,
                 // useSprites: true,
                 drawOptions: {
                     patchesColor: 'transparent',
                     turtlesShape: 'square',
                     turtlesRotate: false,
                     turtlesColor: 'red',
-                    turtlesSize: 0.5, //1,
+                    turtlesSize: 0.5
                 },
             })
             // Note: when zooming happens after adding the canvas, remove the current one
@@ -142,23 +147,32 @@
                 () => {
                     model.step()
                     view.draw()
-                    // if (model.ticks === 10) view.downloadCanvas()
+                    gui.update()
                 },
-                500,// -1, // 500, // run 500 steps
+                -1, //500,// -1, // 500, // run 500 steps
                 30 // 10 // 30 // 30 fps
-            ).startStats()
+            ).startStats('70px') // avoid +/= leaflet control
 
             util.toWindow({ model, view, modelLayer, anim })
         }
         await setupModelView(elementBounds)
 
+        // did not use opacity, so just showed tiles as images
+        // leafletImage(map, (err, canvas) => {
+        //     util.downloadCanvas(canvas)
+        // })
+        // prob getting skypack style sheet
+        // domtoimage.toBlob(document.getElementById('map')).then(blob => window.foo = blob)
+        // similar opacity problems
+        // can = await html2canvas(document.getElementById('map'))
+        // document.body.appendChild(can)
 
         // ================ mouse drag bbox rect ================
 
         const mapMouseDownFcn = (ev) => {
             if (ev.originalEvent.altKey) {
-                leafletUtils.mouseBounds(L, map, ev, async (elementBounds) => {
-                    await setupModelView(elementBounds)
+                leafletUtils.mouseBounds(L, map, ev, async (bounds) => {
+                    await setupModelView(bounds)
                 })
             }
         }
@@ -167,15 +181,115 @@
         const mapKeyFcn = async (ev) => {
             console.log('key', ev.originalEvent)
             if (ev.originalEvent.key === 'm') {
-                elementBounds = map.getBounds()
-                await setupModelView(elementBounds)
-
+                // elementBounds = map.getBounds()
+                await setupModelView()
             }
         }
-        map.on('keypress', mapKeyFcn)
+        // map.on('keypress', mapKeyFcn)
+
+        // ================ gui ================
+
+        const gui = new GUI({
+            opacity: { // slider
+                val: [elevationLayer.options.opacity, [0, 1, 0.1]],
+                cmd: val => elevationLayer.setOpacity(val),
+            },
+            turtlesSize: { // slider
+                val: [view.drawOptions.turtlesSize, [0, 1, 0.1]],
+                cmd: val => view.drawOptions.turtlesSize = val,
+            },
+            turtlesColor: { // color
+                val: '#ff0000',
+                cmd: val => {
+                    view.drawOptions.turtlesColor = val
+                    if (!anim.isRunning()) view.draw()
+                },
+            },
+            getElevations: { // button
+                cmd: () => util.downloadBlob(bboxDataSet, 'elevations.json', false),
+            },
+            patchesAspect: { // button
+                cmd: () => {
+                    const dataSet = model.patches.exportDataSet('aspect')
+                    dataSet.bounds = elementBounds
+                    util.downloadBlob(dataSet, 'patchesAspect.json', false)
+                }
+            },
+            turtlesData: { // button
+                cmd: () => {
+                    const data = model.turtles.map(t => {
+                        let { heading, x, y } = t
+                        const obj = { heading, x, y }
+                        util.forLoop(obj, (val, key) => obj[key] = Math.round(val))
+                        return obj
+                    })
+                    util.downloadBlob(data, 'turtlesData.json', false)
+                }
+            },
+            restartMap: { // button
+                cmd: async () => await setupModelView()
+            },
+            pause: { // button
+                cmd: () => {
+                    const isRunning = anim.isRunning()
+                    gui.controllers.pause.name(isRunning ? 'resume' : 'pause')
+                    isRunning ? anim.stop() : anim.start()
+                },
+            },
+            modelTicks: { // monitor
+                val: 'listen',
+                cmd: () => model.ticks,
+            },
+        })
+
+        util.toWindow({ gui })
+
+
 
 
     </script>
 </body>
 
 </html>
+
+<!--
+        // gui.add(values, 'pause')
+        //     .onChange((pause) => {
+        //         if (pause) anim.stop(); else anim.start()
+        //     })
+
+        // model = new Model({
+        // minX: 0,
+        // minY: 0,
+        // maxX: Math.round(bboxDataSet.width / 4) - 1,
+        // maxY: Math.round(bboxDataSet.height / 4) - 1,
+        // })
+
+    // const gui = new dat.GUI()
+
+    // util.toWindow({ dat, gui })
+
+    // const values = {
+    // opacity: elevationLayer.options.opacity,
+    // toggle: () => anim.toggle(),
+    // download: () => util.downloadBlob(bboxDataSet, 'ds.txt')
+    // // download: 'map',
+    // // pause: false
+    // }
+    // gui.add(values, 'opacity', 0, 1, 0.1)
+    // .onChange(opacity => elevationLayer.setOpacity(opacity))
+    // gui.add(values, 'toggle')
+    // gui.add(values, 'download')
+    // // gui.add(values, 'download', ['map', 'elevations'])
+    // // .onChange(download => {
+    // // switch (download) {
+    // // case map:
+
+    // // break;
+
+    // // default:
+    // // break;
+    // // }
+    // // })
+
+ -->
