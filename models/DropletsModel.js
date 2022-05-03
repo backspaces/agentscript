@@ -81,7 +81,7 @@ export default class DropletsModel extends Model {
             if (stepType === 'minNeighbor') {
                 // Face the best neighbor if better than me
                 const n = t.patch.neighbors.minOneOf('elevation')
-                if (t.elevation > n.elevation) t.face(n)
+                if (t.patch.elevation > n.elevation) t.face(n)
             } else if (stepType === 'patchAspect') {
                 t.theta = t.patch.aspect
             } else if (stepType.includes('dataSet')) {
