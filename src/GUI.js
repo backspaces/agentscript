@@ -5,12 +5,24 @@ import dat from '../vendor/dat.gui.js'
 export default class GUI {
     constructor(template) {
         this.template = template
-        this.controllers = {} // not required but may help in debugging
+        this.controllers = {}
+        this.folders = {}
         this.values = {} // the key/val's from each template
 
-        this.gui = new dat.GUI()
+        this.baseGui = this.gui = new dat.GUI()
+        // this.folders['default'] = this.baseGui
+
         util.forLoop(template, (obj, key) => {
-            this.controllers[key] = this.addUI(obj, key)
+            if (util.isString(obj)) {
+                if (obj === 'default') {
+                    this.gui = this.baseGui
+                } else {
+                    this.gui = this.baseGui.addFolder(obj)
+                    this.folders[key] = this.gui
+                }
+            } else {
+                this.controllers[key] = this.addUI(obj, key)
+            }
         })
     }
 
@@ -68,7 +80,7 @@ export default class GUI {
                 throw Error(`Controller.addUI: bad type: ${type}`)
         }
 
-        // initialize: set AS values to the GUI vals
+        // initialize: set model etc initial values to this value
         if (cmd && val !== 'listen' && val) cmd(val)
         if (val === 'listen') this.setListener(key, cmd)
 

@@ -148,8 +148,6 @@ export function downloadCanvas(can, name = 'download.png', quality = null) {
     link.download = name
     link.href = url
     link.click()
-
-    // download(url, name)
 }
 // blobable = ArrayBuffer, ArrayBufferView, Blob, String
 // Objects & Arrays too, converted to json

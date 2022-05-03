@@ -5,6 +5,7 @@ import Color from './Color.js'
 function getPixel(color) {
     if (typeof pixel === 'number') return pixel
     if (color.pixel) return color.pixel
+    if (color === 'transparent') return 'rgba(0,0,0,0)'
     return Color.toTypedColor(color).pixel
 }
 
