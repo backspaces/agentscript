@@ -92,7 +92,7 @@ export default class TwoDraw extends TwoView {
         // drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
         this.checkOptions(drawOptions)
         this.drawOptions = drawOptions
-        view.ticks = 0
+        this.view.ticks = 0
         return drawOptions
     }
 
@@ -128,7 +128,7 @@ export default class TwoDraw extends TwoView {
                 // colors is an array of typedColors or pixels:
                 const colors = initPatches(model, view)
                 view.createPatchPixels(i => colors[i])
-                console.log(colors)
+                // console.log(colors)
             } else if (patchesColor === 'random') {
                 // NOTE: random colors only done once for patches.
                 view.createPatchPixels(i => patchesMap.randomColor())

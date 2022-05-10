@@ -52,12 +52,12 @@
 
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
-        util.toWindow({ L, util, gis, LeafletDataSet, leafletUtils })
+        // util.toWindow({ L, util, gis, LeafletDataSet, leafletUtils })
 
         const ElementOverlay = elementOverlay(L)
         const tileData = TileData['mapzen'] // redfishUSA/World, mapzen, mapbox
         const terrainName = 'topo'
-        util.toWindow({ ElementOverlay, TileData, tileData })
+        // util.toWindow({ ElementOverlay, TileData, tileData })
 
         // ================ create map with terrain & elevation ================
 
@@ -84,7 +84,7 @@
                 maxZoom: tileData.maxZoom, // larger mapzen zoom yields tileerror
             }
         ).addTo(map)
-        util.toWindow({ terrainLayer, elevationLayer, map })
+        // util.toWindow({ terrainLayer, elevationLayer, map })
 
         // ================ create dataset from bbox tiles ================
 
@@ -104,9 +104,9 @@
             elementBounds = bounds
             let bboxDataSet = await leafletDataSet.getBBoxDataSet(bounds)
             let bboxExtent = bboxDataSet.extent()
-            util.toWindow({ leafletDataSet, bboxDataSet, bboxExtent, bounds })
+            // util.toWindow({ leafletDataSet, bboxDataSet, bboxExtent, bounds })
 
-            console.log('leafletDataSet', leafletDataSet, 'bboxDataSet', bboxDataSet)
+            // console.log('leafletDataSet', leafletDataSet, 'bboxDataSet', bboxDataSet)
 
             const patchSize = 4
             const worldOptions = {
@@ -129,19 +129,12 @@
                         p => p.isLocalMin
                             ? 'black'
                             : colorMap.scaleColor(p.elevation, ...bboxExtent))
-
-                    // model.patches.map(p => p.isLocalMin ? 'black' : 0)
-
                     return colors
                 },
                 turtlesShape: 'square',
                 turtlesRotate: false,
                 turtlesColor: 'rgb(255,0,0)', // 'red',
                 turtlesSize: 0.5,
-
-                // patchesColor: p => colorMap.scale(p.elevation, ...bboxExtent)
-                // turtlesColor: t => t.patch.isLocalMin ? 'green' : 'red',
-                // turtlesSize: t => t.patch.isLocalMin ? 2.0 : 0.5
             }
 
             // view = view || new TwoDraw(model, {
@@ -174,7 +167,7 @@
                 anim.reset()
             }
 
-            util.toWindow({ model, view, modelLayer, anim, drawOptions })
+            // util.toWindow({ model, view, modelLayer, anim, drawOptions })
         }
         await setupModelView() // default to full page
 
@@ -190,7 +183,7 @@
         map.on('mousedown', mapMouseDownFcn)
 
         const mapKeyFcn = async (ev) => {
-            console.log('key', ev.originalEvent)
+            // console.log('key', ev.originalEvent)
             if (ev.originalEvent.key === 'm') {
                 await setupModelView()
             }
@@ -307,7 +300,7 @@
         })
         util.forLoop(gui.folders, (val, key) => val.open())
 
-        util.toWindow({ GUI: gui.GUI, gui })
+        // util.toWindow({ GUI: gui.GUI, gui })
 
     </script>
 </body>

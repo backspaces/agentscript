@@ -46,7 +46,7 @@ export default class GUI {
     }
 
     addUI(obj, key) {
-        console.log(obj, key)
+        // console.log(obj, key)
         let { val, cmd } = obj
         const type = this.type(obj)
 
