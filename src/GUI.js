@@ -24,6 +24,8 @@ export default class GUI {
                 this.controllers[key] = this.addUI(obj, key)
             }
         })
+
+        this.gui = this.baseGui
     }
 
     type(obj) {

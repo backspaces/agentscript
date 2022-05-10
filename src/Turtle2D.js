@@ -174,9 +174,11 @@ export default class Turtle {
      * Defaults to 'wrap', wrapping the x,y,z to the opposite edge.
      *
      * atEdge can be:
+     * - 'die'
      * - 'wrap'
      * - 'bounce'
      * - 'clamp'
+     * - 'random'
      * - a function called with the Turtle as it's argument
      *
      * @param {number} x Turtle's x coord
@@ -194,6 +196,10 @@ export default class Turtle {
                 this.x = util.wrap(x, minXcor, maxXcor)
                 this.y = util.wrap(y, minYcor, maxYcor)
                 if (z != null) this.z = util.wrap(z, minZcor, maxZcor)
+            } else if (atEdge === 'die') {
+                this.die()
+            } else if (atEdge === 'random') {
+                this.setxy(...this.model.world.randomPoint())
             } else if (atEdge === 'clamp' || atEdge === 'bounce') {
                 this.x = util.clamp(x, minXcor, maxXcor)
                 this.y = util.clamp(y, minYcor, maxYcor)

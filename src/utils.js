@@ -1362,11 +1362,7 @@ export function floatRamp(start, stop, numItems) {
 }
 // Integer version of floatRamp, start & stop integers, rounding each element.
 // Default numItems yields unit step between start & stop.
-export function integerRamp(
-    start,
-    stop,
-    numItems = Math.abs(stop - start) + 1
-) {
+export function integerRamp(start, stop, numItems = stop - start + 1) {
     return floatRamp(start, stop, numItems).map(a => Math.round(a))
 }
 

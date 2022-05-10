@@ -10,6 +10,8 @@ import ColorMap from '../src/ColorMap.js'
 export default class TwoDraw extends TwoView {
     static defaultOptions() {
         return {
+            data: {},
+
             patchesColor: 'random',
             initPatches: null,
 
@@ -41,24 +43,23 @@ export default class TwoDraw extends TwoView {
             drawOptions = viewOptions.drawOptions
             delete viewOptions.drawOptions
         }
-        drawOptions = Object.assign(TwoDraw.defaultOptions(), drawOptions)
+        drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
 
-        if (typeof drawOptions.turtlesMap === 'string')
-            drawOptions.turtlesMap = ColorMap[drawOptions.turtlesMap]
-        if (typeof drawOptions.patchesMap === 'string')
-            drawOptions.patchesMap = ColorMap[drawOptions.patchesMap]
+        super(model.world, viewOptions) // TwoView
 
-        super(model.world, viewOptions)
+        this.checkOptions(drawOptions)
+        this.drawOptions = drawOptions
         this.model = model
         this.view = this
-        this.checkParams(drawOptions)
-        this.drawOptions = drawOptions
+        // this.checkOptions(drawOptions)
+        // this.drawOptions = drawOptions
     }
 
     // The parameters are easily mistaken: check they are all in the defaults.
-    checkParams(params) {
-        const keys = Object.keys(params)
+    checkOptions(drawOptions) {
+        const keys = Object.keys(drawOptions)
         const defaults = TwoDraw.defaultOptions()
+
         keys.forEach(k => {
             if (defaults[k] === undefined) {
                 console.log(
@@ -68,11 +69,37 @@ export default class TwoDraw extends TwoView {
                 throw Error('Unknown TwoDraw parameter: ' + k)
             }
         })
+
+        if (typeof drawOptions.patchesMap === 'string') {
+            drawOptions.patchesMap = ColorMap[drawOptions.patchesMap]
+            if (!drawOptions.patchesMap)
+                Error('Unknown patchMap: ' + drawOptions.patchesMap)
+        }
+        if (typeof drawOptions.turtlesMap === 'string') {
+            drawOptions.turtlesMap = ColorMap[drawOptions.turtlesMap]
+            if (!drawOptions.turtlesMap)
+                Error('Unknown turtlesMap: ' + drawOptions.turtlesMap)
+        }
+    }
+
+    resetOptions(drawOptions = this.drawOptions) {
+        // if (drawOptions !== this.drawOptions)
+        //     drawOptions = Object.assign(
+        //         {},
+        //         TwoDraw.defaultOptions(),
+        //         drawOptions
+        //     )
+        // drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
+        this.checkOptions(drawOptions)
+        this.drawOptions = drawOptions
+        view.ticks = 0
+        return drawOptions
     }
 
     draw() {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)
         let {
+            data,
             patchesColor,
             initPatches,
 
@@ -101,6 +128,7 @@ export default class TwoDraw extends TwoView {
                 // colors is an array of typedColors or pixels:
                 const colors = initPatches(model, view)
                 view.createPatchPixels(i => colors[i])
+                console.log(colors)
             } else if (patchesColor === 'random') {
                 // NOTE: random colors only done once for patches.
                 view.createPatchPixels(i => patchesMap.randomColor())

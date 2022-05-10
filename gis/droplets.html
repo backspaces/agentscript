@@ -38,15 +38,12 @@
         import LeafletDataSet from './LeafletDataSet.js'
 
         import TwoDraw from '../src/TwoDraw.js'
+        // import ColorMap from '../src/ColorMap.js'
         import Animator from '../src/Animator.js'
         import GUI from '../src/GUI.js'
-        // import dat from 'https://cdn.skypack.dev/dat.gui'
 
         import Model from '../models/DropletsModel.js'
 
-        // import leafletImage from 'https://cdn.skypack.dev/leaflet-image'
-        // import domtoimage from 'https://cdn.skypack.dev/dom-to-image'
-        // import html2canvas from 'https://cdn.skypack.dev/html2canvas'
 
         // import L from 'https://cdn.skypack.dev/leaflet'
         import * as L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
@@ -101,16 +98,17 @@
 
         // ================ create model using bbox dataset ================
 
-        let modelLayer, elementBounds // = map.getBounds()
-        let model, view, anim
+        let modelLayer, elementBounds, model, view, anim, drawOptions
+
         async function setupModelView(bounds = map.getBounds()) {
             elementBounds = bounds
             let bboxDataSet = await leafletDataSet.getBBoxDataSet(bounds)
+            let bboxExtent = bboxDataSet.extent()
+            util.toWindow({ leafletDataSet, bboxDataSet, bboxExtent, bounds })
+
             console.log('leafletDataSet', leafletDataSet, 'bboxDataSet', bboxDataSet)
-            util.toWindow({ leafletDataSet, bboxDataSet, bounds })
 
             const patchSize = 4
-
             const worldOptions = {
                 minX: 0,
                 minY: 0,
@@ -119,36 +117,47 @@
             }
             if (model) model.reset(worldOptions)
             else model = new Model(worldOptions)
-
-            model.killOffworld = true // see if faster
             // await model.startup([Z, X, Y]) // TEST
             await model.startup(bboxDataSet)
             model.setup()
 
+            drawOptions = {
+                patchesMap: 'Jet', // 'transparent',
+                initPatches: (model, view) => {
+                    const colorMap = drawOptions.patchesMap
+                    const colors = model.patches.map(
+                        p => p.isLocalMin
+                            ? 'black'
+                            : colorMap.scaleColor(p.elevation, ...bboxExtent))
+
+                    // model.patches.map(p => p.isLocalMin ? 'black' : 0)
+
+                    return colors
+                },
+                turtlesShape: 'square',
+                turtlesRotate: false,
+                turtlesColor: 'rgb(255,0,0)', // 'red',
+                turtlesSize: 0.5,
+
+                // patchesColor: p => colorMap.scale(p.elevation, ...bboxExtent)
+                // turtlesColor: t => t.patch.isLocalMin ? 'green' : 'red',
+                // turtlesSize: t => t.patch.isLocalMin ? 2.0 : 0.5
+            }
+
+            // view = view || new TwoDraw(model, {
             view = new TwoDraw(model, {
                 div: util.createCanvas(0, 0), // the view will resize
                 patchSize: patchSize,
                 useSprites: true,
-                drawOptions: {
-                    // patchesColor: 'transparent',
-                    initPatches: (model, view) =>
-                        // view.clear('transparent')
-                        model.patches.map(p => p.isLocalMin ? 'black' : 0)
-                    ,
-                    turtlesShape: 'square',
-                    turtlesRotate: false,
-                    turtlesColor: 'red',
-                    turtlesSize: 0.5
-
-                    // turtlesColor: t => t.patch.isLocalMin ? 'green' : 'red',
-                    // turtlesSize: t => t.patch.isLocalMin ? 2.0 : 0.5
-                },
+                drawOptions: drawOptions, // will be view.drawOptions if available
             })
+            drawOptions = view.drawOptions
+
             // Note: when zooming happens after adding the canvas, remove the current one
             // and draw it on a new larger canvas with ctx.imageSmoothingEnabled = false
             if (modelLayer) modelLayer.remove()
             view.canvas.style.border = '1px red solid'
-            modelLayer = new ElementOverlay(view.canvas, elementBounds).addTo(map)
+            modelLayer = new ElementOverlay(view.canvas, bounds).addTo(map)
             // const modelLayer = new ElementOverlay(view.canvas, gis.bbox2bounds(bbox)).addTo(map)
 
             if (!anim) {
@@ -165,28 +174,9 @@
                 anim.reset()
             }
 
-            util.toWindow({ model, view, modelLayer, anim })
+            util.toWindow({ model, view, modelLayer, anim, drawOptions })
         }
-        await setupModelView(elementBounds)
-        // anim = new Animator(
-        //     () => {
-        //         model.step()
-        //         view.draw()
-        //         gui.update()
-        //     },
-        //     -1, //500,// -1, // 500, // run 500 steps
-        //     30 // 10 // 30 // 30 fps
-        // ).startStats('70px') // avoid +/= leaflet control
-
-        // did not use opacity, so just showed tiles as images
-        // leafletImage(map, (err, canvas) => {
-        //     util.downloadCanvas(canvas)
-        // })
-        // prob getting skypack style sheet
-        // domtoimage.toBlob(document.getElementById('map')).then(blob => window.foo = blob)
-        // similar opacity problems
-        // can = await html2canvas(document.getElementById('map'))
-        // document.body.appendChild(can)
+        await setupModelView() // default to full page
 
         // ================ mouse drag bbox rect ================
 
@@ -202,22 +192,20 @@
         const mapKeyFcn = async (ev) => {
             console.log('key', ev.originalEvent)
             if (ev.originalEvent.key === 'm') {
-                // elementBounds = map.getBounds()
                 await setupModelView()
             }
         }
-        // map.on('keypress', mapKeyFcn)
+        map.on('keypress', mapKeyFcn)
 
         // ================ gui ================
 
         const gui = new GUI({
             restartMap: { // button
                 cmd: async () => {
-                    const stepType = model.stepType
+                    const atEdge = model.turtles.getDefault('atEdge')
                     await setupModelView()
-                    model.stepType = stepType
                     gui.controllers.pause.name('pause')
-                    // val => (model.stepType = val)
+                    model.turtles.setDefault('atEdge', atEdge)
                 }
             },
             pause: { // button
@@ -233,14 +221,21 @@
                 ]],
                 cmd: val => (model.stepType = val),
             },
+            patchesColors: { // chooser
+                // val: ['Jet', ['transparent', 'Jet', 'LightGray']],
+                val: ['Transparent', ['Transparent', 'Jet', 'Gray', 'Hue', 'Basic16']],
+                cmd: val => {
+                    drawOptions.patchesMap = val
+                    drawOptions = view.resetOptions(drawOptions)
+                    if (!anim.isRunning()) view.draw()
+                },
+            },
 
             mapFolder: 'Map Functions',
             puddleDepth: {
                 val: [model.puddleDepth, [1, 15, 1]],
                 cmd: async val => {
                     model.puddleDepth = val
-                    // await setupModelView()
-                    // model.reset(); model.setup()
                 }
             },
             opacity: { // slider
@@ -259,22 +254,32 @@
             },
             turtlesSize: { // slider
                 val: [0.5, [.2, 1, 0.1]],
-                cmd: val => view.drawOptions.turtlesSize = val,
+                cmd: val => {
+                    drawOptions.turtlesSize = val
+                    if (!anim.isRunning()) view.draw()
+                },
             },
             turtlesSpeed: { // slider
                 val: [model.speed, [0.2, 1, 0.1]],
                 cmd: val => model.speed = val,
             },
-            // turtlesColor: { // color
-            //     val: '#ff0000',
-            //     cmd: val => {
-            //         view.drawOptions.turtlesColor = val
-            //         if (!anim.isRunning()) view.draw()
-            //     },
-            // },
+            turtlesColor: { // colorπ
+                val: drawOptions.turtlesColor,
+                cmd: val => {
+                    drawOptions.turtlesColor = val
+                    if (!anim.isRunning()) view.draw()
+                },
+            },
             moves: {
                 val: 'listen',
                 cmd: () => model.steps
+            },
+            atEdge: {
+                val: [model.turtles.getDefault('atEdge'),
+                ['wrap', 'die', 'clamp', 'bounce', 'random']],
+                cmd: val => {
+                    model.turtles.setDefault('atEdge', val)
+                },
             },
 
             dataFolder: 'Data Functions',
@@ -284,7 +289,7 @@
             patchesAspect: { // button
                 cmd: () => {
                     const dataSet = model.patches.exportDataSet('aspect')
-                    dataSet.bounds = elementBounds
+                    dataSet.bounds = elementBounds // add metadata
                     util.downloadBlob(dataSet, 'patchesAspect.json', false)
                 }
             },
@@ -308,45 +313,3 @@
 </body>
 
 </html>
-
-<!--
-        // gui.add(values, 'pause')
-        //     .onChange((pause) => {
-        //         if (pause) anim.stop(); else anim.start()
-        //     })
-
-        // model = new Model({
-        // minX: 0,
-        // minY: 0,
-        // maxX: Math.round(bboxDataSet.width / 4) - 1,
-        // maxY: Math.round(bboxDataSet.height / 4) - 1,
-        // })
-
-    // const gui = new dat.GUI()
-
-    // util.toWindow({ dat, gui })
-
-    // const values = {
-    // opacity: elevationLayer.options.opacity,
-    // toggle: () => anim.toggle(),
-    // download: () => util.downloadBlob(bboxDataSet, 'ds.txt')
-    // // download: 'map',
-    // // pause: false
-    // }
-    // gui.add(values, 'opacity', 0, 1, 0.1)
-    // .onChange(opacity => elevationLayer.setOpacity(opacity))
-    // gui.add(values, 'toggle')
-    // gui.add(values, 'download')
-    // // gui.add(values, 'download', ['map', 'elevations'])
-    // // .onChange(download => {
-    // // switch (download) {
-    // // case map:
-
-    // // break;
-
-    // // default:
-    // // break;
-    // // }
-    // // })
-
- -->

@@ -3,7 +3,8 @@ import Color from './Color.js'
 
 // const getPixel = color => color.pixel || color
 function getPixel(color) {
-    if (typeof pixel === 'number') return pixel
+    // if (typeof pixel === 'number') return pixel
+    if (typeof color === 'number') return color
     if (color.pixel) return color.pixel
     if (color === 'transparent') return 'rgba(0,0,0,0)'
     return Color.toTypedColor(color).pixel

@@ -39,7 +39,7 @@ const Color = {
      * NOTE: h=0 and h=360 are the same, use h in 0-359 for unique colors.
      */
     // Alpha "a" is converted to float in 0-1 for css string.
-    hslCssColor(h, s, l, a = 255) {
+    hslCssColor(h, s = 100, l = 50, a = 255) {
         a = a / 255
         const a4 = a.toPrecision(4)
         return a === 1
@@ -64,7 +64,7 @@ const Color = {
     // * hexCssColor otherwise
     cssColor(r, g, b, a = 255) {
         return a === 255
-            ? this.hexCssColor(r, g, b, true)
+            ? this.hexCssColor(r, g, b)
             : this.rgbaCssColor(r, g, b, a)
     },
 
@@ -289,7 +289,7 @@ const TypedColorProto = {
     checkColorChange() {
         // Reset string & webgl on color change.
         this.string = null // will be lazy evaluated via getCss.
-        this.floatArray = null
+        // this.floatArray = null
     },
     // Return true if color is same value as myself, comparing pixels
     equals(color) {

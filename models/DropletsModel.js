@@ -10,7 +10,7 @@ import Model from '../src/Model2D.js'
 import { mapzen as provider } from '../src/TileData.js'
 
 export default class DropletsModel extends Model {
-    killOffworld = false // Kill vs clamp turtles when offworld.
+    // atEdge = 'random'
     speed = 0.5
     puddleDepth = 5
     // stepType choices:
@@ -18,7 +18,6 @@ export default class DropletsModel extends Model {
     //    'patchAspect',
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
-    // stepType = 'dataSetAspectBilinear'
     stepType = 'patchAspect'
     steps = 0
     // Installed datasets:
@@ -50,12 +49,8 @@ export default class DropletsModel extends Model {
         this.patches.importDataSet(aspect, 'aspect', true)
     }
     setup() {
-        // this.installDataSets(this.elevation)
-        // Kill if droplet moves off world/tile.
-        // Otherwise use 'clamp' (bunch up on edge)
-        if (this.killOffworld) {
-            this.turtles.setDefault('atEdge', turtle => turtle.die())
-        }
+        // this.turtles.setDefault('atEdge', this.atEdge)
+        this.turtles.setDefault('atEdge', 'die')
 
         this.turtles.ask(t => (t.done = false))
 
@@ -104,7 +99,7 @@ export default class DropletsModel extends Model {
 
             let pAhead = t.patchAtHeadingAndDistance(t.heading, this.speed)
             if (!pAhead) {
-                t.die()
+                t.handleEdge(t.x, t.y) // t.die()
             } else if (
                 t.patch.isLocalMin &&
                 t.patch.turtlesHere.length < this.puddleDepth
@@ -115,27 +110,16 @@ export default class DropletsModel extends Model {
                 t.forward(this.speed)
                 this.steps++
             } else {
-                // no turtlesHere.length < this.puddleDepth
-                // choose the best neighbor if one exists
+                // turtlesHere at max, choose the best neighbor if one exists
                 let n = t.patch.neighbors.with(
                     n => n.turtlesHere < this.puddleDepth
                 )
-                // .oneOf()
                 if (n.length > 0) {
                     n = n.minOneOf('elevation')
                     t.setxy(n.x, n.y)
                     this.steps++
                 }
             }
-
-            //  else if (stepType === 'minNeighbor') {
-            //     t.moveTo(t.patch.x, t.patch.y)
-            // }
-
-            // if (stepType === 'minNeighbor' && t.patch.isOnEdge()) {
-            //     t.die()
-            // }
-            // if (t.id !== -1) this.steps++
         })
     }
     // turtlesOnLocalMins() {

@@ -142,8 +142,9 @@ const ColorMap = {
         // Used to match data directly to a color as in MatLab.
         //
         // Ex: scaleColor(25, 0, 50) returns the color in the middle of the colormap
-        scaleColor(number, min, max) {
+        scaleColor(number, min = 0, max = this.length - 1) {
             // number = util.clamp(number, min, max)
+            if (min === max) return this[min]
             const scale = util.lerpScale(number, min, max)
             const index = Math.round(util.lerp(0, this.length - 1, scale))
             return this[index]
@@ -183,6 +184,7 @@ const ColorMap = {
         // Faster than rgbClosestIndex, does direct calculation, not iteration.
         cubeClosestIndex(r, g, b) {
             const cube = this.cube
+            if (!cube) throw Error('cubeClosestIndex: requires the cube arrays')
             const rgbSteps = cube.map(c => 255 / (c - 1))
             const rgbLocs = [r, g, b].map((c, i) => Math.round(c / rgbSteps[i]))
             const [rLoc, gLoc, bLoc] = rgbLocs
@@ -243,11 +245,21 @@ const ColorMap = {
 
     // Create an hsl map, inputs are arrays to be permutted like rgbColorMap.
     // Convert the HSL values to Color.colors, default to bright hue ramp (L=50).
-    hslColorMap(H, S = [100], L = [50]) {
-        const hslArray = this.permuteArrays(H, S, L)
-        const array = hslArray.map(a =>
-            Color.toTypedColor(Color.hslCssColor(...a))
-        )
+    hslColorMap(num = 360, S = 100, L = 50) {
+        const hues = util.integerRamp(1, 360, num)
+        const colors = hues.map(h => Color.hslCssColor(h))
+        const typedColors = colors.map(c => Color.toTypedColor(c))
+        return this.basicColorMap(typedColors)
+    },
+
+    transparentColorMap(num = 1) {
+        // const array = Array(num).fill(0)
+        // return this.basicColorMap(array)
+        return this.staticColorMap(0, num)
+    },
+    staticColorMap(color, num = 1) {
+        color = Color.toTypedColor(color)
+        const array = Array(num).fill(color)
         return this.basicColorMap(array)
     },
 
@@ -288,12 +300,14 @@ const ColorMap = {
     // These sorted by hue/saturation/light, hue in 0-300 degrees.
     // See [Mozilla Color Docs](https://goo.gl/tolSnS) for *lots* more!
 
-    basicColorNames: 'white silver gray black red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
-        ' '
-    ),
-    brightColorNames: 'white silver red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
-        ' '
-    ),
+    basicColorNames:
+        'white silver gray black red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
+            ' '
+        ),
+    brightColorNames:
+        'white silver red maroon yellow orange olive lime green cyan teal blue navy magenta purple'.split(
+            ' '
+        ),
     // Create a named colors colormap
     cssColorMap(cssArray, createNameIndex = false) {
         const array = cssArray.map(str => Color.cssToUint8Array(str))
@@ -335,6 +349,9 @@ const ColorMap = {
     get Gray() {
         return this.LazyMap('Gray', this.grayColorMap())
     },
+    get Hue() {
+        return this.LazyMap('Hue', this.hslColorMap())
+    },
     get LightGray() {
         return this.LazyMap('LightGray', this.grayColorMap(200))
     },
@@ -350,6 +367,9 @@ const ColorMap = {
     get Rgb() {
         return this.LazyMap('Rgb', this.rgbColorCube(16))
     },
+    get Transparent() {
+        return this.LazyMap('Transparent', this.transparentColorMap())
+    },
     get Basic16() {
         // 17 unique + 2 "aliases" = 19 names. "16" historic
         return this.LazyMap(
@@ -357,13 +377,13 @@ const ColorMap = {
             this.cssColorMap(this.basicColorNames, true)
         )
     },
-    get Bright16() {
-        // Basic16 w/o grays: white, black
-        return this.LazyMap(
-            'Bright16',
-            this.cssColorMap(this.brightColorNames, true)
-        )
-    },
+    // get Bright16() {
+    //     // Basic16 w/o grays: white, black
+    //     return this.LazyMap(
+    //         'Bright16',
+    //         this.cssColorMap(this.brightColorNames, true)
+    //     )
+    // },
 }
 
 export default ColorMap
