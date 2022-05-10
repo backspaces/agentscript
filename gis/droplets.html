@@ -231,9 +231,13 @@
                     model.puddleDepth = val
                 }
             },
-            opacity: { // slider
+            tilesOpacity: { // slider
                 val: [elevationLayer.options.opacity, [0, 1, 0.1]],
                 cmd: val => elevationLayer.setOpacity(val),
+            },
+            modelOpacity: { // slider
+                val: [1, [0, 1, 0.1]],
+                cmd: val => view.canvas.style.opacity = val,
             },
 
             modelFolder: 'Model Functions',
