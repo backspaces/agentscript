@@ -413,6 +413,22 @@ export function drawText(ctx, string, x, y, color, useIdentity = true) {
 export function ctxImageData(ctx) {
     return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
 }
+
+// Return ctx data as an array of typed array rgba colors
+export function ctxImageColors(ctx) {
+    const typedArray = ctxImageData(ctx).data
+    const colors = []
+    step(typedArray.length, 4, i => colors.push(typedArray.subarray(i, i + 4)))
+    return colors
+}
+
+// Return ctx data as an array of Uint32Array rgba pixels
+export function ctxImagePixels(ctx) {
+    const imageData = ctxImageData(ctx)
+    const pixels = new Uint32Array(imageData.data.buffer)
+    return pixels
+}
+
 // Clear this context using the cssColor.
 // If no color or if color === 'transparent', clear to transparent.
 export function clearCtx(ctx, cssColor = undefined) {
@@ -1580,8 +1596,13 @@ export const isFloatArray = obj => /^float.*array$/.test(typeOf(obj))
 
 export const isArrayLike = obj => isArray(obj) || isTypedArray(obj)
 export const isColorLikeArray = obj =>
-    isArrayLike(obj) & [3, 4].includes(obj.length) &&
-    obj.every(i => isNumber(i))
+    isArrayLike(obj) &&
+    [3, 4].includes(obj.length) &&
+    obj.every(
+        i =>
+            (isInteger(i) && isBetween(i, 0, 255)) ||
+            (isNumber(i) && isBetween(i, 0, 1))
+    )
 
 export function isLittleEndian() {
     const d32 = new Uint32Array([0x01020304])

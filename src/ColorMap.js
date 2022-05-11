@@ -24,18 +24,18 @@ const ColorMap = {
     // Stops are css strings.
     // Locs are floats from 0-1, default is equally spaced.
     gradientImageData(nColors, stops, locs) {
-        // Convert the color stops to css strings
-        // stops = stops.map(c => cssColor(c))
         const ctx = util.createCtx(nColors, 1)
         // Install default locs if none provide
         if (!locs) locs = util.floatRamp(0, 1, stops.length)
+
         // Create a new gradient and fill it with the color stops
         const grad = ctx.createLinearGradient(0, 0, nColors, 0)
         util.repeat(stops.length, i => grad.addColorStop(locs[i], stops[i]))
-        // Draw the gradient, returning the image data TypedArray
+
+        // Draw the gradient, returning the image colors typed arrays
         ctx.fillStyle = grad
         ctx.fillRect(0, 0, nColors, 1)
-        return util.ctxImageData(ctx).data
+        return util.ctxImageColors(ctx)
     },
 
     // ### Array Conversion Utilities
@@ -275,11 +275,12 @@ const ColorMap = {
     //
     // This easily creates all the MatLab colormaps like "jet" below.
     gradientColorMap(nColors, stops, locs) {
-        // Convert the color stops to css strings
-        stops = stops.map(c => c.css || c)
+        stops = stops.map(c => c.css || c) // convert stops to css strings
+
+        // get gradient colors as typed arrays & convert them to typedColors
         const uint8arrays = this.gradientImageData(nColors, stops, locs)
-        // const typedColors = this.typedArraytoColors(uint8arrays)
         const typedColors = this.arrayToTypedColors(uint8arrays)
+
         Object.setPrototypeOf(typedColors, this.ColorMapProto)
         return typedColors
     },
@@ -299,7 +300,7 @@ const ColorMap = {
     // * One color: from black/white to color, optionally back to white/black.
     // stops = ['black', 'red'] or ['white', 'orange', 'black']
     // The NetLogo map is a concatenation of 14 of these.
-    // * Two colors: stops = ['red', 'orange'] (blends the tow, center is white)
+    // * Two colors: stops = ['red', 'orange'] (blends the two, center is white)
 
     // The 16 unique [CSS Color Names](https://goo.gl/sxo36X), case insensitive.
     // In CSS 2.1, the color 'orange' was added to the 16 colors as a 17th color

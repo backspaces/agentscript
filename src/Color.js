@@ -139,6 +139,7 @@ const Color = {
         Object.setPrototypeOf(u8array, TypedColorProto)
         return u8array
     },
+
     isTypedColor(any) {
         return any && any.constructor === Uint8ClampedArray && any.pixelArray
     },
