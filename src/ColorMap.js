@@ -1,8 +1,8 @@
 // A colormap is simply an array of typedColors with several utilities such
 // as randomColor, closestColor etc.
 // This allows the colors to be simple integer indices
-// into the Array. They are also designed to be webgl-ready, being a
-// GLSL "Uniform" variable TypedArray for colors.
+// into the Array. They are also designed to be webgl-ready, being
+// composed of typedColors.
 
 import * as util from './utils.js'
 import Color from './Color.js'
@@ -43,28 +43,32 @@ const ColorMap = {
     // Convert a Uint8Array into Array of 4 element typedColors.
     // Useful for converting ImageData objects like gradients to colormaps.
     // WebGL ready: the array.typedArray is suitable for Uniforms.
-    typedArraytoColors(typedArray) {
-        const array = []
-        util.step(
-            typedArray.length,
-            4,
-            // Note: can't share subarray as color's typed array:
-            // it's buffer is for entire array, not just subarray.
-            i => array.push(Color.typedColor(...typedArray.subarray(i, i + 4)))
-        )
-        array.typedArray = typedArray
-        return array
-    },
+    // typedArraytoColors(typedArray) {
+    //     const array = []
+    //     util.step(
+    //         typedArray.length,
+    //         4,
+    //         // Note: can't share subarray as color's typed array:
+    //         // it's buffer is for entire array, not just subarray.
+    //         i => array.push(Color.typedColor(...typedArray.subarray(i, i + 4)))
+    //     )
+    //     array.typedArray = typedArray
+    //     return array
+    // },
     // Convert an Array of Arrays to an Array of typedColors.
     // Webgl ready as above.
-    arraysToColors(array) {
-        const typedArray = new Uint8ClampedArray(array.length * 4)
-        util.repeat(array.length, i => {
-            const a = array[i]
-            if (a.length === 3) a.push(255)
-            typedArray.set(a, i * 4)
-        })
-        return this.typedArraytoColors(typedArray)
+    // arraysToColors(array) {
+    //     const typedArray = new Uint8ClampedArray(array.length * 4)
+    //     util.repeat(array.length, i => {
+    //         const a = array[i]
+    //         if (a.length === 3) a.push(255)
+    //         typedArray.set(a, i * 4)
+    //     })
+    //     return this.typedArraytoColors(typedArray)
+    // },
+
+    arrayToTypedColors(array) {
+        return array.map(a => Color.toTypedColor(a))
     },
 
     // Permute the values of 3 arrays. Ex:
@@ -88,8 +92,7 @@ const ColorMap = {
 
     // ### ColorMaps
 
-    // ColorMaps are Arrays of TypedColors with these additional methods. Webgl
-    // ready if made w/ `typedArraytoColors` or `arraysToColors` above.
+    // ColorMaps are Arrays of TypedColors with these additional methods.
     // Used to be memory effecent (shared colors), webgl compatible,  and for
     // MatLab-like color-as-data.
     ColorMapProto: {
@@ -210,9 +213,12 @@ const ColorMap = {
 
     // ### Utilities for constructing ColorMaps
 
-    // Convert an array of rgb(a) Arrays or TypedColors to a webgl-ready colormap.
+    // Convert an array of colors to a colormap.
+    // The colors can be strings, numbers, rgb arrays
+    // They are converted to typedColors.
     basicColorMap(colors) {
-        colors = this.arraysToColors(colors)
+        // colors = this.arraysToColors(colors)
+        colors = this.arrayToTypedColors(colors)
         Object.setPrototypeOf(colors, this.ColorMapProto)
         return colors
     },
@@ -272,7 +278,8 @@ const ColorMap = {
         // Convert the color stops to css strings
         stops = stops.map(c => c.css || c)
         const uint8arrays = this.gradientImageData(nColors, stops, locs)
-        const typedColors = this.typedArraytoColors(uint8arrays)
+        // const typedColors = this.typedArraytoColors(uint8arrays)
+        const typedColors = this.arrayToTypedColors(uint8arrays)
         Object.setPrototypeOf(typedColors, this.ColorMapProto)
         return typedColors
     },

@@ -1578,6 +1578,11 @@ export const isUintArray = obj => /^uint.*array$/.test(typeOf(obj))
 export const isIntArray = obj => /^int.*array$/.test(typeOf(obj))
 export const isFloatArray = obj => /^float.*array$/.test(typeOf(obj))
 
+export const isArrayLike = obj => isArray(obj) || isTypedArray(obj)
+export const isColorLikeArray = obj =>
+    isArrayLike(obj) & [3, 4].includes(obj.length) &&
+    obj.every(i => isNumber(i))
+
 export function isLittleEndian() {
     const d32 = new Uint32Array([0x01020304])
     return new Uint8ClampedArray(d32.buffer)[0] === 4

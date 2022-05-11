@@ -146,6 +146,7 @@ const Color = {
     // Return a typedColor given a value and optional colorType
     // If the value already is a typedColor, simply return it
     // If colorType not defined, assume css (string) or pixel (number)
+    // or array [r,g,b,a=255]
     // The colorType can be: 'css', 'pixel', 'rgb', 'webgl'
     // Note rgb and webgl are int arrays & float arrays respectively.
     toTypedColor(value, colorType) {
@@ -153,8 +154,10 @@ const Color = {
 
         const tc = this.typedColor(0, 0, 0, 0) // "empty" typed color
         if (colorType == null) {
-            if (typeof value === 'string') tc.css = value
-            else if (typeof value === 'number') tc.pixel = value
+            if (util.isString(value)) tc.css = value
+            else if (util.isNumber(value)) tc.pixel = value
+            else if (util.isArray(value)) tc.rgb = value
+            else if (util.isTypedArray(value)) tc.rgb = value
             else throw Error(`toTypedColor: illegal value ${value}`)
         } else {
             // REMIND: type check value & colorType?
