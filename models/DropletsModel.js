@@ -6,8 +6,8 @@ import Model from '../src/Model2D.js'
 //   redfishWorldDataSet
 //   mapzenDataSet
 //   mapboxDataSet
-// import { mapzen as provider } from '../src/TileData.js'
 import { mapzen as provider } from '../src/TileData.js'
+// import { maptiler as provider } from '../src/TileData.js'
 
 export default class DropletsModel extends Model {
     // atEdge = 'random'
@@ -18,6 +18,7 @@ export default class DropletsModel extends Model {
     //    'patchAspect',
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
+    // stepType = 'patchAspect'
     stepType = 'patchAspect'
     steps = 0
     // Installed datasets:
@@ -35,7 +36,7 @@ export default class DropletsModel extends Model {
 
     // data can be gis zxy or a DataSet
     async startup(data = [13, 1594, 3339]) {
-        this.elevation = data.width
+        this.elevation = data.width // is a dataset
             ? data
             : await provider.zxyToDataSet(...data)
         this.installDataSets(this.elevation)
@@ -59,9 +60,7 @@ export default class DropletsModel extends Model {
             p.isLocalMin =
                 p.neighbors.minOneOf('elevation').elevation > p.elevation
             if (p.isLocalMin) this.localMins.push(p)
-            // if (p.neighbors.minOneOf('elevation').elevation > p.elevation) {
-            //     this.localMins.push(p)
-            // }
+
             p.sprout(1, this.turtles)
         })
     }
@@ -110,15 +109,21 @@ export default class DropletsModel extends Model {
                 t.forward(this.speed)
                 this.steps++
             } else {
-                // turtlesHere at max, choose the best neighbor if one exists
-                let n = t.patch.neighbors.with(
-                    n => n.turtlesHere < this.puddleDepth
-                )
-                if (n.length > 0) {
-                    n = n.minOneOf('elevation')
+                const n = t.patch.neighbors.oneOf()
+                if (n.turtlesHere < this.puddleDepth) {
                     t.setxy(n.x, n.y)
                     this.steps++
                 }
+
+                // // turtlesHere at max, choose the best neighbor if one exists
+                // let neighbors = t.patch.neighbors.with(
+                //     n => n.turtlesHere < this.puddleDepth
+                // )
+                // if (neighbors.length > 0) {
+                //     const n = neighbors.minOneOf('elevation')
+                //     t.setxy(n.x, n.y)
+                //     this.steps++
+                // }
             }
         })
     }

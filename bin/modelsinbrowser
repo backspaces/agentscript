@@ -19,7 +19,7 @@ cd ~/src/agentscript
 # Doesn't work using "open", apparently
 open --new -a "$browser" --args --new-window --auto-open-devtools-for-tabs
 # open --new -a "$browser" --args --auto-open-devtools-for-tabs
-sleep 2
+sleep 4
 
 # if [["$dir" == 'models']]
 if [[ $dir == "models" ]]; then

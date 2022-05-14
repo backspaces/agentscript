@@ -36,6 +36,25 @@ const sharedTileObject = {
     },
 }
 
+export const maptiler = Object.assign(
+    {
+        elevationFcn: rgbScaleFunction(-10000, 0.1),
+        zxyUrl: (z, x, y) =>
+            // `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`,
+            // `https://api.maptiler.com/maps/topo/?key=iQurAP6lArV1UP4gfSVs#${z}/${x}/${y}`,
+            // `https://api.maptiler.com/maps/topo/256/${z}/${x}/${y}.png?key=iQurAP6lArV1UP4gfSVs`,
+            `https://api.maptiler.com/tiles/terrain-rgb/${z}/${x}/{y}.png?key=iQurAP6lArV1UP4gfSVs`,
+        zxyTemplate:
+            // 'https://api.maptiler.com/maps/topo/?key=iQurAP6lArV1UP4gfSVs#{z}/{x}/{y}',
+            // 'https://api.maptiler.com/maps/topo/256/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs',
+            // 'https://api.maptiler.com/maps/topo/256/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs',
+            'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs',
+        minZoom: 0,
+        maxZoom: 15,
+    },
+    sharedTileObject
+)
+
 export const mapzen = Object.assign(
     {
         elevationFcn: rgbScaleFunction(-32768, 1 / 256), // returns fcn(r,g,b)

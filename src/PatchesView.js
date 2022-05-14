@@ -6,7 +6,7 @@ function getPixel(color) {
     // if (typeof pixel === 'number') return pixel
     if (typeof color === 'number') return color
     if (color.pixel) return color.pixel
-    if (color === 'transparent') return 'rgba(0,0,0,0)'
+    if (color === 'transparent') return 0 // 'rgba(0,0,0,0)'
     return Color.toTypedColor(color).pixel
 }
 

@@ -121,7 +121,7 @@
             await model.startup(bboxDataSet)
             model.setup()
 
-            drawOptions = {
+            drawOptions = drawOptions || {
                 patchesMap: 'Jet', // 'transparent',
                 initPatches: (model, view) => {
                     const colorMap = drawOptions.patchesMap
@@ -302,7 +302,8 @@
                 }
             },
         })
-        util.forLoop(gui.folders, (val, key) => val.open())
+        // util.forLoop(gui.folders, (val) => val.open())
+        gui.close()
 
         // util.toWindow({ GUI: gui.GUI, gui })
 

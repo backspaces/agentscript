@@ -9,82 +9,91 @@
     <script type="module">
         import * as util from '../src/utils.js'
         import World from '../src/World.js'
-        import { redfishUSA, maptilerUrl } from '../src/TileData.js'
+        import { redfishUSA, mapzen, maptiler } from '../src/TileData.js' //maptilerUrl
+        import * as gis from '../src/gis.js'
         import Model from '../models/HelloModel.js'
         import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
         import ThreeDraw from '../src/ThreeDraw.js'
 
-        async function run() {
-            const [Z, X, Y] = [13, 1594, 3339]
-            // const elevation = await redfishUSADataSet(Z, X, Y)
-            // const tile = await redfishUSATile(Z, X, Y)
-            const elevation = await redfishUSA.zxyToDataSet(Z, X, Y)
-            const el0to10 = elevation.scale(0, 10)
+        const provider = mapzen
 
-            const baseMapURL = maptilerUrl(
-                Z,
-                X,
-                Y,
-                'iQurAP6lArV1UP4gfSVs',
-                'topo'
-            )
-            const baseMap = await util.imagePromise(baseMapURL)
-            // const baseCtx = util.createCtx(0, 0)
-            // util.setCtxImage(baseCtx, baseMap)
+        // async function run() {
+        const [Z, X, Y] = [13, 1594, 3339]
+        // const elevation = await redfishUSADataSet(Z, X, Y)
+        // const tile = await redfishUSATile(Z, X, Y)
+        const elevation = await provider.zxyToDataSet(Z, X, Y)
+        const el0to10 = elevation.scale(0, 10)
+        const baseMapURL = gis.url(Z, X, Y, 'topo1')
 
-            const model = new Model(World.defaultOptions(50))
-            model.population = 0
-            model.patches.importDataSet(el0to10, 'z')
+        // const baseMapURL = maptilerUrl(
+        //     Z,
+        //     X,
+        //     Y,
+        //     'iQurAP6lArV1UP4gfSVs',
+        //     'topo'
+        // )
+        // const baseMapURL = provider.zxyUrl(Z, X, Y)
+        // const baseMapURL = maptiler.zxyUrl(Z, X, Y)
+        // const baseMapURL = `https://api.maptiler.com/maps/topo/${Z}/${X}/${Y}.png?key=iQurAP6lArV1UP4gfSVs`
+        // https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs
 
-            await model.startup()
-            model.setup()
+        const baseMap = await util.imagePromise(baseMapURL)
+        // const baseCtx = util.createCtx(0, 0)
+        // util.setCtxImage(baseCtx, baseMap)
 
-            // REMIND: fix patches to update only once
-            const drawOptions = {
-                patchesMesh: {
-                    meshClass: 'PatchesMesh',
-                    useSegments: true,
-                    canvas: baseMap, //baseCtx.canvas,
-                },
-                // patchesSize: 5,
-                // patchesMap: 'Jet',
-                // patchesColor: baseCtx.canvas,
-                // patchesColor: p => {
-                //     const map = view.drawOptions.patchesMap
-                //     const color = map.scaleColor(p.z, 0, 10)
-                //     return color
-                // },
-            }
+        const model = new Model(World.defaultOptions(50))
+        model.population = 0
+        model.patches.importDataSet(el0to10, 'z')
 
-            const view = new ThreeDraw(
-                model,
-                { div: 'modelDiv' },
-                drawOptions
-            )
-            const data = el0to10.resample(102, 102).data
-            const geometry = view.meshes.patches.mesh.geometry
-            const pos = geometry.getAttribute('position')
-            const a = pos.array
-            util.repeat(a.length / 3, (i, a) => (a[i * 3 + 2] = data[i]), a)
-            geometry.setAttribute(
-                'position',
-                new THREE.BufferAttribute(a, 3)
-            )
+        await model.startup()
+        model.setup()
 
-            util.toWindow({ util, model, view })
-
-            util.timeoutLoop(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                5, // 500, just draw once, is static
-                33
-            )
-
-            view.idle()
+        // REMIND: fix patches to update only once
+        const drawOptions = {
+            patchesMesh: {
+                meshClass: 'PatchesMesh',
+                useSegments: true,
+                canvas: baseMap, //baseCtx.canvas,
+            },
+            // patchesSize: 5,
+            // patchesMap: 'Jet',
+            // patchesColor: baseCtx.canvas,
+            // patchesColor: p => {
+            //     const map = view.drawOptions.patchesMap
+            //     const color = map.scaleColor(p.z, 0, 10)
+            //     return color
+            // },
         }
-        run()
+
+        const view = new ThreeDraw(
+            model,
+            { div: 'modelDiv' },
+            drawOptions
+        )
+        const data = el0to10.resample(102, 102).data
+        const geometry = view.meshes.patches.mesh.geometry
+        const pos = geometry.getAttribute('position')
+        const a = pos.array
+        util.repeat(a.length / 3, (i, a) => (a[i * 3 + 2] = data[i]), a)
+        geometry.setAttribute(
+            'position',
+            new THREE.BufferAttribute(a, 3)
+        )
+
+        util.toWindow({ util, model, view })
+
+        util.timeoutLoop(
+            () => {
+                model.step()
+                view.draw()
+            },
+            5, // 500, just draw once, is static
+            33
+        )
+
+        view.idle()
+        // }
+        // run()
 
             // const drawOptions = {
             //     initPatches: (model, view) => {

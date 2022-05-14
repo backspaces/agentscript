@@ -197,7 +197,13 @@ export function attribution(who = 'osm') {
                 prefix + '<a href="https://openstreetmap.org">OpenStreetMap</a>'
             )
         case 'topo':
-            return prefix + '<a https://opentopomap.org">OpenTopoMap</a>'
+            return prefix + '<a href="https://opentopomap.org">OpenTopoMap</a>'
+        case 'topo':
+            return prefix + '<a href="https://opentopomap.org">OpenTopoMap</a>'
+        case 'topo1':
+            return (
+                prefix + '<a  href="https://www.maptiler.com">OpenTopoMap</a>'
+            )
         case 'smooth':
             return prefix + '<a href="https://stadiamaps.com/">Stadia Maps</a>'
         case 'usgs':
@@ -213,9 +219,25 @@ export function template(who = 'osm') {
             return 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         case 'topo':
             return 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
+        case 'topo1':
+            return 'https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs'
         case 'smooth':
             return 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png'
         case 'usgs':
             return 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}'
+    }
+}
+export function url(z, x, y, who = 'osm') {
+    switch (who) {
+        case 'osm':
+            return `https://tile.openstreetmap.org/${z}/${x}/${y}.png`
+        case 'topo':
+            return `https://tile.opentopomap.org/${z}/${x}/${y}.png`
+        case 'topo1':
+            return `https://api.maptiler.com/maps/topo/${z}/${x}/${y}.png?key=iQurAP6lArV1UP4gfSVs`
+        case 'smooth':
+            return `https://tiles.stadiamaps.com/tiles/alidade_smooth/${z}/${x}/${y}{r}.png`
+        case 'usgs':
+            return `https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/${z}/${y}/${x}`
     }
 }
