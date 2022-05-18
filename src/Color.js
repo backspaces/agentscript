@@ -4,7 +4,7 @@ import * as util from './utils.js'
  * A general color module, supporting css string colors, canvas2d pixel
  * colors, webgl and canvas2d Uint8ClampedArray r,g,b,a arrays.
  *
- * ### CSS Color Strings.
+ * #### CSS Color Strings.
  *
  * CSS colors in HTML are strings, see [Mozillas Color Reference](
  * https://developer.mozilla.org/en-US/docs/Web/CSS/color_value),
@@ -19,13 +19,18 @@ import * as util from './utils.js'
  * See [this wikipedia article](https://goo.gl/ev8Kw0)
  * on differences between HSL and HSB/HSV.
  */
+
 const Color = {
     /**
      * Convert 4 r,g,b,a ints in [0-255] ("a" defaulted to 255) to a
      * css color string.
+     *
+     * @param {number} r integer in [0, 255] for red channel
+     * @param {number} g integer in [0, 255] for green channel
+     * @param {number} b integer in [0, 255] for blue channel
+     * @param {number} [a=255] integer in [0, 255] for alpha/opacity channel
+     * @return {string}
      */
-    // Alpha "a" is converted to float in 0-1 for css string.
-    // We use alpha in [0-255] to be compatible with TypedArray conventions.
     rgbaCssColor(r, g, b, a = 255) {
         a = a / 255
         const a2 = a.toPrecision(2)
@@ -35,10 +40,16 @@ const Color = {
     /**
      * Convert 4 ints, h,s,l,a, h in [0-360], s,l in [0-100]% a in [0-255] to a
      * css color string.
+     * See [hsl()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl).
      *
      * NOTE: h=0 and h=360 are the same, use h in 0-359 for unique colors.
+     *
+     * @param {number} h
+     * @param {number} [s=100]
+     * @param {number} [l=50]
+     * @param {number} [a=255]
+     * @return {string}
      */
-    // Alpha "a" is converted to float in 0-1 for css string.
     hslCssColor(h, s = 100, l = 50, a = 255) {
         a = a / 255
         const a4 = a.toPrecision(4)

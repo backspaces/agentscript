@@ -8,7 +8,8 @@ const debug = false
 const port = 9008
 const useWorkers = true // !debug
 const compareSamples = true
-const nonWorker = model => ['droplets'].includes(model)
+const nonWorker = model => [].includes(model)
+// const nonWorker = model => ['droplets'].includes(model)
 
 liveServer.start({
     open: false,
@@ -42,7 +43,6 @@ async function runModels() {
     for (const model of models) {
         await test.serial(model, async t => {
             const sample = await runModel(model)
-            // console.log(model, sample)
 
             currentSamples[model] = sample
             const testSample = lastSamples[model]
@@ -71,6 +71,7 @@ async function runModel(model) {
         useWorkers && !nonWorker(model) // use list of non-worker models
             ? `http://127.0.0.1:${port}/models/worker.html?${model}`
             : `http://127.0.0.1:${port}/models/test.html?${model}`
+    // console.log(useWorkers && !nonWorker(model))
 
     const browser = await puppeteer.launch({
         args: [

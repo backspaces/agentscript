@@ -39,7 +39,7 @@ export default class DropletsModel extends Model {
         this.elevation = data.width // is a dataset
             ? data
             : await provider.zxyToDataSet(...data)
-        this.installDataSets(this.elevation)
+        // this.installDataSets(this.elevation)
     }
     installDataSets(elevation) {
         const slopeAndAspect = elevation.slopeAndAspect()
@@ -50,6 +50,8 @@ export default class DropletsModel extends Model {
         this.patches.importDataSet(aspect, 'aspect', true)
     }
     setup() {
+        this.installDataSets(this.elevation)
+
         // this.turtles.setDefault('atEdge', this.atEdge)
         this.turtles.setDefault('atEdge', 'die')
 

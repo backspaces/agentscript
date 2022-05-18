@@ -1,37 +1,46 @@
 <html>
-    <head>
-        <title>test</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
 
-            const modelParams = util.parseQueryString()
-            const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
-            const className = name[0].toUpperCase() + name.slice(1)
-            console.log('Running', className)
-            document.title = `W:${className}`
+<head>
+    <title>test</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-            const testing = navigator.userAgent === 'Puppeteer'
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import { mapzen as provider } from '../src/TileData.js'
 
-            const params = {
-                classPath: `./${className}.js`,
-                className: className,
-                steps: 500,
-                seed: testing,
-            }
-            console.log(params)
+        const modelParams = util.parseQueryString()
+        const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
+        const className = name[0].toUpperCase() + name.slice(1)
+        console.log('Running', className)
+        document.title = `W:${className}`
 
-            const worker = new Worker('./runWorker.js', { type: 'module' })
-            worker.postMessage({ cmd: 'init', params: params })
-            worker.onmessage = e => {
-                console.log(e.data)
-                util.printToPage(e.data)
-                if (testing) window.modelSample = JSON.stringify(e.data)
-                worker.terminate()
-            }
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+        const testing = navigator.userAgent === 'Puppeteer'
+
+        const params = {
+            classPath: `./${className}.js`,
+            className: className,
+            steps: 500,
+            seed: testing,
+            startup: undefined,
+        }
+        if (name === 'dropletsModel') {
+            params.startup = await provider.zxyToDataSet(13, 1594, 3339)
+        }
+        console.log(params)
+
+
+        const worker = new Worker('./runWorker.js', { type: 'module' })
+        worker.postMessage({ cmd: 'init', params: params })
+        worker.onmessage = e => {
+            console.log(e.data)
+            util.printToPage(e.data)
+            if (testing) window.modelSample = JSON.stringify(e.data)
+            // worker.terminate()
+        }
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>
