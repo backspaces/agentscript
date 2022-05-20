@@ -22,13 +22,7 @@ toc:
     - name: Data
     - DataSet
     - name: Utilities
+      children:
+          - ./utils.js
       description: |
           An assortment of helper functions. To use: `import * as util from src/utils.js`.
-    # - utils
-
-    # - randomInt
-    # - randomInt2
-    # - randomFloat
-    # - randomFloat2
-    # - name: Other
-    # - DataSet

@@ -29,6 +29,7 @@
 
 <body>
     <div id="map"></div>
+
     <script type="module">
         import * as util from '../src/utils.js'
 
@@ -98,12 +99,11 @@
 
         // ================ create model using bbox dataset ================
 
-        let modelLayer, elementBounds, model, view, anim, drawOptions
+        let modelLayer, model, view, anim //, drawOptions
 
         async function setupModelView(bounds = map.getBounds()) {
-            elementBounds = bounds
-            let bboxDataSet = await leafletDataSet.getBBoxDataSet(bounds)
-            let bboxExtent = bboxDataSet.extent()
+            const bboxDataSet = await leafletDataSet.getBBoxDataSet(bounds)
+            const bboxExtent = bboxDataSet.extent()
             // util.toWindow({ leafletDataSet, bboxDataSet, bboxExtent, bounds })
 
             // console.log('leafletDataSet', leafletDataSet, 'bboxDataSet', bboxDataSet)
@@ -120,11 +120,15 @@
             // await model.startup([Z, X, Y]) // TEST
             await model.startup(bboxDataSet)
             model.setup()
+            model.elementBounds = bounds
+            model.bboxDataSet = bboxDataSet
 
-            drawOptions = drawOptions || {
+
+            // drawOptions = drawOptions || {
+            const drawOptions = view?.drawOptions || {
                 patchesMap: 'Jet', // 'transparent',
                 initPatches: (model, view) => {
-                    const colorMap = drawOptions.patchesMap
+                    const colorMap = view.drawOptions.patchesMap
                     const colors = model.patches.map(
                         p => p.isLocalMin
                             ? 'black'
@@ -144,7 +148,7 @@
                 useSprites: true,
                 drawOptions: drawOptions, // will be view.drawOptions if available
             })
-            drawOptions = view.drawOptions
+            // drawOptions = view.drawOptions
 
             // Note: when zooming happens after adding the canvas, remove the current one
             // and draw it on a new larger canvas with ctx.imageSmoothingEnabled = false
@@ -218,8 +222,9 @@
                 // val: ['Jet', ['transparent', 'Jet', 'LightGray']],
                 val: ['Transparent', ['Transparent', 'Jet', 'Gray', 'Hue', 'Basic16']],
                 cmd: val => {
-                    drawOptions.patchesMap = val
-                    drawOptions = view.resetOptions(drawOptions)
+                    view.drawOptions.patchesMap = val
+                    view.resetOptions(view.drawOptions)
+                    // drawOptions = view.resetOptions(drawOptions)
                     if (!anim.isRunning()) view.draw()
                 },
             },
@@ -245,6 +250,10 @@
                 val: 'listen',
                 cmd: () => model.ticks,
             },
+            patches: { // monitor
+                val: 'listen',
+                cmd: () => model.patches.length,
+            },
             turtles: { // monitor
                 val: 'listen',
                 cmd: () => model.turtles.length,
@@ -252,7 +261,7 @@
             turtlesSize: { // slider
                 val: [0.5, [.2, 1, 0.1]],
                 cmd: val => {
-                    drawOptions.turtlesSize = val
+                    view.drawOptions.turtlesSize = val
                     if (!anim.isRunning()) view.draw()
                 },
             },
@@ -261,9 +270,9 @@
                 cmd: val => model.speed = val,
             },
             turtlesColor: { // colorπ
-                val: drawOptions.turtlesColor,
+                val: view.drawOptions.turtlesColor,
                 cmd: val => {
-                    drawOptions.turtlesColor = val
+                    view.drawOptions.turtlesColor = val
                     if (!anim.isRunning()) view.draw()
                 },
             },
@@ -281,29 +290,29 @@
 
             dataFolder: 'Data Functions',
             getElevations: { // button
-                cmd: () => util.downloadBlob(bboxDataSet, 'elevations.json', false),
+                cmd: () => util.downloadBlob(model.bboxDataSet, 'elevations.json', false),
             },
             patchesAspect: { // button
                 cmd: () => {
                     const dataSet = model.patches.exportDataSet('aspect')
-                    dataSet.bounds = elementBounds // add metadata
+                    dataSet.bounds = model.elementBounds // add metadata
                     util.downloadBlob(dataSet, 'patchesAspect.json', false)
                 }
             },
-            turtlesData: { // button
+            turtlesXYHead: { // button
                 cmd: () => {
                     const data = model.turtles.map(t => {
-                        let { heading, x, y } = t
-                        const obj = { heading, x, y }
+                        let { x, y, heading } = t
+                        const obj = { x, y, heading }
                         util.forLoop(obj, (val, key) => obj[key] = Math.round(val))
                         return obj
                     })
-                    util.downloadBlob(data, 'turtlesData.json', false)
+                    util.downloadBlob(data, 'turtlesXYHead.json', false)
                 }
             },
         })
         // util.forLoop(gui.folders, (val) => val.open())
-        gui.folders.mapFolder.open()
+        // gui.folders.mapFolder.open()
         gui.baseGui.close()
 
         // util.toWindow({ GUI: gui.GUI, gui })

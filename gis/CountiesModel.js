@@ -3,7 +3,7 @@ import HelloModel from '../models/HelloModel.js'
 import booleanPointInPolygon from 'https://cdn.skypack.dev/@turf/boolean-point-in-polygon'
 
 export default class CountiesModel extends HelloModel {
-    // Constructor not needed, called with GeoWorld options, passed to super
+    // Constructor not needed, called with GeoWorld world object, passed to super
     setup() {
         super.setup()
         this.patches.ask(p => {

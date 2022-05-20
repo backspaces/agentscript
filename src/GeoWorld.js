@@ -24,8 +24,8 @@ export default class GeoWorld extends World {
             maxY: Math.round(width / aspect),
         })
         this.bbox = bbox
-        if (json) this.geojson = json
         this.xfm = this.bboxTransform(...bbox)
+        if (json) this.geojson = json
     }
     // Convert to/from geo coords.
     toGeo(x, y) {
@@ -35,14 +35,18 @@ export default class GeoWorld extends World {
         return this.xfm.toWorld([geoX, geoY])
     }
     // Return center [x,y] of bbox in geo coords.
-    bboxCenter(point = 'lonlat') {
+    get bboxCenter() {
         const [west, south, east, north] = this.bbox
-        if (point === 'lonlat') {
-            return [(west + east) / 2, (south + north) / 2]
-        } else {
-            return [(south + north) / 2, (west + east) / 2]
-        }
+        return [(west + east) / 2, (south + north) / 2]
     }
+    // bboxCenter(point = 'lonlat') {
+    //     const [west, south, east, north] = this.bbox
+    //     if (point === 'lonlat') {
+    //         return [(west + east) / 2, (south + north) / 2]
+    //     } else {
+    //         return [(south + north) / 2, (west + east) / 2]
+    //     }
+    // }
     // bboxCenter() {
     //     const [west, south, east, north] = this.bbox
     //     return [(west + east) / 2, (south + north) / 2]
