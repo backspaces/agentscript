@@ -3,7 +3,7 @@ import * as util from '../src/utils.js'
 import * as gis from '../src/gis.js'
 // import RGBDataSet from './RGBDataSet.js'
 
-export default class LeafletDataSet {
+class LeafletDataSet {
     constructor(map, elevationLayer, tileData) {
         Object.assign(this, { map, elevationLayer, tileData })
         this.tiles = {}
@@ -199,3 +199,5 @@ export default class LeafletDataSet {
         }
     }
 }
+
+export default LeafletDataSet

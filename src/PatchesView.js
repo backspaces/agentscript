@@ -10,7 +10,7 @@ function getPixel(color) {
     return Color.toTypedColor(color).pixel
 }
 
-export default class PatchesView {
+class PatchesView {
     // Ctor: create a 2D context and imageData for this View
     constructor(width, height) {
         this.ctx = util.createCtx(width, height)
@@ -108,3 +108,5 @@ export default class PatchesView {
         return this.ctx.canvas
     }
 }
+
+export default PatchesView

@@ -13,7 +13,7 @@ import * as util from './utils.js'
  * So *don't* do this:
  */
 
-export default class Turtle {
+class Turtle {
     atEdge = 'wrap'
     hidden = false
     // Set by AgentSet
@@ -21,12 +21,15 @@ export default class Turtle {
     model
     name
 
-    // Alas doesn't work
-    // /**
-    //  * @ignore
-    //  */
-    // constructor() {
-    // }
+    /**
+     * Error: Do not create "new Turtle", use Turtles factories
+     */
+    constructor() {
+        // throw new Error('Do not use "new Turtle", use Turtles factories')
+        console.log('Do not use "new Turtle", use Turtles factories')
+    }
+
+    // Called by Turtle factories, not programmers
     agentConstructor() {
         this.theta = null
         this.x = 0
@@ -451,3 +454,5 @@ export default class Turtle {
         return t in this.linkNeighbors()
     }
 }
+
+export default Turtle

@@ -7,7 +7,7 @@ import ColorMap from '../src/ColorMap.js'
  *
  * **TODO: Document this class**
  */
-export default class TwoDraw extends TwoView {
+class TwoDraw extends TwoView {
     static defaultOptions() {
         return {
             data: {},
@@ -198,3 +198,5 @@ export default class TwoDraw extends TwoView {
         view.tick()
     }
 }
+
+export default TwoDraw

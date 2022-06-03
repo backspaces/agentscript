@@ -17,14 +17,12 @@ import AgentSet from './AgentSet.js'
  *
  * You use both, however, using the methods they both provide.
  *
- * @extends {AgentSet}
- *
  * @param {Model} model The model I belong to
  * @param {Turtle|Turtle3d} AgentClass The Turtle class
  * @param {string} name The name of this new Turtles instance
  * @param {null|Turtles} [baseSet=null] Used to create a breed subclass
  */
-export default class Turtles extends AgentSet {
+class Turtles extends AgentSet {
     constructor(model, AgentClass, name, baseSet = null) {
         super(model, AgentClass, name, baseSet)
     }
@@ -178,3 +176,4 @@ export default class Turtles extends AgentSet {
 }
 
 // export default Turtles
+export default Turtles

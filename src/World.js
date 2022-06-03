@@ -9,16 +9,15 @@ import * as util from './utils.js'
 /**
  * @private
  * @typedef {Object} WorldOptions
- * @property {number} minX Max world patch x integer value
- * @property {number} minY Max world patch y integer value
- * @property {number} minZ Max world patch z integer value
- * @property {number} maxX Min world patch x integer value
- * @property {number} maxY Min world patch y integer value
- * @property {number} maxZ Min world patch z integer value
+ * @property {number} minX Min world patch x integer value
+ * @property {number} minY Min world patch y integer value
+ * @property {number} minZ Min world patch z integer value
+ * @property {number} maxX Max world patch x integer value
+ * @property {number} maxY Max world patch y integer value
+ * @property {number} maxZ Max world patch z integer value
  */
 
 /**
- * @description
  * Class World defines the coordinate system for the model.
  * It has transforms for multiple coordinate systems.
  *
@@ -33,7 +32,7 @@ import * as util from './utils.js'
  *              maxZ: integer,
  *          }
  */
-export default class World {
+class World {
     maxX = 16
     maxY = 16
     maxZ = 16
@@ -42,22 +41,12 @@ export default class World {
     minZ = -16
 
     /**
-     * Create a new World object given an Object with optional
-     * minX, maxX, minY, maxY, minZ, maxZ overriding class properties.
-     * @param {World|WorldOptions|Object} options Object with overrides for class properties
-     */
-    constructor(options = {}) {
-        Object.assign(this, options) // set the option override values
-        this.setWorld() // convert these to rest of world parameters
-    }
-
-    /**
      * Return a default options object, origin at center.
      *
      * @param {number} [maxX=16] Integer max X value
      * @param {number} [maxY=maxX] Integer max Y value
      * @param {number} [maxZ=Math.max(maxX, maxY)] Integer max Z value
-     * @returns {WorldOptions}
+     * @returns WorldOptions
      */
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
         return {
@@ -69,6 +58,7 @@ export default class World {
             maxZ: maxZ,
         }
     }
+
     /**
      * Factory to create a default World instance.
      *
@@ -79,6 +69,18 @@ export default class World {
      */
     static defaultWorld(maxX = 16, maxY = maxX, maxZ = maxX) {
         return new World(World.defaultOptions(maxX, maxY, maxZ))
+    }
+
+    // ======================
+
+    /**
+     * Create a new World object given an Object with optional
+     * minX, maxX, minY, maxY, minZ, maxZ overriding class properties.
+     * @param {World|WorldOptions|Object} options Object with overrides for class properties
+     */
+    constructor(options = {}) {
+        Object.assign(this, options) // set the option override values
+        this.setWorld() // convert these to rest of world parameters
     }
 
     // ======================
@@ -124,7 +126,7 @@ export default class World {
     }
 
     /**
-     * Return a random 2D point within the World
+     * Return a random 2D float point within the World
      *
      * @returns {Array} A random x,y float array
      */
@@ -182,7 +184,6 @@ export default class World {
     }
     // cropToWorld(x, y) {}
 
-    // Note minX etc NOT the world's but of the coord sys we want to use.
     /**
      * Return an instance of a bounding box 2D transform.
      * It linearly interpolates between the given minX, minY, maxX, maxY,
@@ -190,7 +191,9 @@ export default class World {
      *
      * The parameters are in the popular geojson order: west, south, east, north
      *
-     * Useful for Canvas top-left transforms and geojson transforms.
+     * Useful for Canvas (pixel) top-left transforms and geojson transforms.
+     *
+     * Note minX etc NOT the world's but of the coord sys we want to use.
      *
      * @param {number} minX min bounding box x value
      * @param {number} minY min bounding box y value
@@ -258,18 +261,20 @@ export default class World {
     // patchIndexToXY(index) {}
 }
 
+export default World
+
 /**
  * A linear transformer between world coords and the given bounding box.
- *
- * @class
  * @private
  */
 class BBoxTransform {
     /**
      * Creates an instance of BBoxTransform.
-     * See https://tools.ietf.org/html/rfc7946#section-5
-     * .. which defines bbox as [west, south, east, north]
-     * .. which is the bbox [minX, minY, maxX, maxY]
+     *
+     * - See [ietf reference](https://tools.ietf.org/html/rfc7946#section-5)
+     * - .. which defines bbox as [west, south, east, north]
+     * - .. which is the bbox [minX, minY, maxX, maxY]
+     *
      * @param {number} minX min bounding box x value
      * @param {number} minY max bounding box x value
      * @param {number} maxX min bounding box y value

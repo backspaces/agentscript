@@ -1,6 +1,12 @@
 import * as util from './utils.js'
 
-// img can be: image, canvas, context2d, url, data url
+// /** @namespace */
+/** @module */
+
+/**
+ * @param {Image|Imageable} img img: image, canvas, context2d, url, data url
+ * @returns A Canvas.context object
+ */
 async function toContext(img) {
     const type = util.typeOf(img)
     switch (type) {
@@ -24,9 +30,16 @@ async function toContext(img) {
     }
 }
 // msg can be string or Uint8Array
+
+/**
+ * @param {*} msg A string, charCode (number), Uint8Array or Uint8ClampedArray
+ * @returns A Uint8Array or Uint8ClampedArray
+ */
 function toUint8Array(msg) {
     const type = util.typeOf(msg)
     switch (type) {
+        case 'number':
+            msg = String.fromCharCode(msg) // drop thru to 'string'
         case 'string':
             return new TextEncoder().encode(msg)
 
@@ -39,6 +52,11 @@ function toUint8Array(msg) {
     }
 }
 // Convert a char to an array of three RGB low order pixel values
+/**
+ *
+ * @param {} char An 8 bit char
+ * @returns Array of 3 parts of char using the bits tempate (3, 2, 3 bits)
+ */
 function charToBits(char) {
     // return [char >> 5, char >> 3 & 0b11111100, char & 0b11111000]
     return [

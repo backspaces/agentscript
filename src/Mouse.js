@@ -1,10 +1,17 @@
 /**
-* A NetLogo-like mouse handler.
-*
-* **TODO: Example usage.**
-*/
-export default class Mouse {
-    // Create and start mouse obj, args: a model, and a callback method.
+ * A NetLogo-like mouse handler.
+ *
+ * **TODO: Example usage.**
+ */
+class Mouse {
+    /**
+     * Create and start mouse obj, args: a model, and a callback method.
+     *
+     * @param {Canvas|String} canvas The canvas upon which we track the mouse.
+     *      If a string is given, get the HTML element by that name
+     * @param {world} world World instance
+     * @param {Function} callback callback(evt, mouse) called on every mouse action
+     */
     constructor(canvas, world, callback = (evt, mouse) => {}) {
         if (typeof canvas === 'string') {
             canvas = document.getElementById(canvas)
@@ -18,14 +25,18 @@ export default class Mouse {
         this.mouseMove = e => this.handleMouseMove(e)
     }
 
-    // Start/stop the mouseListeners.  Note that NetLogo's model is to have
-    // mouse move events always on, rather than starting/stopping them
-    // on mouse down/up.  We may want do make that optional, using the
-    // more standard down/up enabling move events.
     resetParams() {
         this.x = this.y = NaN
         this.moved = this.down = false
     }
+
+    /**
+     * Start/stop the mouseListeners.  Note that NetLogo's model is to have
+     * mouse move events always on, rather than starting/stopping them
+     * on mouse down/up.  We may want do make that optional, using the
+     * more standard down/up enabling move events.
+     * @returns this Return this instance for chaining
+     */
     start() {
         // Note: multiple calls safe
         this.canvas.addEventListener('mousedown', this.mouseDown)
@@ -42,6 +53,7 @@ export default class Mouse {
         this.resetParams()
         return this // chaining
     }
+
     get running() {
         return !isNaN(this.x)
     }
@@ -94,3 +106,5 @@ export default class Mouse {
         ;[this.x, this.y] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
     }
 }
+
+export default Mouse

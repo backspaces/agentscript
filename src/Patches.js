@@ -8,12 +8,13 @@ import DataSet from './DataSet.js'
  * Patches are the world other AgentSets live on.
  * They define a coord system from the Model's World values:
  * minX, maxX, minY, maxY, (minZ, maxZ) (z optional)
+ *
  * Patches form a grid of Patch objects which can store world data
  * (elevation, fires, ant pheromones, buildings, roads, gis spatial data, water and so on)
  *
  * Created by class Model. Used by modeler in their Model subclass
  */
-export default class Patches extends AgentSet {
+class Patches extends AgentSet {
     /**
      * Creates an instance of Patches.
      * @param {Model} model An instance of class Model
@@ -314,4 +315,4 @@ export default class Patches extends AgentSet {
     }
 }
 
-// export default Patches
+export default Patches

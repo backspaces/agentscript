@@ -4,7 +4,7 @@ import DataSet from './DataSet.js'
 // Parse an RGBA image to a DataSet of the given type.
 // We use all 4 bytes of the pixels, thus map exactly onto
 // multiples all [TypedArray](https://goo.gl/3OOQzy) sizes.
-export class RGBADataSet extends DataSet {
+class RGBADataSet extends DataSet {
     constructor(img, Type = Float32Array, options = {}) {
         const bytes = imageToBytes(img)
         const data = new Type(bytes.buffer) // Parse via a Type view on the buffer
@@ -84,4 +84,4 @@ export function imageToBytes(img, flipY = false, imgFormat = 'RGBA') {
     return pixels
 }
 
-// export default RGBADataSet
+export default RGBADataSet

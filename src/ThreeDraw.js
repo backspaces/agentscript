@@ -17,7 +17,7 @@ function isDynamicColor(color) {
  *
  * **TODO: Document this class**
  */
-export default class ThreeDraw extends ThreeView {
+class ThreeDraw extends ThreeView {
     static defaultOptions() {
         return {
             patchesMesh: null, // 'PatchesMesh',
@@ -233,3 +233,5 @@ export default class ThreeDraw extends ThreeView {
         view.render() // calls three.render() & view.tick()
     }
 }
+
+export default ThreeDraw

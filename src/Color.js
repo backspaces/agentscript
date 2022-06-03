@@ -1,6 +1,9 @@
 import * as util from './utils.js'
 
+// /** @module  */
+
 /**
+ *
  * A general color module, supporting css string colors, canvas2d pixel
  * colors, webgl and canvas2d Uint8ClampedArray r,g,b,a arrays.
  *
@@ -10,16 +13,18 @@ import * as util from './utils.js'
  * https://developer.mozilla.org/en-US/docs/Web/CSS/color_value),
  * taking one of 7 forms:
  *
- * * Names: over 140 color case-insensitive names like
+ * - Names: over 140 color case-insensitive names like
  *   Red, Green, CadetBlue, etc.
- * * Hex, short and long form: #0f0, #ff10a0
- * * RGB: rgb(255, 0, 0), rgba(255, 0, 0, 0.5)
- * * HSL: hsl(120, 100%, 50%), hsla(120, 100%, 50%, 0.8)
+ * - Hex, short and long form: #0f0, #ff10a0
+ * - RGB: rgb(255, 0, 0), rgba(255, 0, 0, 0.5)
+ * - HSL: hsl(120, 100%, 50%), hsla(120, 100%, 50%, 0.8)
  *
  * See [this wikipedia article](https://goo.gl/ev8Kw0)
  * on differences between HSL and HSB/HSV.
+ *
  */
 
+/** @namespace */
 const Color = {
     /**
      * Convert 4 r,g,b,a ints in [0-255] ("a" defaulted to 255) to a
@@ -31,6 +36,7 @@ const Color = {
      * @param {number} [a=255] integer in [0, 255] for alpha/opacity channel
      * @return {string}
      */
+    // /** @function */
     rgbaCssColor(r, g, b, a = 255) {
         a = a / 255
         const a2 = a.toPrecision(2)
@@ -50,6 +56,7 @@ const Color = {
      * @param {number} [a=255]
      * @return {string}
      */
+    // /** @function */
     hslCssColor(h, s = 100, l = 50, a = 255) {
         a = a / 255
         const a4 = a.toPrecision(4)

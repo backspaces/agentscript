@@ -23,7 +23,7 @@ import AgentArray from './AgentArray.js'
  * @param {Patches|Turtles|Links} [baseSet=null] If a Breed, it's parent AgentSet
  */
 
-export default class AgentSet extends AgentArray {
+class AgentSet extends AgentArray {
     // Inherited by Patches, Turtles, Links
     model
     name
@@ -333,4 +333,4 @@ export default class AgentSet extends AgentArray {
     }
 }
 
-// export default AgentSet
+export default AgentSet

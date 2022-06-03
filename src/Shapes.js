@@ -7,7 +7,7 @@ function cssColor(color) {
 
 // Shapes are Canvas2D drawings in -0.5 to +0.5, unit squares
 // They are drawn on a Canvas2D using transforms for x, y, theta
-export default class Shapes {
+class Shapes {
     constructor() {
         this.cache = {}
         this.paths = paths // For accessing the paths thru the Shapes instance
@@ -264,7 +264,7 @@ const paths = {
     },
 }
 
-// export default Shapes
+export default Shapes
 
 /*
 ToDo:

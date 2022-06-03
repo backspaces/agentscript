@@ -9,7 +9,7 @@ import ThreeMeshes from './ThreeMeshes.js'
 // import Stats from 'https://cdn.skypack.dev/stats.js'
 import { THREE, OrbitControls } from '../vendor/three.js'
 
-export default class ThreeView {
+class ThreeView {
     static shapeNames() {
         return ThreeMeshes.Obj3DShapes
     }
@@ -349,7 +349,7 @@ export default class ThreeView {
     }
 }
 
-// export default ThreeView
+export default ThreeView
 
 /*
 

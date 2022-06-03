@@ -20,7 +20,7 @@ const { checkArg, checkArgs } = util
  * So *don't* do this:
  */
 
-export default class Turtle3D extends Turtle2D {
+class Turtle3D extends Turtle2D {
     static defaultVariables() {
         return {
             atEdge: 'wrap',
@@ -42,6 +42,10 @@ export default class Turtle3D extends Turtle2D {
         this.obj3d.rotation.order = 'ZYX'
         this.reset()
     }
+
+    /**
+     * Resets this turtle's position, rotation and heading all to 0's
+     */
     reset() {
         this.obj3d.position.set(0, 0, 0)
         this.obj3d.rotation.set(0, 0, 0)
@@ -49,7 +53,13 @@ export default class Turtle3D extends Turtle2D {
         // this.pitch = 0
         // this.roll = 0
     }
-
+    /**
+     * Set's this turtle's 3D, x y z, position
+     *
+     * @param {number} x float for x position
+     * @param {number} y float for y position
+     * @param {number} z float for z position
+     */
     setxyz(x, y, z) {
         checkArgs(arguments)
         super.setxy(x, y, z)
@@ -252,3 +262,5 @@ export default class Turtle3D extends Turtle2D {
         return Math.sin(pitch)
     }
 }
+
+export default Turtle3D

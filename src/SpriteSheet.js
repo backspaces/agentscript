@@ -2,7 +2,7 @@ import * as util from './utils.js'
 import Shapes from './Shapes.js'
 
 // Sprites are shapes rendered within a sprite-sheet canvas.
-export default class SpriteSheet {
+class SpriteSheet {
     // Initialize a one row by cols initial sheet.
     // spriteSize rounded up if a float.
     constructor(spriteSize = 64, cols = 16, usePowerOf2 = false) {
@@ -186,6 +186,8 @@ export default class SpriteSheet {
         return [u0, v0, u1, v0, u1, v1, u0, v1]
     }
 }
+
+export default SpriteSheet
 
 // Return sprite image coords for drawing: x,y,size,size
 // getSpriteCoords(sprite) {

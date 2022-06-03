@@ -2,6 +2,9 @@
 // import { typeOf } from './utils.js'
 import * as gis from './gis.js'
 
+// /** @exports */
+/** @module */
+
 export function isGeojson(obj) {
     return typeof obj === 'object' && obj.type === 'FeatureCollection'
 }
@@ -39,9 +42,11 @@ export function bboxFeature(bbox, properties = {}) {
     }
 }
 
-// Flatten MultiLineStrings to single LineStrings features.
-// Input can be a FeatureCollection or a Features array
-// Return Features array
+/**
+ * Flatten MultiLineStrings to single LineStrings features.
+ * @param {FeatureCollection|Array<Features>} geojson a FeatureCollection or Features array
+ * @returns Features array
+ */
 export function flattenMultiLineStrings(geojson) {
     const features = geojson.features || geojson
     const lineStrings = features.reduce((acc, obj) => {
@@ -63,6 +68,13 @@ export function flattenMultiLineStrings(geojson) {
 // Convert LineStrings to Links.
 // Input can be a FeatureCollection or a Features array
 // Return an array of new Turtles & Links
+
+/**
+ * @param {Model} model Instance of Model
+ * @param {Array<number>} bbox [west, south, east, north] Gis BBox
+ * @param {FeatureCollection|Array<Features>} lineStrings geojson features
+ * @returns {Turtles|Links} Return an array of new Turtles & Links
+ */
 export function lineStringsToLinks(model, bbox, lineStrings) {
     // const xfm = xfmFromBBox(model, bbox)
     const xfm = model.world.bboxTransform(...bbox)

@@ -30,7 +30,7 @@ import Link from './Link.js'
  */
 //  * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
 
-export default class Model2D {
+class Model2D {
     world
     patches
     turtles
@@ -192,3 +192,5 @@ const geometries = {
         toCCW: angle => -angle,
     },
 }
+
+export default Model2D

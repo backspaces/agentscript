@@ -1,14 +1,15 @@
 import Model from './Model3D.js'
+/** @class */
 
 /**
- *  This is our default Model which simply re-exports Model3D
- *  Thus when using:
+ * This is our default Model which simply re-exports Model3D
+ * Thus when using:
  *
- *  import Model from './Model.js'
+ * import Model from './Model.js'
  *
- *  ..you will be using ./Model3D
+ * ..you will be using ./Model3D
  *
- *  @param {Object|World} [worldOptions=World.defaultOptions()]
+ * @param {Object|World} [worldOptions=World.defaultOptions()]
  *  Identical to {@link Model3D}
  */
 

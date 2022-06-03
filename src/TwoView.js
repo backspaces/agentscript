@@ -3,7 +3,7 @@ import World from './World.js'
 import PatchesView from './PatchesView.js'
 import TurtlesView from './TurtlesView.js'
 
-export default class TwoView {
+class TwoView {
     static defaultOptions() {
         return {
             div: document.body,
@@ -161,3 +161,5 @@ export default class TwoView {
         util.drawText(this.ctx, string, x, y, color)
     }
 }
+
+export default TwoView

@@ -6,7 +6,7 @@ function cssColor(color) {
     return color
 }
 
-export default class TurtlesView {
+class TurtlesView {
     static defaultOptions() {
         return {
             // canvasStack: false,
@@ -190,6 +190,8 @@ export default class TurtlesView {
         // ctx.restore()
     }
 }
+
+export default TurtlesView
 
 /*
 

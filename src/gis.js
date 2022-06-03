@@ -1,5 +1,8 @@
 // import * as util from '../src/utils.js'
 
+// /** @namespace */
+/** @module */
+
 const { PI, atan, atan2, cos, floor, log, pow, sin, sinh, sqrt, tan, abs } =
     Math
 const radians = degrees => (degrees * PI) / 180
@@ -7,6 +10,14 @@ const degrees = radians => (radians * 180) / PI
 
 // Current gis and geoJson uses lon/lat coords, i.e. x,y.
 // This converts to latlon, i.e. y,x.
+/**
+ * Current gis and geoJson uses [lon, lat] coords, i.e. x,y.
+ * - This converts these to [lat, lon], i.e. y,x as used by leaflet
+ * - If Array contains multiple [lon, lat] subarrays, convert them all
+ *
+ * @param {Array} latlon Convert a [lon, lat] to [lat, lon]. If Array of Array, perform latlon on each
+ * @returns [lat, lon]
+ */
 export function latlon(lonlat) {
     if (typeof lonlat[0] !== 'number') return lonlat.map(val => latlon(val))
     return [lonlat[1], lonlat[0]]

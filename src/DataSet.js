@@ -7,7 +7,7 @@ import * as util from './utils.js'
  * The array can be a TypedArray or a JavaScript Array.
  */
 
-export default class DataSet {
+class DataSet {
     width
     height
     data
@@ -465,7 +465,7 @@ export default class DataSet {
     }
 }
 
-// export default DataSet
+export default DataSet
 
 // REMIND: limit to data that can be 24 bit. Error otherwise.
 // DataType of Int8, 16, Int24 OK, others need testing.

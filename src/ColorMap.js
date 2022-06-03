@@ -1,28 +1,38 @@
-// A colormap is simply an array of typedColors with several utilities such
-// as randomColor, closestColor etc.
-// This allows the colors to be simple integer indices
-// into the Array. They are also designed to be webgl-ready, being
-// composed of typedColors.
-
 import * as util from './utils.js'
 import Color from './Color.js'
+// /** @module */
+// /** @exports ColorMap */
 
+/**
+ * A colormap is simply an array of typedColors with several utilities such
+ * as randomColor, closestColor etc.
+ * This allows the colors to be simple integer indices
+ * into the Array. They are also designed to be webgl-ready, being
+ * composed of typedColors.
+ */
+
+/** @namespace */
 const ColorMap = {
     // ### Color Array Utilities
     // Several utilities for creating color arrays
 
-    // ### Gradients
-
-    // Ask the browser to use the canvas gradient feature
-    // to create nColors given the gradient color stops and locs.
-    // See Mozilla [Gradient Doc](
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/linear-gradient),
-    //
-    // This is a powerful browser feature, can be
-    // used to create all the MatLab colormaps.
-    //
-    // Stops are css strings.
-    // Locs are floats from 0-1, default is equally spaced.
+    /**
+     * Ask the browser to use the canvas gradient feature
+     * to create nColors given the gradient color stops and locs.
+     * See Mozilla [Gradient Doc](
+     * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient),
+     *
+     * This is a powerful browser feature, can be
+     * used to create all the MatLab colormaps.
+     *
+     * Stops are css strings.
+     * Locs are floats from 0-1, default is equally spaced.
+     *
+     * @param {number} nColors integer number of colors to be returned
+     * @param {Array} stops Array of nColors css colors, placed at locs below
+     * @param {Array} locs Array of nColors floats in [0.1]. Default to even distribution
+     * @return {Array} Returns Array of nColors rgba color arrays
+     */
     gradientImageData(nColors, stops, locs) {
         const ctx = util.createCtx(nColors, 1)
         // Install default locs if none provide
@@ -67,6 +77,12 @@ const ColorMap = {
     //     return this.typedArraytoColors(typedArray)
     // },
 
+    /**
+     * Convert an Array of rgba color arrays into Array of 4 element typedColors.
+     *
+     * @param {Array} Array of rgba color arrays
+     * @returns  Array of the rgba arrays to Color.typedColors
+     */
     arrayToTypedColors(array) {
         return array.map(a => Color.toTypedColor(a))
     },
@@ -122,7 +138,7 @@ const ColorMap = {
 
         // Clone this colorMap
         clone() {
-            return ColorMap.cloneColorMap(this)
+            return this.cloneColorMap(this)
         },
 
         // Return the color at index of this array.

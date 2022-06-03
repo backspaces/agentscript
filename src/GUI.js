@@ -2,9 +2,26 @@ import * as util from '../src/utils.js'
 // import dat from 'https://cdn.skypack.dev/dat.gui'
 import dat from '../vendor/dat.gui.js'
 
-export default class GUI {
+/** @class */
+class GUI {
+    /**
+     * @param {Object} template A set of name/object pairs, one per UI element
+     *
+     * @example
+     * const gui = new GUI ({
+     *     opacity: { // slider
+     *         val: [canvas.opacity, [0, 1, 0.1]],
+     *         cmd: val => canvas.setOpacity(val),
+     *     },
+     *     download: { // button
+     *         cmd: () => util.downloadBlob(data, 'data.json', false),
+     *     },
+     *     ...
+     * })
+     */
     constructor(template) {
         this.template = template
+
         this.controllers = {}
         this.folders = {}
         this.values = {} // the key/val's from each template
@@ -41,10 +58,16 @@ export default class GUI {
         if (valType === 'array' && val.length === 2) {
             if (util.typeOf(val[0]) === 'number') return 'slider'
             if (util.typeOf(val[0]) === 'string') return 'chooser'
-            throw Error('GUI value type: value error', val)
         }
+        throw Error('GUI type error, val: ' + val + ' cmd: ' + cmd)
     }
 
+    /**
+     *
+     * @param {Object} obj A gui object with two optional objects: 'val' and 'cmd'
+     * @param {string} key The name of the gui
+     * @returns A dat.gui control object
+     */
     addUI(obj, key) {
         // console.log(obj, key)
         let { val, cmd } = obj
@@ -123,3 +146,5 @@ export default class GUI {
         })
     }
 }
+
+export default GUI

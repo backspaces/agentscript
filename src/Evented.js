@@ -1,4 +1,4 @@
-export default class Evented {
+class Evented {
     events = {}
 
     // constructor() {
@@ -32,3 +32,4 @@ export default class Evented {
         }
     }
 }
+export default Evented

@@ -9,12 +9,13 @@ import Model2D from './Model2D.js'
  * Model3D is our default Model.
  *
  * @param {Object|World} [worldOptions=World.defaultOptions()]
- * Identical to {@link Model2D}
  *
  */
-export default class Model3D extends Model2D {
+class Model3D extends Model2D {
     initAgentSet(name, AgentsetClass, AgentClass) {
         if (name === 'turtles') AgentClass = Turtle3D
         super.initAgentSet(name, AgentsetClass, AgentClass)
     }
 }
+
+export default Model3D

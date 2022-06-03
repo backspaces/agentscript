@@ -1,7 +1,7 @@
 import Chart from 'https://unpkg.com/chart.js@3.6.1/auto/auto.esm.js'
 import * as util from '../src/utils.js'
 
-export default class Plot {
+class Plot {
     static defaultOptions() {
         return {
             type: 'line',
@@ -95,3 +95,5 @@ export default class Plot {
         this.chart.update()
     }
 }
+
+export default Plot

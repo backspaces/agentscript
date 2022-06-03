@@ -7,7 +7,7 @@ import { bboxMetricAspect } from './gis.js'
 // transforms like GIS and DataSets/Canvas transforms.
 // This is an example World object for geojson worlds.
 
-export default class GeoWorld extends World {
+class GeoWorld extends World {
     // Use the geojson object's bbox & width to create a World object
     // bbox: [west, south, east, north]
     constructor(bbox, width = 100) {
@@ -62,3 +62,5 @@ export default class GeoWorld extends World {
     //     ]
     // }
 }
+
+export default GeoWorld

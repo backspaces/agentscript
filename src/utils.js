@@ -1,5 +1,8 @@
 // ### Async & I/O
 
+// /** @namespace */
+/** @module */
+
 // Return Promise for getting an image.
 // - use: imagePromise('./path/to/img').then(img => imageFcn(img))
 /**
@@ -8,7 +11,7 @@
  * use: imagePromise('./path/to/img').then(img => imageFcn(img))
  * or: await imagePromise('./path/to/img')
  *
- * @param {URL} url string for path to image
+ * @param {string} url URL for path to image
  * @return {Promise} A promise resolving to the image
  */
 export function imagePromise(url) {
@@ -753,7 +756,10 @@ export const PI = Math.PI
  * @param {number} max The max integer to return
  * @return {number} an integer in  [0, max)
  */
-export const randomInt = max => Math.floor(Math.random() * max)
+export function randomInt(max) {
+    return Math.floor(Math.random() * max)
+}
+// export const randomInt = max => Math.floor(Math.random() * max)
 
 /**
  * Returns an int in [min, max), equal or grater than min, less than max
@@ -762,8 +768,11 @@ export const randomInt = max => Math.floor(Math.random() * max)
  * @param {number} max The max integer to return
  * @return {number} an integer in  [min, max)
  */
-export const randomInt2 = (min, max) =>
-    min + Math.floor(Math.random() * (max - min))
+export function randomInt2(min, max) {
+    return min + Math.floor(Math.random() * (max - min))
+}
+// export const randomInt2 = (min, max) =>
+//     min + Math.floor(Math.random() * (max - min))
 
 /**
  * Returns a random float in [0, max)
@@ -771,7 +780,10 @@ export const randomInt2 = (min, max) =>
  * @param {number} max The max float to return
  * @return {number} a float in [0, max)
  */
-export const randomFloat = max => Math.random() * max
+export function randomFloat(max) {
+    return Math.random() * max
+}
+// export const randomFloat = max => Math.random() * max
 
 /**
  * Returns a random float in [min, max)
@@ -780,14 +792,20 @@ export const randomFloat = max => Math.random() * max
  * @param {number} max The max float to return
  * @return {number} a float in [min, max)
  */
-export const randomFloat2 = (min, max) => min + Math.random() * (max - min)
+export function randomFloat2(min, max) {
+    return min + Math.random() * (max - min)
+}
+// export const randomFloat2 = (min, max) => min + Math.random() * (max - min)
 
 /**
  * Return a random float centered around r, in [-r/2, r/2)
  * @param {number} r The center float
  * @return {number} a float in [-r/2, r/2)
  */
-export const randomCentered = r => randomFloat2(-r / 2, r / 2)
+export function randomCentered(r) {
+    return randomFloat2(-r / 2, r / 2)
+}
+// export const randomCentered = r => randomFloat2(-r / 2, r / 2)
 
 // Return float Gaussian normal with given mean, std deviation.
 export function randomNormal(mean = 0.0, sigma = 1.0) {
@@ -848,7 +866,10 @@ export const nextPowerOf2 = num => Math.pow(2, Math.ceil(Math.log2(num)))
  * @param {number} n The number relative to which the modulus is calculated.
  * @returns {number} The value of v mod n
  */
-export const mod = (v, n) => ((v % n) + n) % n // v - n * Math.floor(v / n)
+export function mod(v, n) {
+    return ((v % n) + n) % n // v - n * Math.floor(v / n)
+}
+// export const mod = (v, n) => ((v % n) + n) % n // v - n * Math.floor(v / n)
 
 // Wrap v around min, max values if v outside min, max
 export const wrap = (v, min, max) => min + mod(v - min, max - min)
@@ -899,7 +920,9 @@ export const toRad = Math.PI / 180
  * @param {number} degrees a value in degrees: in [0, 360)
  * @returns {number} the value as radians: in [0, 2PI)
  */
-export const degToRad = degrees => mod2pi(degrees * toRad)
+export function degToRad(degrees) {
+    return mod2pi(degrees * toRad)
+}
 
 /**
  * Convert from radians to degrees
@@ -907,7 +930,10 @@ export const degToRad = degrees => mod2pi(degrees * toRad)
  * @param {number} radians a value in radians: in [0, 2PI)
  * @returns {number} the value as degrees: in [0, 360)
  */
-export const radToDeg = radians => mod360(radians * toDeg)
+export function radToDeg(radians) {
+    return mod360(radians * toDeg)
+}
+// export const radToDeg = radians => mod360(radians * toDeg)
 
 // Heading & Radians: coord system
 // * Heading is 0-up (y-axis), clockwise angle measured in degrees.
@@ -998,7 +1024,10 @@ export function subtractDegrees(deg1, deg0) {
  * @param {number} head0 The second heading in degrees
  * @returns {number} The smallest andle from head0 to head1
  */
-export const subtractHeadings = (head1, head0) => -subtractDegrees(head1, head0)
+export function subtractHeadings(head1, head0) {
+    return -subtractDegrees(head1, head0)
+}
+// export const subtractHeadings = (head1, head0) => -subtractDegrees(head1, head0)
 
 // Return angle in [-pi,pi] radians from (x,y) to (x1,y1)
 // [See: Math.atan2](http://goo.gl/JS8DF)
@@ -1301,7 +1330,9 @@ export const objectsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
  * @returns {any} The chosen item
  */
 // Return random one of array items.
-export const oneOf = array => array[randomInt(array.length)]
+export function oneOf(array) {
+    return array[randomInt(array.length)]
+}
 export function otherOneOf(array, item) {
     if (array.length < 2) throw Error('otherOneOf: array.length < 2')
     do {

@@ -8,9 +8,13 @@ import AgentArray from './AgentArray.js'
  * Class Link instances form a link between two {@link Turtle}s, forming a graph
  * with the Turtles being the nodes, and the Links the edges.
  *
- * **TODO: Document Link properties and methods.**
+ * You do not call `new Link()`, instead class Links creates Link instances
+ * via {@link Links#create} or  {@link Links#createOne}
+ *
+ * I.e. class Turtles is a factory for all of it's Turtle instances.
+ * So *don't* do this:
  */
-export default class Link {
+class Link {
     hidden = false
     end0 = null // Turtles: end0 & 1 are turtle ends of the link
     end1 = null
@@ -21,20 +25,12 @@ export default class Link {
     model
     name
 
-    // The core default variables needed by a Link.
-    // Use links.setDefault(name, val) to change
-    // Modelers add additional "own variables" as needed.
-    // static defaultVariables() {
-    //     // Core variables for patches. Not 'own' variables.
-    //     return {
-    //         end0: null, // Turtles: end0 & 1 are turtle ends of the link
-    //         end1: null,
-    //         width: 1, // THREE: must be 1. Canvas2D (unsupported) has widths.
-    //     }
-    // }
-    // Initialize a Link
+    /**
+     * Error: Do not create "new Link", use Links factories
+     */
     constructor() {
-        // Object.assign(this, Link.defaultVariables())
+        // throw new Error('Do not use "new Link", use Links factories')
+        console.log('Do not use "new Link", use Links factories')
     }
 
     init(from, to) {
@@ -98,4 +94,4 @@ export default class Link {
     }
 }
 
-// export default Link
+export default Link

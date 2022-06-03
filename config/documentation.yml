@@ -1,13 +1,15 @@
 toc:
     - name: Turtles, Patches, and Links
     - Turtle
+    - Turtle3D
     - Turtles
     - Link
     - Links
     - Patch
     - Patches
-    - AgentSet
     - AgentArray
+    - AgentList
+    - AgentSet
     - name: The Model
     - Model2D
     - Model3D
@@ -17,12 +19,26 @@ toc:
     - TwoDraw
     - ThreeDraw
     - Color
+    - ColorMap
     - name: Interaction
+    - Animator
     - Mouse
+    - GUI
     - name: Data
     - DataSet
+    - RGBDataSet
+    - name: Geographic
+    - gis
+    - geojson
     - name: Utilities
-      children:
-          - ./utils.js
-      description: |
-          An assortment of helper functions. To use: `import * as util from src/utils.js`.
+    - utils
+
+    # - Geo
+    #     children:
+    #         - gis
+    #         - geojson
+    # - name: Utilities
+    #   children:
+    #     - utils
+    # #   description: |
+    # #       An assortment of helper functions. To use: `import * as util from src/utils.js`.

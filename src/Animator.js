@@ -1,13 +1,35 @@
-export default class Animator {
+/**
+ * Class Animator controls running of a function.
+ */
+class Animator {
+    /**
+     * Sets parameters, then calls start().
+     * To have the model not start immediately do:
+     * - const anim = new Animator(\<args>).stop()
+     *
+     * @param {Function} fcn The function the animator runs and controls
+     * @param {number} steps How many steps to run. Default is -1, forever
+     * @param {number} fps Max frames/second to run. Default is 30
+     */
     constructor(fcn, steps = -1, fps = 30) {
         Object.assign(this, { fcn, steps, fps, timeoutID: null, ticks: 0 })
         this.start()
     }
+    /**
+     * Starts the model running
+     *
+     * @returns The animator, allows chaining
+     */
     start() {
         if (this.timeoutID) return // avoid multiple starts
         this.timeoutID = setInterval(() => this.step(), 1000 / this.fps)
         return this // chaining off ctor
     }
+    /**
+     * Stops the model running
+     *
+     * @returns The animator, allows chaining
+     */
     stop() {
         if (this.timeoutID) clearInterval(this.timeoutID)
         this.timeoutID = null
@@ -64,3 +86,5 @@ export default class Animator {
         this.step()
     }
 }
+
+export default Animator
