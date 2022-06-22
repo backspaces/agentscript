@@ -4,9 +4,9 @@ const liveServer = require('live-server')
 const puppeteer = require('puppeteer')
 const shell = require('shelljs')
 
-const debug = false
+const headless = true
 const port = 9008
-const useWorkers = true // !debug
+const useWorkers = false // true // headless
 const compareSamples = true
 const nonWorker = model => [].includes(model)
 // const nonWorker = model => ['droplets'].includes(model)
@@ -31,7 +31,7 @@ let models = shell
     .split('\n')
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
-// if (debug) models = ['droplets', 'mouse'] // debug. Also headless below
+// if (!headless) models = ['droplets', 'mouse'] // debug. Also headless below
 // models = ['droplets'] // debug. Also headless below
 // models = models.filter(m => m !== 'droplets')
 // models = models.filter(m => !['droplets', 'gridPath'].includes(m))
@@ -83,8 +83,7 @@ async function runModel(model) {
             // '--no-sandbox',
             // '--disable-setuid-sandbox',
         ],
-        // headless: true, // use false for useful debugging!
-        headless: !debug, // use false for useful debugging!
+        headless: headless, // use for useful debugging!
     })
     const page = await browser.newPage()
     await page.setDefaultNavigationTimeout(200000)

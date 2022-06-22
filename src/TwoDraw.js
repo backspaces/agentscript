@@ -10,7 +10,7 @@ import ColorMap from '../src/ColorMap.js'
 class TwoDraw extends TwoView {
     static defaultOptions() {
         return {
-            data: {},
+            // data: {},
 
             patchesColor: 'random',
             initPatches: null,
@@ -50,7 +50,7 @@ class TwoDraw extends TwoView {
         this.checkOptions(drawOptions)
         this.drawOptions = drawOptions
         this.model = model
-        this.view = this
+        // this.view = this
         // this.checkOptions(drawOptions)
         // this.drawOptions = drawOptions
     }
@@ -92,14 +92,15 @@ class TwoDraw extends TwoView {
         // drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
         this.checkOptions(drawOptions)
         this.drawOptions = drawOptions
-        this.view.ticks = 0
+        this.ticks = 0
+        // this.view.ticks = 0
         return drawOptions
     }
 
     draw() {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)
         let {
-            data,
+            // data,
             patchesColor,
             initPatches,
 
@@ -119,7 +120,9 @@ class TwoDraw extends TwoView {
             patchesMap,
             turtlesMap,
         } = this.drawOptions
-        const { model, view } = this
+        const model = this.model
+        const view = this
+        // const { model, view } = this
 
         if (view.ticks === 0) {
             if (textProperty) view.setTextProperties(textSize)

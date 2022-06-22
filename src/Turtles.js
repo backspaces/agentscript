@@ -33,7 +33,7 @@ class Turtles extends AgentSet {
      * Returns the new Turtle.
      *
      * @param {Function} [initFcn=turtle => {}]
-     * @return {Turtle} The newly created Turtle
+     * @returns {Turtle} The newly created Turtle
      */
     createOne(initFcn = turtle => {}) {
         const turtle = this.addAgent()
@@ -55,7 +55,7 @@ class Turtles extends AgentSet {
      *
      * @param {number} number Number of Turtles to create
      * @param {Function} [initFcn=turtle => {}] A function to initialize new turtles.
-     * @return {Array} The newly created Turtles
+     * @returns {Array} The newly created Turtles
      */
     create(num, initFcn = turtle => {}) {
         return util.repeat(num, (i, a) => {
@@ -71,7 +71,7 @@ class Turtles extends AgentSet {
      * @param {number} x X coordinate
      * @param {number} y Y coordinate
      * @param {number} radius Radius in patches units
-     * @return {Turtle} The closest Turtle
+     * @returns {Turtle} The closest Turtle
      */
     closestTurtle(x, y, radius) {
         const ts = this.inPatchRectXY(x, y, radius)
@@ -103,7 +103,7 @@ class Turtles extends AgentSet {
      * @param {number} dx The integer x radius of the patchRect
      * @param {number} [dy=dx] The integer y radius of the patchRect
      * @param {boolean} [meToo=false] Whether or not to return me as well
-     * @return {AgentList} The turtles within the patchRect
+     * @returns {AgentList} The turtles within the patchRect
      */
     inPatchRect(turtle, dx, dy = dx, meToo = false) {
         const agents = this.inPatchRectXY(turtle.x, turtle.y, dx, dy)
@@ -119,7 +119,7 @@ class Turtles extends AgentSet {
      * @param {number} dx The integer x radius of the patchRect
      * @param {number} [dy=dx] The integer y radius of the patchRect
      * @param {boolean} [meToo=false] Whether or not to return me as well
-     * @return {AgentList} The turtles within the patchRect
+     * @returns {AgentList} The turtles within the patchRect
      */
     inPatchRectXY(x, y, dx, dy = dx) {
         const patches = this.model.patches.patchRectXY(x, y, dx, dy, true)
@@ -133,7 +133,7 @@ class Turtles extends AgentSet {
      * @param {Turtle} turtle
      * @param {number} radius
      * @param {boolean} [meToo=false] Whether or not to return me as well
-     * @return {AgentList} The turtles within radius of me
+     * @returns {AgentList} The turtles within radius of me
      */
     inRadius(turtle, radius, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true)
@@ -147,7 +147,7 @@ class Turtles extends AgentSet {
      * @param {Turtle} turtle
      * @param {number} radius
      * @param {boolean} [meToo=false] Whether or not to return me as well
-     * @return {AgentList} The turtles within the cone.
+     * @returns {AgentList} The turtles within the cone.
      */
     inCone(turtle, radius, coneAngle, meToo = false) {
         const agents = this.inPatchRect(turtle, radius, radius, true)

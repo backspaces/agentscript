@@ -37,7 +37,6 @@ class HelloModel extends Model {
     }
 }
 
-// HelloModel
-const defaultModel = HelloModel
-// export default HelloModel
+HelloModel
+const defaultModel = export
 

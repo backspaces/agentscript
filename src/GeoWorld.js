@@ -1,6 +1,6 @@
 import World from './World.js'
 import { geojsonBBox } from './geojson.js'
-import { bboxMetricAspect } from './gis.js'
+import * as gis from './gis.js'
 
 // class World defines the coordinate system for the model.
 // It has been upgraded with methods converting from other
@@ -8,21 +8,29 @@ import { bboxMetricAspect } from './gis.js'
 // This is an example World object for geojson worlds.
 
 class GeoWorld extends World {
-    // Use the geojson object's bbox & width to create a World object
     // bbox: [west, south, east, north]
-    constructor(bbox, width = 100) {
+    // bbox of NM
+    static defaultBBox() {
+        return gis.newMexicoBBox
+    }
+
+    // Use geo bbox & width to create a World object
+    // BBox can be a geojson obj, which is converted to geojson's bbox
+    constructor(bbox = GeoWorld.defaultBBox(), width = 50) {
         let json
         if (!Array.isArray(bbox)) {
             json = bbox
             bbox = geojsonBBox(json)
         }
-        const aspect = bboxMetricAspect(bbox)
+        const aspect = gis.bboxMetricAspect(bbox)
+
         super({
             minX: 0,
             minY: 0,
             maxX: width,
             maxY: Math.round(width / aspect),
         })
+
         this.bbox = bbox
         this.xfm = this.bboxTransform(...bbox)
         if (json) this.geojson = json
@@ -34,11 +42,22 @@ class GeoWorld extends World {
     toWorld(geoX, geoY) {
         return this.xfm.toWorld([geoX, geoY])
     }
-    // Return center [x,y] of bbox in geo coords.
-    get bboxCenter() {
-        const [west, south, east, north] = this.bbox
-        return [(west + east) / 2, (south + north) / 2]
+
+    // return bbox lonlat center
+    bboxCenter() {
+        return this.xfm.bboxCenter()
     }
+    // return bbox as 4 lonlat coords/points
+    bboxCoords() {
+        return this.xfm.bboxCoords()
+    }
+
+    // Return center [x,y] of bbox in geo coords.
+    // get bboxCenter() {
+    //     const [west, south, east, north] = this.bbox
+    //     return [(west + east) / 2, (south + north) / 2]
+    // }
+
     // bboxCenter(point = 'lonlat') {
     //     const [west, south, east, north] = this.bbox
     //     if (point === 'lonlat') {

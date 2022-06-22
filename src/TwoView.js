@@ -15,7 +15,7 @@ class TwoView {
 
     // ======================
 
-    // Note: world can be a model, who'd model.world will be used
+    // Note: world can be a model, who's model.world will be used
     constructor(world, options = {}) {
         // options: override defaults, assign to this
         // Object.assign(this, TwoView.defaultOptions(), options)
@@ -24,7 +24,7 @@ class TwoView {
             options.patchSize = options.width / world.width
             delete options.width
         }
-        this.div = options.div
+        // this.div = options.div
 
         // let div = this.div
         let div = options.div

@@ -33,7 +33,7 @@ class DataSet {
      *
      * @param {number} width The integer width of the array
      * @param {number} height The integer height of the array
-     * @param {array} data The array of numbers of length width * height
+     * @param {Array} data The array of numbers of length width * height
      */
     constructor(width, height, data) {
         if (data.length !== width * height) {

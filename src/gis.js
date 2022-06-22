@@ -134,6 +134,14 @@ export function bboxCenter(bbox) {
     const [west, south, east, north] = bbox
     return [(west + east) / 2, (south + north) / 2]
 }
+export function bboxFromCenter(center, dLon = 1, dLat = dLon) {
+    let [lon, lat] = center
+    return [lon - dLon, lat - dLat, lon + dLon, lat + dLat]
+}
+
+export const santaFeCenter = [-105.978, 35.66] // from leaflet click popup
+export const santaFeBBox = bboxFromCenter(santaFeCenter, 0.2, 0.1)
+export const newMexicoBBox = [-109.050044, 31.332301, -103.001964, 37.000104]
 
 export function bboxSize(bbox) {
     const [west, south, east, north] = bbox

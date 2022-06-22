@@ -12,7 +12,7 @@
  * or: await imagePromise('./path/to/img')
  *
  * @param {string} url URL for path to image
- * @return {Promise} A promise resolving to the image
+ * @returns {Promise} A promise resolving to the image
  */
 export function imagePromise(url) {
     return new Promise((resolve, reject) => {
@@ -222,7 +222,7 @@ export function downloadBlob(blobable, name = 'download', format = true) {
  * @param {UTL} url A URL path to the data to be retrieved
  * @param {string} [type='text'] The type of the data
  * @param {string} [method='GET'] The retrieval method
- * @return {any} The resulting data of the given type
+ * @returns {any} The resulting data of the given type
  */
 export function xhrPromise(url, type = 'text', method = 'GET') {
     return new Promise((resolve, reject) => {
@@ -241,7 +241,7 @@ export function xhrPromise(url, type = 'text', method = 'GET') {
  * Use: await timeoutPromise(ms)
  *
  * @param {number} [ms=1000] Number of ms to pause
- * @return {Promise} A promise to wait this number of ms
+ * @returns {Promise} A promise to wait this number of ms
  */
 export function timeoutPromise(ms = 1000) {
     return new Promise(resolve => {
@@ -317,7 +317,7 @@ function offscreenOK() {
  * @param {number} width The canvas height in pixels
  * @param {number} height The canvas width in pixels
  * @param {boolean} [offscreen=offscreenOK()] If true, return "Offscreen" canvas
- * @return {Canvas} The resulting Canvas object
+ * @returns {Canvas} The resulting Canvas object
  */
 export function createCanvas(width, height, offscreen = offscreenOK()) {
     if (offscreen) return new OffscreenCanvas(width, height)
@@ -333,7 +333,7 @@ export function createCanvas(width, height, offscreen = offscreenOK()) {
  * @param {number} width The canvas height in pixels
  * @param {number} height The canvas width in pixels
  * @param {boolean} [offscreen=offscreenOK()] If true, return "Offscreen" canvas
- * @return {Context2D} The resulting Canvas's 2D context
+ * @returns {Context2D} The resulting Canvas's 2D context
  */
 export function createCtx(width, height, offscreen = offscreenOK()) {
     const can = createCanvas(width, height, offscreen)
@@ -625,14 +625,26 @@ export function dump(model = window.model) {
 
 // ### Dom
 
-// export function setCssStyle(url) {
+// export function fetchCssStyle(url) {
 //     document.head.innerHTML += `<link rel="stylesheet" href="${url}" type="text/css" />`
 // }
-export async function setCssStyle(url) {
+export function addCssLink(url) {
+    const link = document.createElement('link')
+    link.setAttribute('rel', 'stylesheet')
+    link.setAttribute('href', url)
+    document.head.appendChild(link)
+}
+export async function fetchCssStyle(url) {
     const response = await fetch(url)
-    if (!response.ok) throw Error(`Not found: ${url}`)
+    if (!response.ok) throw Error(`fetchCssStyle: Not found: ${url}`)
     const css = await response.text()
-    document.head.innerHTML += `<style>${css}</style>`
+    addCssStyle(css)
+}
+export function addCssStyle(css) {
+    // document.head.innerHTML += `<style>${css}</style>`
+    var style = document.createElement('style')
+    style.innerHTML = css
+    document.head.appendChild(style)
 }
 
 // REST:
@@ -754,7 +766,7 @@ export const PI = Math.PI
  * Returns an int in [0, max), equal or grater than 0, less than max
  *
  * @param {number} max The max integer to return
- * @return {number} an integer in  [0, max)
+ * @returns {number} an integer in  [0, max)
  */
 export function randomInt(max) {
     return Math.floor(Math.random() * max)
@@ -766,7 +778,7 @@ export function randomInt(max) {
  *
  * @param {number} min The min integer to return
  * @param {number} max The max integer to return
- * @return {number} an integer in  [min, max)
+ * @returns {number} an integer in  [min, max)
  */
 export function randomInt2(min, max) {
     return min + Math.floor(Math.random() * (max - min))
@@ -778,7 +790,7 @@ export function randomInt2(min, max) {
  * Returns a random float in [0, max)
  *
  * @param {number} max The max float to return
- * @return {number} a float in [0, max)
+ * @returns {number} a float in [0, max)
  */
 export function randomFloat(max) {
     return Math.random() * max
@@ -790,7 +802,7 @@ export function randomFloat(max) {
  *
  * @param {number} min The min float to return
  * @param {number} max The max float to return
- * @return {number} a float in [min, max)
+ * @returns {number} a float in [min, max)
  */
 export function randomFloat2(min, max) {
     return min + Math.random() * (max - min)
@@ -800,7 +812,7 @@ export function randomFloat2(min, max) {
 /**
  * Return a random float centered around r, in [-r/2, r/2)
  * @param {number} r The center float
- * @return {number} a float in [-r/2, r/2)
+ * @returns {number} a float in [-r/2, r/2)
  */
 export function randomCentered(r) {
     return randomFloat2(-r / 2, r / 2)
@@ -841,7 +853,7 @@ export function randomSeed(seed = 123456) {
  *
  * @param {number|Array} num The number to convert/shorten
  * @param {number} [digits=4] The number of decimal digits
- * @return {number} The resulting number
+ * @returns {number} The resulting number
  */
 export function precision(num, digits = 4) {
     if (num === -0) return 0
@@ -880,7 +892,7 @@ export const wrap = (v, min, max) => min + mod(v - min, max - min)
  * @param {number} v value to clamp between min & max
  * @param {number} min min value
  * @param {number} max max value
- * @return {number} a float between min/max
+ * @returns {number} a float between min/max
  */
 export function clamp(v, min, max) {
     if (v < min) return min
@@ -945,7 +957,7 @@ export function radToDeg(radians) {
  * Radians is euclidean: 0-right (x-axis), counterclockwise in radians
  *
  * @param {number} radians a value in radians: in [0, 2PI)
- * @return {number} a value in degrees: in [0, 360)
+ * @returns {number} a value in degrees: in [0, 360)
  */
 export function radToHeading(radians) {
     const deg = radians * toDeg
@@ -955,7 +967,7 @@ export function radToHeading(radians) {
  * Convert from heading to radians
  *
  * @param {number} heading a value in degrees: in [0, 360)
- * @return {number} a value in radians: in [0, 2PI)
+ * @returns {number} a value in radians: in [0, 2PI)
  */
 export function headingToRad(heading) {
     const deg = mod360(90 - heading)
@@ -1153,7 +1165,7 @@ export function toJSON(obj, indent = 0, topLevelArrayOK = true) {
  * Useful for testing Models without needing a View, just data.
  *
  * @param {Model} model A model to sample
- * @return {Object} An object with all the samples
+ * @returns {Object} An object with all the samples
  */
 export function sampleModel(model) {
     const obj = {
@@ -1264,7 +1276,7 @@ export function forLoop(arrayOrObj, fcn) {
  * @param {number} n An integer number of times to run f()
  * @param {function} f The function called.
  * @param {Array} [a=[]] An optional array for use by f()
- * @return {Array} The result of calling f() n times
+ * @returns {Array} The result of calling f() n times
  */
 export function repeat(n, f, a = []) {
     for (let i = 0; i < n; i++) f(i, a)

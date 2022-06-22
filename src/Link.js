@@ -25,14 +25,6 @@ class Link {
     model
     name
 
-    /**
-     * Error: Do not create "new Link", use Links factories
-     */
-    constructor() {
-        // throw new Error('Do not use "new Link", use Links factories')
-        console.log('Do not use "new Link", use Links factories')
-    }
-
     init(from, to) {
         this.end0 = from
         this.end1 = to

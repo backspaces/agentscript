@@ -1,35 +1,35 @@
 <html>
-    <head>
-        <title>Hello</title>
-    </head>
-    <body>
-        <script type="module">
-            // An html file for running the ./HelloModel.js
-            // Run any other model by changing the import's path (i.e. ./MyModel.js)
-            import * as util from '../src/utils.js'
-            import Model from './HelloModel.js'
 
-            // Run the model 500 steps. Async used for startup() and timeoutLoop().
-            // Startup not needed by Hello but others will need it..
-            async function run() {
-                // Avoid a white screen puzzling the user!
-                util.printToPage(`Running for 500 steps. Takes a while!`)
+<head>
+    <title>Hello</title>
+</head>
 
-                // Now create, init and run the model 500 steps
-                const model = new Model()
-                await model.startup()
-                model.setup()
-                await util.timeoutLoop(() => {
-                    model.step()
-                }, 500)
-                // That's it!
+<body>
+    <script type="module">
+        // An html file for running the ./HelloModel.js
+        // Run any other model by changing the import's path (i.e. ./MyModel.js)
+        import * as util from '../src/utils.js'
+        import Model from './HelloModel.js'
 
-                // For our use, we print out a sample of the model's variables.
-                // It will be different each run of the model
-                const sample = util.sampleModel(model)
-                util.printToPage(sample)
-            }
-            run()
-        </script>
-    </body>
+        // Run the model 500 steps. Async used for startup() and timeoutLoop().
+        // Startup not needed by Hello but others will need it..
+        // Avoid a white screen puzzling the user!
+        util.printToPage(`Running for 500 steps. Takes a while!`)
+
+        // Now create, init and run the model 500 steps
+        const model = new Model()
+        await model.startup()
+        model.setup()
+        await util.timeoutLoop(() => {
+            model.step()
+        }, 500)
+        // That's it!
+
+        // For our use, we print out a sample of the model's variables.
+        // It will be different each run of the model
+        const sample = util.sampleModel(model)
+        util.printToPage(sample)
+    </script>
+</body>
+
 </html>

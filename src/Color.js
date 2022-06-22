@@ -34,9 +34,8 @@ const Color = {
      * @param {number} g integer in [0, 255] for green channel
      * @param {number} b integer in [0, 255] for blue channel
      * @param {number} [a=255] integer in [0, 255] for alpha/opacity channel
-     * @return {string}
+     * @returns {string} A rgb(r,g,b) or rgba(r,g,b,a) css color string
      */
-    // /** @function */
     rgbaCssColor(r, g, b, a = 255) {
         a = a / 255
         const a2 = a.toPrecision(2)
@@ -54,9 +53,8 @@ const Color = {
      * @param {number} [s=100]
      * @param {number} [l=50]
      * @param {number} [a=255]
-     * @return {string}
+     * @returns {string} A css HSL color string
      */
-    // /** @function */
     hslCssColor(h, s = 100, l = 50, a = 255) {
         a = a / 255
         const a4 = a.toPrecision(4)
@@ -64,12 +62,16 @@ const Color = {
             ? `hsl(${h},${s}%,${l}%)`
             : `hsla(${h},${s}%,${l}%,${a4})`
     },
-
-    // Return a html/css hex color string for an r,g,b opaque color (a=255).
-    // Hex strings do not support alpha.
-    //
-    // Both #nnn and #nnnnnn forms supported.
-    // Default is to check for the short hex form.
+    /**
+     * Return a html/css hex color string for an r,g,b opaque color (a=255).
+     * Hex strings do not support alpha.
+     * Both #nnn and #nnnnnn forms supported.
+     * Default is to check for the short hex form.
+     * @param {number} r Integer value for red channel
+     * @param {number} g Integer value for green channel
+     * @param {number} b Integer value for blue channel
+     * @returns {string} A css hex color string #nnn or #nnnnnn, n in [0,F] hex
+     */
     hexCssColor(r, g, b) {
         return `#${(0x1000000 | (b | (g << 8) | (r << 16)))
             .toString(16)

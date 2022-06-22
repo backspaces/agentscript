@@ -87,6 +87,31 @@ export function eventKeys(ev) {
     console.log(altKey, ctrlKey, metaKey, shiftKey)
 }
 
+// https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging
+export function getCss(id) {
+    const css = `
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#${id} {
+    height: 100vh
+}
+
+.terrain-pane .leaflet-tile {
+    border: solid black 1px;
+}
+
+.leaflet-container {
+    isolation: isolate;
+}`
+    return css
+}
+//  .leaflet-tile {
+//     border: solid black 1px;
+// }
+
 // export function pixelBounds2bbox(leafletPixelBounds) {
 //     let { lng: eastPx, lat: northPx } = leafletBounds.getNorthEast()
 //     let { lng: westPx, lat: southPx } = leafletBounds.getSouthWest()

@@ -31,7 +31,7 @@ const ColorMap = {
      * @param {number} nColors integer number of colors to be returned
      * @param {Array} stops Array of nColors css colors, placed at locs below
      * @param {Array} locs Array of nColors floats in [0.1]. Default to even distribution
-     * @return {Array} Returns Array of nColors rgba color arrays
+     * @returns {Array} Returns Array of nColors rgba color arrays
      */
     gradientImageData(nColors, stops, locs) {
         const ctx = util.createCtx(nColors, 1)

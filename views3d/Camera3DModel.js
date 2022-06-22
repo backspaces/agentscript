@@ -1,5 +1,5 @@
 import * as util from '../src/utils.js'
-import Model from '../src/Model.js'
+import Model from '../src/Model3D.js'
 
 export default class Camera3DModel extends Model {
     width = 32

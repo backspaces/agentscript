@@ -12,22 +12,33 @@ import DataSet from './DataSet.js'
  */
 class RGBDataSet extends DataSet {
     /**
+     * Convert an r,g,b triple into an integer
      * @param {number} r Red value, integer in [0,255]
      * @param {number} g Green value, integer in [0,255]
      * @param {number} b Blue value, integer in [0,255]
-     * @returns A 24 bit integer
+     * @returns {number} A 24 bit integer
      */
     static rgbToInt24(r, g, b) {
         return r * 256 * 256 + g * 256 + b
     }
 
+    /**
+     * As above with min/scale
+     * @param {number} min The min return value
+     * @param {number} scale The scale factor
+     * @returns {number} A 24 bit integer
+     */
+    static rgbScaleFunction(min, scale) {
+        return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
+    }
+
     // Constructor args: (img, rgbToData, ArrayType)
     // where rgbToData(r,g,b) returns a number for the dataset.
     /**
-     *
+     * Create a {@link DataSet} from image pixel data
      * @param {Image} img Any "imagable" object that can be drawn to a canvas
      * @param {function} rgbToData Fnction converting 3 r,g,b bytes to a number
-     * @param {*} ArrayType A TypedArray or Array. (default Float32)
+     * @param {constructor} ArrayType A TypedArray or Array. (default Float32)
      */
     constructor(
         img,

@@ -62,7 +62,7 @@ class Patch {
     /**
      * Return whether or not this patch is on the edge of the atches.
      *
-     * @return {boolean}
+     * @returns {boolean}
      */
     isOnEdge() {
         return this.patches.isOnEdge(this)
@@ -77,7 +77,7 @@ class Patch {
      * Return an array of this patch's 8
      * [Moore neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood).
      *
-     * @return {AgentArray}
+     * @returns {AgentArray}
      */
     get neighbors() {
         // lazy promote neighbors from getter to instance prop.
@@ -90,7 +90,7 @@ class Patch {
      * [Von Neumann neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood)
      * (north, south, east, west).
      *
-     * @return {AgentArray}
+     * @returns {AgentArray}
      */
     get neighbors4() {
         const n = this.patches.neighbors4(this)
@@ -105,7 +105,7 @@ class Patch {
     /**
      * Return an Array of the turtles on this patch.
      *
-     * @return {AgentArray}
+     * @returns {AgentArray}
      */
     get turtlesHere() {
         if (this.turtles == null) {
@@ -123,7 +123,7 @@ class Patch {
      * Returns an Array of the particular breed on this patch.
      *
      * @param {String} breed
-     * @return {AgentArray}
+     * @returns {AgentArray}
      */
     breedsHere(breed) {
         const turtles = this.turtlesHere

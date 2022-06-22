@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <title>Geo Hello</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import Animator from '../src/Animator.js'
+        import Draw from '../src/LeafletDraw.js'
+        import GeoWorld from '../src/GeoWorld.js'
+        import Model from '../models/HelloModel.js'
+        import * as gis from '../src/gis.js'
+
+        const bbox = gis.santaFeBBox // gis.bboxFromCenter(gis.santaFeCenter, 0.2, 0.1)
+        const world = new GeoWorld(bbox, 100) // geo bbox & width in patches
+        const model = new Model(world)
+        await model.startup()
+        model.setup()
+
+        const drawOptions = {
+            patchesColor: 'transparent',
+            turtlesSize: 2,
+            linksWidth: 0.2,
+        }
+        const view = new Draw(model, {
+            patchSize: 5,
+            drawOptions
+        })
+        const params = await view.initLeaflet({
+            Z: 11,
+            // elevationOpacity: 0.3, // set non-zero for elevation tile layer
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        ).startStats()
+
+        util.toWindow({ util, model, view, anim, gis, params })
+    </script>
+    <div id="map"></div>
+</body>
+
+</html>

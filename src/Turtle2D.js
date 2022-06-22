@@ -21,14 +21,6 @@ class Turtle {
     model
     name
 
-    /**
-     * Error: Do not create "new Turtle", use Turtles factories
-     */
-    constructor() {
-        // throw new Error('Do not use "new Turtle", use Turtles factories')
-        console.log('Do not use "new Turtle", use Turtles factories')
-    }
-
     // Called by Turtle factories, not programmers
     agentConstructor() {
         this.theta = null
@@ -126,7 +118,7 @@ class Turtle {
      * the smallest angle by which t could be rotated to produce heading.
      *
      * @param {Angle} heading The heading I wish to be roated to.
-     * @return {Angle}
+     * @returns {Angle}
      */
     subtractHeading(heading) {
         // // Using rads so will work with any geometry.
@@ -299,7 +291,7 @@ class Turtle {
      * Return the patch ahead of this turtle by distance.
      * Return undefined if the distance puts the patch off-world
      * @param {number} distance The distance ahead
-     * @return {Patch|undefined} The patch at the distance ahead of this Turtle
+     * @returns {Patch|undefined} The patch at the distance ahead of this Turtle
      */
     patchAhead(distance) {
         return this.patchAtHeadingAndDistance(this.heading, distance)
@@ -309,7 +301,7 @@ class Turtle {
      * Return undefined if the distance puts the patch off-world
      * @param {number} angle The angle to the right
      * @param {number} distance The distance ahead
-     * @return {Patch|undefined} The patch found, or undefined if off-world
+     * @returns {Patch|undefined} The patch found, or undefined if off-world
      */
     patchRightAndAhead(angle, distance) {
         // if (this.model.geometry === 'heading') angle = -angle
@@ -321,7 +313,7 @@ class Turtle {
      * Return undefined if the distance puts the patch off-world
      * @param {number} angle The angle to the left
      * @param {number} distance The distance ahead
-     * @return {Patch|undefined} The patch found, or undefined if off-world
+     * @returns {Patch|undefined} The patch found, or undefined if off-world
      */
     patchLeftAndAhead(angle, distance) {
         return this.patchRightAndAhead(-angle, distance)
@@ -329,7 +321,7 @@ class Turtle {
     /**
      * Can I move forward by distance and not be off-world?
      * @param {number} distance The distance ahead
-     * @return {Boolean} True if moving forward by distance is on-world
+     * @returns {Boolean} True if moving forward by distance is on-world
      */
     canMove(distance) {
         return this.patchAhead(distance) != null
@@ -343,7 +335,7 @@ class Turtle {
      * @param {number} x
      * @param {number} y
      * @param {number|undefined} [z=null]
-     * @return {number} distance in patch coordinates.
+     * @returns {number} distance in patch coordinates.
      */
     distanceXY(x, y, z = null) {
         const useZ = z != null && this.z != null
@@ -356,7 +348,7 @@ class Turtle {
      *
      * 2.5D: use z too if both agent.z and this.z exist
      * @param {Patch|Turtle} agent
-     * @return {number} distance in patch coordinates.
+     * @returns {number} distance in patch coordinates.
      */
     distance(agent) {
         const { x, y, z } = agent
@@ -382,7 +374,7 @@ class Turtle {
     /**
      * Return the heading towards the Patch or Turtle given.
      * @param {Patch|Turtle} agent The agent who's angle from this Turtle we use
-     * @return {number} The angle towards the agent
+     * @returns {number} The angle towards the agent
      */
     towards(agent) {
         return this.towardsXY(agent.x, agent.y)
@@ -391,7 +383,7 @@ class Turtle {
      * Return the heading towards the given x,y coordinates.
      * @param {number} x The x coordinarte
      * @param {number} y The y coordinarte
-     * @return {number} The angle towards x,y
+     * @returns {number} The angle towards x,y
      */
     towardsXY(x, y) {
         // return util.radiansTowardXY(this.x, this.y, x, y)
@@ -404,7 +396,7 @@ class Turtle {
      * Return undefined if off-world
      * @param {number} dx The delta x ahead
      * @param {number} dy The delta y ahead
-     * @return {Patch|undefined} The patch dx, dy ahead; undefined if off-world
+     * @returns {Patch|undefined} The patch dx, dy ahead; undefined if off-world
      */
     patchAt(dx, dy) {
         return this.model.patches.patch(this.x + dx, this.y + dy)
@@ -417,7 +409,7 @@ class Turtle {
      * Use the Left/Right versions for relative heading.
      * @param {number} heading The absolute angle from this turtle
      * @param {number} distance The distance ahead
-     * @return {Patch|undefined} The Patch, or undefined if off-world
+     * @returns {Patch|undefined} The Patch, or undefined if off-world
      */
     patchAtHeadingAndDistance(heading, distance) {
         return this.model.patches.patchAtHeadingAndDistance(
@@ -432,7 +424,7 @@ class Turtle {
      *
      * See links property for all my links, if any.
      * @param {Link} l
-     * @return {Turtle} The other turtle making this Link
+     * @returns {Turtle} The other turtle making this Link
      */
     otherEnd(l) {
         return l.end0 === this ? l.end1 : l.end0
@@ -440,7 +432,7 @@ class Turtle {
     // Return all turtles linked to me
     /**
      * Return all turtles linked to me. Basically me.otherEnd of all my links.
-     * @return {Array} All the turtles linked to me
+     * @returns {Array} All the turtles linked to me
      */
     linkNeighbors() {
         return this.links.map(l => this.otherEnd(l))
@@ -448,7 +440,7 @@ class Turtle {
     /**
      * Is the given Turtle linked to me?
      * @param {Turtle} t
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     isLinkNeighbor(t) {
         return t in this.linkNeighbors()
