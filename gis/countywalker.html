@@ -75,7 +75,7 @@
         })
 
         const bbox = world.bbox
-        const bboxCenter = world.bboxCenter
+        const bboxCenter = world.bboxCenter()
         const zoom = 7
         const map = L.map('map')
             .setView(gis.latlon(bboxCenter), zoom)
