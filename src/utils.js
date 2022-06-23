@@ -119,10 +119,10 @@ export async function blobToData(blob, type = 'dataURL') {
 // Async Fetch of a url with the response of the given type
 // types: arrayBuffer, blob, json, text; default is blob
 // See https://developer.mozilla.org/en-US/docs/Web/API/Response#methods
-export async function urlToData(url, type = 'blob') {
+export async function fetchData(url, type = 'blob') {
     const types = ['arrayBuffer', 'blob', 'json', 'text']
     if (!types.includes(type))
-        throw Error('urlToData: data must be one of ' + types.toString())
+        throw Error('fetchData: data must be one of ' + types.toString())
     return fetch(url).then(res => res[type]())
 }
 // Return a dataURL for the given data. type is a mime type: https://t.ly/vzKm

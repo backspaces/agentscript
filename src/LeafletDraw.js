@@ -17,6 +17,8 @@ class LeafletDraw extends TwoDraw {
             elevationOpacity: 0,
             // set to null/undefined/'' for no border
             border: '1px solid red',
+            tiles: 'mapzen',
+            terrain: 'topo',
         }
     }
 
@@ -33,7 +35,7 @@ class LeafletDraw extends TwoDraw {
         }
 
         super(model, viewOptions, drawOptions)
-        this.model = model
+        // this.model = model
         // this === view
     }
 
@@ -47,8 +49,8 @@ class LeafletDraw extends TwoDraw {
         if (options.border) this.canvas.style.border = options.border
 
         const ElementOverlay = elementOverlay(L)
-        const tileData = TileData['mapzen'] // redfishUSA/World, mapzen, mapbox
-        const terrainName = 'topo'
+        const tileData = TileData[options.tiles] // redfishUSA/World, mapzen, mapbox
+        const terrainName = options.terrain
 
         const center = gis.latlon(this.model.world.bboxCenter())
         const map = L.map(options.div, {
@@ -86,8 +88,8 @@ class LeafletDraw extends TwoDraw {
             elementOverlay,
             ElementOverlay,
             tileData,
-            terrainName,
             map,
+            terrainName,
             terrainLayer,
             elevationLayer,
             elementLayer,

@@ -3,6 +3,23 @@
 
 <head>
     <title>CountyWalker</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #map {
+            height: 100vh
+        }
+
+        /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
+        .terrain-pane .leaflet-tile {
+            border: solid black 1px;
+        }
+    </style>
 </head>
 
 <body>
@@ -13,13 +30,18 @@
         import * as gis from '../src/gis.js'
 
         import GeoWorld from '../src/GeoWorld.js'
-        import LeafletDraw from '../src/LeafletDraw.js'
+        import TwoDraw from '../src/TwoDraw.js'
         import Animator from '../src/Animator.js'
         import CountiesModel from '../gis/CountiesModel.js'
+
+        import * as L from 'https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.esm.js'
+        import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
+        const ElementOverlay = elementOverlay(L)
 
         const counties = await fetch(
             '../gis/data/nmcounties.json'
         ).then(resp => resp.json())
+
 
         const world = new GeoWorld(counties, 100)
         const model = new CountiesModel(world)
@@ -34,16 +56,27 @@
             turtlesColor: t =>
                 view.drawOptions.turtlesMap.atIndex(t.county + 1),
         }
-        const view = new LeafletDraw(model, {
-            div: util.createCanvas(0, 0), // default. the view will resize
+        const view = new TwoDraw(model, {
+            div: util.createCanvas(0, 0), // the view will resize
             drawOptions,
         })
 
-        const params = await view.initLeaflet({
-            Z: 7,
-            terrain: 'osm'
-        })
-        const { L, map } = params
+        const bbox = world.bbox
+        const bboxCenter = world.bboxCenter()
+        const zoom = 7
+        const map = L.map('map')
+            .setView(gis.latlon(bboxCenter), zoom)
+
+        L.tileLayer(gis.template('osm'), {
+            attribution: gis.attribution('osm'),
+        }).addTo(map)
+
+        const [west, south, east, north] = bbox
+        const bounds = new L.LatLngBounds(
+            new L.LatLng(north, west),
+            new L.LatLng(south, east)
+        )
+        new ElementOverlay(view.canvas, bounds).addTo(map)
 
         L.geoJSON(counties, {
             style: () => ({
@@ -60,7 +93,7 @@
             )
             .addTo(map)
 
-        const latlngs = gis.latlon(gis.bboxCoords(model.world.bbox))
+        const latlngs = gis.latlon(gis.bboxCoords(bbox))
         L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
 
         const anim = new Animator(

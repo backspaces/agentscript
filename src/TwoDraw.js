@@ -28,8 +28,6 @@ class TwoDraw extends TwoView {
             textSize: 0.5,
             textColor: 'black',
 
-            // patchesMap: ColorMap.DarkGray,
-            // turtlesMap: ColorMap.Basic16,
             patchesMap: 'DarkGray',
             turtlesMap: 'Basic16',
         }
