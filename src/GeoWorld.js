@@ -24,11 +24,14 @@ class GeoWorld extends World {
         }
         const aspect = gis.bboxMetricAspect(bbox)
 
+        // min/max Z set to 0 => Model2D
         super({
             minX: 0,
-            minY: 0,
             maxX: width,
+            minY: 0,
             maxY: Math.round(width / aspect),
+            minZ: 0,
+            maxZ: 0,
         })
 
         this.bbox = bbox

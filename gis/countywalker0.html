@@ -3,23 +3,8 @@
 
 <head>
     <title>CountyWalker</title>
-
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css">
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
-
-        #map {
-            height: 100vh
-        }
-
-        /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
-        .terrain-pane .leaflet-tile {
-            border: solid black 1px;
-        }
-    </style>
+    <link rel="stylesheet" href="./map.css">
 </head>
 
 <body>
@@ -41,7 +26,6 @@
         const counties = await fetch(
             '../gis/data/nmcounties.json'
         ).then(resp => resp.json())
-
 
         const world = new GeoWorld(counties, 100)
         const model = new CountiesModel(world)

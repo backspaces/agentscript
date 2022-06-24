@@ -3,10 +3,14 @@ import TwoDraw from './TwoDraw.js'
 
 import * as gis from './gis.js'
 import * as TileData from './TileData.js'
-import * as leafletUtils from '../gis/leafletUtils.js'
 
 import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
 import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
+
+// Uses top level await to read css files (and add to <head>)
+// import '../gis/importMapCss.js'
+// import styles from '../gis/importMapCss.js'
+// console.log('styles', styles)
 
 class LeafletDraw extends TwoDraw {
     static defaultLeafletOptions() {
@@ -44,7 +48,7 @@ class LeafletDraw extends TwoDraw {
         options = Object.assign(LeafletDraw.defaultLeafletOptions(), options)
 
         await util.fetchCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
-        util.addCssStyle(leafletUtils.getCss(options.div))
+        await util.fetchCssStyle('./map.css')
 
         if (options.border) this.canvas.style.border = options.border
 

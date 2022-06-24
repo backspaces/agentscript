@@ -1,0 +1,18 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#map {
+    height: 100vh;
+}
+
+/* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
+.terrain-pane .leaflet-tile {
+    border: solid black 1px;
+}
+
+/* Needed when usinng dat.gui to show on top of map */
+.leaflet-container {
+    isolation: isolate;
+}

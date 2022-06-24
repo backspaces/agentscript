@@ -1,5 +1,5 @@
 import * as util from '../src/utils.js'
-import Model from '../src/Model.js'
+import Model from '../src/Model3D.js'
 import {
     assert,
     // assertEquals,

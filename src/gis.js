@@ -67,12 +67,6 @@ export function xyz2bbox(x, y, z) {
     const [west, north] = xyz2lonlat(x, y, z)
     const [east, south] = xyz2lonlat(x + 1, y + 1, z)
     return [west, south, east, north]
-    // return [west, south, (east * 256) / 257, (north * 256) / 257]
-    // const dWidth = (east - west) / 256
-    // const dHeight = (north - south) / 256
-    // console.log('std', [west, south, east, north])
-    // console.log('clipped', [west, south, east - dWidth, north - dHeight])
-    // return [west, south, east - dWidth, north - dHeight]
 }
 
 // export function bbox2xyz(bbox) {

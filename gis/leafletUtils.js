@@ -88,26 +88,26 @@ export function eventKeys(ev) {
 }
 
 // https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging
-export function getCss(id) {
-    const css = `
-* {
-    padding: 0;
-    margin: 0;
-}
+// export function getCss(id) {
+//     const css = `
+// * {
+//     padding: 0;
+//     margin: 0;
+// }
 
-#${id} {
-    height: 100vh
-}
+// #${id} {
+//     height: 100vh
+// }
 
-.terrain-pane .leaflet-tile {
-    border: solid black 1px;
-}
+// .terrain-pane .leaflet-tile {
+//     border: solid black 1px;
+// }
 
-.leaflet-container {
-    isolation: isolate;
-}`
-    return css
-}
+// .leaflet-container {
+//     isolation: isolate;
+// }`
+//     return css
+// }
 //  .leaflet-tile {
 //     border: solid black 1px;
 // }
