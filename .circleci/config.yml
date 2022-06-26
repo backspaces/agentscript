@@ -6,7 +6,8 @@ version: 2.1
 jobs:
     build:
         docker:
-            - image: cimg/node:current-browsers
+            - image: cimg/node:18.3.0
+            # - image: cimg/node:current-browsers
             # - image: circleci/node:latest-browsers
             # - image: circleci/node:10-jessie-browsers
 
@@ -45,13 +46,3 @@ jobs:
                   paths:
                       - node_modules
                   key: v1-dependencies-{{ checksum "package.json" }}
-        #   - run:
-        #       command: mkdir -p ~/reports
-        #   - run:
-        #       command: |
-        #         ./node_modules/ava/cli.js --tap | ./node_modules/tap-xunit/bin/tap-xunit > ~/reports/ava.xml
-        #       when: always
-        #   - store_test_results:
-        #       path: ~/reports
-        #   - store_artifacts:
-        #       path: ~/reports

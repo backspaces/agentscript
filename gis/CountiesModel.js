@@ -27,17 +27,6 @@ export default class CountiesModel extends HelloModel {
             if (t.feature !== t.patch.feature || !t.county) {
                 t.feature = t.patch.feature
                 t.county = t.feature ? Number(t.feature.properties.COUNTY) : 0
-                // const name = t.feature
-                //     ? t.feature.properties.NAME
-                //     : 'No Where'
-                // const population = t.feature
-                //     ? t.feature.properties.population
-                //     : 0
-                // console.log(
-                //     'new feature: turtle: ' + t.id + ',',
-                //     'county: ' + name + ',',
-                //     'population: ' + population
-                // )
             }
         })
     }

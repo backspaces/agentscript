@@ -54,35 +54,6 @@ class GeoWorld extends World {
     bboxCoords() {
         return this.xfm.bboxCoords()
     }
-
-    // Return center [x,y] of bbox in geo coords.
-    // get bboxCenter() {
-    //     const [west, south, east, north] = this.bbox
-    //     return [(west + east) / 2, (south + north) / 2]
-    // }
-
-    // bboxCenter(point = 'lonlat') {
-    //     const [west, south, east, north] = this.bbox
-    //     if (point === 'lonlat') {
-    //         return [(west + east) / 2, (south + north) / 2]
-    //     } else {
-    //         return [(south + north) / 2, (west + east) / 2]
-    //     }
-    // }
-    // bboxCenter() {
-    //     const [west, south, east, north] = this.bbox
-    //     return [(west + east) / 2, (south + north) / 2]
-    // }
-    // Return geo coords of bbox corners, from topLeft, clockwise.
-    // bboxCoords() {
-    //     const [west, south, east, north] = this.bbox
-    //     return [
-    //         [west, north],
-    //         [east, north],
-    //         [east, south],
-    //         [west, south],
-    //     ]
-    // }
 }
 
 export default GeoWorld

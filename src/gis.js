@@ -192,14 +192,6 @@ export function lonLat2meters(pt1, pt2) {
     return d * 1000 // meters
 }
 
-// const terrainLayer = L.tileLayer(
-//     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { // zoom 18
-//     // 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {  // zoom 17
-//     // 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg', { // zoom 18
-//     // 'http://tile.stamen.com/toner/{z}/{x}/{y}.png', { // zoom 17
-//     // 'https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png', { // zoom 18
-//     // 'https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', { // zoom 18
-
 // https://github.com/leaflet-extras/leaflet-providers
 // https://github.com/leaflet-extras/leaflet-providers/blob/master/leaflet-providers.js
 export function attribution(who = 'osm') {

@@ -6,7 +6,7 @@ const shell = require('shelljs')
 
 const headless = true
 const port = 9008
-const useWorkers = false // true // headless
+const useWorkers = true // true // headless
 const compareSamples = true
 const nonWorker = model => [].includes(model)
 // const nonWorker = model => ['droplets'].includes(model)
@@ -69,7 +69,9 @@ runModels()
 async function runModel(model) {
     const url =
         useWorkers && !nonWorker(model) // use list of non-worker models
-            ? `http://127.0.0.1:${port}/models/worker.html?${model}`
+            ? // ? `http://localhost/src/agentscript/models/worker.html?${model}`
+              // : `http://localhost/src/agentscript/models/test.html?${model}`
+              `http://127.0.0.1:${port}/models/worker.html?${model}`
             : `http://127.0.0.1:${port}/models/test.html?${model}`
     // console.log(useWorkers && !nonWorker(model))
 

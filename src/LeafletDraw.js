@@ -7,11 +7,6 @@ import * as TileData from './TileData.js'
 import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
 import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
 
-// Uses top level await to read css files (and add to <head>)
-// import '../gis/importMapCss.js'
-// import styles from '../gis/importMapCss.js'
-// console.log('styles', styles)
-
 class LeafletDraw extends TwoDraw {
     static defaultLeafletOptions() {
         return {
@@ -23,6 +18,7 @@ class LeafletDraw extends TwoDraw {
             border: '1px solid red',
             tiles: 'mapzen',
             terrain: 'topo',
+            fetchCSS: true,
         }
     }
 
@@ -39,16 +35,17 @@ class LeafletDraw extends TwoDraw {
         }
 
         super(model, viewOptions, drawOptions)
-        // this.model = model
-        // this === view
     }
 
-    // async initLeaflet(div = 'map', center = [35.67, -105.93], Z = 10) {
     async initLeaflet(options = {}) {
         options = Object.assign(LeafletDraw.defaultLeafletOptions(), options)
 
-        await util.fetchCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
-        await util.fetchCssStyle('./map.css')
+        if (options.fetchCSS) {
+            await util.fetchCssStyle(
+                'https://unpkg.com/leaflet/dist/leaflet.css'
+            )
+            await util.fetchCssStyle('./map.css')
+        }
 
         if (options.border) this.canvas.style.border = options.border
 

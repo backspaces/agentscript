@@ -2,17 +2,16 @@
 
 <head>
     <title>Geo Hello</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
 </head>
 
 <body>
     <script type="module">
         import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
         import Animator from '../src/Animator.js'
         import Draw from '../src/LeafletDraw.js'
         import GeoWorld from '../src/GeoWorld.js'
         import Model from '../models/HelloModel.js'
-        import * as gis from '../src/gis.js'
 
         const bbox = gis.santaFeBBox // gis.bboxFromCenter(gis.santaFeCenter, 0.2, 0.1)
         const world = new GeoWorld(bbox, 100) // geo bbox & width in patches
