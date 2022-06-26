@@ -20,10 +20,10 @@ jobs:
                   keys:
                       - v1-dependencies-{{ checksum "package.json" }}
 
-            - run:
-                  command: |
-                      google-chrome --version
-                      chromedriver --version
+            # - run:
+            #       command: |
+            #           google-chrome --version
+            #           chromedriver --version
 
             - run: yarn install
 
