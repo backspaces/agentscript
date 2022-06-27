@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: Model3D.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,39 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: Model3D.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Turtle3D from './Turtle3D.js'
+import Model2D from './Model2D.js'
 
+/**
+ * Model3D uses Model2D with one change:
+ *
+ * - model.Turtles: an array {@link Turtles} of {@link Turtle3D} instances
+ *
+ * Model3D is our default Model.
+ *
+ * @param {Object|World} [worldOptions=World.defaultOptions()]
+ *
+ */
+class Model3D extends Model2D {
+    initAgentSet(name, AgentsetClass, AgentClass) {
+        if (name === 'turtles') AgentClass = Turtle3D
+        super.initAgentSet(name, AgentsetClass, AgentClass)
+    }
+}
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default Model3D
+</code></pre>
+        </article>
+    </section>
 
 
 

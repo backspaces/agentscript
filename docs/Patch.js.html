@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Patch.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Patch.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import * as util from './utils.js'
+import AgentList from './AgentList.js'
+
+// Class Patch instances represent a rectangle on a grid.  They hold variables
+// that are in the patches the turtles live on.  The set of all patches
+// is the world on which the turtles live and the model runs.
+
+// Flyweight object creation:
+// Objects within AgentSets use "prototypal inheritance" via Object.create().
+// Here, the Patch class is given to Patches for use creating Proto objects
+// (new Patch(agentSet)), but only once per model/breed.
+// The flyweight Patch objects are created via Object.create(protoObject),
+// This lets the new Patch(agentset) object be "defaults".
+// https://medium.com/dailyjs/two-headed-es6-classes-fe369c50b24
+
+/**
+ * Class Patch instances represent a square on the {@link Patches} grid.
+ * They hold variables
+ * that are in the patches the turtles live on.  The set of all patches
+ * is the world on which the turtles live and the model runs.
+ *
+ * You do not use `new Patch`, rather Class {@link Model} creates the patches
+ * for you, using the {@link World} data passed to the Model.
+ *
+ * You *never* do this:
+ *
+ */
+class Patch {
+    // Set by AgentSet
+    agentSet
+    model
+    name
+
+    turtles
+    z = 0
+
+    // static defaultVariables() {
+    //     // Core variables for patches.
+    //     return {
+    //         turtles: undefined, // the turtles on me. Lazy evalued, see turtlesHere
+    //         z: 0, // default shared z val. Can be overridden
+    //     }
+    // }
+    // // Initialize a Patch given its Patches AgentSet.
+    // constructor() {
+    //     Object.assign(this, Patch.defaultVariables())
+    // }
+    // Getter for x,y derived from patch id, thus no setter.
+    get x() {
+        return (this.id % this.model.world.width) + this.model.world.minX
+    }
+    get y() {
+        return (
+            this.model.world.maxY - Math.floor(this.id / this.model.world.width)
+        )
+    }
+    // get z() {
+    //     return 0
+    // }
+    // set z(z) {}
+
+    /**
+     * Return whether or not this patch is on the edge of the atches.
+     *
+     * @returns {boolean}
+     */
+    isOnEdge() {
+        return this.patches.isOnEdge(this)
+    }
+
+    // Getter for neighbors of this patch.
+    // Uses lazy evaluation to promote neighbors to instance variables.
+    // To avoid promotion, use `patches.neighbors(this)`.
+    // Promotion makes getters accessed only once.
+    // defineProperty required: can't set this.neighbors when getter defined.
+    /**
+     * Return an array of this patch's 8
+     * [Moore neighbors](https://en.wikipedia.org/wiki/Moore_neighborhood).
+     *
+     * @returns {AgentArray}
+     */
+    get neighbors() {
+        // lazy promote neighbors from getter to instance prop.
+        const n = this.patches.neighbors(this)
+        Object.defineProperty(this, 'neighbors', { value: n, enumerable: true })
+        return n
+    }
+    /**
+     * Return an array of this patch's 4
+     * [Von Neumann neighbors](https://en.wikipedia.org/wiki/Von_Neumann_neighborhood)
+     * (north, south, east, west).
+     *
+     * @returns {AgentArray}
+     */
+    get neighbors4() {
+        const n = this.patches.neighbors4(this)
+        Object.defineProperty(this, 'neighbors4', {
+            value: n,
+            enumerable: true,
+        })
+        return n
+    }
+
+    // Promote this.turtles on first call to turtlesHere.
+    /**
+     * Return an Array of the turtles on this patch.
+     *
+     * @returns {AgentArray}
+     */
+    get turtlesHere() {
+        if (this.turtles == null) {
+            this.patches.ask(p => {
+                p.turtles = new AgentList(this.model)
+            })
+            this.model.turtles.ask(t => {
+                t.patch.turtles.push(t)
+            })
+        }
+        return this.turtles
+    }
+    // Returns above but returning only turtles of this breed.
+    /**
+     * Returns an Array of the particular breed on this patch.
+     *
+     * @param {String} breed
+     * @returns {AgentArray}
+     */
+    breedsHere(breed) {
+        const turtles = this.turtlesHere
+        return turtles.withBreed(breed)
+    }
+
+    // 6 methods in both Patch &amp; Turtle modules
+    // Distance from me to x, y.
+    // 2.5D: use z too if both z &amp; this.z exist.
+    // REMIND: No off-world test done
+    distanceXY(x, y, z = null) {
+        const useZ = z != null &amp;&amp; this.z != null
+        return useZ
+            ? util.distance3(this.x, this.y, this.z, x, y, z)
+            : util.distance(this.x, this.y, x, y)
+    }
+    // Return distance from me to object having an x,y pair (turtle, patch, ...)
+    // 2.5D: use z too if both agent.z and this.z exist
+    // distance (agent) { this.distanceXY(agent.x, agent.y) }
+    distance(agent) {
+        const { x, y, z } = agent
+        return this.distanceXY(x, y, z)
+    }
+
+    // distanceXY(x, y) {
+    //     return util.distance(this.x, this.y, x, y)
+    // }
+    // // Return distance from me to object having an x,y pair (turtle, patch, ...)
+    // distance(agent) {
+    //     return this.distanceXY(agent.x, agent.y)
+    // }
+
+    // Return heading towards agent/x,y using current geometry
+    towards(agent) {
+        return this.towardsXY(agent.x, agent.y)
+    }
+    towardsXY(x, y) {
+        // return util.radiansTowardXY(this.x, this.y, x, y)
+        let rads = util.radiansTowardXY(this.x, this.y, x, y)
+        return this.model.fromRads(rads)
+    }
+    // Return patch w/ given parameters. Return undefined if off-world.
+    // Return patch dx, dy from my position.
+    patchAt(dx, dy) {
+        return this.patches.patch(this.x + dx, this.y + dy)
+    }
+    patchAtHeadingAndDistance(heading, distance) {
+        return this.patches.patchAtHeadingAndDistance(this, heading, distance)
+    }
+
+    sprout(num = 1, breed = this.model.turtles, initFcn = turtle => {}) {
+        return breed.create(num, turtle => {
+            turtle.setxy(this.x, this.y)
+            initFcn(turtle)
+        })
+    }
+}
+
+export default Patch
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-geojson.html">geojson</a></li><li><a href="module-gis.html">gis</a></li><li><a href="module-steg.html">steg</a></li><li><a href="module-utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="Color.html">Color</a></li><li><a href="ColorMap.html">ColorMap</a></li></ul><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentList.html">AgentList</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="Animator.html">Animator</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Link.html">Link</a></li><li><a href="Links.html">Links</a></li><li><a href="Model2D.html">Model2D</a></li><li><a href="Model3D.html">Model3D</a></li><li><a href="Mouse.html">Mouse</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="RGBDataSet.html">RGBDataSet</a></li><li><a href="ThreeDraw.html">ThreeDraw</a></li><li><a href="Turtle.html">Turtle</a></li><li><a href="Turtle3D.html">Turtle3D</a></li><li><a href="Turtles.html">Turtles</a></li><li><a href="TwoDraw.html">TwoDraw</a></li><li><a href="World.html">World</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Jun 27 2022 12:02:21 GMT-0600 (Mountain Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

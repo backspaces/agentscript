@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: steg.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: steg.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import * as util from './utils.js'
+
+// /** @namespace */
+/** @module */
+
+/**
+ * @param {Image|Imageable} img img: image, canvas, context2d, url, data url
+ * @returns A Canvas.context object
+ */
+async function toContext(img) {
+    const type = util.typeOf(img)
+    switch (type) {
+        // image url or html element
+        case 'string': // Note: drop thru to image
+            img = await util.imagePromise(img)
+        case 'htmlimageelement':
+            return util.imageToCtx(img)
+
+        // canvas
+        case 'htmlcanvaselement':
+        case 'offscreencanvas':
+            return img.getContext('2d')
+
+        // image 2D context
+        case 'canvasrenderingcontext2d':
+            return img
+
+        default:
+            throw Error('toContext: bad img type: ' + type)
+    }
+}
+// msg can be string or Uint8Array
+
+/**
+ * @param {*} msg A string, charCode (number), Uint8Array or Uint8ClampedArray
+ * @returns A Uint8Array or Uint8ClampedArray
+ */
+function toUint8Array(msg) {
+    const type = util.typeOf(msg)
+    switch (type) {
+        case 'number':
+            msg = String.fromCharCode(msg) // drop thru to 'string'
+        case 'string':
+            return new TextEncoder().encode(msg)
+
+        case 'uint8array':
+        case 'uint8clampedarray':
+            return msg
+
+        default:
+            throw Error('toUint8Array: bad msg type: ' + type)
+    }
+}
+// Convert a char to an array of three RGB low order pixel values
+/**
+ *
+ * @param {} char An 8 bit char
+ * @returns Array of 3 parts of char using the bits tempate (3, 2, 3 bits)
+ */
+function charToBits(char) {
+    // return [char >> 5, char >> 3 &amp; 0b11111100, char &amp; 0b11111000]
+    return [
+        char >> bits[0].shift,
+        (char >> bits[1].shift) &amp; bits[1].msgMask,
+        char &amp; bits[2].msgMask,
+    ]
+}
+const bits = [
+    { shift: 5, msgMask: 0b00000111, dataMask: 0b11111000 }, // bits: 3
+    { shift: 3, msgMask: 0b00000011, dataMask: 0b11111100 }, // bits: 2
+    { shift: 0, msgMask: 0b00000111, dataMask: 0b11111000 }, // bits: 3
+]
+function checkSize(msg, width, height) {
+    const imgSize = width * height // 1 px = 1 byte
+    if (imgSize &lt; msg.length)
+        throw Error(`encode: image size &lt; msg.length: ${imgSize} ${msg.length}`)
+}
+// Return the character length of the message within the image's imgData
+export function stegMsgSize(imgData) {
+    for (let i = 3; i &lt; imgData.length; i = i + 4) {
+        if (imgData[i] === 254) return (i - 3) / 4
+    }
+    throw Error(
+        `decode: no message terminator in image data, length = ${imgData.length}`
+    )
+}
+
+// ============== encode/decode ==============
+
+// img can be png/jpeg image, url, dataurl, context2d, canvas
+// msg is a string or a Uint8 array
+export async function encode(img, msg) {
+    const ctx = await toContext(img)
+    const { width, height } = ctx.canvas
+    checkSize(msg, width, height)
+
+    const msgArray = toUint8Array(msg)
+    console.log('msg buffer', msgArray)
+
+    const imageData = ctx.getImageData(0, 0, width, height)
+    const data = imageData.data
+    console.log('imgageData.data', data)
+
+    let ix
+    msgArray.forEach((char, i) => {
+        const [ch0, ch1, ch2] = charToBits(char)
+        ix = i * 4
+        data[ix] = (data[ix++] &amp; bits[0].dataMask) + ch0
+        data[ix] = (data[ix++] &amp; bits[1].dataMask) + ch1
+        data[ix] = (data[ix++] &amp; bits[2].dataMask) + ch2
+        data[ix] = 255
+    })
+    data[ix + 4] = 254 // use alpha to terminate message
+
+    console.log('encoded imgageData.data', data)
+    ctx.putImageData(imageData, 0, 0)
+
+    console.log('msg length', msg.length)
+    console.log('encode: embedded msg size', stegMsgSize(data))
+
+    return ctx
+}
+
+// img can be png/jpeg image, url, dataurl, context2d, canvas
+// returnU8: return a UintTypedArray; default return string
+export async function decode(img, returnU8 = false) {
+    const ctx = await toContext(img)
+    const { width, height } = ctx.canvas
+    const data = ctx.getImageData(0, 0, width, height).data
+    const msgSize = stegMsgSize(data)
+    console.log('decode: embedded msg size', msgSize)
+
+    const msgArray = new Uint8Array(msgSize)
+    msgArray.forEach((char, i) => {
+        let ix = i * 4
+        const ch0 = (bits[0].msgMask &amp; data[ix++]) &lt;&lt; bits[0].shift
+        const ch1 = (bits[1].msgMask &amp; data[ix++]) &lt;&lt; bits[1].shift
+        const ch2 = (bits[2].msgMask &amp; data[ix++]) &lt;&lt; bits[2].shift
+        msgArray[i] = ch0 + ch1 + ch2
+    })
+    console.log('decode msgArray', msgArray)
+
+    if (returnU8) return msgArray
+    return new TextDecoder().decode(msgArray)
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-geojson.html">geojson</a></li><li><a href="module-gis.html">gis</a></li><li><a href="module-steg.html">steg</a></li><li><a href="module-utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="Color.html">Color</a></li><li><a href="ColorMap.html">ColorMap</a></li></ul><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentList.html">AgentList</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="Animator.html">Animator</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Link.html">Link</a></li><li><a href="Links.html">Links</a></li><li><a href="Model2D.html">Model2D</a></li><li><a href="Model3D.html">Model3D</a></li><li><a href="Mouse.html">Mouse</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="RGBDataSet.html">RGBDataSet</a></li><li><a href="ThreeDraw.html">ThreeDraw</a></li><li><a href="Turtle.html">Turtle</a></li><li><a href="Turtle3D.html">Turtle3D</a></li><li><a href="Turtles.html">Turtles</a></li><li><a href="TwoDraw.html">TwoDraw</a></li><li><a href="World.html">World</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Jun 27 2022 12:02:21 GMT-0600 (Mountain Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

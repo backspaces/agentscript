@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: GUI.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: GUI.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import * as util from '../src/utils.js'
+// import dat from 'https://cdn.skypack.dev/dat.gui'
+import dat from '../vendor/dat.gui.js'
+
+/** @class */
+class GUI {
+    /**
+     * @param {Object} template A set of name/object pairs, one per UI element
+     *
+     * @example
+     * const gui = new GUI ({
+     *     opacity: { // slider
+     *         val: [canvas.opacity, [0, 1, 0.1]],
+     *         cmd: val => canvas.setOpacity(val),
+     *     },
+     *     download: { // button
+     *         cmd: () => util.downloadBlob(data, 'data.json', false),
+     *     },
+     *     ...
+     * })
+     */
+    constructor(template) {
+        this.template = template
+
+        this.controllers = {}
+        this.folders = {}
+        this.values = {} // the key/val's from each template
+
+        this.baseGui = this.gui = new dat.GUI()
+        // this.folders['default'] = this.baseGui
+
+        util.forLoop(template, (obj, key) => {
+            if (util.isString(obj)) {
+                if (obj === 'default') {
+                    this.gui = this.baseGui
+                } else {
+                    this.gui = this.baseGui.addFolder(obj)
+                    this.folders[key] = this.gui
+                }
+            } else {
+                this.controllers[key] = this.addUI(obj, key)
+            }
+        })
+
+        this.gui = this.baseGui
+    }
+
+    type(obj) {
+        const { val, cmd } = obj
+        const valType = util.typeOf(val)
+        const cmdType = util.typeOf(cmd)
+
+        if (this.isDatColor(val)) return 'color'
+        if (valType === 'undefined') return 'button'
+        if (valType === 'boolean') return 'toggle'
+        if (valType === 'string') return 'input'
+        if (val === 'listen') return 'monitor'
+        if (valType === 'array' &amp;&amp; val.length === 2) {
+            if (util.typeOf(val[0]) === 'number') return 'slider'
+            if (util.typeOf(val[0]) === 'string') return 'chooser'
+        }
+        throw Error('GUI type error, val: ' + val + ' cmd: ' + cmd)
+    }
+
+    /**
+     *
+     * @param {Object} obj A gui object with two optional objects: 'val' and 'cmd'
+     * @param {string} key The name of the gui
+     * @returns A dat.gui control object
+     */
+    addUI(obj, key) {
+        // console.log(obj, key)
+        let { val, cmd } = obj
+        const type = this.type(obj)
+
+        let control, extent
+
+        if (util.typeOf(val) === 'array') [val, extent] = val
+        if (type === 'button') [val, cmd] = [cmd, val]
+
+        this.values[key] = val
+
+        switch (type) {
+            case 'slider':
+                const [min, max, step = 1] = extent
+                control = this.gui.add(this.values, key, min, max).step(step)
+                break
+
+            case 'chooser':
+                control = this.gui.add(this.values, key, extent)
+                break
+
+            case 'color':
+                control = this.gui.addColor(this.values, key)
+                break
+
+            case 'button':
+            case 'toggle':
+            case 'input':
+            case 'monitor':
+                control = this.gui.add(this.values, key)
+                break
+
+            default:
+                throw Error(`Controller.addUI: bad type: ${type}`)
+        }
+
+        // initialize: set model etc initial values to this value
+        if (cmd &amp;&amp; val !== 'listen' &amp;&amp; val) cmd(val)
+        if (val === 'listen') this.setListener(key, cmd)
+
+        if (cmd) {
+            if (val === 'listen') control.listen()
+            else control.onChange(cmd)
+        }
+
+        return control
+    }
+
+    isDatColor(val) {
+        if (util.typeOf(val) === 'string') {
+            if (val[0] === '#') return val.length === 7 || val.length === 4
+            if (val.startsWith('rgb(') || val.startsWith('rgba('))
+                return val.endsWith(')')
+            if (val.startsWith('hsl(') || val.startsWith('hsla('))
+                return val.endsWith(')')
+            if (val.startsWith('hsv(') || val.startsWith('hsva('))
+                return val.endsWith(')')
+        }
+
+        if (util.typeOf(val) === 'object')
+            return val.h != null &amp;&amp; val.s != null &amp;&amp; val.v != null
+        // if (util.typeOf(val) === 'array') {
+        //     if (val.length === 3 || val.length === 4)
+        //         return val.every(i => util.typeOf(i) === 'number')
+        // }
+
+        return false
+    }
+    setListener(key, cmd) {
+        this.values[key] = cmd()
+    }
+    update() {
+        util.forLoop(this.template, (obj, key) => {
+            if (obj.val === 'listen') this.setListener(key, obj.cmd)
+        })
+    }
+}
+
+export default GUI
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-geojson.html">geojson</a></li><li><a href="module-gis.html">gis</a></li><li><a href="module-steg.html">steg</a></li><li><a href="module-utils.html">utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="Color.html">Color</a></li><li><a href="ColorMap.html">ColorMap</a></li></ul><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentList.html">AgentList</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="Animator.html">Animator</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="GUI.html">GUI</a></li><li><a href="Link.html">Link</a></li><li><a href="Links.html">Links</a></li><li><a href="Model2D.html">Model2D</a></li><li><a href="Model3D.html">Model3D</a></li><li><a href="Mouse.html">Mouse</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="RGBDataSet.html">RGBDataSet</a></li><li><a href="ThreeDraw.html">ThreeDraw</a></li><li><a href="Turtle.html">Turtle</a></li><li><a href="Turtle3D.html">Turtle3D</a></li><li><a href="Turtles.html">Turtles</a></li><li><a href="TwoDraw.html">TwoDraw</a></li><li><a href="World.html">World</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Jun 27 2022 12:02:21 GMT-0600 (Mountain Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -54,7 +54,8 @@
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
         "build-scripts": "node bin/models2scripts",
         "build-md": "bin/src2md 'models views2 views3 views3d mvc gis' > /dev/null",
-        "build-docs": "echo build called",
+        "build-docs": "jsdoc -c config/jsdoc.js",
+        "build-docs0": "echo build called",
         "build-docs1": "documentation build src/*.js --config config/documentation.yml --github -f html -o docs",
         "test": "ava test/models.js && npm run test3d",
         "test3d": "deno test test/geom.js",
@@ -78,11 +79,12 @@
         "run3w": "bin/runmodels workers3",
         "runnode": "bin/runnodemodels",
         "chrome": "bin/modelsinbrowser models",
+        "safari": "bin/modelsinbrowser models Safari",
+        "-- END OF TESTS --": "The following are doc builders samples",
         "jsdoc": "jsdoc -c tests/themes/config/jsdoc.js",
         "dark": "jsdoc -c tests/themes/config/cleandark.js",
         "light": "jsdoc -c tests/themes/config/cleanlight.js",
-        "betterdoc": "jsdoc -c tests/themes/config/betterdoc.js",
-        "safari": "bin/modelsinbrowser models Safari"
+        "betterdoc": "jsdoc -c tests/themes/config/betterdoc.js"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
@@ -91,8 +93,10 @@
     "devDependencies": {
         "ava": "^2.1.0",
         "chokidar-cli": "^1.2.1",
+        "clean-jsdoc-theme": "^4.0.7",
         "documentation": "^13.2.5",
         "esm": "^3.2.25",
+        "jsdoc": "^3.6.10",
         "live-server": "1.2.1",
         "npm-run-all": "4.1.2",
         "puppeteer": "^13.0.0",
