@@ -73,18 +73,9 @@ async function runModel(model) {
               // : `http://localhost/src/agentscript/models/test.html?${model}`
               `http://127.0.0.1:${port}/models/worker.html?${model}`
             : `http://127.0.0.1:${port}/models/test.html?${model}`
-    // console.log(useWorkers && !nonWorker(model))
 
     const browser = await puppeteer.launch({
-        args: [
-            // Let model know it is being run by Puppeteer:
-            '--user-agent=Puppeteer',
-            // let workers use es6 imports
-            // '--enable-experimental-web-platform-features',
-            // Don't know if these still needed: CI needed a while back?
-            // '--no-sandbox',
-            // '--disable-setuid-sandbox',
-        ],
+        args: ['--user-agent=Puppeteer'], // model: show being run by Puppeteer
         headless: headless, // use for useful debugging!
     })
     const page = await browser.newPage()
@@ -103,6 +94,7 @@ async function runModel(model) {
             waitOn()
         })
     })
+
     await page.close()
     await browser.close()
 
