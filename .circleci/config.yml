@@ -3,27 +3,31 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
+orbs:
+    browser-tools: circleci/browser-tools@1.1.0
 jobs:
     build:
         docker:
-            - image: cimg/node:18.3.0
-            # - image: cimg/node:current-browsers
+            # - image: cimg/node:18.3.0
+            - image: cimg/node:current-browsers
             # - image: circleci/node:latest-browsers
             # - image: circleci/node:10-jessie-browsers
 
         working_directory: ~/repo
 
         steps:
+            - browser-tools/install-chrome
+            - browser-tools/install-chromedriver
             - checkout
 
             - restore_cache:
                   keys:
                       - v1-dependencies-{{ checksum "package.json" }}
 
-            # - run:
-            #       command: |
-            #           google-chrome --version
-            #           chromedriver --version
+            - run:
+                  command: |
+                      google-chrome --version
+                      chromedriver --version
 
             - run: yarn install
 
