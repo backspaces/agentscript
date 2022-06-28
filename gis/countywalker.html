@@ -41,27 +41,22 @@
 
         const params = await view.initLeaflet({
             Z: 7,
-            terrain: 'osm'
+            terrain: 'osm',
+            json: counties,
+            jsonStyle: feature => ({
+                color: 'red',
+                // defaults for rest https://leafletjs.com/reference.html#path-option
+                // fillOpacity: 0.2,
+                // weight: 3,
+                // ...
+            }),
+            jsonPopup: layer =>
+                layer.feature.properties.NAME +
+                ', pop: ' +
+                layer.feature.properties.population.toLocaleString()
         })
         const { L, map } = params
 
-        L.geoJSON(counties, {
-            style: () => ({
-                color: 'red',
-                fillOpacity: 0.025,
-                weight: 2,
-            }),
-        })
-            .bindPopup(
-                layer =>
-                    layer.feature.properties.NAME +
-                    ', pop: ' +
-                    layer.feature.properties.population.toLocaleString()
-            )
-            .addTo(map)
-
-        const latlngs = gis.latlon(gis.bboxCoords(model.world.bbox))
-        L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
 
         const anim = new Animator(
             () => {

@@ -14,11 +14,28 @@ class LeafletDraw extends TwoDraw {
             Z: 10,
             // no elevation layer. 0.01 for invisible elevation layer, 1 for opaque
             elevationOpacity: 0,
-            // set to null/undefined/'' for no border
-            border: '1px solid red',
+
+            // view's canvas border: set to null for no border
+            canvasBorder: '2px solid red',
+
+            // elevation tiles: redfishUSA/World, mapzen, mapbox
             tiles: 'mapzen',
+
+            // map base layer: osm topo topo1 smooth usgs
             terrain: 'topo',
+
+            // have javascript install css files
             fetchCSS: true,
+
+            // Add Leaflet gis layer using the provided style
+            // https://leafletjs.com/reference.html#geojson
+            // https://leafletjs.com/reference.html#layer
+            json: null,
+            // must be a function: geoJsonFeature => ({color:...})
+            // style options: https://leafletjs.com/reference.html#path-option
+            jsonStyle: null, // will be default style if not overriden
+            // must be a function: layer => string
+            jsonPopup: null,
         }
     }
 
@@ -47,9 +64,9 @@ class LeafletDraw extends TwoDraw {
             await util.fetchCssStyle('./map.css')
         }
 
-        if (options.border) this.canvas.style.border = options.border
+        if (options.canvasBorder)
+            this.canvas.style.border = options.canvasBorder
 
-        const ElementOverlay = elementOverlay(L)
         const tileData = TileData[options.tiles] // redfishUSA/World, mapzen, mapbox
         const terrainName = options.terrain
 
@@ -82,7 +99,27 @@ class LeafletDraw extends TwoDraw {
             new L.LatLng(north, west),
             new L.LatLng(south, east)
         )
+        const ElementOverlay = elementOverlay(L)
         const elementLayer = new ElementOverlay(this.canvas, bounds).addTo(map)
+
+        let jsonLayer
+        if (options.json) {
+            // style needs to be fcn w/ json feature arg
+            let jsonStyleFcn = options.jsonStyle
+            if (util.isObject(jsonStyleFcn)) {
+                jsonStyleFcn = feature => jsonStyleFcn
+            }
+
+            jsonLayer = L.geoJSON(options.json, {
+                style: jsonStyleFcn,
+            }) //.addTo(map)
+
+            if (options.jsonPopup) {
+                jsonLayer.bindPopup(options.jsonPopup)
+            }
+
+            jsonLayer.addTo(map)
+        }
 
         return {
             L,
@@ -94,6 +131,7 @@ class LeafletDraw extends TwoDraw {
             terrainLayer,
             elevationLayer,
             elementLayer,
+            jsonLayer,
             options,
         }
     }

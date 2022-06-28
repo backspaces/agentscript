@@ -203,8 +203,8 @@ export function attribution(who = 'osm') {
             )
         case 'topo':
             return prefix + '<a href="https://opentopomap.org">OpenTopoMap</a>'
-        case 'topo':
-            return prefix + '<a href="https://opentopomap.org">OpenTopoMap</a>'
+        // case 'topo':
+        //     return prefix + '<a href="https://opentopomap.org">OpenTopoMap</a>'
         case 'topo1':
             return (
                 prefix + '<a  href="https://www.maptiler.com">OpenTopoMap</a>'

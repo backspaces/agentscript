@@ -9,7 +9,7 @@
         import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
         import Animator from '../src/Animator.js'
-        import Draw from '../src/LeafletDraw.js'
+        import LeafletDraw from '../src/LeafletDraw.js'
         import GeoWorld from '../src/GeoWorld.js'
         import Model from '../models/HelloModel.js'
 
@@ -24,7 +24,7 @@
             turtlesSize: 2,
             linksWidth: 0.2,
         }
-        const view = new Draw(model, {
+        const view = new LeafletDraw(model, {
             patchSize: 5,
             drawOptions
         })

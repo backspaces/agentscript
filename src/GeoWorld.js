@@ -28,14 +28,17 @@ class GeoWorld extends World {
         super({
             minX: 0,
             maxX: width,
+
             minY: 0,
             maxY: Math.round(width / aspect),
+
             minZ: 0,
             maxZ: 0,
         })
 
         this.bbox = bbox
         this.xfm = this.bboxTransform(...bbox)
+
         if (json) this.geojson = json
     }
     // Convert to/from geo coords.
