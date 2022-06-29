@@ -33,6 +33,7 @@ jobs:
 
             - run: yarn build
 
+            # deno used for 3D testing: deno test test/geom.js
             - run: curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/local sh
 
             - run:

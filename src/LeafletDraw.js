@@ -10,13 +10,15 @@ import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/ele
 class LeafletDraw extends TwoDraw {
     static defaultLeafletOptions() {
         return {
+            // L.map uses these
             div: 'map',
             Z: 10,
+
             // no elevation layer. 0.01 for invisible elevation layer, 1 for opaque
             elevationOpacity: 0,
 
-            // view's canvas border: set to null for no border
-            canvasBorder: '2px solid red',
+            // world's border: set to null for no border
+            bboxBorder: { color: 'red', weight: 0.5 },
 
             // elevation tiles: redfishUSA/World, mapzen, mapbox
             tiles: 'mapzen',
@@ -64,9 +66,6 @@ class LeafletDraw extends TwoDraw {
             await util.fetchCssStyle('./map.css')
         }
 
-        if (options.canvasBorder)
-            this.canvas.style.border = options.canvasBorder
-
         const tileData = TileData[options.tiles] // redfishUSA/World, mapzen, mapbox
         const terrainName = options.terrain
 
@@ -93,7 +92,6 @@ class LeafletDraw extends TwoDraw {
             }).addTo(map)
         }
 
-        // let modelLayer = new ElementOverlay(view.canvas, bounds).addTo(map)
         const [west, south, east, north] = this.model.world.bbox
         const bounds = new L.LatLngBounds(
             new L.LatLng(north, west),
@@ -106,9 +104,6 @@ class LeafletDraw extends TwoDraw {
         if (options.json) {
             // style needs to be fcn w/ json feature arg
             let jsonStyleFcn = options.jsonStyle
-            if (util.isObject(jsonStyleFcn)) {
-                jsonStyleFcn = feature => jsonStyleFcn
-            }
 
             jsonLayer = L.geoJSON(options.json, {
                 style: jsonStyleFcn,
@@ -119,6 +114,16 @@ class LeafletDraw extends TwoDraw {
             }
 
             jsonLayer.addTo(map)
+        }
+
+        // Draw a border around the model's bbox
+        // Before done via css: this.canvas.style.border = options.canvasBorder
+        //   where canvasBorder: '2px solid red'
+        // .. but prefer a map layer for keeping it all in Leaflet
+        let bboxLayer
+        if (options.bboxBorder) {
+            const latlngs = gis.latlon(gis.bboxCoords(this.model.world.bbox))
+            bboxLayer = L.polyline(latlngs, options.bboxBorder).addTo(map)
         }
 
         return {
@@ -132,6 +137,7 @@ class LeafletDraw extends TwoDraw {
             elevationLayer,
             elementLayer,
             jsonLayer,
+            bboxLayer,
             options,
         }
     }

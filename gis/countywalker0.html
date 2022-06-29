@@ -78,7 +78,7 @@
             .addTo(map)
 
         const latlngs = gis.latlon(gis.bboxCoords(bbox))
-        L.polyline(latlngs, { color: 'red', weight: 0.5 }).addTo(map)
+        L.polyline(latlngs, { color: 'black', weight: 0.5 }).addTo(map)
 
         const anim = new Animator(
             () => {

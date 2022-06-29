@@ -47,16 +47,16 @@
                 color: 'red',
                 // defaults for rest https://leafletjs.com/reference.html#path-option
                 // fillOpacity: 0.2,
-                // weight: 3,
                 // ...
             }),
             jsonPopup: layer =>
                 layer.feature.properties.NAME +
                 ', pop: ' +
-                layer.feature.properties.population.toLocaleString()
+                layer.feature.properties.population
+                    .toLocaleString(), // for putting "," in thousands
+            bboxBorder: { color: 'black', weight: 0.5 },
         })
         const { L, map } = params
-
 
         const anim = new Animator(
             () => {
