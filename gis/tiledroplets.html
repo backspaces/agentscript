@@ -137,8 +137,8 @@
             // const [X, Y, Z] = centerTileXYZ()
             // const bbox = gis.xyz2bbox(X, Y, Z)
             const bbox = centerTileBBox()
-            // return gis.latlon(gis.bbox2bounds(bbox))
-            return gis.bbox2bounds(bbox)
+            return gis.latlon(gis.bboxBounds(bbox))
+            // return gis.bbox2bounds(bbox)
         }
         function centerTileLatLon() {
             // const [X, Y, Z] = centerTileXYZ()

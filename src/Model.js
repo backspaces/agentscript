@@ -14,3 +14,35 @@ import Model from './Model3D.js'
  */
 
 export default Model
+
+// ======================================
+
+// import Model2D from '../src/Model2D.js'
+// import Turtle3D from '../src/Turtle3D'
+// /** @class */
+
+// class Model extends Model2D {
+//     use3D() {
+//         return !(this.world.minZ === 0 && this.world.maxZ === 0)
+//     }
+//     initAgentSet(name, AgentsetClass, AgentClass) {
+//         if (name === 'turtles' && this.use3D()) AgentClass = Turtle3D
+//         super.initAgentSet(name, AgentsetClass, AgentClass)
+//     }
+// }
+
+// export default Model
+
+// ======================================
+// Try AsyncFunction?? top level await?
+// class Model extends Model2D {
+//     use3D() {
+//         return !(this.world.minZ === 0 && this.world.maxZ === 0)
+//     }
+//     initAgentSet(name, AgentsetClass, AgentClass) {
+//         if (name === 'turtles' && this.use3D()) AgentClass = Turtle3D
+//         super.initAgentSet(name, AgentsetClass, AgentClass)
+//     }
+// }
+
+// export default Model

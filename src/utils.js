@@ -101,6 +101,18 @@ export async function canvasToBlob(can, mimeType = 'png', quality = undefined) {
 //     return fetch(url).then(res => res[type]())
 // }
 
+// export function asyncify(f) {
+//     let AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
+//     const f = new AsyncFunction('context', script)
+// }
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncFunction
+export function AsyncFunction(argsArray, fcnBody) {
+    const ctor = Object.getPrototypeOf(async function () {}).constructor
+    const asyncFcn = new ctor(...argsArray, fcnBody)
+    return asyncFcn
+}
+
 // Async convert blob to one of three types:
 // Type can be one of Text, ArrayBuffer, DataURL
 // Camel case ok: text, arrayBuffer, dataURL

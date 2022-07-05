@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+// Convert all our es6 models to html files running the models
+
+const shell = require('shelljs')
+
+const dir = 'views1'
+shell.rm('-rf', `${dir}/`)
+shell.mkdir(`${dir}`)
+
+const models = shell.ls('models/[A-Z]*Model.js')
+
+models.forEach(model => {
+    shell.echo(model)
+    const html = makeHtml(model)
+
+    // shell.echo(makeHtml(model))
+    const htmlFile = model
+        .replace('models/', dir + '/')
+        // .toLowerCase()
+        .replace('Model.js', '.html')
+        .toLowerCase()
+
+    shell.echo(htmlFile)
+    shell.echo(html)
+    new shell.ShellString(html).to(htmlFile)
+})
+
+function makeHtml(model) {
+    return `<html>
+<head>
+    <title>Hello</title>
+</head>
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import Model from '../${model}'
+
+        util.printToPage('Running for 500 steps. Takes a while!')
+
+        const model = new Model()
+        await model.startup()
+        model.setup()
+        await util.timeoutLoop(() => {
+            model.step()
+        }, 500)
+
+        const sample = util.sampleModel(model)
+        util.printToPage(sample)
+    </script>
+</body>
+
+</html>
+`
+}

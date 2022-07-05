@@ -1,3 +1,11 @@
+import * as util from '../src/utils.js'
+
+import * as gis from '../src/gis.js'
+import * as TileData from '../src/TileData.js'
+
+import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
+import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
+
 function defaultLeafletOptions() {
     return {
         // L.map uses these
@@ -8,7 +16,7 @@ function defaultLeafletOptions() {
         elevationOpacity: 0,
 
         // world's border: set to null for no border
-        bboxBorder: { color: 'red', weight: 0.5 },
+        bboxBorder: { color: 'red', weight: 2 },
 
         // elevation tiles: redfishUSA/World, mapzen, mapbox
         tiles: 'mapzen',
@@ -31,7 +39,7 @@ function defaultLeafletOptions() {
     }
 }
 
-export async function initLeaflet(model, view, options = {}) {
+async function leafletInit(model, canvas, options = {}) {
     options = Object.assign(defaultLeafletOptions(), options)
 
     if (options.fetchCSS) {
@@ -71,7 +79,7 @@ export async function initLeaflet(model, view, options = {}) {
         new L.LatLng(south, east)
     )
     const ElementOverlay = elementOverlay(L)
-    const elementLayer = new ElementOverlay(view.canvas, bounds).addTo(map)
+    const elementLayer = new ElementOverlay(canvas, bounds).addTo(map)
 
     let jsonLayer
     if (options.json) {
@@ -96,21 +104,35 @@ export async function initLeaflet(model, view, options = {}) {
     let bboxLayer
     if (options.bboxBorder) {
         const latlngs = gis.latlon(gis.bboxCoords(model.world.bbox))
-        bboxLayer = L.polyline(latlngs, options.bboxBorder).addTo(map)
+        // bboxLayer = L.polyline(latlngs, options.bboxBorder).addTo(map)
+        bboxLayer = L.polygon(latlngs, options.bboxBorder).addTo(map)
     }
 
     return {
+        // a module of all the elevation tile urls & their datasets
+        TileData,
+        tileData, // our instance of TileData
+        gis, // the gis utilities module
+
+        // The leaflet map, and input for L.map
         L,
-        elementOverlay,
-        ElementOverlay,
-        tileData,
         map,
         terrainName,
+
+        // The leaflet layerrs
         terrainLayer,
         elevationLayer,
         elementLayer,
         jsonLayer,
         bboxLayer,
+
+        // The model's overlay layer
+        elementOverlay,
+        ElementOverlay,
+
+        // the input options
         options,
     }
 }
+
+export default leafletInit

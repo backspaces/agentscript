@@ -23,9 +23,7 @@
         import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
         const ElementOverlay = elementOverlay(L)
 
-        const counties = await fetch(
-            '../gis/data/nmcounties.json'
-        ).then(resp => resp.json())
+        const counties = await fetch('./data/nmcounties.json').then(resp => resp.json())
 
         const world = new GeoWorld(counties, 100)
         const model = new CountiesModel(world)
@@ -78,7 +76,7 @@
             .addTo(map)
 
         const latlngs = gis.latlon(gis.bboxCoords(bbox))
-        L.polyline(latlngs, { color: 'black', weight: 0.5 }).addTo(map)
+        L.polygon(latlngs, { color: 'black', weight: 1, fill: false }).addTo(map)
 
         const anim = new Animator(
             () => {

@@ -10,16 +10,14 @@
 
     <script type="module">
         import * as util from '../src/utils.js'
-        import * as gis from '../src/gis.js'
 
         import GeoWorld from '../src/GeoWorld.js'
-        import LeafletDraw from '../src/LeafletDraw.js'
         import Animator from '../src/Animator.js'
         import CountiesModel from '../gis/CountiesModel.js'
 
-        const counties = await fetch(
-            '../gis/data/nmcounties.json'
-        ).then(resp => resp.json())
+        import LeafletDraw from '../src/LeafletDraw.js'
+
+        const counties = await fetch('./data/nmcounties.json').then(resp => resp.json())
 
         const world = new GeoWorld(counties, 100)
         const model = new CountiesModel(world)
@@ -39,22 +37,20 @@
             drawOptions,
         })
 
-        const params = await view.initLeaflet({
+        const params = await view.leafletInit({
             Z: 7,
             terrain: 'osm',
             json: counties,
             jsonStyle: feature => ({
                 color: 'red',
-                // defaults for rest https://leafletjs.com/reference.html#path-option
-                // fillOpacity: 0.2,
-                // ...
+                // default parameters https://leafletjs.com/reference.html#path-option
             }),
             jsonPopup: layer =>
                 layer.feature.properties.NAME +
                 ', pop: ' +
                 layer.feature.properties.population
                     .toLocaleString(), // for putting "," in thousands
-            bboxBorder: { color: 'black', weight: 0.5 },
+            bboxBorder: { color: 'black', weight: 1, fill: false },
         })
         const { L, map } = params
 

@@ -84,28 +84,14 @@ export function xyz2bbox(x, y, z) {
 
 // Leaflet style latlon corners to bbox
 // "bouonds" uses leaflet's latlon while "bbox" uses our lonlat
-export function bounds2bbox(leafletBounds) {
-    let { lng: east, lat: north } = leafletBounds.getNorthEast()
-    let { lng: west, lat: south } = leafletBounds.getSouthWest()
+export function Lbounds2bbox(leafletBounds) {
+    // let { lng: east, lat: north } = leafletBounds.getNorthEast()
+    // let { lng: west, lat: south } = leafletBounds.getSouthWest()
+    let { lng: west, lat: north } = leafletBounds.getNorthWest() // topLeft
+    let { lng: east, lat: south } = leafletBounds.getSouthEast() // bottomRight
     return [west, south, east, north]
 }
-// export function bbox2Lbounds(L, bbox) {
-//     const [west, south, east, north] = bbox
-//     const corner1 = L.latLng(north, west),
-//         corner2 = L.latLng(south, east)
-//     return L.latLngBounds(corner1, corner2)
-// }
-// All Leaflet methods that accept LatLngBounds objects also accept
-// them in a simple Array form (unless noted otherwise),
-// So the bounds example above can be passed like this:
-// Note this usees leaflet's latlon rather than lonlat
-export function bbox2bounds(bbox) {
-    const [west, south, east, north] = bbox
-    return [
-        [north, west], // latlon topLeft
-        [south, east], //latlon botRight
-    ]
-}
+
 export function tilesBBox(bbox, z) {
     const [west, south, east, north] = bbox
     const [westX, northY] = lonlatz2xy(west, north, z)
@@ -114,6 +100,7 @@ export function tilesBBox(bbox, z) {
     // if (Number.isInteger(southY)) southY--
     return [westX, southY, eastX, northY]
 }
+
 export function bboxCoords(bbox) {
     const [west, south, east, north] = bbox
     return [
@@ -121,6 +108,13 @@ export function bboxCoords(bbox) {
         [east, north], // topRight
         [east, south], // botRight
         [west, south], // botLeft
+    ]
+}
+export function bboxBounds(bbox) {
+    const [west, south, east, north] = bbox
+    return [
+        [west, north], // topLeft
+        [east, south], // botRight
     ]
 }
 

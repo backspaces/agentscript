@@ -47,7 +47,7 @@
         "clean-docs": "shx rm -r docs/"
     },
     "scripts": {
-        "clean": "shx rm -rf dist vendor && shx mkdir dist vendor",
+        "clean": "shx rm -rf dist vendor views1 && shx mkdir dist vendor views1",
         "start": "live-server --ignore=node_modules,.git &",
         "build": "npm-run-all clean build-scripts build-vendor build-dist build-md build-docs",
         "build-dist": "rollup -c config/rollup.dist.js",
@@ -66,7 +66,7 @@
         "-- END OF WORKFLOW --": "The following are verious tests, running models in various directories and browsers",
         "run1": "bin/runmodels models",
         "run1s": "bin/runmodels models/scripts",
-        "run1c": "bin/modelsinbrowser models",
+        "run1c": "bin/modelsinbrowser views1",
         "run2": "bin/runmodels views2",
         "run2c": "bin/modelsinbrowser views2",
         "run3": "bin/runmodels views3",

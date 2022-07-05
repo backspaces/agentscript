@@ -76,12 +76,12 @@ class LeafletDataSet {
     }
 
     mapBBox() {
-        return gis.bounds2bbox(this.map.getBounds())
+        return gis.Lbounds2bbox(this.map.getBounds())
     }
 
     // bbox can be a gis.bbox or a leaflet latlng bounds
     async getBBoxDataSet(bbox) {
-        if (!Array.isArray(bbox)) bbox = gis.bounds2bbox(bbox)
+        if (!Array.isArray(bbox)) bbox = gis.Lbounds2bbox(bbox)
 
         await util.waitPromise(() => this.loading === false)
 
