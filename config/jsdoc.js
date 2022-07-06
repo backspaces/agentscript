@@ -8,5 +8,28 @@ module.exports = {
     },
     opts: {
         destination: 'docs/',
+        readme: './README.md',
+        template: './node_modules/clean-jsdoc-theme',
+        theme_opts: {
+            default_theme: 'light',
+            title: 'agentscript',
+            menu: [
+                {
+                    title: 'GitHub',
+                    link: 'https://github.com/backspaces/agentscript',
+                    target: '_blank',
+                    id: 'github',
+                },
+                {
+                    title: 'npm',
+                    link: 'https://www.npmjs.com/package/agentscript',
+                    target: '_blank',
+                    id: 'npm',
+                },
+            ],
+        },
+    },
+    markdown: {
+        idInHeadings: true,
     },
 }
