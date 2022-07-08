@@ -91,7 +91,9 @@ class LeafletDataSet {
         const dataSetMatrix = this.dataSetsMatrix(tilesBBox, z)
         const tilesDataSet = this.dataSetMatrixToDataSet(dataSetMatrix)
         const cropParameters = this.getCropParameters(bbox, tilesBBox, z)
+        console.log('cropParameters leaflet', cropParameters)
         const bboxDataSet = tilesDataSet.crop(cropParameters)
+        console.log('bbocDataSet dims', bboxDataSet.width, bboxDataSet.height)
         bboxDataSet.bbox = bbox
         console.log('bbox', bbox)
         console.log('tilesBBox', tilesBBox)
@@ -161,7 +163,9 @@ class LeafletDataSet {
 
         console.log(
             'getCropParameters1',
-            this.getCropParameters1(bbox, tilesBBox, z)
+            this.getCropParameters1(bbox, tilesBBox, z),
+            'getCropParameters2',
+            this.getCropParameters2(bbox, tilesBBox, z)
         )
 
         return {
@@ -197,6 +201,26 @@ class LeafletDataSet {
             left: cropWest,
             right: cropEast,
         }
+    }
+    getCropParameters2(bbox, tilesBBox, z) {
+        const [west, south, east, north] = bbox // geo coords
+        const westX = gis.lonz2xFloat(west, z)
+        const eastX = gis.lonz2xFloat(east, z)
+        const northY = gis.latz2yFloat(north, z)
+        const southY = gis.latz2yFloat(south, z)
+
+        const northOuter = Math.floor(northY)
+        const southOuter = Math.ceil(southY)
+        const westOuter = Math.floor(westX)
+        const eastOuter = Math.ceil(eastX)
+        // const innerWidth = (eastX - westX) * this.tileSize
+        // const innerHeight = (southY - northY) * this.tileSize
+        // console.log('innerWidth', innerWidth, 'innerHeight', innerHeight)
+        const left = Math.round( (westX - westOuter) * this.tileSize )
+        const top = Math.round( (northY - northOuter) * this.tileSize )
+        const right = Math.round( (eastOuter - eastX) * this.tileSize )
+        const bottom = Math.round( (southOuter - southY) * this.tileSize )
+        return {top, bottom, left, right}
     }
 }
 
