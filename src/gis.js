@@ -26,14 +26,7 @@ export function latlon(lonlat) {
 // Tiles use a ZXY corrd system. We use lower case below.
 // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 // Convert lon,lats to tile X,Ys
-export function lonz2xFloat(lon, z){
-    return ((lon + 180) / 360) * pow(2, z)
-}
-export function latz2yFloat(lat, z){
-    const latRads = radians(lat)
-    let y = (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
-    return y
-}
+
 export function lonz2x(lon, z) {
     return floor(lonz2xFloat(lon, z))
 }
@@ -44,6 +37,15 @@ export function latz2y(lat, z, roundInt = false) {
 }
 export function lonlatz2xy(lon, lat, z, roundLat = false) {
     return [lonz2x(lon, z), latz2y(lat, z, roundLat)]
+}
+// Convert lon,lats to tile X,Y as floating points. For file paths they are almost always rounded. The floats are also useful for other calculations.
+export function lonz2xFloat(lon, z){
+    return ((lon + 180) / 360) * pow(2, z)
+}
+export function latz2yFloat(lat, z){
+    const latRads = radians(lat)
+    let y = (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
+    return y
 }
 // export function lonlatz2xyz(lon, lat, z) {
 //     return [lonz2x(lon, z), latz2y(lat, z), z]

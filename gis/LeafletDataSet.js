@@ -93,7 +93,6 @@ class LeafletDataSet {
         const cropParameters = this.getCropParameters(bbox, tilesBBox, z)
         console.log('cropParameters leaflet', cropParameters)
         const bboxDataSet = tilesDataSet.crop(cropParameters)
-        console.log('bbocDataSet dims', bboxDataSet.width, bboxDataSet.height)
         bboxDataSet.bbox = bbox
         console.log('bbox', bbox)
         console.log('tilesBBox', tilesBBox)
