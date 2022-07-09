@@ -145,7 +145,6 @@ class LeafletDataSet {
     getCropParameters(bbox, tilesBBox, z) {
         // bbox we want for our map
         const [west, south, east, north] = bbox // geo coords
-        const map = this.map
 
         // tile bbox that contain our map bbox
         const [westX, southY, eastX, northY] = tilesBBox // tile coords
@@ -153,6 +152,8 @@ class LeafletDataSet {
         const [westXlon, northYlat] = gis.xyz2lonlat(westX, northY, z) // geo coords
         const [eastXlon, southYlat] = gis.xyz2lonlat(eastX + 1, southY + 1, z)
 
+        // we'll use the map for for pixel values
+        const map = this.map
         // convert both bbox & tiles to pixels
         const bboxTopLeft = map.latLngToLayerPoint([north, west])
         const bboxBottomRight = map.latLngToLayerPoint([south, east])
@@ -173,22 +174,27 @@ class LeafletDataSet {
         }
     }
     getCropParameters1(bbox, tilesBBox, z) {
+        // bbox we want for our map
         const [west, south, east, north] = bbox // geo coords
 
+        // tile bbox that contain our map bbox
         const [westX, southY, eastX, northY] = tilesBBox // tile coords
-        const [dsWest, dsNorth] = gis.xyz2lonlat(westX, northY, z) // geo coords
-        const [dsEast, dsSouth] = gis.xyz2lonlat(eastX + 1, southY + 1, z)
+        // convert to geo coords
+        const [westXlon, northYlat] = gis.xyz2lonlat(westX, northY, z) // geo coords
+        const [eastXlon, southYlat] = gis.xyz2lonlat(eastX + 1, southY + 1, z)
 
+        // tile bbox in geo coords
         const [tWest, tSouth, tEast, tNorth] = gis.xyz2bbox(westX, northY, z)
+
         const tileHeight = Math.abs(tNorth - tSouth)
         const tileWidth = Math.abs(tWest - tEast)
         const heightRatio = this.tileSize / tileHeight
         const widthRatio = this.tileSize / tileWidth
 
-        let cropNorth = Math.round(Math.abs(dsNorth - north) * heightRatio),
-            cropSouth = Math.round(Math.abs(dsSouth - south) * heightRatio),
-            cropEast = Math.round(Math.abs(dsEast - east) * widthRatio),
-            cropWest = Math.round(Math.abs(dsWest - west) * widthRatio)
+        let cropNorth = Math.round(Math.abs(northYlat - north) * heightRatio),
+            cropSouth = Math.round(Math.abs(southYlat - south) * heightRatio),
+            cropEast = Math.round(Math.abs(eastXlon - east) * widthRatio),
+            cropWest = Math.round(Math.abs(westXlon - west) * widthRatio)
 
         return {
             // use DataSet.crop(obj) names
