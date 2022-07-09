@@ -20,14 +20,14 @@ Example: to import Class Model for building your own model, use:
 
 .. where path/to/agentscript is a local file system path or a url to a server:
 
--   local: [./src/Model.js](./src/Model.js)
+-   local: [./src/Model.js](https://code.agentscript.org/src/Model.js)
 -   code.agentscript.org: [https://code.agentscript.org/src/Model.js](https://code.agentscript.org/src/Model.js)
 -   unpkg.com: [https://unpkg.com/agentscript/src/Model.js](https://unpkg.com/agentscript/src/Model.js)
 -   skypack.dev: [https://cdn.skypack.dev/agentscript/src/Model.js](https://cdn.skypack.dev/agentscript/src/Model.js)
 
 There are bundles as well of all the agentscript modules as a single file from the usual NPM-based CDNs:
 
--   unpkg.com: [https://unpkg.com/agentscript@0.10.6/dist/agentscript.js](https://unpkg.com/agentscript@0.10.6/dist/agentscript.js)
+-   unpkg.com: [https://unpkg.com/agentscript/dist/agentscript.js](https://unpkg.com/agentscript/dist/agentscript.js)
 
 To create your own local agentscript files:
 
@@ -59,35 +59,35 @@ Our directory layout is:
 
 The models directory contains the individual Models JavaScript files. I.e. HelloModel.js exports the HelloModel. It is the only demo directory with .js files, the rest are "onepagers" .html files. Notice the links use "query parameters" that the index.html file uses to run the model. The output is a random sample of the model's results.
 
-[models](./models/README.md)
+[models](https://code.agentscript.org/models/README.md)
 
 The views1 onepagers import models from the models/ dir and run for 500 steps, printing out a sample of the model's data.
 
-[views1](./views1/README.md)
+[views1](https://code.agentscript.org/views1/README.md)
 
 The views2 onepagers import models from the models/ dir and add a 2D Canvas view.
 
-[views2](./views2/README.md)
+[views2](https://code.agentscript.org/views2/README.md)
 
 The views3 onepagers import models from the models/ dir and add a Three.js webgl 3D view.
 
-[views3](./views3/README.md)
+[views3](https://code.agentscript.org/views3/README.md)
 
 The views3d onepagers import models from the models/ dir and add a Three.js webgl 3D view.
 
-[views3d](./views3d/README.md)
+[views3d](https://code.agentscript.org/views3d/README.md)
 
 The views3d onepagers are similar to the views3 onepagers. It differs from views3 in that these use true 3D via [src/Model3D.js](https://github.com/backspaces/agentscript/blob/master/src/Model3D.js) and [src/Turtle3D.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle3D.js) subclasses.
 
-[mvc](./mvc/README.md)
+[mvc](https://code.agentscript.org/mvc/README.md)
 
 The mvc onepagers are combine Models, Views, and Controls into "apps".
 
-[gis](./gis/README.md)
+[gis](https://code.agentscript.org/gis/README.md)
 
 The gis onepagers use gis & geojson utilities to create and view models running on [Leaflet](https://leafletjs.com/) maps with geojson data.
 
-[fb](./fb/README.md)
+[fb](https://code.agentscript.org/fb/README.md)
 
 An experimental distributed framework for running models in one page while listening & getting results in another. We call these Model Transforms. They currently show their results in the browser console.
 
