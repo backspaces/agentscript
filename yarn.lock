@@ -1333,6 +1333,15 @@ clean-jsdoc-theme@^4.1.3:
     html-minifier "^4.0.0"
     nanoid "^3.3.4"
 
+clean-jsdoc-theme@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-4.1.4.tgz#1add2e5e5e4e84e1bcf9063b5eb89a97e572a7be"
+  integrity sha512-D/uMHy7I5N2LvYGkXWGQ4Kul5aoWBWSh6pneodBGw/gYXoqLlwtCycZevE1zhSa5MDLo4qBHHCPcYUTmEc+U8g==
+  dependencies:
+    fs-extra "^10.1.0"
+    html-minifier "^4.0.0"
+    nanoid "^3.3.4"
+
 clean-stack@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/clean-stack/-/clean-stack-2.2.0.tgz#ee8472dbb129e727b31e8a10a427dee9dfe4008b"
