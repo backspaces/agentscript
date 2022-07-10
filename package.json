@@ -54,7 +54,7 @@
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
         "build-scripts": "node bin/models2scripts",
         "build-md": "bin/src2md 'models views2 views3 views3d mvc gis' > /dev/null",
-        "build-docs": "node copyTutorial.js && jsdoc -c config/jsdoc.js",
+        "build-docs": "node copyTutorials.js && jsdoc -c config/jsdoc.js",
         "build-docs0": "echo build called",
         "build-docs1": "documentation build src/*.js --config config/documentation.yml --github -f html -o docs",
         "test": "ava test/models.js && npm run test3d",

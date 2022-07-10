@@ -12,7 +12,9 @@ const gis = path.join(root, 'gis', 'README.md')
 const mvc = path.join(root, 'mvc', 'README.md')
 const ideExamples = path.join(root, 'ide-examples', 'README.md')
 
-
+/**
+ * All tutorials path with title.
+ */
 const paths = [
     {
         path: view2,
