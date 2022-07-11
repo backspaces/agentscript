@@ -93,7 +93,7 @@
     "devDependencies": {
         "ava": "^2.1.0",
         "chokidar-cli": "^1.2.1",
-        "clean-jsdoc-theme": "^4.1.5",
+        "clean-jsdoc-theme": "^4.1.6",
         "documentation": "^13.2.5",
         "esm": "^3.2.25",
         "jsdoc": "^3.6.10",
