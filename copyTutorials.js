@@ -10,7 +10,7 @@ const view3 = path.join(root, 'views3', 'README.md')
 const view3d = path.join(root, 'views3d', 'README.md')
 const gis = path.join(root, 'gis', 'README.md')
 const mvc = path.join(root, 'mvc', 'README.md')
-const ideExamples = path.join(root, 'ide-examples', 'README.md')
+// const ideExamples = path.join(root, 'ide-examples', 'README.md') ., see below
 
 /**
  * All tutorials path with title.
@@ -18,31 +18,29 @@ const ideExamples = path.join(root, 'ide-examples', 'README.md')
 const paths = [
     {
         path: view2,
-        title: "View 2"
+        title: 'View 2',
     },
     {
         path: view3,
-        title: "View 3"
+        title: 'View 3',
     },
     {
         path: view3d,
-        title: "View 3D"
+        title: 'View 3D',
     },
     {
         path: gis,
-        title: "GIS"
+        title: 'GIS',
     },
     {
         path: mvc,
-        title: "MVC"
+        title: 'MVC',
     },
-    {
-        path: ideExamples,
-        title: "IDE Examples"
-    },
+    // { ideExamples are not used, waiting our our IDE!
+    //     path: ideExamples,
+    //     title: "IDE Examples"
+    // },
 ]
-
-
 
 if (fs.existsSync(tutorialsDir)) {
     // Requires node > v14.14
@@ -54,12 +52,18 @@ if (fs.existsSync(tutorialsDir)) {
 
 const tutorialsConfig = {}
 
-paths.forEach((tutorial) => {
+paths.forEach(tutorial => {
     tutorialsConfig[path.basename(tutorial.title)] = {
-        title: tutorial.title
+        title: tutorial.title,
     }
 
-    fs.copyFileSync(tutorial.path, path.join(tutorialsDir, `${tutorial.title}.md`))
+    fs.copyFileSync(
+        tutorial.path,
+        path.join(tutorialsDir, `${tutorial.title}.md`)
+    )
 })
 
-fs.writeFileSync(path.join(tutorialsDir, 'tutorials.json'), JSON.stringify(tutorialsConfig))
+fs.writeFileSync(
+    path.join(tutorialsDir, 'tutorials.json'),
+    JSON.stringify(tutorialsConfig)
+)

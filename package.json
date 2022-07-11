@@ -32,19 +32,6 @@
     "bugs": {
         "url": "https://github.com/backspaces/agentscript/issues"
     },
-    "scripts comments": {
-        "name": "@redfish/agentscript",
-        "ava": "0.25.0",
-        "build-bin": "rollup -f umd -n gis src/gis.js > bin/gis.umd.js",
-        "postinstall": "rollup -c rollup.three.js",
-        "Node settig for esm, causes error, sigh: ": "type: module",
-        "three": "^0.89.0",
-        "build-dist0": "rollup -c config/rollup.dist.js && cp -R src models views2 views3  dist",
-        "build-dist": "rollup -c config/rollup.dist.js &&  cp -R src dist",
-        "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
-        "mkdirs": "dist",
-        "clean-docs": "shx rm -r docs/"
-    },
     "scripts": {
         "clean": "shx rm -rf dist vendor && shx mkdir dist vendor",
         "start": "live-server --ignore=node_modules,.git &",
