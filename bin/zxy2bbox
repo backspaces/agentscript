@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
-// const gis = require('./gis.umd.js')
 const esmImport = require('esm')(module)
-// const gis = esmImport('../src/gis.js').default
 const gis = esmImport('../src/gis.js')
 
 // const https = require('https')

@@ -26,6 +26,7 @@ Example: to import Class Model for building your own model, use:
 -   skypack.dev: [https://cdn.skypack.dev/agentscript/src/Model.js](https://cdn.skypack.dev/agentscript/src/Model.js)
 
 There are bundles as well of all the agentscript modules as a single file from the usual NPM-based CDNs:
+
 -   unpkg.com: [https://unpkg.com/agentscript@0.10.6/dist/agentscript.js](https://unpkg.com/agentscript@0.10.6/dist/agentscript.js)
 
 To create your own local agentscript files:
@@ -59,6 +60,10 @@ Our directory layout is:
 The models directory contains the individual Models JavaScript files. I.e. HelloModel.js exports the HelloModel. It is the only demo directory with .js files, the rest are "onepagers" .html files. Notice the links use "query parameters" that the index.html file uses to run the model. The output is a random sample of the model's results.
 
 [models](./models/README.md)
+
+The views1 onepagers import models from the models/ dir and run for 500 steps, printing out a sample of the model's data.
+
+[views1](./views1/README.md)
 
 The views2 onepagers import models from the models/ dir and add a 2D Canvas view.
 

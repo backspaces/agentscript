@@ -42,14 +42,13 @@
         "build-dist0": "rollup -c config/rollup.dist.js && cp -R src models views2 views3  dist",
         "build-dist": "rollup -c config/rollup.dist.js &&  cp -R src dist",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
-        "watch-docs": "documentation serve --config config/documentation.yml --github --watch src/**",
         "mkdirs": "dist",
         "clean-docs": "shx rm -r docs/"
     },
     "scripts": {
-        "clean": "shx rm -rf dist vendor views1 && shx mkdir dist vendor views1",
+        "clean": "shx rm -rf dist vendor && shx mkdir dist vendor",
         "start": "live-server --ignore=node_modules,.git &",
-        "build": "npm-run-all clean build-scripts build-vendor build-dist build-md build-docs",
+        "build": "npm-run-all clean build-scripts build-vendor build-dist build-docs build-views build-md",
         "build-dist": "rollup -c config/rollup.dist.js",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
         "build-scripts": "node bin/models2scripts",

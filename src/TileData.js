@@ -112,4 +112,12 @@ export const mapbox = Object.assign(
     sharedTileObject
 )
 
-// ============= Misc base mmaps etc =============
+// ============= Stitch multiple tiles together =============
+
+export class MultiDataSet {
+    constructor(bbox, z, tileData, tileSize = 256) {
+        Object.assign(this, { bbox, z, tileData, tileSize })
+        this.tiles = {}
+    }
+    // the rest of LeafletDataSet w/o leaflet ...
+}
