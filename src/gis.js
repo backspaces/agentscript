@@ -26,13 +26,16 @@ export function latlon(lonlat) {
 // Tiles use a ZXY corrd system. We use lower case below.
 // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 // Convert lon,lats to tile X,Ys
+export function lonz2xFloat(lon, z) {
+    return ((lon + 180) / 360) * pow(2, z)
+}
 export function lonz2x(lon, z) {
     return floor(lonz2xFloat(lon, z))
 }
-export function latz2y(lat, z, roundInt = false) {
-    let y = latz2yFloat(lat, z)
-    if (roundInt && Number.isInteger(y)) return y - 1
-    return floor(y)
+
+export function latz2yFloat(lat, z) {
+    const latRads = radians(lat)
+    return (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
 }
 export function latz2y(lat, z) {
     return floor(latz2yFloat(lat, z))
@@ -244,4 +247,3 @@ export function url(z, x, y, who = 'osm') {
             return `https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/${z}/${y}/${x}`
     }
 }
-
