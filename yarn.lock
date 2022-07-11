@@ -1324,19 +1324,10 @@ clean-css@^4.2.1:
   dependencies:
     source-map "~0.6.0"
 
-clean-jsdoc-theme@^4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-4.1.3.tgz#96d45bf3671805962e4815f504adbb60707da477"
-  integrity sha512-/WkGLNVdo4F/JhBlpczA+gxvYFKPaOMhiRXDVM3814lZnEiIpNE8KofA9U7n1RaU/4BNH4ZErCSfzpuwhIwloA==
-  dependencies:
-    fs-extra "^10.1.0"
-    html-minifier "^4.0.0"
-    nanoid "^3.3.4"
-
-clean-jsdoc-theme@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-4.1.4.tgz#1add2e5e5e4e84e1bcf9063b5eb89a97e572a7be"
-  integrity sha512-D/uMHy7I5N2LvYGkXWGQ4Kul5aoWBWSh6pneodBGw/gYXoqLlwtCycZevE1zhSa5MDLo4qBHHCPcYUTmEc+U8g==
+clean-jsdoc-theme@^4.1.5:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-4.1.5.tgz#8fa12ad9bf3c77ccac1cedcc90f39ba890506e33"
+  integrity sha512-/r85qnPsXQyL1QRnNxUSalAR56DrKn0THYo2Z5t6MgY1YHZoTO8FcZDAA5Efh1VTVfcWhnXOA3kHYwSx5lt4IQ==
   dependencies:
     fs-extra "^10.1.0"
     html-minifier "^4.0.0"
