@@ -1073,10 +1073,10 @@ clean-css@^4.2.1:
   dependencies:
     source-map "~0.6.0"
 
-clean-jsdoc-theme@^4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-4.1.3.tgz#96d45bf3671805962e4815f504adbb60707da477"
-  integrity sha512-/WkGLNVdo4F/JhBlpczA+gxvYFKPaOMhiRXDVM3814lZnEiIpNE8KofA9U7n1RaU/4BNH4ZErCSfzpuwhIwloA==
+clean-jsdoc-theme@^4.1.6:
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-4.1.6.tgz#e13ffba8f618c32b9a8cee248299f5fe77b4539a"
+  integrity sha512-Nt16VBh5+owNKM48zvmLZDWILf/visQ5GMEfLR4nTg9uqOlDe7LIa+wrfVwA0vzY6CFEq5uxmbd7Jxk5hJ7S6w==
   dependencies:
     fs-extra "^10.1.0"
     html-minifier "^4.0.0"

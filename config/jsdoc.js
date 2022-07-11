@@ -10,9 +10,10 @@ module.exports = {
         destination: 'docs/',
         readme: './README.md',
         template: './node_modules/clean-jsdoc-theme',
+        tutorials: "./tutorials",
         theme_opts: {
             default_theme: 'light',
-            title: 'agentscript',
+            title: 'AgentScript',
             menu: [
                 {
                     title: 'GitHub',
