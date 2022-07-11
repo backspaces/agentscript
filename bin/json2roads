@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 const process = require('process')
-// const gis = require('./gis.umd.js')
 const esmImport = require('esm')(module)
-// const gis = esmImport('../src/gis.js').default
 
 const gis = esmImport('../src/gis.js')
 const geofilters = esmImport('./geofilters.js')

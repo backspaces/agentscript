@@ -26,7 +26,6 @@ export function latlon(lonlat) {
 // Tiles use a ZXY corrd system. We use lower case below.
 // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 // Convert lon,lats to tile X,Ys
-
 export function lonz2x(lon, z) {
     return floor(lonz2xFloat(lon, z))
 }
@@ -35,21 +34,16 @@ export function latz2y(lat, z, roundInt = false) {
     if (roundInt && Number.isInteger(y)) return y - 1
     return floor(y)
 }
-export function lonlatz2xy(lon, lat, z, roundLat = false) {
-    return [lonz2x(lon, z), latz2y(lat, z, roundLat)]
+export function latz2y(lat, z) {
+    return floor(latz2yFloat(lat, z))
 }
-// Convert lon,lats to tile X,Y as floating points. For file paths they are almost always rounded. The floats are also useful for other calculations.
-export function lonz2xFloat(lon, z){
-    return ((lon + 180) / 360) * pow(2, z)
+
+export function lonlatz2xyFloat(lon, lat, z) {
+    return [lonz2xFloat(lon, z), latz2yFloat(lat, z)]
 }
-export function latz2yFloat(lat, z){
-    const latRads = radians(lat)
-    let y = (1 - log(tan(latRads) + 1 / cos(latRads)) / PI) * pow(2, z - 1)
-    return y
+export function lonlatz2xy(lon, lat, z) {
+    return [lonz2x(lon, z), latz2y(lat, z)]
 }
-// export function lonlatz2xyz(lon, lat, z) {
-//     return [lonz2x(lon, z), latz2y(lat, z), z]
-// }
 
 // returns top-left, or north-west lon, lat of given tile X Y Z's
 // adding 1 to either x,y or both gives other corner lonlats
@@ -68,7 +62,7 @@ export function xyz2centerLonlat(x, y, z) {
     return [xz2lon(x + 0.5, z), yz2lat(y + 0.5, z)]
 }
 
-// Return a tile bbox for xyz tile.
+// Return a lonlat bbox for xyz tile.
 // x,y any point within the tile like center etc.
 // We use the usual bbox convention of
 //   [minX, minY, maxX, maxY] or [west, south, east, north]
@@ -101,12 +95,13 @@ export function Lbounds2bbox(leafletBounds) {
     return [west, south, east, north]
 }
 
+// given a gis bbox, return the corners of the surounding tiles, in tile coords
 export function tilesBBox(bbox, z) {
     const [west, south, east, north] = bbox
     const [westX, northY] = lonlatz2xy(west, north, z)
-    let [eastX, southY] = lonlatz2xy(east, south, z, true)
-    // if (Number.isInteger(eastX)) eastX--
-    // if (Number.isInteger(southY)) southY--
+    let [eastX, southY] = lonlatz2xyFloat(east, south, z)
+    eastX = floor(eastX)
+    southY = Number.isInteger(southY) ? southY - 1 : floor(southY)
     return [westX, southY, eastX, northY]
 }
 

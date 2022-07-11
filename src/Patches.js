@@ -164,6 +164,10 @@ class Patches extends AgentSet {
     // Return patch at x,y float values
     // Return undefined if off-world
     patch(x, y) {
+        // Benny suggests: (in PR wrap x and y in patches.patch(x, y))
+        // const intX = Math.round(util.wrap(x, this.model.world.minXcor, this.model.world.maxXcor))
+        // const intY = Math.round(util.wrap(y, this.model.world.minYcor, this.model.world.maxYcor))
+
         if (!this.model.world.isOnWorld(x, y)) return undefined
         const intX =
             x === this.model.world.maxXcor

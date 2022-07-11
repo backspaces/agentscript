@@ -67,13 +67,13 @@ async function runModels() {
 runModels()
 
 async function runModel(model) {
-    // prettier-ignore
     const url =
-        useWorkers // && !nonWorker(model) // use list of non-worker models
-            // ? `http://localhost/src/agentscript/models/worker.html?${model}`
-            // : `http://localhost/src/agentscript/models/test.html?${model}`
-    ?  `http://127.0.0.1:${port}/models/worker.html?${model}`
-    : `http://127.0.0.1:${port}/models/test.html?${model}`
+        useWorkers && !nonWorker(model) // use list of non-worker models
+            ? `http://127.0.0.1:${port}/models/worker.html?${model}`
+            : `http://127.0.0.1:${port}/models/test.html?${model}`
+
+    // ? `http://localhost/src/agentscript/models/worker.html?${model}`
+    // : `http://localhost/src/agentscript/models/test.html?${model}`
 
     // console.log(url)
 
