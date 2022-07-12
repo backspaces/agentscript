@@ -23,9 +23,18 @@ export function latlon(lonlat) {
     return [lonlat[1], lonlat[0]]
 }
 
-// Tiles use a ZXY corrd system. We use lower case below.
+// There are two coord systems here: tile X/Y & zoom coords and lon/lat Coords
+// This can be quite confusing:
+// Tiles have the top/left as the 0,0 origin, with positive x,y coords "down"
+// LonLat are both in degrees, lon: -180/+180 and lat: ~85/-~85 in degrees
+// So tiles are like pixel coords (scaled by 2**zoom), and lonlat euclidean degrees.
+
+// Tiles use a ZXY corrd system. We use lower case for these below.
 // Tile Helpers http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 // Convert lon,lats to tile X,Ys
+// Although XYZs for tiles are all integrs, we provide float versions as
+// well for things like finding the distance of an arbitrary lonlat to
+// the edges of the tile
 export function lonz2xFloat(lon, z) {
     return ((lon + 180) / 360) * pow(2, z)
 }
