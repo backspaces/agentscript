@@ -90,8 +90,7 @@ class LeafletDataSet {
         const tilesBBox = gis.tilesBBox(bbox, z) // in xy coords
         const dataSetMatrix = this.dataSetsMatrix(tilesBBox, z)
         const tilesDataSet = this.dataSetMatrixToDataSet(dataSetMatrix)
-        const cropParameters = this.getCropParameters(bbox, tilesBBox, z)
-        console.log('cropParameters leaflet', cropParameters)
+        const cropParameters = this.getCropParameters2(bbox, tilesBBox, z)
         const bboxDataSet = tilesDataSet.crop(cropParameters)
         bboxDataSet.bbox = bbox
         console.log('bbox', bbox)
@@ -100,6 +99,16 @@ class LeafletDataSet {
         console.log('tilesDataSet', tilesDataSet)
         console.log('cropParameters', cropParameters)
         console.log('bboxDataSet', bboxDataSet)
+
+        // compare different ways to crop
+        console.log(
+            'cropParameters leaflet',
+            this.getCropParameters(bbox, tilesBBox, z),
+            'getCropParameters1',
+            this.getCropParameters1(bbox, tilesBBox, z),
+            'getCropParameters2',
+            this.getCropParameters2(bbox, tilesBBox, z)
+        )
 
         return bboxDataSet
     }
@@ -160,13 +169,6 @@ class LeafletDataSet {
         const bboxBottomRight = map.latLngToLayerPoint([south, east])
         const tilesTopLeft = map.latLngToLayerPoint([northYlat, westXlon])
         const tilesBottomRight = map.latLngToLayerPoint([southYlat, eastXlon])
-
-        console.log(
-            'getCropParameters1',
-            this.getCropParameters1(bbox, tilesBBox, z),
-            'getCropParameters2',
-            this.getCropParameters2(bbox, tilesBBox, z)
-        )
 
         return {
             // use DataSet.crop(obj) names
