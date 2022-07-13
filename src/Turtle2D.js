@@ -56,6 +56,9 @@ class Turtle {
         // Useful when other JS objects contain turtles. Views for example.
         this.id = -1
     }
+    isDead() {
+        return this.id === -1
+    }
 
     /**
      * Factory method: create num new turtles at this turtle's location.

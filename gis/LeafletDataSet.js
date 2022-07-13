@@ -90,25 +90,17 @@ class LeafletDataSet {
         const tilesBBox = gis.tilesBBox(bbox, z) // in xy coords
         const dataSetMatrix = this.dataSetsMatrix(tilesBBox, z)
         const tilesDataSet = this.dataSetMatrixToDataSet(dataSetMatrix)
-        const cropParameters = this.getCropParameters2(bbox, tilesBBox, z)
+        const cropParameters = this.getCropParameters(bbox, z)
         const bboxDataSet = tilesDataSet.crop(cropParameters)
         bboxDataSet.bbox = bbox
+
         console.log('bbox', bbox)
         console.log('tilesBBox', tilesBBox)
         console.log('dataSetMatrix', dataSetMatrix)
         console.log('tilesDataSet', tilesDataSet)
         console.log('cropParameters', cropParameters)
         console.log('bboxDataSet', bboxDataSet)
-
-        // compare different ways to crop
-        console.log(
-            'cropParameters leaflet',
-            this.getCropParameters(bbox, tilesBBox, z),
-            'getCropParameters1',
-            this.getCropParameters1(bbox, tilesBBox, z),
-            'getCropParameters2',
-            this.getCropParameters2(bbox, tilesBBox, z)
-        )
+        console.log('')
 
         return bboxDataSet
     }
@@ -152,64 +144,7 @@ class LeafletDataSet {
         const dataSet = rows.reduce((prev, cur) => prev.concatSouth(cur))
         return dataSet
     }
-    getCropParameters(bbox, tilesBBox, z) {
-        // bbox we want for our map
-        const [west, south, east, north] = bbox // geo coords
-
-        // tile bbox that contain our map bbox
-        const [westX, southY, eastX, northY] = tilesBBox // tile coords
-        // convert to geo coords
-        const [westXlon, northYlat] = gis.xyz2lonlat(westX, northY, z) // geo coords
-        const [eastXlon, southYlat] = gis.xyz2lonlat(eastX + 1, southY + 1, z)
-
-        // we'll use the map for for pixel values
-        const map = this.map
-        // convert both bbox & tiles to pixels
-        const bboxTopLeft = map.latLngToLayerPoint([north, west])
-        const bboxBottomRight = map.latLngToLayerPoint([south, east])
-        const tilesTopLeft = map.latLngToLayerPoint([northYlat, westXlon])
-        const tilesBottomRight = map.latLngToLayerPoint([southYlat, eastXlon])
-
-        return {
-            // use DataSet.crop(obj) names
-            top: bboxTopLeft.y - tilesTopLeft.y,
-            bottom: tilesBottomRight.y - bboxBottomRight.y,
-            left: bboxTopLeft.x - tilesTopLeft.x,
-            right: tilesBottomRight.x - bboxBottomRight.x,
-        }
-    }
-    getCropParameters1(bbox, tilesBBox, z) {
-        // bbox we want for our map
-        const [west, south, east, north] = bbox // geo coords
-
-        // tile bbox that contain our map bbox
-        const [westX, southY, eastX, northY] = tilesBBox // tile coords
-        // convert to geo coords
-        const [westXlon, northYlat] = gis.xyz2lonlat(westX, northY, z) // geo coords
-        const [eastXlon, southYlat] = gis.xyz2lonlat(eastX + 1, southY + 1, z)
-
-        // tile bbox in geo coords
-        const [tWest, tSouth, tEast, tNorth] = gis.xyz2bbox(westX, northY, z)
-
-        const tileHeight = Math.abs(tNorth - tSouth)
-        const tileWidth = Math.abs(tWest - tEast)
-        const heightRatio = this.tileSize / tileHeight
-        const widthRatio = this.tileSize / tileWidth
-
-        let cropNorth = Math.round(Math.abs(northYlat - north) * heightRatio),
-            cropSouth = Math.round(Math.abs(southYlat - south) * heightRatio),
-            cropEast = Math.round(Math.abs(eastXlon - east) * widthRatio),
-            cropWest = Math.round(Math.abs(westXlon - west) * widthRatio)
-
-        return {
-            // use DataSet.crop(obj) names
-            top: cropNorth,
-            bottom: cropSouth,
-            left: cropWest,
-            right: cropEast,
-        }
-    }
-    getCropParameters2(bbox, tilesBBox, z) {
+    getCropParameters(bbox, z) {
         const [west, south, east, north] = bbox // geo coords
         const westX = gis.lonz2xFloat(west, z)
         const eastX = gis.lonz2xFloat(east, z)
@@ -220,14 +155,16 @@ class LeafletDataSet {
         const southOuter = Math.ceil(southY)
         const westOuter = Math.floor(westX)
         const eastOuter = Math.ceil(eastX)
+
         // const innerWidth = (eastX - westX) * this.tileSize
         // const innerHeight = (southY - northY) * this.tileSize
         // console.log('innerWidth', innerWidth, 'innerHeight', innerHeight)
-        const left = Math.round( (westX - westOuter) * this.tileSize )
-        const top = Math.round( (northY - northOuter) * this.tileSize )
-        const right = Math.round( (eastOuter - eastX) * this.tileSize )
-        const bottom = Math.round( (southOuter - southY) * this.tileSize )
-        return {top, bottom, left, right}
+
+        const left = Math.round((westX - westOuter) * this.tileSize)
+        const top = Math.round((northY - northOuter) * this.tileSize)
+        const right = Math.round((eastOuter - eastX) * this.tileSize)
+        const bottom = Math.round((southOuter - southY) * this.tileSize)
+        return { top, bottom, left, right }
     }
 }
 

@@ -5,7 +5,7 @@
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
     "main": "dist/agentscript.umd.js",
-    "module": "dist/agentscript.esm.js",
+    "module": "dist/agentscript.js",
     "files": [
         "/dist/",
         "/vendor/",

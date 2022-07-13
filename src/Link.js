@@ -40,6 +40,9 @@ class Link {
         // Set id to -1, indicates that I've died.
         this.id = -1
     }
+    isDead() {
+        return this.id === -1
+    }
 
     bothEnds() {
         return AgentArray.fromArray([this.end0, this.end1])

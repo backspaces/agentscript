@@ -7,10 +7,8 @@ var Model = AS.Model
 //   mapzenDataSet
 //   mapboxDataSet
 import { mapzen as provider } from '../src/TileData.js'
-// import { maptiler as provider } from '../src/TileData.js'
 
 class DropletsModel extends Model {
-    // atEdge = 'random'
     speed = 0.5
     puddleDepth = 5
     // stepType choices:
@@ -18,9 +16,8 @@ class DropletsModel extends Model {
     //    'patchAspect',
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
-    // stepType = 'patchAspect'
     stepType = 'patchAspect'
-    steps = 0
+    // steps = 0
     // Installed datasets:
     elevation
     dzdx
@@ -52,7 +49,6 @@ class DropletsModel extends Model {
     setup() {
         this.installDataSets(this.elevation)
 
-        // this.turtles.setDefault('atEdge', this.atEdge)
         this.turtles.setDefault('atEdge', 'die')
 
         this.turtles.ask(t => (t.done = false))
@@ -67,54 +63,95 @@ class DropletsModel extends Model {
         })
     }
 
+    faceMin(t) {
+        if (this.stepType === 'minNeighbor') {
+            // Face the best neighbor if better than me
+            const n = t.patch.neighbors.minOneOf('elevation')
+            if (t.patch.elevation > n.elevation) t.face(n)
+        } else if (this.stepType === 'patchAspect') {
+            t.theta = t.patch.aspect
+        } else if (this.stepType.includes('dataSet')) {
+            // Move in direction of aspect DataSet:
+            const { minXcor, maxYcor, numX, numY } = this.world
+            // bilinear many more minima
+            const nearest = this.stepType === 'dataSetAspectNearest'
+            t.theta = this.aspect.coordSample(
+                t.x,
+                t.y,
+                minXcor,
+                maxYcor,
+                numX,
+                numY,
+                nearest
+            )
+        } else {
+            throw Error('bad stepType: ' + this.stepType)
+        }
+    }
     step() {
-        this.steps = 0
+        // this.steps = 0
         this.turtles.ask(t => {
             if (t.done) return
 
-            const stepType = this.stepType
+            this.faceMin(t)
 
-            if (stepType === 'minNeighbor') {
-                // Face the best neighbor if better than me
-                const n = t.patch.neighbors.minOneOf('elevation')
-                if (t.patch.elevation > n.elevation) t.face(n)
-            } else if (stepType === 'patchAspect') {
-                t.theta = t.patch.aspect
-            } else if (stepType.includes('dataSet')) {
-                // Move in direction of aspect DataSet:
-                const { minXcor, maxYcor, numX, numY } = this.world
-                // bilinear many more minima
-                const nearest = stepType === 'dataSetAspectNearest'
-                t.theta = this.aspect.coordSample(
-                    t.x,
-                    t.y,
-                    minXcor,
-                    maxYcor,
-                    numX,
-                    numY,
-                    nearest
-                )
-            } else {
-                throw Error('bad stepType: ' + stepType)
+            // if (this.stepType === 'minNeighbor') {
+            //     // Face the best neighbor if better than me
+            //     const n = t.patch.neighbors.minOneOf('elevation')
+            //     if (t.patch.elevation > n.elevation) t.face(n)
+            // } else if (this.stepType === 'patchAspect') {
+            //     t.theta = t.patch.aspect
+            // } else if (this.stepType.includes('dataSet')) {
+            //     // Move in direction of aspect DataSet:
+            //     const { minXcor, maxYcor, numX, numY } = this.world
+            //     // bilinear many more minima
+            //     const nearest = this.stepType === 'dataSetAspectNearest'
+            //     t.theta = this.aspect.coordSample(
+            //         t.x,
+            //         t.y,
+            //         minXcor,
+            //         maxYcor,
+            //         numX,
+            //         numY,
+            //         nearest
+            //     )
+            // } else {
+            //     throw Error('bad stepType: ' + this.stepType)
+            // }
+
+            const pAhead = t.patchAtHeadingAndDistance(t.heading, this.speed)
+            const handleLocalMin = t => {
+                if (t.patch.isLocalMin) {
+                    // center t in patch, and mark as done
+                    t.setxy(t.patch.x, t.patch.y)
+                    t.done = true
+                }
+                // if handleEdge didn't manage this:
+                if (t.patch.turtlesHere.length > this.puddleDepth) {
+                    t.die()
+                }
             }
 
-            let pAhead = t.patchAtHeadingAndDistance(t.heading, this.speed)
             if (!pAhead) {
-                t.handleEdge(t.x, t.y) // t.die()
-            } else if (
-                t.patch.isLocalMin &&
-                t.patch.turtlesHere.length < this.puddleDepth
-            ) {
-                t.setxy(t.patch.x, t.patch.y)
-                t.done = true
+                t.handleEdge(t.x, t.y) // default is t.die()
+                if (!t.isDead()) handleLocalMin(t)
+
+                // } else if (
+                //     t.patch.isLocalMin &&
+                //     t.patch.turtlesHere.length < this.puddleDepth
+                // ) {
+                //     t.setxy(t.patch.x, t.patch.y)
+                //     t.done = true
             } else if (pAhead.turtlesHere.length < this.puddleDepth) {
                 t.forward(this.speed)
-                this.steps++
+                handleLocalMin(t)
+                // this.steps++
             } else {
                 const n = t.patch.neighbors.oneOf()
                 if (n.turtlesHere < this.puddleDepth) {
                     t.setxy(n.x, n.y)
-                    this.steps++
+                    handleLocalMin(t)
+                    // this.steps++
                 }
 
                 // // turtlesHere at max, choose the best neighbor if one exists
