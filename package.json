@@ -1,6 +1,6 @@
 {
     "name": "agentscript",
-    "version": "0.10.16",
+    "version": "0.10.17",
     "description": "AgentScript Model in Model/View architecture",
     "author": "Owen Densmore",
     "homepage": "https://github.com/backspaces/agentscript",
@@ -9,15 +9,13 @@
     "files": [
         "/dist/",
         "/vendor/",
-        "/vendorx/",
         "/src/",
         "/docs/",
         "/models/",
         "/views2/",
         "/views3/",
         "/views3d/",
-        "/gis/",
-        "/tests/"
+        "/gis/"
     ],
     "repository": {
         "type": "git",
