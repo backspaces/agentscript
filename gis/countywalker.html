@@ -40,19 +40,18 @@
         const params = await view.leafletInit({
             Z: 7,
             terrain: 'osm',
+            bboxBorder: { color: 'black', weight: 1, fill: false },
+            tilesBorder: 'solid green 2px',
             json: counties,
+            // default style parameters https://leafletjs.com/reference.html#path-option
             jsonStyle: feature => ({
                 color: 'red',
-                // default parameters https://leafletjs.com/reference.html#path-option
             }),
             jsonPopup: layer =>
                 layer.feature.properties.NAME +
                 ', pop: ' +
-                layer.feature.properties.population
-                    .toLocaleString(), // for putting "," in thousands
-            bboxBorder: { color: 'black', weight: 1, fill: false },
+                layer.feature.properties.population.toLocaleString(),
         })
-        const { L, map } = params
 
         const anim = new Animator(
             () => {
@@ -62,6 +61,8 @@
             -1, // 500, // run 500 steps
             20 // 30 // 30 fps
         )
+
+        util.toWindow({ model, view, params })
     </script>
 </body>
 

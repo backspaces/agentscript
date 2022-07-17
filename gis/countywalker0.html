@@ -21,7 +21,6 @@
 
         import * as L from 'https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.esm.js'
         import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
-        const ElementOverlay = elementOverlay(L)
 
         const counties = await fetch('./data/nmcounties.json').then(resp => resp.json())
 
@@ -43,40 +42,49 @@
             drawOptions,
         })
 
+        // ===== Start of map & layers
+
+        // ===== The map using the div, model center and Z. World is a GeoWorld
         const bbox = world.bbox
         const bboxCenter = world.bboxCenter()
         const zoom = 7
-        const map = L.map('map')
+        // preferCanvas seems to be needed for model on top of json?
+        const map = L.map('map', { preferCanvas: true, })
             .setView(gis.latlon(bboxCenter), zoom)
 
+        // ===== Map's terrain
         L.tileLayer(gis.template('osm'), {
             attribution: gis.attribution('osm'),
         }).addTo(map)
 
+        // ===== A border around the model
+        const latlngs = gis.latlon(gis.bboxCoords(bbox))
+        L.rectangle(latlngs, { color: 'black', weight: 1, fill: false }).addTo(map)
+
+        // ===== A JSON layer with popup, fairly common
+        L.geoJSON(counties, {
+            style: (feature) => ({
+                color: 'red',
+                fillOpacity: 0.2,
+                weight: 3,
+            }),
+        }).bindPopup(
+            layer =>
+                layer.feature.properties.NAME +
+                ', pop: ' +
+                layer.feature.properties.population.toLocaleString()
+        ).addTo(map)
+
+        // ===== The model layer, on top, using Cody's ElementOverlay
         const [west, south, east, north] = bbox
         const bounds = new L.LatLngBounds(
             new L.LatLng(north, west),
             new L.LatLng(south, east)
         )
-        new ElementOverlay(view.canvas, bounds).addTo(map)
+        const ElementOverlay = elementOverlay(L)
+        const modelLayer = new ElementOverlay(view.canvas, bounds).addTo(map)
 
-        L.geoJSON(counties, {
-            style: () => ({
-                color: 'red',
-                fillOpacity: 0.2,
-                weight: 3,
-            }),
-        })
-            .bindPopup(
-                layer =>
-                    layer.feature.properties.NAME +
-                    ', pop: ' +
-                    layer.feature.properties.population.toLocaleString()
-            )
-            .addTo(map)
-
-        const latlngs = gis.latlon(gis.bboxCoords(bbox))
-        L.polygon(latlngs, { color: 'black', weight: 1, fill: false }).addTo(map)
+        // ===== End of map & layers
 
         const anim = new Animator(
             () => {
@@ -86,6 +94,8 @@
             -1, // 500, // run 500 steps
             20 // 30 // 30 fps
         )
+
+        util.toWindow({ map, modelLayer })
     </script>
 </body>
 

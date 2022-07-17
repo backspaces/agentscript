@@ -145,21 +145,22 @@ class LeafletDataSet {
         return dataSet
     }
     getCropParameters(bbox, z) {
+        // Get bbox lons & lats (in float degrees)
         const [west, south, east, north] = bbox // geo coords
+
+        // Get tile coords (in floats) of bbox
         const westX = gis.lonz2xFloat(west, z)
         const eastX = gis.lonz2xFloat(east, z)
         const northY = gis.latz2yFloat(north, z)
         const southY = gis.latz2yFloat(south, z)
 
+        // Get tile edge coords in ints
         const northOuter = Math.floor(northY)
         const southOuter = Math.ceil(southY)
         const westOuter = Math.floor(westX)
         const eastOuter = Math.ceil(eastX)
 
-        // const innerWidth = (eastX - westX) * this.tileSize
-        // const innerHeight = (southY - northY) * this.tileSize
-        // console.log('innerWidth', innerWidth, 'innerHeight', innerHeight)
-
+        // Calculate the crop values in pixels.
         const left = Math.round((westX - westOuter) * this.tileSize)
         const top = Math.round((northY - northOuter) * this.tileSize)
         const right = Math.round((eastOuter - eastX) * this.tileSize)

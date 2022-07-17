@@ -1,18 +1,33 @@
+/*
+    To change the tile borders:
+        let root = document.documentElement
+        root.style.setProperty('--tile-border', "solid red 4px")
+        Use "0px" for none
+    Similar for width/height
+ */
+
+:root {
+    --tile-border: solid red 2px;
+    --map-height: 100vh;
+    --map-width: 100vw;
+}
+
 * {
     padding: 0;
     margin: 0;
 }
 
 #map {
-    height: 100vh;
+    height: var(--map-height);
+    width: var(--map-width);
 }
 
 /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
-.terrain-pane .leaflet-tile {
-    border: solid black 1px;
+.leaflet-tile {
+    border: var(--tile-border);
 }
 
-/* Needed when usinng dat.gui to show on top of map */
+/* Needed when usinng dat.gui to put it on top of map */
 .leaflet-container {
     isolation: isolate;
 }

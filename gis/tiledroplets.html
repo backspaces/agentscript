@@ -4,8 +4,8 @@
 <head>
     <title>Tile Droplets</title>
 
-    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet@1.8.0-beta.3/dist/leaflet.css">
-    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0-beta.3/dist/leaflet.css"> -->
+    <!-- <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet@1.8.0/dist/leaflet.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css">
 
     <style>
         * {
@@ -42,6 +42,8 @@
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay';
 
         const ElementOverlay = elementOverlay(L)
+
+        util.toWindow({ util, gis, L, ElementOverlay })
 
         // ========== Setup map and layers ==========
 

@@ -15,8 +15,11 @@ function defaultLeafletOptions() {
         // no elevation layer. 0.01 for invisible elevation layer, 1 for opaque
         elevationOpacity: 0,
 
-        // world's border: set to null for no border
+        // model's border: set to null for no border. can also be used for fill color
         bboxBorder: { color: 'red', weight: 2 },
+
+        // tiles's border: set to null for no border, uses css format for now.
+        tilesBorder: 'solid red 2px',
 
         // elevation tiles: redfishUSA/World, mapzen, mapbox
         tiles: 'mapzen',
@@ -31,26 +34,39 @@ function defaultLeafletOptions() {
         // https://leafletjs.com/reference.html#geojson
         // https://leafletjs.com/reference.html#layer
         json: null,
-        // must be a function: geoJsonFeature => ({color:...})
+        // jsonStyle must be a function: geoJsonFeature => ({color:...})
+        // default is red w/ rest of options the defaults:
         // style options: https://leafletjs.com/reference.html#path-option
-        jsonStyle: null, // will be default style if not overriden
-        // must be a function: layer => string
+        jsonStyle: feature => ({}), // use leaflet defaults
         jsonPopup: null,
+
+        // ToDo:
+        // A popup, bound to a layer. Must be a function: layer => string
+        // Ex: ['jsonLayer', layer => layer.feature.properties.NAME]
+        // see: https://leafletjs.com/reference.html#popup
+        // popup: [],
     }
 }
 
 async function leafletInit(model, canvas, options = {}) {
+    // ========== Startup: css, tile datasets, terrain layer ==========
     options = Object.assign(defaultLeafletOptions(), options)
 
+    // If options.fetchCSS use JS to set Leaflet & our css files
     if (options.fetchCSS) {
         await util.fetchCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
         await util.fetchCssStyle('./map.css')
     }
 
+    // Get one of the 4 tile datasets
     const tileData = TileData[options.tiles] // redfishUSA/World, mapzen, mapbox
+    // Name of the terrain layer (from the gis.js module)
     const terrainName = options.terrain
 
+    // ========== Start of map layers: ==========
+    // ===== The map using the div, model center and Z. World is a GeoWorld
     const center = gis.latlon(model.world.bboxCenter())
+    // preferCanvas seems to be needed for model on top of json?
     const map = L.map(options.div, {
         zoomDelta: 0.25, //0.1
         zoomSnap: 0,
@@ -58,11 +74,13 @@ async function leafletInit(model, canvas, options = {}) {
         // renderer: L.canvas()
     }).setView(center, options.Z)
 
+    // ===== Map's terrain
     const terrainLayer = L.tileLayer(gis.template(terrainName), {
         attribution: gis.attribution(terrainName),
-        className: 'terrain-pane', // shows tiles borders
+        // className: 'terrain-pane', // shows tiles borders
     }).addTo(map)
 
+    // ===== elevation layer if non-zero elevationOpacity
     let elevationLayer
     if (options.elevationOpacity > 0) {
         elevationLayer = L.tileLayer(tileData.zxyTemplate, {
@@ -73,30 +91,7 @@ async function leafletInit(model, canvas, options = {}) {
         }).addTo(map)
     }
 
-    const [west, south, east, north] = model.world.bbox
-    const bounds = new L.LatLngBounds(
-        new L.LatLng(north, west),
-        new L.LatLng(south, east)
-    )
-    const ElementOverlay = elementOverlay(L)
-    const elementLayer = new ElementOverlay(canvas, bounds).addTo(map)
-
-    let jsonLayer
-    if (options.json) {
-        // style needs to be fcn w/ json feature arg
-        let jsonStyleFcn = options.jsonStyle
-
-        jsonLayer = L.geoJSON(options.json, {
-            style: jsonStyleFcn,
-        }) //.addTo(map)
-
-        if (options.jsonPopup) {
-            jsonLayer.bindPopup(options.jsonPopup)
-        }
-
-        jsonLayer.addTo(map)
-    }
-
+    // ===== A border around the model
     // Draw a border around the model's bbox
     // Before done via css: this.canvas.style.border = options.canvasBorder
     //   where canvasBorder: '2px solid red'
@@ -105,8 +100,41 @@ async function leafletInit(model, canvas, options = {}) {
     if (options.bboxBorder) {
         const latlngs = gis.latlon(gis.bboxCoords(model.world.bbox))
         // bboxLayer = L.polyline(latlngs, options.bboxBorder).addTo(map)
-        bboxLayer = L.polygon(latlngs, options.bboxBorder).addTo(map)
+        bboxLayer = L.rectangle(latlngs, options.bboxBorder).addTo(map)
     }
+
+    // ===== Draw a border around each tile, using css, not Leaflet
+    // https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging
+    if (options.tilesBorder !== 'solid red 2px') {
+        if (!options.tilesBorder) options.tilesBorder = '0px'
+        const root = document.documentElement
+        root.style.setProperty('--tile-border', options.tilesBorder)
+    }
+    // ===== A JSON layer with optional popup, fairly common
+    let jsonLayer
+    if (options.json) {
+        jsonLayer = L.geoJSON(options.json, {
+            style: options.jsonStyle,
+        })
+
+        if (options.jsonPopup) {
+            jsonLayer.bindPopup(options.jsonPopup)
+        }
+
+        jsonLayer.addTo(map)
+    }
+
+    // ===== The model layer, using Cody's ElementOverlay
+    // Should be last layer, on top
+    const [west, south, east, north] = model.world.bbox
+    const bounds = new L.LatLngBounds(
+        new L.LatLng(north, west),
+        new L.LatLng(south, east)
+    )
+    const ElementOverlay = elementOverlay(L)
+    const elementLayer = new ElementOverlay(canvas, bounds).addTo(map)
+
+    // ========== End of map layers ==========
 
     return {
         // a module of all the elevation tile urls & their datasets
@@ -130,7 +158,7 @@ async function leafletInit(model, canvas, options = {}) {
         elementOverlay,
         ElementOverlay,
 
-        // the input options
+        // the input options, possibly modified above
         options,
     }
 }

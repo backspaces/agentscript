@@ -15,9 +15,10 @@
         import Model from '../models/DropletsModel.js'
 
         const drawOptions = {
-            turtlesShape: 'circle',
+            turtlesShape: 'square',
+            turtlesRotate: false,
+            turtlesSize: 0.8,
             turtlesColor: 'yellow',
-            turtlesSize: 0.5,
             initPatches: (model, view) => {
                 const elevation = model.patches.exportDataSet('elevation')
                 const grays = elevation.scale(0, 255).data

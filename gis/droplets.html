@@ -46,7 +46,7 @@
 
         const terrainLayer = L.tileLayer(gis.template(terrainName), {
             attribution: gis.attribution(terrainName),
-            className: 'terrain-pane' // shows tiles borders
+            // className: 'terrain-pane' // shows tiles borders
         }).addTo(map)
 
         const elevationLayer = L.tileLayer(
@@ -111,7 +111,7 @@
                 turtlesShape: 'square',
                 turtlesRotate: false,
                 turtlesColor: 'rgb(255,0,0)', // 'red',
-                turtlesSize: 0.5,
+                turtlesSize: 0.8,
             }
 
             // view = view || new TwoDraw(model, {
@@ -136,6 +136,10 @@
                         model.step()
                         view.draw()
                         gui.update()
+                        if (model.moves === 0) {
+                            anim.stop()
+                            console.log('No moves, stopping at step', model.ticks)
+                        }
                     },
                     -1, //500,// -1, // 500, // run 500 steps
                     30 // 10 // 30 // 30 fps
@@ -202,13 +206,13 @@
                 },
             },
 
-            mapFolder: 'Map Functions',
-            puddleDepth: {
-                val: [model.puddleDepth, [1, 15, 1]],
-                cmd: async val => {
-                    model.puddleDepth = val
-                }
-            },
+            mapFolder: 'Opacity',
+            // puddleDepth: {
+            //     val: [model.puddleDepth, [1, 15, 1]],
+            //     cmd: async val => {
+            //         model.puddleDepth = val
+            //     }
+            // },
             tilesOpacity: { // slider
                 val: [elevationLayer.options.opacity, [0, 1, 0.1]],
                 cmd: val => elevationLayer.setOpacity(val),
@@ -218,7 +222,7 @@
                 cmd: val => view.canvas.style.opacity = val,
             },
 
-            modelFolder: 'Model Functions',
+            modelFolder: 'Model Data',
             modelTicks: { // monitor
                 val: 'listen',
                 cmd: () => model.ticks,
@@ -232,7 +236,7 @@
                 cmd: () => model.turtles.length,
             },
             turtlesSize: { // slider
-                val: [0.5, [.2, 1, 0.1]],
+                val: [0.8, [.2, 1, 0.1]],
                 cmd: val => {
                     view.drawOptions.turtlesSize = val
                     if (!anim.isRunning()) view.draw()
@@ -251,7 +255,7 @@
             },
             moves: {
                 val: 'listen',
-                cmd: () => model.steps
+                cmd: () => model.moves
             },
             atEdge: {
                 val: [model.turtles.getDefault('atEdge'),
@@ -286,7 +290,8 @@
         })
         // util.forLoop(gui.folders, (val) => val.open())
         // gui.folders.mapFolder.open()
-        gui.baseGui.close()
+
+        // gui.baseGui.close()
 
         // util.toWindow({ GUI: gui.GUI, gui })
 
