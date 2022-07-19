@@ -1,50 +1,55 @@
 <html>
-    <head>
-        <title>roads</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import Animator from '../src/Animator.js'
-            import Model from '../models/RoadsModel.js'
 
-            async function run() {
-                const model = new Model()
-                await model.startup()
-                model.setup()
+<head>
+    <title>Roads</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-                const baseUrl = `../models/data/roads14.png`
-                const baseMapTile = await util.imagePromise(baseUrl)
-                const isIntersection = t => t.breed.name === 'intersections'
-                const drawOptions = {
-                    patchesColor: baseMapTile,
-                    turtlesShape: 'circle',
-                    turtlesColor: t => (isIntersection(t) ? 'blue' : 'red'),
-                    turtlesSize: t => (isIntersection(t) ? 2 : 1),
-                    linksColor: 'black',
-                }
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import Model from '../models/RoadsModel.js'
 
-                const view = new TwoDraw(
-                    model,
-                    { div: 'modelDiv', patchSize: 4 },
-                    drawOptions
-                )
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-                const anim = new Animator(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    500, // run 500 steps
-                    30 // 30 fps
-                )
-
-                util.toWindow({ util, model, view, anim })
+            const baseUrl = `../models/data/roads14.png`
+            const baseMapTile = await util.imagePromise(baseUrl)
+            const breedColor = { nodes: 'red', intersections: 'blue', drivers: 'green' }
+            const breedSize = { nodes: 1, intersections: 2, drivers: 5 }
+            const breedShape = { nodes: 'circle', intersections: 'circle', drivers: 'dart' }
+            const drawOptions = {
+                patchesColor: baseMapTile,
+                turtlesColor: t => breedColor[t.breed.name],
+                turtlesSize: t => breedSize[t.breed.name],
+                turtlesShape: t => breedShape[t.breed.name],
+                linksColor: 'black',
             }
-            run()
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+
+            const view = new TwoDraw(
+                model,
+                { div: 'modelDiv', patchSize: 4 },
+                drawOptions
+            )
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            )
+
+            util.toWindow({ util, model, view, anim })
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

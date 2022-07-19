@@ -1,51 +1,55 @@
 <html>
-    <head>
-        <title>roads</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import ThreeDraw from '../src/ThreeDraw.js'
-            import Model from '../models/RoadsModel.js'
 
-            async function run() {
-                const model = new Model()
-                await model.startup()
-                model.setup()
+<head>
+    <title>Roads</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-                const baseUrl = `../models/data/roads14.png`
-                const baseMapTile = await util.imagePromise(baseUrl)
-                const isIntersection = t => t.breed.name === 'intersections'
-                const drawOptions = {
-                    patchesColor: baseMapTile,
-                    turtlesShape: 'circle',
-                    turtlesColor: t => (isIntersection(t) ? 'blue' : 'red'),
-                    // turtlesSize: t => (isIntersection(t) ? 0.5 : 0.5), //2:1
-                    turtlesSize: t => (isIntersection(t) ? 2 : 1),
-                    linksColor: 'black',
-                }
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from '../models/RoadsModel.js'
 
-                const view = new ThreeDraw(model, {
-                    // div: 'modelDiv',
-                    drawOptions,
-                })
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-                util.toWindow({ util, model, view })
-
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    500,
-                    33
-                )
-
-                view.idle()
+            const baseUrl = `../models/data/roads14.png`
+            const baseMapTile = await util.imagePromise(baseUrl)
+            const breedColor = { nodes: 'red', intersections: 'blue', drivers: 'green' }
+            const breedSize = { nodes: 1, intersections: 2, drivers: 5 }
+            const breedShape = { nodes: 'circle', intersections: 'circle', drivers: 'dart' }
+            const drawOptions = {
+                patchesColor: baseMapTile,
+                turtlesColor: t => breedColor[t.breed.name],
+                turtlesSize: t => breedSize[t.breed.name],
+                turtlesShape: t => breedShape[t.breed.name],
+                linksColor: 'black',
             }
-            run()
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+
+            const view = new ThreeDraw(model, {
+                // div: 'modelDiv', use default, document.body
+                drawOptions,
+            })
+
+            util.toWindow({ util, model, view })
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                33
+            )
+
+            view.idle()
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

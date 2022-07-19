@@ -205,9 +205,10 @@ class AgentArray extends Array {
     }
 
     /**
-     * Call fcn(agent, index, array) for each item in AgentArray.
-     * Index & array optional.
+     * Call fcn(agent, [ i, AgentArray ]) for each agent in AgentArray.
+     * where i = agent's array index and AgentArray is this array
      * Array can shrink. If it grows, will not visit beyond original length.
+     * If it either shrinks or grows, it will console.log a message
      * "ask" is NetLogo term.
      *
      * @param {Function} fcn fcn(agent, [index], [array])
@@ -226,7 +227,7 @@ class AgentArray extends Array {
         // return this
     }
     /**
-     * Return all elements returning f(obj, index, array) true.
+     * Return all elements returning f(obj, [index, array]) true, as in ask()
      * NetLogo term, simply calls this.filter(fcn)
      *
      * @param {Function} fcn fcn(agent, [index], [array])
@@ -240,6 +241,19 @@ class AgentArray extends Array {
     // Return all other than me.
     other(t) {
         return this.filter(o => o !== t)
+    }
+    // Return an AgentArray of values for each object in AgentArray
+    //
+    // If fcn is a string, it will return that property value.
+    // Otherwise it returns the value returned from fcn(obj)
+    getValues(fcn) {
+        const props = new AgentArray()
+        if (util.isString(fcn)) {
+            this.forLoop(obj => props.push(obj[fcn]))
+        } else {
+            this.forLoop(obj => props.push(fcn(obj)))
+        }
+        return props
     }
 
     // Return count of agents with reporter(agent) true
