@@ -4,7 +4,9 @@ const esmImport = require('esm')(module)
 const gis = esmImport('../src/gis.js')
 const https = require('https')
 
+// tile zxy. Returns data within that.
 const zxy = process.argv[2]
+
 const [z, x, y] = zxy.split('/').map(Number)
 const [west, south, east, north] = gis.xyz2bbox(x, y, z)
 

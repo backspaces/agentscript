@@ -8,19 +8,21 @@ import ColorMap from '../src/ColorMap.js'
  * **TODO: Document this class**
  */
 class TwoDraw extends TwoView {
-    static defaultOptions() {
+    static defaultOptions(model) {
         return {
             // data: {},
 
             patchesColor: 'random',
             initPatches: null,
 
+            turtles: model.turtles,
             turtlesColor: 'random',
             turtlesStrokeColor: 'random',
             turtlesShape: 'dart',
             turtlesSize: 1,
             turtlesRotate: true,
 
+            links: model.links,
             linksColor: 'random',
             linksWidth: 1,
 
@@ -41,13 +43,17 @@ class TwoDraw extends TwoView {
             drawOptions = viewOptions.drawOptions
             delete viewOptions.drawOptions
         }
-        drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
+        drawOptions = Object.assign(
+            {},
+            TwoDraw.defaultOptions(model),
+            drawOptions
+        )
 
         super(model.world, viewOptions) // TwoView
+        this.model = model
 
         this.checkOptions(drawOptions)
         this.drawOptions = drawOptions
-        this.model = model
         // this.view = this
         // this.checkOptions(drawOptions)
         // this.drawOptions = drawOptions
@@ -56,13 +62,13 @@ class TwoDraw extends TwoView {
     // The parameters are easily mistaken: check they are all in the defaults.
     checkOptions(drawOptions) {
         const keys = Object.keys(drawOptions)
-        const defaults = TwoDraw.defaultOptions()
+        const defaults = TwoDraw.defaultOptions(this.model)
 
         keys.forEach(k => {
             if (defaults[k] === undefined) {
                 console.log(
                     'Legal TwoDraw parameters',
-                    Object.keys(TwoDraw.defaultOptions())
+                    Object.keys(TwoDraw.defaultOptions(this.model))
                 )
                 throw Error('Unknown TwoDraw parameter: ' + k)
             }
@@ -97,17 +103,21 @@ class TwoDraw extends TwoView {
 
     draw() {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)
+        const model = this.model
+        const view = this
         let {
             // data,
             patchesColor,
             initPatches,
 
+            turtles,
             turtlesColor,
             turtlesStrokeColor,
             turtlesShape,
             turtlesSize,
             turtlesRotate,
 
+            links,
             linksColor,
             linksWidth,
 
@@ -118,8 +128,6 @@ class TwoDraw extends TwoView {
             patchesMap,
             turtlesMap,
         } = this.drawOptions
-        const model = this.model
-        const view = this
         // const { model, view } = this
 
         if (view.ticks === 0) {
@@ -152,7 +160,7 @@ class TwoDraw extends TwoView {
         const checkColor = (agent, color) =>
             color === 'random' ? turtlesMap.atIndex(agent.id).css : color
 
-        view.drawLinks(model.links, l => ({
+        view.drawLinks(links, l => ({
             color:
                 linksColor === 'random'
                     ? turtlesMap.atIndex(l.id)
@@ -162,7 +170,7 @@ class TwoDraw extends TwoView {
             width: linksWidth,
         }))
 
-        view.drawTurtles(model.turtles, t => ({
+        view.drawTurtles(turtles, t => ({
             shape:
                 typeof turtlesShape === 'function'
                     ? turtlesShape(t)
@@ -190,7 +198,7 @@ class TwoDraw extends TwoView {
         }))
 
         if (textProperty) {
-            model.turtles.ask(t => {
+            turtles.ask(t => {
                 if (t[textProperty] != null)
                     view.drawText(t[textProperty], t.x, t.y, textColor)
             })

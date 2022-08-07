@@ -1,7 +1,7 @@
-// ### Async & I/O
-
 // /** @namespace */
 /** @module */
+
+// ### Async & I/O
 
 // Return Promise for getting an image.
 // - use: imagePromise('./path/to/img').then(img => imageFcn(img))
@@ -1455,21 +1455,21 @@ export function integerRamp(start, stop, numItems = stop - start + 1) {
 // // get nested property like obj.foo.bar.baz:
 // //   const val = nestedProperty(obj, 'foo.bar.baz')
 // // Optimized for path length up to 4, else uses path.reduce()
-// export function nestedProperty(obj, path) {
-//     if (typeof path === 'string') path = path.split('.')
-//     switch (path.length) {
-//         case 1:
-//             return obj[path[0]]
-//         case 2:
-//             return obj[path[0]][path[1]]
-//         case 3:
-//             return obj[path[0]][path[1]][path[2]]
-//         case 4:
-//             return obj[path[0]][path[1]][path[2]][path[3]]
-//         default:
-//             return path.reduce((obj, param) => obj[param], obj)
-//     }
-// }
+export function nestedProperty(obj, path) {
+    if (typeof path === 'string') path = path.split('.')
+    switch (path.length) {
+        case 1:
+            return obj[path[0]]
+        case 2:
+            return obj[path[0]][path[1]]
+        case 3:
+            return obj[path[0]][path[1]][path[2]]
+        case 4:
+            return obj[path[0]][path[1]][path[2]][path[3]]
+        default:
+            return path.reduce((obj, param) => obj[param], obj)
+    }
+}
 
 // // Assign values from one object to another.
 // // keys is an array of keys or a string of space separated keys.

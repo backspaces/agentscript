@@ -8,25 +8,27 @@
     <script type="module">
         import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
-        import Animator from '../src/Animator.js'
+
         import GeoWorld from '../src/GeoWorld.js'
         import Model from '../models/HelloModel.js'
+        import Animator from '../src/Animator.js'
+
         import LeafletDraw from '../src/LeafletDraw.js'
 
-        const bbox = gis.santaFeBBox // gis.bboxFromCenter(gis.santaFeCenter, 0.2, 0.1)
-        const world = new GeoWorld(bbox, 100) // geo bbox & width in patches
+        const world = new GeoWorld({ bbox: gis.santaFeBBox, patchesWidth: 100 })
         const model = new Model(world)
         await model.startup()
         model.setup()
 
         const drawOptions = {
-            patchesColor: 'transparent',
+            // patchesColor: 'transparent', // default in LeafletDraw
             turtlesSize: 2,
             linksWidth: 0.2,
         }
         const view = new LeafletDraw(model, {
+            // div: util.createCanvas(0, 0), // default. the view will resize
             patchSize: 5,
-            drawOptions
+            drawOptions,
         })
         const params = await view.leafletInit({
             Z: 11,

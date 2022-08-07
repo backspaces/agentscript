@@ -8,6 +8,7 @@ import { lineStringsToLinks } from '../src/geojson.js'
 // Thus done offline via node/deno cli's
 const xyz = [3370, 6451, 14]
 const bbox = gis.xyz2bbox(...xyz)
+// const jsonUrl = './data/santafe14roads.json'
 const jsonUrl = '../models/data/santafe14roads.json'
 
 console.log(bbox.toString())
@@ -31,7 +32,22 @@ class RoadsModel extends Model {
         this.turtleBreeds('intersections nodes drivers')
         // REMIND: this fails! this.nodes.setDefault('atEdge', 'clamp')
         this.turtles.setDefault('atEdge', 'clamp')
+
         this.network = lineStringsToLinks(this, bbox, this.geojson)
+        console.log(this.network)
+
+        this.turtles.ask(t => {
+            if (!this.world.isOnWorld(t.x, t.y)) {
+                console.log('t offworld', t.x, t.y)
+                t.die()
+            }
+        })
+        this.turtles.ask(t => {
+            if (t.links.length === 0) {
+                console.log('t no links', t.id)
+                t.die()
+            }
+        })
 
         this.turtles.ask(t => {
             this.nodes.setBreed(t)
@@ -50,29 +66,29 @@ class RoadsModel extends Model {
     }
 
     step() {
-        this.drivers.ask(t => {
-            this.drivers.ask(driver => {
-                const moveBy = Math.min(
-                    driver.speed,
-                    driver.distance(driver.toNode)
-                )
-                driver.face(driver.toNode)
-                driver.forward(moveBy)
+        // this.drivers.ask(t => {
+        this.drivers.ask(driver => {
+            const moveBy = Math.min(
+                driver.speed,
+                driver.distance(driver.toNode)
+            )
+            driver.face(driver.toNode)
+            driver.forward(moveBy)
 
-                // if moveBy was driver.distance, change to/from nodes
-                if (moveBy < driver.speed) {
-                    const lastFromNode = driver.fromNode
-                    driver.fromNode = driver.toNode
+            // if moveBy was driver.distance, change to/from nodes
+            if (moveBy < driver.speed) {
+                const lastFromNode = driver.fromNode
+                driver.fromNode = driver.toNode
 
-                    if (driver.toNode.links.length === 1) {
-                        driver.toNode = lastFromNode
-                    } else {
-                        const neighbors = driver.toNode.linkNeighbors()
-                        driver.toNode = neighbors.otherOneOf(lastFromNode)
-                    }
+                if (driver.toNode.links.length === 1) {
+                    driver.toNode = lastFromNode
+                } else {
+                    const neighbors = driver.toNode.linkNeighbors()
+                    driver.toNode = neighbors.otherOneOf(lastFromNode)
                 }
-            })
+            }
         })
+        // })
     }
 }
 const defaultModel = RoadsModel

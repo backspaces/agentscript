@@ -9,6 +9,8 @@ class LeafletDraw extends TwoDraw {
             throw Error('LeafletDraw: model must use GeoWorld')
 
         drawOptions = viewOptions.drawOptions || drawOptions
+        if (viewOptions.drawOptions) delete viewOptions.drawOptions
+
         if (!drawOptions.patchesColor) {
             drawOptions.patchesColor = 'transparent'
         }

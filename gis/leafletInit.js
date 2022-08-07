@@ -12,6 +12,13 @@ function defaultLeafletOptions() {
         div: 'map',
         Z: 10,
 
+        // have javascript install css files
+        fetchCSS: true,
+
+        // the L.map options
+        // preferCanvas seems to be needed for model on top of json?
+        mapOptions: { zoomDelta: 0.25, zoomSnap: 0, preferCanvas: true },
+
         // no elevation layer. 0.01 for invisible elevation layer, 1 for opaque
         elevationOpacity: 0,
 
@@ -21,23 +28,23 @@ function defaultLeafletOptions() {
         // tiles's border: set to null for no border, uses css format for now.
         tilesBorder: 'solid red 2px',
 
-        // elevation tiles: redfishUSA/World, mapzen, mapbox
-        tiles: 'mapzen',
-
         // map base layer: osm topo topo1 smooth usgs
         terrain: 'topo',
 
-        // have javascript install css files
-        fetchCSS: true,
+        // elevation tiles: redfishUSA/World, mapzen, mapbox
+        tiles: 'mapzen',
 
         // Add Leaflet gis layer using the provided style
         // https://leafletjs.com/reference.html#geojson
         // https://leafletjs.com/reference.html#layer
         json: null,
         // jsonStyle must be a function: geoJsonFeature => ({color:...})
-        // default is red w/ rest of options the defaults:
-        // style options: https://leafletjs.com/reference.html#path-option
-        jsonStyle: feature => ({}), // use leaflet defaults
+        // default style is leaflet's:
+        // https://leafletjs.com/reference.html#path-option
+        jsonStyle: feature => ({
+            // put styles here. none => use leaflet defaults
+            color: 'red',
+        }),
         jsonPopup: null,
 
         // ToDo:
@@ -49,13 +56,16 @@ function defaultLeafletOptions() {
 }
 
 async function leafletInit(model, canvas, options = {}) {
+    if (!model.world.bbox) throw Error('leafletInit: model must use GeoWorld')
+
     // ========== Startup: css, tile datasets, terrain layer ==========
     options = Object.assign(defaultLeafletOptions(), options)
 
     // If options.fetchCSS use JS to set Leaflet & our css files
     if (options.fetchCSS) {
         await util.fetchCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
-        await util.fetchCssStyle('./map.css')
+        // await util.fetchCssStyle('./map.css')
+        await util.fetchCssStyle('https://code.agentscript.org/gis/map.css')
     }
 
     // Get one of the 4 tile datasets
@@ -66,13 +76,8 @@ async function leafletInit(model, canvas, options = {}) {
     // ========== Start of map layers: ==========
     // ===== The map using the div, model center and Z. World is a GeoWorld
     const center = gis.latlon(model.world.bboxCenter())
-    // preferCanvas seems to be needed for model on top of json?
-    const map = L.map(options.div, {
-        zoomDelta: 0.25, //0.1
-        zoomSnap: 0,
-        preferCanvas: true,
-        // renderer: L.canvas()
-    }).setView(center, options.Z)
+    const map = L.map(options.div, options.mapOptions)
+    map.setView(center, options.Z)
 
     // ===== Map's terrain
     const terrainLayer = L.tileLayer(gis.template(terrainName), {

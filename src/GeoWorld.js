@@ -1,6 +1,7 @@
+import * as gis from './gis.js'
 import World from './World.js'
 import { geojsonBBox } from './geojson.js'
-import * as gis from './gis.js'
+// import { MathUtils } from 'three'
 
 // class World defines the coordinate system for the model.
 // It has been upgraded with methods converting from other
@@ -8,15 +9,36 @@ import * as gis from './gis.js'
 // This is an example World object for geojson worlds.
 
 class GeoWorld extends World {
+    static defaultOptions(bbox = gis.newMexicoBBox, patchesWidth = 100) {
+        return {
+            bbox,
+            patchesWidth,
+        }
+    }
+
     // bbox: [west, south, east, north]
     // bbox of NM
     static defaultBBox() {
         return gis.newMexicoBBox
     }
 
-    // Use geo bbox & width to create a World object
+    // Use geo bbox & patchesWidth to create a World object
     // BBox can be a geojson obj, which is converted to geojson's bbox
-    constructor(bbox = GeoWorld.defaultBBox(), width = 50) {
+    // constructor(bbox = GeoWorld.defaultBBox(), width = 50) {
+    constructor(options = GeoWorld.defaultOptions()) {
+        // TEMPORY: will be removed in a few commits
+        if (arguments.length === 2) {
+            console.log(
+                'WARNING: GeoWorld(bbox, width) replaced by GeoWorld(options)',
+                'See: GeoWorld.defaultOptions'
+            )
+
+            options = {
+                bbox: arguments[0],
+                patchesWidth: arguments[1],
+            }
+        }
+        let { bbox, patchesWidth } = options
         let json
         if (!Array.isArray(bbox)) {
             json = bbox
@@ -24,16 +46,16 @@ class GeoWorld extends World {
         }
         const aspect = gis.bboxMetricAspect(bbox)
 
-        // min/max Z set to 0 => Model2D
+        const maxZ = Math.round(patchesWidth / 2)
         super({
             minX: 0,
-            maxX: width,
+            maxX: patchesWidth,
 
             minY: 0,
-            maxY: Math.round(width / aspect),
+            maxY: Math.round(patchesWidth / aspect),
 
-            minZ: 0,
-            maxZ: 0,
+            minZ: -maxZ,
+            maxZ: maxZ,
         })
 
         this.bbox = bbox
@@ -41,14 +63,19 @@ class GeoWorld extends World {
 
         if (json) this.geojson = json
     }
-    // Convert to/from geo coords.
+    // Convert from world patch coords to geo coords.
     toGeo(x, y) {
         return this.xfm.toBBox([x, y])
     }
+    // Convert from geo lon/lat coords to patch coords
     toWorld(geoX, geoY) {
         return this.xfm.toWorld([geoX, geoY])
     }
 
+    // return bbox in geo coords
+    // bbox() {
+    //     return this.bbox
+    // }
     // return bbox lonlat center
     bboxCenter() {
         return this.xfm.bboxCenter()

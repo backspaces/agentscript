@@ -19,7 +19,8 @@
 
         const counties = await fetch('./data/nmcounties.json').then(resp => resp.json())
 
-        const world = new GeoWorld(counties, 100)
+        const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
+
         const model = new CountiesModel(world)
         await model.startup()
         model.setup()
@@ -33,7 +34,7 @@
                 view.drawOptions.turtlesMap.atIndex(t.county + 1),
         }
         const view = new LeafletDraw(model, {
-            div: util.createCanvas(0, 0), // default. the view will resize
+            // div: util.createCanvas(0, 0), // default. the view will resize
             drawOptions,
         })
 

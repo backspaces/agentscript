@@ -1,17 +1,17 @@
-import { feature } from '../gis/turfImports'
-import { nestedProperty, precision } from '../src/utils.js'
+import { xyInBBox } from './gis.js'
+import { clone } from './geojson.js'
 
 // util has it's own, this used locally in pathFilter
-// function nestedProperty(obj, path) {
-//     if (typeof path === 'string') path = path.split('.')
-//     return path.reduce((obj, param) => obj[param], obj)
-// }
-
-// The filters modify the input json. Use cloneJson to preserve original.
+function nestedProperty(obj, path) {
+    if (typeof path === 'string') path = path.split('.')
+    return path.reduce((obj, param) => obj[param], obj)
+}
 
 // turf.flatten()
 // bin/demultline (roads has it's own)
-export function flattenMultiLineStrings(json) {
+export function flattenMultiLineStrings(json, cloneJson = true) {
+    if (cloneJson) json = clone(json)
+
     const features = []
     json.features.forEach(feature => {
         if (feature.geometry.type === 'MultiLineString') {
@@ -29,18 +29,25 @@ export function flattenMultiLineStrings(json) {
     return json
 }
 
-// export function coordPrecision(geojson, digits = 4) {
-//     let features = geojson.features || geojson
-//     features = features.map(feature, i) {}
-// }
+export function bboxFilter(json, bbox, cloneJson = true) {
+    if (cloneJson) json = clone(json)
 
-export function bboxFilter(json, bbox) {
-    json.features = json.features.filter(feature => {
+    const features = json.features.filter(feature => {
         let coords = feature.geometry.coordinates
-        coords = coords.filter(pt => gis.xyInBBox(bbox, pt))
+        coords = coords.filter(pt => xyInBBox(bbox, pt))
+
+        // if (coords.length !== feature.geometry.coordinates.length)
+        //     console.log(
+        //         feature.geometry.coordinates.length,
+        //         '->',
+        //         coords.length
+        //     )
+
         feature.geometry.coordinates = coords
         return coords.length >= 2
     })
+    json.features = features
+    return json
 }
 
 // ========= REMIND: refactor into bin/
@@ -55,6 +62,7 @@ export function featureFilter(json, filterFcn) {
     json.features = json.features.filter(filterFcn)
     return json
 }
+
 // Used locally only, geometryFilter & streetsFilter
 // Filter by a property (path) matching one of values array.
 export function pathFilter(json, featurePath, values) {
@@ -65,13 +73,18 @@ export function pathFilter(json, featurePath, values) {
     })
     return json
 }
+
 // The above specific to geometry (Point, Polygon, LineString)
-export function geometryFilter(json, values) {
+export function geometryFilter(json, values, cloneJson = true) {
+    if (cloneJson) json = clone(json)
+
     return pathFilter(json, 'geometry.type', values)
 }
 
 // Reduces the feature properties to only those in the properties array.
-export function propertiesFilter(json, properties) {
+export function propertiesFilter(json, properties, cloneJson = true) {
+    if (cloneJson) json = clone(json)
+
     if (typeof properties === 'string') properties = properties.split(' ')
     json.features.forEach(feature => {
         const obj = {}
@@ -121,8 +134,11 @@ export const osmStreetProperties = [
 export function streetsFilter(
     json,
     streetTypes = osmStreetTypes,
-    streetProperties = osmStreetProperties
+    streetProperties = osmStreetProperties,
+    cloneJson = true
 ) {
+    if (cloneJson) json = clone(json)
+
     geometryFilter(json, 'LineString')
     // see https://wiki.openstreetmap.org/wiki/Highways
     // note motorway_junction's are Point geometries

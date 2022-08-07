@@ -24,7 +24,7 @@
 
         const counties = await fetch('./data/nmcounties.json').then(resp => resp.json())
 
-        const world = new GeoWorld(counties, 100)
+        const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
         const model = new CountiesModel(world)
         await model.startup()
         model.setup()

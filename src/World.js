@@ -95,7 +95,7 @@ class World {
 
         util.forLoop({ minX, maxX, minY, maxY, minZ, maxZ }, (val, key) => {
             if (!Number.isInteger(val))
-                throw Error(`${key}:${val} must be an integer`)
+                throw Error(`World: ${key}:${val} must be an integer`)
         })
 
         this.numX = this.width = maxX - minX + 1
@@ -336,6 +336,11 @@ class BBoxTransform {
     //     return Math.abs((east - west) / (north - south))
     // }
 
+    // Return bbox in xfm coords
+    bbox() {
+        const [west, south, east, north] = this.bbox
+        return [west, south, east, north]
+    }
     // Return center [x,y] of bbox in bbox coords.
     bboxCenter() {
         const [west, south, east, north] = this.bbox

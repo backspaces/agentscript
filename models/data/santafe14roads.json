@@ -1,458 +1,911 @@
-{"type":"FeatureCollection", "features": [
-{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9444868,35.680041],[-105.9445385,35.679817],[-105.9446411,35.6793691]]},"properties":{"highway":"residential","name":"Chavez Place","tiger:name_base":"Chavez"},"id":"way/14603901"},
+{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9444868,35.680041],[-105.9445385,35.679817],[-105.9446411,35.6793691]]},"properties":{"highway":"residential","name":"Chavez Place","tiger:name_base":"Chavez"},"id":"way/14603901"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9445385,35.679817],[-105.9435763,35.6796338]]},"properties":{"highway":"residential","name":"Chavez Place","tiger:name_base":"Chavez"},"id":"way/14603902"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9405288,35.6888219],[-105.9423544,35.6891745],[-105.9431142,35.6892873],[-105.9435103,35.6893248],[-105.9436101,35.6893102]]},"properties":{"highway":"residential","name":"Johnson Street","tiger:name_base":"Johnson"},"id":"way/14603917"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9390919,35.6816098],[-105.9391016,35.6815056],[-105.9392317,35.6806996],[-105.9392881,35.6802329],[-105.9394289,35.6791726],[-105.9395756,35.6780853]]},"properties":{"highway":"residential","name":"Webber Street","tiger:name_base":"Webber"},"id":"way/14603955"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9316223,35.6821053],[-105.9305803,35.6818429],[-105.9304551,35.6816136],[-105.9305246,35.6812419],[-105.9303277,35.6810491],[-105.9302687,35.6809006],[-105.9304135,35.6801204]]},"properties":{"highway":"residential","name":"Calle Corvo","tiger:name_base":"Calle Corvo"},"id":"way/14604048"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9357301,35.6811477],[-105.9359356,35.6806097],[-105.936069,35.6801852],[-105.9360911,35.6798282],[-105.936206,35.67938]]},"properties":{"highway":"residential","name":"Halona Street","tiger:name_base":"Halona"},"id":"way/14604062"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9412381,35.6805517],[-105.9392881,35.6802329],[-105.9377236,35.6800713]]},"properties":{"highway":"residential","name":"East Santa Fe Avenue","tiger:name_base":"Santa Fe"},"id":"way/14604112"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9462153,35.6767609],[-105.9462929,35.6761563]]},"properties":{"highway":"residential","name":"Don Manuel Street","tiger:name_base":"Don Manuel"},"id":"way/14604153"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9454889,35.6802776],[-105.9458363,35.6803569],[-105.9465056,35.680445],[-105.9465766,35.6800737]]},"properties":{"highway":"residential","name":"West Gomez Road","tiger:name_base":"Gomez"},"id":"way/14604207"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9301806,35.6801228],[-105.930176,35.6793112],[-105.9301185,35.6780563],[-105.9301095,35.6774787]]},"properties":{"highway":"residential","name":"San Antonio Street","tiger:name_base":"San Antonio"},"id":"way/14604501"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9484542,35.6877793],[-105.9476239,35.6876175]]},"properties":{"highway":"residential","name":"Pena Place","tiger:name_base":"Pena"},"id":"way/14604581"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9397558,35.6865099],[-105.9391732,35.6863536],[-105.938378,35.6860814]]},"properties":{"highway":"residential","oneway":"yes","name":"East Water Street","tiger:name_base":"Water"},"id":"way/14604587"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9504886,35.6835723],[-105.95064,35.6825662]]},"properties":{"highway":"residential","name":"Adolfo Street","tiger:name_base":"Adolfo"},"id":"way/14604664"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.934451,35.6791685],[-105.9338783,35.6780126]]},"properties":{"highway":"residential","name":"Douglas Street","tiger:name_base":"Douglas"},"id":"way/14604672"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.943771,35.6786978],[-105.9460006,35.6791837],[-105.9462708,35.6792188]]},"properties":{"highway":"residential","name":"Anita Place","tiger:name_base":"Anita"},"id":"way/14604701"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9353897,35.6786064],[-105.9352315,35.678626],[-105.9345931,35.6790944],[-105.934451,35.6791685],[-105.9337753,35.6795388],[-105.9333775,35.6798078],[-105.9333834,35.6801032]]},"properties":{"highway":"residential","name":"Arroyo Tenorio Street","tiger:name_base":"Arroyo Tenorio"},"id":"way/14604788"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439671,35.6898894],[-105.9438151,35.6904178],[-105.9436864,35.6906199],[-105.943331,35.6911514],[-105.9432872,35.6912685]]},"properties":{"highway":"residential","name":"Jefferson Street","tiger:name_base":"Jefferson"},"id":"way/14604796"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9334174,35.691202],[-105.9327529,35.6925765],[-105.9325915971601,35.6929]]},"properties":{"highway":"residential","name":"Sunset Street","tiger:name_base":"Sunset"},"id":"way/14604821"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9457445,35.687656],[-105.9462163,35.6878406],[-105.9467659,35.6879118],[-105.9472197,35.6880213],[-105.9475124,35.6881712],[-105.9478459,35.6882139],[-105.9483471,35.6881918],[-105.9496027,35.6881518],[-105.9506277,35.6881783],[-105.9513897,35.6880982],[-105.9521,35.688177731288924]]},"properties":{"highway":"residential","name":"Alto Street","tiger:name_base":"Alto"},"id":"way/14605009"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9334771,35.6884734],[-105.9341187,35.6886651]]},"properties":{"highway":"residential","name":"Castillo Place","tiger:name_base":"Castillo"},"id":"way/14605279"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9396937,35.6918519],[-105.9395679,35.6919671],[-105.9392371,35.6920125]]},"properties":{"highway":"secondary_link","oneway":"yes","name":"North Federal Place","tiger:name_base":"Federal"},"id":"way/14605329"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9431676,35.6925067],[-105.9432132,35.6928966],[-105.94321431917707,35.6929]]},"properties":{"highway":"residential","name":"Rio Grande Avenue","tiger:name_base":"Rio Grande"},"id":"way/14605348"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9453673,35.6912103],[-105.9455913,35.6912176]]},"properties":{"highway":"residential","name":"Jose Street","tiger:name_base":"Jose"},"id":"way/14605457"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9471517,35.6769201],[-105.9462153,35.6767609],[-105.9454882,35.6766583],[-105.9449177,35.6765858]]},"properties":{"highway":"residential","oneway":"yes","name":"West Houghton Street","tiger:name_base":"Houghton"},"id":"way/14605603"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9444117,35.6765329],[-105.9446354,35.6766197],[-105.9449177,35.6765858],[-105.9453927,35.6761208],[-105.9455083,35.676067],[-105.9462929,35.6761563],[-105.9465249,35.6759853],[-105.9467127,35.6754166],[-105.94676623140097,35.6751]]},"properties":{"highway":"residential","name":"West Houghton Street","tiger:name_base":"Houghton"},"id":"way/14605604"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9421514,35.6762612],[-105.943876,35.676531]]},"properties":{"highway":"residential","name":"West Houghton Street","tiger:name_base":"Houghton"},"id":"way/14605608"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485421,35.6896914],[-105.9484157,35.6912016]]},"properties":{"highway":"residential","name":"Quintana Street","tiger:name_base":"Quintana"},"id":"way/14605630"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9448526,35.6923523],[-105.94551521535074,35.6929]]},"properties":{"highway":"residential","name":"Sandia Street","tiger:name_base":"Sandia"},"id":"way/14605664"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9468367,35.6787381],[-105.9469566,35.6781776],[-105.9470791,35.6773216],[-105.9471517,35.6769201],[-105.9472818,35.6760978],[-105.94742734209777,35.6751]]},"properties":{"highway":"residential","name":"Don Cubero Avenue","tiger:name_base":"Don Cubero"},"id":"way/14605868"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9377089,35.6800294],[-105.9364473,35.6798898]]},"properties":{"highway":"residential","name":"Sanchez Street","tiger:name_base":"Sanchez"},"id":"way/14606037"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9406728,35.6899731],[-105.9422494,35.6899411],[-105.9439671,35.6898894]]},"properties":{"highway":"residential","name":"McKenzie Street","tiger:name_base":"Mc Kenzie"},"id":"way/14606150"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9327812,35.6829902],[-105.9333834,35.6801032]]},"properties":{"highway":"residential","name":"Garcia Street","tiger:name_base":"Garcia"},"id":"way/14606182"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9470791,35.6773216],[-105.9460207,35.6771738]]},"properties":{"highway":"residential","name":"Don Cubero Place","tiger:name_base":"Don Cubero"},"id":"way/14606275"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.682670900910466],[-105.951029,35.6827753]]},"properties":{"highway":"residential","name":"Montez Street","tiger:name_base":"Montez"},"id":"way/14606348"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9456058,35.6879382],[-105.9456364,35.6878687]]},"properties":{"highway":"residential","name":"De Fouri Street","tiger:name_base":"De Fouri"},"id":"way/14606539"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9312843,35.6873888],[-105.9310205,35.6879428]]},"properties":{"highway":"residential","name":"Harkins Lane","tiger:name_base":"Harkins"},"id":"way/14606655"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9456791,35.6799253],[-105.9450758,35.6797085]]},"properties":{"highway":"residential","name":"Rael Road","tiger:name_base":"Rael"},"id":"way/14606657"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9340389,35.6837887],[-105.9337807,35.6837204],[-105.9327812,35.6829902]]},"properties":{"highway":"residential","name":"East Canyon Road","tiger:name_base":"Canyon"},"id":"way/14606769"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9411204,35.6904533],[-105.9421647,35.6905129],[-105.9436864,35.6906199]]},"properties":{"highway":"residential","name":"Staab Street","tiger:name_base":"Staab"},"id":"way/14606900"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.93577,35.6923649],[-105.9352729,35.6921835],[-105.9347179,35.6919664],[-105.9346389,35.6917546]]},"properties":{"highway":"residential","name":"Kearney Road","tiger:name_base":"Kearney"},"id":"way/14607092"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9385686,35.6918848],[-105.93811113333334,35.6929]]},"properties":{"highway":"residential","name":"Old Taos Highway","tiger:name_base":"Old Taos"},"id":"way/14607330"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9345444,35.6897257],[-105.9339153,35.6892465],[-105.9336549,35.6889574],[-105.9334771,35.6884734],[-105.9336116,35.6880328]]},"properties":{"highway":"residential","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/14607363"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.69083730121244],[-105.9506072,35.691343],[-105.9491097,35.6918506],[-105.9483536,35.6920554],[-105.947503,35.6922063],[-105.9473766,35.6922047]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/14607368"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.935087,35.6810506],[-105.935496,35.681063],[-105.9357301,35.6811477],[-105.9360612,35.6812911]]},"properties":{"highway":"secondary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/14607372"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9494739,35.6787563],[-105.9495608,35.6787045],[-105.9500105,35.6775164],[-105.950073,35.6771752],[-105.9502028,35.6764317]]},"properties":{"highway":"residential","name":"Calle Torreador","tiger:name_base":"Calle Torreador"},"id":"way/14607533"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9388484,35.6878498],[-105.9390847,35.6872004]]},"properties":{"highway":"residential","oneway":"yes","name":"Lincoln Avenue","tiger:name_base":"Lincoln"},"id":"way/14607595"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9301,35.680117977402205],[-105.9301806,35.6801228],[-105.9304135,35.6801204],[-105.9312165,35.6800844],[-105.9320733,35.6800955],[-105.932521,35.680081],[-105.932826,35.680032],[-105.9330822,35.6799977],[-105.9333834,35.6801032],[-105.9339309,35.6802594],[-105.9343415,35.6804469],[-105.9347923,35.680703],[-105.9350223,35.6808899],[-105.935087,35.6810506]]},"properties":{"highway":"residential","name":"Acequia Madre","tiger:name_base":"Acequia Madre"},"id":"way/14607608"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9416337,35.6787058],[-105.9425915,35.6788395]]},"properties":{"highway":"residential","name":"Laughlin Street","tiger:name_base":"Laughlin"},"id":"way/14607624"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9425486,35.6791445],[-105.9430957,35.6792317]]},"properties":{"highway":"residential","name":"Laughlin Street","tiger:name_base":"Laughlin"},"id":"way/14607626"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9499091,35.6897695],[-105.9498209,35.690316],[-105.9498267,35.6912606]]},"properties":{"highway":"residential","name":"Jimenez Street","tiger:name_base":"Jimenez"},"id":"way/14607703"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.946167,35.6902394],[-105.9458579,35.6912264]]},"properties":{"highway":"residential","name":"Daniel Street","tiger:name_base":"Daniel"},"id":"way/14607757"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9395497,35.6872872],[-105.9397659,35.6865713],[-105.9397558,35.6865099]]},"properties":{"highway":"residential","oneway":"yes","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/14607895"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9466638,35.688517],[-105.9463331,35.6893316]]},"properties":{"highway":"residential","name":"Camino del Campo","tiger:name_base":"Camino del Campo"},"id":"way/14608015"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9398834,35.6911091],[-105.9418496,35.6912194]]},"properties":{"highway":"residential","name":"Catron Street","tiger:name_base":"Catron"},"id":"way/14608039"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9370108,35.6767059],[-105.9370152,35.6763698]]},"properties":{"highway":"tertiary","name":"Old Pecos Trail","tiger:name_base":"Old Pecos"},"id":"way/14608074"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9440997,35.6928202],[-105.94405346538461,35.6929]]},"properties":{"highway":"residential","name":"Rio Grande Place","tiger:name_base":"Rio Grande"},"id":"way/14608222"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9417494,35.6781593],[-105.9405643,35.6781182],[-105.9395756,35.6780853],[-105.9387047,35.6780503],[-105.9373128,35.6777992]]},"properties":{"highway":"residential","name":"East Buena Vista Street","tiger:name_base":"Buena Vista"},"id":"way/14608348"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.94430301592706,35.6929],[-105.9448526,35.6923523]]},"properties":{"highway":"residential","name":"Solona Street","tiger:name_base":"Solona"},"id":"way/14608454"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9383324,35.6765518],[-105.938476,35.675731]]},"properties":{"highway":"residential","name":"Cross Street","tiger:name_base":"Cross"},"id":"way/14608461"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9472704,35.6895688],[-105.947169,35.6901131],[-105.9469353,35.6918179]]},"properties":{"highway":"residential","name":"Duran Street","tiger:name_base":"Duran"},"id":"way/14608553"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9370686,35.6891315],[-105.9352364,35.6885151]]},"properties":{"highway":"tertiary","name":"East Marcy Street","tiger:name_base":"Marcy"},"id":"way/14608598"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9329324,35.6864104],[-105.9326233,35.6872667]]},"properties":{"highway":"residential","name":"East Faithway Street","tiger:name_base":"Faithway"},"id":"way/14608629"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9379835,35.6860719],[-105.9376511,35.6848592]]},"properties":{"highway":"tertiary","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/14608725"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.938378,35.6860814],[-105.9383286,35.6861465],[-105.9381241,35.6869296],[-105.9381358,35.6869743]]},"properties":{"highway":"residential","oneway":"yes","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/14608727"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9370686,35.6891315],[-105.9381967,35.6894197]]},"properties":{"highway":"tertiary","name":"West Marcy Street","tiger:name_base":"Marcy"},"id":"way/14608848"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439379,35.6853377],[-105.9453,35.6856694]]},"properties":{"highway":"residential","name":"Aztec Street","tiger:name_base":"Aztec"},"id":"way/14608910"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9311923,35.6902041],[-105.9308152,35.6902202],[-105.9301,35.69056075209989]]},"properties":{"highway":"residential","name":"Prince Avenue","tiger:name_base":"Prince"},"id":"way/14609309"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9454143,35.6854758],[-105.9453,35.6856694]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/14609331"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9343415,35.6804469],[-105.9345368,35.6800077]]},"properties":{"highway":"residential","name":"Plaza Chamisal","tiger:name_base":"Plaza Chamisol"},"id":"way/14609354"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9403836,35.6844553],[-105.9395062,35.6841423]]},"properties":{"highway":"residential","name":"East de Vargas Street","tiger:name_base":"de Vargas"},"id":"way/14609367"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9394709,35.6767185],[-105.9396581,35.6759081]]},"properties":{"highway":"residential","name":"Waldo Street","tiger:name_base":"Waldo"},"id":"way/14609680"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9353201,35.691783],[-105.9346389,35.6917546],[-105.9334174,35.691202],[-105.932301,35.6907819],[-105.9314503,35.6903015],[-105.9311923,35.6902041]]},"properties":{"highway":"residential","name":"Kearney Avenue","tiger:name_base":"Kearney"},"id":"way/14609801"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9317973,35.6813548],[-105.9322676,35.6814197],[-105.9326154,35.6814113]]},"properties":{"highway":"residential","name":"Plaza Fatimo","tiger:name_base":"Plaza Fatimo"},"id":"way/14609816"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9311334,35.6806151],[-105.9312165,35.6800844]]},"properties":{"highway":"residential","name":"Plaza Fatimo","tiger:name_base":"Plaza Fatimo"},"id":"way/14609817"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9506277,35.6881783],[-105.9508139,35.6871512],[-105.9509739,35.6864348]]},"properties":{"highway":"residential","name":"Maynard Street","tiger:name_base":"Maynard"},"id":"way/14609906"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9412526,35.6804734],[-105.9432966,35.6807789]]},"properties":{"highway":"residential","name":"West Santa Fe Avenue","tiger:name_base":"Santa Fe"},"id":"way/14610112"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9333775,35.6798078],[-105.9333016,35.6794877],[-105.9331085,35.6791521],[-105.9320785,35.6779233],[-105.9318908,35.6776183],[-105.9315904,35.676677],[-105.9312256,35.675884],[-105.93055598319589,35.6751]]},"properties":{"highway":"residential","name":"East Garcia Street","tiger:name_base":"Garcia"},"id":"way/14610294"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9353925,35.6879838],[-105.9352364,35.6885151],[-105.93491,35.6892485],[-105.9345444,35.6897257],[-105.9334174,35.691202]]},"properties":{"highway":"residential","name":"Otero Street","tiger:name_base":"Otero"},"id":"way/14610312"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.930176,35.6793112],[-105.9301,35.67931107656612]]},"properties":{"highway":"residential","name":"Sosaya Street","tiger:name_base":"Sosaya"},"id":"way/14610343"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9367992,35.6807143],[-105.9359356,35.6806097]]},"properties":{"highway":"residential","name":"Winische Way","tiger:name_base":"Winische"},"id":"way/14610391"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9423178,35.6754446],[-105.9447136,35.675831]]},"properties":{"highway":"residential","name":"West Coronado Road","tiger:name_base":"Coronado"},"id":"way/14610423"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.94196253345586,35.6929],[-105.9419639,35.6928997],[-105.9424085,35.6925676],[-105.9429584,35.6923428]]},"properties":{"highway":"residential","name":"Rosario Boulevard","tiger:name_base":"Rosario"},"id":"way/14610612"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9395497,35.6872872],[-105.9390847,35.6872004],[-105.9381358,35.6869743],[-105.9368886,35.6866743]]},"properties":{"highway":"residential","oneway":"yes","name":"East San Francisco Street","tiger:name_base":"San Francisco"},"id":"way/14610631"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9421514,35.6762612],[-105.9409863,35.6760997],[-105.9396581,35.6759081]]},"properties":{"highway":"residential","name":"East Houghton Street","tiger:name_base":"Houghton"},"id":"way/14610800"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.938378,35.6860814],[-105.9384156,35.6860244],[-105.9387207,35.6850143]]},"properties":{"highway":"residential","oneway":"yes","name":"Shelby Street","tiger:name_base":"Shelby"},"id":"way/14610807"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485726,35.6802571],[-105.9485226,35.6801509]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Don Diego Avenue","tiger:name_base":"Don Diego"},"id":"way/14610835"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9320733,35.6800955],[-105.9321302,35.6799131]]},"properties":{"highway":"residential","name":"Delgado Lane","tiger:name_base":"Delgado"},"id":"way/14610896"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9304805,35.6857987],[-105.9301,35.68588289662211]]},"properties":{"highway":"residential","name":"Armijo Street","tiger:name_base":"Armijo"},"id":"way/14610898"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9450931,35.6785379],[-105.9451995,35.6779351],[-105.9454882,35.6766583]]},"properties":{"highway":"residential","name":"Allendale Street","tiger:name_base":"Allendale"},"id":"way/14610904"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9314379,35.6860442],[-105.9306421,35.6871033]]},"properties":{"highway":"residential","name":"Martinez Street","tiger:name_base":"Martinez"},"id":"way/14610928"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.93372618741999,35.6929],[-105.9327529,35.6925765],[-105.9304084,35.6918067],[-105.9301,35.69171299447078]]},"properties":{"highway":"secondary","name":"Artist Road","tiger:name_base":"Artist"},"id":"way/14611022"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9403957,35.6894011],[-105.9405624,35.6898073],[-105.9406728,35.6899731],[-105.9411204,35.6904533],[-105.9418496,35.6912194]]},"properties":{"highway":"residential","name":"Griffin Street","tiger:name_base":"Griffin"},"id":"way/14611139"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9482854,35.6884805],[-105.9483471,35.6881918],[-105.9484542,35.6877793],[-105.948576,35.68713],[-105.9486708,35.6865645],[-105.9486145,35.6859109]]},"properties":{"highway":"residential","name":"Closson Street","tiger:name_base":"Closson"},"id":"way/14611211"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9482018,35.6769955],[-105.9487704,35.6770283],[-105.950073,35.6771752]]},"properties":{"highway":"residential","name":"Calle Lucero","tiger:name_base":"Calle Lucero"},"id":"way/14611302"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9500111,35.6855882],[-105.9505562,35.6857389],[-105.9512296,35.6857821],[-105.9521,35.685767275946546]]},"properties":{"highway":"residential","name":"Dunlap Street","tiger:name_base":"Dunlap"},"id":"way/14611306"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9318908,35.6776183],[-105.9311207,35.6775636],[-105.931123,35.67878]]},"properties":{"highway":"residential","name":"Johnson Lane","tiger:name_base":"Johnson"},"id":"way/14611309"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9353925,35.6879838],[-105.937328,35.6885174]]},"properties":{"highway":"residential","name":"Nusbaum Street","tiger:name_base":"Nusbaum"},"id":"way/14611433"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9366901,35.6901259],[-105.9372148,35.6903432]]},"properties":{"highway":"tertiary_link","oneway":"yes","name":"South Federal Place","tiger:name_base":"Federal"},"id":"way/14611437"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9394514,35.6910303],[-105.9396968,35.6911953],[-105.9397955,35.6914531]]},"properties":{"highway":"tertiary_link","oneway":"yes","name":"South Federal Place","tiger:name_base":"Federal"},"id":"way/14611438"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9363505,35.6910609],[-105.936585,35.690625],[-105.9368188,35.6904118],[-105.9372148,35.6903432]]},"properties":{"highway":"tertiary_link","oneway":"yes","name":"South Federal Place","tiger:name_base":"Federal"},"id":"way/14611439"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9452053,35.6814397],[-105.9452155,35.6813483],[-105.9453773,35.6804466],[-105.9454889,35.6802776],[-105.9456791,35.6799253],[-105.9458866,35.6795485],[-105.9460006,35.6791837],[-105.9461695,35.6780672]]},"properties":{"highway":"residential","name":"Gomez Road","tiger:name_base":"Gomez"},"id":"way/14611484"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9510544,35.6791861],[-105.9510074,35.6791096],[-105.9510436,35.6785928],[-105.9509603,35.6784799],[-105.9506689,35.6783417],[-105.9508482,35.6771321]]},"properties":{"highway":"residential","name":"Gilmore Street","tiger:name_base":"Gilmore"},"id":"way/14611508"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9472818,35.6760978],[-105.9483003,35.6761395]]},"properties":{"highway":"residential","name":"Camino Adela","tiger:name_base":"Camino Adela"},"id":"way/14611982"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9325038,35.6876981],[-105.9333338,35.6883845],[-105.9334771,35.6884734]]},"properties":{"highway":"residential","oneway":"yes","name":"Hillside Avenue","tiger:name_base":"Hillside"},"id":"way/14612036"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.940476,35.67853],[-105.9405643,35.6781182],[-105.9408122,35.6769061],[-105.9409863,35.6760997],[-105.9411601,35.6752521]]},"properties":{"highway":"residential","name":"Gildersleeve Street","tiger:name_base":"Gildersleeve"},"id":"way/14612098"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9495725,35.6871267],[-105.9497114,35.6862139]]},"properties":{"highway":"residential","name":"Casados Street","tiger:name_base":"Casados"},"id":"way/14612127"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9510436,35.6785928],[-105.9515353,35.6783228],[-105.9521,35.67831775673052]]},"properties":{"highway":"residential","name":"Topeka Street","tiger:name_base":"Topeka"},"id":"way/14612215"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9353897,35.6786064],[-105.9354592,35.677416]]},"properties":{"highway":"residential","name":"Miller Street","tiger:name_base":"Miller"},"id":"way/14612222"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.93451,35.6773448],[-105.9344711,35.6762304],[-105.9343531,35.6760343],[-105.9340208,35.6758445]]},"properties":{"highway":"residential","name":"Camino Atalaya","tiger:name_base":"Camino Atalaya"},"id":"way/14612235"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9372869,35.6775184],[-105.9354592,35.677416],[-105.93451,35.6773448],[-105.9339038,35.6773274]]},"properties":{"highway":"residential","name":"Camino de Las Animas","tiger:name_base":"Camino de Las Animas"},"id":"way/14612254"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9377157,35.6875632],[-105.937328,35.6885174],[-105.9370686,35.6891315]]},"properties":{"highway":"tertiary","name":"Washington Avenue","tiger:name_base":"Washington"},"id":"way/14612350"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9513897,35.6880982],[-105.9514647,35.687364]]},"properties":{"highway":"residential","name":"Alto Lane","tiger:name_base":"Alto"},"id":"way/14612389"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9412612,35.6855509],[-105.9406851,35.6859884],[-105.9400901,35.6865836]]},"properties":{"highway":"residential","oneway":"yes","name":"Ortiz Street","tiger:name_base":"Ortiz"},"id":"way/14612473"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9442144,35.6830302],[-105.9442588,35.6831037],[-105.944716,35.6832197]]},"properties":{"highway":"residential","name":"Read Street","tiger:name_base":"Read"},"id":"way/14612684"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9407392,35.6828475],[-105.9425572,35.6833628]]},"properties":{"highway":"residential","name":"South Capitol Place","tiger:name_base":"Capitol"},"id":"way/14612789"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9366252,35.676248],[-105.9360392,35.6762762],[-105.935276,35.676231],[-105.934717,35.676231]]},"properties":{"highway":"residential","name":"Camino Monte Vista","tiger:name_base":"Camino Monte Vista"},"id":"way/14612817"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9315074,35.6826741],[-105.9301,35.68224338257794]]},"properties":{"highway":"residential","oneway":"yes","name":"Canyon Road","tiger:name_base":"Canyon"},"id":"way/14613062"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9491596,35.6889539],[-105.9490516,35.6897074],[-105.9489118,35.691563]]},"properties":{"highway":"residential","name":"Candelario Street","tiger:name_base":"Candelario"},"id":"way/14613081"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9358301,35.6906844],[-105.9355977,35.6909821],[-105.9354274,35.6913679],[-105.9353201,35.691783],[-105.9352729,35.6921835]]},"properties":{"highway":"residential","name":"Magdalena Road","tiger:name_base":"Magdalena"},"id":"way/14613118"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9496027,35.6881518],[-105.9500213,35.6871428],[-105.9502804,35.6864603]]},"properties":{"highway":"residential","name":"Barela Street","tiger:name_base":"Barela"},"id":"way/14613275"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9513388,35.6752902],[-105.95138561342513,35.6751]]},"properties":{"highway":"residential","name":"Cordova Place","tiger:name_base":"Cordova"},"id":"way/14613301"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9414671,35.6794885],[-105.9424119,35.6796542],[-105.9435203,35.6798818]]},"properties":{"highway":"residential","name":"West Booth Street","tiger:name_base":"Booth"},"id":"way/14613567"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9340348,35.6844098],[-105.933902,35.6844073],[-105.9328764,35.6845172],[-105.9320045,35.6845766],[-105.9311354,35.6846012],[-105.9304728,35.6845665],[-105.9301,35.68458818333645]]},"properties":{"highway":"tertiary","name":"East Alameda Street","tiger:name_base":"Alameda"},"id":"way/14613583"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.931176,35.68433],[-105.9301396,35.6843121],[-105.9301,35.684306144130126]]},"properties":{"highway":"residential","name":"East Alameda Street","tiger:name_base":"Alameda"},"id":"way/14613585"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9465461,35.6900072],[-105.947169,35.6901131]]},"properties":{"highway":"residential","name":"Dolores Street","tiger:name_base":"Dolores"},"id":"way/14613625"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.932826,35.680032],[-105.9328126,35.6799668]]},"properties":{"highway":"residential","name":"Placita Rafaela","tiger:name_base":"Placita Rafaela"},"id":"way/14613710"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9419638167887,35.6929],[-105.9419639,35.6928997]]},"properties":{"highway":"residential","name":"Rosario Hill","tiger:name_base":"Rosario Hill"},"id":"way/14613711"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9379224,35.6875796],[-105.9377157,35.6875632]]},"properties":{"highway":"residential","oneway":"yes","name":"East Palace Avenue","tiger:name_base":"Palace"},"id":"way/14613739"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9486101,35.6786915],[-105.9488637,35.6778831],[-105.9490637,35.677798],[-105.9492369,35.6779171],[-105.9489822,35.6787183]]},"properties":{"highway":"residential","name":"Pueblo Drive","tiger:name_base":"Pueblo"},"id":"way/14614061"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9465461,35.6900072],[-105.9466867,35.6894251]]},"properties":{"highway":"residential","name":"Callej Tisnado Street","tiger:name_base":"Callej Tisnado"},"id":"way/14614065"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9392317,35.6806996],[-105.9378843,35.680597],[-105.9378663,35.6806151],[-105.9376468,35.6806446],[-105.9369709,35.680296],[-105.9366759,35.6802306]]},"properties":{"highway":"residential","name":"Pino Road","tiger:name_base":"Pino"},"id":"way/14614169"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9347955,35.6868508],[-105.9343224,35.6882404]]},"properties":{"highway":"residential","oneway":"yes","name":"Cienega Street","tiger:name_base":"Cienega"},"id":"way/14614218"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9444758,35.6838952],[-105.945996,35.6842176]]},"properties":{"highway":"residential","name":"Garfield Street","tiger:name_base":"Garfield"},"id":"way/14614231"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9343487,35.6922292],[-105.93401601524884,35.6929]]},"properties":{"highway":"residential","name":"Monte Vista Place","tiger:name_base":"Monte Vista"},"id":"way/14614284"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.948576,35.68713],[-105.9495725,35.6871267],[-105.9500213,35.6871428],[-105.9508139,35.6871512]]},"properties":{"highway":"residential","name":"Don Felix Street","tiger:name_base":"Don Felix"},"id":"way/14614453"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9447895,35.6756475],[-105.9450873,35.6756312],[-105.9452768,35.6754247],[-105.9452528,35.6751006],[-105.94525152162555,35.6751]]},"properties":{"highway":"residential","name":"Lugar de Monte Vista","tiger:name_base":"Lugar de Monte Vista"},"id":"way/14614666"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9424119,35.6796542],[-105.9425486,35.6791445],[-105.9425915,35.6788395],[-105.9427095,35.6783122]]},"properties":{"highway":"residential","name":"Granada Street","tiger:name_base":"Granada"},"id":"way/14614735"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9417494,35.6781593],[-105.9427095,35.6783122],[-105.9438096,35.6785109]]},"properties":{"highway":"residential","name":"West Buena Vista Street","tiger:name_base":"Buena Vista"},"id":"way/14614745"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9468367,35.6787381],[-105.9474267,35.6786634],[-105.9480196,35.6786657],[-105.9486101,35.6786915],[-105.9489822,35.6787183],[-105.9494739,35.6787563]]},"properties":{"highway":"residential","name":"West Buena Vista Street","tiger:name_base":"Buena Vista"},"id":"way/14614746"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9466019,35.6798939],[-105.9468367,35.6787381]]},"properties":{"highway":"residential","name":"Gregory Lane","tiger:name_base":"Gregory"},"id":"way/14614903"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9414671,35.6794885],[-105.9409379,35.679427],[-105.9395135,35.6792059],[-105.9394289,35.6791726],[-105.9387777,35.679084]]},"properties":{"highway":"residential","name":"East Booth Street","tiger:name_base":"Booth"},"id":"way/14615011"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9453814,35.6890162],[-105.9452786,35.6894316],[-105.9450178,35.6906545],[-105.9449358,35.6907058]]},"properties":{"highway":"tertiary","name":"Park Avenue","tiger:name_base":"Park"},"id":"way/14615089"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9402827,35.6847654],[-105.9418139,35.6852169]]},"properties":{"highway":"residential","name":"West de Vargas Street","tiger:name_base":"de Vargas"},"id":"way/14615106"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.93139676535434,35.6929],[-105.931377,35.6928846]]},"properties":{"highway":"residential","name":"Hadisway Avenue","tiger:name_base":"Hadisway"},"id":"way/14615131"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9419772,35.677075],[-105.9431668,35.6772361],[-105.943605,35.677136],[-105.9441631,35.6771811]]},"properties":{"highway":"residential","name":"West Berger Street","tiger:name_base":"Berger"},"id":"way/14615157"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9390927,35.6896434],[-105.9397012,35.6880752]]},"properties":{"highway":"residential","oneway":"yes","name":"Sheridan Avenue","tiger:name_base":"Sheridan"},"id":"way/14615386"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.948287,35.6762707],[-105.9489435,35.6762292]]},"properties":{"highway":"residential","name":"Calle Grillo","tiger:name_base":"Calle Grillo"},"id":"way/14615458"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9489261,35.6763086],[-105.9502028,35.6764317],[-105.9513264,35.6765465],[-105.9521,35.67656895236189]]},"properties":{"highway":"residential","name":"Calle Grillo","tiger:name_base":"Calle Grillo"},"id":"way/14615462"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9419772,35.677075],[-105.9408122,35.6769061],[-105.9394709,35.6767185],[-105.9383324,35.6765518],[-105.9370152,35.6763698]]},"properties":{"highway":"residential","name":"East Berger Street","tiger:name_base":"Berger"},"id":"way/14615465"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9318921,35.6809572],[-105.9311679,35.6808807],[-105.9309739,35.6809095],[-105.930906,35.6812358]]},"properties":{"highway":"residential","name":"Plaza Balentine","tiger:name_base":"Plaza Balentine"},"id":"way/14615667"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9423178,35.6754446],[-105.9411601,35.6752521],[-105.94025282847059,35.6751]]},"properties":{"highway":"residential","name":"East Coronado Road","tiger:name_base":"Coronado"},"id":"way/14615680"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9491955,35.6857489],[-105.9491637,35.6855838],[-105.9491782,35.6850022]]},"properties":{"highway":"residential","oneway":"yes","name":"Romero Street","tiger:name_base":"Romero"},"id":"way/14615718"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9479038,35.689651],[-105.9477556,35.6916754]]},"properties":{"highway":"residential","name":"Elena Street","tiger:name_base":"Elena"},"id":"way/14615789"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9487704,35.6770283],[-105.9489261,35.6763086],[-105.9489435,35.6762292],[-105.9490495,35.6759842],[-105.951276,35.67623]]},"properties":{"highway":"residential","name":"Don Canuto Street","tiger:name_base":"Don Canuto"},"id":"way/14615790"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9408426,35.6867958],[-105.9400901,35.6865836],[-105.9397558,35.6865099]]},"properties":{"highway":"residential","oneway":"yes","name":"West Water Street","tiger:name_base":"Water"},"id":"way/14615804"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9436315,35.6876073],[-105.9437296,35.6876472]]},"properties":{"highway":"residential","name":"West Water Street","tiger:name_base":"Water"},"id":"way/14615805"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439931,35.6777723],[-105.9451995,35.6779351],[-105.9461695,35.6780672],[-105.9469566,35.6781776]]},"properties":{"highway":"residential","name":"Sena Street","tiger:name_base":"Sena"},"id":"way/14615863"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9472197,35.6880213],[-105.947316,35.6877481],[-105.9473095,35.6875783],[-105.9475648,35.6868833]]},"properties":{"highway":"residential","name":"Polaco Street","tiger:name_base":"Polaco"},"id":"way/14615988"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9518693,35.6753581],[-105.9513388,35.6752902],[-105.9500084,35.6751421],[-105.94997383165138,35.6751]]},"properties":{"highway":"residential","name":"Marquez Place","tiger:name_base":"Marquez"},"id":"way/14616179"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9308192,35.6858764],[-105.9309089,35.6855846]]},"properties":{"highway":"residential","name":"Delgado Street","tiger:name_base":"Delgado"},"id":"way/14616195"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9423544,35.6891745],[-105.9422494,35.6899411],[-105.9421647,35.6905129]]},"properties":{"highway":"residential","name":"Chapelle Street","tiger:name_base":"Chapelle"},"id":"way/14616224"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9366647,35.687294],[-105.9368886,35.6866743],[-105.9368472,35.6865167],[-105.9365707,35.6862877],[-105.9365507,35.6860577],[-105.9363755,35.6855934],[-105.9361694,35.6852866],[-105.9357551,35.6847484],[-105.9356949,35.6845719]]},"properties":{"highway":"residential","oneway":"no","name":"Cathedral Place","tiger:name_base":"Cathedral"},"id":"way/14616237"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9432509,35.6860842],[-105.9433378,35.6861986],[-105.9435809,35.6863003],[-105.9443067,35.6863081],[-105.9447183,35.6864178],[-105.9448442,35.6865097]]},"properties":{"highway":"residential","name":"West de Vargas Street","tiger:name_base":"de Vargas"},"id":"way/104470383"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.938378,35.6860814],[-105.9379835,35.6860719]]},"properties":{"highway":"residential","name":"East Water Street","tiger:name_base":"Water"},"id":"way/104470387"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9365507,35.6860577],[-105.9379835,35.6860719]]},"properties":{"highway":"residential","oneway":"yes","name":"East Water Street","tiger:name_base":"Water"},"id":"way/104470389"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9405701,35.6875228],[-105.9395497,35.6872872]]},"properties":{"highway":"residential","oneway":"yes","name":"West San Francisco Street","tiger:name_base":"San Francisco"},"id":"way/104470396"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9370152,35.6763698],[-105.9367554,35.6763765]]},"properties":{"highway":"tertiary_link"},"id":"way/104470412"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.942505,35.684337],[-105.9423533,35.6844345],[-105.9418139,35.6852169]]},"properties":{"highway":"tertiary","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/104470414"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9449251955601,35.6751],[-105.9447895,35.6756475],[-105.9447136,35.675831],[-105.9444117,35.6765329],[-105.9441631,35.6771811],[-105.9439931,35.6777723],[-105.9438096,35.6785109],[-105.943771,35.6786978],[-105.9435763,35.6796338],[-105.9435203,35.6798818],[-105.9432966,35.6807789],[-105.9432038,35.6810674],[-105.9431622,35.681173],[-105.942863,35.6821539],[-105.9428097,35.6824934],[-105.9425572,35.6833628],[-105.9423471,35.6840624],[-105.9423402,35.6841698],[-105.942505,35.684337]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/104470429"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.940652,35.6883204],[-105.9413224,35.6884531],[-105.9416411,35.6883582],[-105.9418473,35.6878855],[-105.9420224,35.6875117],[-105.9421409,35.6871328]]},"properties":{"highway":"tertiary","oneway":"no","name":"Sandoval Street","tiger:name_base":"Sandoval;Burro Alley"},"id":"way/104470434"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9414892,35.6856942],[-105.9408426,35.6867958]]},"properties":{"highway":"residential","oneway":"yes","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/104470437"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9367554,35.6763765],[-105.9370108,35.6767059]]},"properties":{"highway":"residential","oneway":"yes","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/104470439"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9408426,35.6867958],[-105.9421409,35.6871328]]},"properties":{"highway":"residential","name":"West Water Street","tiger:name_base":"Water"},"id":"way/104470447"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9388484,35.6878498],[-105.938799,35.687922],[-105.9381967,35.6894197]]},"properties":{"highway":"residential","oneway":"no","name":"Lincoln Avenue","tiger:name_base":"Lincoln"},"id":"way/104470466"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9381358,35.6869743],[-105.937976,35.687523],[-105.9379224,35.6875796]]},"properties":{"highway":"residential","oneway":"yes","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/104470479"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9408426,35.6867958],[-105.9405701,35.6875228]]},"properties":{"highway":"residential","oneway":"yes","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/104470489"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9377157,35.6875632],[-105.9366647,35.687294]]},"properties":{"highway":"residential","name":"East Palace Avenue","tiger:name_base":"Palace"},"id":"way/104470499"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9397558,35.6865099],[-105.9401801,35.6851295]]},"properties":{"highway":"residential","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/104470511"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9403836,35.6844553],[-105.9404392,35.684346],[-105.9406862,35.6831886],[-105.9407392,35.6828475],[-105.940877,35.6822377],[-105.940948,35.6818068],[-105.9409983,35.6817052]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/104470518"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9376511,35.6848592],[-105.9376464,35.6847835]]},"properties":{"highway":"tertiary","name":"Old Santa Fe Trail"},"id":"way/104470521"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9452247,35.6860472],[-105.9453,35.6856694]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/104628402"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9442313,35.6870963],[-105.9444304,35.6869465]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628403"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9436315,35.6876073],[-105.9434565,35.6879602],[-105.943378,35.6882365],[-105.943355,35.6886203],[-105.9433908,35.6890012],[-105.9435103,35.6893248],[-105.9440023,35.6898668],[-105.9448509,35.6907357],[-105.9450619,35.6909668],[-105.9452888,35.6911269]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628405"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9363505,35.6910609],[-105.9360968,35.6908299],[-105.9358301,35.6906844],[-105.9357788,35.6905961],[-105.9345444,35.6897257]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/104628406"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.67869751179713],[-105.9520389,35.6787221],[-105.9510544,35.6791861]]},"properties":{"highway":"secondary","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/104628408"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.6851539360582],[-105.9506679,35.6854403],[-105.9500111,35.6855882],[-105.9491955,35.6857489],[-105.9486145,35.6859109],[-105.9462266,35.6866143]]},"properties":{"highway":"tertiary","name":"Agua Fria Street","tiger:name_base":"Agua Fria"},"id":"way/104628409"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9426157,35.6842915],[-105.9428028,35.6842361],[-105.9442588,35.6831037],[-105.9445881,35.6828175],[-105.9447144,35.6828144]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/104628410"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9459544,35.6917301],[-105.9460652,35.6918335],[-105.946558,35.692017],[-105.947032,35.6921302],[-105.9472169,35.6922196]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628413"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9444304,35.6869465],[-105.9446058,35.6868256],[-105.9449323,35.6865445]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628414"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9363505,35.6910609],[-105.9360165,35.6919277],[-105.93577,35.6923649],[-105.9355873,35.6926127],[-105.9351766287242,35.6929]]},"properties":{"highway":"secondary","name":"Bishop's Lodge Road","tiger:name_base":"Washington"},"id":"way/104628417"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9380949,35.6816225],[-105.9380928,35.6815079]]},"properties":{"highway":"tertiary","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/104628418"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9401801,35.6851295],[-105.9401933,35.6850957]]},"properties":{"highway":"tertiary","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/104628422"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9446058,35.6868256],[-105.9448442,35.6865097]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/104628427"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9396196,35.6921291],[-105.9396141,35.6922359]]},"properties":{"highway":"residential","name":"Grant Avenue","tiger:name_base":"Grant"},"id":"way/104628428"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.94819001543803,35.6929],[-105.9478243,35.6925905]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628431"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9456664,35.6849544],[-105.945996,35.6842176],[-105.9461483,35.6839622]]},"properties":{"highway":"tertiary","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628433"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9437296,35.6876472],[-105.9439234,35.6877119]]},"properties":{"highway":"residential","name":"West Water Street","tiger:name_base":"Water"},"id":"way/104628435"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.940652,35.6883204],[-105.9397012,35.6880752]]},"properties":{"highway":"residential","oneway":"no","name":"West Palace Avenue","tiger:name_base":"Palace"},"id":"way/104628439"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9448442,35.6865097],[-105.9445975,35.6867209],[-105.9443112,35.6868868]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628441"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.940652,35.6883204],[-105.9405288,35.6888219],[-105.9403957,35.6894011],[-105.9402257,35.6899293]]},"properties":{"highway":"residential","name":"Grant Avenue","tiger:name_base":"Grant"},"id":"way/104628446"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9449323,35.6865445],[-105.9452247,35.6860472],[-105.945427,35.6855516]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628450"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9457087,35.6915555],[-105.9453239,35.6919443],[-105.9451908,35.6920406],[-105.9448526,35.6923523]]},"properties":{"highway":"residential"},"id":"way/104628451"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9443112,35.6868868],[-105.9441058,35.6870247]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/104628453"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439671,35.6898894],[-105.9440023,35.6898668],[-105.9440695,35.6898232]]},"properties":{"highway":"residential"},"id":"way/104628461"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9450856,35.686136],[-105.9449323,35.6865445]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/104628465"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.949446,35.6835567],[-105.9495512,35.6835611],[-105.9504886,35.6835723],[-105.9521,35.683578342749996]]},"properties":{"highway":"residential","name":"West Manhattan Avenue","tiger:name_base":"Manhattan"},"id":"way/104628658"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9460663,35.6816138],[-105.9456051,35.6820306],[-105.9451997,35.6823443]]},"properties":{"highway":"tertiary","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/104628732"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9507817,35.6817147],[-105.950768,35.6819082]]},"properties":{"highway":"residential","oneway":"yes","name":"Camino de la Familia"},"id":"way/133627388"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9448733,35.6825229],[-105.9445472,35.682719]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Cerrillos Road"},"id":"way/201365370"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.944716,35.6832197],[-105.9448073,35.6827453],[-105.9449895,35.6825458],[-105.9451997,35.6823443]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/201365372"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9418038,35.6817382],[-105.9418837,35.6818332],[-105.9419314,35.681887],[-105.9420417,35.6819483],[-105.9427769,35.682102],[-105.942863,35.6821539],[-105.9429652,35.68222],[-105.943601,35.6823698],[-105.9445472,35.682719]]},"properties":{"highway":"residential","name":"West Manhattan Avenue"},"id":"way/201365373"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9448733,35.6825229],[-105.9447144,35.6828144]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/201777243"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9417264,35.6853293],[-105.9426355,35.6858668],[-105.9428974,35.6859433],[-105.943065,35.6860611]]},"properties":{"highway":"residential","name":"West de Vargas Street"},"id":"way/202609219"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.944716,35.6832197],[-105.9444758,35.6838952],[-105.9442071,35.6846358]]},"properties":{"highway":"tertiary","oneway":"no","name":"Sandoval Street"},"id":"way/202609221"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9429317,35.686316],[-105.9432509,35.6860842],[-105.9435416,35.6859175],[-105.9438034,35.6856863],[-105.9439379,35.6853377]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/202609222"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439379,35.6853377],[-105.9434842,35.6858111],[-105.943065,35.6860611]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/202609223"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9401933,35.6850957],[-105.9402539,35.6848699]]},"properties":{"highway":"tertiary","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/284162879"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9402827,35.6847654],[-105.9403836,35.6844553]]},"properties":{"highway":"tertiary","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/284162880"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9415482,35.6856094],[-105.9414892,35.6856942]]},"properties":{"highway":"tertiary","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/284162881"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9416151,35.6855078],[-105.9415482,35.6856094]]},"properties":{"highway":"tertiary","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/284162882"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9376499,35.684623],[-105.9376772,35.6842452],[-105.9379324,35.6836621],[-105.9381958,35.6829135]]},"properties":{"highway":"tertiary","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/284162891"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9376464,35.6847835],[-105.9376499,35.684623]]},"properties":{"highway":"tertiary","name":"Old Santa Fe Trail"},"id":"way/284162892"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9340435,35.6843031],[-105.9340287,35.6841402]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/284162895"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9340287,35.6841402],[-105.9340389,35.6837887]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/284162896"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9395062,35.6841423],[-105.9379324,35.6836621]]},"properties":{"highway":"residential","oneway":"yes","name":"East de Vargas Street","tiger:name_base":"de Vargas"},"id":"way/310455834"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9379324,35.6836621],[-105.9374073,35.6834861],[-105.9371405,35.6833429],[-105.9368926,35.6832822],[-105.935131,35.6830472],[-105.9348154,35.6830384],[-105.9344901,35.6830846],[-105.9340788,35.6830932]]},"properties":{"highway":"residential","oneway":"yes","name":"East de Vargas Street","tiger:name_base":"de Vargas"},"id":"way/310455835"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9372148,35.6903432],[-105.9377754,35.6905179],[-105.9394514,35.6910303]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Federal Place","tiger:name_base":"Federal"},"id":"way/310552283"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9385686,35.6918848],[-105.938435,35.6918221],[-105.9374644,35.6915504],[-105.9367469,35.691322],[-105.9363505,35.6910609]]},"properties":{"highway":"secondary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/317472301"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9385686,35.6918848],[-105.9386954,35.6919657],[-105.9396141,35.6922359]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/317472302"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9467125,35.69237],[-105.9471561,35.6924071],[-105.947507,35.6924792]]},"properties":{"highway":"secondary","oneway":"yes"},"id":"way/317472325"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9478243,35.6925905],[-105.947807,35.6923908],[-105.9480884,35.6922468]]},"properties":{"highway":"secondary","oneway":"yes"},"id":"way/317472328"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9452768,35.6754247],[-105.9459074,35.6755949],[-105.9460115,35.6755915],[-105.9461227,35.6752884],[-105.94607383048023,35.6751]]},"properties":{"highway":"residential","name":"San Isabel Road","tiger:name_base":"San Isabel"},"id":"way/318069351"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9459129,35.6866341],[-105.9453314,35.6866522]]},"properties":{"highway":"residential","name":"Agua Fria Street","tiger:name_base":"Agua Fria"},"id":"way/319634350"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9453314,35.6866522],[-105.9451637,35.6866548],[-105.9449323,35.6865445]]},"properties":{"highway":"residential","name":"Agua Fria Street","tiger:name_base":"Agua Fria"},"id":"way/319634351"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9480682,35.679686],[-105.9479421,35.6793422],[-105.9480196,35.6786657],[-105.9482018,35.6769955],[-105.948287,35.6762707],[-105.9483003,35.6761395],[-105.94841429784327,35.6751]]},"properties":{"highway":"tertiary","name":"Don Diego Avenue","tiger:name_base":"Don Diego"},"id":"way/319636350"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9480682,35.679686],[-105.9484045,35.6801854]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Don Diego Avenue","tiger:name_base":"Don Diego"},"id":"way/319636351"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9461483,35.6839622],[-105.9462481,35.6838665],[-105.9466721,35.683491],[-105.9470702,35.6832135]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/319636352"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9484446,35.6802925],[-105.9486674,35.6807775],[-105.9486985,35.6811208],[-105.948627,35.6814343],[-105.9485011,35.6817209]]},"properties":{"highway":"secondary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/319636353"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9462481,35.6838665],[-105.9464164,35.683593]]},"properties":{"highway":"residential","oneway":"yes"},"id":"way/319636356"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9510544,35.6791861],[-105.9506406,35.6793559]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/319637303"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9471456,35.6807073],[-105.9478754,35.6804242],[-105.9484446,35.6802925]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/319637304"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9460663,35.6816138],[-105.9461542,35.68154]]},"properties":{"highway":"secondary","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/319637305"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9488535,35.6809801],[-105.9487871,35.6803262],[-105.9489752,35.6801405]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/319637306"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.68909197769156],[-105.9519418,35.6890952],[-105.9516905,35.6892455],[-105.9515722,35.6895477],[-105.951452,35.6897678],[-105.9515234,35.6899579],[-105.9517299,35.6900058]]},"properties":{"highway":"residential","oneway":"no","name":"Villa Alegre Street"},"id":"way/325256015"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9480682,35.679686],[-105.9478757,35.679865],[-105.9477648,35.6802598]]},"properties":{"highway":"residential","name":"Don Diego Court"},"id":"way/351194545"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.68047087101812],[-105.9510689,35.681564]]},"properties":{"highway":"residential","name":"Camino de la Familia"},"id":"way/352675101"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9510823,35.681705],[-105.9510689,35.681564]]},"properties":{"highway":"residential","oneway":"yes","name":"Camino de la Familia"},"id":"way/362347528"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9510689,35.681564],[-105.9510335,35.6817058]]},"properties":{"highway":"residential","oneway":"yes","name":"Camino de la Familia"},"id":"way/362347529"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.936142,35.6813143],[-105.9366086,35.6814763],[-105.9371725,35.6815422],[-105.9376173,35.6815884]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/362347531"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9470664,35.6816802],[-105.946471,35.6815508],[-105.9463765,35.6813542]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/362347532"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9507817,35.6817147],[-105.9497442,35.6817125]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/362347533"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9371725,35.6815422],[-105.937378,35.6816133],[-105.937885,35.6816681],[-105.9380618,35.6818037],[-105.9381419,35.6821263]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/362347535"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.947656,35.683948],[-105.9473067,35.6842028],[-105.946895,35.6848299],[-105.9466963,35.6852029]]},"properties":{"highway":"residential","name":"Market Street"},"id":"way/362347546"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9382662,35.6824264],[-105.9382852,35.6822427],[-105.9382283,35.6817713],[-105.9384035,35.6816184]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/362347547"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9395597,35.68161],[-105.9398013,35.6815091]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/362347551"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9456364,35.6878687],[-105.9457079,35.6877215]]},"properties":{"highway":"residential","name":"De Fouri Street Bridge","tiger:name_base":"De Fouri"},"id":"way/435625150"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9457079,35.6877215],[-105.9457445,35.687656],[-105.9462266,35.6866143]]},"properties":{"highway":"residential","name":"De Fouri Street","tiger:name_base":"De Fouri"},"id":"way/435625151"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9428446,35.6862594],[-105.9427373,35.6863732]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/435625153"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9428291,35.6864266],[-105.9429317,35.686316]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/435625154"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9421409,35.6871328],[-105.9422409,35.687081],[-105.9427349,35.6865245]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/435625155"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.942649,35.6864693],[-105.9423134,35.6867978],[-105.9421409,35.6871328]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/435625156"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.944156,35.6871865],[-105.9442313,35.6870963]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/435625160"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9440229,35.6871105],[-105.9439401,35.6872165]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/435625161"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9452888,35.6911269],[-105.945252,35.691016],[-105.9449358,35.6907058],[-105.9440695,35.6898232],[-105.9436101,35.6893102],[-105.9435194,35.6891238],[-105.9434385,35.6886225],[-105.943456,35.6882997],[-105.9435089,35.6880545],[-105.9437296,35.6876472]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/435625162"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9441058,35.6870247],[-105.9440229,35.6871105]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/435625163"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9488535,35.6809801],[-105.9488028,35.6807746],[-105.9485726,35.6802571]]},"properties":{"highway":"secondary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/458328977"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9489752,35.6801405],[-105.9495517,35.6799696],[-105.9500285,35.6797878],[-105.950861,35.6793671],[-105.9510544,35.6791861]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/458328978"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9484045,35.6801854],[-105.9484446,35.6802925]]},"properties":{"highway":"secondary","oneway":"yes","name":"Don Diego Avenue","tiger:name_base":"Don Diego"},"id":"way/458328979"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9484045,35.6801854],[-105.9476628,35.6803886],[-105.9473147,35.6805353],[-105.9471456,35.6807073]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/458328980"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.67541539749091],[-105.9518693,35.6753581]]},"properties":{"highway":"residential","name":"Early Street","tiger:name_base":"Early"},"id":"way/461945241"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9311333,35.6845309],[-105.931169,35.684375]]},"properties":{"highway":"residential","name":"Delgado Street","tiger:name_base":"Delgado"},"id":"way/462424367"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.931169,35.684375],[-105.931176,35.68433],[-105.9315074,35.6826741],[-105.9316223,35.6821053],[-105.9317973,35.6813548],[-105.9318921,35.6809572],[-105.9320733,35.6800955]]},"properties":{"highway":"residential","name":"Delgado Street","tiger:name_base":"Delgado"},"id":"way/462424368"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9491782,35.6850022],[-105.9493677,35.6842699],[-105.9495512,35.6835611]]},"properties":{"highway":"residential","oneway":"no","name":"Romero Street","tiger:name_base":"Romero"},"id":"way/470301942"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9506072,35.691343],[-105.9506325,35.6914815],[-105.9508118,35.6918494],[-105.950898,35.6918751]]},"properties":{"highway":"tertiary","oneway":"yes"},"id":"way/473672212"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.950898,35.6918751],[-105.9507138,35.6914545],[-105.9506072,35.691343]]},"properties":{"highway":"tertiary","oneway":"yes"},"id":"way/473672213"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.952083,35.6907438],[-105.9520138,35.6905852]]},"properties":{"highway":"residential","name":"West San Francisco Street","tiger:name_base":"San Francisco"},"id":"way/473673751"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9520138,35.6905852],[-105.9517575,35.6903982],[-105.9511678,35.6902004],[-105.950735,35.6899619],[-105.9505196,35.6898854],[-105.9499091,35.6897695],[-105.9495349,35.6897197],[-105.9490516,35.6897074],[-105.9485421,35.6896914],[-105.9479038,35.689651],[-105.9472704,35.6895688],[-105.9466867,35.6894251],[-105.9463331,35.6893316],[-105.945906,35.6892092],[-105.9453814,35.6890162],[-105.9448449,35.6887988],[-105.943456,35.6882997],[-105.943378,35.6882365],[-105.9422574,35.6880196],[-105.9418473,35.6878855],[-105.9412544,35.6876917],[-105.9405701,35.6875228]]},"properties":{"highway":"tertiary","name":"West San Francisco Street","tiger:name_base":"San Francisco"},"id":"way/473673752"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9493677,35.6842699],[-105.9495102,35.6843007],[-105.95003,35.6842527],[-105.9501865,35.6841976],[-105.9505615,35.6842192],[-105.9505793,35.6843535],[-105.9502308,35.6848332],[-105.9500418,35.6849867],[-105.9498262,35.6849508],[-105.949805,35.6845862]]},"properties":{"highway":"residential"},"id":"way/475976058"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9394777,35.6927822],[-105.93944825,35.6929]]},"properties":{"highway":"residential","name":"Grant Avenue","tiger:name_base":"Grant"},"id":"way/483857409"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9340788,35.6830932],[-105.9327812,35.6829902]]},"properties":{"highway":"residential","oneway":"yes","name":"East de Vargas Street","tiger:name_base":"de Vargas"},"id":"way/601686071"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9353925,35.6879838],[-105.9356918,35.6870568]]},"properties":{"highway":"residential","oneway":"yes","name":"Otero Street","tiger:name_base":"Otero"},"id":"way/601704869"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9517299,35.6900058],[-105.9517836,35.6899427],[-105.9517138,35.6896529],[-105.9515722,35.6895477]]},"properties":{"highway":"residential","oneway":"no","name":"Villa Alegre Street"},"id":"way/611188704"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9370152,35.6763698],[-105.9371206,35.6754457],[-105.93711548746975,35.6751]]},"properties":{"highway":"tertiary","name":"Old Pecos Trail","tiger:name_base":"Old Pecos"},"id":"way/619375185"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.950768,35.6819082],[-105.9503757,35.6823178],[-105.9484507,35.6843762],[-105.9482198,35.6846474]]},"properties":{"highway":"residential","name":"Camino de la Familia"},"id":"way/691522483"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.950768,35.6819082],[-105.9507817,35.6817147]]},"properties":{"highway":"residential","oneway":"yes","name":"Camino de la Familia"},"id":"way/691522484"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9328126,35.6799668],[-105.9328382,35.6794452]]},"properties":{"highway":"residential","name":"Placita Rafaela","tiger:name_base":"Placita Rafaela"},"id":"way/693445262"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9321302,35.6799131],[-105.9321457,35.6790936]]},"properties":{"highway":"residential","name":"Delgado Lane","tiger:name_base":"Delgado"},"id":"way/693445268"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9309089,35.6855846],[-105.9304805,35.6857987]]},"properties":{"highway":"residential","oneway":"yes","name":"Delgado Street"},"id":"way/697226490"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9427641,35.6921493],[-105.9420264,35.6923869],[-105.9417437,35.6924669],[-105.941265,35.692531],[-105.9407759,35.692484],[-105.9404911,35.6924113],[-105.9396196,35.6921291]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/697526995"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9429584,35.6923428],[-105.9431676,35.6925067],[-105.94335,35.6924936],[-105.9439079,35.6926918],[-105.9440997,35.6928202],[-105.94421887268723,35.6929]]},"properties":{"highway":"residential","name":"Griffin Street","tiger:name_base":"Griffin"},"id":"way/697526997"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9428195,35.6922051],[-105.9436004,35.6919486],[-105.9439388,35.691866],[-105.9444245,35.6918489],[-105.9448032,35.6919115],[-105.9451908,35.6920406],[-105.9454835,35.6921593],[-105.9459849,35.692306],[-105.9463426,35.6923629],[-105.9467125,35.69237],[-105.9473404,35.6923345]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/697526998"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9418496,35.6912194],[-105.9427641,35.6921493]]},"properties":{"highway":"tertiary","name":"Griffin Street","tiger:name_base":"Griffin"},"id":"way/697526999"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.945427,35.6855516],[-105.9454143,35.6854758]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027133"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9452888,35.6911269],[-105.9453673,35.6912103],[-105.9457087,35.6915555],[-105.9459544,35.6917301]]},"properties":{"highway":"secondary","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027137"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9455913,35.6912176],[-105.9458579,35.6912264],[-105.9465255,35.6912743]]},"properties":{"highway":"residential","name":"Jose Street","tiger:name_base":"Jose"},"id":"way/699027138"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9483536,35.6920554],[-105.9476462,35.6921249],[-105.9473551,35.6921076],[-105.9471333,35.6920372]]},"properties":{"highway":"secondary","oneway":"yes"},"id":"way/699027139"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9475067,35.6923215],[-105.9480884,35.6922468]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/699027140"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9475067,35.6923215],[-105.9473766,35.6922047]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027141"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9473766,35.6922047],[-105.9472169,35.6922196]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/699027143"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9473766,35.6922047],[-105.9471333,35.6920372],[-105.9464684,35.691886],[-105.9459544,35.6917301]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027144"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9478243,35.6925905],[-105.9475067,35.6923215]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027145"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9472169,35.6922196],[-105.9473404,35.6923345]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027146"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9472169,35.6922196],[-105.9466599,35.6922462],[-105.9461304,35.6922034],[-105.9456624,35.6920821],[-105.9453239,35.6919443],[-105.945077,35.6918538],[-105.9445367,35.6917506],[-105.9439932,35.6917634],[-105.9433252,35.6919486],[-105.9427641,35.6921493]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/699027147"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9477173,35.6926685],[-105.94799290936665,35.6929]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027148"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.947507,35.6924792],[-105.9477173,35.6926685]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027149"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9473404,35.6923345],[-105.9475067,35.6923215]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/699027150"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9473404,35.6923345],[-105.947507,35.6924792]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/699027151"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9360612,35.6812911],[-105.936142,35.6813143]]},"properties":{"highway":"secondary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/700442470"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9363815,35.6813225],[-105.936142,35.6813143]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700442471"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9381668,35.6820136],[-105.9380949,35.6816225]]},"properties":{"highway":"tertiary","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/700442472"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9381441,35.6824327],[-105.9381958,35.6829135],[-105.9382265,35.6828405]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/700442474"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9380949,35.6816225],[-105.9384035,35.6816184]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700442475"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9380928,35.6815079],[-105.9378663,35.6806151],[-105.9377236,35.6800713],[-105.9377089,35.6800294],[-105.9373784,35.6785529],[-105.9373349,35.678332],[-105.9373128,35.6777992],[-105.9372869,35.6775184],[-105.9370108,35.6767059]]},"properties":{"highway":"tertiary","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/700442476"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9380928,35.6815079],[-105.9378477,35.6815008]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700442477"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9376316,35.6814827],[-105.9366717,35.6813786],[-105.9363815,35.6813225]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700442478"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9376909,35.6814877],[-105.9376316,35.6814827]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700442479"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9378477,35.6815008],[-105.9376909,35.6814877]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700442482"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9384035,35.6816184],[-105.9390919,35.6816098],[-105.9395597,35.68161],[-105.9400152,35.6816398],[-105.940948,35.6818068],[-105.9412502,35.6818656],[-105.9414792,35.6818992],[-105.9418837,35.6818332],[-105.9422149,35.6815919],[-105.9423509,35.6813838],[-105.9425406,35.6812237],[-105.9429294,35.6811254],[-105.9431622,35.681173],[-105.9439314,35.6813044],[-105.9444203,35.6813352],[-105.9447614,35.6813607],[-105.9452053,35.6814397],[-105.9460663,35.6816138]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700442483"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9376173,35.6815884],[-105.9380949,35.6816225]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700442484"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9398834,35.6911091],[-105.9397955,35.6914531]]},"properties":{"highway":"residential","name":"Grant Avenue","tiger:name_base":"Grant"},"id":"way/700445590"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9394514,35.6910303],[-105.9398834,35.6911091]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Federal Place","tiger:name_base":"Federal"},"id":"way/700445591"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9397955,35.6914531],[-105.9396937,35.6918519]]},"properties":{"highway":"tertiary","name":"Grant Avenue","tiger:name_base":"Grant"},"id":"way/700445592"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9510823,35.681705],[-105.9521,35.68166788675412]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/700445594"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9510335,35.6817058],[-105.9510823,35.681705]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/700445595"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9507817,35.6817147],[-105.9510335,35.6817058]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/700445597"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9497442,35.6817125],[-105.9495236,35.6817146]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700446218"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9495236,35.6817146],[-105.9490182,35.6817139]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700446220"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9491793,35.681815],[-105.9497318,35.6817914]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700446221"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9490182,35.6817139],[-105.9486406,35.6817202]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/700446222"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9448073,35.6827453],[-105.9453346,35.6828207],[-105.946199,35.6828527],[-105.9467838,35.6829616],[-105.9470266,35.6831475],[-105.9470702,35.6832135]]},"properties":{"highway":"tertiary","name":"West Manhattan Avenue","tiger:name_base":"Manhattan"},"id":"way/700446224"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9470702,35.6832135],[-105.947921,35.6825378]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/700446225"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9470702,35.6832135],[-105.9472096,35.6834068],[-105.9471724,35.6836964],[-105.9475232,35.6839192],[-105.947656,35.683948],[-105.9477542,35.6839741],[-105.9484507,35.6843762]]},"properties":{"highway":"tertiary","name":"West Manhattan Avenue","tiger:name_base":"Manhattan"},"id":"way/700446226"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9470266,35.6831475],[-105.9464164,35.683593],[-105.9461434,35.6838766],[-105.9461483,35.6839622]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/700446228"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9453,35.6856694],[-105.9450856,35.686136],[-105.9448442,35.6865097]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/700446229"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9304805,35.6857987],[-105.9303822,35.6857628]]},"properties":{"highway":"residential","name":"East Palace Avenue","tiger:name_base":"Palace"},"id":"way/700446230"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9308192,35.6858764],[-105.9304805,35.6857987]]},"properties":{"highway":"residential","name":"East Palace Avenue","tiger:name_base":"Palace"},"id":"way/700446231"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9309089,35.6855846],[-105.9311354,35.6846012],[-105.9311333,35.6845309]]},"properties":{"highway":"residential","name":"Delgado Street","tiger:name_base":"Delgado"},"id":"way/700446232"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485791,35.6818233],[-105.9491793,35.681815]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/702161775"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485791,35.6818233],[-105.9486406,35.6817202]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/702161776"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9486406,35.6817202],[-105.9485011,35.6817209]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/702161777"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9486406,35.6817202],[-105.9487763,35.6814121],[-105.9488535,35.6809801]]},"properties":{"highway":"secondary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/702161778"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485011,35.6817209],[-105.9484285,35.6818236]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/702161779"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485011,35.6817209],[-105.9475289,35.6817413],[-105.9470664,35.6816802]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/702161780"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9484285,35.6818236],[-105.9485051,35.6818234],[-105.9485791,35.6818233]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/702161781"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9484285,35.6818236],[-105.9482077,35.6820906],[-105.9476483,35.6826615],[-105.9470266,35.6831475]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/702161782"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9447144,35.6828144],[-105.944716,35.6832197]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/702162236"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9445472,35.682719],[-105.9447144,35.6828144]]},"properties":{"highway":"residential","name":"West Manhattan Avenue"},"id":"way/702162237"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9442144,35.6830302],[-105.9434638,35.6836172],[-105.942683,35.6842001],[-105.9426157,35.6842915]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Cerrillos Road"},"id":"way/702162238"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.944716,35.6832197],[-105.9463447,35.683547],[-105.9464164,35.683593]]},"properties":{"highway":"residential","name":"Read Street","tiger:name_base":"Read"},"id":"way/702162239"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9420264,35.6923869],[-105.941665,35.6924078]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/703795445"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9506406,35.6793559],[-105.9496969,35.6798035],[-105.9487904,35.6800823]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/704419025"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485726,35.6802571],[-105.9489752,35.6801405]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/704419026"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9484446,35.6802925],[-105.9485726,35.6802571]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/704419027"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9487904,35.6800823],[-105.9485226,35.6801509]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/704419028"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485226,35.6801509],[-105.9483451,35.6798682],[-105.9480682,35.679686]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Don Diego Avenue","tiger:name_base":"Don Diego"},"id":"way/704419030"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9485226,35.6801509],[-105.9484045,35.6801854]]},"properties":{"highway":"secondary","oneway":"yes","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/704419031"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9461542,35.68154],[-105.9463765,35.6813542]]},"properties":{"highway":"secondary","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/704419032"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9461542,35.68154],[-105.9452155,35.6813483],[-105.9449245,35.6812807],[-105.9444615,35.6812302],[-105.9438358,35.6811832],[-105.9432038,35.6810674],[-105.94288,35.6810165],[-105.9425566,35.6810904],[-105.9422435,35.6813071],[-105.9420214,35.6816134],[-105.9418038,35.6817382],[-105.9414651,35.6817867],[-105.9409983,35.6817052]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/704419033"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9463765,35.6813542],[-105.9471456,35.6807073]]},"properties":{"highway":"secondary","name":"Cerrillos Road","tiger:name_base":"Cerrillos"},"id":"way/704419034"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9460663,35.6816138],[-105.9462005,35.6816216],[-105.9472872,35.6818231],[-105.9476651,35.6818408],[-105.9484285,35.6818236]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/704419035"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9456664,35.6849544],[-105.9466963,35.6852029],[-105.9468224,35.6853123],[-105.9467808,35.6855179],[-105.9464251,35.6858948],[-105.9462266,35.6866143]]},"properties":{"highway":"tertiary","oneway":"no","name":"Montezuma Avenue","tiger:name_base":"Montezuma"},"id":"way/704419038"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9396196,35.6921291],[-105.9392371,35.6920125]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/704433994"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9396937,35.6918519],[-105.9396196,35.6921291]]},"properties":{"highway":"tertiary","name":"Grant Avenue","tiger:name_base":"Grant"},"id":"way/704433995"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9396141,35.6922359],[-105.9394777,35.6927822]]},"properties":{"highway":"residential","name":"Grant Avenue","tiger:name_base":"Grant"},"id":"way/704433996"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9396141,35.6922359],[-105.9407601,35.6925694],[-105.941123,35.692615],[-105.9416613,35.6925908],[-105.9419243,35.6925196],[-105.9428195,35.6922051]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/704433997"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9392371,35.6920125],[-105.9387674,35.6918666],[-105.9385686,35.6918848]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/704433998"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.68848703703057],[-105.9514459,35.6884162],[-105.9510881,35.68845],[-105.9491844,35.6885502],[-105.9485921,35.6885641],[-105.9482854,35.6884805]]},"properties":{"highway":"residential"},"id":"way/705644167"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.930235,35.6857087],[-105.9301,35.68565887025068]]},"properties":{"highway":"residential","name":"East Palace Avenue","tiger:name_base":"Palace"},"id":"way/705750364"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9303822,35.6857628],[-105.930235,35.6857087]]},"properties":{"highway":"residential","name":"East Palace Avenue","tiger:name_base":"Palace"},"id":"way/705750365"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9366647,35.687294],[-105.9356918,35.6870568],[-105.9347955,35.6868508],[-105.9337858,35.6866081],[-105.9329324,35.6864104],[-105.9314379,35.6860442],[-105.9308192,35.6858764]]},"properties":{"highway":"tertiary","name":"East Palace Avenue","tiger:name_base":"Palace"},"id":"way/725197095"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9338567,35.6861392],[-105.9339802,35.6850412],[-105.9340348,35.6844098]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/725197098"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9382662,35.6824264],[-105.9381668,35.6820136]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/725202014"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9340389,35.6837887],[-105.9340788,35.6830932],[-105.9340467,35.6827135],[-105.9344522,35.6815819],[-105.9346555,35.6813428],[-105.9349138,35.6811244],[-105.935087,35.6810506]]},"properties":{"highway":"secondary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/725206078"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9466123,35.6884897],[-105.9466638,35.688517],[-105.9472441,35.6886864],[-105.9479624,35.68879]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/725411503"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.946397,35.6883597],[-105.9466123,35.6884897]]},"properties":{"highway":"tertiary","oneway":"yes","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/725411504"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9466123,35.6884897],[-105.946397,35.6883597]]},"properties":{"highway":"tertiary","oneway":"yes","name":"West Alameda Street"},"id":"way/725411505"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9482434,35.6888306],[-105.9488695,35.6889191]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/725411506"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9479624,35.68879],[-105.9482434,35.6888306]]},"properties":{"highway":"tertiary","oneway":"yes","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/725411507"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9482434,35.6888306],[-105.9479624,35.68879]]},"properties":{"highway":"tertiary","oneway":"yes","name":"West Alameda Street"},"id":"way/725411508"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9514386,35.6887885],[-105.9517053,35.6887647]]},"properties":{"highway":"tertiary","oneway":"yes","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/725411518"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9517053,35.6887647],[-105.9514386,35.6887885]]},"properties":{"highway":"tertiary","oneway":"yes","name":"West Alameda Street"},"id":"way/725411519"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9517053,35.6887647],[-105.9521,35.68874718122995]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/725411520"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9491596,35.6889539],[-105.9495433,35.6889634],[-105.9514386,35.6887885]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/725411521"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9488695,35.6889191],[-105.9491596,35.6889539]]},"properties":{"highway":"tertiary","oneway":"yes","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/725411522"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9491596,35.6889539],[-105.9488695,35.6889191]]},"properties":{"highway":"tertiary","oneway":"yes","name":"West Alameda Street"},"id":"way/725411523"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9470664,35.6816802],[-105.9461542,35.68154]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/725697738"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9418496,35.6912194],[-105.9420885,35.6912047],[-105.9432872,35.6912685],[-105.9438275,35.6912218],[-105.944396,35.6910156],[-105.9448509,35.6907357],[-105.9449358,35.6907058]]},"properties":{"highway":"tertiary","name":"Catron Street","tiger:name_base":"Catron"},"id":"way/729362263"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9325038,35.6876981],[-105.9321021,35.6875347],[-105.9312843,35.6873888],[-105.9306421,35.6871033],[-105.9301,35.68683921428571]]},"properties":{"highway":"residential","name":"Hillside Avenue","tiger:name_base":"Hillside"},"id":"way/729362268"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9352364,35.6885151],[-105.9343224,35.6882404],[-105.9336116,35.6880328],[-105.9325038,35.6876981]]},"properties":{"highway":"residential","name":"East Marcy Street","tiger:name_base":"Marcy"},"id":"way/729362269"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9341187,35.6886651],[-105.9345302,35.6887881],[-105.9343782,35.6890942],[-105.9340013,35.6889515],[-105.9341187,35.6886651]]},"properties":{"highway":"residential","name":"Castillo Place","tiger:name_base":"Castillo"},"id":"way/729362272"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9336116,35.6880328],[-105.9336987,35.6876364],[-105.9337858,35.6866081],[-105.9338567,35.6861392]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/729362281"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9480884,35.6922468],[-105.9489595,35.6920424],[-105.9506325,35.6914815],[-105.9507138,35.6914545],[-105.9515421,35.6911769],[-105.9521,35.690984568146774]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/729362286"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9366901,35.6901259],[-105.9363505,35.6910609]]},"properties":{"highway":"tertiary","name":"Washington Avenue","tiger:name_base":"Washington"},"id":"way/731806452"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9367554,35.6763765],[-105.9366252,35.676248],[-105.9363205,35.6759677],[-105.93519465975695,35.6751]]},"properties":{"highway":"residential","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/731807387"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9428195,35.6922051],[-105.9429584,35.6923428]]},"properties":{"highway":"tertiary","name":"Griffin Street","tiger:name_base":"Griffin"},"id":"way/744229303"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9427641,35.6921493],[-105.9428195,35.6922051]]},"properties":{"highway":"tertiary","name":"Griffin Street","tiger:name_base":"Griffin"},"id":"way/744229304"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439314,35.6813044],[-105.9443651,35.681289],[-105.9444615,35.6812302]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/757103427"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9438358,35.6811832],[-105.9436371,35.6812041],[-105.9432752,35.6811327],[-105.9431622,35.681173]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/757103428"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9449245,35.6812807],[-105.9445241,35.6812839],[-105.9444203,35.6813352]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/757103429"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9447614,35.6813607],[-105.9452155,35.6813483]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/757103430"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9497318,35.6817914],[-105.9505104,35.6817563],[-105.9507817,35.6817147]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/762699209"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9447144,35.6828144],[-105.9448491,35.6826131],[-105.9449895,35.6825458]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/768984379"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9481431,35.6823265],[-105.9481729,35.6822157],[-105.9485051,35.6818234],[-105.9485011,35.6817209]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/807649087"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9476483,35.6826615],[-105.9475794,35.6827843],[-105.947169,35.6830929],[-105.9470702,35.6832135]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/807649091"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9466721,35.683491],[-105.9470266,35.6831475]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/807649105"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9415448,35.6791263],[-105.9416337,35.6787058],[-105.9417494,35.6781593],[-105.9419772,35.677075],[-105.9421514,35.6762612],[-105.9423178,35.6754446],[-105.94239347891371,35.6751]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/825239793"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9415349,35.679174],[-105.9415448,35.6791263]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/825239794"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9412502,35.6818656],[-105.9415046,35.6819507],[-105.9419314,35.681887]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/825239863"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9353897,35.6786064],[-105.9358779,35.6786478],[-105.9360463,35.678594],[-105.9373784,35.6785529]]},"properties":{"highway":"residential","oneway":"yes","name":"Arroyo Tenorio Street","tiger:name_base":"Arroyo Tenorio"},"id":"way/873281849"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.947656,35.683948],[-105.9484519,35.683501],[-105.9487843,35.6831644]]},"properties":{"highway":"residential","oneway":"yes","name":"Market Street"},"id":"way/875312007"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9515421,35.6911769],[-105.9517089,35.6910464],[-105.9520424,35.6909296],[-105.9521,35.69085920776699]]},"properties":{"highway":"secondary_link","oneway":"yes"},"id":"way/886030872"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9397012,35.6880752],[-105.9388484,35.6878498]]},"properties":{"highway":"residential","oneway":"no","name":"West Palace Avenue","tiger:name_base":"Palace"},"id":"way/907973065"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9414892,35.6856942],[-105.9420097,35.6859905],[-105.9422782,35.6862518],[-105.942649,35.6864693]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/907973066"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9427349,35.6865245],[-105.9428291,35.6864266]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/907973067"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9390927,35.6896434],[-105.9402257,35.6899293]]},"properties":{"highway":"tertiary","name":"West Marcy Street","tiger:name_base":"Marcy"},"id":"way/907973068"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9402257,35.6899293],[-105.9398834,35.6911091]]},"properties":{"highway":"residential","name":"Grant Avenue","tiger:name_base":"Grant"},"id":"way/907973069"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9442071,35.6846358],[-105.9439379,35.6853377]]},"properties":{"highway":"tertiary","oneway":"no","name":"Sandoval Street"},"id":"way/907973070"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9426157,35.6842915],[-105.9442071,35.6846358]]},"properties":{"highway":"tertiary","oneway":"no","name":"Montezuma Avenue","tiger:name_base":"Montezuma"},"id":"way/907973071"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9454143,35.6854758],[-105.9456664,35.6849544]]},"properties":{"highway":"tertiary","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/907973072"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9442071,35.6846358],[-105.9456664,35.6849544]]},"properties":{"highway":"tertiary","oneway":"no","name":"Montezuma Avenue","tiger:name_base":"Montezuma"},"id":"way/907973073"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9427349,35.6865245],[-105.9431819,35.6868137],[-105.9434942,35.6869528],[-105.9439401,35.6872165]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/907973074"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.942649,35.6864693],[-105.9427349,35.6865245]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/907984158"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9427373,35.6863732],[-105.942649,35.6864693]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/907984159"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9401801,35.6851295],[-105.9408096,35.6852827],[-105.9412612,35.6855509],[-105.9414892,35.6856942]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/907997187"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9426157,35.6842915],[-105.942505,35.684337]]},"properties":{"highway":"tertiary","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/908052384"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9445472,35.682719],[-105.9442144,35.6830302]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Cerrillos Road"},"id":"way/908275081"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9521,35.69077841004784],[-105.952083,35.6907438]]},"properties":{"highway":"residential","name":"West San Francisco Street","tiger:name_base":"San Francisco"},"id":"way/908496379"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9381967,35.6894197],[-105.9377754,35.6905179]]},"properties":{"highway":"residential","oneway":"no","name":"Lincoln Avenue","tiger:name_base":"Lincoln"},"id":"way/908501458"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9381967,35.6894197],[-105.9390927,35.6896434]]},"properties":{"highway":"tertiary","name":"West Marcy Street","tiger:name_base":"Marcy"},"id":"way/908501459"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9370686,35.6891315],[-105.9366901,35.6901259]]},"properties":{"highway":"tertiary","name":"Washington Avenue","tiger:name_base":"Washington"},"id":"way/908501460"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9401801,35.6851295],[-105.940074,35.6851504],[-105.9387207,35.6850143],[-105.9376511,35.6848592],[-105.9359428,35.6845578],[-105.9356949,35.6845719]]},"properties":{"highway":"tertiary","name":"East Alameda Street","tiger:name_base":"Alameda"},"id":"way/908501461"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9356949,35.6845719],[-105.9353681,35.684571],[-105.9345349,35.6844351],[-105.9340348,35.6844098]]},"properties":{"highway":"tertiary","name":"East Alameda Street","tiger:name_base":"Alameda"},"id":"way/908501462"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9340348,35.6844098],[-105.9340435,35.6843031]]},"properties":{"highway":"tertiary","name":"Paseo de Peralta","tiger:name_base":"Paseo de Peralta"},"id":"way/908501463"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9409983,35.6817052],[-105.9412381,35.6805517],[-105.9412526,35.6804734],[-105.9414671,35.6794885],[-105.9415349,35.679174]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/908501464"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9409983,35.6817052],[-105.9401865,35.6815553],[-105.9398013,35.6815091],[-105.9391016,35.6815056],[-105.9380928,35.6815079]]},"properties":{"highway":"secondary","oneway":"yes","name":"Paseo de Peralta"},"id":"way/908501465"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9381668,35.6820136],[-105.9381419,35.6821263],[-105.9381441,35.6824327]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/908501467"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9382265,35.6828405],[-105.9382662,35.6824264]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Old Santa Fe Trail","tiger:name_base":"Old Santa Fe"},"id":"way/908501469"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9402539,35.6848699],[-105.9402827,35.6847654]]},"properties":{"highway":"tertiary","name":"Don Gaspar Avenue","tiger:name_base":"Don Gaspar"},"id":"way/908501470"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9417264,35.6853293],[-105.9416151,35.6855078]]},"properties":{"highway":"tertiary","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/908501471"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9418139,35.6852169],[-105.9417264,35.6853293]]},"properties":{"highway":"tertiary","name":"Galisteo Street","tiger:name_base":"Galisteo"},"id":"way/908501472"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.943065,35.6860611],[-105.9428446,35.6862594]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Sandoval Street"},"id":"way/908501473"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9451997,35.6823443],[-105.9448733,35.6825229]]},"properties":{"highway":"tertiary","oneway":"yes","name":"Cerrillos Road"},"id":"way/908501474"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9462266,35.6866143],[-105.9459129,35.6866341]]},"properties":{"highway":"tertiary","name":"Agua Fria Street","tiger:name_base":"Agua Fria"},"id":"way/908501476"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9481431,35.6823265],[-105.9485791,35.6818233]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/908501477"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.947921,35.6825378],[-105.9481431,35.6823265]]},"properties":{"highway":"tertiary","oneway":"yes","name":"South Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/908501478"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9327812,35.6829902],[-105.9318389,35.6827962],[-105.9315074,35.6826741]]},"properties":{"highway":"residential","name":"East Canyon Road","tiger:name_base":"Canyon"},"id":"way/908507649"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9443112,35.6868868],[-105.9441622,35.6870569]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/914512474"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9441622,35.6870569],[-105.944085,35.6871459]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/914512475"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.944085,35.6871459],[-105.9440499,35.6873036]]},"properties":{"highway":"tertiary_link","oneway":"yes"},"id":"way/914512476"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439401,35.6872165],[-105.9436315,35.6876073]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/914512477"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439401,35.6872165],[-105.9440499,35.6873036]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/914512478"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9440499,35.6873036],[-105.944156,35.6871865]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/914512479"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9440499,35.6873036],[-105.9444557,35.6874823],[-105.9456058,35.6879382],[-105.9458308,35.6880307],[-105.946397,35.6883597]]},"properties":{"highway":"tertiary","oneway":"no","name":"West Alameda Street","tiger:name_base":"Alameda"},"id":"way/914512480"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9437296,35.6876472],[-105.9440499,35.6873036]]},"properties":{"highway":"secondary","oneway":"yes","name":"North Guadalupe Street","tiger:name_base":"Guadalupe"},"id":"way/914512481"},
+
 {"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9439234,35.6877119],[-105.9448996,35.6880593],[-105.9454191,35.6882178],[-105.9456058,35.6879382]]},"properties":{"highway":"residential","name":"West Water Street","tiger:name_base":"Water"},"id":"way/914512482"},
-{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9482198,35.6846474],[-105.9480911,35.6847984]]},"properties":{"highway":"residential","name":"Camino de la Familia"},"id":"way/917674206"}
-]}
+
+{"type":"Feature","geometry":{"type":"LineString","coordinates":[[-105.9482198,35.6846474],[-105.9480911,35.6847984]]},"properties":{"highway":"residential","name":"Camino de la Familia"},"id":"way/917674206"}]}

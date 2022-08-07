@@ -1,4 +1,4 @@
-// import * as util from '../src/utils.js'
+import * as util from '../src/utils.js'
 
 // /** @namespace */
 /** @module */
@@ -82,6 +82,17 @@ export function xyz2bbox(x, y, z) {
     const [west, north] = xyz2lonlat(x, y, z)
     const [east, south] = xyz2lonlat(x + 1, y + 1, z)
     return [west, south, east, north]
+}
+export function xyz2bbox4(x, y, z) {
+    const p4 = util.precision
+    const [west, north] = xyz2lonlat(x, y, z)
+    const [east, south] = xyz2lonlat(x + 1, y + 1, z)
+    return [p4(west), p4(south), p4(east), p4(north)]
+}
+export function xyInBBox(bbox, pt) {
+    const [west, south, east, north] = bbox
+    const [x, y] = pt // pt can be turtle xy pair, [t.x, t.y]
+    return util.isBetween(x, west, east) && util.isBetween(y, south, north)
 }
 
 // export function bbox2xyz(bbox) {
@@ -174,6 +185,8 @@ export function bboxMetricAspect(bbox) {
 // Create a url for OSM json data.
 // https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL
 // south, west, north, east = minLat, minLon, maxLat, maxLon
+// https://wiki.openstreetmap.org/wiki/Downloading_data shows a newer url
+// https://api.openstreetmap.org/api/0.6/map?bbox=11.54,48.14,11.543,48.145
 export function getOsmURL(south, west, north, east) {
     const url = 'https://overpass-api.de/api/interpreter?data='
     const params = `\
@@ -182,6 +195,14 @@ way[highway];
 (._;>;);
 out;`
     return url + encodeURIComponent(params)
+}
+// Use the osm url to grab data. The overpass wiki sez:
+// The API is limited to bounding boxes of about 0.5 degree by 0.5 degree
+export async function bbox2osm(bbox) {
+    const [west, south, east, north] = bbox
+    const url = getOsmURL(south, west, north, east)
+    const osm = await fetch(url).then(rsp => rsp.json())
+    return osm
 }
 
 // https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters

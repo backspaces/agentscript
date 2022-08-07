@@ -26,7 +26,7 @@ import Link from './Link.js'
  * - Step(): Step the model. Will advance ticks.
  *
  * @param {Object|World} [worldOptions=World.defaultOptions()]
- * Can be Object of min/max X,Y,Z values or an instance of World
+ * Can be Object of min/max X,Y,Z values or an instance of World or GeoWorld
  */
 //  * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
 

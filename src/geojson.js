@@ -18,7 +18,7 @@ export function minify(json) {
     if (typeof json === 'string') json = JSON.parse(json)
     const str = JSON.stringify(json) // compact form
     // newline for each feature
-    return str.replace(/{"type":"Feature"/g, '\n\n{"type":"Feature"')
+    return str.replace(/},{/g, '},\n\n{')
 }
 
 // ========== features
@@ -41,7 +41,8 @@ export function bboxFeature(bbox, properties = {}) {
  * @param {FeatureCollection|Array<Features>} geojson a FeatureCollection or Features array
  * @returns Features array
  */
-export function flattenMultiLineStrings(geojson) {
+export function flattenMultiLineStrings(geojson, cloneJson = true) {
+    if (cloneJson) geojson = clone(geojson)
     const features = geojson.features || geojson
     const lineStrings = features.reduce((acc, obj) => {
         const geom = obj.geometry
@@ -71,7 +72,7 @@ export function flattenMultiLineStrings(geojson) {
  */
 export function lineStringsToLinks(model, bbox, lineStrings) {
     // const xfm = xfmFromBBox(model, bbox)
-    const xfm = model.world.bboxTransform(...bbox)
+    const xfm = model.world.xfm || model.world.bboxTransform(...bbox)
     lineStrings = flattenMultiLineStrings(lineStrings)
     const nodeCache = {}
     const newTurtles = []
@@ -115,7 +116,8 @@ export function lineStringsToLinks(model, bbox, lineStrings) {
 }
 
 // https://github.com/tmcw/geojson-flatten
-export function flatten(gj) {
+export function flatten(gj, cloneJson = true) {
+    if (cloneJson) gj = clone(gj)
     switch ((gj && gj.type) || null) {
         case 'FeatureCollection':
             gj.features = gj.features.reduce(function (mem, feature) {
