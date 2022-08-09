@@ -1,0 +1,133 @@
+<html>
+
+<head>
+    <title>TileInfo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #map {
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
+        import { mapzen } from '../src/TileData.js'
+        import * as L from 'https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.esm.js'
+
+        let [lon, lat, Z] = [-105.941109, 35.68222, 13]
+        const map = L.map('map', {
+            zoomDelta: 0.25, //0.1
+            zoomSnap: 0,
+        }).setView([lat, lon], Z)
+
+        const terrainLayer = L.tileLayer(gis.template('osm'), {
+            attribution: gis.attribution('osm'),
+        }).addTo(map)
+
+        // https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging
+        L.GridLayer.GridDebug = L.GridLayer.extend({
+            createTile: function (coords) {
+                const tile = document.createElement('div')
+                tile.style.outline = '1px solid green'
+                tile.style.fontWeight = 'bold'
+                tile.style.fontSize = '14pt'
+                tile.innerHTML = tileZxy(coords)
+                return tile
+            },
+        })
+        const tileZxy = coords => {
+            const { x, y, z } = coords
+            return [z, x, y].join(' / ')
+        }
+        L.gridLayer.gridDebug = function (opts) {
+            return new L.GridLayer.GridDebug(opts)
+        }
+        const debugLayer = map.addLayer(L.gridLayer.gridDebug())
+
+        let popup
+        map.on('click', e => {
+            let { lat, lng: lon } = e.latlng
+            let z = Math.round(map.getZoom())
+            let [x, y] = gis.lonlatz2xy(lon, lat, z)
+            let bbox = gis.xyz2bbox(x, y, z, 3).toString().replaceAll(',', ', ')
+            map.openPopup(`BBox to 3 places:<br />${bbox}`, e.latlng)
+        })
+        map.on('zoom', e => {
+            map.closePopup()
+        })
+
+
+    </script>
+</body>
+
+</html>
+
+<!--
+        const elevationLayer = L.tileLayer(
+        mapzen.zxyTemplate,
+        {
+        opacity: 0.15,
+        attribution: 'Elevation Tiles',
+        crossOrigin: '',
+        }
+        ).addTo(map)
+        util.toWindow({ terrainLayer, elevationLayer, gis })
+
+        const bounds = centerTileBounds()
+        const rectangle = L.rectangle(bounds, { color: 'black' })
+        .bindPopup(layer => centerTileString())
+        .addTo(map)
+
+        map.on('zoomend', ev => {
+        update(ev)
+        })
+        map.on('moveend', ev => {
+        update(ev)
+        })
+
+        function centerTileString() {
+        const [X, Y, Z] = centerTileXYZ()
+        return `X:${X}, Y:${Y}, Z:${Z}`
+        }
+        function centerTileXYZ() {
+        const { lat, lng: lon } = map.getCenter()
+        const Z = Math.round(map.getZoom())
+        const [X, Y] = gis.lonlatz2xy(lon, lat, Z)
+        return [X, Y, Z]
+        }
+        function centerTileBounds() {
+        const [X, Y, Z] = centerTileXYZ()
+        const bbox = gis.xyz2bbox(X, Y, Z)
+        // console.log('bbox', bbox)
+        // console.log('bboxPixels', gis.bboxPixels(L, bbox, Z))
+        util.toWindow({ bbox, Z })
+        return gis.latlon(gis.bboxBounds(bbox))
+        // return gis.bbox2bounds(bbox)
+        }
+        function update(ev) {
+        // if (ev.type === 'moveend') console.log('moved')
+        // console.log('event', ev.type)
+        rectangle.closePopup()
+        const bounds = centerTileBounds()
+        rectangle.setBounds(bounds)
+        }
+
+        util.toWindow({ L, util, map })
+
+        // // test of crossOrigin: works!
+        // const img = elevationLayer.getContainer().firstChild.children[0]
+        // console.log(img)
+        // const data = new RGBDataSet(img)
+        // console.log(data)
+    -->

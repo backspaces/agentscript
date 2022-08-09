@@ -78,17 +78,18 @@ export function xyz2centerLonlat(x, y, z) {
 // x,y any point within the tile like center etc.
 // We use the usual bbox convention of
 //   [minX, minY, maxX, maxY] or [west, south, east, north]
-export function xyz2bbox(x, y, z) {
+export function xyz2bbox(x, y, z, digits = null) {
     const [west, north] = xyz2lonlat(x, y, z)
     const [east, south] = xyz2lonlat(x + 1, y + 1, z)
-    return [west, south, east, north]
+    if (!digits) return [west, south, east, north]
+    return util.precision([west, south, east, north], digits)
 }
-export function xyz2bbox4(x, y, z) {
-    const p4 = util.precision
-    const [west, north] = xyz2lonlat(x, y, z)
-    const [east, south] = xyz2lonlat(x + 1, y + 1, z)
-    return [p4(west), p4(south), p4(east), p4(north)]
-}
+// export function xyz2bbox4(x, y, z) {
+//     const p4 = util.precision
+//     const [west, north] = xyz2lonlat(x, y, z)
+//     const [east, south] = xyz2lonlat(x + 1, y + 1, z)
+//     return [p4(west), p4(south), p4(east), p4(north)]
+// }
 export function xyInBBox(bbox, pt) {
     const [west, south, east, north] = bbox
     const [x, y] = pt // pt can be turtle xy pair, [t.x, t.y]
