@@ -1,4 +1,4 @@
-import Turtle2D from './Turtle2D.js'
+import Turtle from './Turtle.js'
 import { Object3D } from '../vendor/Object3D.js'
 import * as util from './utils.js'
 
@@ -14,13 +14,11 @@ const { checkArg, checkArgs } = util
  * instead class Turtles creates Turtle3D instances via
  * {@link Model} modifying the Turtles/Turtle3D initialization.
  *
- * 3D is the default. To revert to 2D, see {@link Model2D}
- *
  * Again, class Turtles is a factory for all of it's Turtle3D instances.
  * So *don't* do this:
  */
 
-class Turtle3D extends Turtle2D {
+class Turtle3D extends Turtle {
     static defaultVariables() {
         return {
             atEdge: 'wrap',

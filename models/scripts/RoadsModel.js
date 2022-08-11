@@ -17,8 +17,8 @@ class RoadsModel extends Model {
     geojson
     network
     numDrivers = 100 // 25
-    speed = 0.01
-    speedDelta = 0.01
+    speed = 0.05
+    speedDelta = 0.05
 
     constructor(worldOptions = World.defaultOptions(100)) {
         super(worldOptions)

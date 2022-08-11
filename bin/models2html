@@ -49,7 +49,6 @@ function makeHtml(model) {
         util.printToPage(sample)
     </script>
 </body>
-
 </html>
 `
 }
