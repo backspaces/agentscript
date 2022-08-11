@@ -89,27 +89,23 @@
         // view.draw() // Draw once to get started ??
 
         // ============ Plot new tours  ==================
-        const pens = {
-            tourLength: 'blue',
-        }
         const options = {
             width: 1000,
             height: 500,
             title: 'Tour Length',
         }
-        const plot = new Plot('plot', pens, options)
-        pens.tourLength = []
-
+        const plot = new Plot('plot', {
+            tourLength: 'blue',
+        }, options)
+        
         // ============ Tour Change Callback  ==================
 
         model.onChange = (length, changes, ticks) => {
-            length = Math.round(length)
+            const tourLength = Math.round(length)
+            plot.setData({tourLength: tourLength})
             console.log(
                 `new best tour at tick ${ticks}: ${length}, changes ${changes}`
             )
-            pens.tourLength = length
-            plot.setData(pens)
-            // plot.addPoints(pens)
         }
 
         util.toWindow({ util, model, view, anim, gui, plot, pens })
