@@ -32,7 +32,7 @@ const sharedTileObject = {
         const img = await this.zxyToTile(z, x, y)
         const ds1 = this.tileDataSet(img, ArrayType)
         const bbox = xyz2bbox(x, y, z)
-        return GeoDataSet.fromDataSet(ds1, bbox)
+        return GeoDataSet.viewFromDataSet(ds1, bbox)
     },
     tileDataSet: function (img, ArrayType = Float32Array) {
         const tileDecoder = this.elevationFcn

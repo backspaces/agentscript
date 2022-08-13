@@ -5,6 +5,8 @@ import { bboxMetricSize } from './gis.js'
 export default class GeoDataSet extends DataSet {
 
     /**
+     * Mostly the same a DataSet, except it has bounds. 
+     * A few methods, like slop, dzdx, dzdy, and aspect are different because they take into account the bbox
      * 
      * @param {Number} width width of the DataSet in pixels
      * @param {Number} height height of the DataSet in pixels
@@ -16,7 +18,13 @@ export default class GeoDataSet extends DataSet {
         this.bbox = bbox
     }
 
-    static fromDataSet(dataSet, bbox){
+    /**
+     * 
+     * @param {DataSet} dataSet 
+     * @param {Array} bbox [west, south, east, north]
+     * @returns 
+     */
+    static viewFromDataSet(dataSet, bbox){
         return new GeoDataSet(dataSet.width, dataSet.height, bbox, dataSet.data)
     }
 
@@ -44,6 +52,14 @@ export default class GeoDataSet extends DataSet {
         return this.setXY(x,y)
     }
 
+    /**
+     * Samples a pixel at a given latitude and longitude
+     * 
+     * @param {Number} lat 
+     * @param {Number} lng 
+     * @param {Boolean} useNearest 
+     * @returns 
+     */
     sampleLatLng(lat, lng, useNearest=true) {
         const x = this.lng2x(lng)
         const y = this.lat2y(lat)
@@ -54,14 +70,16 @@ export default class GeoDataSet extends DataSet {
         const [widthMeters, heightMeters] = bboxMetricSize(this.bbox)
         const pixelScale = widthMeters / this.width
         const dzdx = super.dzdx(2, (1 / 8) * (1 / pixelScale)) // (1/8) for the kernel and 1/pixelscale to get units right
-        return dzdx
+        const dzdx2 = GeoDataSet.viewFromDataSet(dzdx, this.bbox)
+        return dzdx2
     }
 
     dzdy() {
         const [widthMeters, heightMeters] = bboxMetricSize(this.bbox)
         const pixelScale = heightMeters / this.height
         const dzdy = super.dzdy(2, (1 / 8) * (1 / pixelScale))
-        return dzdy
+        const dzdy2 = GeoDataSet.viewFromDataSet(dzdy, this.bbox)
+        return dzdy2
     }
 
     slopeAndAspect() {
@@ -91,31 +109,36 @@ export default class GeoDataSet extends DataSet {
         return slop
     }
 
+    //
+    // The functions below are the same as DataSet's version except they return a GeoDataset instead of a dataset.
+    // Is there a better way to do this?
+    //
+    
     clone() {
         return new GeoDataSet(this.width, this.height, this.bbox, this.data)
     }
 
     resample(width, height, useNearest = true, Type = Array) {
         const a = super.resample(width, height, useNearest, Type)
-        const b = GeoDataSet.fromDataSet(a, this.bbox)
+        const b = GeoDataSet.viewFromDataSet(a, this.bbox)
         return b
     }
 
     convolve(kernel, factor = 1, crop = false) {
         const a = super.convolve(kernel, factor, crop)
-        const b = GeoDataSet.fromDataSet(a, this.bbox)
+        const b = GeoDataSet.viewFromDataSet(a, this.bbox)
         return b
     }
 
     normalize(lo = 0, hi = 1, round = false) {
         const a = super.normalize(lo, hi, round)
-        const b = GeoDataSet.fromDataSet(a, this.bbox)
+        const b = GeoDataSet.viewFromDataSet(a, this.bbox)
         return b
     }
 
     map(f) {
         const a = super.map(f)
-        const b = GeoDataSet.fromDataSet(a, this.bbox)
+        const b = GeoDataSet.viewFromDataSet(a, this.bbox)
         return b
     }
 
