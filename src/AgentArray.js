@@ -451,7 +451,7 @@ class AgentArray extends Array {
             throw Error('min/max nOf: n larger than AgentArray')
         }
         const as = this.clone().sortBy(reporter)
-        return min ? as.clone(0, n) : as.clone(as.length - n)
+        return min ? as.slice(0, n) : as.slice(as.length - n)
     }
     minNOf(n, reporter) {
         return this.minOrMaxNOf(true, n, reporter)
