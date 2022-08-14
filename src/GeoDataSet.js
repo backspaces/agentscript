@@ -5,8 +5,8 @@ import { bboxMetricSize } from './gis.js'
 export default class GeoDataSet extends DataSet {
 
     /**
-     * Mostly the same a DataSet, except it has bounds. 
-     * A few methods, like slop, dzdx, dzdy, and aspect are different because they take into account the bbox
+     * Mostly the same a DataSet except it has bounds. 
+     * A few methods, like slope, dzdx, dzdy, and aspect are different because they take into account the size of the bbox in meters
      * 
      * @param {Number} width width of the DataSet in pixels
      * @param {Number} height height of the DataSet in pixels
@@ -22,7 +22,7 @@ export default class GeoDataSet extends DataSet {
      * 
      * @param {DataSet} dataSet 
      * @param {Array} bbox [west, south, east, north]
-     * @returns 
+     * @returns {GeoDataSet} GeoDataSet view of the dataset data. It is a view not a copy. 
      */
     static viewFromDataSet(dataSet, bbox){
         return new GeoDataSet(dataSet.width, dataSet.height, bbox, dataSet.data)
@@ -58,7 +58,8 @@ export default class GeoDataSet extends DataSet {
      * @param {Number} lat 
      * @param {Number} lng 
      * @param {Boolean} useNearest 
-     * @returns 
+     * @throws Out Of Range Error - when it is outside of the bbox
+     * @returns {Number}
      */
     sampleLatLng(lat, lng, useNearest=true) {
         const x = this.lng2x(lng)
@@ -113,7 +114,7 @@ export default class GeoDataSet extends DataSet {
     // The functions below are the same as DataSet's version except they return a GeoDataset instead of a dataset.
     // Is there a better way to do this?
     //
-    
+
     clone() {
         return new GeoDataSet(this.width, this.height, this.bbox, this.data)
     }
