@@ -1,6 +1,8 @@
 Code    | Run demo
 ------- | ------
 [ants](https://github.com/backspaces/agentscript/tree/master/views2/ants.html#L1) | [https://code.agentscript.org/views2/ants.html](https://code.agentscript.org/views2/ants.html)
+[avalanche](https://github.com/backspaces/agentscript/tree/master/views2/avalanche.html#L1) | [https://code.agentscript.org/views2/avalanche.html](https://code.agentscript.org/views2/avalanche.html)
+[avy](https://github.com/backspaces/agentscript/tree/master/views2/avy.html#L1) | [https://code.agentscript.org/views2/avy.html](https://code.agentscript.org/views2/avy.html)
 [buttons](https://github.com/backspaces/agentscript/tree/master/views2/buttons.html#L1) | [https://code.agentscript.org/views2/buttons.html](https://code.agentscript.org/views2/buttons.html)
 [diffuse](https://github.com/backspaces/agentscript/tree/master/views2/diffuse.html#L1) | [https://code.agentscript.org/views2/diffuse.html](https://code.agentscript.org/views2/diffuse.html)
 [droplets](https://github.com/backspaces/agentscript/tree/master/views2/droplets.html#L1) | [https://code.agentscript.org/views2/droplets.html](https://code.agentscript.org/views2/droplets.html)

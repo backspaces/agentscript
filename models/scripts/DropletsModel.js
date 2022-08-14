@@ -15,7 +15,7 @@ class DropletsModel extends Model {
     //    'patchAspect',
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
-    stepType = 'minNeighbor'
+    stepType = 'dataSetAspectNearest'
     moves // how many moves in a step
     // Installed datasets:
     elevation

@@ -1,8 +1,7 @@
 import DataSet from "./DataSet.js"
 import { bboxMetricSize } from './gis.js'
 
-
-export default class GeoDataSet extends DataSet {
+class GeoDataSet extends DataSet {
 
     /**
      * Mostly the same a DataSet except it has bounds. 
@@ -19,7 +18,9 @@ export default class GeoDataSet extends DataSet {
     }
 
     /**
+     * Create a view of a Dataset including the bounds. 
      * 
+     * @static
      * @param {DataSet} dataSet 
      * @param {Array} bbox [west, south, east, north]
      * @returns {GeoDataSet} GeoDataSet view of the dataset data. It is a view not a copy. 
@@ -28,12 +29,24 @@ export default class GeoDataSet extends DataSet {
         return new GeoDataSet(dataSet.width, dataSet.height, bbox, dataSet.data)
     }
 
+    /**
+     * Get the y pixel coordinate. Note: This can be out of bounds
+     * 
+     * @param {Number} lat Latitude
+     * @returns {Number} y pixel coordinate
+     */
     lat2y(lat) {
         const [west, south, east, north] = this.bbox
         const y = Math.round(this.height * (lat - south) / (north - south))
         return y
     }
 
+    /**
+     * Get the x pixel coordinate. Note: This can be out of bounds
+     * 
+     * @param {Number} lng Longitude
+     * @returns {Number} x pixel coordinate
+     */
     lng2x(lng) {
         const [west, south, east, north] = this.bbox
         const x = Math.round(this.width * (lng - west) / (east - west))
@@ -67,6 +80,11 @@ export default class GeoDataSet extends DataSet {
         return this.sample(x,y, useNearest)
     }
 
+    /**
+     * Change in z value in terms of x. Finite difference.
+     * 
+     * @returns {GeoDataset}
+     */
     dzdx() {
         const [widthMeters, heightMeters] = bboxMetricSize(this.bbox)
         const pixelScale = widthMeters / this.width
@@ -75,6 +93,11 @@ export default class GeoDataSet extends DataSet {
         return dzdx2
     }
 
+    /**
+     * Change in z value in terms of y. Finite difference.
+     * 
+     * @returns {GeoDataSet}
+     */
     dzdy() {
         const [widthMeters, heightMeters] = bboxMetricSize(this.bbox)
         const pixelScale = heightMeters / this.height
@@ -83,6 +106,11 @@ export default class GeoDataSet extends DataSet {
         return dzdy2
     }
 
+    /**
+     * Create dzdx, dzdy, slope, and aspect in one function. 
+     * 
+     * @returns {SlopeAndAspect} {dzdx, dzdy, slope, aspect}  
+     */
     slopeAndAspect() {
         const dzdx = this.dzdx()
         const dzdy = this.dzdy()
@@ -91,6 +119,13 @@ export default class GeoDataSet extends DataSet {
         return { dzdx, dzdy, slope, aspect }
     }
 
+    /**
+     * The aspect of each pixel in radians.
+     * 
+     * @param {GeoDataset} dzdx 
+     * @param {GeoDataSet} dzdy 
+     * @returns {GeoDataSet} Aspect in radians.
+     */
     aspect(dzdx = this.dzdx(), dzdy = this.dzdy()) {
         const asp = dzdx.map((x, i) => {
             const y = dzdy.data[i]
@@ -100,6 +135,13 @@ export default class GeoDataSet extends DataSet {
         return asp
     }
     
+    /**
+     * Returns the slope in radians
+     * 
+     * @param {GeoDataset} dzdx 
+     * @param {GeoDataset} dzdy 
+     * @returns {GeoDataset}
+     */
     slope(dzdx = this.dzdx(), dzdy = this.dzdy()) {
         const slop = dzdx.map((x, i) => {
             const y = dzdy.data[i]
@@ -142,7 +184,7 @@ export default class GeoDataSet extends DataSet {
         const b = GeoDataSet.viewFromDataSet(a, this.bbox)
         return b
     }
-
-
 }
+
+export default GeoDataSet
 
