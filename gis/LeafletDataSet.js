@@ -1,6 +1,7 @@
 // import * as TileData from './TileData.js'
 import * as util from '../src/utils.js'
 import * as gis from '../src/gis.js'
+import GeoDataSet from '../src/GeoDataSet.js'
 // import RGBDataSet from './RGBDataSet.js'
 
 class LeafletDataSet {
@@ -91,8 +92,8 @@ class LeafletDataSet {
         const dataSetMatrix = this.dataSetsMatrix(tilesBBox, z)
         const tilesDataSet = this.dataSetMatrixToDataSet(dataSetMatrix)
         const cropParameters = this.getCropParameters(bbox, z)
-        const bboxDataSet = tilesDataSet.crop(cropParameters)
-        bboxDataSet.bbox = bbox
+        const croppedDataSet = tilesDataSet.crop(cropParameters)
+        const bboxDataSet = GeoDataSet.viewFromDataSet(croppedDataSet, bbox)
 
         console.log('bbox', bbox)
         console.log('tilesBBox', tilesBBox)
