@@ -16,7 +16,6 @@ class GeoDataSet extends DataSet {
     constructor(width, height, bbox, data) {
         super(width, height, data)
         this.bbox = bbox
-        this.xfm = new BBoxTransform(...bbox)
     }
 
     /**
@@ -31,13 +30,21 @@ class GeoDataSet extends DataSet {
         return new GeoDataSet(dataSet.width, dataSet.height, bbox, dataSet.data)
     }
 
-    toGeo(x, y) {
-        return this.xfm.toBBox([x, y])
+    lat2y(lat) {
+        const [west, south, east, north] = this.bbox
+        const y = Math.round(this.height * (lat - south) / (north - south))
+        return y
+    }
+
+    lon2x(lng) {
+        const [west, south, east, north] = this.bbox
+        const x = Math.round(this.width * (lng - west) / (east - west))
+        return x
     }
 
     // Convert from geo lon/lat coords to pixel coords
     toPixel(geoX, geoY) {
-        return this.xfm.toWorld([geoX, geoY])
+        return [this.lon2x(geoX), this.lat2y(geoY)]
     }
 
     // Get pixel from geo lon/lat coords to pixel coords
