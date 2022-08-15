@@ -42,7 +42,7 @@ class GeoDataSet extends DataSet {
         return x
     }
 
-    // Convert from geo lon/lat coords to pixel coords
+    // Convert from geoon/lat coords to pixel coords
     toPixel(geoX, geoY) {
         return [this.lon2x(geoX), this.lat2y(geoY)]
     }
@@ -54,6 +54,7 @@ class GeoDataSet extends DataSet {
     }
 
     // Set pixel from geo lon/lat coords to pixel coords
+    // I think this could be a slow way to set data for large amounts
     setGeo(geoX, geoY, value) {
         const [x, y] = this.toPixel(geoX, geoY)
         return this.setXY(x, y, value)
@@ -62,8 +63,8 @@ class GeoDataSet extends DataSet {
     /**
      * Samples a pixel at a given latitude and longitude
      * 
-     * @param {Number} lat 
-     * @param {Number} lon 
+     * @param {Number} geoX longitude
+     * @param {Number} geoY latitude
      * @param {Boolean} useNearest 
      * @throws Out Of Range Error - when it is outside of the bbox
      * @returns {Number}
