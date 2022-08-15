@@ -270,7 +270,7 @@ export default World
  * A linear transformer between world coords and the given bounding box.
  * @private
  */
-class BBoxTransform {
+export class BBoxTransform {
     /**
      * Creates an instance of BBoxTransform.
      *

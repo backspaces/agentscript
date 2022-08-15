@@ -1,5 +1,6 @@
 import DataSet from "./DataSet.js"
 import { bboxMetricSize } from './gis.js'
+import BBoxTransform from './World.js'
 
 class GeoDataSet extends DataSet {
 
@@ -15,6 +16,7 @@ class GeoDataSet extends DataSet {
     constructor(width, height, bbox, data) {
         super(width, height, data)
         this.bbox = bbox
+        this.xfm = new BBoxTransform(...bbox)
     }
 
     /**
@@ -25,59 +27,43 @@ class GeoDataSet extends DataSet {
      * @param {Array} bbox [west, south, east, north]
      * @returns {GeoDataSet} GeoDataSet view of the dataset data. It is a view not a copy. 
      */
-    static viewFromDataSet(dataSet, bbox){
+    static viewFromDataSet(dataSet, bbox) {
         return new GeoDataSet(dataSet.width, dataSet.height, bbox, dataSet.data)
     }
 
-    /**
-     * Get the y pixel coordinate. Note: This can be out of bounds
-     * 
-     * @param {Number} lat Latitude
-     * @returns {Number} y pixel coordinate
-     */
-    lat2y(lat) {
-        const [west, south, east, north] = this.bbox
-        const y = Math.round(this.height * (lat - south) / (north - south))
-        return y
+    toGeo(x, y) {
+        return this.xfm.toBBox([x, y])
     }
 
-    /**
-     * Get the x pixel coordinate. Note: This can be out of bounds
-     * 
-     * @param {Number} lng Longitude
-     * @returns {Number} x pixel coordinate
-     */
-    lng2x(lng) {
-        const [west, south, east, north] = this.bbox
-        const x = Math.round(this.width * (lng - west) / (east - west))
-        return x
+    // Convert from geo lon/lat coords to pixel coords
+    toPixel(geoX, geoY) {
+        return this.xfm.toWorld([geoX, geoY])
     }
 
-    getLatLng(lat, lng) {
-        const x = this.lng2x(lng)
-        const y = this.lat2y(lat)
-        return this.getXY(x,y)
+    // Get pixel from geo lon/lat coords to pixel coords
+    getGeo(geoX, geoY) {
+        const [x, y] = this.toPixel(geoX, geoY)
+        return this.getXY(x, y)
     }
 
-    setLatLng(lat, lng) {
-        const x = this.lng2x(lng)
-        const y = this.lat2y(lat)
-        return this.setXY(x,y)
+    // Set pixel from geo lon/lat coords to pixel coords
+    setGeo(geoX, geoY, value) {
+        const [x, y] = this.toPixel(geoX, geoY)
+        return this.setXY(x, y, value)
     }
 
     /**
      * Samples a pixel at a given latitude and longitude
      * 
      * @param {Number} lat 
-     * @param {Number} lng 
+     * @param {Number} lon 
      * @param {Boolean} useNearest 
      * @throws Out Of Range Error - when it is outside of the bbox
      * @returns {Number}
      */
-    sampleLatLng(lat, lng, useNearest=true) {
-        const x = this.lng2x(lng)
-        const y = this.lat2y(lat)
-        return this.sample(x,y, useNearest)
+    sampleGeo(geoX, geoY, useNearest = true) {
+        const [x, y] = this.toPixel(geoX, geoY)
+        return this.sample(x, y, useNearest)
     }
 
     /**
@@ -134,7 +120,7 @@ class GeoDataSet extends DataSet {
         })
         return asp
     }
-    
+
     /**
      * Returns the slope in radians
      * 
@@ -156,7 +142,7 @@ class GeoDataSet extends DataSet {
     // The functions below are the same as DataSet's version except they return a GeoDataset instead of a dataset.
     // Is there a better way to do this?
     //
-
+    //
     clone() {
         return new GeoDataSet(this.width, this.height, this.bbox, this.data)
     }
