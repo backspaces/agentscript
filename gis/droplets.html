@@ -36,7 +36,7 @@
         // ================ create map with terrain & elevation ================
 
         const center = [35.67, -105.93]
-        const Z = 10
+        const Z = 10 // 10 11
         const map = L.map('map', {
             zoomDelta: 0.25, //0.1
             zoomSnap: 0,
@@ -65,7 +65,7 @@
         let leafletDataSet = new LeafletDataSet(
             map,
             elevationLayer,
-            tileData
+            // tileData
         )
         // leafletUtils.testEvents(map, elevationLayer)
         // leafletUtils.testZooms(elevationLayer)
@@ -151,6 +151,7 @@
             // util.toWindow({ model, view, modelLayer, anim, drawOptions })
         }
         await setupModelView() // default to full page
+        // await setupModelView(gis.santaFeBBox) // test
 
         // ================ mouse drag bbox rect ================
 

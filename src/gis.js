@@ -1,5 +1,16 @@
 import * as util from '../src/utils.js'
 
+// This module primarily manages various GIS structures:
+// * xyz: The slippy map coords array [x, y, z(oom)] integers.
+//   http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
+// * lon, lat: Longitude/latitude (in x, y .. lon, lat order)
+// * points: [lon, lat] arrays
+// * bbox: an array of [west, south, east, north] lon/lat values
+//   Note the order is (minx, miny, maxx, maxy), another semi standard
+// * tile: a 256 x 256 image used in slippy maps at a xyz map location
+// See:  https://macwright.com/lonlat/ which we follow
+// Note there is a simple conversion for [lat, lon] coord orders: latlon(lonlat)
+
 // /** @namespace */
 /** @module */
 
@@ -84,15 +95,10 @@ export function xyz2bbox(x, y, z, digits = null) {
     if (!digits) return [west, south, east, north]
     return util.precision([west, south, east, north], digits)
 }
-// export function xyz2bbox4(x, y, z) {
-//     const p4 = util.precision
-//     const [west, north] = xyz2lonlat(x, y, z)
-//     const [east, south] = xyz2lonlat(x + 1, y + 1, z)
-//     return [p4(west), p4(south), p4(east), p4(north)]
-// }
+
 export function xyInBBox(bbox, pt) {
     const [west, south, east, north] = bbox
-    const [x, y] = pt // pt can be turtle xy pair, [t.x, t.y]
+    const [x, y] = pt // lon, lats
     return util.isBetween(x, west, east) && util.isBetween(y, south, north)
 }
 
@@ -111,6 +117,9 @@ export function xyInBBox(bbox, pt) {
 
 // Leaflet style latlon corners to bbox
 // "bouonds" uses leaflet's latlon while "bbox" uses our lonlat
+// https://leafletjs.com/reference.html#latlngbounds
+// this may not be needed: leaflet allows [lat, lon] arrays
+// where every latlng bounds are used.
 export function Lbounds2bbox(leafletBounds) {
     // let { lng: east, lat: north } = leafletBounds.getNorthEast()
     // let { lng: west, lat: south } = leafletBounds.getSouthWest()
@@ -119,7 +128,7 @@ export function Lbounds2bbox(leafletBounds) {
     return [west, south, east, north]
 }
 
-// given a gis bbox, return the corners of the surounding tiles, in tile coords
+// given a gis bbox, return the corners of the surounding tiles, in tile XY coords
 export function tilesBBox(bbox, z) {
     const [west, south, east, north] = bbox
     const [westX, northY] = lonlatz2xy(west, north, z)

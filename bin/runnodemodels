@@ -18,4 +18,4 @@ models = models
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
 shell.echo('models:', models)
-models.forEach(model => shell.exec(`${dir}/runNode ${model}`))
+models.forEach(model => shell.exec(`./bin/runnode ${model}`))

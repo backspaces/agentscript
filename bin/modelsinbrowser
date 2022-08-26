@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+// const esmImport = require('esm')(module, { mode: 'all' })
+const esmImport = require('esm')(module)
+const liveServer = esmImport('live-server')
+const shell = esmImport('shelljs')
+const utils = esmImport('../src/utils.js')
+
+const dir = process.argv[2]
+if (!dir) throw Error('Needs dir name argument')
+const browser = process.argv[3] || 'Google Chrome'
+
+console.log('dir:', dir, 'browser', browser)
+
+liveServer.start({
+    open: false,
+    // logLevel: 0,
+    // ignore: '*',
+    port: 9090,
+})
+const root = 'http://127.0.0.1:9090'
+
+async function run() {
+    const models = shell.ls(`${dir}/*.html`) // Just the Model files
+
+    models.forEach(model => shell.echo(model))
+    shell.exec(`open --new -a "${browser}" --args --new-window`)
+    await utils.timeoutPromise(4000)
+
+    models.forEach(model => shell.exec(`open -a "${browser}" ${root}/${model}`))
+}
+run()

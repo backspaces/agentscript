@@ -11,8 +11,11 @@ shell.mkdir(`${dir}`)
 const models = shell.ls('models/[A-Z]*Model.js')
 
 models.forEach(model => {
-    shell.echo(model)
-    const html = makeHtml(model)
+    // shell.echo(model)
+    const title = model.replace('models/', '').replace('Model.js', '')
+    shell.echo(model, title)
+
+    const html = makeHtml(title, model)
 
     // shell.echo(makeHtml(model))
     const htmlFile = model
@@ -26,10 +29,10 @@ models.forEach(model => {
     new shell.ShellString(html).to(htmlFile)
 })
 
-function makeHtml(model) {
+function makeHtml(title, model) {
     return `<html>
 <head>
-    <title>Hello</title>
+    <title>${title}</title>
 </head>
 <body>
     <script type="module">

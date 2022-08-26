@@ -1392,10 +1392,11 @@ export function sortObjs(array, fcn, ascending = true) {
 // See [Durstenfeld / Fisher-Yates-Knuth shuffle](https://goo.gl/mfbdPh)
 export function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        const temp = array[i]
-        array[i] = array[j]
-        array[j] = temp
+        const j = randomInt(i)
+        ;[array[j], array[i]] = [array[i], array[j]]
+        // const temp = array[i]
+        // array[i] = array[j]
+        // array[j] = temp
     }
     return array
 }
@@ -1560,6 +1561,20 @@ export const arraysDiff = (a1, a2, ifcn = i => i) => {
     }
     return diffs
 }
+
+export function arrayToMatrix(array, width, height) {
+    if (array.length !== width * height)
+        throw Error('arrayToMatrix: length !== width * height')
+
+    const matrix = []
+    for (let i = 0; i < height; i++) {
+        const row = array.slice(i * width, (i + 1) * width)
+        matrix.push(row)
+    }
+
+    return matrix
+}
+export const matrixToArray = matrix => matrix.flat()
 
 // // Return a new shallow of array (either Array or TypedArray)
 // export function clone(array) {

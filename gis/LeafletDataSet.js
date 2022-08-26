@@ -1,10 +1,10 @@
-// import * as TileData from './TileData.js'
+import * as TileData from '../src/TileData.js'
 import * as util from '../src/utils.js'
 import * as gis from '../src/gis.js'
-// import RGBDataSet from './RGBDataSet.js'
 
 class LeafletDataSet {
-    constructor(map, elevationLayer, tileData) {
+    constructor(map, elevationLayer, tileData = 'mapzen') {
+        if (util.isString(tileData)) tileData = TileData[tileData]
         Object.assign(this, { map, elevationLayer, tileData })
         this.tiles = {}
 

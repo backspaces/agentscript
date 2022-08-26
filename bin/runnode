@@ -1,22 +1,23 @@
 #!/usr/bin/env node
 
+// const esmImport = require('esm')(module, { mode: 'all' })
 const esmImport = require('esm')(module)
 const str = process.argv[2] || 'hello'
 const className = str.charAt(0).toUpperCase() + str.slice(1) + 'Model'
 
-console.log('Running', className)
+console.log('\nRunning', className)
 
-const Model = esmImport(`./${className}.js`).default
-const util = esmImport('../src/util.js').default
+const Model = esmImport(`../models/${className}.js`).default
+const utils = esmImport('../src/utils.js')
+
 const model = new Model()
-
 async function run() {
     await model.startup()
     model.setup()
-    await util.timeoutLoop(() => {
+    await utils.timeoutLoop(() => {
         model.step()
     }, 500)
-    const sample = util.sampleModel(model)
+    const sample = utils.sampleModel(model)
     console.log(sample)
 }
 run().catch(e => {

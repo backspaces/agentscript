@@ -60,8 +60,15 @@
             let { lat, lng: lon } = e.latlng
             let z = Math.round(map.getZoom())
             let [x, y] = gis.lonlatz2xy(lon, lat, z)
-            let bbox = gis.xyz2bbox(x, y, z, 3).toString().replaceAll(',', ', ')
-            map.openPopup(`BBox to 3 places:<br />${bbox}`, e.latlng)
+            let bbox = gis.xyz2bbox(x, y, z, 3)
+            let bboxStr = bbox.toString().replaceAll(',', ', ')
+            let [west, south, east, north] = bbox
+            let width = util.precision(east - west, 8)
+            let height = util.precision(south - north, 8)
+            // let width = east - west
+            // let height = south - north
+            console.log(width, height)
+            map.openPopup(`BBox to 3 places:<br />${bboxStr}`, e.latlng)
         })
         map.on('zoom', e => {
             map.closePopup()

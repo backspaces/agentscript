@@ -7,7 +7,8 @@ function rgbToInt24(r, g, b) {
     return r * 256 * 256 + g * 256 + b
 }
 function rgbScaleFunction(min, scale) {
-    return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
+    return (r, g, b) => min + rgbToInt24(r, g, b) * scale
+    // return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
 }
 function redfishElevation(r, g, b) {
     let negative = 1 // From RGB2DeciMeters()
@@ -15,20 +16,27 @@ function redfishElevation(r, g, b) {
         negative = -1
         r = 0
     }
-    return (negative * (r * 256 * 256 + g * 256 + b)) / 10
+    return (negative * rgbToInt24(r, g, b)) / 10
+    // return (negative * (r * 256 * 256 + g * 256 + b)) / 10
 }
 
 // ============= Convenience elevation "bundles" =============
+// Example use:
+// import { mapzen } from '../src/TileData.js'
 
 const sharedTileObject = {
     zxyToTile: async function (z, x, y) {
         const tileUrl = this.zxyUrl(z, x, y)
         const img = await util.imagePromise(tileUrl)
+        img.zxy = [z, x, y]
         return img
     },
     zxyToDataSet: async function (z, x, y, ArrayType = Float32Array) {
         const img = await this.zxyToTile(z, x, y)
-        return this.tileDataSet(img, ArrayType)
+        const dataSet = this.tileDataSet(img, ArrayType)
+        dataSet.zxy = [z, x, y]
+        // dataSet.img = img
+        return dataSet
     },
     tileDataSet: function (img, ArrayType = Float32Array) {
         const tileDecoder = this.elevationFcn
@@ -40,14 +48,8 @@ export const maptiler = Object.assign(
     {
         elevationFcn: rgbScaleFunction(-10000, 0.1),
         zxyUrl: (z, x, y) =>
-            // `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`,
-            // `https://api.maptiler.com/maps/topo/?key=iQurAP6lArV1UP4gfSVs#${z}/${x}/${y}`,
-            // `https://api.maptiler.com/maps/topo/256/${z}/${x}/${y}.png?key=iQurAP6lArV1UP4gfSVs`,
-            `https://api.maptiler.com/tiles/terrain-rgb/${z}/${x}/{y}.png?key=iQurAP6lArV1UP4gfSVs`,
+            `https://api.maptiler.com/tiles/terrain-rgb/${z}/${x}/${y}.png?key=iQurAP6lArV1UP4gfSVs`,
         zxyTemplate:
-            // 'https://api.maptiler.com/maps/topo/?key=iQurAP6lArV1UP4gfSVs#{z}/{x}/{y}',
-            // 'https://api.maptiler.com/maps/topo/256/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs',
-            // 'https://api.maptiler.com/maps/topo/256/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs',
             'https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs',
         minZoom: 0,
         maxZoom: 15,
@@ -111,13 +113,3 @@ export const mapbox = Object.assign(
     },
     sharedTileObject
 )
-
-// ============= Stitch multiple tiles together =============
-
-export class MultiDataSet {
-    constructor(bbox, z, tileData, tileSize = 256) {
-        Object.assign(this, { bbox, z, tileData, tileSize })
-        this.tiles = {}
-    }
-    // the rest of LeafletDataSet w/o leaflet ...
-}

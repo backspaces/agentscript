@@ -3,8 +3,7 @@
 const process = require('process')
 const esmImport = require('esm')(module)
 
-const gis = esmImport('../src/gis.js')
-const geofilters = esmImport('./geofilters.js')
+const geofilters = esmImport('../src/geofilters.js')
 
 let data = ''
 process.stdin.on('readable', () => {
@@ -19,7 +18,6 @@ process.stdin.on('end', () => {
 
 function processData(data) {
     const json = JSON.parse(data)
-    geofilters.streetsFilter(json)
-    return JSON.stringify(json, null, 2)
-    // return gis.minify(json)
+    const streets = geofilters.streetsFilter(json)
+    return JSON.stringify(streets, null, 2)
 }
