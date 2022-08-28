@@ -4,45 +4,50 @@ import * as TileData from './TileData.js'
 // import RGBDataSet from './RGBDataSet.js'
 
 class BBoxDataSet {
-    constructor(bbox, zoom, tileData = 'mapzen', tileSize = 256) {
+    constructor(tileData = 'mapzen', tileSize = 256) {
         if (util.isString(tileData)) tileData = TileData[tileData]
         Object.assign(this, { tileData, tileSize })
-        this.reset(bbox, zoom)
     }
+    // constructor(bbox, zoom, tileData = 'mapzen', tileSize = 256) {
+    //     if (util.isString(tileData)) tileData = TileData[tileData]
+    //     Object.assign(this, { tileData, tileSize })
+    //     this.reset(bbox, zoom)
+    // }
     // used by ctor
     // to get a bboxDataSet for a different bbox, use this
-    reset(bbox, zoom) {
-        Object.assign(this, { bbox, zoom })
-        this.tiles = {}
-    }
+    // reset(bbox, zoom) {
+    //     // if (!Array.isArray(bbox)) bbox = gis.Lbounds2bbox(bbox)
+    //     Object.assign(this, { bbox, zoom })
+    //     this.tiles = {}
+    // }
 
     // xyz = [x, y, z(oom)], a tile's slippy map location
     // tile = a slippy map image
     // bbox = [west, south, east, west] in lon/lats
-    tileName(xyz) {
-        const [x, y, z] = xyz
-        return x + '/' + y + '/' + z
-    }
-    addTile(tile, xyz) {
-        const dataSet = this.tileData.tileDataSet(tile)
-        // dataSet.xyz = xyz
-        // dataSet.tile = tile
-        const key = this.tileName(xyz)
-        this.tiles[key] = dataSet
-    }
-    removeTile(xyz) {
-        delete this.tiles[this.tileName(xyz)]
-    }
+    // tileName(xyz) {
+    //     const [x, y, z] = xyz
+    //     return x + '/' + y + '/' + z
+    // }
+    // addTile(tile, xyz) {
+    //     const dataSet = this.tileData.tileDataSet(tile)
+    //     // dataSet.xyz = xyz
+    //     // dataSet.tile = tile
+    //     const key = this.tileName(xyz)
+    //     this.tiles[key] = dataSet
+    // }
+    // removeTile(xyz) {
+    //     delete this.tiles[this.tileName(xyz)]
+    // }
 
     async getBBoxDataSet(bbox, zoom) {
         const bboxXYs = bboxToXYZs(bbox, zoom)
-        const bboxTiles = await getBBoxDataSets(bboxXYs)
+        const bboxTiles = await getBBoxDataSets(bboxXYs, this.tileData)
         const { dataSets, width, height } = bboxTiles
         const dataSetMatrix = util.arrayToMatrix(dataSets, width, height)
         const tilesDataSet = dataSetMatrixToDataSet(dataSetMatrix)
         const cropParameters = getCropParameters(bbox, zoom)
         console.log('cropParameters', cropParameters)
-        const bboxDataSet = tilesDataSet.crop(cropParams)
+        const bboxDataSet = tilesDataSet.crop(cropParameters)
         return bboxDataSet
     }
 }
@@ -75,7 +80,8 @@ export function zxy(xyz) {
     return [z, x, y]
 }
 
-export async function getBBoxDataSets(xyzDataSet) {
+export async function getBBoxDataSets(xyzDataSet, tileData) {
+    if (util.isString(tileData)) tileData = TileData[tileData]
     const { xyzs, width, height } = xyzDataSet
     const promises = xyzs.map(xyz => tileData.zxyToDataSet(...zxy(xyz)))
     const dataSets = await Promise.all(promises)

@@ -15,7 +15,7 @@
         import * as gis from '../src/gis.js'
         import * as TileData from '../src/TileData.js'
         import * as leafletUtils from './leafletUtils.js'
-        import LeafletDataSet from './LeafletDataSet.js'
+        import BBoxDataSet from '../src/BBoxDataSet.js'
 
         import TwoDraw from '../src/TwoDraw.js'
         import Animator from '../src/Animator.js'
@@ -62,11 +62,12 @@
 
         // ================ create dataset from bbox tiles ================
 
-        let leafletDataSet = new LeafletDataSet(
-            map,
-            elevationLayer,
-            // tileData
-        )
+
+        // let leafletDataSet = new LeafletDataSet(
+        //     map,
+        //     elevationLayer,
+        //     // tileData
+        // )
         // leafletUtils.testEvents(map, elevationLayer)
         // leafletUtils.testZooms(elevationLayer)
 
@@ -75,7 +76,12 @@
         let modelLayer, model, view, anim //, drawOptions
 
         async function setupModelView(bounds = map.getBounds()) {
-            const bboxDataSet = await leafletDataSet.getBBoxDataSet(bounds)
+            let bbox = gis.Lbounds2bbox(bounds)
+            let zoom = Math.round(map.getZoom())
+            let bboxDataSet = await new BBoxDataSet() // default tileData, tileSize
+                .getBBoxDataSet(bbox, zoom)
+
+            // const bboxDataSet = await leafletDataSet.getBBoxDataSet(bounds)
             const bboxExtent = bboxDataSet.extent()
             // util.toWindow({ leafletDataSet, bboxDataSet, bboxExtent, bounds })
 

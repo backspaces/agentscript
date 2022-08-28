@@ -33,6 +33,7 @@
 
         const terrainLayer = L.tileLayer(gis.template('osm'), {
             attribution: gis.attribution('osm'),
+            noWrap: true,
         }).addTo(map)
 
         // https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging
@@ -57,18 +58,21 @@
 
         let popup
         map.on('click', e => {
+            const p4 = util.precision
+
             let { lat, lng: lon } = e.latlng
             let z = Math.round(map.getZoom())
             let [x, y] = gis.lonlatz2xy(lon, lat, z)
-            let bbox = gis.xyz2bbox(x, y, z, 3)
+            let bbox = gis.xyz2bbox(x, y, z, 4)
+
             let bboxStr = bbox.toString().replaceAll(',', ', ')
+            map.openPopup(`BBox to 4 places:<br />${bboxStr}`, e.latlng)
+
             let [west, south, east, north] = bbox
-            let width = util.precision(east - west, 8)
-            let height = util.precision(south - north, 8)
-            // let width = east - west
-            // let height = south - north
-            console.log(width, height)
-            map.openPopup(`BBox to 3 places:<br />${bboxStr}`, e.latlng)
+            let width = east - west
+            let height = north - south
+
+            console.log('lon/lat', p4(lon), p4(lat), 'width/height', p4(width), p4(height))
         })
         map.on('zoom', e => {
             map.closePopup()
