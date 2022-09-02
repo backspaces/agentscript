@@ -32,7 +32,7 @@
     },
     "scripts": {
         "clean": "shx rm -rf dist vendor && shx mkdir dist vendor",
-        "start": "live-server --ignore=node_modules,.git &",
+        "start": "live-server --ignore='node_modules,.git,docs,Attic' &",
         "build": "npm-run-all clean build-scripts build-vendor build-dist build-docs build-views build-md",
         "build-dist": "rollup -c config/rollup.dist.js",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",

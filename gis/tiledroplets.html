@@ -31,19 +31,16 @@
         import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
 
-        import TwoDraw from '../src/TwoDraw.js'
         import Animator from '../src/Animator.js'
-        import DropletsModel from '../models/DropletsModel.js'
+        import Model from '../models/DropletsModel.js'
+        // import Model from '../models/HelloModel.js'
+        import TwoDraw from '../src/TwoDraw.js'
 
-        // import L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.3'
         import * as L from 'https://cdn.skypack.dev/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
         // import * as L from 'https://unpkg.com/leaflet@1.8.0-beta.3/dist/leaflet-src.esm.js'
-
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay';
-
         const ElementOverlay = elementOverlay(L)
 
-        util.toWindow({ util, gis, L, ElementOverlay })
 
         // ========== Setup map and layers ==========
 
@@ -67,59 +64,87 @@
             .addTo(map)
         centerTile.openPopup(centerTileLatLon())
 
+        util.toWindow({ map, centerTile })
+
         // ========== Setup model, view & animator ==========
+        const drawOptions = {
+            patchesColor: 'transparent',
+            turtlesShape: 'circle',
+            turtlesColor: 'blue',
+            turtlesSize: 0.8,
+        }
 
-        const model = new DropletsModel()
-        await model.startup([Z, X, Y])
-        model.setup()
-        const view = new TwoDraw(model, {
-            div: util.createCanvas(0, 0), // the view will resize
-            patchSize: 20,
-            drawOptions: {
-                patchesColor: 'transparent',
-                turtlesShape: 'circle',
-                turtlesColor: 'blue',
-                turtlesSize: 0.8,
-            },
-        })
+        let anim, view, centerTileOverlay
+        async function runModel(Z, X, Y) {
+            if (anim) anim.stop()
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // run 500 steps
-            10 // 30 // 30 fps
-        ).stop() // don't run until user clicks below
+            const model = new Model()
+            await model.startup([Z, X, Y])
+            model.setup()
+
+            view = new TwoDraw(model, {
+                div: util.createCanvas(0, 0), // the view will resize
+                patchSize: 20,
+                drawOptions,
+            })
+
+            if (centerTileOverlay) { centerTileOverlay.remove() }
+            centerTileOverlay = new ElementOverlay(
+                view.canvas,
+                centerTileBounds()
+            ).addTo(map)
+
+            // const anim = new Animator(
+            anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    if (model.moves === 0) {
+                        console.log('Model done, stopping at', model.ticks)
+                        anim.stop()
+                    }
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            )//.stop() // don't run until user clicks below
+
+            util.toWindow({ model, view, anim })
+
+        }
+        // await runModel(Z, X, Y)
+
 
         // ========== Map interactions. Restarts model on new click ==========
 
-        const centerTileOverlay = new ElementOverlay(
-            view.canvas,
-            centerTileBounds()
-        ).addTo(map)
+        // const centerTileOverlay = new ElementOverlay(
+        //     view.canvas,
+        //     centerTileBounds()
+        // ).addTo(map)
 
         map.on('zoomend', update)
         map.on('moveend', update)
         centerTile.on('click', restartModel)
 
         function update(ev) {
-            anim.stop()
-            util.clearCtx(view.ctx)
-
-            centerTile.openPopup(centerTileLatLon())
-
             const bounds = centerTileBounds()
             centerTile.setBounds(bounds)
-            centerTileOverlay.setBounds(bounds)
+            centerTile.openPopup(centerTileLatLon())
+
+            if (anim) { // i.e. the model has run
+                anim.stop()
+                util.clearCtx(view.ctx)
+                centerTileOverlay.setBounds(bounds)
+            }
         }
         async function restartModel(ev) {
             centerTile.closePopup()
-            model.reset()
+            // model.reset()
             const [X, Y, Z] = centerTileXYZ()
-            await model.startup([Z, X, Y])
-            model.setup()
-            anim.reset()
+            await runModel(Z, X, Y)
+
+            // await model.startup([Z, X, Y])
+            // model.setup()
+            // anim.reset()
         }
 
         // ========== Map utility functions ==========
@@ -151,8 +176,9 @@
         function centerTileString() {
             const [X, Y, Z] = centerTileXYZ()
             let [lon, lat] = gis.xyz2lonlat(X, Y, Z)
-            // return `X:${X},  Y:${Y}, Z:${Z}<br>lon:${lon.toFixed(5)} lat:${lat.toFixed(5)}`
-            return `X:${X},  Y:${Y}, Z:${Z}<br>lon:${lon} lat:${lat}`
+            lon = util.precision(lon, 2)
+            lat = util.precision(lat, 2)
+            return `X:${X} Y:${Y} Z:${Z} lon:${lon} lat:${lat}<br>Click to run droplets here`
         }
     </script>
 </body>

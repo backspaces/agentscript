@@ -8,36 +8,6 @@ class BBoxDataSet {
         if (util.isString(tileData)) tileData = TileData[tileData]
         Object.assign(this, { tileData, tileSize })
     }
-    // constructor(bbox, zoom, tileData = 'mapzen', tileSize = 256) {
-    //     if (util.isString(tileData)) tileData = TileData[tileData]
-    //     Object.assign(this, { tileData, tileSize })
-    //     this.reset(bbox, zoom)
-    // }
-    // used by ctor
-    // to get a bboxDataSet for a different bbox, use this
-    // reset(bbox, zoom) {
-    //     // if (!Array.isArray(bbox)) bbox = gis.Lbounds2bbox(bbox)
-    //     Object.assign(this, { bbox, zoom })
-    //     this.tiles = {}
-    // }
-
-    // xyz = [x, y, z(oom)], a tile's slippy map location
-    // tile = a slippy map image
-    // bbox = [west, south, east, west] in lon/lats
-    // tileName(xyz) {
-    //     const [x, y, z] = xyz
-    //     return x + '/' + y + '/' + z
-    // }
-    // addTile(tile, xyz) {
-    //     const dataSet = this.tileData.tileDataSet(tile)
-    //     // dataSet.xyz = xyz
-    //     // dataSet.tile = tile
-    //     const key = this.tileName(xyz)
-    //     this.tiles[key] = dataSet
-    // }
-    // removeTile(xyz) {
-    //     delete this.tiles[this.tileName(xyz)]
-    // }
 
     async getBBoxDataSet(bbox, zoom) {
         const bboxXYs = bboxToXYZs(bbox, zoom)
@@ -51,15 +21,10 @@ class BBoxDataSet {
         return bboxDataSet
     }
 }
-
 export default BBoxDataSet
 
 // these may be useful by themselves.
 // test with bbox = gis.santaFeBBox; zoom = 11
-
-export function bboxCornerXYs(bbox, zoom) {
-    return gis.tilesBBox(bbox, zoom)
-}
 
 export function bboxToXYZs(bbox, zoom) {
     const [westX, southY, eastX, northY] = bboxCornerXYs(bbox, zoom)
@@ -74,13 +39,16 @@ export function bboxToXYZs(bbox, zoom) {
     const [width, height] = [eastX - westX + 1, southY - northY + 1]
     return { xyzs, width, height } // sorta like a tile dataSet
 }
+export function bboxCornerXYs(bbox, zoom) {
+    return gis.tilesBBox(bbox, zoom)
+}
 
 export function zxy(xyz) {
     const [x, y, z] = xyz
     return [z, x, y]
 }
 
-export async function getBBoxDataSets(xyzDataSet, tileData) {
+export async function getBBoxDataSets(xyzDataSet, tileData = 'mapzen') {
     if (util.isString(tileData)) tileData = TileData[tileData]
     const { xyzs, width, height } = xyzDataSet
     const promises = xyzs.map(xyz => tileData.zxyToDataSet(...zxy(xyz)))
@@ -90,19 +58,6 @@ export async function getBBoxDataSets(xyzDataSet, tileData) {
 
 // export function dataSetsMatrix(dataSets, width, height){
 //     return util.arrayToMatrix(dataSets, width, height)
-// }
-
-// export function arrayToMatrix(array, width, height) {
-//     if (array.length !== width * height)
-//         throw Error('arrayToMatrix: length !== width * height')
-
-//     const matrix = []
-//     for (let i = 0; i < height; i++) {
-//         const row = array.slice(i * width, (i + 1) * width)
-//         matrix.push(row)
-//     }
-
-//     return matrix
 // }
 
 export function dataSetMatrixToDataSet(dataSetMatrix) {
@@ -136,5 +91,3 @@ export function getCropParameters(bbox, zoom, tileSize = 256) {
     const bottom = Math.round((southOuter - southY) * tileSize)
     return { top, bottom, left, right }
 }
-
-// export function bboxDataSet

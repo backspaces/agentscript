@@ -1,7 +1,7 @@
-import * as util from './utils.js'
-import TwoDraw from './TwoDraw.js'
+import * as util from '../src/utils.js'
+import TwoDraw from '../src/TwoDraw.js'
 
-import leafletInit from '../gis/leafletInit.js'
+import leafletInit from './leafletInit.js'
 
 class LeafletDraw extends TwoDraw {
     constructor(model, viewOptions = {}, drawOptions = {}) {

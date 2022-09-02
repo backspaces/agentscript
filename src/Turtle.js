@@ -39,7 +39,7 @@ class Turtle {
      */
     die() {
         if (this.id === -1) return
-        this.agentSet.removeAgent(this) // remove me from my baseSet and breed
+        this.agentSet.removeAgent(this) // remove me from my baseSet and breeds
         // Remove my links if any exist.
         // Careful: don't promote links
         if (this.hasOwnProperty('links')) {
@@ -160,7 +160,7 @@ class Turtle {
     }
     checkPatch(p0) {
         const p = this.patch
-
+        // both can be null
         if (p != p0) {
             if (p0 && p0.turtles) util.removeArrayItem(p0.turtles, this)
             if (p && p.turtles) p.turtles.push(this)
