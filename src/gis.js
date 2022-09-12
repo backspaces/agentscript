@@ -106,10 +106,10 @@ export function xyInBBox(bbox, pt) {
 //     const [west, south, east, north] = bbox
 //     const [x0, y0] = lonlatz2xy(west,)
 // }
-// export function lonLatz2bbox(lon, lat, z) {
-//     const [x, y] = lonlatz2xy(lon, lat, z)
-//     return xyz2bbox(x, y, z) ???
-// }
+export function lonLatz2bbox(lon, lat, z) {
+    const [x, y] = lonlatz2xy(lon, lat, z)
+    return xyz2bbox(x, y, z)
+}
 // export function xyz2zxy(xyz) {
 //     const [x, y, z] = xyz
 //     return [z, x, y]
@@ -167,6 +167,7 @@ export function bboxFromCenter(center, dLon = 1, dLat = dLon) {
 export const santaFeCenter = [-105.978, 35.66] // from leaflet click popup
 export const santaFeBBox = bboxFromCenter(santaFeCenter, 0.2, 0.1)
 export const newMexicoBBox = [-109.050044, 31.332301, -103.001964, 37.000104]
+export const newMexicoCenter = bboxCenter(newMexicoBBox)
 
 export function bboxSize(bbox) {
     const [west, south, east, north] = bbox

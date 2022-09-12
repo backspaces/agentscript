@@ -38,18 +38,19 @@ class TwoDraw extends TwoView {
     // ======================
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
-        // drawOptions = Object.assign({}, TwoDraw.defaultOptions(), drawOptions)
         if (viewOptions.drawOptions) {
             drawOptions = viewOptions.drawOptions
             delete viewOptions.drawOptions
         }
+
         drawOptions = Object.assign(
             {},
             TwoDraw.defaultOptions(model),
             drawOptions
         )
 
-        super(model.world, viewOptions) // TwoView
+        // super(model.world, viewOptions) // TwoView
+        super(model, viewOptions) // TwoView
         this.model = model
 
         this.checkOptions(drawOptions)

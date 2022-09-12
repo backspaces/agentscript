@@ -651,6 +651,7 @@ export async function fetchCssStyle(url) {
     if (!response.ok) throw Error(`fetchCssStyle: Not found: ${url}`)
     const css = await response.text()
     addCssStyle(css)
+    return css
 }
 export function addCssStyle(css) {
     // document.head.innerHTML += `<style>${css}</style>`

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ML test</title>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
+        import * as turf from '../gis/turfImports.js'
+
+        import GeoWorld from '../src/GeoWorld.js'
+        import Model from '../models/HelloModel.js'
+        import View from '../gis/MapDraw.js'
+        import RunModelView from '../src/RunModelView.js'
+
+        import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
+        util.fetchCssStyle('https://unpkg.com/maplibre-gl/dist/maplibre-gl.css')
+        util.fetchCssStyle('../gis/fullScreen.css')
+        // This allows maplibre to have access to mapbox
+        // maplibregl.accessToken =
+        //     'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
+
+        const statesUrl = '../gis/data/nmcounties.json'
+        const states = await fetch(statesUrl).then(resp => resp.json())
+        const statesBBox = turf.bbox(states)
+
+        const modelView = new RunModelView(Model, View)
+        await modelView.run(new GeoWorld({ bbox: statesBBox, patchesWidth: 60 }))
+
+        const statesPoly = turf.bboxPolygon(statesBBox, { id: 42 })
+        const statesCoords = gis.bboxCoords(statesBBox)
+        const map = new maplibregl.Map({
+            container: 'map', // container id
+            center: gis.bboxCenter(statesBBox), // [-105.941109, 35.68222],
+            zoom: 5,
+            renderWorldCopies: false,
+
+            style: {
+                "version": 8,
+                // "name": "Mapbox Streets",
+                // "sprite": "mapbox://sprites/mapbox/streets-v8",
+                // "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+
+                // vector, raster, raster-dem, geojson, image, video
+                sources: {
+                    osm: {
+                        type: 'raster',
+                        tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        maxzoom: 19,
+                        attribution: '&copy; OpenStreetMap Contributors',
+                    },
+                    elevation: {
+                        type: 'raster',
+                        tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                    },
+                    states: {
+                        type: 'geojson',
+                        data: states,
+                    },
+                    statesPoly: {
+                        type: 'geojson',
+                        data: statesPoly,
+                    },
+                    model: {
+                        type: 'canvas',
+                        canvas: modelView.view.canvas,
+                        coordinates: statesCoords,
+                        // animate: true,
+                    },
+                },
+
+                // background, fill, line, symbol, raster, circle, fill-extrusion, heatmap, hillshade
+                layers: [
+                    {
+                        id: 'osm',
+                        type: 'raster',
+                        source: 'osm'
+                    },
+                    {
+                        id: 'elevation',
+                        type: 'raster',
+                        source: 'elevation',
+                        paint: { 'raster-opacity': 0.15 },
+                    },
+                    {
+                        id: 'states',
+                        type: 'line',
+                        source: 'states',
+                        paint: { 'line-color': 'red' },
+                    },
+                    {
+                        id: 'statesPoly',
+                        type: 'line',
+                        source: 'statesPoly',
+                        // source: { .. only when using map.addLayer(layer)
+                        //     type: 'geojson',
+                        //     data: statesPoly,
+                        // },
+                        paint: { 'line-color': 'blue' },
+                    },
+                    {
+                        id: 'model',
+                        type: 'raster',
+                        source: 'model'
+                    },
+
+                ]
+            },
+        })
+
+        util.toWindow({ maplibregl, modelView, map })
+
+    </script>
+</body>
+<!--
+
+    // maplibregl.accessToken =
+    //     'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
+
+    // style: 'mapbox://styles/mapbox/streets-v11',
+    // style: 'mapbox://styles/mapbox/satellite-v9',
+    // style: 'mapbox://styles/mapbox/dark-v10',
+    // style: 'mapbox://styles/mapbox/light-v10',
+
+        // const type = 'geojson'
+        // const data = './data/santafe7roads.json'
+        // ? 'http://backspaces.net/temp/santafe7roads.json'
+        // : '../../tiles/santafe7.mbtiles'
+        // : 'http://backspaces.net/temp/santafe7.mbtiles'
+        // : 'mapbox://backspaces.04kiyweb'
+        // const id = 'santaFe'
+        // console.log(map, type, data, id)
+
+        // map.on('load', function () {
+        //     if (type === 'vector') {
+        //         map.addLayer({
+        //             id: id,
+        //             type: 'line',
+        //             source: { type, url: data },
+        //             layout: {},
+        //             paint: { 'line-color': 'red' },
+        //             'source-layer': 'roads',
+        //         })
+        //     } else {
+        //         map.addLayer({
+        //             id: id,
+        //             type: 'line',
+        //             source: { type, data },
+        //             layout: {},
+        //             paint: { 'line-color': 'red' },
+        //         })
+        //     }
+        // })
+-->
+
+</html>

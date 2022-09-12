@@ -32,7 +32,7 @@
     },
     "scripts": {
         "clean": "shx rm -rf dist vendor && shx mkdir dist vendor",
-        "start": "live-server --ignore='node_modules,.git,docs,Attic' &",
+        "start": "live-server --ignore=node_modules,docs,Attic ./ &",
         "build": "npm-run-all clean build-scripts build-vendor build-dist build-docs build-views build-md",
         "build-dist": "rollup -c config/rollup.dist.js",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.js",
@@ -42,10 +42,6 @@
         "build-docs": "node copyTutorials.js && jsdoc -c config/jsdoc.js",
         "test": "ava test/models.js && npm run test3d",
         "test3d": "deno test test/geom.js",
-        "watch-src": "chokidar 'src/*.js' -c 'npm run build-dist' &",
-        "watch-models": "chokidar 'models/[A-Z]*Model.js' -c 'npm run build-scripts' &",
-        "watch-docs": "chokidar 'src/*.js' -c 'npm run build-docs' &",
-        "watch": "npm-run-all watch-src watch-models",
         "-- END OF WORKFLOW --": "The following are verious tests, running models in various directories and browsers",
         "run1": "bin/runmodels models",
         "run1s": "bin/runmodels models/scripts",
@@ -63,22 +59,22 @@
         "runmvcc": "bin/modelsinbrowser mvc",
         "run3w": "bin/runmodels workers3",
         "runnode": "bin/runnodemodels",
+        "-- END OF TESTS --": "Put misc scripts below",
         "chrome": "bin/modelsinbrowser views1",
         "safari": "bin/modelsinbrowser views1 Safari",
-        "foo": "bin/modelsinbrowser views1",
-        "-- END OF TESTS --": "Put misc scripts below"
+        "foo": "bin/modelsinbrowser views1"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
         "three": "^0.120.0"
     },
+    "live-server install must use npm, not yarn. crlf problem": "npm install --save-dev",
     "devDependencies": {
         "ava": "^2.1.0",
-        "chokidar-cli": "^1.2.1",
         "clean-jsdoc-theme": "^4.1.6",
         "esm": "^3.2.25",
         "jsdoc": "^3.6.10",
-        "live-server": "1.2.1",
+        "live-server": "^1.2.2",
         "npm-run-all": "4.1.2",
         "puppeteer": "^15.0.0",
         "rollup": "^2.33.1",

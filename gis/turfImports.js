@@ -1,14 +1,19 @@
 // These are a few turf tools that we have used.
 // import * as turf from './turfimports.js'
+
+// see:
+// https://turfjs.org/docs/
+// https://github.com/Turfjs/turf/tree/master/packages
+// https://unpkg.com/@turf/turf/
+
 // If you only need one or so, you can import like this:
-// import booleanPointInPolygon from 'https://cdn.skypack.dev/@turf/boolean-point-in-polygon'
+// import bbox from 'https://cdn.skypack.dev/@turf/bbox'
 
 // These are the turf modules/functions we use
 
-// https://github.com/Turfjs/turf/tree/master/packages
+export { default as bbox } from 'https://cdn.skypack.dev/@turf/bbox'
 export { default as bboxPolygon } from 'https://cdn.skypack.dev/@turf/bbox-polygon'
 export { default as booleanPointInPolygon } from 'https://cdn.skypack.dev/@turf/boolean-point-in-polygon'
-export { default as simplify } from 'https://cdn.skypack.dev/@turf/simplify'
 
 // https://github.com/Turfjs/turf/tree/master/packages/turf-helpers
 export {
@@ -53,58 +58,36 @@ export {
 
 // https://github.com/Turfjs/turf/tree/master/packages/turf-meta
 export {
-    findSegment,
-    findPoint,
-    //
     coordEach,
-    coordEachCallback,
     coordAll,
-    //
     coordReduce,
-    coordReduceCallback,
     //
     propEach,
-    propEachCallback,
-    //
     propReduce,
-    propReduceCallback,
     //
     featureEach,
-    featureEachCallback,
-    //
     featureReduce,
-    featureReduceCallback,
     //
     geomEach,
-    geomEachCallback,
-    //
     geomReduce,
-    geomReduceCallback,
     //
     flattenEach,
-    flattenEachCallback,
-    //
     flattenReduce,
-    flattenReduceCallback,
     //
     segmentEach,
-    segmentEachCallback,
-    //
     segmentReduce,
-    segmentReduceCallback,
+    //
+    findPoint,
+    findSegment,
     //
     lineEach,
-    lineEachCallback,
-    //
     lineReduce,
-    lineReduceCallback,
 } from 'https://cdn.skypack.dev/@turf/meta'
 
-// https://turfjs.org/docs/
-// https://github.com/Turfjs/turf/tree/master/packages
-
-// For helpers, invariant, meta, simply page search for
-//  turf/helpers module
-//  turf/invariant module
-//  turf/meta module
-//
+// https://github.com/Turfjs/turf/tree/master/packages/turf-random
+export {
+    randomPosition,
+    randomPoint,
+    randomLineString,
+    randomPolygon,
+} from 'https://cdn.skypack.dev/@turf/random'
