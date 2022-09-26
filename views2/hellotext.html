@@ -1,42 +1,45 @@
 <html>
-    <head>
-        <title>hello</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import Animator from '../src/Animator.js'
-            import Model from '../models/HelloModel.js'
 
-            const drawOptions = {
-                turtlesSize: 2, // turtle size in patches
-                textProperty: 'id',
-                textSize: 0.8, // text size in patches
-            }
+<head>
+    <title>hello</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-            const model = new Model()
-            await model.startup()
-            model.setup()
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import Model from '../models/HelloModel.js'
 
-            const view = new TwoDraw(
-                model,
-                { div: 'modelDiv', patchSize: 20 },
-                drawOptions
-            )
+        const drawOptions = {
+            turtlesSize: 2, // turtle size in patches
+            textProperty: 'id',
+            textSize: 0.8, // text size in patches
+        }
 
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500, // run 500 steps
-                30 // 30 fps
-            )
+        const model = new Model()
+        await model.startup()
+        model.setup()
 
-            util.toWindow({ util, model, view, anim })
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+        const view = new TwoDraw(
+            model,
+            { div: 'modelDiv', patchSize: 20 },
+            drawOptions
+        )
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        )
+
+        util.toWindow({ util, model, view, anim })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <title>water</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ColorMap from '../src/ColorMap.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from '../models/WaterModel.js'
+
+        const patchColors = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
+        const maxZ = 10
+        const drawOptions = {
+            // Patches only model:
+            patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
+        }
+
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(
+                model,
+                { div: 'modelDiv' },
+                drawOptions
+            )
+
+            util.toWindow({ util, model, view })
+            view.setPatchesSmoothing(true) // make water smoother
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                33
+            )
+
+            view.idle()
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

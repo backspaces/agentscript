@@ -1,42 +1,45 @@
 <html>
-    <head>
-        <title>water</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import ColorMap from '../src/ColorMap.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import Animator from '../src/Animator.js'
-            import Model from '../models/WaterModel.js'
 
-            const patchColors = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
-            const maxZ = 10
-            const drawOptions = {
-                // Patches only model:
-                patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
-            }
+<head>
+    <title>water</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-            const model = new Model()
-            await model.startup()
-            model.setup()
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ColorMap from '../src/ColorMap.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import Model from '../models/WaterModel.js'
 
-            const view = new TwoDraw(model, { div: 'modelDiv' }, drawOptions)
+        const patchColors = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
+        const maxZ = 10
+        const drawOptions = {
+            // Patches only model:
+            patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
+        }
 
-            view.setPatchesSmoothing(true) // make water smoother
+        const model = new Model()
+        await model.startup()
+        model.setup()
 
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500, // run 500 steps
-                30 // 30 fps
-            )
+        const view = new TwoDraw(model, { div: 'modelDiv' }, drawOptions)
 
-            util.toWindow({ util, model, view, anim })
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+        view.setPatchesSmoothing(true) // make water smoother
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        )
+
+        util.toWindow({ util, model, view, anim })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

@@ -1,74 +1,77 @@
 <html>
-    <head>
-        <title>mouse</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import Mouse from '../src/Mouse.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import Model from '../models/MouseModel.js'
 
-            // const worldOptions = {
-            //     minX: 0,
-            //     maxX: 40,
-            //     minY: 0,
-            //     maxY: 30,
-            // }
-            // const worldOptions = { minX: 1, maxX: 9, minY: 1, maxY: 5 }
-            // const model = new Model(worldOptions)
+<head>
+    <title>mouse</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-            const model = new Model()
-            model.setup()
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import Mouse from '../src/Mouse.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Model from '../models/MouseModel.js'
 
-            const view = new TwoDraw(
-                model,
-                { patchSize: 15 },
-                {
-                    patchesColor: 'black',
-                    linksColor: l => (l === selectedLink ? 'red' : 'gray'),
-                    linksWidth: 2,
-                    turtlesShape: 'circle',
-                    turtlesColor: 'random',
-                }
-            )
+        // const worldOptions = {
+        //     minX: 0,
+        //     maxX: 40,
+        //     minY: 0,
+        //     maxY: 30,
+        // }
+        // const worldOptions = { minX: 1, maxX: 9, minY: 1, maxY: 5 }
+        // const model = new Model(worldOptions)
 
-            let selectedTurtle, selectedLink
-            function handleMouse(mouse) {
-                const { x, y, action } = mouse
-                switch (action) {
-                    case 'down':
-                        selectedTurtle = model.turtles.minOneOf(t =>
-                            t.distanceXY(x, y)
-                        )
-                        break
-                    case 'drag':
-                        if (selectedTurtle) selectedTurtle.setxy(x, y)
-                        break
-                    case 'move':
-                        selectedLink = model.links.minOneOf(l =>
-                            l.distanceXY(x, y)
-                        )
-                        break
-                    case 'up':
-                        selectedTurtle = null
-                        break
-                }
-                view.draw() // Draw whenever mouse has an event
+        const model = new Model()
+        model.setup()
+
+        const view = new TwoDraw(
+            model,
+            { patchSize: 15 },
+            {
+                patchesColor: 'black',
+                linksColor: l => (l === selectedLink ? 'red' : 'gray'),
+                linksWidth: 2,
+                turtlesShape: 'circle',
+                turtlesColor: 'random',
             }
+        )
 
-            const mouse = new Mouse(
-                view.canvas,
-                model.world,
-                handleMouse
-            ).start()
+        let selectedTurtle, selectedLink
+        function handleMouse(mouse) {
+            const { x, y, action } = mouse
+            switch (action) {
+                case 'down':
+                    selectedTurtle = model.turtles.minOneOf(t =>
+                        t.distanceXY(x, y)
+                    )
+                    break
+                case 'drag':
+                    if (selectedTurtle) selectedTurtle.setxy(x, y)
+                    break
+                case 'move':
+                    selectedLink = model.links.minOneOf(l =>
+                        l.distanceXY(x, y)
+                    )
+                    break
+                case 'up':
+                    selectedTurtle = null
+                    break
+            }
+            view.draw() // Draw whenever mouse has an event
+        }
 
-            view.draw() // Draw once to get started
+        const mouse = new Mouse(
+            view.canvas,
+            model.world,
+            handleMouse
+        ).start()
 
-            // Note: don't use the usual Animator, run by mouse events! YaY!
-            util.toWindow({ util, model, view, mouse })
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+        view.draw() // Draw once to get started
+
+        // Note: don't use the usual Animator, run by mouse events! YaY!
+        util.toWindow({ util, model, view, mouse })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

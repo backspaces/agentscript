@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <title>camera3d</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import Color from '../src/Color.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from './Camera3DModel.js'
+        import dat from 'https://cdn.skypack.dev/dat.gui'
+
+        const isPixel = t => t.breed.name === 'pixels'
+        const uvToColor = t => {
+            const { u, v } = t
+            const r = Math.sqrt(u ** 2 + v ** 2)
+            return Color.toTypedColor(`hsl(${(r * 240) % 240}, 100%, 50%)`)
+        }
+        const drawOptions = {
+            turtlesMesh: { meshClass: 'Obj3DMesh', useAxes: true },
+            turtlesShape: t => (isPixel(t) ? 'Cube' : 'Dart'),
+            turtlesColor: t =>
+                isPixel(t) ? uvToColor(t) : Color.toTypedColor('red'),
+            turtlesSize: t => (isPixel(t) ? 0.35 : 3),
+            linksColor: l => uvToColor(l.end0),
+        }
+
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(model, {
+                div: document.body,
+                // turtles: { meshClass: 'Obj3DMesh' },
+                drawOptions,
+            })
+
+            util.toWindow({ util, model, view })
+
+            const gui = runGui(model, view)
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, //500,
+                33
+            )
+        }
+        run()
+
+        function runGui(model, view) {
+            const gui = new dat.GUI()
+
+            // Helper for adding variables to gui.
+            // "listen" to make reset values to appear in gui menu
+            // "onChange" to have model update camera for each change.
+            const guiAddVal = (obj, name, start, stop, step) => {
+                gui.add(obj, name, start, stop, step)
+                    .listen()
+                    .onChange(val => {
+                        model.moveCamera()
+                    })
+            }
+
+            guiAddVal(model, 'heading', -180, 180, 5)
+            guiAddVal(model, 'tilt', -180, 180, 5)
+            guiAddVal(model, 'roll', -180, 180, 5)
+            guiAddVal(model, 'sphereRadius', 0, 16, 1)
+            guiAddVal(model, 'fieldOfView', 1, 180, 1)
+
+            gui.add(model, 'toggleLinks')
+            gui.add(model, 'reset')
+
+            return gui
+        }
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

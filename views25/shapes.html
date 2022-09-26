@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <title>shapes</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from '../models/HelloModel.js'
+        import World from '../src/World.js'
+        import Shapes from '../src/Shapes.js'
+
+        const shapes = new Shapes()
+
+        async function addImages() {
+            await shapes.imagePathPromise(
+                'twitter',
+                '../models/data/twitter.png'
+            )
+            await shapes.imagePathPromise(
+                'redfish',
+                '../models/data/redfish.png'
+            )
+        }
+        function turtleName(t) {
+            return shapes.nameAtIndex(t.id)
+        }
+
+        async function run() {
+            await addImages()
+
+            const model = new Model(World.defaultOptions(25, 16))
+            model.population = 100
+            await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(
+                model,
+                {
+                    div: 'modelDiv',
+                    patchSize: 20,
+                },
+                {
+                    turtlesShape: t => turtleName(t),
+                    turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
+                }
+            )
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                33
+            )
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

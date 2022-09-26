@@ -6,8 +6,8 @@ const tutorialsDir = path.join(__dirname, 'tutorials')
 
 // Tutorial paths
 const view2 = path.join(root, 'views2', 'README.md')
+const view25 = path.join(root, 'views25', 'README.md')
 const view3 = path.join(root, 'views3', 'README.md')
-const view3d = path.join(root, 'views3d', 'README.md')
 const gis = path.join(root, 'gis', 'README.md')
 const mvc = path.join(root, 'mvc', 'README.md')
 // const ideExamples = path.join(root, 'ide-examples', 'README.md') ., see below
@@ -18,14 +18,14 @@ const mvc = path.join(root, 'mvc', 'README.md')
 const paths = [
     {
         path: view2,
-        title: 'View 2',
+        title: 'View 2D',
+    },
+    {
+        path: view25,
+        title: 'View 2.5D',
     },
     {
         path: view3,
-        title: 'View 3',
-    },
-    {
-        path: view3d,
         title: 'View 3D',
     },
     {

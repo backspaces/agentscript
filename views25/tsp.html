@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <title>tsp</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from '../models/TspModel.js'
+
+        const drawOptions = {
+            patchesColor: 'black',
+            turtlesShape: 'circle',
+            // turtlesSize of 0 will skip drawing this turle
+            // here "travelers" are skipped
+            turtlesSize: t => (t.breed.name === 'nodes' ? 1.25 : 0),
+            turtlesColor: 'yellow',
+            linksColor: 'red',
+        }
+
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(
+                model,
+                { div: 'modelDiv' },
+                drawOptions
+            )
+
+            util.toWindow({ util, model, view })
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                33
+            )
+
+            view.idle()
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

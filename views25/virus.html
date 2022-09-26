@@ -1,0 +1,56 @@
+<html>
+
+<head>
+    <title>virus</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from '../models/VirusModel.js'
+
+        const turtleColors = {
+            infected: 'red',
+            susceptible: 'blue',
+            resistant: 'gray',
+        }
+        const drawOptions = {
+            patchesColor: 'black',
+            turtlesShape: 'circle',
+            turtlesSize: 1.5,
+            turtlesColor: t => turtleColors[t.state],
+            linksColor: 'rgba(255, 255, 255, 0.50',
+        }
+
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(
+                model,
+                { div: 'modelDiv' },
+                drawOptions
+            )
+
+            util.toWindow({ util, model, view })
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                33
+            )
+
+            view.idle()
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

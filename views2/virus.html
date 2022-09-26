@@ -1,49 +1,52 @@
 <html>
-    <head>
-        <title>virus</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import Animator from '../src/Animator.js'
-            import Model from '../models/VirusModel.js'
 
-            const turtleColors = {
-                infected: 'red',
-                susceptible: 'blue',
-                resistant: 'gray',
-            }
-            const drawOptions = {
-                patchesColor: 'black',
-                turtlesShape: 'circle',
-                turtlesSize: 1.5,
-                turtlesColor: t => turtleColors[t.state],
-                linksColor: 'rgba(255, 255, 255, 0.50',
-            }
+<head>
+    <title>virus</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-            const model = new Model()
-            await model.startup()
-            model.setup()
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import Model from '../models/VirusModel.js'
 
-            const view = new TwoDraw(
-                model,
-                { div: 'modelDiv', patchSize: 10 },
-                drawOptions
-            )
+        const turtleColors = {
+            infected: 'red',
+            susceptible: 'blue',
+            resistant: 'gray',
+        }
+        const drawOptions = {
+            patchesColor: 'black',
+            turtlesShape: 'circle',
+            turtlesSize: 1.5,
+            turtlesColor: t => turtleColors[t.state],
+            linksColor: 'rgba(255, 255, 255, 0.50',
+        }
 
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500, // run 500 steps
-                30 // 30 fps
-            )
+        const model = new Model()
+        await model.startup()
+        model.setup()
 
-            util.toWindow({ util, model, view, anim })
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+        const view = new TwoDraw(
+            model,
+            { div: 'modelDiv', patchSize: 10 },
+            drawOptions
+        )
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        )
+
+        util.toWindow({ util, model, view, anim })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

@@ -69,15 +69,15 @@ The views2 onepagers import models from the models/ dir and add a 2D Canvas view
 
 [views2](./views2/README.md)
 
+The views25 onepagers import models from the models/ dir and add a Three.js webgl 3D view.
+
+[views25](./views25/README.md)
+
 The views3 onepagers import models from the models/ dir and add a Three.js webgl 3D view.
 
 [views3](./views3/README.md)
 
-The views3d onepagers import models from the models/ dir and add a Three.js webgl 3D view.
-
-[views3d](./views3d/README.md)
-
-The views3d onepagers are similar to the views3 onepagers. It differs from views3 in that these use true 3D via [src/Model3D.js](https://github.com/backspaces/agentscript/blob/master/src/Model3D.js) and [src/Turtle3D.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle3D.js) subclasses.
+The views3 onepagers are similar to the views25 onepagers. It differs from views25 in that these use true 3D via [src/Model3D.js](https://github.com/backspaces/agentscript/blob/master/src/Model3D.js) and [src/Turtle3D.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle3D.js) subclasses.
 
 [mvc](./mvc/README.md)
 

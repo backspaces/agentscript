@@ -1,37 +1,40 @@
 <html>
-    <head>
-        <title>hello</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import Animator from '../src/Animator.js'
-            import Model from '../models/HelloModel.js'
 
-            // use model's default world options
-            const model = new Model()
-            await model.startup()
-            model.setup()
+<head>
+    <title>hello</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-            // use defalt drawOptions
-            const view = new TwoDraw(model, {
-                div: 'modelDiv',
-                patchSize: 20,
-            })
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import Model from '../models/HelloModel.js'
 
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500, // run 500 steps
-                30 // 30 fps
-            )
+        // use model's default world options
+        const model = new Model()
+        await model.startup()
+        model.setup()
 
-            util.toWindow({ util, model, view, anim })
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+        // use defalt drawOptions
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 20,
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        )
+
+        util.toWindow({ util, model, view, anim })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

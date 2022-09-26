@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <title>wallFollower</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import Color from '../src/Color.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from '../models/WallFollowerModel.js'
+
+        const wallsColor = Color.typedColor(222, 184, 135)
+        const backgroundColor = Color.typedColor('black')
+        const drawOptions = {
+            patchesColor: p =>
+                p.breed.name === 'walls' ? wallsColor : backgroundColor,
+            turtlesShape: 'dart',
+            turtlesSize: 2,
+            turtlesColor: t => (t.breed.name === 'lefty' ? 'green' : 'red'),
+        }
+
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(
+                model,
+                { div: 'modelDiv' },
+                drawOptions
+            )
+
+            util.toWindow({ util, model, view })
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                100 // 10fps, 30fps way too fast!
+            )
+
+            view.idle()
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

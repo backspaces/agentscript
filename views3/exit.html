@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>exit</title>
+        <title>exit3d</title>
         <link rel="icon" type="image/x-icon" href="../favicon.ico" />
     </head>
     <body>
@@ -9,7 +9,23 @@
             import ThreeDraw from '../src/ThreeDraw.js'
             import Color from '../src/Color.js'
             import ColorMap from '../src/ColorMap.js'
+            import World from '../src/World.js'
+
+            // import Model from './Exit3DModel.js'
+
+            import Turtle3D from '../src/Turtle3D.js'
             import Model from '../models/ExitModel.js'
+
+            // import ExitModel from '../models/ExitModel.js'
+            // class Model extends ExitModel {
+            //     initAgentSet(name, AgentsetClass, AgentClass) {
+            //         if (name === 'turtles') AgentClass = Turtle3D
+            //         super.initAgentSet(name, AgentsetClass, AgentClass)
+            //     }
+            //     // constructor(worldDefaults) {
+            //     //     super(worldDefaults)
+            //     // }
+            // }
 
             async function run() {
                 const model = new Model()
@@ -30,6 +46,8 @@
                     }
                 })
                 const drawOptions = {
+                    turtlesMesh: 'Obj3DMesh',
+                    turtlesShape: 'Cone',
                     turtlesColor: t => patchColors[t.exit.id],
                     turtlesSize: 1,
                     initPatches: (model, view) => patchColors,

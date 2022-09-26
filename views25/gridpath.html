@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <title>gridpath</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from '../models/GridPathModel.js'
+
+        const drawOptions = {
+            turtlesShape: 'circle',
+            turtlesColor: 'red',
+            turtlesSize: 0.5,
+            linksColor: 'red',
+            patchesMap: 'LightGray',
+            // textProperty: 'choices',
+            // textColor: 'white',
+            // textSize: 0.3,
+        }
+
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(
+                model,
+                { div: 'modelDiv' },
+                drawOptions
+            )
+
+            util.toWindow({ util, model, view })
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                100 // 10fps, 30fps way too fast!
+            )
+
+            view.idle()
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

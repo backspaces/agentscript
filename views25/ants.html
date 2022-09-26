@@ -1,0 +1,70 @@
+<html>
+
+<head>
+    <title>ants</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Color from '../src/Color.js'
+        import ColorMap from '../src/ColorMap.js'
+        import Model from '../models/AntsModel.js'
+
+        // Define colors and colormaps
+        const nestColor = Color.typedColor('yellow')
+        const foodColor = Color.typedColor('blue')
+        const nestColorMap = ColorMap.gradientColorMap(20, [
+            'black',
+            nestColor,
+        ])
+        const foodColorMap = ColorMap.gradientColorMap(20, [
+            'black',
+            foodColor,
+        ])
+        const drawOptions = {
+            patchesColor: p => {
+                if (p.isNest) return nestColor
+                if (p.isFood) return foodColor
+                return p.foodPheromone > p.nestPheromone
+                    ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
+                    : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+            },
+            turtlesShape: 'bug',
+            turtlesSize: 3,
+            turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
+        }
+        // ==============================
+
+        async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(
+                model,
+                { div: 'modelDiv' },
+                drawOptions
+            )
+
+            util.toWindow({ util, model, view })
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                33
+            )
+
+            view.idle()
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>
