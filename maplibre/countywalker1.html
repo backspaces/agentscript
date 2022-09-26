@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CountyWalker1</title>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import * as mltools from './mltools.js'
+
+        import GeoWorld from '../src/GeoWorld.js'
+        import Animator from '../src/Animator.js'
+        import CountiesModel from '../gis/CountiesModel.js'
+
+        import MapDraw from '../src/MapDraw.js'
+
+        const maplibregl = await mltools.importMapLibre()
+
+        const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
+
+        const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
+        const model = new CountiesModel(world)
+        await model.startup()
+        model.setup()
+
+        const countiesBBox = mltools.bboxFeature(world.bbox)
+
+        const drawOptions = {
+            // patchesColor: 'transparent', // default
+            linksColor: 'gray',
+            linksWidth: 4,
+            turtlesSize: 6,
+            turtlesColor: t => view.drawOptions.turtlesMap.atIndex(t.county + 1),
+        }
+        const view = new MapDraw(model, {
+            // div: util.createCanvas(0, 0), // default & the view will resize
+            drawOptions,
+        })
+
+        // ===== Start of map & layers
+
+        const map = new maplibregl.Map({
+            container: 'map', // container id
+            center: world.bboxCenter(), // [-105.941109, 35.68222],
+            zoom: 5,
+            style: {
+                "version": 8,
+                sources: {},
+                layers: []
+            },
+        })
+        await mltools.mapLoadPromise(map)
+        map.on('load', function () {
+            console.log('A load event occurred.');
+        });
+
+        map.addSource('osm', {
+            type: 'raster',
+            tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            maxzoom: 19,
+            attribution: '&copy; OpenStreetMap Contributors',
+
+        })
+        map.addLayer({
+            id: 'osm',
+            type: 'raster',
+            source: 'osm',
+        })
+
+        map.addSource('elevation', {
+            type: 'raster',
+            tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+            tileSize: 256,
+        })
+        map.addLayer({
+            id: 'elevation',
+            type: 'raster',
+            source: 'elevation',
+            paint: { 'raster-opacity': 0.15 },
+        })
+
+        map.addSource('counties', {
+            type: 'geojson',
+            data: counties,
+        })
+        map.addLayer({
+            id: 'counties',
+            type: 'fill',
+            source: 'counties',
+            paint: { 'fill-color': 'red', 'fill-opacity': 0.2 },
+        })
+        map.addLayer({
+            id: 'countiesLines',
+            type: 'line',
+            source: 'counties',
+            paint: { 'line-color': 'red', 'line-width': 3 },
+        })
+
+        map.addSource('countiesBBox', {
+            type: 'geojson',
+            data: countiesBBox,
+        })
+        map.addLayer({
+            id: 'countiesBBox',
+            type: 'line',
+            source: 'countiesBBox',
+            paint: { 'line-color': 'blue' },
+        })
+
+        map.addSource('model', {
+            type: 'canvas',
+            canvas: view.canvas,
+            coordinates: world.bboxCoords(),
+
+        })
+        map.addLayer({
+            id: 'model',
+            type: 'raster',
+            source: 'model',
+        })
+
+        map.on('click', 'counties', function (e) {
+            const props = e.features[0].properties
+            const msg = props.NAME + ', pop: ' + props.population.toLocaleString()
+            new maplibregl.Popup({ maxWidth: 'none' })
+                .setLngLat(e.lngLat)
+                .setHTML(msg)
+                .addTo(map);
+        });
+
+        // ===== End of map & layers
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // 500, // run this many steps, -1 for forever
+            20 // 30 // 30 fps
+        )
+
+        util.toWindow({ map, anim })
+    </script>
+</body>
+
+</html>

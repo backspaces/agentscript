@@ -1,7 +1,10 @@
 import * as util from '../src/utils.js'
 import TwoDraw from '../src/TwoDraw.js'
 
-// import leafletInit from './leafletInit.js'
+// make sure world is a geoworld
+// separate drawoptions from viewoptions if needed
+// default patch colors to transparent
+// default div to a canvas
 
 class MapDraw extends TwoDraw {
     constructor(model, viewOptions = {}, drawOptions = {}) {

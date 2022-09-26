@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CountyWalker</title>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script type="module">
+        import * as util from '../src/utils.js'
+
+        import * as mltools from './mltools.js'
+        import MapDraw from '../src/MapDraw.js'
+
+        import GeoWorld from '../src/GeoWorld.js'
+        import Animator from '../src/Animator.js'
+        import CountiesModel from '../gis/CountiesModel.js'
+
+        const maplibregl = await mltools.importMapLibre()
+        const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
+
+        const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
+        const model = new CountiesModel(world)
+        await model.startup()
+        model.setup()
+
+        const countiesBBox = mltools.bboxFeature(world.bbox)
+
+        const drawOptions = {
+            // patchesColor: 'transparent', // default
+            linksColor: 'gray',
+            linksWidth: 4,
+            turtlesSize: 6,
+            turtlesColor: t => view.drawOptions.turtlesMap.atIndex(t.county + 1),
+        }
+        const view = new MapDraw(model, {
+            // div: util.createCanvas(0, 0), // default & the view will resize
+            drawOptions,
+        })
+
+        // ===== Start of map & layers
+
+        const map = await mltools.newMap(world, 5)
+        map.on('load', function () {
+            console.log('A load event occurred.');
+        });
+
+        mltools.addRasterLayer(map, 'osm', mltools.osmUrl)
+
+        mltools.addRasterLayer(map, 'elevation', mltools.elevationUrl, 0.15)
+
+        mltools.addGeojsonFillLayer(map, 'counties', counties, 'rgba(255, 0, 0, 0.2)')
+
+        mltools.addGeojsonLineLayer(map, 'countiesLine', counties, 'red', 3)
+
+        mltools.addGeojsonLineLayer(map, 'countiesBBox', countiesBBox, 'blue')
+
+        mltools.addCanvasLayer(map, 'model', view.canvas, world.bboxCoords())
+
+        const msg = (props) => props.NAME + ', pop: ' + props.population.toLocaleString()
+        mltools.addClickPopup(map, 'counties', msg)
+
+        // ===== End of map & layers
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // 500, // run this many steps, -1 for forever
+            20 // 30 // 30 fps
+        )
+
+        util.toWindow({ map, anim })
+    </script>
+</body>
+
+</html>

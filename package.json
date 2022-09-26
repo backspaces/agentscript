@@ -69,6 +69,7 @@
         "three": "^0.120.0"
     },
     "live-server install must use npm, not yarn. crlf problem": "npm install --save-dev",
+    "prepare": "npx crlf --set=LF node_modules/.bin/live-server",
     "devDependencies": {
         "ava": "^2.1.0",
         "clean-jsdoc-theme": "^4.1.6",

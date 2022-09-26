@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CountyWalker0</title>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css">
+    <link rel="stylesheet" href="../gis/fullScreen.css">
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
+        import * as turf from '../gis/turfImports.js'
+
+        import GeoWorld from '../src/GeoWorld.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import CountiesModel from '../gis/CountiesModel.js'
+
+        import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
+
+        const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
+
+        const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
+        const model = new CountiesModel(world)
+        await model.startup()
+        model.setup()
+
+        const countiesBBox = turf.bboxPolygon(world.bbox)
+
+        const drawOptions = {
+            patchesColor: 'transparent',
+            linksColor: 'gray',
+            linksWidth: 4,
+            turtlesSize: 6,
+            turtlesColor: t =>
+                view.drawOptions.turtlesMap.atIndex(t.county + 1),
+        }
+        const view = new TwoDraw(model, {
+            div: util.createCanvas(0, 0), // the view will resize
+            drawOptions,
+        })
+
+        // ===== Start of map & layers
+
+        const map = new maplibregl.Map({
+            container: 'map', // container id
+            center: world.bboxCenter(), // [-105.941109, 35.68222],
+            zoom: 5,
+            renderWorldCopies: false,
+
+            style: {
+                "version": 8,
+
+                // vector, raster, raster-dem, geojson, image, canvas, video
+                sources: {
+                    osm: {
+                        type: 'raster',
+                        tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        maxzoom: 19,
+                        attribution: '&copy; OpenStreetMap Contributors',
+                    },
+                    elevation: {
+                        type: 'raster',
+                        tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                    },
+                    counties: {
+                        type: 'geojson',
+                        data: counties,
+                    },
+                    countiesBBox: {
+                        type: 'geojson',
+                        data: countiesBBox,
+                    },
+                    model: {
+                        type: 'canvas',
+                        canvas: view.canvas,
+                        coordinates: world.bboxCoords(world.bbox),
+                    },
+                },
+
+                // background, fill, line, symbol, raster, circle, fill-extrusion, heatmap, hillshade
+                layers: [
+                    {
+                        id: 'osm',
+                        type: 'raster',
+                        source: 'osm'
+                    },
+                    {
+                        id: 'elevation',
+                        type: 'raster',
+                        source: 'elevation',
+                        paint: { 'raster-opacity': 0.15 },
+                    },
+                    {
+                        id: 'counties',
+                        type: 'fill',
+                        source: 'counties',
+                        paint: { 'fill-color': 'red', 'fill-opacity': 0.2 },
+                    },
+                    {
+                        id: 'countiesLines',
+                        type: 'line',
+                        source: 'counties',
+                        paint: { 'line-color': 'red', 'line-width': 3 },
+                    },
+                    {
+                        id: 'countiesBBox',
+                        type: 'line',
+                        source: 'countiesBBox',
+                        paint: { 'line-color': 'blue' },
+                    },
+                    {
+                        id: 'model',
+                        type: 'raster',
+                        source: 'model'
+                    },
+                ]
+            },
+        })
+        map.on('load', function () {
+            console.log('A load event occurred.');
+        });
+
+        map.on('click', 'counties', function (e) {
+            const props = e.features[0].properties
+            const msg = props.NAME + ', pop: ' + props.population.toLocaleString()
+            new maplibregl.Popup({ maxWidth: 'none' })
+                .setLngLat(e.lngLat)
+                .setHTML(msg)
+                .addTo(map);
+        });
+
+        // ===== End of map & layers
+
+        let anim
+        map.on('load', () => {
+            anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // 500, // run this many steps, -1 for forever
+                20 // 30 // 30 fps
+            )
+            util.toWindow({ map, anim })
+        })
+    </script>
+</body>
+
+</html>

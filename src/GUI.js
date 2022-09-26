@@ -52,6 +52,7 @@ class GUI {
 
         if (this.isDatColor(val)) return 'color'
         if (valType === 'undefined') return 'button'
+        // if (cmdType === 'undefined') return 'message'
         if (valType === 'boolean') return 'toggle'
         if (valType === 'string') return 'input'
         if (val === 'listen') return 'monitor'

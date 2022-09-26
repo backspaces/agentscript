@@ -1,15 +1,16 @@
-import * as util from '../src/utils.js'
-import GeoWorld from '../src/GeoWorld.js'
-import Model from '../models/HelloModel.js'
-import TwoDraw from '../src/TwoDraw.js'
+// import * as util from '../src/utils.js'
+// import GeoWorld from '../src/GeoWorld.js'
+// import Model from '../models/HelloModel.js'
+// import TwoDraw from '../src/TwoDraw.js'
 import Animator from '../src/Animator.js'
 // console.log( Model, TwoDraw, Animator)
 
 class RunModelView {
-    constructor(Model, View = TwoDraw, viewOptions = {}, drawOptions = {}) {
+    constructor(Model, View, viewOptions = {}, drawOptions = {}) {
         Object.assign(this, { Model, View, viewOptions, drawOptions })
     }
     async run(world = undefined) {
+        // undefined: use model's default
         if (this.anim) anim.stop
 
         const model = new this.Model(world)

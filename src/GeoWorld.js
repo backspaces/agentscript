@@ -49,7 +49,7 @@ class GeoWorld extends World {
         const maxZ = Math.round(patchesWidth / 2)
         super({
             minX: 0,
-            maxX: patchesWidth,
+            maxX: patchesWidth - 1,
 
             minY: 0,
             maxY: Math.round(patchesWidth / aspect),

@@ -17,7 +17,7 @@
 
         import LeafletDraw from './LeafletDraw.js'
 
-        const counties = await fetch('./data/nmcounties.json').then(resp => resp.json())
+        const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
 
         const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
 

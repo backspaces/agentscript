@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>GUI</title>
+    <title>HelloGui</title>
 </head>
 
 <body>
@@ -39,37 +39,28 @@
         ).startStats()
 
         const gui = new GUI({
-            fps: { // slider
+            fps: { // val numeric array: slider
                 val: [30, [5, 60, 5]],
                 cmd: val => anim.setFps(val),
             },
-            turtlesShape: { // chooser
+            turtlesShape: { // val string array: chooser
                 val: ['bug', ['bug', 'dart', 'person']],
                 cmd: val => view.drawOptions.turtlesShape = val,
             },
-            turtlesColor: { // color picker
-                // val: '#ff0000',
-                // val: '#f00',
-                // val: 'rgb(255, 0, 0)',
-                val: 'rgba(255, 0, 0, 0.5)',
-                // val: 'hsv(360, 90%, 0%)', // doesn't work
-                // val: 'hsl(360, 100%, 50%)', // doesn't work
-                // val: [0, 128, 255, 0.3], // works, but not JS color
-                // val: { h: 350, s: 0.9, v: 0.3 }, // works, but not JS color
-                // gui.values.turtlesColor = { h: 350, s: 0.9, v: 0.3 }
-                // gui.values.turtlesColor // right color controller
+            turtlesColor: { // val color string: color picker
+                val: '#ff0000',
                 cmd: val => view.drawOptions.turtlesColor = val,
             },
-            downloadCanvas: { // button
-                cmd: () => view.downloadCanvas(),
-            },
-            pause: { // switch/toggle
-                val: false, // bool
+            pause: { // val bool: switch/toggle
+                val: false,
                 cmd: val => { if (val) { anim.stop() } else { anim.start() } },
             },
-            setTitle: { // input
-                val: 'Play',
+            setTitle: { // val string: input
+                val: document.title,
                 cmd: val => document.title = val
+            },
+            downloadCanvas: { // no val: button
+                cmd: () => view.downloadCanvas(),
             },
             modelTicks: { // monitor
                 val: 'listen',
@@ -84,3 +75,19 @@
 </body>
 
 </html>
+<!--
+turtlesColor val behavior:
+    val: '#ff0000',
+    val: 'rgb(255, 0, 0)',
+
+    val: '#f00', // => #ff0000
+    val: 'rgba(255, 0, 0, 0.5)', // color picker sticks at 0.5
+    val: 'red', // becomes a text input for named/#hex/rgb(a) colors
+    val: 'hsv(360, 90%, 0%)', // doesn't work
+    val: 'hsl(360, 100%, 50%)', // doesn't work
+    val: [0, 128, 255, 0.3], // works, but not JS color
+    val: { h: 350, s: 0.9, v: 0.3 }, // works, but not JS color
+
+    gui.values.turtlesColor = { h: 350, s: 0.9, v: 0.3 }
+    gui.values.turtlesColor // right color controller
+-->

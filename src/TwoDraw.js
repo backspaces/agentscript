@@ -44,7 +44,7 @@ class TwoDraw extends TwoView {
         }
 
         drawOptions = Object.assign(
-            {},
+            // {},
             TwoDraw.defaultOptions(model),
             drawOptions
         )

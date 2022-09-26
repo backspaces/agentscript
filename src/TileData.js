@@ -42,6 +42,7 @@ const sharedTileObject = {
         const tileDecoder = this.elevationFcn
         return new RGBDataSet(img, tileDecoder, ArrayType)
     },
+    tileSize: 256,
 }
 
 export const maptiler = Object.assign(

@@ -208,7 +208,7 @@ class World {
         return new BBoxTransform(minX, minY, maxX, maxY, this)
     }
 
-    // ### Following use PatchSize
+    // ### Following functions use PatchSize
 
     // Get the world size in pixels. PatchSize is optional, defalting to 1
     getWorldSize(patchSize = 1) {
