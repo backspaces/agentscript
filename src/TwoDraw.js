@@ -34,14 +34,26 @@ class TwoDraw extends TwoView {
             turtlesMap: 'Basic16',
         }
     }
+    static separateDrawOptions(viewOptions, drawOptions) {
+        if (viewOptions.drawOptions) {
+            // drawOptions = viewOptions.drawOptions
+            Object.assign(drawOptions, viewOptions.drawOptions)
+            delete viewOptions.drawOptions
+        }
+        return drawOptions
+        // return [viewOptions, drawOptions]
+    }
 
     // ======================
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
-        if (viewOptions.drawOptions) {
-            drawOptions = viewOptions.drawOptions
-            delete viewOptions.drawOptions
-        }
+        // if (viewOptions.drawOptions) {
+        //     drawOptions = viewOptions.drawOptions
+        //     delete viewOptions.drawOptions
+        // }
+
+        // ;[viewOptions, drawOptions] =
+        drawOptions = TwoDraw.separateDrawOptions(viewOptions, drawOptions)
 
         drawOptions = Object.assign(
             // {},

@@ -8,29 +8,32 @@ import TwoDraw from '../src/TwoDraw.js'
 
 class MapDraw extends TwoDraw {
     constructor(model, viewOptions = {}, drawOptions = {}) {
-        if (!model.world.bbox)
-            throw Error('LeafletDraw: model must use GeoWorld')
+        if (!model.world.bbox) throw Error('MapDraw: model must use GeoWorld')
 
-        drawOptions = viewOptions.drawOptions || drawOptions
-        if (viewOptions.drawOptions) delete viewOptions.drawOptions
+        // too slick:
+        // drawOptions = viewOptions.drawOptions || drawOptions
+        // if (viewOptions.drawOptions) delete viewOptions.drawOptions
+        //
+        // drawOptions.patchesColor = drawOptions.patchesColor || 'transparent'
+        // viewOptions.div = viewOptions.div || util.createCanvas(0, 0)
 
-        drawOptions.patchesColor = drawOptions.patchesColor || 'transparent'
-        viewOptions.div = viewOptions.div || util.createCanvas(0, 0)
-
-        // if (!drawOptions.patchesColor) {
-        //     drawOptions.patchesColor = 'transparent'
+        // clearer:
+        // if (viewOptions.drawOptions) {
+        //     // move drawOptions out of viewOptions
+        //     drawOptions = viewOptions.drawOptions
+        //     delete viewOptions.drawOptions
         // }
-        // if (!viewOptions.div) {
-        //     viewOptions.div = util.createCanvas(0, 0) // the view will resize
-        // }
+        drawOptions = TwoDraw.separateDrawOptions(viewOptions, drawOptions)
+
+        if (!drawOptions.patchesColor) {
+            drawOptions.patchesColor = 'transparent'
+        }
+        if (!viewOptions.div) {
+            viewOptions.div = util.createCanvas(0, 0) // the view will resize
+        }
 
         super(model, viewOptions, drawOptions)
     }
-
-    // async leafletInit(options = {}) {
-    //     const params = await leafletInit(this.model, this.canvas, options)
-    //     return params
-    // }
 }
 
 export default MapDraw

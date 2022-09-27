@@ -26,7 +26,7 @@
         model.setup()
 
         const drawOptions = {
-            patchesColor: 'transparent',
+            // patchesColor: 'transparent', //
             linksColor: 'gray',
             linksWidth: 4,
             turtlesSize: 6,
@@ -34,7 +34,7 @@
                 view.drawOptions.turtlesMap.atIndex(t.county + 1),
         }
         const view = new LeafletDraw(model, {
-            // div: util.createCanvas(0, 0), // default. the view will resize
+            // div: util.createCanvas(0, 0), // default & the view will resize
             drawOptions,
         })
 

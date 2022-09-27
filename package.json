@@ -62,7 +62,8 @@
         "-- END OF TESTS --": "Put misc scripts below",
         "chrome": "bin/modelsinbrowser views1",
         "safari": "bin/modelsinbrowser views1 Safari",
-        "foo": "bin/modelsinbrowser views1"
+        "runallc": "npm run run1c & npm run run2c",
+        "foo": " && npm run25c run3c"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
