@@ -1,11 +1,17 @@
 #!/usr/bin/env node
+
+// console.log('puppeteer start require')
 const puppeteer = require('puppeteer')
+// console.log('puppeteer end require')
+
+// console.log('shelljs start require')
 const shell = require('shelljs')
+// console.log('shelljs end require')
 
-const dir = process.argv[2].replace(/\/$/, '') // remove optional final "/"
-
+let dir = process.argv[2] // .replace(/\/$/, '') // remove optional final "/"
 const model = process.argv[3]
 if (!dir || !model) throw Error(`Needs dir & model arguments: ${dir} ${model}`)
+dir = dir.replace(/\/$/, '')
 
 const url =
     dir === 'models' || dir === 'models/scripts'
@@ -14,9 +20,13 @@ const url =
 console.log('url:', url)
 
 const child = shell.exec(
-    './node_modules/.bin/live-server --port=9009 --no-browser --quiet --watch=src',
+    // './node_modules/.bin/live-server --port=9009 --no-browser --quiet --watch=src',
+    './node_modules/.bin/http-server -p 9009 -s',
+    // './node_modules/.bin/serve -p 9009 --no-clipboard',
+    // shell.exec options
     {
         async: true,
+        silent: true,
     }
 )
 
@@ -44,7 +54,7 @@ async function run() {
     })
     const page = await browser.newPage()
     await page.setViewport({ width, height })
-    await page.goto(url)
+    await page.goto(url) // dies here with live-server
 
     if (waitFinish) {
         console.log(`waiting model finish`)

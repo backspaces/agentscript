@@ -2,6 +2,8 @@
 
 // const esmImport = require('esm')(module, { mode: 'all' })
 const esmImport = require('esm')(module)
+
+// esmImport solves the live-server CRLF problem, apparently
 const liveServer = esmImport('live-server')
 const shell = esmImport('shelljs')
 const utils = esmImport('../src/utils.js')

@@ -1,6 +1,9 @@
 import test from 'ava'
 
-const liveServer = require('live-server')
+// does not have the crlf problem
+// const liveServer = require('live-server')
+// const httpServer = require('http-server')
+
 const puppeteer = require('puppeteer')
 const shell = require('shelljs')
 
@@ -11,11 +14,15 @@ const compareSamples = true
 const nonWorker = model => [].includes(model)
 // const nonWorker = model => ['droplets'].includes(model)
 
-liveServer.start({
-    open: false,
-    logLevel: 0,
-    ignore: '*',
-    port: port,
+// liveServer.start({
+//     open: false,
+//     logLevel: 0,
+//     ignore: '*',
+//     port: port,
+// })
+const child = shell.exec(`http-server -s -p ${port}`, {
+    async: true,
+    silent: true,
 })
 
 const samplesFile = 'test/samples.txt' // Store model samples here
@@ -32,7 +39,7 @@ let models = shell
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
 // if (!headless) models = ['droplets', 'mouse'] // debug. Also headless below
-// models = ['hello'] // debug. Also headless below
+// models = ['hello', 'droplets'] // debug. Also headless below
 // models = models.filter(m => m !== 'droplets')
 // models = models.filter(m => !['droplets', 'gridPath'].includes(m))
 
@@ -60,9 +67,13 @@ async function runModels() {
                 // shell.echo(currentSamples).to(samplesFile)
                 new shell.ShellString(json).to(samplesFile)
                 // shell.echo(json).to(samplesFile)
+
+                child.kill()
             }
         })
     }
+
+    // child.kill()
 }
 runModels()
 

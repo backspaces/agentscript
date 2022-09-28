@@ -2,8 +2,9 @@
 
 const shell = require('shelljs')
 
-const dir = process.argv[2].replace(/\/$/, '') // remove optional final "/"
+let dir = process.argv[2] // .replace(/\/$/, '') // remove optional final "/"
 if (!dir) throw Error('Needs dir name argument')
+dir = dir.replace(/\/$/, '') // remove optional final "/"
 console.log('dir:', dir)
 
 let models
