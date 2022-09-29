@@ -76,7 +76,7 @@
         "ava": "^2.1.0",
         "clean-jsdoc-theme": "^4.1.6",
         "esm": "^3.2.25",
-        "http-server": "latest",
+        "http-server": "14.1.1 ",
         "jsdoc": "^3.6.10",
         "live-server": "1.2.2",
         "npm-run-all": "4.1.2",

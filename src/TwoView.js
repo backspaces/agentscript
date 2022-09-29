@@ -1,5 +1,5 @@
 import * as util from './utils.js'
-import World from './World.js'
+// import World from './World.js'
 import PatchesView from './PatchesView.js'
 import TurtlesView from './TurtlesView.js'
 
@@ -17,11 +17,17 @@ class TwoView {
 
     // Note: world can be a model, who's model.world will be used
     constructor(world, options = {}) {
+        // if world is a model:
+        if (world.world) world = world.world
+
         // options: override defaults, assign to this
         // Object.assign(this, TwoView.defaultOptions(), options)
         options = Object.assign(TwoView.defaultOptions(), options)
         if (options.width) {
+            // options.patchSize = Math.round(options.width / world.width)
             options.patchSize = options.width / world.width
+            // if (options.useSprites)
+            //     options.patchSize = Math.round(options.patchSize)
             delete options.width
         }
         // this.div = options.div
@@ -38,7 +44,9 @@ class TwoView {
         // this.div = div
 
         this.ctx = can.getContext('2d')
-        this.world = new World(world.world || world) // world can be model
+        // don't remember why we built a new world rather than using arg's.
+        // this.world = new World(world.world || world) // world can be model
+        this.world = world
 
         // Object.assign(this, { ctx, world }, options)
         // Object.assign(this, { ctx, world })
