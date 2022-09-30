@@ -37,10 +37,10 @@ class World {
     minX = -16
     maxY = 16
     minY = -16
-    maxZ = 0
-    minZ = 0
-    // maxZ = 16
-    // minZ = -16
+    // maxZ = 0
+    // minZ = 0
+    maxZ = 16
+    minZ = -16
 
     /**
      * Return a default options object, origin at center.
@@ -51,13 +51,12 @@ class World {
      * @returns WorldOptions
      */
     static defaultOptions(maxX = 16, maxY = maxX, maxZ = Math.max(maxX, maxY)) {
-        // static defaultOptions(maxX = 16, maxY = maxX, maxZ = 0) {
         return {
             minX: -maxX,
             maxX: maxX,
             minY: -maxY,
             maxY: maxY,
-            minZ: maxZ === 0 ? 0 : -maxZ, // don't trust -0 === 0
+            minZ: -maxZ,
             maxZ: maxZ,
         }
     }

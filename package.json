@@ -41,7 +41,8 @@
         "build-scripts": "node bin/models2scripts",
         "build-views": "node bin/models2html",
         "build-md": "bin/src2md 'models views1 views2 views25 views3 mvc gis' > /dev/null",
-        "build-docs": "node copyTutorials.js && jsdoc -c config/jsdoc.js",
+        "build-docs": "node config/copyTutorials.js && jsdoc -c config/jsdoc.js",
+        "build-docs0": "node --trace-deprecation copyTutorials.js && jsdoc -c config/jsdoc.js",
         "test": "ava test/models.js && npm run test3d",
         "test3d": "deno test test/geom.js",
         "-- END OF WORKFLOW --": "The following are verious tests, running models in various directories and browsers",
@@ -65,8 +66,8 @@
         "fixcrlf": "npx crlf --set=LF node_modules/.bin/live-server",
         "chrome": "bin/modelsinbrowser views1",
         "safari": "bin/modelsinbrowser views1 Safari",
-        "runallc": "npm run run1c & npm run run2c",
-        "foo": " && npm run25c run3c"
+        "runallc": "npm run run1c & npm run run2c && npm run25c run3c",
+        "foo": "node tests/node/node.js"
     },
     "Note": "shx includes shelljs; tap-xunit for circleci/ava.",
     "dependencies": {
@@ -74,7 +75,7 @@
     },
     "devDependencies": {
         "ava": "^2.1.0",
-        "clean-jsdoc-theme": "^4.1.6",
+        "clean-jsdoc-theme": "latest",
         "esm": "^3.2.25",
         "http-server": "14.1.1 ",
         "jsdoc": "^3.6.10",
