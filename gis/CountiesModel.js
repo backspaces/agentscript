@@ -8,6 +8,7 @@ export default class CountiesModel extends HelloModel {
         super.setup()
         this.patches.ask(p => {
             const pt = this.world.toGeo(p.x, p.y)
+            // note: the geoworld has to be constructed with geojson for bbox
             util.forLoop(this.world.geojson.features, (f, i) => {
                 if (booleanPointInPolygon(pt, f)) {
                     if (p.feature) console.log('p.feature exists', p)

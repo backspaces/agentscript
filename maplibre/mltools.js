@@ -8,7 +8,7 @@ export async function importMapLibre() {
     await util.fetchCssStyle(
         'https://unpkg.com/maplibre-gl/dist/maplibre-gl.css'
     )
-    await util.fetchCssStyle('../gis/fullScreen.css')
+    await util.fetchCssStyle('./fullScreen.css')
     return maplibregl
 }
 // export const maplibregl

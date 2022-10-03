@@ -10,46 +10,78 @@ console.log(root)
 console.log(tutorialsDir)
 
 // Tutorial paths
-const view2 = path.join(root, 'views2', 'README.md')
-const view25 = path.join(root, 'views25', 'README.md')
-const view3 = path.join(root, 'views3', 'README.md')
-const gis = path.join(root, 'gis', 'README.md')
-const mvc = path.join(root, 'mvc', 'README.md')
-// const ideExamples = path.join(root, 'ide-examples', 'README.md') ., see below
-console.log(mvc)
+
 /**
  * All tutorials path with title.
  */
-const paths = [
-    {
-        path: view2,
-        title: 'View 2D',
-    },
-    {
-        path: view25,
-        title: 'View 2.5D',
-    },
-    {
-        path: view3,
-        title: 'View 3D',
-    },
-    {
-        path: gis,
-        title: 'GIS',
-    },
-    {
-        path: mvc,
-        title: 'MVC',
-    },
-    // { ideExamples are not used, waiting our our IDE!
-    //     path: ideExamples,
-    //     title: "IDE Examples"
-    // },
-]
 
-// (node:82925) [DEP0147] DeprecationWarning: In future versions of Node.js,
-// fs.rmdir(path, { recursive: true }) will be removed.
-// Use fs.rm(path, { recursive: true }) instead
+// third version: simpler data
+const dirPath = dir => path.join(root, dir, 'README.md')
+const pathData = [
+    // [dir name, title]
+    ['views2', 'View 2D'],
+    ['views25', 'View 2.5D'],
+    ['views3', 'View 3D'],
+    ['leaflet', 'Leaflet'],
+    ['maplibre', 'Map Libre'],
+    ['mvc', 'MVC'],
+]
+const paths = pathData.map(a => ({ path: dirPath(a[0]), title: a[1] }))
+
+// second version, in-line the paths to keep everything in one place
+// const paths = [
+//     {
+//         path: dirPath('views2'),
+//         title: 'View 2D',
+//     },
+//     {
+//         path: dirPath('views25'),
+//         title: 'View 2.5D',
+//     },
+//     {
+//         path: dirPath('views3'),
+//         title: 'View 3D',
+//     },
+//     {
+//         path: dirPath('gis'),
+//         title: 'GIS',
+//     },
+//     {
+//         path: dirPath('mvc'),
+//         title: 'MVC',
+//     },
+// ]
+
+// Initial version
+// const view2 = path.join(root, 'views2', 'README.md')
+// const view25 = path.join(root, 'views25', 'README.md')
+// const view3 = path.join(root, 'views3', 'README.md')
+// const gis = path.join(root, 'gis', 'README.md')
+// const mvc = path.join(root, 'mvc', 'README.md')
+// const paths = [
+//     {
+//         path: view2,
+//         title: 'View 2D',
+//     },
+//     {
+//         path: view25,
+//         title: 'View 2.5D',
+//     },
+//     {
+//         path: view3,
+//         title: 'View 3D',
+//     },
+//     {
+//         path: gis,
+//         title: 'GIS',
+//     },
+//     {
+//         path: mvc,
+//         title: 'MVC',
+//     },
+// ]
+
+console.log(paths)
 
 if (fs.existsSync(tutorialsDir)) {
     // Requires node > v14.14
@@ -57,35 +89,28 @@ if (fs.existsSync(tutorialsDir)) {
 }
 fs.mkdirSync(tutorialsDir)
 
-// if (fs.existsSync(tutorialsDir)) {
-//     // Requires node > v14.14
-//     fs.rmSync(tutorialsDir, { recursive: true, force: true })
-//     fs.mkdirSync(tutorialsDir)
-// } else {
-//     fs.mkdirSync(tutorialsDir)
-// }
-// if (fs.existsSync(tutorialsDir)) {
-//     // Requires node > v14.14
-//     fs.rmdirSync(tutorialsDir, { recursive: true, force: true })
-//     fs.mkdirSync(tutorialsDir)
-// } else {
-//     fs.mkdirSync(tutorialsDir)
-// }
-
-const tutorialsConfig = {}
+// Doesn't seem to be used!
+// const tutorialsConfig = {}
+//
+// paths.forEach(tutorial => {
+//     tutorialsConfig[path.basename(tutorial.title)] = {
+//         title: tutorial.title,
+//     }
+//
+//     fs.copyFileSync(
+//         tutorial.path,
+//         path.join(tutorialsDir, `${tutorial.title}.md`)
+//     )
+// })
+//
+// fs.writeFileSync(
+//     path.join(tutorialsDir, 'tutorials.json'),
+//     JSON.stringify(tutorialsConfig)
+// )
 
 paths.forEach(tutorial => {
-    tutorialsConfig[path.basename(tutorial.title)] = {
-        title: tutorial.title,
-    }
-
     fs.copyFileSync(
         tutorial.path,
         path.join(tutorialsDir, `${tutorial.title}.md`)
     )
 })
-
-fs.writeFileSync(
-    path.join(tutorialsDir, 'tutorials.json'),
-    JSON.stringify(tutorialsConfig)
-)

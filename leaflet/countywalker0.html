@@ -22,7 +22,7 @@
         import * as L from 'https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.esm.js'
         import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
 
-        const counties = await fetch('./data/nmcounties.json').then(resp => resp.json())
+        const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
 
         const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
         const model = new CountiesModel(world)
@@ -95,7 +95,7 @@
             20 // 30 // 30 fps
         )
 
-        util.toWindow({ map, modelLayer })
+        util.toWindow({ map, modelLayer, anim })
     </script>
 </body>
 
