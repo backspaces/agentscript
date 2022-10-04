@@ -3,25 +3,8 @@
 
 <head>
     <title>Tile Droplets</title>
-
-    <!-- <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet@1.8.0/dist/leaflet.css"> -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css">
-
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
-
-        #map {
-            height: 100vh
-        }
-
-        /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
-        .leaflet-tile {
-            border: solid red 1px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="./map.css">
 </head>
 
 <body>
@@ -33,11 +16,11 @@
 
         import Animator from '../src/Animator.js'
         import Model from '../models/DropletsModel.js'
-        // import Model from '../models/HelloModel.js'
         import TwoDraw from '../src/TwoDraw.js'
 
         import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
         import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
+
         const ElementOverlay = elementOverlay(L)
 
         // ========== Setup map and layers ==========
@@ -106,7 +89,6 @@
             )
 
             util.toWindow({ model, view, anim })
-
         }
 
 

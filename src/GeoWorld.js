@@ -18,26 +18,26 @@ class GeoWorld extends World {
 
     // bbox: [west, south, east, north]
     // bbox of NM
-    static defaultBBox() {
-        return gis.newMexicoBBox
-    }
+    // static defaultBBox() {
+    //     return gis.newMexicoBBox
+    // }
 
     // Use geo bbox & patchesWidth to create a World object
     // BBox can be a geojson obj, which is converted to geojson's bbox
-    // constructor(bbox = GeoWorld.defaultBBox(), width = 50) {
     constructor(options = GeoWorld.defaultOptions()) {
-        // TEMPORY: will be removed in a few commits
-        if (arguments.length === 2) {
-            console.log(
-                'WARNING: GeoWorld(bbox, width) replaced by GeoWorld(options)',
-                'See: GeoWorld.defaultOptions'
-            )
+        // constructor(bbox = GeoWorld.defaultBBox(), width = 50) {
+        // // TEMPORY: will be removed in a few commits
+        // if (arguments.length === 2) {
+        //     console.log(
+        //         'WARNING: GeoWorld(bbox, width) replaced by GeoWorld(options)',
+        //         'See: GeoWorld.defaultOptions'
+        //     )
 
-            options = {
-                bbox: arguments[0],
-                patchesWidth: arguments[1],
-            }
-        }
+        //     options = {
+        //         bbox: arguments[0],
+        //         patchesWidth: arguments[1],
+        //     }
+        // }
         let { bbox, patchesWidth } = options
         let json
         if (!Array.isArray(bbox)) {

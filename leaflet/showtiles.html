@@ -2,18 +2,8 @@
 
 <head>
     <title>TileInfo</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css">
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
-
-        #map {
-            height: 100vh;
-            width: 100vw;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="./map.css">
 </head>
 
 <body>
@@ -23,12 +13,12 @@
         import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
         import { mapzen } from '../src/TileData.js'
-        import * as L from 'https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.esm.js'
+        import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
 
         let [lon, lat, Z] = [-105.941109, 35.68222, 13]
         const map = L.map('map', {
-            zoomDelta: 0.25, //0.1
-            zoomSnap: 0,
+            zoomDelta: 0.25,
+            zoomSnap: 0.25,
         }).setView([lat, lon], Z)
 
         const terrainLayer = L.tileLayer(gis.template('osm'), {

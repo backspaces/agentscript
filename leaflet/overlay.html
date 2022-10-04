@@ -2,25 +2,8 @@
 
 <head>
     <title>Overlay</title>
-
     <link rel="stylesheet" href="https://cdn.skypack.dev/leaflet/dist/leaflet.css">
-    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"> -->
-
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
-
-        #map {
-            height: 100vh
-        }
-
-        /* https://gis.stackexchange.com/questions/149062/display-tile-grid-borders-with-leaflet-visual-debugging */
-        .leaflet-tile {
-            border: solid black 1px;
-        }
-    </style>
+    <link rel="stylesheet" href="./map.css">
 </head>
 
 <body>
@@ -33,17 +16,10 @@
         import * as gis from '../src/gis.js'
         import * as util from '../src/utils.js'
 
-        // import L from 'https://cdn.skypack.dev/leaflet'
         import * as L from 'https://cdn.skypack.dev/leaflet/dist/leaflet-src.esm.js'
-        // import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-
         import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay';
-        const ElementOverlay = elementOverlay(L)
 
-        // import elementOverlay from './elementOverlay.esm.js'
-        // import elementOverlay from 'https://cdn.skypack.dev/@redfish/leafletelementoverlay'
 
-        // async function run() {
         const xyz = [3370, 6451, 14]
         const bbox = gis.xyz2bbox(...xyz)
         const bboxCenter = gis.latlon(gis.bboxCenter(bbox))
@@ -53,6 +29,7 @@
         const model = new Model()
         await model.startup()
         model.setup()
+
         const view = new TwoDraw(model, {
             div: util.createCanvas(0, 0), // the view will resize
             patchSize: 20,
@@ -67,11 +44,8 @@
             attribution: gis.attribution('osm'),
         }).addTo(map)
 
-        const [west, south, east, north] = bbox
-        const bounds = new L.LatLngBounds(
-            new L.LatLng(north, west),
-            new L.LatLng(south, east)
-        )
+        const bounds = gis.latlon(gis.bboxBounds(bbox))
+        const ElementOverlay = elementOverlay(L)
         const layer = new ElementOverlay(view.canvas, bounds).addTo(map)
 
         const anim = new Animator(
@@ -79,13 +53,11 @@
                 model.step()
                 view.draw()
             },
-            -1, // 500, // run 500 steps
-            10 // 30 // 30 fps
+            1000, // run steps
+            30 // fps
         )
 
         util.toWindow({ util, model, view, map, layer, anim })
-        // }
-        // run()
     </script>
 </body>
 

@@ -15,13 +15,14 @@
         import Animator from '../src/Animator.js'
         import CountiesModel from '../gis/CountiesModel.js'
 
-        import LeafletDraw from './LeafletDraw.js'
+        // import LeafletDraw from './LeafletDraw.js'
+        import MapDraw from '../src/MapDraw.js'
+        import leafletInit from './leafletInit.js'
 
         const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
-
         const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
-
         const model = new CountiesModel(world)
+        // const model = new CountiesModel()
         await model.startup()
         model.setup()
 
@@ -33,17 +34,19 @@
             turtlesColor: t =>
                 view.drawOptions.turtlesMap.atIndex(t.county + 1),
         }
-        const view = new LeafletDraw(model, {
+        const view = new MapDraw(model, {
             // div: util.createCanvas(0, 0), // default & the view will resize
             drawOptions,
         })
 
-        const params = await view.leafletInit({
+        // const params = await view.leafletInit({
+        const params = await leafletInit(model, view.canvas, {
             Z: 7,
             terrain: 'osm',
             bboxBorder: { color: 'black', weight: 1, fill: false },
             tilesBorder: 'solid green 2px',
-            json: counties,
+            // json: counties,
+            json: model.world.geojson,
             // default style parameters https://leafletjs.com/reference.html#path-option
             jsonStyle: feature => ({
                 color: 'red',
