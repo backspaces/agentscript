@@ -53,7 +53,9 @@
 
         mltools.addGeojsonFillLayer(map, 'counties', counties, 'rgba(255, 0, 0, 0.2)')
 
-        mltools.addGeojsonLineLayer(map, 'countiesLine', counties, 'red', 3)
+        // counties string => use as source id, above, rather than a new source layer
+        mltools.addGeojsonLineLayer(map, 'countiesLine', 'counties', 'red', 3)
+        // mltools.addGeojsonLineLayer(map, 'countiesLine', counties, 'red', 3)
 
         mltools.addGeojsonLineLayer(map, 'countiesBBox', countiesBBox, 'blue')
 

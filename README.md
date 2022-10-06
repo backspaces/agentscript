@@ -57,7 +57,7 @@ Our directory layout is:
 
 ## Run demos
 
-The models directory contains the individual Models JavaScript files. I.e. HelloModel.js exports the HelloModel. It is the only demo directory with .js files, the rest are "onepagers" .html files. Notice the links use "query parameters" that the index.html file uses to run the model. The output is a random sample of the model's results.
+The models directory contains the individual Models JavaScript files. I.e. HelloModel.js exports the HelloModel etc. It is the only demo directory with .js files, the rest are "onepagers" .html files.
 
 [models](./models/README.md)
 
@@ -69,27 +69,34 @@ The views2 onepagers import models from the models/ dir and add a 2D Canvas view
 
 [views2](./views2/README.md)
 
-The views25 onepagers import models from the models/ dir and add a Three.js webgl 3D view.
+The views25 onepagers import models from the models/ dir and add a Three.js webgl 2.5D view.
 
 [views25](./views25/README.md)
 
 The views3 onepagers import models from the models/ dir and add a Three.js webgl 3D view.
 
+They are similar to the views25 onepagers but use
+[src/Model3D.js](https://github.com/backspaces/agentscript/blob/master/src/Model3D.js)
+and [src/Turtle3D.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle3D.js)
+which are subclasses of their 2D counterparts:
+[src/Model.js](https://github.com/backspaces/agentscript/blob/master/src/Model.js)
+and [src/Turtle.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle.js)
+
 [views3](./views3/README.md)
-
-The views3 onepagers are similar to the views25 onepagers. It differs from views25 in that these use true 3D via [src/Model3D.js](https://github.com/backspaces/agentscript/blob/master/src/Model3D.js) and [src/Turtle3D.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle3D.js) subclasses.
-
-[mvc](./mvc/README.md)
 
 The mvc onepagers are combine Models, Views, and Controls into "apps".
 
-[gis](./gis/README.md)
+[mvc](./mvc/README.md)
 
-The gis onepagers use gis & geojson utilities to create and view models running on [Leaflet](https://leafletjs.com/) maps with geojson data.
+AgentScript provides a way to include your models on a map. These two sets of onepagers use gis & geojson utilities to create and view models running on [Leaflet](https://leafletjs.com/) [maplibre](https://github.com/maplibre/maplibre-gl-js#readme/) maps.
 
-[fb](./fb/README.md)
+[leaflet](./leaflet/README.md)
 
-An experimental distributed framework for running models in one page while listening & getting results in another. We call these Model Transforms. They currently show their results in the browser console.
+[maplibre](./maplibre/README.md)
+
+<!-- [fb](./fb/README.md)
+
+An experimental distributed framework for running models in one page while listening & getting results in another. We call these Model Transforms. They currently show their results in the browser console. -->
 
 ## Developer Information
 
@@ -101,8 +108,7 @@ To clone the github repo:
 -   git clone https://github.com/backspaces/agentscript
 -   cd agentscript # go to new repo
 -   yarn install # install all dev dependencies.
--   yarn build # complete the install.
--   yarn run build-vendor # build depend<br>
+-   yarn build # install all our dependencies.
     Note: Fine to use npm rather than yarn.
 
 All workflow is npm run scripts. See package.json's scripts, or use `yarn/npm run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.prettierrc.js).

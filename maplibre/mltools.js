@@ -42,6 +42,10 @@ export async function newMap(world, zoom = 10, div = 'map') {
         },
     })
     await mapLoadPromise(map)
+
+    const nav = new maplibregl.NavigationControl()
+    map.addControl(nav, 'top-left')
+
     return map
 }
 
@@ -64,28 +68,39 @@ export function addRasterLayer(map, id, url, opacity = 1) {
     })
 }
 
+// Note both geojson layers can share their sources due to often
+// using the same geojson foe lines and fills.
+// Thus if the geojson arg is a string, it is used for the source id
 export function addGeojsonFillLayer(map, id, geojson, color) {
-    map.addSource(id, {
-        type: 'geojson',
-        data: geojson,
-    })
+    let sourceID = util.isString(geojson) ? geojson : id
+
+    if (sourceID === id) {
+        map.addSource(id, {
+            type: 'geojson',
+            data: geojson,
+        })
+    }
     map.addLayer({
         id: id,
         type: 'fill',
-        source: id,
+        source: sourceID,
         paint: { 'fill-color': color },
     })
 }
 
 export function addGeojsonLineLayer(map, id, geojson, color, width = 1) {
-    map.addSource(id, {
-        type: 'geojson',
-        data: geojson,
-    })
+    let sourceID = util.isString(geojson) ? geojson : id
+
+    if (sourceID === id) {
+        map.addSource(id, {
+            type: 'geojson',
+            data: geojson,
+        })
+    }
     map.addLayer({
         id: id,
         type: 'line',
-        source: id,
+        source: sourceID,
         paint: { 'line-color': color, 'line-width': width },
     })
 }
