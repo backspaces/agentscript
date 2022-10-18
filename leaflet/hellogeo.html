@@ -23,13 +23,13 @@
         model.setup()
 
         const drawOptions = {
-            // patchesColor: 'transparent', // default in LeafletDraw
+            // patchesColor: 'transparent', // default in MapDraw
             turtlesSize: 2,
             linksWidth: 0.2,
         }
         // const view = new LeafletDraw(model, {
         const view = new MapDraw(model, {
-            // div: util.createCanvas(0, 0), // default. the view will resize
+            // div: util.createCanvas(0, 0), // default & the view will resize
             patchSize: 5,
             drawOptions,
         })

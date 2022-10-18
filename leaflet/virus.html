@@ -17,7 +17,6 @@
         import Model from '../models/VirusModel.js'
 
         import { geojsonBBox } from '../src/geojson.js'
-        // import LeafletDraw from './LeafletDraw.js'
         import MapDraw from '../src/MapDraw.js'
         import leafletInit from './leafletInit.js'
 
@@ -27,7 +26,7 @@
             resistant: 'gray',
         }
         const drawOptions = {
-            patchesColor: 'transparent',
+            // patchesColor: 'transparent', // default in MapDraw
             turtlesShape: 'circle',
             turtlesSize: 3,
             turtlesColor: t => turtleColors[t.state],
@@ -37,14 +36,14 @@
         const counties = await fetch(
             '../gis/data/nmcounties.json'
         ).then(resp => resp.json())
-
         const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
+
         const model = new Model(world)
         await model.startup()
         model.setup()
 
         const view = new MapDraw(model, {
-            div: util.createCanvas(0, 0), // the view will resize
+            // div: util.createCanvas(0, 0), // default & the view will resize
             drawOptions,
         })
         await leafletInit(model, view.canvas, {

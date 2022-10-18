@@ -1,0 +1,33 @@
+<html>
+
+<head>
+    <title>USCounties</title>
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
+        // import { geojsonBBox } from '../src/geojson.js'
+        import * as mltools from './mltools.js'
+
+        const uscountiesUrl = 'https://backspaces.s3.amazonaws.com/uscounties.json'
+        const uscounties = await util.fetchJson(uscountiesUrl)
+        const usaCenter = gis.usaCenter
+        const terrain = gis.template('usgs')
+
+        const maplibregl = await mltools.importMapLibre()
+
+        const map = await mltools.newMap(usaCenter, 4)
+        // mltools.onLoad(map, 'load') // log msg on map load event; shouldn't occur, await above
+
+        mltools.addRasterLayer(map, 'terrain', terrain)
+
+        mltools.addGeojsonLineLayer(map, 'uscounties', uscounties, 'red', 1)
+
+        util.toWindow({ util, gis, map, mltools })
+    </script>
+    <div id="map"></div>
+</body>
+
+</html>

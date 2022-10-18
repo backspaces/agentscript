@@ -131,7 +131,9 @@ const Color = {
     // returning the r,g,b,a canvas ImageData TypedArray.
 
     // The shared 1x1 canvas 2D context.
-    sharedCtx1x1: util.createCtx(1, 1), // share across calls.
+    sharedCtx1x1: util.createCtx(1, 1, false, { willReadFrequently: true }),
+    // sharedCtx1x1: util.createCtx(1, 1),
+
     // Convert any css string to 4 element Uint8ClampedArray TypedArray.
     // If you need a JavaScript Array, use `new Array(...TypedArray)`
     // Slow, but works for all css strings: hsl, rgb, .. as well as names.

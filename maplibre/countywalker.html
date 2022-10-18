@@ -10,26 +10,22 @@
 
     <script type="module">
         import * as util from '../src/utils.js'
-
         import * as mltools from './mltools.js'
+
         import MapDraw from '../src/MapDraw.js'
-
-        import GeoWorld from '../src/GeoWorld.js'
         import Animator from '../src/Animator.js'
-        import CountiesModel from '../gis/CountiesModel.js'
+        import CountiesModel from '../models/CountiesModel.js'
 
-        const maplibregl = await mltools.importMapLibre()
-        const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
-
-        const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
-        const model = new CountiesModel(world)
+        // If not using the default model options:
+        // const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
+        // const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
+        // const model = new CountiesModel(world)
+        const model = new CountiesModel() // default: { bbox: nmcounties.json, patchesWidth: 100 }
         await model.startup()
         model.setup()
 
-        const countiesBBox = mltools.bboxFeature(world.bbox)
-
         const drawOptions = {
-            // patchesColor: 'transparent', // default
+            // patchesColor: 'transparent', // default in MapDraw
             linksColor: 'gray',
             linksWidth: 4,
             turtlesSize: 6,
@@ -41,11 +37,15 @@
         })
 
         // ===== Start of map & layers
+        // const maplibregl = await mltools.importMapLibre()
 
-        const map = await mltools.newMap(world, 5)
-        map.on('load', function () {
-            console.log('A load event occurred.');
-        });
+        const counties = model.world.geojson
+        const countiesBBox = mltools.bboxFeature(model.world.bbox)
+
+        await mltools.importMapLibre()
+
+        const map = await mltools.newMap(model.world.bboxCenter(), 5)
+        mltools.onLoad(map) // log msg on map load event; shouldn't occur, await above
 
         mltools.addRasterLayer(map, 'osm', mltools.osmUrl)
 
@@ -55,11 +55,10 @@
 
         // counties string => use as source id, above, rather than a new source layer
         mltools.addGeojsonLineLayer(map, 'countiesLine', 'counties', 'red', 3)
-        // mltools.addGeojsonLineLayer(map, 'countiesLine', counties, 'red', 3)
 
         mltools.addGeojsonLineLayer(map, 'countiesBBox', countiesBBox, 'blue')
 
-        mltools.addCanvasLayer(map, 'model', view.canvas, world.bboxCoords())
+        mltools.addCanvasLayer(map, 'model', view.canvas, model.world.bboxCoords())
 
         const msg = (props) => props.NAME + ', pop: ' + props.population.toLocaleString()
         mltools.addClickPopup(map, 'counties', msg)
@@ -75,7 +74,7 @@
             20 // 30 // 30 fps
         )
 
-        util.toWindow({ map, anim })
+        util.toWindow({ map, anim, model, util })
     </script>
 </body>
 

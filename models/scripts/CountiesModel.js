@@ -1,9 +1,20 @@
-import * as util from '../src/utils.js'
-import HelloModel from '../models/HelloModel.js'
-import booleanPointInPolygon from 'https://cdn.skypack.dev/@turf/boolean-point-in-polygon'
+var util = AS.util
+var HelloModel = AS.HelloModel
+// import GeoWorld from '../src/GeoWorld.js'
+var booleanPointInPolygon = AS.booleanPointInPolygon
 
-export default class CountiesModel extends HelloModel {
-    // Constructor not needed, called with GeoWorld world object, passed to super
+const counties = await fetch('../gis/data/nmcounties.json').then(resp =>
+    resp.json()
+)
+
+class CountiesModel extends HelloModel {
+    static defaultOptions() {
+        return { bbox: counties, patchesWidth: 100 }
+    }
+
+    constructor(options = CountiesModel.defaultOptions()) {
+        super(options)
+    }
     setup() {
         super.setup()
         this.patches.ask(p => {
@@ -31,3 +42,7 @@ export default class CountiesModel extends HelloModel {
         })
     }
 }
+
+CountiesModel
+const defaultModel = export
+

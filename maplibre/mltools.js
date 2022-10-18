@@ -1,7 +1,7 @@
 import * as util from '../src/utils.js'
-import * as gis from '../src/gis.js'
+// import * as gis from '../src/gis.js'
 import * as turf from '../gis/turfImports.js'
-import * as TileData from '../src/TileData.js'
+// import * as TileData from '../src/TileData.js'
 import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
 
 export async function importMapLibre() {
@@ -13,7 +13,8 @@ export async function importMapLibre() {
 }
 // export const maplibregl
 
-export function bboxFeature(bbox, options = { properties: {}, id: undefined }) {
+// export function bboxFeature(bbox, options = { properties: {}, id: undefined }) {
+export function bboxFeature(bbox, options = {}) {
     return turf.bboxPolygon(bbox, options)
 }
 
@@ -29,10 +30,19 @@ function defaultZoom(world) {
     const bbox = world.bbox
     // calc a zoom
 }
-export async function newMap(world, zoom = 10, div = 'map') {
+// async function emptyStyle() {
+//     return {
+//         version: 8,
+//         sources: {},
+//         layers: [],
+//     }
+// }
+function emptyMap(center, zoom, div) {
+    // "world" can be a model who's world we can use (model.world)
+    // if (world.world) world = world.world
     const map = new maplibregl.Map({
         container: div, // container id
-        center: world.bboxCenter(), // [-105.941109, 35.68222],
+        center: center, //world.bboxCenter(),
         zoom: zoom,
         // renderWorldCopies: false,
         style: {
@@ -41,12 +51,25 @@ export async function newMap(world, zoom = 10, div = 'map') {
             layers: [],
         },
     })
+    return map
+}
+export async function newMap(center, zoom = 10, div = 'map') {
+    const map = emptyMap(center, zoom, div)
     await mapLoadPromise(map)
 
     const nav = new maplibregl.NavigationControl()
     map.addControl(nav, 'top-left')
 
     return map
+}
+export function onLoad(map, msg = 'A load event occurred.') {
+    map.on('load', function () {
+        console.log(msg)
+    })
+}
+
+export function showTileBoundaries(map, show = true) {
+    map.showTileBoundaries = show
 }
 
 export const osmUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -72,6 +95,7 @@ export function addRasterLayer(map, id, url, opacity = 1) {
 // using the same geojson foe lines and fills.
 // Thus if the geojson arg is a string, it is used for the source id
 export function addGeojsonFillLayer(map, id, geojson, color) {
+    if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
     let sourceID = util.isString(geojson) ? geojson : id
 
     if (sourceID === id) {
@@ -89,7 +113,8 @@ export function addGeojsonFillLayer(map, id, geojson, color) {
 }
 
 export function addGeojsonLineLayer(map, id, geojson, color, width = 1) {
-    let sourceID = util.isString(geojson) ? geojson : id
+    if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
+    const sourceID = util.isString(geojson) ? geojson : id
 
     if (sourceID === id) {
         map.addSource(id, {
@@ -102,6 +127,30 @@ export function addGeojsonLineLayer(map, id, geojson, color, width = 1) {
         type: 'line',
         source: sourceID,
         paint: { 'line-color': color, 'line-width': width },
+    })
+}
+
+export function addGeojsonLayer(map, id, geojson, stroke, width = 1, fill) {
+    if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
+    const sourceID = util.isString(geojson) ? geojson : id
+
+    if (sourceID === id) {
+        map.addSource(id, {
+            type: 'geojson',
+            data: geojson,
+        })
+    }
+    map.addLayer({
+        id: id + 'Fill',
+        type: 'fill',
+        source: sourceID,
+        paint: { 'fill-color': fill },
+    })
+    map.addLayer({
+        id: id + 'Stroke',
+        type: 'line',
+        source: sourceID,
+        paint: { 'line-color': stroke, 'line-width': width },
     })
 }
 
@@ -130,6 +179,93 @@ export function addClickPopup(map, layerID, msg) {
     })
 }
 
+export const getLayer = (map, id) => map.getLayer(id)
+export const getLayers = map => map.getStyle().layers
+export const getPaintProperties = (map, id) =>
+    map.getLayer(id).paint._properties.properties
+export const getPaintPropertiesKeys = (map, id) =>
+    Object.keys(getPaintProperties(map, id))
+
+// function setTopLayerSource(map, layerId, source, sourceLayer) {
+//     // const oldLayers = map.getStyle().layers
+//     // const layerIndex = oldLayers.findIndex(l => l.id === layerId)
+//     // const layerDef = oldLayers[layerIndex]
+//     const layerDef = map.getLayer(layerId)
+//     const before = oldLayers[layerIndex + 1] && oldLayers[layerIndex + 1].id
+//     layerDef.source = source
+//     if (sourceLayer) {
+//         layerDef['source-layer'] = sourceLayer
+//     }
+//     map.removeLayer(layerId)
+//     map.addLayer(layerDef, before)
+
+//     map.getSource('bboxID').setData(updatedGeoJSONData)
+// }
+
+export function mouseRect(map, ev, fcn) {
+    let corner1, corner2
+    const bboxID = 'bboxID'
+
+    const getBBox = () => {
+        // console.log(corner1, corner2)
+        let [lon1, lat1] = [corner1.lng, corner1.lat]
+        let [lon2, lat2] = [corner2.lng, corner2.lat]
+
+        const minLon = Math.min(lon1, lon2),
+            maxLon = Math.max(lon1, lon2),
+            minLat = Math.min(lat1, lat2),
+            maxLat = Math.max(lat1, lat2)
+
+        const bbox = [minLon, minLat, maxLon, maxLat]
+        // console.log('bbox', bbox.toLocaleString())
+        return bbox
+    }
+    const setBBox = () => {
+        const bbox = getBBox()
+
+        const source = map.getSource(bboxID)
+        if (!source) {
+            addGeojsonLineLayer(map, bboxID, bbox, 'red', 4)
+        } else {
+            source.setData(bboxFeature(bbox))
+        }
+    }
+
+    const down = ev => {
+        // console.log('down', ev, ev.lngLat)
+        corner1 = corner2 = ev.lngLat
+        setBBox()
+
+        map.on('mousemove', move)
+        map.on('mouseup', up)
+        map.dragPan.disable()
+    }
+    const move = ev => {
+        // console.log('move:', ev.lngLat)
+        corner2 = ev.lngLat
+        setBBox()
+    }
+    const up = ev => {
+        // console.log('up:', ev.lngLat)
+        corner2 = ev.lngLat
+        const bbox = getBBox()
+
+        map.removeLayer(bboxID)
+        map.removeSource(bboxID)
+
+        map.off('mousemove', move)
+        map.off('mouseup', up)
+        map.dragPan.enable()
+
+        fcn(bbox)
+    }
+
+    if (!(ev.originalEvent.altKey && ev.originalEvent.button === 0)) return
+    // console.log('starting drag rect')
+
+    down(ev)
+}
+
 // export function getLayersList(map) {
 //     return map.getStyle().layers
 // }
@@ -142,13 +278,6 @@ export function addClickPopup(map, layerID, msg) {
 //     array.forEach(layer => (obj[layer.id] = layer))
 //     return obj
 // }
-
-export const getLayer = (map, id) => map.getLayer(id)
-export const getLayers = map => map.getStyle().layers
-export const getPaintProperties = (map, id) =>
-    map.getLayer(id).paint._properties.properties
-export const getPaintPropertiesKeys = (map, id) =>
-    Object.keys(getPaintProperties(map, id))
 
 // export async function importModel(url) {
 //     const Model = (await import(url)).default

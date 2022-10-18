@@ -31,7 +31,7 @@
         "url": "https://github.com/backspaces/agentscript/issues"
     },
     "scripts": {
-        "clean": "shx rm -rf dist vendor && shx mkdir dist vendor",
+        "clean": "shx rm -rf dist vendor views1 && shx mkdir dist vendor views1",
         "start0": "live-server --ignore=node_modules,docs,Attic ./ & #crlf bug",
         "start": "http-server -o -s > /dev/null",
         "start1": "serve",
@@ -55,8 +55,10 @@
         "run3": "bin/runmodels views3",
         "run3c": "bin/modelsinbrowser views3",
         "rund": "bin/runmodels docs",
-        "rungis": "bin/runmodels gis",
-        "rungisc": "bin/modelsinbrowser gis",
+        "runleaf": "bin/runmodels leaflet",
+        "runleafc": "bin/modelsinbrowser leaflet",
+        "runml": "bin/runmodels maplibre",
+        "runmlc": "bin/modelsinbrowser maplibre",
         "runmvc": "bin/runmodels mvc",
         "runmvcc": "bin/modelsinbrowser mvc",
         "run3w": "bin/runmodels workers3",

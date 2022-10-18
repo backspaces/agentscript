@@ -168,6 +168,8 @@ export const santaFeCenter = [-105.978, 35.66] // from leaflet click popup
 export const santaFeBBox = bboxFromCenter(santaFeCenter, 0.2, 0.1)
 export const newMexicoBBox = [-109.050044, 31.332301, -103.001964, 37.000104]
 export const newMexicoCenter = bboxCenter(newMexicoBBox)
+export const usaBBox = [-124.733174, 24.544701, -66.949895, 49.384358]
+export const usaCenter = bboxCenter(usaBBox)
 
 export function bboxSize(bbox) {
     const [west, south, east, north] = bbox
@@ -259,13 +261,14 @@ export function attribution(who = 'osm') {
                 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
             )
     }
+    throw Error('gis.attribution: name unknown:', who)
 }
 export function template(who = 'osm') {
     switch (who) {
         case 'osm':
-            return 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            return 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
         case 'topo':
-            return 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png'
+            return 'https://a.tile.opentopomap.org/{z}/{x}/{y}.png'
         case 'topo1':
             return 'https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs'
         case 'smooth':
@@ -273,6 +276,7 @@ export function template(who = 'osm') {
         case 'usgs':
             return 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}'
     }
+    throw Error('gis.template: name unknown:', who)
 }
 export function url(z, x, y, who = 'osm') {
     switch (who) {
@@ -286,5 +290,23 @@ export function url(z, x, y, who = 'osm') {
             return `https://tiles.stadiamaps.com/tiles/alidade_smooth/${z}/${x}/${y}{r}.png`
         case 'usgs':
             return `https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/${z}/${y}/${x}`
+    }
+    throw Error('gis.url: name unknown:', who)
+}
+export function elevationTemplate(who = 'mapzen') {
+    switch (who) {
+        case 'mapzen':
+            return `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png`
+        case 'maptiler':
+            return `https://api.maptiler.com/tiles/terrain-rgb/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs`
+        case 'redfishUSA':
+            return `https://s3-us-west-2.amazonaws.com/simtable-elevation-tiles/{z}/{x}/{y}.png`
+        case 'redfishWorld':
+            return `https://s3-us-west-2.amazonaws.com/world-elevation-tiles/DEM_tiles/{z}/{x}/{y}.png`
+        case 'mapbox':
+            return (
+                `https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.png?access_token=` +
+                'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
+            )
     }
 }

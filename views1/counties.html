@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>Counties</title>
+</head>
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import Model from '../models/CountiesModel.js'
+
+        util.printToPage('Running for 500 steps. Takes a while!')
+
+        const model = new Model()
+        await model.startup()
+        model.setup()
+        await util.timeoutLoop(() => {
+            model.step()
+        }, 500)
+
+        const sample = util.sampleModel(model)
+        util.printToPage(sample)
+    </script>
+</body>
+</html>

@@ -17,15 +17,16 @@
         import GeoWorld from '../src/GeoWorld.js'
         import TwoDraw from '../src/TwoDraw.js'
         import Animator from '../src/Animator.js'
-        import CountiesModel from '../gis/CountiesModel.js'
+        import CountiesModel from '../models/CountiesModel.js'
 
         import * as L from 'https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.esm.js'
         import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
 
-        const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
-
-        const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
-        const model = new CountiesModel(world)
+        // If not using the default model options:
+        // const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
+        // const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
+        // const model = new CountiesModel(world)
+        const model = new CountiesModel() // default: { bbox: nmcounties.json, patchesWidth: 100 }
         await model.startup()
         model.setup()
 
@@ -43,10 +44,11 @@
         })
 
         // ===== Start of map & layers
+        const bbox = model.world.bbox
+        const bboxCenter = model.world.bboxCenter()
+        const counties = model.world.geojson
 
         // ===== The map using the div, model center and Z. World is a GeoWorld
-        const bbox = world.bbox
-        const bboxCenter = world.bboxCenter()
         const zoom = 7
         // preferCanvas seems to be needed for model on top of json?
         const map = L.map('map', { preferCanvas: true, })
@@ -95,7 +97,7 @@
             20 // 30 // 30 fps
         )
 
-        util.toWindow({ map, modelLayer, anim })
+        util.toWindow({ map, modelLayer, anim, util })
     </script>
 </body>
 

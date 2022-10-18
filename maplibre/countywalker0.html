@@ -12,35 +12,33 @@
 
     <script type="module">
         import * as util from '../src/utils.js'
-        import * as gis from '../src/gis.js'
-        import * as turf from '../gis/turfImports.js'
+        import * as mltools from './mltools.js'
 
-        import GeoWorld from '../src/GeoWorld.js'
-        import TwoDraw from '../src/TwoDraw.js'
+        import MapDraw from '../src/MapDraw.js'
         import Animator from '../src/Animator.js'
-        import CountiesModel from '../gis/CountiesModel.js'
+        import CountiesModel from '../models/CountiesModel.js'
 
         import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
 
-        const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
-
-        const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
-        const model = new CountiesModel(world)
+        // If not using the default model options:
+        // const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
+        // const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
+        // const model = new CountiesModel(world)
+        const model = new CountiesModel() // default: { bbox: nmcounties.json, patchesWidth: 100 }
         await model.startup()
         model.setup()
 
-        const countiesBBox = turf.bboxPolygon(world.bbox)
-
+        // MapDraw has default patchesColor & div as commented out below
         const drawOptions = {
-            patchesColor: 'transparent',
+            // patchesColor: 'transparent', // default in MapDraw
             linksColor: 'gray',
             linksWidth: 4,
             turtlesSize: 6,
             turtlesColor: t =>
                 view.drawOptions.turtlesMap.atIndex(t.county + 1),
         }
-        const view = new TwoDraw(model, {
-            div: util.createCanvas(0, 0), // the view will resize
+        const view = new MapDraw(model, {
+            // div: util.createCanvas(0, 0), // default & the view will resize
             drawOptions,
         })
 
@@ -48,7 +46,7 @@
 
         const map = new maplibregl.Map({
             container: 'map', // container id
-            center: world.bboxCenter(), // [-105.941109, 35.68222],
+            center: model.world.bboxCenter(), // [-105.941109, 35.68222],
             zoom: 5,
             renderWorldCopies: false,
 
@@ -71,16 +69,17 @@
                     },
                     counties: {
                         type: 'geojson',
-                        data: counties,
+                        data: model.world.geojson,
                     },
                     countiesBBox: {
                         type: 'geojson',
-                        data: countiesBBox,
+                        data: mltools.bboxFeature(model.world.bbox),
+                        // data: turf.bboxPolygon(model.world.bbox),
                     },
                     model: {
                         type: 'canvas',
                         canvas: view.canvas,
-                        coordinates: world.bboxCoords(world.bbox),
+                        coordinates: model.world.bboxCoords(model.world.bbox),
                     },
                 },
 
@@ -123,9 +122,7 @@
                 ]
             },
         })
-        map.on('load', function () {
-            console.log('A load event occurred.');
-        });
+        mltools.onLoad(map) // log msg on map load event; shouldn't occur, await above
 
         map.on('click', 'counties', function (e) {
             const props = e.features[0].properties
@@ -148,7 +145,7 @@
                 -1, // 500, // run this many steps, -1 for forever
                 20 // 30 // 30 fps
             )
-            util.toWindow({ map, anim })
+            util.toWindow({ map, anim, model, util })
         })
     </script>
 </body>

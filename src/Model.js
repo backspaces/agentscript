@@ -1,4 +1,5 @@
 import World from './World.js'
+import GeoWorld from './GeoWorld.js'
 import Patches from './Patches.js'
 import Patch from './Patch.js'
 import Turtles from './Turtles.js'
@@ -44,11 +45,16 @@ class Model {
         this[name] = new AgentsetClass(this, AgentClass, name)
     }
 
+    options2world(worldOptions) {
+        return worldOptions.bbox
+            ? new GeoWorld(worldOptions)
+            : new World(worldOptions)
+    }
     resetModel(worldOptions) {
         this.ticks = 0
         this.world =
-            worldOptions.maxXcor === undefined
-                ? new World(worldOptions)
+            worldOptions.maxXcor === undefined // is already a world object
+                ? this.options2world(worldOptions)
                 : worldOptions
         // Base AgentSets setup here. Breeds handled by setup
         this.initAgentSet('patches', Patches, Patch)

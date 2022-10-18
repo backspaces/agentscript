@@ -11,6 +11,7 @@ const headless = true
 const port = 9008
 const useWorkers = true
 const compareSamples = true
+const debug = false
 const nonWorker = model => [].includes(model)
 // const nonWorker = model => ['droplets'].includes(model)
 
@@ -48,8 +49,11 @@ shell.echo('using Workers:', useWorkers)
 
 async function runModels() {
     for (const model of models) {
+        if (debug) console.log('model', model)
         await test.serial(model, async t => {
+            if (debug) console.log('calling runModel')
             const sample = await runModel(model)
+            if (debug) console.log('sample', sample)
 
             currentSamples[model] = sample
             const testSample = lastSamples[model]
@@ -82,20 +86,22 @@ async function runModel(model) {
         useWorkers && !nonWorker(model) // use list of non-worker models
             ? `http://127.0.0.1:${port}/models/worker.html?${model}`
             : `http://127.0.0.1:${port}/models/test.html?${model}`
-
+    if (debug) console.log('in runModel, url = ', url)
     // ? `http://localhost/src/agentscript/models/worker.html?${model}`
     // : `http://localhost/src/agentscript/models/test.html?${model}`
-
-    // console.log(url)
 
     const browser = await puppeteer.launch({
         args: ['--user-agent=Puppeteer'], // model: show being run by Puppeteer
         headless: headless, // use for useful debugging!
     })
+    if (debug) console.log('puppeteer launched, browser = ', browser)
+
     const page = await browser.newPage()
     await page.setDefaultNavigationTimeout(200000)
+    if (debug) console.log('browser.newPage() = ', page)
 
     await page.goto(url)
+    if (debug) console.log('called page.goto(url), calling page.evaluate')
     const sample = await page.evaluate(() => {
         return new Promise(resolve => {
             function waitOn() {
@@ -108,6 +114,7 @@ async function runModel(model) {
             waitOn()
         })
     })
+    if (debug) console.log('returned from page.evaluate, sample: ', sample)
 
     await page.close()
     await browser.close()

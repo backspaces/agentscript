@@ -291,6 +291,7 @@ class BBoxTransform {
 
         if (minX < maxX) [minX, maxX] = [maxX, minX]
         if (maxY < minY) [maxY, minY] = [minY, maxY]
+
         const { maxXcor, maxYcor, minXcor, minYcor } = world
 
         const mx = (minX - maxX) / (maxXcor - minXcor)

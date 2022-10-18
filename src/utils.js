@@ -137,6 +137,12 @@ export async function fetchData(url, type = 'blob') {
         throw Error('fetchData: data must be one of ' + types.toString())
     return fetch(url).then(res => res[type]())
 }
+export async function fetchJson(url) {
+    return fetchData(url, 'json')
+}
+export async function fetchText(url) {
+    return fetchData(url, 'text')
+}
 // Return a dataURL for the given data. type is a mime type: https://t.ly/vzKm
 // If data is a canvas, return data.toDataURL(type), defaulting to image/png
 // Otherwise, use btoa/base64, default type text/plain;charset=US-ASCII
@@ -347,9 +353,14 @@ export function createCanvas(width, height, offscreen = offscreenOK()) {
  * @param {boolean} [offscreen=offscreenOK()] If true, return "Offscreen" canvas
  * @returns {Context2D} The resulting Canvas's 2D context
  */
-export function createCtx(width, height, offscreen = offscreenOK()) {
+export function createCtx(
+    width,
+    height,
+    offscreen = offscreenOK(),
+    attrs = {}
+) {
     const can = createCanvas(width, height, offscreen)
-    return can.getContext('2d')
+    return can.getContext('2d', attrs)
 }
 
 // Duplicate a canvas, preserving it's current image/drawing

@@ -2,6 +2,7 @@ Code    | Run demo
 ------- | ------
 [ants](https://github.com/backspaces/agentscript/tree/master/views1/ants.html#L1) | [https://code.agentscript.org/views1/ants.html](https://code.agentscript.org/views1/ants.html)
 [buttons](https://github.com/backspaces/agentscript/tree/master/views1/buttons.html#L1) | [https://code.agentscript.org/views1/buttons.html](https://code.agentscript.org/views1/buttons.html)
+[counties](https://github.com/backspaces/agentscript/tree/master/views1/counties.html#L1) | [https://code.agentscript.org/views1/counties.html](https://code.agentscript.org/views1/counties.html)
 [diffuse](https://github.com/backspaces/agentscript/tree/master/views1/diffuse.html#L1) | [https://code.agentscript.org/views1/diffuse.html](https://code.agentscript.org/views1/diffuse.html)
 [droplets](https://github.com/backspaces/agentscript/tree/master/views1/droplets.html#L1) | [https://code.agentscript.org/views1/droplets.html](https://code.agentscript.org/views1/droplets.html)
 [exit](https://github.com/backspaces/agentscript/tree/master/views1/exit.html#L1) | [https://code.agentscript.org/views1/exit.html](https://code.agentscript.org/views1/exit.html)
