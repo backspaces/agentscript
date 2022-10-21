@@ -51,7 +51,7 @@
             },
         })
         await mltools.mapLoadPromise(map)
-        mltools.onLoad(map) // log msg on map load event; shouldn't occur, await above
+        mltools.onLoad(map) // log msg on load event; shouldn't occur, await above
 
         map.addSource('osm', {
             type: 'raster',

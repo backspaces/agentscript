@@ -94,7 +94,7 @@ export function addRasterLayer(map, id, url, opacity = 1) {
 // Note both geojson layers can share their sources due to often
 // using the same geojson foe lines and fills.
 // Thus if the geojson arg is a string, it is used for the source id
-export function addGeojsonFillLayer(map, id, geojson, color) {
+export function addGeojsonFillLayer(map, id, geojson, fill, opacity, stroke) {
     if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
     let sourceID = util.isString(geojson) ? geojson : id
 
@@ -108,7 +108,17 @@ export function addGeojsonFillLayer(map, id, geojson, color) {
         id: id,
         type: 'fill',
         source: sourceID,
-        paint: { 'fill-color': color },
+        paint: {
+            'fill-color': fill,
+            'fill-outline-color': stroke ? stroke : fill,
+            'fill-opacity': opacity ? opacity : 1,
+            // 'fill-opacity': [
+            //     'case',
+            //     ['boolean', ['feature-state', 'hover'], false],
+            //     1,
+            //     0.5,
+            // ],
+        },
     })
 }
 
@@ -130,7 +140,7 @@ export function addGeojsonLineLayer(map, id, geojson, color, width = 1) {
     })
 }
 
-export function addGeojsonLayer(map, id, geojson, stroke, width = 1, fill) {
+export function addGeojsonLayer(map, id, geojson, fill, stroke, width = 2) {
     if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
     const sourceID = util.isString(geojson) ? geojson : id
 
@@ -141,7 +151,8 @@ export function addGeojsonLayer(map, id, geojson, stroke, width = 1, fill) {
         })
     }
     map.addLayer({
-        id: id + 'Fill',
+        // id: id + 'Fill',
+        id: id,
         type: 'fill',
         source: sourceID,
         paint: { 'fill-color': fill },
@@ -168,14 +179,23 @@ export function addCanvasLayer(map, id, canvas, coordinates) {
 }
 
 export function addClickPopup(map, layerID, msg) {
-    map.on('click', layerID, function (e) {
-        const props = e.features[0].properties
-        const html = msg(props, e)
+    map.on('click', layerID, function (ev) {
+        const props = ev.features[0].properties
+        const html = msg(props, ev)
         // msg = msg.toLocaleString()
         new maplibregl.Popup({ maxWidth: 'none' })
-            .setLngLat(e.lngLat)
+            .setLngLat(ev.lngLat)
             .setHTML(html)
             .addTo(map)
+    })
+}
+
+export function addMapCursor(map, fillID, cursor = 'pointer') {
+    map.on('mouseenter', fillID, () => {
+        map.getCanvas().style.cursor = cursor
+    })
+    map.on('mouseleave', fillID, () => {
+        map.getCanvas().style.cursor = ''
     })
 }
 
@@ -185,6 +205,20 @@ export const getPaintProperties = (map, id) =>
     map.getLayer(id).paint._properties.properties
 export const getPaintPropertiesKeys = (map, id) =>
     Object.keys(getPaintProperties(map, id))
+
+// point can be a lngLat object or [lng, lat] array
+export function findPolygon(geojson, point) {
+    if (point.lng) point = [point.lng, point.lat]
+    const features = geojson.features
+
+    for (const feature of features) {
+        if (turf.booleanPointInPolygon(point, feature)) return feature
+    }
+    return null
+
+    // console.log(features[0], point)
+    // return features[0]
+}
 
 // function setTopLayerSource(map, layerId, source, sourceLayer) {
 //     // const oldLayers = map.getStyle().layers

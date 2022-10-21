@@ -143,6 +143,7 @@ export async function fetchJson(url) {
 export async function fetchText(url) {
     return fetchData(url, 'text')
 }
+
 // Return a dataURL for the given data. type is a mime type: https://t.ly/vzKm
 // If data is a canvas, return data.toDataURL(type), defaulting to image/png
 // Otherwise, use btoa/base64, default type text/plain;charset=US-ASCII

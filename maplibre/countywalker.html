@@ -45,13 +45,13 @@
         await mltools.importMapLibre()
 
         const map = await mltools.newMap(model.world.bboxCenter(), 5)
-        mltools.onLoad(map) // log msg on map load event; shouldn't occur, await above
+        mltools.onLoad(map) // log msg on load event; shouldn't occur, await above
 
         mltools.addRasterLayer(map, 'osm', mltools.osmUrl)
 
         mltools.addRasterLayer(map, 'elevation', mltools.elevationUrl, 0.15)
 
-        mltools.addGeojsonFillLayer(map, 'counties', counties, 'rgba(255, 0, 0, 0.2)')
+        mltools.addGeojsonFillLayer(map, 'counties', counties, 'red', 0.2)
 
         // counties string => use as source id, above, rather than a new source layer
         mltools.addGeojsonLineLayer(map, 'countiesLine', 'counties', 'red', 3)
@@ -60,7 +60,7 @@
 
         mltools.addCanvasLayer(map, 'model', view.canvas, model.world.bboxCoords())
 
-        const msg = (props) => props.NAME + ', pop: ' + props.population.toLocaleString()
+        const msg = props => props.NAME + ', pop: ' + props.population.toLocaleString()
         mltools.addClickPopup(map, 'counties', msg)
 
         // ===== End of map & layers

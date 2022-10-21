@@ -10,22 +10,39 @@
         import * as gis from '../src/gis.js'
         // import { geojsonBBox } from '../src/geojson.js'
         import * as mltools from './mltools.js'
+        import statecodes from '../models/data/statecodes.js'
+        // import usstates from '../models/data/statecodes.js'
 
         const uscountiesUrl = 'https://backspaces.s3.amazonaws.com/uscounties.json'
+        const usstatesUrl = 'https://backspaces.s3.amazonaws.com/usstates.json'
         const uscounties = await util.fetchJson(uscountiesUrl)
+        const usstates = await util.fetchJson(usstatesUrl)
         const usaCenter = gis.usaCenter
         const terrain = gis.template('usgs')
 
         const maplibregl = await mltools.importMapLibre()
 
         const map = await mltools.newMap(usaCenter, 4)
-        // mltools.onLoad(map, 'load') // log msg on map load event; shouldn't occur, await above
+        // mltools.onLoad(map, 'load') // log msg on load event; shouldn't occur, await above
 
         mltools.addRasterLayer(map, 'terrain', terrain)
 
-        mltools.addGeojsonLineLayer(map, 'uscounties', uscounties, 'red', 1)
+        // mltools.addGeojsonLineLayer(map, 'uscounties', uscounties, 'red', 1)
+        // We need to use fill, rather than line, layer so that on-click works within polys
+        // mltools.addGeojsonFillLayer(map, 'uscounties', uscounties, 'transparent', 'red',)
 
-        util.toWindow({ util, gis, map, mltools })
+        mltools.addGeojsonFillLayer(map, 'countiesFill', uscounties, 'orange', 0.5)
+
+        mltools.addGeojsonLineLayer(map, 'countiesBorder', 'countiesFill', 'red', 2)
+
+        mltools.addGeojsonLineLayer(map, 'usstates', usstates, 'blue')
+
+        const msg = props => props.NAME + ', ' + statecodes[props.STATE].name
+        mltools.addClickPopup(map, 'countiesFill', msg)
+
+        mltools.addMapCursor(map, 'countiesFill')
+
+        util.toWindow({ util, gis, map, mltools, usstates })
     </script>
     <div id="map"></div>
 </body>
