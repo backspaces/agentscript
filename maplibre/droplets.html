@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <title>Droplets</title>
+</head>
+
+<body>
+    <script type="module">
+        // import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
+        import * as mltools from './mltools.js'
+        import Model from '../models/DropletsModel.js'
+        import MapDraw from '../src/MapDraw.js'
+        import RunModelView from '../src/RunModelView.js'
+
+        import Color from '../src/Color.js'
+        import ColorMap from '../src/ColorMap.js'
+
+        const bbox = gis.santaFeBBox
+        let zoom = 10 // int for computing usages, maplibre uses fractional zooms
+        const viewOptions = {
+            // div: util.createCanvas(0, 0), // default & the view will resize
+            patchSize: 2,
+            drawOptions: {
+                // patchesColor: 'transparent', // default in MapDraw
+                turtlesShape: 'square',
+                turtlesRotate: false,
+                turtlesSize: 0.8,
+                turtlesColor: 'blue',
+            },
+        }
+
+        const modelView = new RunModelView(Model, MapDraw, viewOptions)
+        const patchesWidth = 250
+        await modelView.setWorld({ bbox, patchesWidth }, zoom)
+
+        // ===== Start of map & layers
+
+        // terrain sources: osm topo topo1 smooth usgs
+        // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
+        const terrain = gis.template('topo')
+        const elevation = gis.elevationTemplate('mapzen')
+
+        const map = await mltools.newMap(bbox, zoom)
+
+        mltools.addRasterLayer(map, 'terrain', terrain)
+
+        // mltools.addRasterLayer(map, 'elevation', elevation, 0.15)
+
+        // mltools.addGeojsonLayer(map, 'bbox', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
+        mltools.addGeojsonLayer(map, 'bbox', bbox, 'transparent', 'red', 3)
+
+        mltools.addCanvasLayer(map, 'model', modelView.canvas, bbox)
+
+        // fcn args: fcn(bbox) where bbox is dragged rectangle in geo coords
+        // const fcn = bbox => console.log(bbox)
+        const dragFcn = async bbox => {
+            await modelView.setWorld({ bbox, patchesWidth }, mltools.getZoom(map))
+            // modelView.run() // not needed, initial run steps were -1, forever
+            mltools.updateGeojson(map, 'bbox', bbox)
+            mltools.updateCanvas(map, 'model', modelView.canvas, bbox)
+            // map.panTo(gis.bboxCenter(bbox))
+        }
+        mltools.addDragRect(map, dragFcn)
+
+        // const clickFcn = async () => { await modelView.setWorld() }
+        // mltools.addLayerClick(map, 'bbox', clickFcn)
+
+        // ===== End of map & layers
+
+        modelView.run(-1, 30) // steps, fps. steps of -1 goes forever
+
+        // util.toWindow({ map, modelView })
+    </script>
+    <div id="map"></div>
+</body>
+
+</html>

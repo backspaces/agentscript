@@ -6,73 +6,52 @@
 
 <body>
     <script type="module">
-        import * as util from '../src/utils.js'
+        // import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
         import * as mltools from './mltools.js'
 
-        import GeoWorld from '../src/GeoWorld.js'
         import Animator from '../src/Animator.js'
         import Model from '../models/HelloModel.js'
-
         import MapDraw from '../src/MapDraw.js'
 
-        const world = new GeoWorld({ bbox: gis.santaFeBBox, patchesWidth: 100 })
-        const model = new Model(world)
+        const bbox = gis.santaFeBBox
+        const worldOptions = { bbox: bbox, patchesWidth: 100 }
+
+        const model = new Model(worldOptions)
         await model.startup()
         model.setup()
 
-        const drawOptions = {
-            // patchesColor: 'transparent', // default in MapDraw
-            turtlesSize: 2,
-            linksWidth: 0.2,
-        }
         const view = new MapDraw(model, {
             // div: util.createCanvas(0, 0), // default & the view will resize
             patchSize: 5,
-            drawOptions,
+            drawOptions: {
+                // patchesColor: 'transparent', // default in MapDraw
+                turtlesSize: 4,
+                linksWidth: 0.2,
+            },
         })
 
-        const maplibregl = await mltools.importMapLibre()
-        const santaFeBBox = mltools.bboxFeature(model.world.bbox)
+
+        // ===== Start of map & layers
 
         // terrain sources: osm topo topo1 smooth usgs
         // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
-        // const foo = mltools.osmUrl
         const terrain = gis.template('topo')
         const elevation = gis.elevationTemplate('mapzen')
 
+        const map = await mltools.newMap(bbox, 10)
 
-        const map = await mltools.newMap(model.world.bboxCenter(), 10)
-        // mltools.showTileBoundaries(map, true) // good for debugging tiles and zxy's
-
-        mltools.onLoad(map, 'load') // log msg on load event; shouldn't occur, await above
-
-        // mltools.addRasterLayer(map, 'terrain', terrain)
         mltools.addRasterLayer(map, 'terrain', terrain)
 
-        mltools.addRasterLayer(map, 'elevation', mltools.elevationUrl, 0.5)
+        mltools.addRasterLayer(map, 'elevation', elevation, 0.2)
 
-        // mltools.addGeojsonFillLayer(map, 'santaFe', santaFeBBox, 'rgba(255, 0, 0, 0.2)')
+        // mltools.addGeojsonFillLayer(map, 'santaFe', world.bbox, 'rgba(255, 0, 0, 0.2)')
+        // mltools.addGeojsonLineLayer(map, 'santaFeBorder', world.bbox, 'red', 3)
+        mltools.addGeojsonLayer(map, 'santaFe', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 
-        // mltools.addGeojsonLineLayer(map, 'santaFeBorder', santaFeBBox, 'red', 3)
+        mltools.addCanvasLayer(map, 'model', view.canvas, bbox)
 
-        mltools.addGeojsonLayer(map, 'santaFe', world.bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
-
-        mltools.addCanvasLayer(map, 'model', view.canvas, model.world.bboxCoords())
-
-        map.on('mousedown', function (ev) {
-            // console.log('A mousedown event has occurred.', ev)
-            // console.log('alt', ev.originalEvent.altKey)
-            // console.log('button', ev.originalEvent.button)
-            mltools.mouseRect(map, ev, bbox => console.log(bbox))
-        })
-        // map.on('drag', function (ev) {
-        //     console.log('A drag event occurred.', ev);
-        // });
-        // map.on('dragend', function () {
-        //     console.log('A dragend event occurred.', ev);
-        // });
-
+        // ===== End of map & layers
 
         const anim = new Animator(
             () => {
@@ -81,9 +60,8 @@
             },
             500, // run 500 steps
             30 // 30 fps
-        ).startStats()
+        ) //.startStats()
 
-        util.toWindow({ util, model, view, anim, gis, map, mltools })
     </script>
     <div id="map"></div>
 </body>

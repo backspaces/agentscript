@@ -7,6 +7,9 @@ var Model = AS.Model
 //   mapzenDataSet
 //   mapboxDataSet
 import { mapzen as provider } from '../src/TileData.js'
+var BBoxDataSet = AS.BBoxDataSet
+// import { MathUtils } from 'three'
+import { bbox } from '../gis/turfImports.js'
 
 class DropletsModel extends Model {
     speed = 0.5
@@ -30,11 +33,38 @@ class DropletsModel extends Model {
         super(worldOptions)
     }
 
-    // data can be gis zxy or a DataSet
+    // data can be gis [z, x, y], [bbox, z], z, or a DataSet
+    // if world is a geoworld: [world.bbox, z]
     async startup(data = [13, 1594, 3339]) {
-        this.elevation = data.width // is a dataset
-            ? data
-            : await provider.zxyToDataSet(...data)
+        // this.elevation = data.width // is a dataset
+        //     ? data
+        //     : await provider.zxyToDataSet(...data)
+
+        if (data.width) {
+            // data is a dataset, use as is
+            this.elevation = data
+        } else if (Array.isArray(data) && data.length === 3) {
+            if (data.length === 3) {
+                // data is [z, x, y] array
+                this.elevation = await provider.zxyToDataSet(...data)
+            } else if ((data.length = 2)) {
+                // data is [bbox, zoom]
+                this.elevation = await new BBoxDataSet().getBBoxDataSet(...data)
+            }
+        } else if (typeof data === 'number') {
+            // data is zoom; use world.bbox for bbox
+            const bbox = this.world.bbox
+            const zoom = data
+            if (bbox) {
+                const bboxDataSet = new BBoxDataSet()
+                this.elevation = await bboxDataSet.getBBoxDataSet(bbox, zoom)
+            }
+        }
+
+        if (!this.elevation)
+            throw Error(
+                'model startup: data argument is not one of [z, x, y], [bbox, z], z, or a DataSet'
+            )
     }
     installDataSets(elevation) {
         const slopeAndAspect = elevation.slopeAndAspect()

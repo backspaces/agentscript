@@ -27,6 +27,8 @@ export default BBoxDataSet
 // test with bbox = gis.santaFeBBox; zoom = 11
 
 export function bboxToXYZs(bbox, zoom) {
+    // if (Array.isArray(zoom)) [zoom, bbox] = [bbox, zoom]
+
     const [westX, southY, eastX, northY] = bboxCornerXYs(bbox, zoom)
 
     const xyzs = []

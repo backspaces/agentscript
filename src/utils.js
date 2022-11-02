@@ -257,12 +257,13 @@ export function xhrPromise(url, type = 'text', method = 'GET') {
 
 /**
  * Return promise for pause of ms.
- * Use: await timeoutPromise(ms)
+ * Use: await pause(ms)
  *
  * @param {number} [ms=1000] Number of ms to pause
  * @returns {Promise} A promise to wait this number of ms
  */
-export function timeoutPromise(ms = 1000) {
+// export function timeoutPromise(ms = 1000) {
+export function pause(ms = 1000) {
     return new Promise(resolve => {
         setTimeout(resolve, ms)
     })
@@ -271,7 +272,7 @@ export function timeoutPromise(ms = 1000) {
 // steps < 0: forever (default), steps === 0 is no-op
 // Returns a promise for when done. If forever, no need to use it.
 /**
- * Use timeoutPromise for an animation loop.
+ * Use pause for an animation loop.
  * Calls the fcn each step
  * Stops after steps calls, negative means run forever
  *
@@ -283,7 +284,7 @@ export async function timeoutLoop(fcn, steps = -1, ms = 0) {
     let i = 0
     while (i++ !== steps) {
         fcn(i - 1)
-        await timeoutPromise(ms)
+        await pause(ms)
     }
 }
 

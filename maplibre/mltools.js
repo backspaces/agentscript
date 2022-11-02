@@ -1,21 +1,27 @@
 import * as util from '../src/utils.js'
-// import * as gis from '../src/gis.js'
+import * as gis from '../src/gis.js'
 import * as turf from '../gis/turfImports.js'
 // import * as TileData from '../src/TileData.js'
 import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
 
+let mapLibreCss
 export async function importMapLibre() {
-    await util.fetchCssStyle(
+    if (mapLibreCss) return maplibregl
+    mapLibreCss = await util.fetchCssStyle(
         'https://unpkg.com/maplibre-gl/dist/maplibre-gl.css'
     )
     await util.fetchCssStyle('./fullScreen.css')
     return maplibregl
 }
-// export const maplibregl
 
-// export function bboxFeature(bbox, options = { properties: {}, id: undefined }) {
+// options = { properties: {}, id: undefined }
 export function bboxFeature(bbox, options = {}) {
     return turf.bboxPolygon(bbox, options)
+}
+
+function isBBox(obj) {
+    if (!Array.isArray(obj) || obj.length !== 4) return false
+    return obj.every(val => util.isNumber(val))
 }
 
 export async function mapLoadPromise(map) {
@@ -30,13 +36,6 @@ function defaultZoom(world) {
     const bbox = world.bbox
     // calc a zoom
 }
-// async function emptyStyle() {
-//     return {
-//         version: 8,
-//         sources: {},
-//         layers: [],
-//     }
-// }
 function emptyMap(center, zoom, div) {
     // "world" can be a model who's world we can use (model.world)
     // if (world.world) world = world.world
@@ -54,6 +53,12 @@ function emptyMap(center, zoom, div) {
     return map
 }
 export async function newMap(center, zoom = 10, div = 'map') {
+    zoom = Math.round(zoom) // needed for tile, bbox, etc calculations
+
+    if (isBBox(center)) center = gis.bboxCenter(center)
+
+    await importMapLibre() // is no-op if css already loaded
+
     const map = emptyMap(center, zoom, div)
     await mapLoadPromise(map)
 
@@ -68,13 +73,40 @@ export function onLoad(map, msg = 'A load event occurred.') {
     })
 }
 
+export function getZoom(map, round = true) {
+    let zoom = map.getZoom()
+    if (round) zoom = Math.round(zoom)
+    return zoom
+}
+
 export function showTileBoundaries(map, show = true) {
     map.showTileBoundaries = show
 }
 
-export const osmUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-export const elevationUrl =
-    'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
+export const getLayer = (map, id) => map.getLayer(id)
+export const getLayers = map => map.getStyle().layers
+export const getPaintProperties = (map, id) =>
+    map.getLayer(id).paint._properties.properties
+export const getPaintPropertiesKeys = (map, id) =>
+    Object.keys(getPaintProperties(map, id))
+
+// // point can be a lngLat object or [lng, lat] array
+// export function findPolygon(geojson, point) {
+//     if (point.lng) point = [point.lng, point.lat]
+//     const features = geojson.features
+
+//     for (const feature of features) {
+//         if (turf.booleanPointInPolygon(point, feature)) return feature
+//     }
+//     return null
+
+//     // console.log(features[0], point)
+//     // return features[0]
+// }
+
+// export const osmUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
+// export const elevationUrl =
+//     'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
 
 export function addRasterLayer(map, id, url, opacity = 1) {
     map.addSource(id, {
@@ -92,10 +124,12 @@ export function addRasterLayer(map, id, url, opacity = 1) {
 }
 
 // Note both geojson layers can share their sources due to often
-// using the same geojson foe lines and fills.
+// using the same geojson for lines and fills.
 // Thus if the geojson arg is a string, it is used for the source id
 export function addGeojsonFillLayer(map, id, geojson, fill, opacity, stroke) {
-    if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
+    if (isBBox(geojson)) geojson = bboxFeature(geojson)
+
+    // if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
     let sourceID = util.isString(geojson) ? geojson : id
 
     if (sourceID === id) {
@@ -123,7 +157,7 @@ export function addGeojsonFillLayer(map, id, geojson, fill, opacity, stroke) {
 }
 
 export function addGeojsonLineLayer(map, id, geojson, color, width = 1) {
-    if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
+    if (isBBox(geojson)) geojson = bboxFeature(geojson)
     const sourceID = util.isString(geojson) ? geojson : id
 
     if (sourceID === id) {
@@ -141,7 +175,8 @@ export function addGeojsonLineLayer(map, id, geojson, color, width = 1) {
 }
 
 export function addGeojsonLayer(map, id, geojson, fill, stroke, width = 2) {
-    if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
+    if (isBBox(geojson)) geojson = bboxFeature(geojson)
+    // if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
     const sourceID = util.isString(geojson) ? geojson : id
 
     if (sourceID === id) {
@@ -165,11 +200,13 @@ export function addGeojsonLayer(map, id, geojson, fill, stroke, width = 2) {
     })
 }
 
-export function addCanvasLayer(map, id, canvas, coordinates) {
+export function addCanvasLayer(map, id, canvas, coords) {
+    if (isBBox(coords)) coords = gis.bboxCoords(coords)
+
     map.addSource(id, {
         type: 'canvas',
         canvas: canvas,
-        coordinates: coordinates,
+        coordinates: coords,
     })
     map.addLayer({
         id: id,
@@ -178,7 +215,22 @@ export function addCanvasLayer(map, id, canvas, coordinates) {
     })
 }
 
-export function addClickPopup(map, layerID, msg) {
+export function updateGeojson(map, id, geojson) {
+    if (isBBox(geojson)) geojson = bboxFeature(geojson)
+    map.getSource(id).setData(geojson)
+}
+
+export function updateCanvas(map, id, canvas, coords) {
+    map.removeLayer(id)
+    map.removeSource(id)
+    addCanvasLayer(map, id, canvas, coords)
+}
+
+export function addLayerClick(map, layerID, fcn) {
+    map.on('click', layerID, fcn)
+}
+
+export function addLayerClickPopup(map, layerID, msg) {
     map.on('click', layerID, function (ev) {
         const props = ev.features[0].properties
         const html = msg(props, ev)
@@ -190,7 +242,7 @@ export function addClickPopup(map, layerID, msg) {
     })
 }
 
-export function addMapCursor(map, fillID, cursor = 'pointer') {
+export function addLayerCursor(map, fillID, cursor = 'pointer') {
     map.on('mouseenter', fillID, () => {
         map.getCanvas().style.cursor = cursor
     })
@@ -199,46 +251,21 @@ export function addMapCursor(map, fillID, cursor = 'pointer') {
     })
 }
 
-export const getLayer = (map, id) => map.getLayer(id)
-export const getLayers = map => map.getStyle().layers
-export const getPaintProperties = (map, id) =>
-    map.getLayer(id).paint._properties.properties
-export const getPaintPropertiesKeys = (map, id) =>
-    Object.keys(getPaintProperties(map, id))
-
-// point can be a lngLat object or [lng, lat] array
-export function findPolygon(geojson, point) {
-    if (point.lng) point = [point.lng, point.lat]
-    const features = geojson.features
-
-    for (const feature of features) {
-        if (turf.booleanPointInPolygon(point, feature)) return feature
-    }
-    return null
-
-    // console.log(features[0], point)
-    // return features[0]
+export function addDragRect(map, fcn) {
+    map.on('mousedown', function (ev) {
+        mouseRect(map, ev, fcn)
+    })
 }
-
-// function setTopLayerSource(map, layerId, source, sourceLayer) {
-//     // const oldLayers = map.getStyle().layers
-//     // const layerIndex = oldLayers.findIndex(l => l.id === layerId)
-//     // const layerDef = oldLayers[layerIndex]
-//     const layerDef = map.getLayer(layerId)
-//     const before = oldLayers[layerIndex + 1] && oldLayers[layerIndex + 1].id
-//     layerDef.source = source
-//     if (sourceLayer) {
-//         layerDef['source-layer'] = sourceLayer
-//     }
-//     map.removeLayer(layerId)
-//     map.addLayer(layerDef, before)
-
-//     map.getSource('bboxID').setData(updatedGeoJSONData)
-// }
-
 export function mouseRect(map, ev, fcn) {
-    let corner1, corner2
+    if (!(ev.originalEvent.altKey && ev.originalEvent.button === 0)) return
+
+    let corner1, corner2, isOut
     const bboxID = 'bboxID'
+    let debug = false
+
+    const logEvent = ev => {
+        if (debug) console.log(ev.type, ev.lngLat, ev)
+    }
 
     const getBBox = () => {
         // console.log(corner1, corner2)
@@ -265,22 +292,35 @@ export function mouseRect(map, ev, fcn) {
         }
     }
 
+    // const out = ev => {
+    //     logEvent(ev)
+    //     isOut = true
+
+    //     corner2 = ev.lngLat
+    // }
+
     const down = ev => {
-        // console.log('down', ev, ev.lngLat)
+        logEvent(ev)
+
         corner1 = corner2 = ev.lngLat
+        isOut = false
+
         setBBox()
 
         map.on('mousemove', move)
         map.on('mouseup', up)
+        // map.on('mouseout', out)
         map.dragPan.disable()
     }
     const move = ev => {
-        // console.log('move:', ev.lngLat)
+        logEvent(ev)
+
         corner2 = ev.lngLat
         setBBox()
     }
     const up = ev => {
-        // console.log('up:', ev.lngLat)
+        logEvent(ev)
+
         corner2 = ev.lngLat
         const bbox = getBBox()
 
@@ -289,16 +329,36 @@ export function mouseRect(map, ev, fcn) {
 
         map.off('mousemove', move)
         map.off('mouseup', up)
+        // map.off('mouseout', out)
         map.dragPan.enable()
 
         fcn(bbox)
     }
 
-    if (!(ev.originalEvent.altKey && ev.originalEvent.button === 0)) return
-    // console.log('starting drag rect')
-
     down(ev)
 }
+
+// map.on('drag', function (ev) {
+//     console.log('A drag event occurred.', ev);
+// });
+// map.on('dragend', function () {
+//     console.log('A dragend event occurred.', ev);
+// });
+
+// function setTopLayerSource(map, layerId, source, sourceLayer) {
+//     // const oldLayers = map.getStyle().layers
+//     // const layerIndex = oldLayers.findIndex(l => l.id === layerId)
+//     // const layerDef = oldLayers[layerIndex]
+//     const layerDef = map.getLayer(layerId)
+//     const before = oldLayers[layerIndex + 1] && oldLayers[layerIndex + 1].id
+//     layerDef.source = source
+//     if (sourceLayer) {
+//         layerDef['source-layer'] = sourceLayer
+//     }
+//     map.removeLayer(layerId)
+//     map.addLayer(layerDef, before)
+//     map.getSource('bboxID').setData(updatedGeoJSONData)
+// }
 
 // export function getLayersList(map) {
 //     return map.getStyle().layers

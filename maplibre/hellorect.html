@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <title>Rect Hello</title>
+</head>
+
+<body>
+    <script type="module">
+        // import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
+        import * as mltools from './mltools.js'
+        import Model from '../models/HelloModel.js'
+
+        import MapDraw from '../src/MapDraw.js'
+        import RunModelView from '../src/RunModelView.js'
+
+        const bbox = gis.santaFeBBox
+        const viewOptions = {
+            // div: util.createCanvas(0, 0), // default & the view will resize
+            patchSize: 5,
+            drawOptions: {
+                // patchesColor: 'transparent', // default in MapDraw
+                turtlesSize: 4,
+                linksWidth: 0.2,
+            },
+        }
+
+        const modelView = new RunModelView(Model, MapDraw, viewOptions)
+        await modelView.setWorld({ bbox: bbox, patchesWidth: 100 })
+
+        // ===== Start of map & layers
+
+        // terrain sources: osm topo topo1 smooth usgs
+        // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
+        const terrain = gis.template('osm')
+        const elevation = gis.elevationTemplate('mapzen')
+
+        const map = await mltools.newMap(bbox, 10)
+
+        mltools.addRasterLayer(map, 'terrain', terrain)
+
+        mltools.addRasterLayer(map, 'elevation', elevation, 0.15)
+
+        mltools.addGeojsonLayer(map, 'rectangle', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
+
+        mltools.addCanvasLayer(map, 'model', modelView.canvas, bbox)
+
+        mltools.addLayerCursor(map, 'rectangle')
+
+
+        // fcn args: fcn(bbox) where bbox is dragged rectangle in geo coords
+        // const fcn = bbox => console.log(bbox)
+        const fcn = async bbox => {
+            await modelView.setWorld({ bbox: bbox, patchesWidth: 100 })
+            // modelView.run() // not needed, initial run steps is -1, forever
+            mltools.updateGeojson(map, 'rectangle', bbox)
+            mltools.updateCanvas(map, 'model', modelView.canvas, bbox)
+            map.panTo(gis.bboxCenter(bbox))
+        }
+        mltools.addDragRect(map, fcn)
+
+        // ===== End of map & layers
+
+        modelView.run(-1, 30) // steps, fps. steps of -1 goes forever
+    </script>
+    <div id="map"></div>
+</body>
+
+</html>

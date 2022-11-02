@@ -44,12 +44,7 @@ class TwoView {
         // this.div = div
 
         this.ctx = can.getContext('2d')
-        // don't remember why we built a new world rather than using arg's.
-        // this.world = new World(world.world || world) // world can be model
         this.world = world
-
-        // Object.assign(this, { ctx, world }, options)
-        // Object.assign(this, { ctx, world })
 
         this.patchesView = new PatchesView(this.world.width, this.world.height)
         this.turtlesView = new TurtlesView(this.ctx, this.world, options)

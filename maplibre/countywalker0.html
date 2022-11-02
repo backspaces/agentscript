@@ -122,21 +122,23 @@
                 ]
             },
         })
-        mltools.onLoad(map) // log msg on load event; shouldn't occur, await above
+        // mltools.onLoad(map) // log msg on load event; will occur, see below for usage
 
-        map.on('click', 'counties', function (e) {
-            const props = e.features[0].properties
-            const msg = props.NAME + ', pop: ' + props.population.toLocaleString()
-            new maplibregl.Popup({ maxWidth: 'none' })
-                .setLngLat(e.lngLat)
-                .setHTML(msg)
-                .addTo(map);
-        });
 
         // ===== End of map & layers
 
         let anim
         map.on('load', () => {
+
+            map.on('click', 'counties', function (e) {
+                const props = e.features[0].properties
+                const msg = props.NAME + ', pop: ' + props.population.toLocaleString()
+                new maplibregl.Popup({ maxWidth: 'none' })
+                    .setLngLat(e.lngLat)
+                    .setHTML(msg)
+                    .addTo(map);
+            })
+
             anim = new Animator(
                 () => {
                     model.step()
@@ -145,6 +147,7 @@
                 -1, // 500, // run this many steps, -1 for forever
                 20 // 30 // 30 fps
             )
+
             util.toWindow({ map, anim, model, util })
         })
     </script>

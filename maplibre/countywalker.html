@@ -10,6 +10,7 @@
 
     <script type="module">
         import * as util from '../src/utils.js'
+        import * as gis from '../src/gis.js'
         import * as mltools from './mltools.js'
 
         import MapDraw from '../src/MapDraw.js'
@@ -37,19 +38,18 @@
         })
 
         // ===== Start of map & layers
-        // const maplibregl = await mltools.importMapLibre()
 
         const counties = model.world.geojson
         const countiesBBox = mltools.bboxFeature(model.world.bbox)
-
-        await mltools.importMapLibre()
+        const terrain = gis.template('osm')
+        const elevation = gis.elevationTemplate('mapzen')
 
         const map = await mltools.newMap(model.world.bboxCenter(), 5)
-        mltools.onLoad(map) // log msg on load event; shouldn't occur, await above
+        // mltools.onLoad(map) // log msg on load event; shouldn't occur, await above
 
-        mltools.addRasterLayer(map, 'osm', mltools.osmUrl)
+        mltools.addRasterLayer(map, 'osm', terrain)
 
-        mltools.addRasterLayer(map, 'elevation', mltools.elevationUrl, 0.15)
+        mltools.addRasterLayer(map, 'elevation', elevation, 0.15)
 
         mltools.addGeojsonFillLayer(map, 'counties', counties, 'red', 0.2)
 
@@ -61,7 +61,7 @@
         mltools.addCanvasLayer(map, 'model', view.canvas, model.world.bboxCoords())
 
         const msg = props => props.NAME + ', pop: ' + props.population.toLocaleString()
-        mltools.addClickPopup(map, 'counties', msg)
+        mltools.addLayerClickPopup(map, 'counties', msg)
 
         // ===== End of map & layers
 
