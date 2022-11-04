@@ -123,6 +123,27 @@ export function addRasterLayer(map, id, url, opacity = 1) {
     })
 }
 
+export function addVectorLayer(map, id, url, color = 'red', width = 3) {
+    map.addSource(id, {
+        type: 'vector',
+        url: url,
+    })
+    map.addLayer({
+        id: id,
+        type: 'line',
+        source: id,
+        'source-layer': id,
+        layout: {
+            'line-join': 'round',
+            'line-cap': 'round',
+        },
+        paint: {
+            'line-color': color,
+            'line-width': width,
+        },
+    })
+}
+
 // Note both geojson layers can share their sources due to often
 // using the same geojson for lines and fills.
 // Thus if the geojson arg is a string, it is used for the source id
@@ -146,12 +167,6 @@ export function addGeojsonFillLayer(map, id, geojson, fill, opacity, stroke) {
             'fill-color': fill,
             'fill-outline-color': stroke ? stroke : fill,
             'fill-opacity': opacity ? opacity : 1,
-            // 'fill-opacity': [
-            //     'case',
-            //     ['boolean', ['feature-state', 'hover'], false],
-            //     1,
-            //     0.5,
-            // ],
         },
     })
 }

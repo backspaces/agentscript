@@ -32,14 +32,14 @@
 
         // terrain sources: osm topo topo1 smooth usgs
         // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
-        const terrain = gis.template('osm')
-        const elevation = gis.elevationTemplate('mapzen')
+        const terrain = gis.template('usgs')
+        // const elevation = gis.elevationTemplate('mapzen')
 
         const map = await mltools.newMap(bbox, 10)
 
         mltools.addRasterLayer(map, 'terrain', terrain)
 
-        mltools.addRasterLayer(map, 'elevation', elevation, 0.15)
+        // mltools.addRasterLayer(map, 'elevation', elevation, 0.15)
 
         mltools.addGeojsonLayer(map, 'rectangle', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 

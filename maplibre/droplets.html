@@ -13,9 +13,6 @@
         import MapDraw from '../src/MapDraw.js'
         import RunModelView from '../src/RunModelView.js'
 
-        import Color from '../src/Color.js'
-        import ColorMap from '../src/ColorMap.js'
-
         const bbox = gis.santaFeBBox
         let zoom = 10 // int for computing usages, maplibre uses fractional zooms
         const viewOptions = {
@@ -38,7 +35,7 @@
 
         // terrain sources: osm topo topo1 smooth usgs
         // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
-        const terrain = gis.template('topo')
+        const terrain = gis.template('usgs')
         const elevation = gis.elevationTemplate('mapzen')
 
         const map = await mltools.newMap(bbox, zoom)

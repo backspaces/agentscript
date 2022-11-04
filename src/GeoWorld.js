@@ -1,7 +1,6 @@
 import * as gis from './gis.js'
 import World from './World.js'
 import { geojsonBBox } from './geojson.js'
-// import { MathUtils } from 'three'
 
 // class World defines the coordinate system for the model.
 // It has been upgraded with methods converting from other

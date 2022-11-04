@@ -8,7 +8,6 @@ var Model = AS.Model
 //   mapboxDataSet
 import { mapzen as provider } from '../src/TileData.js'
 var BBoxDataSet = AS.BBoxDataSet
-// import { MathUtils } from 'three'
 import { bbox } from '../gis/turfImports.js'
 
 class DropletsModel extends Model {

@@ -27,7 +27,7 @@ async function run() {
 
     models.forEach(model => shell.echo(model))
     shell.exec(`open --new -a "${browser}" --args --new-window`)
-    await utils.timeoutPromise(4000)
+    await utils.pause(4000)
 
     models.forEach(model => shell.exec(`open -a "${browser}" ${root}/${model}`))
 }

@@ -1,4 +1,3 @@
-// import ColorMap from '../src/ColorMap.js'
 var World = AS.World
 var Model = AS.Model
 var util = AS.util

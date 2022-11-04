@@ -1,4 +1,3 @@
-// import ColorMap from '../src/ColorMap.js'
 import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 

@@ -273,8 +273,10 @@ export function template(who = 'osm') {
             return 'https://api.maptiler.com/maps/topo/{z}/{x}/{y}.png?key=iQurAP6lArV1UP4gfSVs'
         case 'smooth':
             return 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png'
-        case 'usgs':
+        case 'usgs': // doesn't use .png extension
             return 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}'
+        case 'contour':
+            return 'https://api.maptiler.com/tiles/contours/tiles.json?key=iQurAP6lArV1UP4gfSVs'
     }
     throw Error('gis.template: name unknown:', who)
 }
@@ -309,4 +311,5 @@ export function elevationTemplate(who = 'mapzen') {
                 'pk.eyJ1IjoiYmFja3NwYWNlcyIsImEiOiJjanVrbzI4dncwOXl3M3ptcGJtN3oxMmhoIn0.x9iSCrtm0iADEqixVgPwqQ'
             )
     }
+    throw Error('gis.elevationTemplate: name unknown:', who)
 }
