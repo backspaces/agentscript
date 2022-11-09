@@ -1,9 +1,10 @@
 var util = AS.util
 var HelloModel = AS.HelloModel
+// import HelloModel from '../models/HelloModel.js'
 // import GeoWorld from '../src/GeoWorld.js'
 var booleanPointInPolygon = AS.booleanPointInPolygon
 
-const counties = await fetch('../gis/data/nmcounties.json').then(resp =>
+const counties = await fetch('../models/data/nmcounties.json').then(resp =>
     resp.json()
 )
 

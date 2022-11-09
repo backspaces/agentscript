@@ -1,12 +1,11 @@
 <html>
 
 <head>
-    <title>Geo Hello</title>
+    <title>Model0 Hello</title>
 </head>
 
 <body>
     <script type="module">
-        // import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
         import * as mltools from './mltools.js'
 
@@ -51,10 +50,6 @@
 
         mltools.addCanvasLayer(map, 'model', view.canvas, bbox)
 
-        map.setTransformRequest((url, resourceType) => {
-            console.log(url, resourceType)
-        })
-
         // ===== End of map & layers
 
         const anim = new Animator(
@@ -64,7 +59,7 @@
             },
             500, // run 500 steps
             30 // 30 fps
-        ) //.startStats()
+        )
 
     </script>
     <div id="map"></div>

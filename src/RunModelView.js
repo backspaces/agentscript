@@ -21,7 +21,9 @@ class RunModelView {
 
         const view = new this.View(model, this.viewOptions, this.drawOptions)
         const canvas = view.canvas
-        Object.assign(this, { model, view, canvas })
+        world = model.world
+
+        Object.assign(this, { model, view, world, canvas })
     }
 
     run(steps = 500, fps = 30) {

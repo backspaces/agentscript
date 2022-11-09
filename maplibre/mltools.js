@@ -245,15 +245,31 @@ export function addLayerClick(map, layerID, fcn) {
     map.on('click', layerID, fcn)
 }
 
-export function addLayerClickPopup(map, layerID, msg) {
+export function addLayerClickPopup(map, layerID, msg, anchor = 'bottom') {
     map.on('click', layerID, function (ev) {
         const props = ev.features[0].properties
         const html = msg(props, ev)
         // msg = msg.toLocaleString()
-        new maplibregl.Popup({ maxWidth: 'none' })
+        new maplibregl.Popup({ maxWidth: 'none', anchor })
             .setLngLat(ev.lngLat)
             .setHTML(html)
             .addTo(map)
+    })
+}
+
+let popup
+export function addLayerMovePopup(map, layerID, msg, anchor = 'bottom') {
+    map.on('mousemove', layerID, function (ev) {
+        const props = ev.features[0].properties
+        if (props) {
+            if (popup) popup.remove()
+            const html = msg(props, ev)
+            // msg = msg.toLocaleString()
+            popup = new maplibregl.Popup({ maxWidth: 'none', anchor })
+                .setLngLat(ev.lngLat)
+                .setHTML(html)
+                .addTo(map)
+        }
     })
 }
 

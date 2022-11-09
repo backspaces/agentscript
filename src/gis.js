@@ -277,6 +277,8 @@ export function template(who = 'osm') {
             return 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}'
         case 'contour':
             return 'https://api.maptiler.com/tiles/contours/tiles.json?key=iQurAP6lArV1UP4gfSVs'
+        case 'contour1':
+            return 'https://api.maptiler.com/tiles/contours/{z}/{x}/{y}.pbf?key=iQurAP6lArV1UP4gfSVs'
     }
     throw Error('gis.template: name unknown:', who)
 }

@@ -9,72 +9,55 @@
     <div id="map"></div>
 
     <script type="module">
-        import * as util from '../src/utils.js'
         import * as gis from '../src/gis.js'
         import * as mltools from './mltools.js'
 
+        import Model from '../models/CountiesModel.js'
         import MapDraw from '../src/MapDraw.js'
-        import Animator from '../src/Animator.js'
-        import CountiesModel from '../models/CountiesModel.js'
+        import RunModelView from '../src/RunModelView.js'
 
-        // If not using the default model options:
-        // const counties = await fetch('../gis/data/nmcounties.json').then(resp => resp.json())
-        // const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
-        // const model = new CountiesModel(world)
-        const model = new CountiesModel() // default: { bbox: nmcounties.json, patchesWidth: 100 }
-        await model.startup()
-        model.setup()
-
-        const drawOptions = {
-            // patchesColor: 'transparent', // default in MapDraw
-            linksColor: 'gray',
-            linksWidth: 4,
-            turtlesSize: 6,
-            turtlesColor: t => view.drawOptions.turtlesMap.atIndex(t.county + 1),
-        }
-        const view = new MapDraw(model, {
+        const viewOptions = {
             // div: util.createCanvas(0, 0), // default & the view will resize
-            drawOptions,
-        })
+            drawOptions: {
+                // patchesColor: 'transparent', // default in MapDraw
+                linksColor: 'gray',
+                linksWidth: 4,
+                turtlesSize: 6,
+                turtlesColor: t => modelView.view.drawOptions.turtlesMap.atIndex(t.county + 1),
+            },
+        }
+
+        const modelView = new RunModelView(Model, MapDraw, viewOptions)
+        await modelView.setWorld() // use CountiesModel's default
 
         // ===== Start of map & layers
 
-        const counties = model.world.geojson
-        const countiesBBox = mltools.bboxFeature(model.world.bbox)
+        const world = modelView.world // use the model's world object below
+
+        const counties = world.geojson
+        const countiesBBox = mltools.bboxFeature(world.bbox)
         const terrain = gis.template('osm')
         const elevation = gis.elevationTemplate('mapzen')
 
-        const map = await mltools.newMap(model.world.bboxCenter(), 5)
-        // mltools.onLoad(map) // log msg on load event; shouldn't occur, await above
+        const map = await mltools.newMap(world.bboxCenter(), 5)
+        // map.onLoad(...) // not needed, await above includes onload
 
         mltools.addRasterLayer(map, 'osm', terrain)
 
         mltools.addRasterLayer(map, 'elevation', elevation, 0.15)
 
-        mltools.addGeojsonFillLayer(map, 'counties', counties, 'red', 0.2)
-
-        // counties string => use as source id, above, rather than a new source layer
-        mltools.addGeojsonLineLayer(map, 'countiesLine', 'counties', 'red', 3)
+        mltools.addGeojsonLayer(map, 'counties', counties, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 
         mltools.addGeojsonLineLayer(map, 'countiesBBox', countiesBBox, 'blue')
 
-        mltools.addCanvasLayer(map, 'model', view.canvas, model.world.bboxCoords())
+        mltools.addCanvasLayer(map, 'model', modelView.canvas, world.bboxCoords())
 
         const msg = props => props.NAME + ', pop: ' + props.population.toLocaleString()
-        mltools.addLayerClickPopup(map, 'counties', msg)
+        mltools.addLayerClickPopup(map, 'counties', msg, 'bottom-right')
 
         // ===== End of map & layers
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            -1, // 500, // run this many steps, -1 for forever
-            20 // 30 // 30 fps
-        )
-
-        util.toWindow({ map, anim, model, util })
+        modelView.run(-1, 30) // steps, fps. steps of -1 goes forever
     </script>
 </body>
 

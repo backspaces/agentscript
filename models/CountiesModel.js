@@ -1,9 +1,10 @@
 import * as util from '../src/utils.js'
-import HelloModel from '../models/HelloModel.js'
+import HelloModel from './HelloModel.js'
+// import HelloModel from '../models/HelloModel.js'
 // import GeoWorld from '../src/GeoWorld.js'
 import booleanPointInPolygon from 'https://cdn.skypack.dev/@turf/boolean-point-in-polygon'
 
-const counties = await fetch('../gis/data/nmcounties.json').then(resp =>
+const counties = await fetch('../models/data/nmcounties.json').then(resp =>
     resp.json()
 )
 

@@ -30,7 +30,7 @@
         mltools.addGeojsonLineLayer(map, 'usstates', usstates, 'blue')
 
         const msg = props => props.NAME + ', ' + statecodes[props.STATE].name
-        mltools.addLayerClickPopup(map, 'countiesFill', msg)
+        mltools.addLayerClickPopup(map, 'countiesFill', msg, 'bottom-left')
 
         mltools.addLayerCursor(map, 'countiesFill')
 
