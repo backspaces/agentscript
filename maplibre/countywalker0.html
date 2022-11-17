@@ -11,35 +11,27 @@
     <div id="map"></div>
 
     <script type="module">
-        import * as util from '../src/utils.js'
-        import * as mltools from './mltools.js'
-
         import MapDraw from '../src/MapDraw.js'
         import Animator from '../src/Animator.js'
-        import CountiesModel from '../models/CountiesModel.js'
-
+        import Model from '../models/CountiesModel.js'
         import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
 
-        // If not using the default model options:
-        // const counties = await fetch('../models/data/nmcounties.json').then(resp => resp.json())
-        // const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
-        // const model = new CountiesModel(world)
-        const model = new CountiesModel() // default: { bbox: nmcounties.json, patchesWidth: 100 }
+        // Use default model options: { bbox: nmcounties.json, patchesWidth: 100 }
+        // where nmcounties.json is fetched in CountiesModel.js
+        const model = new Model()
         await model.startup()
         model.setup()
 
         // MapDraw has default patchesColor & div as commented out below
-        const drawOptions = {
-            // patchesColor: 'transparent', // default in MapDraw
-            linksColor: 'gray',
-            linksWidth: 4,
-            turtlesSize: 6,
-            turtlesColor: t =>
-                view.drawOptions.turtlesMap.atIndex(t.county + 1),
-        }
         const view = new MapDraw(model, {
             // div: util.createCanvas(0, 0), // default & the view will resize
-            drawOptions,
+            drawOptions: {
+                // patchesColor: 'transparent', // default in MapDraw
+                linksColor: 'gray',
+                linksWidth: 4,
+                turtlesSize: 6,
+                turtlesColor: t => view.drawOptions.turtlesMap.atIndex(t.county + 1),
+            },
         })
 
         // ===== Start of map & layers
@@ -48,86 +40,79 @@
             container: 'map', // container id
             center: model.world.bboxCenter(), // [-105.941109, 35.68222],
             zoom: 5,
-            renderWorldCopies: false,
-
             style: {
                 "version": 8,
-
-                // vector, raster, raster-dem, geojson, image, canvas, video
-                sources: {
-                    osm: {
-                        type: 'raster',
-                        tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
-                        tileSize: 256,
-                        maxzoom: 19,
-                        attribution: '&copy; OpenStreetMap Contributors',
-                    },
-                    elevation: {
-                        type: 'raster',
-                        tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
-                        tileSize: 256,
-                    },
-                    counties: {
-                        type: 'geojson',
-                        data: model.world.geojson,
-                    },
-                    countiesBBox: {
-                        type: 'geojson',
-                        data: mltools.bboxFeature(model.world.bbox),
-                        // data: turf.bboxPolygon(model.world.bbox),
-                    },
-                    model: {
-                        type: 'canvas',
-                        canvas: view.canvas,
-                        coordinates: model.world.bboxCoords(model.world.bbox),
-                    },
-                },
-
-                // background, fill, line, symbol, raster, circle, fill-extrusion, heatmap, hillshade
-                layers: [
-                    {
-                        id: 'osm',
-                        type: 'raster',
-                        source: 'osm'
-                    },
-                    {
-                        id: 'elevation',
-                        type: 'raster',
-                        source: 'elevation',
-                        paint: { 'raster-opacity': 0.15 },
-                    },
-                    {
-                        id: 'counties',
-                        type: 'fill',
-                        source: 'counties',
-                        paint: { 'fill-color': 'red', 'fill-opacity': 0.2 },
-                    },
-                    {
-                        id: 'countiesLines',
-                        type: 'line',
-                        source: 'counties',
-                        paint: { 'line-color': 'red', 'line-width': 3 },
-                    },
-                    {
-                        id: 'countiesBBox',
-                        type: 'line',
-                        source: 'countiesBBox',
-                        paint: { 'line-color': 'blue' },
-                    },
-                    {
-                        id: 'model',
-                        type: 'raster',
-                        source: 'model'
-                    },
-                ]
+                sources: {},
+                layers: []
             },
         })
-        // mltools.onLoad(map) // log msg on load event; will occur, see below for usage
 
-        // ===== End of map & layers
+        map.on('load', function () {
+            map.addSource('osm', {
+                type: 'raster',
+                tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                tileSize: 256,
+                maxzoom: 19,
+                attribution: '&copy; OpenStreetMap Contributors',
 
-        let anim
-        map.on('load', () => {
+            })
+            map.addLayer({
+                id: 'osm',
+                type: 'raster',
+                source: 'osm',
+            })
+
+            map.addSource('elevation', {
+                type: 'raster',
+                tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+                tileSize: 256,
+            })
+            map.addLayer({
+                id: 'elevation',
+                type: 'raster',
+                source: 'elevation',
+                paint: { 'raster-opacity': 0.15 },
+            })
+
+            map.addSource('counties', {
+                type: 'geojson',
+                data: model.world.geojson,
+            })
+            map.addLayer({
+                id: 'counties',
+                type: 'fill',
+                source: 'counties',
+                paint: { 'fill-color': 'red', 'fill-opacity': 0.2 },
+            })
+            map.addLayer({
+                id: 'countiesLines',
+                type: 'line',
+                source: 'counties',
+                paint: { 'line-color': 'red', 'line-width': 3 },
+            })
+
+            map.addSource('countiesBBox', {
+                type: 'geojson',
+                data: model.world.bbox,
+            })
+            map.addLayer({
+                id: 'countiesBBox',
+                type: 'line',
+                source: 'countiesBBox',
+                paint: { 'line-color': 'blue' },
+            })
+
+            map.addSource('model', {
+                type: 'canvas',
+                canvas: view.canvas,
+                coordinates: model.world.bboxCoords(),
+
+            })
+            map.addLayer({
+                id: 'model',
+                type: 'raster',
+                source: 'model',
+            })
 
             map.on('click', 'counties', function (e) {
                 const props = e.features[0].properties
@@ -136,19 +121,18 @@
                     .setLngLat(e.lngLat)
                     .setHTML(msg)
                     .addTo(map);
-            })
-
-            anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                -1, // 500, // run this many steps, -1 for forever
-                20 // 30 // 30 fps
-            )
-
-            util.toWindow({ map, anim, model, util })
+            });
         })
+        // ===== End of map & layers
+
+        new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // 500, // run this many steps, -1 for forever
+            20 // 30 // 30 fps
+        )
     </script>
 </body>
 

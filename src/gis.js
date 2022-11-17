@@ -138,6 +138,11 @@ export function tilesBBox(bbox, z) {
     return [westX, southY, eastX, northY]
 }
 
+export function bboxCenter(bbox) {
+    const [west, south, east, north] = bbox
+    return [(west + east) / 2, (south + north) / 2]
+}
+
 export function bboxCoords(bbox) {
     const [west, south, east, north] = bbox
     return [
@@ -155,10 +160,20 @@ export function bboxBounds(bbox) {
     ]
 }
 
-export function bboxCenter(bbox) {
-    const [west, south, east, north] = bbox
-    return [(west + east) / 2, (south + north) / 2]
+// Return a geojson feature for this bbox
+export function bboxFeature(bbox, properties = {}) {
+    const coords = bboxCoords(bbox)
+    coords.push(coords[0]) // polys are closed, repeat first coord
+    return {
+        type: 'Feature',
+        geometry: {
+            type: 'Polygon',
+            coordinates: [coords],
+        },
+        properties,
+    }
 }
+
 export function bboxFromCenter(center, dLon = 1, dLat = dLon) {
     let [lon, lat] = center
     return [lon - dLon, lat - dLat, lon + dLon, lat + dLat]
@@ -277,8 +292,10 @@ export function template(who = 'osm') {
             return 'https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}'
         case 'contour':
             return 'https://api.maptiler.com/tiles/contours/tiles.json?key=iQurAP6lArV1UP4gfSVs'
-        case 'contour1':
-            return 'https://api.maptiler.com/tiles/contours/{z}/{x}/{y}.pbf?key=iQurAP6lArV1UP4gfSVs'
+        // case 'contour':
+        //     return 'https://basemap.nationalmap.gov/ArcGIS/rest/services/USGSImageryTopo/MapServer/tile/{z}/{x}/{y}'
+        // case 'contour1':
+        //     return 'https://api.maptiler.com/tiles/contours/{z}/{x}/{y}.pbf?key=iQurAP6lArV1UP4gfSVs'
     }
     throw Error('gis.template: name unknown:', who)
 }

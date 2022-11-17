@@ -1,6 +1,6 @@
 import * as gis from './gis.js'
 import World from './World.js'
-import { geojsonBBox } from './geojson.js'
+import { bbox as toBBox } from '../vendor/turfImports.js'
 
 // class World defines the coordinate system for the model.
 // It has been upgraded with methods converting from other
@@ -22,7 +22,7 @@ class GeoWorld extends World {
         let json
         if (!Array.isArray(bbox)) {
             json = bbox
-            bbox = geojsonBBox(json)
+            bbox = toBBox(json)
         }
 
         const aspect = gis.bboxMetricAspect(bbox)
@@ -52,17 +52,24 @@ class GeoWorld extends World {
         return this.xfm.toWorld([geoX, geoY])
     }
 
-    // return bbox in geo coords
-    // bbox() {
+    // return bbox in geo coords. use model.world.bbox variable rather than a method
+    // bbox() { // would be name conflict with this.bbox
+    //     // return this.xfm.bbox
     //     return this.bbox
     // }
+
     // return bbox lonlat center
     bboxCenter() {
-        return this.xfm.bboxCenter()
+        return gis.bboxCenter(this.bbox)
     }
     // return bbox as 4 lonlat coords/points
     bboxCoords() {
-        return this.xfm.bboxCoords()
+        return gis.bboxCoords(this.bbox)
+    }
+
+    // return bbox geojson feature
+    bboxFeature(options = {}) {
+        return gis.bboxFeature(this.bbox, options)
     }
 }
 

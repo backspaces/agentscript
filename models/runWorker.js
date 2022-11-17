@@ -1,16 +1,16 @@
 import * as util from '../src/utils.js'
-import DataSet from '../src/DataSet.js'
+// import DataSet from '../src/DataSet.js'
 
 let model, params
 
 onmessage = e => {
     if (e.data.cmd === 'init') {
         params = e.data.params
-        if (util.isDataSet(params.startup)) {
-            const { data, width, height } = params.startup
-            params.startup = new DataSet(width, height, data)
-        }
-        console.log('worker: params', params)
+        // if (util.isDataSet(params.startup)) {
+        //     const { data, width, height } = params.startup
+        //     params.startup = new DataSet(width, height, data)
+        // }
+        console.log(`worker: params, ${params}`)
 
         async function run() {
             const module = await import(params.classPath)

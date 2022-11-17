@@ -26,7 +26,7 @@ export function bboxFeature(bbox, properties = {}) {
     const coords = gis.bboxCoords(bbox)
     coords.push(coords[0]) // polys are closed, repeat first coord
     return {
-        type: 'feature',
+        type: 'Feature',
         geometry: {
             cordinates: coords,
             type: 'Polygon',

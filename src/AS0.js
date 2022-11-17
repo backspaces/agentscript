@@ -4,6 +4,7 @@
 
 export * as util from './utils.js'
 export * as steg from './steg.js'
+export * as turfImports from '../vendor/turfImports.js'
 
 // Models:
 export { default as AgentArray } from './AgentArray.js'

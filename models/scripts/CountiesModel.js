@@ -1,8 +1,6 @@
 var util = AS.util
 var HelloModel = AS.HelloModel
-// import HelloModel from '../models/HelloModel.js'
-// import GeoWorld from '../src/GeoWorld.js'
-var booleanPointInPolygon = AS.booleanPointInPolygon
+import { booleanPointInPolygon } from '../vendor/turfImports.js'
 
 const counties = await fetch('../models/data/nmcounties.json').then(resp =>
     resp.json()
@@ -44,6 +42,4 @@ class CountiesModel extends HelloModel {
     }
 }
 
-CountiesModel
-const defaultModel = export
-
+export default CountiesModel

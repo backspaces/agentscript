@@ -337,23 +337,40 @@ class BBoxTransform {
     // }
 
     // Return bbox in xfm coords
-    bbox() {
-        const [west, south, east, north] = this.bbox
-        return [west, south, east, north]
-    }
-    // Return center [x,y] of bbox in bbox coords.
-    bboxCenter() {
-        const [west, south, east, north] = this.bbox
-        return [(west + east) / 2, (south + north) / 2]
-    }
-    // Return 4 coordinate points of bbox corners, from topLeft, clockwise.
-    bboxCoords() {
-        const [west, south, east, north] = this.bbox
-        return [
-            [west, north],
-            [east, north],
-            [east, south],
-            [west, south],
-        ]
-    }
+    // bbox() {
+    //     const [west, south, east, north] = this.bbox
+    //     return [west, south, east, north]
+    //     // return this.bbox // name conflict?
+    // }
+
+    // // Return center [x,y] of bbox in bbox coords.
+    // bboxCenter() {
+    //     const [west, south, east, north] = this.bbox
+    //     return [(west + east) / 2, (south + north) / 2]
+    // }
+
+    // // Return 4 coordinate points of bbox corners, from topLeft, clockwise.
+    // bboxCoords() {
+    //     const [west, south, east, north] = this.bbox
+    //     return [
+    //         [west, north],
+    //         [east, north],
+    //         [east, south],
+    //         [west, south],
+    //     ]
+    // }
+
+    // // Return a geojson feature for this bbox
+    // bboxFeature(properties = {}) {
+    //     const coords = this.bboxCoords(bbox)
+    //     coords.push(coords[0]) // polys are closed, repeat first coord
+    //     return {
+    //         type: 'feature',
+    //         geometry: {
+    //             cordinates: coords,
+    //             type: 'Polygon',
+    //         },
+    //         properties,
+    //     }
+    // }
 }

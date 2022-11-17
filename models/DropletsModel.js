@@ -8,7 +8,6 @@ import Model from '../src/Model.js'
 //   mapboxDataSet
 import { mapzen as provider } from '../src/TileData.js'
 import BBoxDataSet from '../src/BBoxDataSet.js'
-import { bbox } from '../gis/turfImports.js'
 
 export default class DropletsModel extends Model {
     speed = 0.5

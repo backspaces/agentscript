@@ -25,9 +25,7 @@
 
         mltools.addLayerCursor(map, 'rectangle')
 
-
         // fcn args: fcn(bbox) where bbox is dragged rectangle in geo coords
-        // const fcn = bbox => console.log(bbox)
         const fcn = async bbox => {
             mltools.updateGeojson(map, 'rectangle', bbox)
             map.panTo(gis.bboxCenter(bbox))

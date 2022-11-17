@@ -18,7 +18,6 @@
 		// elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
 		const terrain = gis.template('usgs')
 		const contour = gis.template('contour')
-		const contour1 = gis.template('contour1')
 		const elevation = gis.elevationTemplate('mapzen')
 
 		const map = await mltools.newMap(bbox, zoom)
@@ -29,7 +28,6 @@
 		// mltools.addRasterLayer(map, 'elevation', elevation, 0.25)
 
 		mltools.addVectorLayer(map, 'contour', contour, 'red', 2)
-		// mltools.addVectorLayer(map, 'contour', contour1, 'red', 2)
 
 		const msg = props => 'height: ' + props.height + ', nth line: ' + props.nth_line
 		mltools.addLayerMovePopup(map, 'contour', msg)

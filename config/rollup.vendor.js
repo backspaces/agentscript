@@ -1,7 +1,26 @@
 import { terser } from 'rollup-plugin-terser'
 import cleanup from 'rollup-plugin-cleanup'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 export default [
+    {
+        input: 'config/turfImports.js',
+        output: {
+            file: 'vendor/turfImports.js',
+            format: 'esm',
+        },
+        plugins: [nodeResolve(), cleanup()],
+    },
+
+    {
+        input: 'config/turfImports.js',
+        output: {
+            file: 'vendor/turfImports.min.js',
+            format: 'esm',
+        },
+        plugins: [nodeResolve(), terser()],
+    },
+
     // three.all.js = THREE & OrbitControls
     {
         input: './config/three.all.js',

@@ -35,7 +35,9 @@
         const world = modelView.world // use the model's world object below
 
         const counties = world.geojson
-        const countiesBBox = mltools.bboxFeature(world.bbox)
+        // const countiesBBox = world.bboxFeature()
+        const countiesBBox = world.bbox
+        // const countiesBBox = mltools.bboxFeature(world.bbox)
         const terrain = gis.template('osm')
         const elevation = gis.elevationTemplate('mapzen')
 

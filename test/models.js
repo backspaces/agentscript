@@ -12,8 +12,8 @@ const port = 9008
 const useWorkers = true
 const compareSamples = true
 const debug = false
-const nonWorker = model => [].includes(model)
-// const nonWorker = model => ['droplets'].includes(model)
+// const nonWorker = model => [].includes(model)
+const nonWorker = model => ['droplets'].includes(model)
 
 // liveServer.start({
 //     open: false,
