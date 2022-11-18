@@ -34,7 +34,7 @@
     "@ava/babel-plugin-throws-helper" "^4.0.0"
     babel-plugin-espower "^3.0.1"
 
-"@babel/code-frame@^7.10.4", "@babel/code-frame@^7.18.6":
+"@babel/code-frame@^7.18.6":
   version "7.18.6"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.18.6.tgz"
   integrity sha512-TDCmlK5eOvH+eH7cdAFlNXeVJqWIQ7gW9tY1GJIpUtFb6CmjVyq2VM3u71bOyR8CRihcCgMUYoDNyLXao3+70Q==
@@ -394,7 +394,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@rollup/plugin-node-resolve@latest":
+"@rollup/plugin-node-resolve@^15.0.1":
   version "15.0.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-node-resolve/-/plugin-node-resolve-15.0.1.tgz#72be449b8e06f6367168d5b3cd5e2802e0248971"
   integrity sha512-ReY88T7JhJjeRVbfCyNj+NXAG3IIsVMsX9b5/9jC98dRP8/yxlZdz7mHZbHk5zHr24wZZICS5AcXsFZAXYUQEg==
@@ -405,6 +405,13 @@
     is-builtin-module "^3.2.0"
     is-module "^1.0.0"
     resolve "^1.22.1"
+
+"@rollup/plugin-terser@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-terser/-/plugin-terser-0.1.0.tgz#7530c0f11667637419d71820461646c418526041"
+  integrity sha512-N2KK+qUfHX2hBzVzM41UWGLrEmcjVC37spC8R3c9mt3oEDFKh3N2e12/lLp9aVSt86veR0TQiCNQXrm8C6aiUQ==
+  dependencies:
+    terser "^5.15.1"
 
 "@rollup/pluginutils@^5.0.1":
   version "5.0.2"
@@ -1424,7 +1431,7 @@
     "@turf/helpers" "^6.5.0"
     "@turf/meta" "^6.5.0"
 
-"@turf/turf@latest":
+"@turf/turf@^6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@turf/turf/-/turf-6.5.0.tgz#49cd07b942a757f3ebbdba6cb294bbb864825a83"
   integrity sha512-ipMCPnhu59bh92MNt8+pr1VZQhHVuTMHklciQURo54heoxRzt1neNYZOBR6jdL+hNsbDGAECMuIpAutX+a3Y+w==
@@ -2311,9 +2318,9 @@ clean-css@^4.2.1:
   dependencies:
     source-map "~0.6.0"
 
-clean-jsdoc-theme@latest:
+clean-jsdoc-theme@^4.1.8:
   version "4.1.8"
-  resolved "https://registry.npmjs.org/clean-jsdoc-theme/-/clean-jsdoc-theme-4.1.8.tgz"
+  resolved "https://registry.yarnpkg.com/clean-jsdoc-theme/-/clean-jsdoc-theme-4.1.8.tgz#372b40e0c304b8bc36e0f400156fa6bb1d18d77a"
   integrity sha512-GY/wflOxRnctu2zhRrJwHwIyiGlTtk4+402TRYIIp6/bWcnFd+aFRiiXscPvOpu/HWV7atIzyTaFXYPFY0b0cA==
   dependencies:
     fs-extra "^10.1.0"
@@ -4131,15 +4138,6 @@ isobject@^3.0.0, isobject@^3.0.1:
   resolved "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz"
   integrity sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==
 
-jest-worker@^26.2.1:
-  version "26.6.2"
-  resolved "https://registry.npmjs.org/jest-worker/-/jest-worker-26.6.2.tgz"
-  integrity sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==
-  dependencies:
-    "@types/node" "*"
-    merge-stream "^2.0.0"
-    supports-color "^7.0.0"
-
 js-cleanup@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/js-cleanup/-/js-cleanup-1.2.0.tgz"
@@ -5320,13 +5318,6 @@ quickselect@^2.0.0:
   resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-2.0.0.tgz#f19680a486a5eefb581303e023e98faaf25dd018"
   integrity sha512-RKJ22hX8mHe3Y6wH/N3wCM6BWtjaxIyyUIkpHOvfFnxdI4yD4tBXEBKSbriGujF6jnSVkJrffuo6vxACiSSxIw==
 
-randombytes@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/randombytes/-/randombytes-2.1.0.tgz"
-  integrity sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==
-  dependencies:
-    safe-buffer "^5.1.0"
-
 range-parser@1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/range-parser/-/range-parser-1.2.0.tgz"
@@ -5648,16 +5639,6 @@ rollup-plugin-cleanup@^3.2.1:
     js-cleanup "^1.2.0"
     rollup-pluginutils "^2.8.2"
 
-rollup-plugin-terser@^7.0.2:
-  version "7.0.2"
-  resolved "https://registry.npmjs.org/rollup-plugin-terser/-/rollup-plugin-terser-7.0.2.tgz"
-  integrity sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==
-  dependencies:
-    "@babel/code-frame" "^7.10.4"
-    jest-worker "^26.2.1"
-    serialize-javascript "^4.0.0"
-    terser "^5.0.0"
-
 rollup-pluginutils@^2.8.2:
   version "2.8.2"
   resolved "https://registry.npmjs.org/rollup-pluginutils/-/rollup-pluginutils-2.8.2.tgz"
@@ -5665,10 +5646,10 @@ rollup-pluginutils@^2.8.2:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@^2.79.1:
-  version "2.79.1"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.79.1.tgz#bedee8faef7c9f93a2647ac0108748f497f081c7"
-  integrity sha512-uKxbd0IhMZOhjAiD5oAFp7BqvkA4Dv47qpOCtaNvng4HBwdbWtdOh8f5nZNuk2rp51PMGk3bzfWu5oayNEuYnw==
+rollup@^3.2.5:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.3.0.tgz#ae8dc84808a9c75d775d8b2ed8db1adada31a581"
+  integrity sha512-wqOV/vUJCYEbWsXvwCkgGWvgaEnsbn4jxBQWKpN816CqsmCimDmCNJI83c6if7QVD4v/zlyRzxN7U2yDT5rfoA==
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -5684,7 +5665,7 @@ safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   resolved "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
-safe-buffer@>=5.1.0, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@~5.2.0:
+safe-buffer@>=5.1.0, safe-buffer@^5.0.1, safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
@@ -5755,13 +5736,6 @@ serialize-error@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/serialize-error/-/serialize-error-2.1.0.tgz"
   integrity sha512-ghgmKt5o4Tly5yEG/UJp8qTd0AN7Xalw4XBtDEKP655B699qMEtra1WlXeE6WIvdEG481JvRxULKsInq/iNysw==
-
-serialize-javascript@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/serialize-javascript/-/serialize-javascript-4.0.0.tgz"
-  integrity sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==
-  dependencies:
-    randombytes "^2.1.0"
 
 serve-handler@6.1.3:
   version "6.1.3"
@@ -6271,10 +6245,10 @@ term-size@^1.2.0:
   dependencies:
     execa "^0.7.0"
 
-terser@^5.0.0:
-  version "5.15.0"
-  resolved "https://registry.npmjs.org/terser/-/terser-5.15.0.tgz"
-  integrity sha512-L1BJiXVmheAQQy+as0oF3Pwtlo4s3Wi1X2zNZ2NxOB4wx9bdS9Vk67XQENLFdLYGCK/Z2di53mTj/hBafR+dTA==
+terser@^5.15.1:
+  version "5.15.1"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.15.1.tgz#8561af6e0fd6d839669c73b92bdd5777d870ed6c"
+  integrity sha512-K1faMUvpm/FBxjBXud0LWVAGxmvoPbZbfTCYbSgaaYQaIXI3/TdI7a7ZGA73Zrou6Q8Zmz3oeUTsp/dj+ag2Xw==
   dependencies:
     "@jridgewell/source-map" "^0.3.2"
     acorn "^8.5.0"

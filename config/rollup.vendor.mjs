@@ -1,6 +1,8 @@
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
+// import { terser } from 'rollup-plugin-terser'
 import cleanup from 'rollup-plugin-cleanup'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
+// import resolve from 'rollup-plugin-node-resolve'
 
 export default [
     {
@@ -10,6 +12,7 @@ export default [
             format: 'esm',
         },
         plugins: [nodeResolve(), cleanup()],
+        // plugins: [resolve(), cleanup()],
     },
 
     {
@@ -19,6 +22,7 @@ export default [
             format: 'esm',
         },
         plugins: [nodeResolve(), terser()],
+        // plugins: [resolve(), terser()],
     },
 
     // three.all.js = THREE & OrbitControls

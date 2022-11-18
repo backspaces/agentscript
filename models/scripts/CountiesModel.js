@@ -42,4 +42,6 @@ class CountiesModel extends HelloModel {
     }
 }
 
-export default CountiesModel
+CountiesModel
+const defaultModel = export
+

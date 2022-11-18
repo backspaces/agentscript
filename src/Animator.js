@@ -1,3 +1,5 @@
+import Stats from '../vendor/stats.js'
+
 /**
  * Class Animator controls running of a function.
  */
@@ -51,11 +53,16 @@ class Animator {
 
     startStats(left = '0px') {
         if (this.stats) return console.log('startStats: already running')
-        import('https://cdn.skypack.dev/stats.js').then(m => {
-            this.stats = new m.default()
-            document.body.appendChild(this.stats.dom)
-            this.stats.dom.style.left = left
-        })
+        // import('https://cdn.skypack.dev/stats.js').then(m => {
+        // import('../vendor/stats.js').then(m => {
+        //     this.stats = new m.default()
+        //     document.body.appendChild(this.stats.dom)
+        //     this.stats.dom.style.left = left
+        // })
+        this.stats = new Stats()
+        document.body.appendChild(this.stats.dom)
+        this.stats.dom.style.left = left
+
         return this // chaining off ctor
     }
 
