@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>Vector Hello</title>
+	<title>VectorMap</title>
 </head>
 
 <body>
@@ -25,14 +25,19 @@
 
 		mltools.addRasterLayer(map, 'terrain', terrain)
 
-		// mltools.addRasterLayer(map, 'elevation', elevation, 0.25)
+		mltools.addRasterLayer(map, 'elevation', elevation, 0.25)
 
 		mltools.addVectorLayer(map, 'contour', contour, 'red', 2)
 
 		const msg = props => 'height: ' + props.height + ', nth line: ' + props.nth_line
 		mltools.addLayerMovePopup(map, 'contour', msg)
 
-        // ===== End of map & layers
+		// ===== End of map & layers
+
+		mltools.startupMessage(
+			'Hover the mouse over the red vector lines for information.\nThis layer uses vector tiles rather than the usual raster tiles\nYou can use the return key to remove this'
+		)
+
 
 	</script>
 	<div id="map"></div>

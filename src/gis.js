@@ -229,7 +229,7 @@ out;`
 export async function bbox2osm(bbox) {
     const [west, south, east, north] = bbox
     const url = getOsmURL(south, west, north, east)
-    const osm = await fetch(url).then(rsp => rsp.json())
+    const osm = await fetch(url).then(resp => resp.json())
     return osm
 }
 

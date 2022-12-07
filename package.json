@@ -15,7 +15,8 @@
         "/views2/",
         "/views25/",
         "/views3/",
-        "/gis/"
+        "/leaflet/",
+        "/maplibre/"
     ],
     "repository": {
         "type": "git",

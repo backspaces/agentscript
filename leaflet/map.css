@@ -2,6 +2,7 @@
     To change the tile borders:
         let root = document.documentElement
         root.style.setProperty('--tile-border', "solid red 4px")
+        root.style.getPropertyValue('--tile-border')
         Use "0px" for none
     Similar for width/height
  */

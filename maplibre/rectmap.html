@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Rect Hello</title>
+    <title>RectMap</title>
 </head>
 
 <body>
@@ -21,18 +21,27 @@
 
         mltools.addRasterLayer(map, 'terrain', terrain)
 
+        // Draw a rect of this bbox on map. Used for point-of-view GIS functions.
         mltools.addGeojsonLayer(map, 'rectangle', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 
         mltools.addLayerCursor(map, 'rectangle')
 
+        // Change rectangle to a new point-of-view. See console for bbox coords
         // fcn args: fcn(bbox) where bbox is dragged rectangle in geo coords
         const fcn = async bbox => {
             mltools.updateGeojson(map, 'rectangle', bbox)
             map.panTo(gis.bboxCenter(bbox))
+            console.log('rect bbox', bbox)
         }
         mltools.addDragRect(map, fcn)
 
         // ===== End of map & layers
+
+        mltools.startupMessage(
+            'The rectangle can be changed using\nAlt mouse drag, printing new bbox in consol\nYou can use the return key to remove this'
+        )
+
+
 
     </script>
     <div id="map"></div>

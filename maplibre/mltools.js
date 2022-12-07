@@ -66,6 +66,32 @@ export function onLoad(map, msg = 'A load event occurred.') {
     })
 }
 
+// let startupMessageShown = false
+// const startupFcn = message => alert(message)
+// export function startupMessage(map, message) {
+//     if (startupMessageShown) {
+//         map.off('idle', startupFcn)
+//     } else {
+//         map.on('idle', startupFcn(message))
+//         startupMessageShown = true
+//     }
+// }
+// const startupFcn = message => {
+//     alert(message)
+//     map.off('idle', startupFcn)
+// }
+// export function startupMessage(map, message) {
+//     const startupFcn = message => {
+//         alert(message)
+//         map.off('idle', startupFcn)
+//     }
+//     map.on('idle', startupFcn(message))
+// }
+export async function startupMessage(message) {
+    await util.pause(1000)
+    alert(message)
+}
+
 export function getZoom(map, round = true) {
     let zoom = map.getZoom()
     if (round) zoom = Math.round(zoom)
