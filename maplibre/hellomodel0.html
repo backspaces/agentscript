@@ -44,6 +44,7 @@
 
         mltools.addRasterLayer(map, 'elevation', elevation, 0.2)
 
+        // Equivalent to:
         // mltools.addGeojsonFillLayer(map, 'bbox', bbox, 'rgba(255, 0, 0, 0.2)')
         // mltools.addGeojsonLineLayer(map, 'bboxLines', bbox, 'red', 3)
         mltools.addGeojsonLayer(map, 'santaFe', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
@@ -59,6 +60,12 @@
             },
             500, // run 500 steps
             30 // 30 fps
+        )
+
+        mltools.startupMessage(
+            'This is the Hello model on a map using the' +
+            '\nmltools utilities for creating the map and it\'s layers' +
+            '\nYou can use the return key to remove this'
         )
 
     </script>

@@ -42,9 +42,6 @@
 
         mltools.addRasterLayer(map, 'terrain', terrain)
 
-        // mltools.addRasterLayer(map, 'elevation', elevation, 0.15)
-
-        // mltools.addGeojsonLayer(map, 'bbox', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
         mltools.addGeojsonLayer(map, 'bbox', bbox, 'transparent', 'red', 3)
 
         mltools.addCanvasLayer(map, 'model', modelView.canvas, bbox)
@@ -60,14 +57,17 @@
         }
         mltools.addDragRect(map, dragFcn)
 
-        // const clickFcn = async () => { await modelView.setWorld() }
-        // mltools.addLayerClick(map, 'bbox', clickFcn)
-
         // ===== End of map & layers
 
         modelView.run(-1, 10) // steps, fps. steps of -1 goes forever
 
-        // util.toWindow({ map, modelView })
+        mltools.startupMessage(
+            'This is the rectMap.html page with the droplets model added' +
+            '\nThe model\'s rectangle can be changed using' +
+            '\nAlt mouse drag, creating a new rect for the droplets.' +
+            '\nYou can use the return key to remove this'
+        )
+
     </script>
     <div id="map"></div>
 </body>
