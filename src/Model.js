@@ -160,8 +160,7 @@ class Model {
 
     setGeometry(name = 'heading') {
         const geometry = geometries[name]
-        if (!geometry)
-            throw Error(`util.setGeometry: ${name} geometry not defined`)
+        if (!geometry) throw Error(`setGeometry: ${name} geometry not defined`)
         Object.assign(this, geometry)
     }
 }
