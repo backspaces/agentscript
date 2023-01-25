@@ -1,3 +1,6 @@
+// Note: Warning: To load an ES module, set "type": "module"
+// in the package.json or use the .mjs extension.
+
 import terser from '@rollup/plugin-terser'
 // import { terser } from 'rollup-plugin-terser'
 import cleanup from 'rollup-plugin-cleanup'

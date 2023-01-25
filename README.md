@@ -29,7 +29,7 @@ Example: to import Class Model for building your own model, use:
 
 There are bundles as well of all the agentscript modules as a single file from the usual NPM-based CDNs:
 
--   unpkg.com: [https://unpkg.com/agentscript@0.10.6/dist/agentscript.js](https://unpkg.com/agentscript@0.10.6/dist/agentscript.js)
+-   unpkg.com: [https://unpkg.com/agentscript/dist/agentscript.js](https://unpkg.com/agentscript/dist/agentscript.js)
 
 To create your own local agentscript files:
 
