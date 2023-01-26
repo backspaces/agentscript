@@ -16,9 +16,10 @@ jobs:
         working_directory: ~/repo
 
         steps:
+            - checkout
             - browser-tools/install-chrome
             - browser-tools/install-chromedriver
-            - checkout
+
 
             - restore_cache:
                   keys:
