@@ -1,12 +1,28 @@
-import * as util from '../src/utils.js'
+import {
+    toRad,
+    toDeg,
+    headingToRad,
+    radToHeading,
+    precision,
+} from '../src/utils.js'
 import Model from '../src/Model3D.js'
 import {
     assert,
     // assertEquals,
 } from 'https://deno.land/std@0.92.0/testing/asserts.ts'
 
-const { toRad, toDeg, headingToRad, radToHeading, precision } = util
+// const { toRad, toDeg, headingToRad, radToHeading, precision } = util
 const { PI, abs } = Math
+
+// const toDeg = 180 / Math.PI
+// const toRad = Math.PI / 180
+// function headingToRad(heading) {
+//     const deg = mod360(90 - heading)
+//     return deg * toRad
+// }
+// function mod360(degrees) {
+//     return mod(degrees, 360)
+// }
 
 // const p = num => precision(num, 10)
 const epsilon = 1e-10

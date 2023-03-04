@@ -161,7 +161,7 @@ export async function blobsEqual(blob0, blob1) {
 // download canvas as png or jpeg. Canvas can be a dataURL.
 // quality is default. For lossless jpeg, set to 1
 export function downloadCanvas(can, name = 'download.png', quality = null) {
-    if (!(name.endsWith('.png') || name.endsWith('.jpeg'))) name + '.png'
+    if (!(name.endsWith('.png') || name.endsWith('.jpeg'))) name = name + '.png'
 
     const type = name.endsWith('.png') ? 'image/png' : 'image/jpeg'
     const url = typeOf(can) === 'string' ? can : can.toDataURL(type, quality)
@@ -399,6 +399,11 @@ export function setCanvasSize(can, width, height) {
     }
 }
 
+// export function canvasToImage(can) {
+//     var img = new Image()
+//     img.src = can.toDataURL()
+// }
+
 // Install identity transform for this context.
 // Call ctx.restore() to revert to previous transform.
 export function setIdentity(ctx) {
@@ -418,6 +423,21 @@ export function setTextProperties(
     textBaseline = 'middle'
 ) {
     Object.assign(ctx, { font, textAlign, textBaseline })
+}
+
+// bboxCtx is reused on every call to stringMetrics
+const bboxCtx = createCtx(0, 0)
+export function stringMetrics(
+    string,
+    font,
+    textAlign = 'center',
+    textBaseline = 'middle'
+) {
+    setTextProperties(bboxCtx, font, textAlign, textBaseline)
+    const metrics = bboxCtx.measureText(string)
+    metrics.height = // not sure how safe this is but..
+        metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
+    return metrics
 }
 
 // Draw string of the given color at the xy location, in ctx pixel coords.

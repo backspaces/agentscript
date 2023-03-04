@@ -6,6 +6,10 @@
 </head>
 
 <body>
+
+    <!-- HTML emojis -->
+    <!-- <p>I am copyright &copy; I am a lion &#129409; Me too &#x1F981; </p> -->
+
     <script type="module">
         import * as util from '../src/utils.js'
         import TwoDraw from '../src/TwoDraw.js'
@@ -13,9 +17,17 @@
         import Model from '../models/HelloModel.js'
         import World from '../src/World.js'
         import Shapes from '../src/Shapes.js'
+        import * as emoji from '../src/emoji.js'
+
+        // JS emojies
+        // console.log("At: \x40, Sum: \u2211, Tree: \u{1F332}")
 
         const shapes = new Shapes()
 
+        function createEmojiPath(name, codePoint) {
+            const can = emoji.emoji2can(codePoint)
+            shapes.createImagePath(name, can)
+        }
         async function addImages() {
             await shapes.imagePathPromise(
                 'twitter',
@@ -25,6 +37,9 @@
                 'redfish',
                 '../models/data/redfish.png'
             )
+            createEmojiPath('lion', 0x1F981)
+            createEmojiPath('smiley', 0x1F600)
+            createEmojiPath('tree', 0x1F332)
         }
         function turtleName(t) {
             return shapes.nameAtIndex(t.id)
@@ -46,6 +61,7 @@
             {
                 turtlesShape: t => turtleName(t),
                 turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
+                turtlesRotate: t => (!["lion", "smiley", "tree"].includes(turtleName(t))),
             }
         )
 
@@ -58,7 +74,7 @@
             30 // 30 fps
         )
 
-        util.toWindow({ util, model, view, anim })
+        // util.toWindow({ util, model, view, anim })
     </script>
     <div id="modelDiv"></div>
 </body>
