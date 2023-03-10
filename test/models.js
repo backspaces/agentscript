@@ -12,8 +12,8 @@ const port = 9008
 const useWorkers = true
 const compareSamples = true
 const debug = false
-// const nonWorker = model => [].includes(model)
-const nonWorker = model => ['droplets'].includes(model)
+const nonWorker = model => [].includes(model)
+// const nonWorker = model => ['droplets'].includes(model)
 
 // liveServer.start({
 //     open: false,
@@ -31,7 +31,7 @@ const samplesFile = 'test/samples.txt' // Store model samples here
 const lastSamples = shell.cat(samplesFile) // Last set of samples
 const currentSamples = {} // This set of samples
 
-let models = shell
+const models = shell
     .ls('models/*Model.js') // Just the Model files
     .sed(/^models\//, '')
     .sed(/Model.js$/, '')

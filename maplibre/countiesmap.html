@@ -14,8 +14,9 @@
 
         const uscountiesUrl = 'https://backspaces.s3.amazonaws.com/uscounties.json'
         const usstatesUrl = 'https://backspaces.s3.amazonaws.com/usstates.json'
-        const uscounties = await util.fetchJson(uscountiesUrl)
-        const usstates = await util.fetchJson(usstatesUrl)
+        const uscounties = await fetch(uscountiesUrl).then(res => res.json())
+        const usstates = await fetch(usstatesUrl).then(res => res.json())
+
         const usaCenter = gis.usaCenter
         const terrain = gis.template('usgs')
 

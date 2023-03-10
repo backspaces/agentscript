@@ -25,6 +25,8 @@
             seed: testing,
             startup: undefined,
         }
+        // workers can't use util.ImagePromise, new Image() not
+        // avail in Workers. (creates an HTMLImageElement)
         if (name === 'dropletsModel') {
             params.startup = await provider.zxyToDataSet(13, 1594, 3339)
         }

@@ -40,14 +40,15 @@ export function imagePromise(url) {
 //     return createImageBitmap(urlOrBlob, options)
 // }
 
-// createImageBitmap(img) with lossless parameters.
-// img: image, canvas, video, blob, imageData
-export async function imageToImageBitmap(img) {
-    return createImageBitmap(img, {
-        premultiplyAlpha: 'none',
-        colorSpaceConversion: 'none',
-    })
-}
+// // createImageBitmap(img) with lossless parameters.
+// // img: image, canvas, video, blob, imageData
+// export async function imageToImageBitmap(img) {
+//     return createImageBitmap(img, {
+//         premultiplyAlpha: 'none',
+//         colorSpaceConversion: 'none',
+//     })
+// }
+
 // https://stackoverflow.com/questions/52959839/convert-imagebitmap-to-blob
 // https://stackoverflow.com/questions/60031536/difference-between-imagebitmap-and-imagedata
 // Return an ImageBitmapRenderingContext from the imageBitmap
@@ -64,38 +65,43 @@ export async function imageToImageBitmap(img) {
 //     // downloadCanvas(ctx.canvas) // debug
 //     return ctx // ctx.getImageData(0, 0, width, height)
 // }
-export async function imageBitmapRendererCtx(imageBitmap) {
-    const { width, height } = imageBitmap
-    const can = new OffscreenCanvas(width, height)
-    const ctx = can.getContext('bitmaprenderer')
-    ctx.transferFromImageBitmap(imageBitmap)
-    return ctx // ctx.getImageData(0, 0, width, height)
-}
+
+// export async function imageBitmapRendererCtx(imageBitmap) {
+//     const { width, height } = imageBitmap
+//     const can = new OffscreenCanvas(width, height)
+//     const ctx = can.getContext('bitmaprenderer')
+//     ctx.transferFromImageBitmap(imageBitmap)
+//     return ctx // ctx.getImageData(0, 0, width, height)
+// }
+
 // Use above to create a new canvas filled with the imageBitmap
 // export async function imageBitmapCanvas(imageBitmap) {
 //     // const ctx = await imageBitmapCtx(imageBitmap)
 //     // return cloneCanvas(ctx.canvas) // Safe from premultiply?
 //     return imageBitmapCanvasCtx(imageBitmap).canvas
 // }
-export function imageBitmap2dCtx(imageBitmap) {
-    const { width, height } = imageBitmap
-    const can = new OffscreenCanvas(width, height)
-    const ctx = can.getContext('2d')
-    ctx.drawImage(imageBitmap, 0, 0)
-    return ctx
-}
-export async function imageBitmapData(imageBitmap) {
-    const ctx = imageBitmap2dCtx(imageBitmap)
-    return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
-}
 
-// Convert canvas.toBlob callback style to a promise
-export async function canvasToBlob(can, mimeType = 'png', quality = undefined) {
-    if (!mimeType.startsWith('image/')) mimeType = 'image/' + mimeType
-    return new Promise(resolve => {
-        can.toBlob(blob => resolve(blob), mimeType, quality)
-    })
-}
+// export function imageBitmap2dCtx(imageBitmap) {
+//     const { width, height } = imageBitmap
+//     const can = new OffscreenCanvas(width, height)
+//     const ctx = can.getContext('2d')
+//     ctx.drawImage(imageBitmap, 0, 0)
+//     return ctx
+// }
+
+// export async function imageBitmapData(imageBitmap) {
+//     const ctx = imageBitmap2dCtx(imageBitmap)
+//     return ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+// }
+
+// // Convert canvas.toBlob callback style to a promise
+// export async function canvasToBlob(can, mimeType = 'png', quality = undefined) {
+//     if (!mimeType.startsWith('image/')) mimeType = 'image/' + mimeType
+//     return new Promise(resolve => {
+//         can.toBlob(blob => resolve(blob), mimeType, quality)
+//     })
+// }
+
 // ^^ditto for canvasToDataURL()
 // export async function imageToBlob(img) {
 //     return fetch(url).then(res => res[type]())
@@ -116,7 +122,8 @@ export function AsyncFunction(argsArray, fcnBody) {
 // Async convert blob to one of three types:
 // Type can be one of Text, ArrayBuffer, DataURL
 // Camel case ok: text, arrayBuffer, dataURL
-export async function blobToData(blob, type = 'dataURL') {
+// export async function blobToData(blob, type = 'dataURL') {
+export function blobToData(blob, type = 'dataURL') {
     type = type[0].toUpperCase() + type.slice(1)
     const types = ['Text', 'ArrayBuffer', 'DataURL']
     if (!types.includes(type))
@@ -128,21 +135,23 @@ export async function blobToData(blob, type = 'dataURL') {
         reader['readAs' + type](blob)
     })
 }
+
+// deprecated, use: await fetch(url).then(res => res.<type>())
 // Async Fetch of a url with the response of the given type
 // types: arrayBuffer, blob, json, text; default is blob
 // See https://developer.mozilla.org/en-US/docs/Web/API/Response#methods
-export async function fetchData(url, type = 'blob') {
-    const types = ['arrayBuffer', 'blob', 'json', 'text']
-    if (!types.includes(type))
-        throw Error('fetchData: data must be one of ' + types.toString())
-    return fetch(url).then(res => res[type]())
-}
-export async function fetchJson(url) {
-    return fetchData(url, 'json')
-}
-export async function fetchText(url) {
-    return fetchData(url, 'text')
-}
+// export async function fetchData(url, type = 'blob') {
+//     const types = ['arrayBuffer', 'blob', 'json', 'text']
+//     if (!types.includes(type))
+//         throw Error('fetchData: data must be one of ' + types.toString())
+//     return fetch(url).then(res => res[type]())
+// }
+// export async function fetchJson(url) {
+//     return fetchData(url, 'json')
+// }
+// export async function fetchText(url) {
+//     return fetchData(url, 'text')
+// }
 
 // Return a dataURL for the given data. type is a mime type: https://t.ly/vzKm
 // If data is a canvas, return data.toDataURL(type), defaulting to image/png
@@ -688,7 +697,7 @@ export async function fetchCssStyle(url) {
 }
 export function addCssStyle(css) {
     // document.head.innerHTML += `<style>${css}</style>`
-    var style = document.createElement('style')
+    const style = document.createElement('style')
     style.innerHTML = css
     document.head.appendChild(style)
 }

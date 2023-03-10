@@ -1,4 +1,4 @@
-// import * as util from '../src/utils.js'
+import * as util from '../src/utils.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
 // Current tile dataSet functions:
@@ -38,14 +38,18 @@ export default class DropletsModel extends Model {
         //     ? data
         //     : await provider.zxyToDataSet(...data)
 
-        if (data.width) {
-            // data is a dataset, use as is
+        // if (data.width && data.height) {
+        if (util.isDataSet(data)) {
+            // data is a dataset, use as is.
+            // workers: reconstruct the dataset object via
+            //   new DataSet(width, height, data)
             this.elevation = data
-        } else if (Array.isArray(data) && data.length === 3) {
+        } else if (Array.isArray(data)) {
+            // && data.length === 3) {
             if (data.length === 3) {
                 // data is [z, x, y] array
                 this.elevation = await provider.zxyToDataSet(...data)
-            } else if ((data.length = 2)) {
+            } else if (data.length === 2) {
                 // data is [bbox, zoom]
                 this.elevation = await new BBoxDataSet().getBBoxDataSet(...data)
             }

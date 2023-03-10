@@ -1,30 +1,22 @@
-import {
-    toRad,
-    toDeg,
-    headingToRad,
-    radToHeading,
-    precision,
-} from '../src/utils.js'
-import Model from '../src/Model3D.js'
-import {
-    assert,
-    // assertEquals,
-} from 'https://deno.land/std@0.92.0/testing/asserts.ts'
+// deno test test/geom.js
 
-// const { toRad, toDeg, headingToRad, radToHeading, precision } = util
+// use remote AS modules, deno fails with local versions
+import { toDeg, headingToRad } from 'https://code.agentscript.org/src/utils.js'
+// import { toDeg, headingToRad } from '../src/utils.js'
+import Model from 'https://code.agentscript.org/models/Hello3DModel.js'
+// import Model from '../models/Hello3DModel.js'
+import { assert } from 'https://deno.land/std@0.92.0/testing/asserts.ts'
+
 const { PI, abs } = Math
 
-// const toDeg = 180 / Math.PI
-// const toRad = Math.PI / 180
-// function headingToRad(heading) {
-//     const deg = mod360(90 - heading)
-//     return deg * toRad
-// }
-// function mod360(degrees) {
-//     return mod(degrees, 360)
-// }
+// make a 1 turtle model.
+const model = new Model()
+model.population = 1
+await model.startup()
+model.setup()
+const t = model.turtles[0]
 
-// const p = num => precision(num, 10)
+// testing functions
 const epsilon = 1e-10
 const areEqual = (a, b) => {
     const eq = abs(a - b) < epsilon
@@ -38,15 +30,6 @@ const areAllEqual = (A, B) => {
         throw Error(`!areAllEqual: arrays ${A.toString()} ${B.toString()}`)
     }
 }
-
-class Turtle extends Model {
-    setup() {
-        const t = this.turtles.createOne()
-    }
-}
-const model = new Turtle()
-model.setup()
-const t = model.turtles.first()
 
 // =========== tests ===========
 

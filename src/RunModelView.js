@@ -28,7 +28,7 @@ class RunModelView {
 
     run(steps = 500, fps = 30) {
         if (this.anim) {
-            if ((this.anim.steps = -1)) return
+            if (this.anim.steps === -1) return
             this.anim.stop()
         }
 
