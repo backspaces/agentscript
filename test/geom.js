@@ -1,10 +1,7 @@
 // deno test test/geom.js
 
-// use remote AS modules, deno fails with local versions
-import { toDeg, headingToRad } from 'https://code.agentscript.org/src/utils.js'
-// import { toDeg, headingToRad } from '../src/utils.js'
-import Model from 'https://code.agentscript.org/models/Hello3DModel.js'
-// import Model from '../models/Hello3DModel.js'
+import { toDeg, headingToRad } from '../src/utils.js'
+import Model from '../models/Hello3DModel.js'
 import { assert } from 'https://deno.land/std@0.92.0/testing/asserts.ts'
 
 const { PI, abs } = Math

@@ -1,5 +1,6 @@
 import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
+// import * as util from '../src/jsUtils.js'
 
 class HelloModel extends Model {
     population = 10 // number of turtles

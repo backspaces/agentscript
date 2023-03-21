@@ -9,7 +9,8 @@ console.log('dir:', dir)
 
 let models
 // const models = shell.ls(`${dir}/*.js`)
-if (dir === 'models' || dir === 'models/scripts') {
+// if (dir === 'models' || dir === 'models/scripts') {
+if (dir === 'models') {
     models = shell
         .ls(`${dir}/*Model.js`)
         // OK if first char is capitolized, index.html will just recap
