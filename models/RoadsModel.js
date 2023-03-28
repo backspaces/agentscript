@@ -10,8 +10,9 @@ const xyz = [3370, 6451, 14]
 const bbox = gis.xyz2bbox(...xyz)
 // const jsonUrl = './data/santafe14roads.json'
 const jsonUrl = '../models/data/santafe14roads.json'
+// const jsonUrl = import.meta.resolve('../models/data/santafe14roads.json')
 
-console.log(bbox.toString())
+// console.log(bbox.toString())
 
 export default class RoadsModel extends Model {
     geojson
@@ -25,7 +26,9 @@ export default class RoadsModel extends Model {
     }
 
     async startup() {
-        this.geojson = await fetch(jsonUrl).then(resp => resp.json())
+        const url = import.meta.resolve(jsonUrl)
+        this.geojson = await fetch(url).then(resp => resp.json())
+        // this.geojson = await fetch(jsonUrl).then(resp => resp.json())
     }
 
     setup() {
@@ -34,7 +37,7 @@ export default class RoadsModel extends Model {
         this.turtles.setDefault('atEdge', 'clamp')
 
         this.network = lineStringsToLinks(this, bbox, this.geojson)
-        console.log(this.network)
+        // console.log(this.network)
 
         this.turtles.ask(t => {
             if (!this.world.isOnWorld(t.x, t.y)) {

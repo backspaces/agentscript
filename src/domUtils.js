@@ -1,12 +1,15 @@
-// import { inWorker } from './jsUtils.js'
+import {
+    inWorker,
+    typeOf,
+    isDataSet,
+    isTypedArray,
+    isObject,
+} from './jsUtils.js'
 
-function inMain() {
-    return globalThis.document !== undefined
-}
-function inWorker() {
-    // return !inNode() && typeof self.window === 'undefined'
-    return globalThis.WorkerGlobalScope !== undefined
-}
+// function inWorker() {
+//     // return !inNode() && typeof self.window === 'undefined'
+//     return globalThis.WorkerGlobalScope !== undefined
+// }
 
 // ### Async & I/O
 
@@ -49,7 +52,7 @@ export function downloadBlob(blobable, name = 'download', format = true) {
     if (isDataSet(blobable) && !Array.isArray(blobable.data))
         blobable.data = Array.from(blobable.data)
     if (isTypedArray(blobable)) blobable = Array.from(blobable)
-    if (isObject(blobable) || isArray(blobable))
+    if (isObject(blobable) || Array.isArray(blobable))
         blobable = format
             ? JSON.stringify(blobable, null, 2)
             : JSON.stringify(blobable)

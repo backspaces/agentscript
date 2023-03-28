@@ -871,6 +871,24 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 
 // ### Models
 
+// model can be:
+// - a path to the class Model. uses Model.default. careful! use import.meta
+// - a class Model
+// - a model
+// if either of the first two, they're converted to a model
+// the model is called w/ default, no args.. i.e. model()
+export async function runModel(model, steps = 500) {
+    if (isString(model)) model = (await import(model)).default
+    if (isFunction(model)) model = new model() // model is a class
+
+    await model.startup()
+    model.setup()
+    await timeoutLoop(() => {
+        model.step()
+    }, steps)
+    // return model //  not needed, same as input model
+}
+
 export function toJSON(obj, indent = 0, topLevelArrayOK = true) {
     let firstCall = topLevelArrayOK
     const blackList = ['rectCache']
@@ -994,6 +1012,13 @@ export function range(length) {
     return repeat(length, (i, a) => {
         a[i] = i
     })
+}
+
+export function grep(array, regex) {
+    return array.reduce((acc, val) => {
+        if (regex.test(val)) acc.push(val)
+        return acc
+    }, [])
 }
 
 // Return a new array that is the concatination two arrays.

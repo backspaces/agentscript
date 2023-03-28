@@ -2,9 +2,10 @@ import * as util from '../src/utils.js'
 import HelloModel from './HelloModel.js'
 import { booleanPointInPolygon } from '../vendor/turfImports.js'
 
-const counties = await fetch('../models/data/nmcounties.json').then(resp =>
-    resp.json()
-)
+const url = import.meta.resolve('./data/nmcounties.json')
+const counties = await fetch(url).then(resp => resp.json())
+// console.log('counties', dataurl)
+// const counties = await fetch('./data/nmcounties.json').then(resp => resp.json())
 
 class CountiesModel extends HelloModel {
     static defaultOptions() {
@@ -19,7 +20,7 @@ class CountiesModel extends HelloModel {
         this.patches.ask(p => {
             const pt = this.world.toGeo(p.x, p.y)
             // note: the geoworld has to be constructed with geojson for bbox
-            util.forLoop(this.world.geojson.features, (f, i) => {
+            util.forLoop(this.world.geojson.features, f => {
                 if (booleanPointInPolygon(pt, f)) {
                     if (p.feature) console.log('p.feature exists', p)
                     p.feature = f
@@ -43,3 +44,7 @@ class CountiesModel extends HelloModel {
 }
 
 export default CountiesModel
+
+// const counties = await fetch('../models/data/nmcounties.json').then(resp =>
+//     resp.json()
+// )

@@ -1,6 +1,13 @@
+/*
+    Note: this is the only model that has dom methods.
+    To keep the model/view split clean, we provide a
+    pre-built dataset created from a 256x256 gis tile (needing dom methods)
+    scaled to 101x101 and thus does not need any of the dom methods
+*/
 import * as util from '../src/utils.js'
 import World from '../src/World.js'
 import Model from '../src/Model.js'
+import tileDataSet from './data/tile101x101.js'
 // Current tile dataSet functions:
 //   redfishUSDataSet
 //   redfishWorldDataSet
@@ -33,12 +40,7 @@ export default class DropletsModel extends Model {
 
     // data can be gis [z, x, y], [bbox, z], z, or a DataSet
     // if world is a geoworld: [world.bbox, z]
-    async startup(data = [13, 1594, 3339]) {
-        // this.elevation = data.width // is a dataset
-        //     ? data
-        //     : await provider.zxyToDataSet(...data)
-
-        // if (data.width && data.height) {
+    async startup(data = tileDataSet) {
         if (util.isDataSet(data)) {
             // data is a dataset, use as is.
             // workers: reconstruct the dataset object via

@@ -68,7 +68,9 @@
         "chrome": "bin/modelsinbrowser views1",
         "safari": "bin/modelsinbrowser views1 Safari",
         "runallc": "npm run run1c & npm run run2c && npm run25c run3c",
-        "foo": "node tests/node/node.js"
+        "denomodels": "deno run -A models/runmodels.js",
+        "bar": "echo $INIT_CWD",
+        "mytask": "cd $INIT_CWD && pwd"
     },
     "dependencies": {
         "three": "^0.120.0"

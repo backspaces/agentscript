@@ -29,7 +29,7 @@ export default class FlockModel extends Model {
         this.turtles.ask(t => {
             this.flock(t)
         })
-        if (this.ticks % 50 === 49) this.report()
+        // if (this.ticks % 50 === 49) this.report()
     }
     report() {
         console.log('step', this.ticks + 1, 'cohesion:', this.flockVectorSize())
