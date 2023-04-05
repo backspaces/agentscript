@@ -4,6 +4,7 @@ import {
     isDataSet,
     isTypedArray,
     isObject,
+    step
 } from './jsUtils.js'
 
 // function inWorker() {
