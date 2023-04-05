@@ -1,7 +1,5 @@
 import DataSet from "./DataSet.js"
 import { bboxMetricSize } from './gis.js'
-import BBoxTransform from './World.js'
-
 class GeoDataSet extends DataSet {
 
     /**
