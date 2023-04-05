@@ -151,13 +151,13 @@ export async function timeoutLoop(fcn, steps = -1, ms = 0) {
     }
 }
 
-export function waitPromise(done, ms = 10) {
+export function waitUntilPromise(done, ms = 10) {
     return new Promise(resolve => {
-        function waitOn() {
+        function waitOnDone() {
             if (done()) return resolve()
-            else setTimeout(waitOn, ms)
+            else setTimeout(waitOnDone, ms)
         }
-        waitOn()
+        waitOnDone()
     })
 }
 
@@ -877,16 +877,23 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 // - a model
 // if either of the first two, they're converted to a model
 // the model is called w/ default, no args.. i.e. model()
-export async function runModel(model, steps = 500) {
+// async arg: if true use timeoutLoop, otherwise a simple for loop
+export async function runModel(model, steps = 500, useSeed = false) {
+    if (useSeed) randomSeed()
+
     if (isString(model)) model = (await import(model)).default
     if (isFunction(model)) model = new model() // model is a class
 
     await model.startup()
     model.setup()
-    await timeoutLoop(() => {
-        model.step()
-    }, steps)
-    // return model //  not needed, same as input model
+    if (inMain()) {
+        await timeoutLoop(() => {
+            model.step()
+        }, steps)
+    } else {
+        for (let i = 0; i < steps; i++) model.step()
+    }
+    return model
 }
 
 export function toJSON(obj, indent = 0, topLevelArrayOK = true) {

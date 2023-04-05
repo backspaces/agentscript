@@ -1,0 +1,1792 @@
+{
+  "ButtonsModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "cluster",
+      "done"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 273
+    },
+    "turtles": 200,
+    "turtle": {
+      "id": 136,
+      "theta": 2.283142302887487,
+      "x": -10,
+      "y": -16,
+      "links": [
+        112,
+        150,
+        412,
+        438
+      ]
+    },
+    "links": 500,
+    "link": {
+      "id": 482,
+      "end0": {
+        "id": 121,
+        "theta": 3.7783750618803937,
+        "x": 10,
+        "y": 9,
+        "links": [
+          194,
+          200,
+          482,
+          484
+        ]
+      },
+      "end1": {
+        "id": 192,
+        "theta": 5.1900867760030405,
+        "x": -15,
+        "y": -8,
+        "links": [
+          77,
+          274,
+          366,
+          454,
+          482,
+          499
+        ]
+      }
+    }
+  },
+  "GridPathModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "probability",
+      "walker"
+    ],
+    "patches": 100,
+    "patch": {
+      "id": 16,
+      "occupied": true,
+      "ok": false,
+      "step": 11,
+      "neighbors4": [
+        6,
+        17,
+        26,
+        15
+      ]
+    },
+    "turtles": 39,
+    "turtle": {
+      "id": 19,
+      "theta": 6.070890570568255,
+      "x": 5,
+      "y": 3,
+      "z": 0,
+      "links": [
+        18,
+        19
+      ],
+      "choices": 3
+    },
+    "links": 38,
+    "link": {
+      "id": 14,
+      "end0": {
+        "id": 15,
+        "theta": 6.070890570568255,
+        "x": 7,
+        "y": 3,
+        "z": 0,
+        "links": [
+          14,
+          15
+        ],
+        "choices": 3
+      },
+      "end1": {
+        "id": 14,
+        "theta": 6.070890570568255,
+        "x": 7,
+        "y": 4,
+        "z": 0,
+        "links": [
+          13,
+          14
+        ],
+        "choices": 3
+      }
+    }
+  },
+  "MouseModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 928
+    },
+    "turtles": 20,
+    "turtle": {
+      "id": 7,
+      "theta": 1.3785909678969208,
+      "x": -2,
+      "y": -14,
+      "links": [
+        7,
+        10
+      ]
+    },
+    "links": 20,
+    "link": {
+      "id": 6,
+      "end0": {
+        "id": 6,
+        "theta": 3.8802022297483476,
+        "x": -16,
+        "y": -15,
+        "links": [
+          6,
+          15
+        ]
+      },
+      "end1": {
+        "id": 1,
+        "theta": 1.3318918841805771,
+        "x": -8,
+        "y": 12,
+        "links": [
+          1,
+          6,
+          17
+        ]
+      }
+    }
+  },
+  "HelloModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "speed",
+      "wiggleAngle",
+      "noLinks"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 927
+    },
+    "turtles": 10,
+    "turtle": {
+      "id": 3,
+      "theta": 4.533987643999834,
+      "x": 12.274546427462818,
+      "y": 8.875327786484148,
+      "links": [
+        3,
+        4
+      ]
+    },
+    "links": 10,
+    "link": {
+      "id": 9,
+      "end0": {
+        "id": 9,
+        "theta": -10.57069815432466,
+        "x": 9.424111960358411,
+        "y": -14.834705002380867,
+        "links": [
+          3,
+          9
+        ]
+      },
+      "end1": {
+        "id": 5,
+        "theta": -0.6639458760881362,
+        "x": 15.822144837655062,
+        "y": -7.941677077024614,
+        "links": [
+          5,
+          9
+        ]
+      }
+    }
+  },
+  "Hello3ZModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "speed",
+      "wiggleAngle",
+      "radius"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 762
+    },
+    "turtles": 100,
+    "turtle": {
+      "id": 46,
+      "theta": 0.8125588483184313,
+      "x": 1.7419224386859273,
+      "y": 11.103264924138973,
+      "z": 7.657885755349685,
+      "links": [
+        46,
+        50,
+        56
+      ]
+    },
+    "links": 100,
+    "link": {
+      "id": 0,
+      "end0": {
+        "id": 0,
+        "theta": 0.8620143847949843,
+        "x": 6.764142513175204,
+        "y": 10.110859894302424,
+        "z": 6.080862460148445,
+        "links": [
+          0,
+          55
+        ]
+      },
+      "end1": {
+        "id": 82,
+        "theta": -5.0574327049437215,
+        "x": 1.4571965862781437,
+        "y": 2.9200911647488113,
+        "z": 13.202637831073579,
+        "links": [
+          0,
+          5,
+          14,
+          68,
+          73,
+          82
+        ]
+      }
+    }
+  },
+  "HelloPlusModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "speed",
+      "wiggleAngle",
+      "noLinks",
+      "minPopulation",
+      "maxPopulation",
+      "changeTick"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 201
+    },
+    "turtles": 200,
+    "turtle": {
+      "id": 50,
+      "theta": -1.677306643938555,
+      "x": -16.368204514871305,
+      "y": -16.35362511501106,
+      "links": [
+        50,
+        120,
+        177
+      ]
+    },
+    "links": 200,
+    "link": {
+      "id": 57,
+      "end0": {
+        "id": 57,
+        "theta": -1.9709147757311043,
+        "x": -16.100760189930753,
+        "y": 2.5054364826009916,
+        "links": [
+          57
+        ]
+      },
+      "end1": {
+        "id": 171,
+        "theta": -0.4883278263634737,
+        "x": 8.009492425624886,
+        "y": -11.711078594247999,
+        "links": [
+          57,
+          171
+        ]
+      }
+    }
+  },
+  "Hello3DModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "speed",
+      "wiggleAngle",
+      "linksToo"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 251
+    },
+    "turtles": 100,
+    "turtle": {
+      "id": 81,
+      "obj3d": {
+        "metadata": {
+          "version": 4.5,
+          "type": "Object",
+          "generator": "Object3D.toJSON"
+        },
+        "object": {
+          "uuid": "8EB34A2F-30CB-42D1-AB27-9A9264D8A2C6",
+          "type": "Object3D",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      },
+      "links": [
+        81
+      ]
+    },
+    "links": 100,
+    "link": {
+      "id": 12,
+      "end0": {
+        "id": 12,
+        "obj3d": {
+          "metadata": {
+            "version": 4.5,
+            "type": "Object",
+            "generator": "Object3D.toJSON"
+          },
+          "object": {
+            "uuid": "72C3F6D7-21E0-4989-801E-4AD5A43C29F5",
+            "type": "Object3D",
+            "layers": 1,
+            "matrix": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          }
+        },
+        "links": [
+          12,
+          19,
+          30,
+          59
+        ]
+      },
+      "end1": {
+        "id": 45,
+        "obj3d": {
+          "metadata": {
+            "version": 4.5,
+            "type": "Object",
+            "generator": "Object3D.toJSON"
+          },
+          "object": {
+            "uuid": "4B656B7E-6AA1-47BC-B896-36D6A5E1F199",
+            "type": "Object3D",
+            "layers": 1,
+            "matrix": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          }
+        },
+        "links": [
+          12,
+          45
+        ]
+      }
+    }
+  },
+  "LinkTravelModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "layoutCircle",
+      "numNodes",
+      "numDrivers",
+      "speed",
+      "speedDelta",
+      "nodes",
+      "drivers"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 125
+    },
+    "turtles": 130,
+    "turtle": {
+      "id": 24,
+      "theta": -3.4557519189487724,
+      "x": -14.265847744427305,
+      "y": 4.635254915624209,
+      "links": [
+        44,
+        45
+      ]
+    },
+    "links": 56,
+    "link": {
+      "id": 50,
+      "end0": {
+        "id": 27,
+        "theta": -4.084070449666731,
+        "x": -8.816778784387099,
+        "y": 12.13525491562421,
+        "links": [
+          50,
+          51
+        ]
+      },
+      "end1": {
+        "id": 5,
+        "theta": 0.5235987755982989,
+        "x": 12.990381056766578,
+        "y": 7.5,
+        "links": [
+          6,
+          7,
+          19,
+          20,
+          37,
+          49,
+          50
+        ]
+      }
+    }
+  },
+  "Wander3DModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "speed",
+      "wiggleAngle",
+      "rotateEvery"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 714
+    },
+    "turtles": 25,
+    "turtle": {
+      "id": 18,
+      "obj3d": {
+        "metadata": {
+          "version": 4.5,
+          "type": "Object",
+          "generator": "Object3D.toJSON"
+        },
+        "object": {
+          "uuid": "643400EA-4009-40B3-87A4-6F805688AB21",
+          "type": "Object3D",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    "links": 0
+  },
+  "WallFollowerModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "wallPercent",
+      "walls",
+      "lefty",
+      "righty"
+    ],
+    "patches": 5041,
+    "patch": {
+      "id": 2482,
+      "neighbors4": [
+        2411,
+        2483,
+        2553,
+        2481
+      ]
+    },
+    "turtles": 40,
+    "turtle": {
+      "id": 27,
+      "theta": -23.56194490192345,
+      "x": 17.000000000000014,
+      "y": 34
+    },
+    "links": 0
+  },
+  "CountiesModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "speed",
+      "wiggleAngle",
+      "noLinks"
+    ],
+    "patches": 11800,
+    "patch": {
+      "id": 10045,
+      "feature": {
+        "type": "Feature",
+        "properties": {
+          "GEO_ID": "0500000US35035",
+          "STATE": "35",
+          "COUNTY": "035",
+          "NAME": "Otero",
+          "LSAD": "County",
+          "CENSUSAREA": 6613.209,
+          "population": 65745
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -105.998003,
+                32.002328
+              ],
+              [
+                -106.09976,
+                32.002174
+              ],
+              [
+                -106.18184,
+                32.00205
+              ],
+              [
+                -106.200699,
+                32.001785
+              ],
+              [
+                -106.205915,
+                32.001762
+              ],
+              [
+                -106.313307,
+                32.001512
+              ],
+              [
+                -106.377174,
+                32.00149
+              ],
+              [
+                -106.376614,
+                32.957941
+              ],
+              [
+                -106.340731,
+                32.95825
+              ],
+              [
+                -106.340473,
+                33.052795
+              ],
+              [
+                -106.345851,
+                33.390815
+              ],
+              [
+                -105.727343,
+                33.390524
+              ],
+              [
+                -105.725957,
+                33.304834
+              ],
+              [
+                -105.319045,
+                33.30509
+              ],
+              [
+                -105.316882,
+                33.132218
+              ],
+              [
+                -105.316151,
+                32.962014
+              ],
+              [
+                -105.35255,
+                32.961976
+              ],
+              [
+                -105.353907,
+                32.518769
+              ],
+              [
+                -104.851525,
+                32.520505
+              ],
+              [
+                -104.847757,
+                32.000482
+              ],
+              [
+                -104.918272,
+                32.000496
+              ],
+              [
+                -105.077046,
+                32.000579
+              ],
+              [
+                -105.078605,
+                32.000533
+              ],
+              [
+                -105.11804,
+                32.000485
+              ],
+              [
+                -105.131377,
+                32.000524
+              ],
+              [
+                -105.132916,
+                32.000518
+              ],
+              [
+                -105.14824,
+                32.000485
+              ],
+              [
+                -105.15031,
+                32.000497
+              ],
+              [
+                -105.153994,
+                32.000497
+              ],
+              [
+                -105.390396,
+                32.000607
+              ],
+              [
+                -105.427049,
+                32.000638
+              ],
+              [
+                -105.428582,
+                32.0006
+              ],
+              [
+                -105.429281,
+                32.000577
+              ],
+              [
+                -105.886159,
+                32.00197
+              ],
+              [
+                -105.9006,
+                32.0021
+              ],
+              [
+                -105.998003,
+                32.002328
+              ]
+            ]
+          ]
+        },
+        "id": "35035"
+      }
+    },
+    "turtles": 10,
+    "turtle": {
+      "id": 3,
+      "theta": -3.003951718457565,
+      "x": 66.46462262820525,
+      "y": -0.2230938744463614,
+      "links": [
+        3,
+        4
+      ],
+      "county": 0
+    },
+    "links": 10,
+    "link": {
+      "id": 9,
+      "end0": {
+        "id": 9,
+        "theta": 5.3768267377265735,
+        "x": 98.42971640527904,
+        "y": 92.12521142974605,
+        "links": [
+          3,
+          9
+        ],
+        "feature": {
+          "type": "Feature",
+          "properties": {
+            "GEO_ID": "0500000US35059",
+            "STATE": "35",
+            "COUNTY": "059",
+            "NAME": "Union",
+            "LSAD": "County",
+            "CENSUSAREA": 3823.744,
+            "population": 4175
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -103.040824,
+                  36.055231
+                ],
+                [
+                  -103.041357,
+                  35.739274
+                ],
+                [
+                  -103.374988,
+                  35.740011
+                ],
+                [
+                  -103.364975,
+                  36.086373
+                ],
+                [
+                  -103.794342,
+                  36.085787
+                ],
+                [
+                  -103.793986,
+                  36.173995
+                ],
+                [
+                  -104.008991,
+                  36.174503
+                ],
+                [
+                  -104.008927,
+                  36.218018
+                ],
+                [
+                  -104.007855,
+                  36.996239
+                ],
+                [
+                  -103.734364,
+                  36.998041
+                ],
+                [
+                  -103.733247,
+                  36.998016
+                ],
+                [
+                  -103.086105,
+                  36.999864
+                ],
+                [
+                  -103.002199,
+                  37.000104
+                ],
+                [
+                  -103.002247,
+                  36.911587
+                ],
+                [
+                  -103.001964,
+                  36.909573
+                ],
+                [
+                  -103.002198,
+                  36.719427
+                ],
+                [
+                  -103.002518,
+                  36.675186
+                ],
+                [
+                  -103.002252,
+                  36.61718
+                ],
+                [
+                  -103.002188,
+                  36.602716
+                ],
+                [
+                  -103.002565,
+                  36.526588
+                ],
+                [
+                  -103.002434,
+                  36.500397
+                ],
+                [
+                  -103.041669,
+                  36.478514
+                ],
+                [
+                  -103.041745,
+                  36.318267
+                ],
+                [
+                  -103.041674,
+                  36.317534
+                ],
+                [
+                  -103.040824,
+                  36.055231
+                ]
+              ]
+            ]
+          },
+          "id": "35059"
+        },
+        "county": 59
+      },
+      "end1": {
+        "id": 5,
+        "theta": 3.6460743952564254,
+        "x": 69.35860283103828,
+        "y": 71.14804380641982,
+        "links": [
+          5,
+          9
+        ],
+        "feature": {
+          "type": "Feature",
+          "properties": {
+            "GEO_ID": "0500000US35019",
+            "STATE": "35",
+            "COUNTY": "019",
+            "NAME": "Guadalupe",
+            "LSAD": "County",
+            "CENSUSAREA": 3030.482,
+            "population": 4382
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -105.312968,
+                  34.34672
+                ],
+                [
+                  -105.312626,
+                  34.607052
+                ],
+                [
+                  -105.290299,
+                  34.606744
+                ],
+                [
+                  -105.290884,
+                  35.042093
+                ],
+                [
+                  -105.291355,
+                  35.216345
+                ],
+                [
+                  -104.124816,
+                  35.2156
+                ],
+                [
+                  -104.124841,
+                  35.142183
+                ],
+                [
+                  -104.129424,
+                  34.779324
+                ],
+                [
+                  -104.340132,
+                  34.779062
+                ],
+                [
+                  -104.444913,
+                  34.604821
+                ],
+                [
+                  -104.892023,
+                  34.604426
+                ],
+                [
+                  -104.89185,
+                  34.346989
+                ],
+                [
+                  -105.312968,
+                  34.34672
+                ]
+              ]
+            ]
+          },
+          "id": "35019"
+        },
+        "county": 19
+      }
+    }
+  },
+  "RoadsModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "geojson",
+      "network",
+      "numDrivers",
+      "speed",
+      "speedDelta",
+      "intersections",
+      "nodes",
+      "drivers"
+    ],
+    "patches": 40401,
+    "patch": {
+      "id": 1795
+    },
+    "turtles": 975,
+    "turtle": {
+      "id": 877,
+      "theta": -1.9882984842817673,
+      "x": -95.12672988671686,
+      "y": 61.90966284125516,
+      "fromNode": {
+        "id": 600,
+        "theta": 3.666132900359308,
+        "x": -94.12917546669681,
+        "y": 64.15853485639326,
+        "lon": -105.951452,
+        "lat": 35.6897678,
+        "links": [
+          584,
+          585
+        ]
+      },
+      "toNode": {
+        "id": 599,
+        "theta": 6.074051158268076,
+        "x": -95.2287330133433,
+        "y": 61.679708492576985,
+        "lon": -105.9515722,
+        "lat": 35.6895477,
+        "links": [
+          583,
+          584,
+          691
+        ]
+      },
+      "speed": 0.07455124491783907
+    },
+    "links": 1058,
+    "link": {
+      "id": 577,
+      "end0": {
+        "id": 591,
+        "theta": 5.852117476787024,
+        "x": -61.41139242667511,
+        "y": -41.071642394684496,
+        "lon": -105.9478754,
+        "lat": 35.6804242,
+        "links": [
+          576,
+          577
+        ]
+      },
+      "end1": {
+        "id": 583,
+        "theta": 3.9937091278376804,
+        "x": -66.61828224001802,
+        "y": -42.55488379453773,
+        "lon": -105.9484446,
+        "lat": 35.6802925,
+        "links": [
+          570,
+          577,
+          636,
+          845
+        ]
+      },
+      "lineString": [
+        576,
+        577
+      ]
+    }
+  },
+  "SlimeMoldModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 383,
+      "_diffuseNext": 0,
+      "neighbors": [
+        349,
+        350,
+        351,
+        384,
+        417,
+        416,
+        415,
+        382
+      ],
+      "pheromone": 29.08008489890981
+    },
+    "turtles": 100,
+    "turtle": {
+      "id": 1,
+      "theta": -11.231153928461307,
+      "x": -12.04559211977485,
+      "y": 6.85058220429185
+    },
+    "links": 0
+  },
+  "VirusModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "averageNodeDegree",
+      "outbreakSize",
+      "virusSpreadPercent",
+      "virusCheckFrequency",
+      "recoveryPercent",
+      "gainResistancePercent",
+      "done"
+    ],
+    "patches": 6561,
+    "patch": {
+      "id": 3002
+    },
+    "turtles": 150,
+    "turtle": {
+      "id": 15,
+      "theta": 5.354326060992883,
+      "x": -9.349923324864283,
+      "y": -12.260946722175877,
+      "resistant": false,
+      "infected": false,
+      "state": "susceptible",
+      "virusCheckTimer": 0,
+      "links": [
+        36,
+        40,
+        169,
+        184,
+        314,
+        327
+      ]
+    },
+    "links": 450,
+    "link": {
+      "id": 413,
+      "end0": {
+        "id": 32,
+        "theta": 4.3059879866764295,
+        "x": -26.084254426820436,
+        "y": -13.913646330976531,
+        "resistant": true,
+        "infected": false,
+        "state": "resistant",
+        "virusCheckTimer": 0,
+        "links": [
+          86,
+          112,
+          221,
+          233,
+          328,
+          348,
+          356,
+          378,
+          413
+        ]
+      },
+      "end1": {
+        "id": 144,
+        "theta": 5.1900867760030405,
+        "x": -34.47228191769429,
+        "y": -19.091619802328402,
+        "resistant": false,
+        "infected": false,
+        "state": "susceptible",
+        "virusCheckTimer": 0,
+        "links": [
+          7,
+          29,
+          156,
+          211,
+          240,
+          308,
+          413,
+          414,
+          416
+        ]
+      }
+    }
+  },
+  "DropletsModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "speed",
+      "stepType",
+      "moves",
+      "elevation",
+      "dzdx",
+      "dzdy",
+      "slope",
+      "aspect",
+      "localMins"
+    ],
+    "patches": 10201,
+    "patch": {
+      "id": 5057,
+      "elevation": 1723,
+      "aspect": 4.2721484668299095,
+      "neighbors": [
+        4955,
+        4956,
+        4957,
+        5058,
+        5159,
+        5158,
+        5157,
+        5056
+      ],
+      "isLocalMin": false
+    },
+    "turtles": 10175,
+    "turtle": {
+      "id": 7680,
+      "theta": 2.6411186168144085,
+      "x": -46.707106781186546,
+      "y": -26.707106781186546,
+      "done": true
+    },
+    "links": 0
+  },
+  "AntsModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "speed",
+      "maxPheromone",
+      "diffusionRate",
+      "evaporationRate",
+      "wiggleAngle",
+      "foodX",
+      "foodY",
+      "nestX",
+      "nestY"
+    ],
+    "patches": 6561,
+    "patch": {
+      "id": 4174,
+      "isFood": false,
+      "isNest": false,
+      "foodPheromone": 0.0257680536425004,
+      "nestPheromone": 0.04021862087665316,
+      "_diffuseNext": 0,
+      "neighbors": [
+        4092,
+        4093,
+        4094,
+        4175,
+        4256,
+        4255,
+        4254,
+        4173
+      ]
+    },
+    "turtles": 255,
+    "turtle": {
+      "id": 80,
+      "theta": 0.35187919106928417,
+      "x": 4.569458552541104,
+      "y": 1.1474232505464783,
+      "carryingFood": true,
+      "pheromone": 0.37713422825070403
+    },
+    "links": 0
+  },
+  "FlockModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "vision",
+      "speed",
+      "maxTurn",
+      "minSeparation"
+    ],
+    "patches": 1089,
+    "patch": {
+      "id": 901,
+      "turtles": []
+    },
+    "turtles": 100,
+    "turtle": {
+      "id": 62,
+      "theta": 5.977855336438268,
+      "x": -3.03522882546589,
+      "y": 15.92186049918204
+    },
+    "links": 0
+  },
+  "FireModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "density",
+      "fires",
+      "embers",
+      "patchTypes",
+      "dirtType",
+      "treeType",
+      "fireType",
+      "burnedTrees",
+      "initialTrees"
+    ],
+    "patches": 63001,
+    "patch": {
+      "id": 52543,
+      "type": "ember0",
+      "neighbors4": [
+        52292,
+        52544,
+        52794,
+        52542
+      ]
+    },
+    "turtles": 0,
+    "links": 0
+  },
+  "DiffuseModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "population",
+      "speed",
+      "wiggleAngle",
+      "radius",
+      "diffuseRate",
+      "seedDelta",
+      "seedMax"
+    ],
+    "patches": 80601,
+    "patch": {
+      "id": 45451,
+      "ran": 0.6014832474734432,
+      "_diffuseNext": 0,
+      "neighbors": [
+        45049,
+        45050,
+        45051,
+        45452,
+        45853,
+        45852,
+        45851,
+        45450
+      ]
+    },
+    "turtles": 2,
+    "turtle": {
+      "id": 1,
+      "theta": 4.017593726538558,
+      "x": -169.46259631353462,
+      "y": -13.334433990431691
+    },
+    "links": 0
+  },
+  "WaterModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "strength",
+      "surfaceTension",
+      "friction",
+      "drip"
+    ],
+    "patches": 10201,
+    "patch": {
+      "id": 6451,
+      "zpos": -2.022592688314435,
+      "deltaZ": -4.8107524811331555,
+      "neighbors4": [
+        6350,
+        6452,
+        6552,
+        6450
+      ]
+    },
+    "turtles": 0,
+    "links": 0
+  },
+  "TspModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "nodeCount",
+      "travelersCount",
+      "growPopulation",
+      "useInversion",
+      "stopTickDifference",
+      "onChange",
+      "nodes",
+      "travelers",
+      "done",
+      "bestTourNodes",
+      "bestTourLength",
+      "bestTourTick",
+      "tourChanges"
+    ],
+    "patches": 10201,
+    "patch": {
+      "id": 6348
+    },
+    "turtles": 150,
+    "turtle": {
+      "id": 49248,
+      "theta": 4.589511136703417,
+      "x": 0,
+      "y": 0,
+      "tourNodes": [
+        17,
+        32,
+        14,
+        36,
+        38,
+        29,
+        40,
+        5,
+        27,
+        39,
+        18,
+        23,
+        44,
+        31,
+        33,
+        12,
+        47,
+        22,
+        24,
+        48,
+        19,
+        10,
+        6,
+        9,
+        28,
+        0,
+        1,
+        13,
+        45,
+        21,
+        8,
+        30,
+        4,
+        37,
+        25,
+        42,
+        15,
+        3,
+        2,
+        34,
+        7,
+        46,
+        20,
+        41,
+        26,
+        11,
+        49,
+        16,
+        35,
+        43
+      ],
+      "tourLength": 683.6578668442219
+    },
+    "links": 50,
+    "link": {
+      "id": 6495,
+      "end0": {
+        "id": 11,
+        "theta": 4.400871999041906,
+        "x": 26,
+        "y": -47,
+        "z": 0,
+        "links": [
+          6494,
+          6495
+        ]
+      },
+      "end1": {
+        "id": 49,
+        "theta": 5.234912704298912,
+        "x": 23,
+        "y": -46,
+        "z": 0,
+        "links": [
+          6495,
+          6496
+        ]
+      }
+    }
+  },
+  "ExitModel": {
+    "ticks": 500,
+    "model": [
+      "world",
+      "patches",
+      "turtles",
+      "links",
+      "ticks",
+      "step0",
+      "step",
+      "toRads",
+      "fromRads",
+      "toAngleRads",
+      "fromAngleRads",
+      "toCCW",
+      "numExits",
+      "population",
+      "exits",
+      "inside",
+      "wall"
+    ],
+    "patches": 5041,
+    "patch": {
+      "id": 4012,
+      "neighbors4": [
+        3941,
+        4013,
+        4083,
+        4011
+      ],
+      "turtles": [],
+      "neighbors": [
+        3940,
+        3941,
+        3942,
+        4013,
+        4084,
+        4083,
+        4082,
+        4011
+      ]
+    },
+    "turtles": 9,
+    "turtle": {
+      "id": 1039,
+      "theta": -0.7853981633974483,
+      "x": 15,
+      "y": -22,
+      "exit": {
+        "id": 4313,
+        "exitNumber": 0,
+        "turtles": []
+      }
+    },
+    "links": 0
+  }
+}
