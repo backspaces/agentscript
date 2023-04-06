@@ -151,7 +151,7 @@ export async function timeoutLoop(fcn, steps = -1, ms = 0) {
     }
 }
 
-export function waitUntilPromise(done, ms = 10) {
+export function waitUntilDone(done, ms = 10) {
     return new Promise(resolve => {
         function waitOnDone() {
             if (done()) return resolve()

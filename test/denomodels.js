@@ -52,7 +52,7 @@ for (const name of models) {
     }
 }
 
-await util.waitUntilPromise(() => numResults === models.length - 1)
+await util.waitUntilDone(() => numResults === models.length - 1)
 
 Deno.chdir('../' + testDir)
 console.log('cwd', Deno.cwd())
