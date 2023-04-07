@@ -1,8 +1,0 @@
-{
-    "name": "@deno/my-example-app",
-    "description": "An example app created with Deno",
-    "type": "module",
-    "scripts": {},
-    "dependencies": {},
-    "devDependencies": {}
-}

@@ -1,4 +1,5 @@
-// deno test test/geom.js
+#!/usr/bin/env -S deno test -A
+// deno test test/deno3Dgeom.js
 
 import { toDeg, headingToRad } from '../src/utils.js'
 import Model from '../models/Hello3DModel.js'
