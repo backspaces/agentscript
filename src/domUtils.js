@@ -4,11 +4,7 @@ import {
     isDataSet,
     isTypedArray,
     isObject,
-<<<<<<< HEAD
-    step
-=======
     step,
->>>>>>> 283f611aba92ca8f0d1ab0ebdca45ee7ae100fed
 } from './jsUtils.js'
 
 // function inWorker() {
