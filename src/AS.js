@@ -52,3 +52,5 @@ export { default as Mouse } from './Mouse.js'
 export * as gis from './gis.js'
 export * as geojson from './geojson.js'
 export { default as GeoWorld } from './GeoWorld.js'
+export { default as GeoDataSet } from './GeoDataSet.js'
+
