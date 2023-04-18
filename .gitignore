@@ -13,7 +13,7 @@ yarn-error.log
 **/.DS_Store
 
 /Attic/
-/test/samples.txt
+/test/samples.json
 /tests/
 
 # package-lock.json

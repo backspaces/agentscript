@@ -53,7 +53,7 @@ Our directory layout is:
 
 -   [bin/](https://github.com/backspaces/agentscript/tree/master/bin): workflow scripts
 -   [dist/](https://github.com/backspaces/agentscript/tree/master/dist): the umd and esm bundles with their min.js versions and src/.
--   [test/](https://github.com/backspaces/agentscript/tree/master/test): testing in browser for all models/ using [Puppeteer](https://github.com/puppeteer/puppeteer#puppeteer)
+-   [test/](https://github.com/backspaces/agentscript/tree/master/test): testing using Deno with it's browser environment running all models/ using its test feature to report errors.
 -   [config/](https://github.com/backspaces/agentscript/tree/master/config): tools for creating "bundles".<br>
 
 ## Run demos
