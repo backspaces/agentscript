@@ -1,0 +1,132 @@
+<html>
+
+<head>
+    <title>Avalanche</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
+
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import World from '../src/World.js'
+        import Model from '../src/Model.js'
+        import { mapzen as provider } from '../src/TileData.js'
+
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import Color from '../src/Color.js'
+        import ColorMap from '../src/ColorMap.js'
+        import DataSet from '../src/DataSet.js'
+        import GeoDataSet from '../src/GeoDataSet.js'
+        import { xyz2bbox, bboxMetricSize } from '../src/gis.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+
+        const pi = Math.PI
+        /**
+         * 
+         * Model
+         * 
+         * **/
+        export default class AvalancheModel extends Model {
+            // ======================
+            constructor(worldOptions = World.defaultOptions(50)) {
+                super(worldOptions)
+            }
+
+            // data can be gis zxy or a DataSet
+            async startup() {
+                const z = 13, x = 1555, y = 3084
+                const bounds = xyz2bbox(x, y, z)// alta utah. USA
+                const elev = await provider.zxyToDataSet(z, x, y)
+                this.installDataSets(elev)
+            }
+
+            installDataSets(elevation) {
+                const { slope, aspect, dzdx, dzdy } = elevation.slopeAndAspect()
+                this.patches.importDataSet(aspect, 'aspect')
+                this.patches.importDataSet(slope, 'slope')
+                this.patches.importDataSet(dzdx, 'dzdx')
+                this.patches.importDataSet(dzdy, 'dzdy')
+                this.patches.importDataSet(elevation, 'elevation')
+                // for 3d 
+                const elevationScaled = elevation.clone().scale(-10, 10)
+                this.patches.importDataSet(elevationScaled, 'z', true) // for drawing
+            }
+            setup() {
+                this.patches.ask(p => {
+                    p.snowDepth = 1
+                })
+            }
+            step() {
+                // start new buffer
+                this.patches.ask(p => p.nextSnow = p.snowDepth)
+                // drop snow
+                this.patches.ask(p => p.nextSnow += + 0.01)
+                // make avalanche
+                this.patches.ask(p => {
+                    const maxSnowDepth = (pi) / (p.slope)
+                    if (p.snowDepth > maxSnowDepth) {
+                        //choose the 2 downhill neighbors to give snow to
+                        const n = Math.min(2, p.neighbors.length)
+                        p.neighbors.minNOf(n, 'elevation')
+                            .ask(p2 => p2.nextSnow = p2.nextSnow + p.snowDepth / n)
+                        p.nextSnow = 0
+                    }
+                })
+                // swap buffer
+                this.patches.ask(p => p.snowDepth = p.nextSnow)
+            }
+        }
+
+
+        /**
+         * 
+         * View
+         * 
+         * */
+        const snowColor = ColorMap.gradientColorMap(20, ['rgb(98,52,18)', 'white'])
+        const drawOptions = {
+            patchesColor: p => {
+                const aspect2 = (p.aspect + 2*pi) % (2*pi)
+                const k = (pi - Math.abs(aspect2 - pi))/pi
+                const snow = snowColor.scaleColor(p.snowDepth, 0, 6)
+                const col = Color.typedColor(k * snow[0], k * snow[1], k * snow[2])
+                return col
+            },
+        }
+
+        const model = new AvalancheModel()
+        await model.startup()
+        model.setup()
+
+        //  const view = new ThreeDraw(
+        //     model,
+        //     { div: 'modelDiv' },
+        //     drawOptions
+        // )
+
+        const view = new TwoDraw(
+            model,
+            {
+                div: 'modelDiv',
+                useSprites: true, // lots of turtles, sprites faster
+            },
+            drawOptions
+        )
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            400, // run 500 steps
+            30 // 30 fps
+        )
+
+        util.toWindow({ util, model, view, anim, ColorMap, Color })
+
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>
