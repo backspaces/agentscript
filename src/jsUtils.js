@@ -881,6 +881,8 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 export async function runModel(model, steps = 500, useSeed = false) {
     if (useSeed) randomSeed()
 
+    console.log('runModel model', model)
+
     if (isString(model)) model = (await import(model)).default
     if (isFunction(model)) model = new model() // model is a class
 
