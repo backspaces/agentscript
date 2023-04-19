@@ -1,5 +1,7 @@
 import * as util from './utils.js'
 import RGBDataSet from './RGBDataSet.js'
+import GeoDataSet from './GeoDataSet.js'
+import { xyz2bbox } from './gis.js'
 
 // ============= rgb to elevation/numeric =============
 
@@ -34,9 +36,11 @@ const sharedTileObject = {
     zxyToDataSet: async function (z, x, y, ArrayType = Float32Array) {
         const img = await this.zxyToTile(z, x, y)
         const dataSet = this.tileDataSet(img, ArrayType)
-        dataSet.zxy = [z, x, y]
+        const bbox = xyz2bbox(x, y, z)
+        const geoDS = GeoDataSet.viewFromDataSet(dataSet, bbox)
+        geoDS.zxy = [z, x, y]
         // dataSet.img = img
-        return dataSet
+        return geoDS
     },
     tileDataSet: function (img, ArrayType = Float32Array) {
         const tileDecoder = this.elevationFcn
