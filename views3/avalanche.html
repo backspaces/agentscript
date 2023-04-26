@@ -12,14 +12,14 @@
         import Color from '../src/Color.js'
         import ColorMap from '../src/ColorMap.js'
         import ThreeDraw from '../src/ThreeDraw.js'
-        import AvalancheModel from '../models/Avalanche.js'
+        import AvalancheModel from '../models/AvalancheModel.js'
 
         const pi = Math.PI
 
         /**
-         * 
+         *
          * View
-         * 
+         *
          * */
         const colormap = ColorMap.gradientColorMap(20, ['rgb(98,52,18)', 'white'])
         const drawOptions = {
@@ -28,7 +28,7 @@
             patchesColor: p => {
                 const pi2 = 2 * Math.PI
                 const aspect2 = (p.aspect + pi2) % pi2
-                const k = (Math.PI - Math.abs(aspect2-Math.PI))/Math.PI
+                const k = (Math.PI - Math.abs(aspect2 - Math.PI)) / Math.PI
                 const snow = colormap.scaleColor(p.snowDepth, 0, 6)
                 const foo = Color.typedColor(k * snow[0], k * snow[1], k * snow[2])
                 return foo

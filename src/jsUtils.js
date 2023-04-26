@@ -161,6 +161,11 @@ export function waitUntilDone(done, ms = 10) {
     })
 }
 
+export async function fetchImage(url) {
+    const blob = await fetch(url).then(res => res.blob())
+    return blob
+}
+
 // // ### Canvas
 
 // function offscreenOK() {

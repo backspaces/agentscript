@@ -1,13 +1,8 @@
-import { runModel, sampleModel, pause } from '../src/utils.js'
-
-// console.log('worker runModel, sampleModel', runModel, sampleModel)
-
-// https:/deno.land/manual/runtime/workers
-await pause(1000)
+import { runModel, sampleModel } from '../src/utils.js'
 
 self.onmessage = async e => {
     const { name, path } = e.data
-    console.log('worker', name, path)
+    console.log(name, path)
 
     const model = await runModel(path, 500, true)
     const result = sampleModel(model)

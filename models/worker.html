@@ -16,7 +16,7 @@
         console.log('Running', className)
         document.title = `W:${className}`
 
-        const testing = navigator.userAgent === 'Puppeteer'
+        const testing = true // true => use random seed for constant results
 
         const params = {
             classPath: `./${className}.js`,

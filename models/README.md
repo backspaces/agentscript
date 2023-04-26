@@ -1,6 +1,7 @@
 Code    | Run demo
 ------- | ------
 [ants](https://github.com/backspaces/agentscript/tree/master/models/AntsModel.js#L1) | [https://code.agentscript.org/models/run.html?ants](https://code.agentscript.org/models/run.html?ants)
+[avalanche](https://github.com/backspaces/agentscript/tree/master/models/AvalancheModel.js#L1) | [https://code.agentscript.org/models/run.html?avalanche](https://code.agentscript.org/models/run.html?avalanche)
 [buttons](https://github.com/backspaces/agentscript/tree/master/models/ButtonsModel.js#L1) | [https://code.agentscript.org/models/run.html?buttons](https://code.agentscript.org/models/run.html?buttons)
 [counties](https://github.com/backspaces/agentscript/tree/master/models/CountiesModel.js#L1) | [https://code.agentscript.org/models/run.html?counties](https://code.agentscript.org/models/run.html?counties)
 [diffuse](https://github.com/backspaces/agentscript/tree/master/models/DiffuseModel.js#L1) | [https://code.agentscript.org/models/run.html?diffuse](https://code.agentscript.org/models/run.html?diffuse)

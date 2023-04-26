@@ -29,7 +29,8 @@ class RGBDataSet extends DataSet {
      * @returns {number} A 24 bit integer
      */
     static rgbScaleFunction(min, scale) {
-        return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
+        return (r, g, b) => min + rgbToInt24(r, g, b) * scale
+        // return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
     }
 
     // Constructor args: (img, rgbToData, ArrayType)
@@ -47,8 +48,9 @@ class RGBDataSet extends DataSet {
     ) {
         super(img.width, img.height, new ArrayType(img.width * img.height))
 
-        if (Array.isArray(rgbToData))
-            rgbToData = RGBDataSet.newRgbDataFunction(rgbToData)
+        // Not used or defined anywhere!
+        // if (Array.isArray(rgbToData))
+        //     rgbToData = RGBDataSet.newRgbDataFunction(rgbToData)
 
         // const ctx = util.createCtx(img.width, img.height)
         // util.fillCtxWithImage(ctx, img)

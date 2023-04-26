@@ -10,7 +10,6 @@ function rgbToInt24(r, g, b) {
 }
 function rgbScaleFunction(min, scale) {
     return (r, g, b) => min + rgbToInt24(r, g, b) * scale
-    // return (r, g, b) => min + (r * 256 * 256 + g * 256 + b) * scale
 }
 function redfishElevation(r, g, b) {
     let negative = 1 // From RGB2DeciMeters()
@@ -19,12 +18,11 @@ function redfishElevation(r, g, b) {
         r = 0
     }
     return (negative * rgbToInt24(r, g, b)) / 10
-    // return (negative * (r * 256 * 256 + g * 256 + b)) / 10
 }
 
 // ============= Convenience elevation "bundles" =============
 // Example use:
-// import { mapzen } from '../src/TileData.js'
+// import { mapzen as provider } from '../src/TileData.js'
 
 const sharedTileObject = {
     zxyToTile: async function (z, x, y) {
@@ -118,3 +116,7 @@ export const mapbox = Object.assign(
     },
     sharedTileObject
 )
+
+// if your're using mapbox, consider the open source maplibre
+// maplibre can use mapzen for it's tiles.
+export const maplibre = mapzen
