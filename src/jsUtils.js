@@ -6,14 +6,13 @@ export function inMain() {
     return globalThis.document !== undefined
 }
 export function inWorker() {
-    // return !inNode() && typeof self.window === 'undefined'
+    // This should work for browser and deno
     return globalThis.WorkerGlobalScope !== undefined
 }
 export function inNode() {
     return typeof globalThis.require !== 'undefined'
 }
 export function inDeno() {
-    // return !!Deno
     return typeof globalThis.Deno !== 'undefined'
 }
 
@@ -161,12 +160,13 @@ export function waitUntilDone(done, ms = 10) {
     })
 }
 
-export async function fetchImage(url) {
+export async function fetchImageBitmap(url) {
     const blob = await fetch(url).then(res => res.blob())
-    return blob
+    const ibm = await createImageBitmap(blob)
+    return ibm
 }
 
-// // ### Canvas
+// // ### Canvas & Image
 
 // function offscreenOK() {
 //     // return !!self.OffscreenCanvas
@@ -886,7 +886,7 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 export async function runModel(model, steps = 500, useSeed = false) {
     if (useSeed) randomSeed()
 
-    console.log('runModel model', model)
+    // console.log('runModel model', model)
 
     if (isString(model)) model = (await import(model)).default
     if (isFunction(model)) model = new model() // model is a class

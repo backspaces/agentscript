@@ -1,5 +1,7 @@
 import {
     inWorker,
+    inMain,
+    inDeno,
     typeOf,
     isDataSet,
     isTypedArray,
@@ -13,26 +15,6 @@ import {
 // }
 
 // ### Async & I/O
-
-/**
- * Return a Promise for getting an image.
- *
- * use: imagePromise('./path/to/img').then(img => imageFcn(img))
- * or: await imagePromise('./path/to/img')
- *
- * @param {string} url URL for path to image
- * @returns {Promise} A promise resolving to the image
- */
-export function imagePromise(url) {
-    return new Promise((resolve, reject) => {
-        const img = new Image()
-        img.crossOrigin = 'Anonymous'
-        img.onload = () => resolve(img)
-        // img.onerror = () => reject(Error(`Could not load image ${url}`))
-        img.onerror = () => reject(`Could not load image ${url}`)
-        img.src = url
-    })
-}
 
 // download canvas as png or jpeg. Canvas can be a dataURL.
 // quality is default. For lossless jpeg, set to 1
@@ -69,35 +51,75 @@ export function downloadBlob(blobable, name = 'download', format = true) {
     URL.revokeObjectURL(url)
 }
 
-// ### Canvas
+// ### Canvas & Image
 
-function offscreenOK() {
-    // return !!self.OffscreenCanvas
-    // return typeof OffscreenCanvas !== 'undefined'
-    return inWorker()
+/**
+ * Return a Promise for getting an image.
+ *
+ * use: imagePromise('./path/to/img').then(img => imageFcn(img))
+ * or: await imagePromise('./path/to/img')
+ *
+ * @param {string} url URL for path to image
+ * @returns {Promise} A promise resolving to the image
+ */
+export async function imagePromise(url, preferDOM = false) {
+    if (inMain() && preferDOM) {
+        return new Promise((resolve, reject) => {
+            const img = new Image()
+            img.crossOrigin = 'Anonymous'
+            img.onload = () => resolve(img)
+            img.onerror = () => reject(`Could not load image ${url}`)
+            img.src = url
+        })
+    } else if (inDeno()) {
+        return loadImage(url)
+    } else if (inWorker() || !preferDOM) {
+        // { mode: 'cors' } ?
+        const blob = await fetch(url).then(response => response.blob())
+        return createImageBitmap(blob)
+    }
 }
 
-// const document = globalThis.document || {
-//     createElement: function (foo) {
-//         return {
-//             getContext: () => {},
-//         } // canvas
-//     },
+export function imageSize(img) {
+    if (inDeno()) {
+        return [img.width(), img.height()]
+    } else {
+        return [img.width, img.height]
+    }
+}
+
+// function offscreenOK() {
+//     // return !!self.OffscreenCanvas
+//     // return typeof OffscreenCanvas !== 'undefined'
+//     return inWorker()
 // }
+
 /**
  * Create a blank 2D canvas of a given width/height.
  *
  * @param {number} width The canvas height in pixels
  * @param {number} height The canvas width in pixels
- * @param {boolean} [offscreen=offscreenOK()] If true, return "Offscreen" canvas
+ * @param {boolean} [preferDOM=false] If false, return "Offscreen" canvas
  * @returns {Canvas} The resulting Canvas object
  */
-export function createCanvas(width, height, offscreen = offscreenOK()) {
-    if (offscreen) return new OffscreenCanvas(width, height)
-    const can = document.createElement('canvas')
-    can.width = width
-    can.height = height
-    return can
+// export function createCanvas(width, height, offscreen = offscreenOK()) {
+//     if (offscreen) return new OffscreenCanvas(width, height)
+//     const can = document.createElement('canvas')
+//     can.width = width
+//     can.height = height
+//     return can
+// }
+export function createCanvas(width, height, preferDOM = false) {
+    if (inMain() && preferDOM) {
+        const can = document.createElement('canvas')
+        can.width = width
+        can.height = height
+        return can
+    } else if (inDeno()) {
+        return globalThis.createCanvas(width, height)
+    } else if (inWorker() || !preferDOM) {
+        return new OffscreenCanvas(width, height)
+    }
 }
 
 /**
@@ -109,43 +131,51 @@ export function createCanvas(width, height, offscreen = offscreenOK()) {
  * @param {boolean} [offscreen=offscreenOK()] If true, return "Offscreen" canvas
  * @returns {Context2D} The resulting Canvas's 2D context
  */
-export function createCtx(
-    width,
-    height,
-    offscreen = offscreenOK(),
-    attrs = {}
-) {
-    const can = createCanvas(width, height, offscreen)
-    return can.getContext('2d', attrs)
+export function createCtx(width, height, preferDOM = false, attrs = {}) {
+    // const can = createCanvas(width, height, offscreen)
+    // return can.getContext('2d', attrs)
+    const can = createCanvas(width, height, preferDOM)
+    const ctx = can.getContext('2d', attrs)
+    if (inDeno()) {
+        const ctxObj = {
+            canvas: can,
+        }
+        Object.setPrototypeOf(ctxObj, ctx)
+        return ctxObj
+    } else {
+        return ctx
+    }
 }
 
+// FIX or drop
 // Duplicate a canvas, preserving it's current image/drawing
-export function cloneCanvas(can, offscreen = offscreenOK()) {
-    const ctx = createCtx(can.width, can.height, offscreen)
+export function cloneCanvas(can, preferDOM = false()) {
+    const ctx = createCtx(can.width, can.height, preferDOM)
     ctx.drawImage(can, 0, 0)
     return ctx.canvas
 }
-// Resize a ctx in-place and preserve image.
+// Resize a ctx in-place and preserve image. SpriteSheet
 export function resizeCtx(ctx, width, height) {
     const copy = cloneCanvas(ctx.canvas)
     ctx.canvas.width = width
     ctx.canvas.height = height
     ctx.drawImage(copy, 0, 0)
 }
-// Return new canvas scaled by width, height and preserve image.
-export function resizeCanvas(
-    can,
-    width,
-    height = (width / can.width) * can.height
-) {
-    const ctx = createCtx(width, height)
-    ctx.drawImage(can, 0, 0, width, height)
-    return ctx.canvas
-}
+// // Return new canvas scaled by width, height and preserve image.
+// export function resizeCanvas(
+//     can,
+//     width,
+//     height = (width / can.width) * can.height
+// ) {
+//     const ctx = createCtx(width, height)
+//     ctx.drawImage(can, 0, 0, width, height)
+//     return ctx.canvas
+// }
 
 // Set the ctx/canvas size if differs from width/height.
 // It does not install a transform and assumes there is not one currently installed.
 // The World object can do that for AgentSets.
+// Can move to World
 export function setCanvasSize(can, width, height) {
     if (can.width !== width || can.height != height) {
         can.width = width
@@ -245,7 +275,9 @@ export function clearCtx(ctx, cssColor = undefined) {
 // https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
 
 export function imageToCtx(img) {
-    const ctx = createCtx(img.width, img.height)
+    const [width, height] = imageSize(img)
+    const ctx = createCtx(width, height)
+    // const ctx = createCtx(img.width, img.height)
     fillCtxWithImage(ctx, img)
     return ctx
 }

@@ -10,6 +10,11 @@
 
 import * as util from '../src/utils.js'
 import { assert } from 'https://deno.land/std@0.92.0/testing/asserts.ts'
+import {
+    createCanvas,
+    loadImage,
+} from 'https://deno.land/x/canvas@v1.4.1/mod.ts'
+Object.assign(globalThis, { createCanvas, loadImage })
 
 const modelsDir = 'models/'
 const testDir = 'test/'
@@ -28,9 +33,8 @@ const p = await Deno.run({
     stdout: 'piped',
 })
 const ls = new TextDecoder().decode(await p.output()).split('\n')
-const models = util
-    .grep(ls, /^[A-Z].*js$/)
-    .filter(name => !nonworkers.includes(name))
+const models = util.grep(ls, /^[A-Z].*js$/)
+// .filter(name => !nonworkers.includes(name))
 // .filter(name => name !== 'Avalanche.js')
 console.log('models', models)
 

@@ -37,7 +37,8 @@ class TwoView {
         let can = div
         div = util.isString(div) ? document.getElementById(div) : div
         if (!util.isCanvas(can)) {
-            can = util.createCanvas(0, 0, false) // not offscreen
+            // can = util.createCanvas(0, 0, false) // not offscreen
+            can = util.createCanvas(0, 0, true) // not offscreen, preferDOM
             div.appendChild(can)
             // div = can
         }
