@@ -7,7 +7,6 @@ import {
     isTypedArray,
     isObject,
     step,
-    pause,
 } from './jsUtils.js'
 
 // function inWorker() {
