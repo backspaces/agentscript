@@ -883,13 +883,14 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 // if either of the first two, they're converted to a model
 // the model is called w/ default, no args.. i.e. model()
 // async arg: if true use timeoutLoop, otherwise a simple for loop
-export async function runModel(model, steps = 500, useSeed = false) {
+export async function runModel(model, steps = 500, useSeed = true) {
     if (useSeed) randomSeed()
 
-    // console.log('runModel model', model)
-
+    // if passing in a url, remember that util.js is in the src/ scope
     if (isString(model)) model = (await import(model)).default
     if (isFunction(model)) model = new model() // model is a class
+
+    // console.log('runModel model', model)
 
     await model.startup()
     model.setup()

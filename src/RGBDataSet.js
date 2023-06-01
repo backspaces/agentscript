@@ -46,7 +46,8 @@ class RGBDataSet extends DataSet {
         rgbToData = RGBDataSet.rgbToInt24,
         ArrayType = Float32Array
     ) {
-        const [width, height] = util.imageSize(img)
+        // const [width, height] = util.imageSize(img)
+        const { width, height } = img
         super(width, height, new ArrayType(width * height))
         // super(img.width, img.height, new ArrayType(img.width * img.height))
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno test -A
+#!/usr/bin/env -S deno test -A  --unstable
 // deno test test/deno3Dgeom.js
 
 import { toDeg, headingToRad } from '../src/utils.js'

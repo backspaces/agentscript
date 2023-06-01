@@ -7,6 +7,7 @@ import {
     isTypedArray,
     isObject,
     step,
+    pause,
 } from './jsUtils.js'
 
 // function inWorker() {
@@ -63,7 +64,7 @@ export function downloadBlob(blobable, name = 'download', format = true) {
  * @returns {Promise} A promise resolving to the image
  */
 export async function imagePromise(url, preferDOM = false) {
-    if (inMain() && preferDOM) {
+    if ((inMain() && preferDOM) || inDeno()) {
         return new Promise((resolve, reject) => {
             const img = new Image()
             img.crossOrigin = 'Anonymous'
@@ -71,8 +72,14 @@ export async function imagePromise(url, preferDOM = false) {
             img.onerror = () => reject(`Could not load image ${url}`)
             img.src = url
         })
-    } else if (inDeno()) {
-        return loadImage(url)
+        // } else if (inDeno()) {
+        //     // return loadImage(url)
+        //     console.log('inDeno: url', url, 'Image', Image)
+        //     const img = new Image(url) // needs install in deno function
+        //     console.log('inDeno: img', img)
+        //     await pause(1000)
+        //     console.log('inDeno: img', img)
+        //     return img
     } else if (inWorker() || !preferDOM) {
         // { mode: 'cors' } ?
         const blob = await fetch(url).then(response => response.blob())
@@ -80,13 +87,13 @@ export async function imagePromise(url, preferDOM = false) {
     }
 }
 
-export function imageSize(img) {
-    if (inDeno()) {
-        return [img.width(), img.height()]
-    } else {
-        return [img.width, img.height]
-    }
-}
+// export function imageSize(img) {
+//     if (inDeno()) {
+//         return [img.width(), img.height()]
+//     } else {
+//         return [img.width, img.height]
+//     }
+// }
 
 // function offscreenOK() {
 //     // return !!self.OffscreenCanvas
@@ -191,8 +198,9 @@ export function setCanvasSize(can, width, height) {
 // Install identity transform for this context.
 // Call ctx.restore() to revert to previous transform.
 export function setIdentity(ctx) {
+    console.log('setIdentity ctx', ctx)
     ctx.save() // NOTE: Does not change state, only saves current state.
-    ctx.setTransform(1, 0, 0, 1, 0, 0) // or ctx.resetTransform()
+    ctx.resetTransform() // or ctx.setTransform(1, 0, 0, 1, 0, 0)
 }
 // Set the text font, align and baseline drawing parameters.
 // Ctx can be either a canvas context or a DOM element
@@ -275,7 +283,8 @@ export function clearCtx(ctx, cssColor = undefined) {
 // https://developer.mozilla.org/en-US/docs/Web/API/CanvasImageSource
 
 export function imageToCtx(img) {
-    const [width, height] = imageSize(img)
+    // const [width, height] = imageSize(img)
+    const { width, height } = img
     const ctx = createCtx(width, height)
     // const ctx = createCtx(img.width, img.height)
     fillCtxWithImage(ctx, img)

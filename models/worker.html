@@ -8,38 +8,24 @@
 <body>
     <script type="module">
         import * as util from '../src/utils.js'
-        import { mapzen as provider } from '../src/TileData.js'
 
-        const modelParams = util.parseQueryString()
-        const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
-        const className = name[0].toUpperCase() + name.slice(1)
-        console.log('Running', className)
+        const query = util.parseQueryString()
+        let className = Object.keys(query)[0] || 'hello'
+
+        if (!className.endsWith('.js')) {
+            className = className[0].toUpperCase() + className.slice(1) + 'Model.js'
+        }
         document.title = `W:${className}`
+        console.log('Running', className)
 
-        const testing = true // true => use random seed for constant results
-
-        const params = {
-            classPath: `./${className}.js`,
-            className: className,
-            steps: 500,
-            seed: testing,
-            startup: undefined,
-        }
-        // workers can't use util.ImagePromise, new Image() not
-        // avail in Workers. (creates an HTMLImageElement)
-        if (name === 'dropletsModel') {
-            params.startup = await provider.zxyToDataSet(13, 1594, 3339)
-        }
-        console.log(params)
-
+        const classPath = import.meta.resolve('./' + className)
+        console.log('classPath', classPath)
 
         const worker = new Worker('./runWorker.js', { type: 'module' })
-        worker.postMessage({ cmd: 'init', params: params })
+        worker.postMessage({ cmd: 'init', classPath })
         worker.onmessage = e => {
             console.log(e.data)
             util.printToPage(e.data)
-            if (testing) window.modelSample = JSON.stringify(e.data)
-            // worker.terminate()
         }
     </script>
     <div id="modelDiv"></div>

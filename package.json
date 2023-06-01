@@ -34,8 +34,8 @@
     "scripts": {
         "clean": "shx rm -rf dist vendor views1 && shx mkdir dist vendor views1",
         "start0": "live-server --ignore=node_modules,docs,Attic ./ & #crlf bug",
-        "start": "http-server -o -s > /dev/null",
-        "start1": "serve",
+        "start": "http-server -o --silent > /dev/null",
+        "start1": "serve -L",
         "build": "npm-run-all clean build-vendor build-dist build-views build-md build-docs",
         "build-dist": "rollup -c config/rollup.dist.mjs",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.mjs",
@@ -75,7 +75,7 @@
         "npm-run-all": "^4.1.5",
         "rollup": "^3.2.5",
         "rollup-plugin-cleanup": "^3.2.1",
-        "serve": "^14.0.1",
+        "serve": "^14.2.0",
         "shx": "^0.3.4"
     }
 }
