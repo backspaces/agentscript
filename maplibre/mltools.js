@@ -14,6 +14,8 @@ export async function importMapLibre() {
 
 function isBBox(obj) {
     if (!Array.isArray(obj) || obj.length !== 4) return false
+    // const isNumberArray = obj.every(val => util.isNumber(val))
+    // return isNumberArray
     return obj.every(val => util.isNumber(val))
 }
 
@@ -23,12 +25,12 @@ export async function mapLoadPromise(map) {
     })
 }
 
-function defaultZoom(world) {
-    const height = document.body.clientHeight
-    const worldHeight = world.height
-    const bbox = world.bbox
-    // calc a zoom
-}
+// function defaultZoom(world) {
+//     const height = document.body.clientHeight
+//     const worldHeight = world.height
+//     const bbox = world.bbox
+//     // calc a zoom
+// }
 function emptyMap(center, zoom, div) {
     // "world" can be a model who's world we can use (model.world)
     // if (world.world) world = world.world
@@ -218,6 +220,8 @@ export function addGeojsonLayer(map, id, geojson, fill, stroke, width = 2) {
 
 export function addCanvasLayer(map, id, canvas, coords) {
     if (isBBox(coords)) coords = gis.bboxCoords(coords)
+
+    console.log('addCanvasLayer:', map, id, canvas, coords)
 
     map.addSource(id, {
         type: 'canvas',

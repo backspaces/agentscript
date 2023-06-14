@@ -62,7 +62,8 @@ export function downloadBlob(blobable, name = 'download', format = true) {
  * @param {string} url URL for path to image
  * @returns {Promise} A promise resolving to the image
  */
-export async function imagePromise(url, preferDOM = false) {
+export async function imagePromise(url, preferDOM = true) {
+    // if (inMain() || inDeno()) {
     if ((inMain() && preferDOM) || inDeno()) {
         return new Promise((resolve, reject) => {
             const img = new Image()
@@ -115,7 +116,7 @@ export async function imagePromise(url, preferDOM = false) {
 //     can.height = height
 //     return can
 // }
-export function createCanvas(width, height, preferDOM = false) {
+export function createCanvas(width, height, preferDOM = true) {
     if (inMain() && preferDOM) {
         const can = document.createElement('canvas')
         can.width = width
@@ -137,7 +138,7 @@ export function createCanvas(width, height, preferDOM = false) {
  * @param {boolean} [offscreen=offscreenOK()] If true, return "Offscreen" canvas
  * @returns {Context2D} The resulting Canvas's 2D context
  */
-export function createCtx(width, height, preferDOM = false, attrs = {}) {
+export function createCtx(width, height, preferDOM = true, attrs = {}) {
     // const can = createCanvas(width, height, offscreen)
     // return can.getContext('2d', attrs)
     const can = createCanvas(width, height, preferDOM)
@@ -155,7 +156,7 @@ export function createCtx(width, height, preferDOM = false, attrs = {}) {
 
 // FIX or drop
 // Duplicate a canvas, preserving it's current image/drawing
-export function cloneCanvas(can, preferDOM = false()) {
+export function cloneCanvas(can, preferDOM = true) {
     const ctx = createCtx(can.width, can.height, preferDOM)
     ctx.drawImage(can, 0, 0)
     return ctx.canvas
@@ -197,7 +198,6 @@ export function setCanvasSize(can, width, height) {
 // Install identity transform for this context.
 // Call ctx.restore() to revert to previous transform.
 export function setIdentity(ctx) {
-    console.log('setIdentity ctx', ctx)
     ctx.save() // NOTE: Does not change state, only saves current state.
     ctx.resetTransform() // or ctx.setTransform(1, 0, 0, 1, 0, 0)
 }

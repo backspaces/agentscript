@@ -884,6 +884,7 @@ export const distance3 = (x, y, z, x1, y1, z1) =>
 // the model is called w/ default, no args.. i.e. model()
 // async arg: if true use timeoutLoop, otherwise a simple for loop
 export async function runModel(model, steps = 500, useSeed = true) {
+    console.log('runModel: model', model)
     if (useSeed) randomSeed()
 
     // if passing in a url, remember that util.js is in the src/ scope

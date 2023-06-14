@@ -2,25 +2,24 @@
 // if using hashbang, must be called from repo root:
 //   test/denomodels.js
 // if run from npm script, it will be run in repo root.
-//   "denomodels": "deno test -A test/denomodels.js",
+//   "denomodels": "deno test -A --unstable test/denomodels.js",
 // or
 //   "denomodels": "test/denomodels.js",
 // to run from cli, from repo root:
-//    deno test -A test/denomodels.js
+//    deno test -A --unstable test/denomodels.js
+// to debug:
+//    deno test -A --unstable --inspect-brk test/denomodels.js
 
 import * as util from '../src/utils.js'
 import { assert } from 'https://deno.land/std@0.92.0/testing/asserts.ts'
-import * as skiaCanvas from 'https://deno.land/x/skia_canvas@0.5.2/mod.ts'
-
-// await util.pause(100)
-
+import * as skiaCanvas from 'https://deno.land/x/skia_canvas@0.5.4/mod.ts'
 console.log('skiaCanvas', Object.keys(skiaCanvas))
 
 // make available to all models globally
 const { Image, createCanvas } = skiaCanvas
 Object.assign(globalThis, { Image, createCanvas })
 
-let img = new skiaCanvas.Image(
+let img = await util.imagePromise(
     'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/13/1555/3084.png'
 )
 console.log('img test', img)
@@ -42,6 +41,9 @@ console.log('cwd', Deno.cwd())
 function nameToPath(name) {
     return import.meta.resolve('../models/' + name)
 }
+function shortName(name) {
+    return name.replace('.js', '')
+}
 
 // ------------------ fetch model names ------------------
 
@@ -52,53 +54,46 @@ const p = await Deno.run({
 const ls = new TextDecoder().decode(await p.output()).split('\n')
 const models = util
     .grep(ls, /^[A-Z].*js$/)
-    // .filter(name => !nonworkers.includes(name))
-    // .filter(name => ['AntsModel.js', 'HelloModel.js'].includes(name))
     .filter(name => !nonworkers.includes(name))
-// .filter(name => name === 'AntsModel.js')
 // .filter(name => name === 'CountiesModel.js')
 // .filter(name => name === 'AvalancheModel.js')
 
 console.log('models', models)
 
-// ------------------ run in main ------------------
+// ------------------ run models in main thread ------------------
 
-// run all nonworkers in main thread
-// for (const name of models) {
-//     // for (const name of nonworkers) {
-//     // const path = import.meta.resolve('./' + name)
-//     // const path = import.meta.resolve('../models/' + name)
-//     const path = nameToPath(name)
-//     console.log('model path', path)
+async function runInMain(name) {
+    const path = nameToPath(name)
+    console.log('model path', path)
+    const model = await util.runModel(path, 500, true)
+    results[shortName(name)] = util.sampleModel(model)
+}
+for (const name of nonworkers) {
+    runInMain(name)
+}
 
-//     const model = await util.runModel(path, 500, true)
+// ------------------ run models in worker thread ------------------
 
-//     // console.log('model results', model)
-
-//     const shortName = name.replace('.js', '')
-//     results[shortName] = util.sampleModel(model)
-// }
-// console.log('done: results', Object.keys(results))
-
-// ------------------ run in workers ------------------
-
-// run each model in their own worker
 let numResults = 0
 const workerURL = new URL('./denoworker.js', import.meta.url).href
-// for await (const name of models) {
-for (const name of models) {
+function runInWorker(name) {
     const path = nameToPath(name)
-    console.log('main name & path', name, path)
+    console.log('main: name & path', name, path)
 
     const worker = new Worker(workerURL, { type: 'module' })
-    worker.postMessage({ name, path })
-    console.log('main worker message sent', name)
-
     worker.onmessage = e => {
-        const { name, result } = e.data
-        results[name.replace('.js', '')] = result
-        console.log('main worker results', name, 'result', ++numResults)
+        if (e.data === 'init') {
+            console.log('main: worker init received, posting', name)
+            worker.postMessage({ name, path })
+        } else {
+            const { name, result } = e.data
+            results[shortName(name)] = result
+            console.log('main: worker results', name, 'result', ++numResults)
+        }
     }
+}
+for (const name of models) {
+    runInWorker(name)
 }
 await util.waitUntilDone(() => numResults === models.length)
 
