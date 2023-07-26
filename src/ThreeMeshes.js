@@ -371,7 +371,7 @@ export class LinksMesh extends BaseMesh {
     static options() {
         return {
             color: null,
-            z: 1,
+            z: 0,
             colorType: 'webgl',
         }
     }
@@ -413,6 +413,7 @@ export class LinksMesh extends BaseMesh {
             // if (link.hidden) return // just this link
 
             let { x0, y0, z0, x1, y1, z1 } = link
+            // REMIND: test for null/undefined, z0 === 0 is set twice!
             if (!z0) z0 = 0
             if (!z1) z1 = 0
             vertices.push(x0, y0, z0, x1, y1, z1)

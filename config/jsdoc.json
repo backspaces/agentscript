@@ -1,0 +1,36 @@
+{
+    "source": {
+        "include": ["src", "package.json", "README.md"],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "plugins": ["plugins/markdown"],
+    "opts": {
+        "encoding": "utf8",
+        "readme": "./README.md",
+        "destination": "docs/",
+        "recurse": true,
+
+        "verbose": true,
+        "template": "node_modules/clean-jsdoc-theme",
+        "displayModuleHeader": true,
+
+        "resizeable": {
+            "navbar": {
+                "min": "300",
+                "max": "600"
+            }
+        },
+
+        "theme_opts": {
+            "sections": ["Classes", "Modules", "Global"],
+            "default_theme": "dark",
+            "sort": false,
+            "footer": "This is footer"
+        }
+    },
+    "markdown": {
+        "hardwrap": false,
+        "idInHeadings": true
+    }
+}
