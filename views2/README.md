@@ -14,7 +14,6 @@ Code    | Run demo
 [hellotext](https://github.com/backspaces/agentscript/tree/master/views2/hellotext.html#L1) | [https://code.agentscript.org/views2/hellotext.html](https://code.agentscript.org/views2/hellotext.html)
 [life](https://github.com/backspaces/agentscript/tree/master/views2/life.html#L1) | [https://code.agentscript.org/views2/life.html](https://code.agentscript.org/views2/life.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views2/linktravel.html#L1) | [https://code.agentscript.org/views2/linktravel.html](https://code.agentscript.org/views2/linktravel.html)
-[mouse](https://github.com/backspaces/agentscript/tree/master/views2/mouse.html#L1) | [https://code.agentscript.org/views2/mouse.html](https://code.agentscript.org/views2/mouse.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views2/roads.html#L1) | [https://code.agentscript.org/views2/roads.html](https://code.agentscript.org/views2/roads.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views2/shapes.html#L1) | [https://code.agentscript.org/views2/shapes.html](https://code.agentscript.org/views2/shapes.html)
 [tsp](https://github.com/backspaces/agentscript/tree/master/views2/tsp.html#L1) | [https://code.agentscript.org/views2/tsp.html](https://code.agentscript.org/views2/tsp.html)

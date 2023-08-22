@@ -25,6 +25,7 @@ class Animator {
     start() {
         if (this.timeoutID) return // avoid multiple starts
         this.timeoutID = setInterval(() => this.step(), 1000 / this.fps)
+        this.paused = false
         return this // chaining off ctor
     }
     /**
@@ -72,18 +73,20 @@ class Animator {
     setSteps(steps) {
         this.reset(steps, this.fps)
     }
-    // Stop and restart with the new steps & fps
+    // set the new steps & fps, restStart if currently running
     reset(steps = this.steps, fps = this.fps) {
-        this.stop()
+        const wasRunning = this.isRunning()
+        if (wasRunning) this.stop()
         this.steps = steps
         this.ticks = 0
         this.fps = fps
-        this.start()
+        if (wasRunning) this.start()
     }
     // stop if running, start otherwise
     // if starting and steps === 0, reset with steps = -1, forever.
     toggle() {
-        if (this.timeoutID) this.stop()
+        // if (this.timeoutID) this.stop()
+        if (this.isRunning()) this.stop()
         else if (this.steps === 0) this.reset()
         else this.start()
     }
@@ -92,6 +95,13 @@ class Animator {
         this.stop()
         this.step()
     }
+
+    // pause() {
+    //     this.paused = true
+    // }
+    // resume() {
+    //     this.paused = false
+    // }
 }
 
 export default Animator

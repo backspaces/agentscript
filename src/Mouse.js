@@ -1,8 +1,3 @@
-/**
- * A NetLogo-like mouse handler.
- *
- * **TODO: Example usage.**
- */
 class Mouse {
     /**
      * Create and start mouse obj, args: a model, and a callback method.
@@ -12,22 +7,22 @@ class Mouse {
      * @param {world} world World instance
      * @param {Function} callback callback(evt, mouse) called on every mouse action
      */
-    constructor(canvas, world, callback = (evt, mouse) => {}) {
-        if (typeof canvas === 'string') {
-            canvas = document.getElementById(canvas)
-        }
-        Object.assign(this, { canvas, world, callback })
+    // constructor(canvas, world, callback = (evt, mouse) => {}) {
+    constructor(model, view, callback) {
+        Object.assign(this, { model, view, callback })
+        this.canvas = view.canvas
+        this.world = model.world
 
-        // instance event handlers: arrow fcns to insure "this" is us.
-        // I.e. doesn't work to just use handleXXX in addEventListener.
-        this.mouseDown = e => this.handleMouseDown(e)
-        this.mouseUp = e => this.handleMouseUp(e)
-        this.mouseMove = e => this.handleMouseMove(e)
+        // callMouseHandler: arrow fnc to insure "this" is mouse.
+        this.callMouseHandler = e => this.mouseHandler(e)
+
+        this.isRunning = this.mouseDown = false
+        this.x = this.y = this.action = null
+        this.setContinuous(false)
     }
-
-    resetParams() {
-        this.x = this.y = NaN
-        this.moved = this.down = false
+    setContinuous(continuous = true) {
+        this.continuous = continuous
+        return this
     }
 
     /**
@@ -39,59 +34,45 @@ class Mouse {
      */
     start() {
         // Note: multiple calls safe
-        this.canvas.addEventListener('mousedown', this.mouseDown)
-        document.body.addEventListener('mouseup', this.mouseUp)
-        this.canvas.addEventListener('mousemove', this.mouseMove)
-        this.resetParams()
+        this.canvas.addEventListener('mousedown', this.callMouseHandler)
+        if (this.continuous) this.startMouse()
+        this.isRunning = true
         return this // chaining
     }
     stop() {
         // Note: multiple calls safe
-        this.canvas.removeEventListener('mousedown', this.mouseDown)
-        document.body.removeEventListener('mouseup', this.mouseUp)
-        this.canvas.removeEventListener('mousemove', this.mouseMove)
-        this.resetParams()
+        this.canvas.removeEventListener('mousedown', this.callMouseHandler)
+        this.stopMouse()
+        this.isRunning = false
         return this // chaining
     }
-
-    get running() {
-        return !isNaN(this.x)
+    startMouse() {
+        document.body.addEventListener('mouseup', this.callMouseHandler)
+        this.canvas.addEventListener('mousemove', this.callMouseHandler)
     }
-    run(on = true) {
-        if (on) this.start()
-        else this.stop()
+    stopMouse() {
+        document.body.removeEventListener('mouseup', this.callMouseHandler)
+        this.canvas.removeEventListener('mousemove', this.callMouseHandler)
     }
-    // set run(on = true) {
-    //     if (on) this.start()
-    //     else this.stop()
-    // }
-    // toggle() {
-    //     if (isNaN(this.x)) this.start()
-    //     else this.stop()
-    // }
 
-    // Handlers for eventListeners
-    generalHandler(e, down, moved) {
-        this.down = down
-        this.moved = moved
+    mouseHandler(e) {
+        if (e.type === 'mousedown') {
+            if (!this.continuous) this.startMouse()
+            this.mouseDown = true
+        }
+        if (e.type === 'mouseup') {
+            if (!this.continuous) this.stopMouse()
+            this.mouseDown = false
+        }
+
+        this.action = e.type
+        if (e.type === 'mousemove' && this.mouseDown) {
+            this.action = 'mousedrag'
+        }
+
         this.setXY(e)
-        this.callback(this, e) // callback generally doesn't use e
+        this.callback(this)
     }
-    handleMouseDown(e) {
-        this.action = 'down'
-        this.generalHandler(e, true, false)
-    }
-    handleMouseUp(e) {
-        this.action = 'up'
-        this.generalHandler(e, false, false)
-    }
-    handleMouseMove(e) {
-        this.action = this.down ? 'drag' : 'move'
-        this.generalHandler(e, this.down, true)
-    }
-
-    // Event locations, clientX/Y, screenX/Y, offsetX/Y, pageX/Y .. confusing!
-    // Stack Overflowhttps://tinyurl.com/y5k9rwhb
 
     // set x, y to be event location in turtle coordinates, floats.
     setXY(e) {
@@ -101,9 +82,8 @@ class Mouse {
         const pixX = e.clientX - rect.left
         const pixY = e.clientY - rect.top
 
-        // const [x, y] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
-        // Object.assign(this, { x, y })
-        ;[this.x, this.y] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
+        const [x, y] = world.pixelXYtoPatchXY(pixX, pixY, patchSize)
+        Object.assign(this, { x, y })
     }
 }
 

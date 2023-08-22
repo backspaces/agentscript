@@ -71,13 +71,13 @@
         function handleMouse(mouse) {
             const { x, y, action } = mouse
             switch (action) {
-                case 'down':
+                case 'mousedown':
                     dragNode = model.nodes.minOneOf(t => t.distanceXY(x, y))
                     break
-                case 'drag':
+                case 'mousedrag':
                     if (dragNode) model.moveNode(dragNode, x, y)
                     break
-                case 'up':
+                case 'mouseup':
                     dragNode = null
                     break
             }
@@ -85,8 +85,8 @@
         }
 
         const mouse = new Mouse(
-            view.canvas,
-            model.world,
+            model,
+            view,
             handleMouse
         ).start()
 

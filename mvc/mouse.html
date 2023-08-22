@@ -10,24 +10,15 @@
         import * as util from '../src/utils.js'
         import Mouse from '../src/Mouse.js'
         import TwoDraw from '../src/TwoDraw.js'
-        import Model from '../models/MouseModel.js'
-
-        // const worldOptions = {
-        //     minX: 0,
-        //     maxX: 40,
-        //     minY: 0,
-        //     maxY: 30,
-        // }
-        // const worldOptions = { minX: 1, maxX: 9, minY: 1, maxY: 5 }
-        // const model = new Model(worldOptions)
+        import Model from '../models/HelloModel.js'
 
         const model = new Model()
         model.setup()
 
         const view = new TwoDraw(
             model,
-            { patchSize: 15 },
             {
+                patchSize: 15;
                 patchesColor: 'black',
                 linksColor: l => (l === selectedLink ? 'red' : 'gray'),
                 linksWidth: 2,
@@ -38,22 +29,23 @@
 
         let selectedTurtle, selectedLink
         function handleMouse(mouse) {
-            const { x, y, action } = mouse
-            switch (action) {
-                case 'down':
+            let [x, y] = [mouse.x, mouse.y]
+            switch (mouse.action) {
+                case 'mousedown':
                     selectedTurtle = model.turtles.minOneOf(t =>
                         t.distanceXY(x, y)
                     )
                     break
-                case 'drag':
+
+                case 'mousedrag':
                     if (selectedTurtle) selectedTurtle.setxy(x, y)
                     break
-                case 'move':
-                    selectedLink = model.links.minOneOf(l =>
-                        l.distanceXY(x, y)
-                    )
+
+                case 'mousemove':
+                    selectedLink = model.links.minOneOf(l => l.distanceXY(x, y))
                     break
-                case 'up':
+
+                case 'mouseup':
                     selectedTurtle = null
                     break
             }
@@ -61,10 +53,8 @@
         }
 
         const mouse = new Mouse(
-            view.canvas,
-            model.world,
-            handleMouse
-        ).start()
+            model, view, handleMouse
+        ).setContinuous().start()
 
         view.draw() // Draw once to get started
 
