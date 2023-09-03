@@ -8,7 +8,7 @@ It has a Model/View/Control (MVC) architecture which cleanly separates the three
 
 -   **View**: Use the Model properties to create a view. There can be many Views. We provide a [2D Canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) view and a [Three.js](https://threejs.org/) 2.5D and 3D views. There is also GIS support via a [gis module](https://github.com/backspaces/agentscript/blob/master/src/gis.js), a [geojson module](https://github.com/backspaces/agentscript/blob/master/src/geojson.js), as well as [Leaflet](https://leafletjs.com/) and [MapLibre](https://github.com/maplibre/maplibre-gl-js#readme/) based demos. Plot views are also available.
 
--   **Controls**: We use [dat.gui](https://github.com/dataarts/dat.gui) for a menu UI, a [Mouse module](https://github.com/backspaces/agentscript/blob/master/src/Mouse.js) for selecting Model objects (Patches, Turtles and Links), an [Animator](https://github.com/backspaces/agentscript/blob/master/src/Animator.js) for fine control over the Model/Draw steps.
+-   **Controls**: We use [src/GUI.js](https://code.agentscript.org/src/GUI.js) via [dat.gui](https://github.com/dataarts/dat.gui) for a menu UI, a [Mouse module](https://github.com/backspaces/agentscript/blob/master/src/Mouse.js) for selecting Model objects (Patches, Turtles and Links), an [Animator](https://github.com/backspaces/agentscript/blob/master/src/Animator.js) for fine control over the Model/Draw steps.
 
 ## Modern JavaScript
 
