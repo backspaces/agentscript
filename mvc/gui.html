@@ -10,10 +10,10 @@
     <script type="module">
         import Animator from '../src/Animator.js'
         import Mouse from '../src/Mouse.js'
-        import GUI from '../src/GUI.js'
         import Model from '../models/HelloModel.js'
         import TwoDraw from '../src/TwoDraw.js'
         import * as util from '../src/utils.js'
+        import GUI from '../src/GUI.js'
 
         const model = new Model()
         await model.startup()
@@ -28,11 +28,13 @@
             () => {
                 model.step()
                 view.draw()
-                gui.update()
             },
             -1, // run forever
             30 // fps
         ).startStats()
+
+        util.toWindow({ model, view, aimator })
+
 
         let selectedTurtle
         const mouse = new Mouse(model, view, mouse => {
@@ -54,18 +56,25 @@
                 val: [40, [5, 60, 5]],
                 cmd: val => aimator.setFps(val),
             },
-            turtlesShape: { // chooser
-                val: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
-                cmd: val => view.drawOptions.turtlesShape = val,
+
+            'Turtles Folder': {
+                turtlesShape: { // chooser
+                    val: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
+                    cmd: val => view.drawOptions.turtlesShape = val,
+                },
+                turtlesSize: { // slider
+                    val: [1, [0.5, 10, 0.5]],
+                    // val: { Small: 1, Medium: 3, Large: 5 },
+                    cmd: val => view.drawOptions.turtlesSize = val,
+                },
+                'Test Folder': {
+                    turtlesColor: { // color
+                        val: '#ff0000',
+                        cmd: val => view.drawOptions.turtlesColor = val,
+                    },
+                }
             },
-            turtlesSize: { // chooser
-                val: [1, [0.5, 10, 0.5]],
-                cmd: val => view.drawOptions.turtlesSize = val,
-            },
-            turtlesColor: { // color
-                val: '#ff0000',
-                cmd: val => view.drawOptions.turtlesColor = val,
-            },
+
             downloadCanvas: { // button
                 cmd: () => view.downloadCanvas(),
             },
@@ -82,13 +91,35 @@
                 cmd: val => document.title = val
             },
             modelTicks: { // monitor
-                val: 'listen',
-                cmd: () => model.ticks,
+                val: [model, 'ticks'], // the object and property to monitor
             },
         })
 
-        util.toWindow({ model, view, aimator, GUI, gui })
+        util.toWindow({ GUI, gui })
+        // util.toWindow({ model, view, aimator, GUI, gui })
     </script>
 </body>
 
 </html>
+
+
+<!--
+
+            'Turtles Folder': {
+                turtlesShape: { // chooser
+                    val: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
+                    cmd: val => view.drawOptions.turtlesShape = val,
+                },
+                turtlesSize: { // slider
+                    val: [1, [0.5, 10, 0.5]],
+                    // val: { Small: 1, Medium: 3, Large: 5 },
+                    cmd: val => view.drawOptions.turtlesSize = val,
+                },
+                turtlesColor: { // color
+                    val: '#ff0000',
+                    cmd: val => view.drawOptions.turtlesColor = val,
+                },
+            },
+
+
+ -->

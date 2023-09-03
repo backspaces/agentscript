@@ -63,8 +63,9 @@
                 cmd: () => view.downloadCanvas(),
             },
             modelTicks: { // monitor
-                val: 'listen',
-                cmd: () => model.ticks,
+                val: [model, 'ticks'],
+                // cmd: val => val = model.ticks,
+                // cmd: () => model.ticks,
             },
         })
 

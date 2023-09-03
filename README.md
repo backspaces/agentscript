@@ -22,7 +22,7 @@ Example: to import Class Model for building your own model, use:
 
 .. where path/to/agentscript is a local file system path or a url to a server:
 
--   local: [./src/Model.js](./src/Model.js)
+-   local: [./src/Model.js](https://raw.githubusercontent.com/backspaces/agentscript/master/src/Model.js)
 -   code.agentscript.org: [https://code.agentscript.org/src/Model.js](https://code.agentscript.org/src/Model.js)
 -   unpkg.com: [https://unpkg.com/agentscript/src/Model.js](https://unpkg.com/agentscript/src/Model.js)
 -   skypack.dev: [https://cdn.skypack.dev/agentscript/src/Model.js](https://cdn.skypack.dev/agentscript/src/Model.js)
@@ -47,12 +47,12 @@ Our directory layout is:
 
 -   [models/](https://github.com/backspaces/agentscript/tree/master/models): simple sample/demo models. All are es6 modules used in onepagers below
 -   [src/](https://github.com/backspaces/agentscript/tree/master/src): all the agentscript source code. All are es6 modules
--   [docs/](https://code.agentscript.org/docs/index.html) Documentation for all the individual modules used by the programmer
+-   [docs/](https://code.agentscript.org/docs/agentscript/0.10.19) Documentation for all the individual modules used by the programmer
 
 ### Developer directories:
 
 -   [bin/](https://github.com/backspaces/agentscript/tree/master/bin): workflow scripts
--   [dist/](https://github.com/backspaces/agentscript/tree/master/dist): the umd and esm bundles with their min.js versions and src/.
+-   [dist/](https://unpkg.com/browse/agentscript@0.10.19/dist/): the umd and esm bundles with their min.js versions and src/.
 -   [test/](https://github.com/backspaces/agentscript/tree/master/test): testing using Deno with it's browser environment running all models/ using its test feature to report errors.
 -   [config/](https://github.com/backspaces/agentscript/tree/master/config): tools for creating "bundles".<br>
 
@@ -60,19 +60,19 @@ Our directory layout is:
 
 The models directory contains the individual Models JavaScript files. I.e. HelloModel.js exports the HelloModel etc. It is the only demo directory with .js files, the rest are "onepagers" .html files.
 
-[models](./models/README.md)
+[models](https://code.agentscript.org/models/)
 
 The views1 onepagers import models from the models/ dir and run for 500 steps, printing out a sample of the model's data.
 
-[views1](./views1/README.md)
+[views1](https://code.agentscript.org/views1/)
 
 The views2 onepagers import models from the models/ dir and add a 2D Canvas view.
 
-[views2](./views2/README.md)
+[views2](https://code.agentscript.org/views2/)
 
 The views25 onepagers import models from the models/ dir and add a Three.js webgl 2.5D view.
 
-[views25](./views25/README.md)
+[views25](https://code.agentscript.org/views25/)
 
 The views3 onepagers import models from the models/ dir and add a Three.js webgl 3D view.
 
@@ -83,19 +83,19 @@ which are subclasses of their 2D counterparts:
 [src/Model.js](https://github.com/backspaces/agentscript/blob/master/src/Model.js)
 and [src/Turtle.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle.js)
 
-[views3](./views3/README.md)
+[views3](https://code.agentscript.org/views3/)
 
 The mvc onepagers are combine Models, Views, and Controls into "apps".
 
-[mvc](./mvc/README.md)
+[mvc](https://code.agentscript.org/mvc/)
 
 AgentScript provides a way to include your models on a map. These two sets of onepagers use gis & geojson utilities to create and view models running on [Leaflet](https://leafletjs.com/) [maplibre](https://github.com/maplibre/maplibre-gl-js#readme/) maps.
 
-[leaflet](./leaflet/README.md)
+[leaflet](https://code.agentscript.org/leaflet)
 
 and
 
-[maplibre](./maplibre/README.md)
+[maplibre](https://code.agentscript.org/maplibre/)
 
 <!-- [fb](./fb/README.md)
 

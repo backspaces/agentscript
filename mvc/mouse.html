@@ -7,6 +7,7 @@
 
 <body>
     <script type="module">
+        // Note: we don't use animator, but model is driven by mouse behavior!
         import * as util from '../src/utils.js'
         import Mouse from '../src/Mouse.js'
         import TwoDraw from '../src/TwoDraw.js'
@@ -18,7 +19,9 @@
         const view = new TwoDraw(
             model,
             {
-                patchSize: 15;
+                patchSize: 20,
+            },
+            {
                 patchesColor: 'black',
                 linksColor: l => (l === selectedLink ? 'red' : 'gray'),
                 linksWidth: 2,
@@ -28,7 +31,7 @@
         )
 
         let selectedTurtle, selectedLink
-        function handleMouse(mouse) {
+        function mouseCallback(mouse) {
             let [x, y] = [mouse.x, mouse.y]
             switch (mouse.action) {
                 case 'mousedown':
@@ -53,12 +56,11 @@
         }
 
         const mouse = new Mouse(
-            model, view, handleMouse
+            model, view, mouseCallback
         ).setContinuous().start()
 
         view.draw() // Draw once to get started
 
-        // Note: don't use the usual Animator, run by mouse events! YaY!
         util.toWindow({ util, model, view, mouse })
     </script>
     <div id="modelDiv"></div>

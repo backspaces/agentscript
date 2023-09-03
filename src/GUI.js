@@ -1,5 +1,4 @@
 import * as util from '../src/utils.js'
-// import dat from 'https://cdn.skypack.dev/dat.gui'
 import dat from '../vendor/dat.gui.js'
 
 /** @class */
@@ -23,26 +22,32 @@ class GUI {
         this.template = template
 
         this.controllers = {}
-        this.folders = {}
         this.values = {} // the key/val's from each template
 
-        this.baseGui = this.gui = new dat.GUI()
+        this.gui = new dat.GUI()
+        const guis = [this.gui]
+
         // this.folders['default'] = this.baseGui
 
-        util.forLoop(template, (obj, key) => {
-            if (util.isString(obj)) {
-                if (obj === 'default') {
-                    this.gui = this.baseGui
-                } else {
-                    this.gui = this.baseGui.addFolder(obj)
-                    this.folders[key] = this.gui
-                }
-            } else {
-                this.controllers[key] = this.addUI(obj, key)
-            }
-        })
+        let newFolder = obj => !obj.val && !obj.cmd
+        const parseGuis = obj => {
+            util.forLoop(obj, (obj, key) => {
+                if (newFolder(obj)) {
+                    console.log('new follder', key)
 
-        this.gui = this.baseGui
+                    this.gui = this.gui.addFolder(key)
+                    guis.push(this.gui)
+                    parseGuis(obj)
+                    guis.pop()
+                    this.gui = guis.at(-1)
+                } else {
+                    this.controllers[key] = this.addUI(obj, key)
+                }
+            })
+        }
+        parseGuis(template)
+
+        console.log('controllers, values', this.controllers, this.values, guis)
     }
 
     type(obj) {
@@ -52,14 +57,16 @@ class GUI {
 
         if (this.isDatColor(val)) return 'color'
         if (valType === 'undefined') return 'button'
-        // if (cmdType === 'undefined') return 'message'
+        // if (val === 'listen') return 'monitor'
         if (valType === 'boolean') return 'toggle'
         if (valType === 'string') return 'input'
-        if (val === 'listen') return 'monitor'
         if (valType === 'array' && val.length === 2) {
             if (util.typeOf(val[0]) === 'number') return 'slider'
             if (util.typeOf(val[0]) === 'string') return 'chooser'
+            if (util.typeOf(val[0]) === 'object') return 'monitor'
+            if (util.typeOf(val[0]) === 'array') return 'monitor'
         }
+
         throw Error('GUI type error, val: ' + val + ' cmd: ' + cmd)
     }
 
@@ -70,14 +77,16 @@ class GUI {
      * @returns A dat.gui control object
      */
     addUI(obj, key) {
-        // console.log(obj, key)
         let { val, cmd } = obj
         const type = this.type(obj)
 
         let control, extent
 
-        if (util.typeOf(val) === 'array') [val, extent] = val
-        if (type === 'button') [val, cmd] = [cmd, val]
+        if (type === 'monitor') cmd = () => val[0][val[1]]
+        if (['slider', 'chooser'].includes(type)) [val, extent] = val
+        if (type === 'button') val = cmd
+
+        console.log('addUI:', type, key, val, cmd)
 
         this.values[key] = val
 
@@ -98,8 +107,11 @@ class GUI {
             case 'button':
             case 'toggle':
             case 'input':
-            case 'monitor':
                 control = this.gui.add(this.values, key)
+                break
+
+            case 'monitor':
+                control = this.gui.add(val[0], val[1])
                 break
 
             default:
@@ -107,11 +119,13 @@ class GUI {
         }
 
         // initialize: set model etc initial values to this value
-        if (cmd && val !== 'listen' && val) cmd(val)
-        if (val === 'listen') this.setListener(key, cmd)
+        if (!['monitor', 'button'].includes(type)) cmd(val)
+        // if (cmd && val && type !== 'monitor') cmd(val)
+        // if (val === 'listen') this.setListener(key, cmd)
 
         if (cmd) {
-            if (val === 'listen') control.listen()
+            // if (val === 'listen') control.listen().onChange(cmd)
+            if (type === 'monitor') control.listen() //.onChange(cmd)
             else control.onChange(cmd)
         }
 
@@ -138,14 +152,14 @@ class GUI {
 
         return false
     }
-    setListener(key, cmd) {
-        this.values[key] = cmd()
-    }
-    update() {
-        util.forLoop(this.template, (obj, key) => {
-            if (obj.val === 'listen') this.setListener(key, obj.cmd)
-        })
-    }
+    // setListener(key, cmd) {
+    //     this.values[key] = cmd()
+    // }
+    // update() {
+    //     util.forLoop(this.template, (obj, key) => {
+    //         if (obj.val === 'listen') this.setListener(key, obj.cmd)
+    //     })
+    // }
 }
 
 export default GUI

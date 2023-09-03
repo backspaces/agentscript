@@ -165,9 +165,9 @@ class Model {
     }
 }
 // Five geometry functions converting to the JavaScript
-// standard: radians counter-clockwise from the x-axis.
-// The default set is for "heading" or "clock" geometry,
-// Degrees clockwise from the y-axis.
+// radians: radians counter-clockwise from the x-axis.
+// degrees: degrees counter-clockwise from the x-axis.
+// heading: "clock geometry", clockwise degrees from y axis
 // Add mod2pi & mod360?
 const toDeg = 180 / Math.PI
 const toRad = Math.PI / 180

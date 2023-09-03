@@ -1,80 +1,111 @@
 <html>
-    <head>
-        <title>ants</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import TwoDraw from '../src/TwoDraw.js'
-            import Animator from '../src/Animator.js'
-            import Color from '../src/Color.js'
-            import ColorMap from '../src/ColorMap.js'
-            import Model from '../models/AntsModel.js'
-            import dat from 'https://cdn.skypack.dev/dat.gui'
 
-            // ==============================
+<head>
+    <title>ants</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+</head>
 
-            // Define colors and colormaps
-            const nestColor = Color.typedColor('yellow')
-            const foodColor = Color.typedColor('blue')
-            const nestColorMap = ColorMap.gradientColorMap(20, [
-                'black',
-                nestColor,
-            ])
-            const foodColorMap = ColorMap.gradientColorMap(20, [
-                'black',
-                foodColor,
-            ])
-            const drawOptions = {
-                patchesColor: p => {
-                    if (p.isNest) return nestColor
-                    if (p.isFood) return foodColor
-                    return p.foodPheromone > p.nestPheromone
-                        ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
-                        : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
-                },
-                turtlesShape: 'bug',
-                turtlesSize: 3,
-                turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
-            }
-            // ==============================
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        import Color from '../src/Color.js'
+        import ColorMap from '../src/ColorMap.js'
+        import Model from '../models/AntsModel.js'
+        import GUI from '../src/GUI.js'
 
-            const model = new Model()
-            await model.startup()
-            model.setup()
 
-            const view = new TwoDraw(model, {
-                div: 'modelDiv',
-                useSprites: true, // ant shape difficult to draw
-                width: 500,
-                drawOptions,
-            })
+        // ==== Define draw options, colors and colormaps
+        const nestColor = Color.typedColor('yellow')
+        const foodColor = Color.typedColor('blue')
+        const nestColorMap = ColorMap.gradientColorMap(20, [
+            'black',
+            nestColor,
+        ])
+        const foodColorMap = ColorMap.gradientColorMap(20, [
+            'black',
+            foodColor,
+        ])
+        const drawOptions = {
+            patchesColor: p => {
+                if (p.isNest) return nestColor
+                if (p.isFood) return foodColor
+                return p.foodPheromone > p.nestPheromone
+                    ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
+                    : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+            },
+            turtlesShape: 'bug',
+            turtlesSize: 3,
+            turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
+        }
+        // ==== Define model, view, aimator
 
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500, // run 500 steps
-                30 // 30 fps
-            ).startStats()
+        const model = new Model()
+        await model.startup()
+        model.setup()
 
-            // ==============================
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            useSprites: true, // ant shape difficult to draw
+            width: 500,
+            drawOptions,
+        })
 
-            const gui = new dat.GUI()
-            gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
-            gui.add(anim, 'toggle')
-            gui.add(anim, 'once')
-            gui.add(view, 'width', 100, 1000, 25)
-            gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
-            gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
-            gui.add(view, 'downloadCanvas')
+        const aimator = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // run forever
+            30 // fps
+        ).startStats()
 
-            // ==============================
+        // ==== Define gui
+        const gui = new GUI({
+            fps: { // slider
+                val: [40, [5, 60, 5]],
+                cmd: val => aimator.setFps(val),
+            },
+            stop: { // switch/toggle
+                val: false, // bool
+                cmd: val => { if (val) { aimator.stop() } else { aimator.start() } },
+            },
+            once: { // button
+                cmd: () => aimator.once()
+            },
+            width: { // slider
+                val: [500, [100, 1000, 25]],
+                cmd: val => view.width = val,
+            },
+            turtlesShape: { // chooser
+                val: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
+                cmd: val => view.drawOptions.turtlesShape = val,
+            },
+            turtlesSize: { // chooser
+                val: [1, [1, 10, 1]],
+                cmd: val => view.drawOptions.turtlesSize = val,
+            },
+            downloadCanvas: { // button
+                cmd: () => view.downloadCanvas()
+            },
+        })
 
-            util.toWindow({ util, model, view, anim, gui })
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+
+        // const gui = new dat.GUI()
+        // gui.add(aimator, 'fps', 1, 60, 1).onChange(() => aimator.reset())
+        // gui.add(aimator, 'toggle')
+        // gui.add(aimator, 'once')
+        // gui.add(view, 'width', 100, 1000, 25)
+        // gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
+        // gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+        // gui.add(view, 'downloadCanvas')
+
+        // ==== End, debug if needed
+
+        util.toWindow({ util, model, view, aimator, gui })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

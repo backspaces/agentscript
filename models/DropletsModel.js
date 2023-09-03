@@ -24,7 +24,7 @@ export default class DropletsModel extends Model {
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
     stepType = 'minNeighbor'
-    moves // how many moves in a step
+    moves = 0 // how many moves in a step
     // Installed datasets:
     elevation
     dzdx

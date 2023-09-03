@@ -25,7 +25,7 @@ class Animator {
     start() {
         if (this.timeoutID) return // avoid multiple starts
         this.timeoutID = setInterval(() => this.step(), 1000 / this.fps)
-        this.paused = false
+        // this.paused = false
         return this // chaining off ctor
     }
     /**

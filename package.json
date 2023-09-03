@@ -15,6 +15,7 @@
         "/views2/",
         "/views25/",
         "/views3/",
+        "/mvc/",
         "/leaflet/",
         "/maplibre/"
     ],
@@ -62,6 +63,8 @@
         "mytask": "cd $INIT_CWD && pwd"
     },
     "dependencies": {
+        "@redfish/leafletelementoverlay": "^1.2.2",
+        "chart.js": "^4.4.0",
         "three": "^0.120.0"
     },
     "devDependencies": {

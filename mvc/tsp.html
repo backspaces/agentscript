@@ -12,7 +12,8 @@
         import Animator from '../src/Animator.js'
         import Model from '../models/TspModel.js'
         import Mouse from '../src/Mouse.js'
-        import dat from 'https://cdn.skypack.dev/dat.gui'
+        import dat from '../vendor/dat.gui.js'
+
         import Plot from '../src/Plot.js'
 
 
@@ -53,14 +54,25 @@
 
         const gui = new dat.GUI()
         gui.width = 280 // increase dat.gui width
+        const miscGuis = {
+            stop: false
+        }
 
-        gui.add(anim, 'fps', 1, 60, 1).onChange(() => anim.reset())
+        gui.add(anim, 'fps', 1, 60, 1)
+            .onChange(() => anim.reset())
         gui.add(anim, 'toggle')
-        gui.add(anim, 'once')
+            .onChange(() => miscGuis.stop = anim.isRunning())
+        gui.add(miscGuis, 'stop')
+            .listen()
+            .onChange(val => { if (val) { anim.stop() } else { anim.start() } })
+        gui.add(anim, 'once').onChange(() => miscGuis.stop = true)
         gui.add(view, 'width', 100, 1000, 25)
-        // gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
+        gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
         gui.add(breedSize, 'nodes', 1, 10, 1)
-        gui.add(model, 'bestTourLength').listen()
+        gui.add(model, 'bestTourLength')
+            .listen()
+        gui.add(model, 'ticks')
+            .listen()
         gui.add(view, 'downloadCanvas')
 
         // gui.addColor(view.drawOptions, 'patchesColor')
@@ -68,7 +80,7 @@
         // ============ Independent Mouse Handling ==================
 
         let dragNode
-        function handleMouse(mouse) {
+        function mouseCallback(mouse) {
             const { x, y, action } = mouse
             switch (action) {
                 case 'mousedown':
@@ -87,7 +99,7 @@
         const mouse = new Mouse(
             model,
             view,
-            handleMouse
+            mouseCallback
         ).start()
 
         // view.draw() // Draw once to get started ??

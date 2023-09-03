@@ -1,76 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>height</title>
-    </head>
 
-    <body>
-        <canvas id="can"></canvas>
-    </body>
-    <!-- Greggman sez put scripts after body -->
-    <script type="module">
-        import * as THREE from 'https://cdn.skypack.dev/three@0.120.0/build/three.module.js'
-        import { OrbitControls } from 'https://cdn.skypack.dev/three@0.120.0/examples/jsm/controls/OrbitControls.js'
-        import dat from 'https://cdn.skypack.dev/dat.gui'
+<head>
+    <title>height</title>
+</head>
 
-        import * as util from '../src/utils.js'
-        import * as utils3 from './threeUtils.js'
+<body>
+    <canvas id="can"></canvas>
+</body>
+<!-- Greggman sez put scripts after body -->
+<script type="module">
+    import { THREE, OrbitControls } from '../vendor/three.js'
+    import * as util from '../src/utils.js'
+    import * as utils3 from './threeUtils.js'
 
-        utils3.setDefaultStyle('can')
-        util.toWindow({ THREE, util, utils3 })
+    utils3.setDefaultStyle('can')
+    util.toWindow({ THREE, util, utils3 })
 
-        const canvas = document.querySelector('#can')
-        const renderer = new THREE.WebGLRenderer({ canvas })
-        const scene = new THREE.Scene()
-        util.toWindow({ renderer, scene })
+    const canvas = document.querySelector('#can')
+    const renderer = new THREE.WebGLRenderer({ canvas })
+    const scene = new THREE.Scene()
+    util.toWindow({ renderer, scene })
 
-        // utils3.modelLight(scene, model)
-        const world = 35
-        const camera = utils3.newCamera(renderer, [world, world, world])
-        utils3.addHelpers(renderer, scene, camera, world)
+    // utils3.modelLight(scene, model)
+    const world = 35
+    const camera = utils3.newCamera(renderer, [world, world, world])
+    utils3.addHelpers(renderer, scene, camera, world)
 
-        // ============================
-        // http://danni-three.blogspot.com/2013/09/threejs-heightmaps.html
-        const [width, height] = [25, 25]
-        const size = width * height
-        const data = new Uint8Array(3 * size)
+    // ============================
+    // http://danni-three.blogspot.com/2013/09/threejs-heightmaps.html
+    const [width, height] = [25, 25]
+    const size = width * height
+    const data = new Uint8Array(3 * size)
 
-        util.forLoop(data, (val, i, a) => (a[i] = util.randomInt(255)))
-        const texture = new THREE.DataTexture(
-            data,
-            width,
-            height,
-            THREE.RGBFormat
-        )
+    util.forLoop(data, (val, i, a) => (a[i] = util.randomInt(255)))
+    const texture = new THREE.DataTexture(
+        data,
+        width,
+        height,
+        THREE.RGBFormat
+    )
 
-        const geometry = new THREE.PlaneBufferGeometry(
-            width,
-            height,
-            width,
-            height
-        )
+    const geometry = new THREE.PlaneBufferGeometry(
+        width,
+        height,
+        width,
+        height
+    )
 
-        const pos = geometry.getAttribute('position')
-        const a = pos.array
-        util.repeat(
-            a.length / 3,
-            (i, a) => (a[i * 3 + 2] = util.randomFloat(1)),
-            a
-        )
-        geometry.setAttribute('position', new THREE.BufferAttribute(a, 3))
+    const pos = geometry.getAttribute('position')
+    const a = pos.array
+    util.repeat(
+        a.length / 3,
+        (i, a) => (a[i * 3 + 2] = util.randomFloat(1)),
+        a
+    )
+    geometry.setAttribute('position', new THREE.BufferAttribute(a, 3))
 
-        const material = new THREE.MeshBasicMaterial({
-            map: texture,
-            side: THREE.DoubleSide,
-        })
+    const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+    })
 
-        const mesh = new THREE.Mesh(geometry, material)
-        scene.add(mesh)
+    const mesh = new THREE.Mesh(geometry, material)
+    scene.add(mesh)
 
-        // ============================
+    // ============================
 
-        utils3.animate(renderer, scene, camera, () => {
-            mesh.material.map.needsUpdate = true
-        })
-    </script>
+    utils3.animate(renderer, scene, camera, () => {
+        mesh.material.map.needsUpdate = true
+    })
+</script>
+
 </html>

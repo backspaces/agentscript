@@ -141,7 +141,7 @@
                     () => {
                         model.step()
                         view.draw()
-                        gui.update()
+                        // gui.update()
                         if (model.moves === 0) {
                             anim.stop()
                             console.log('No moves, stopping at step', model.ticks)
@@ -154,7 +154,7 @@
                 anim.reset()
             }
 
-            // util.toWindow({ model, view, modelLayer, anim, drawOptions })
+            util.toWindow({ model, view, modelLayer, anim, drawOptions })
         }
         await setupModelView() // default to full page
         // await setupModelView(gis.santaFeBBox) // test
@@ -213,87 +213,89 @@
                 },
             },
 
-            mapFolder: 'Opacity',
-            // puddleDepth: {
-            //     val: [model.puddleDepth, [1, 15, 1]],
-            //     cmd: async val => {
-            //         model.puddleDepth = val
-            //     }
-            // },
-            tilesOpacity: { // slider
-                val: [elevationLayer.options.opacity, [0, 1, 0.1]],
-                cmd: val => elevationLayer.setOpacity(val),
-            },
-            modelOpacity: { // slider
-                val: [1, [0, 1, 0.1]],
-                cmd: val => view.canvas.style.opacity = val,
-            },
-
-            modelFolder: 'Model Data',
-            modelTicks: { // monitor
-                val: 'listen',
-                cmd: () => model.ticks,
-            },
-            patches: { // monitor
-                val: 'listen',
-                cmd: () => model.patches.length,
-            },
-            turtles: { // monitor
-                val: 'listen',
-                cmd: () => model.turtles.length,
-            },
-            turtlesSize: { // slider
-                val: [0.8, [.2, 1, 0.1]],
-                cmd: val => {
-                    view.drawOptions.turtlesSize = val
-                    if (!anim.isRunning()) view.draw()
+            'Opacity': {
+                // puddleDepth: {
+                //     val: [model.puddleDepth, [1, 15, 1]],
+                //     cmd: async val => {
+                //         model.puddleDepth = val
+                //     }
+                // },
+                tilesOpacity: { // slider
+                    val: [elevationLayer.options.opacity, [0, 1, 0.1]],
+                    cmd: val => elevationLayer.setOpacity(val),
                 },
-            },
-            turtlesSpeed: { // slider
-                val: [model.speed, [0.2, 1, 0.1]],
-                cmd: val => model.speed = val,
-            },
-            turtlesColor: { // colorπ
-                val: view.drawOptions.turtlesColor,
-                cmd: val => {
-                    view.drawOptions.turtlesColor = val
-                    if (!anim.isRunning()) view.draw()
-                },
-            },
-            moves: {
-                val: 'listen',
-                cmd: () => model.moves
-            },
-            atEdge: {
-                val: [model.turtles.getDefault('atEdge'),
-                ['wrap', 'die', 'clamp', 'bounce', 'random']],
-                cmd: val => {
-                    model.turtles.setDefault('atEdge', val)
+                modelOpacity: { // slider
+                    val: [1, [0, 1, 0.1]],
+                    cmd: val => view.canvas.style.opacity = val,
                 },
             },
 
-            dataFolder: 'Downloads',
-            getElevations: { // button
-                cmd: () => util.downloadBlob(model.bboxDataSet, 'elevations.json', false),
+            'Model Data': {
+                modelTicks: { // monitor
+                    val: [model, 'ticks']
+                },
+                patches: { // monitor
+                    val: [model.patches, 'length']
+                    // cmd: () => model.patches.length,
+                },
+                // turtles: { // monitor
+                //     val: 'listen',
+                //     cmd: () => model.turtles.length,
+                // },
+                turtlesSize: { // slider
+                    val: [0.8, [.2, 1, 0.1]],
+                    cmd: val => {
+                        view.drawOptions.turtlesSize = val
+                        if (!anim.isRunning()) view.draw()
+                    },
+                },
+                turtlesSpeed: { // slider
+                    val: [model.speed, [0.2, 1, 0.1]],
+                    cmd: val => model.speed = val,
+                },
+                turtlesColor: { // colorπ
+                    val: view.drawOptions.turtlesColor,
+                    cmd: val => {
+                        view.drawOptions.turtlesColor = val
+                        if (!anim.isRunning()) view.draw()
+                    },
+                },
+                moves: {
+                    val: [model, 'moves'],
+                    // cmd: () => model.moves
+                },
+                atEdge: {
+                    val: [model.turtles.getDefault('atEdge'),
+                    ['wrap', 'die', 'clamp', 'bounce', 'random']],
+                    cmd: val => {
+                        model.turtles.setDefault('atEdge', val)
+                    },
+                },
             },
-            patchesAspect: { // button
-                cmd: () => {
-                    const dataSet = model.patches.exportDataSet('aspect')
-                    dataSet.bounds = model.elementBounds // add metadata
-                    util.downloadBlob(dataSet, 'patchesAspect.json', false)
-                }
-            },
-            turtlesXYHead: { // button
-                cmd: () => {
-                    const data = model.turtles.map(t => {
-                        let { x, y, heading } = t
-                        const obj = { x, y, heading }
-                        util.forLoop(obj, (val, key) => obj[key] = Math.round(val))
-                        return obj
-                    })
-                    util.downloadBlob(data, 'turtlesXYHead.json', false)
-                }
-            },
+
+            'Downloads': {
+                getElevations: { // button
+                    cmd: () => util.downloadBlob(model.bboxDataSet, 'elevations.json', false),
+                },
+                patchesAspect: { // button
+                    cmd: () => {
+                        const dataSet = model.patches.exportDataSet('aspect')
+                        dataSet.bounds = model.elementBounds // add metadata
+                        util.downloadBlob(dataSet, 'patchesAspect.json', false)
+                    }
+                },
+                turtlesXYHead: { // button
+                    cmd: () => {
+                        const data = model.turtles.map(t => {
+                            let { x, y, heading } = t
+                            const obj = { x, y, heading }
+                            util.forLoop(obj, (val, key) => obj[key] = Math.round(val))
+                            return obj
+                        })
+                        util.downloadBlob(data, 'turtlesXYHead.json', false)
+                    }
+                },
+            }
         })
         // util.forLoop(gui.folders, (val) => val.open())
         // gui.folders.mapFolder.open()

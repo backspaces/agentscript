@@ -5,7 +5,7 @@ class Mouse {
      * @param {Canvas|String} canvas The canvas upon which we track the mouse.
      *      If a string is given, get the HTML element by that name
      * @param {world} world World instance
-     * @param {Function} callback callback(evt, mouse) called on every mouse action
+     * @param {Function} callback callback(mouse) called on every mouse action
      */
     // constructor(canvas, world, callback = (evt, mouse) => {}) {
     constructor(model, view, callback) {
