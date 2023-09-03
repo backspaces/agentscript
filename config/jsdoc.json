@@ -26,7 +26,7 @@
             "sections": ["Classes", "Modules", "Global"],
             "default_theme": "dark",
             "sort": false,
-            "footer": "This is footer"
+            "footer": "AgentScript version: 0.10.19"
         }
     },
     "markdown": {
