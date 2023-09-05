@@ -1,60 +1,62 @@
 <html>
-    <head>
-        <title>FlockXfm</title>
-    </head>
-    <body>
-        <canvas id="plotCanvas"></canvas>
-        <script type="module">
-            import DefineTransform from './DefineTransform.js'
-            import { repeat, createCtx } from '../src/utils.js'
-            // import Chart from 'https://cdn.skypack.dev/chart.js'
-            import Chart from 'https://cdn.skypack.dev/chart.js@2.9.4'
 
-            const transform = new DefineTransform()
+<head>
+    <title>FlockXfm</title>
+</head>
 
-            const onValue = transform.defineTransform(
-                'flock',
-                'xy',
-                `return model.turtles.map(t => [t.x, t.y]).toString()`
-            )
+<body>
+    <canvas id="plotCanvas"></canvas>
+    <script type="module">
+        import DefineTransform from './DefineTransform.js'
+        import { repeat, createCtx } from '../src/utils.js'
+        import Chart from 'https://cdn.skypack.dev/chart.js@2.9.4'
 
-            // ========= Handle transform value ==========
+        const transform = new DefineTransform()
 
-            const chart = initPlot()
+        const onValue = transform.defineTransform(
+            'flock',
+            'xy',
+            `return model.turtles.map(t => [t.x, t.y]).toString()`
+        )
 
-            onValue(value => {
-                value = value.split(',')
-                const turtles = repeat(value.length / 2, (i, a) => {
-                    a.push({ x: value.shift(), y: value.shift() })
-                })
-                plot(chart, turtles)
+        // ========= Handle transform value ==========
+
+        const chart = initPlot()
+
+        onValue(value => {
+            value = value.split(',')
+            const turtles = repeat(value.length / 2, (i, a) => {
+                a.push({ x: value.shift(), y: value.shift() })
             })
+            plot(chart, turtles)
+        })
 
-            // =========== Chart setup and call ===========
+        // =========== Chart setup and call ===========
 
-            function initPlot() {
-                const canvas = document.getElementById('plotCanvas')
-                const chart = new Chart(canvas, {
-                    type: 'scatter',
-                    data: {
-                        datasets: [
-                            {
-                                data: [],
-                                label: 'FlockXYs',
-                                backgroundColor: 'red',
-                                borderColor: 'red',
-                            },
-                        ],
-                    },
-                })
-                return chart
-            }
+        function initPlot() {
+            const canvas = document.getElementById('plotCanvas')
+            const chart = new Chart(canvas, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            data: [],
+                            label: 'FlockXYs',
+                            backgroundColor: 'red',
+                            borderColor: 'red',
+                        },
+                    ],
+                },
+            })
+            return chart
+        }
 
-            function plot(chart, points) {
-                chart.clear()
-                chart.data.datasets[0].data = points
-                chart.update()
-            }
-        </script>
-    </body>
+        function plot(chart, points) {
+            chart.clear()
+            chart.data.datasets[0].data = points
+            chart.update()
+        }
+    </script>
+</body>
+
 </html>

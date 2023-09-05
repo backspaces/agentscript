@@ -1,4 +1,4 @@
-import firebase from 'https://cdn.skypack.dev/@firebase/app'
+import firebase from 'https://cdn.skypack.dev/@firebase/app@8.0.0'
 import 'https://cdn.skypack.dev/@firebase/database'
 import config from './Config.js'
 

@@ -26,7 +26,19 @@
             "sections": ["Classes", "Modules", "Global"],
             "default_theme": "dark",
             "sort": false,
-            "footer": "AgentScript version: 0.10.19"
+            "footer": "AgentScript version: 0.10.19 using clean-jsdoc-theme",
+            "menu": [
+                {
+                    "title": "Github",
+                    "id": "github",
+                    "link": "https://github.com/backspaces/agentscript"
+                },
+                {
+                    "title": "npm",
+                    "id": "npm",
+                    "link": "https://www.npmjs.com/package/agentscript"
+                }
+            ]
         }
     },
     "markdown": {

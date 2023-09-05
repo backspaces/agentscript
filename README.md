@@ -114,7 +114,7 @@ To clone the github repo:
 -   yarn build # install all our dependencies.
     Note: Fine to use npm rather than yarn.
 
-All workflow is npm run scripts. See package.json's scripts, or use `yarn/npm run` for a list. [JavaScript Standard Style](https://standardjs.com/) is [used](https://github.com/backspaces/agentscript/blob/master/.prettierrc.js).
+All workflow is npm run scripts. See package.json's scripts, or use `yarn/npm run` for a list of all scripts. [JavaScript Standard Style](https://standardjs.com/) is used, see the [prettierrc.js](https://github.com/backspaces/agentscript/blob/master/.prettierrc.js).
 
 ## License
 

@@ -43,7 +43,7 @@
         "build-views": "node bin/models2html",
         "build-md": "bin/src2md 'models views1 views2 views25 views3 mvc leaflet maplibre' > /dev/null",
         "build-docs-": "node config/copyTutorials.js && jsdoc -c config/jsdoc.js",
-        "build-docs": "node node_modules/.bin/jsdoc --configure config/jsdoc.json --verbose",
+        "build-docs": "jsdoc --configure config/jsdoc.json --verbose",
         "test": "test/denomodels.js && test/deno3Dgeom.js",
         "-- END OF WORKFLOW --": "The following are verious tests, running models in various directories and browsers",
         "run1": "bin/modelsinbrowser views1",
@@ -63,11 +63,11 @@
         "mytask": "cd $INIT_CWD && pwd"
     },
     "dependencies": {
-        "@redfish/leafletelementoverlay": "^1.2.2",
         "chart.js": "^4.4.0",
         "three": "^0.120.0"
     },
     "devDependencies": {
+        "@redfish/leafletelementoverlay": "^1.2.2",
         "@rollup/plugin-node-resolve": "^15.0.1",
         "@rollup/plugin-terser": "^0.1.0",
         "@turf/turf": "^6.5.0",

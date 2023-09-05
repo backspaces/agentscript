@@ -93,4 +93,13 @@ export default [
         },
         plugins: [terser()],
     },
+
+    {
+        input: 'node_modules/@redfish/leafletelementoverlay/elementOverlay.esm.js',
+        output: {
+            file: 'vendor/elementOverlay.js',
+            format: 'esm',
+        },
+        // plugins: [terser()],
+    },
 ]

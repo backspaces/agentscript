@@ -3,8 +3,8 @@ import * as util from '../src/utils.js'
 import * as gis from '../src/gis.js'
 import * as TileData from '../src/TileData.js'
 
-import * as L from 'https://unpkg.com/leaflet/dist/leaflet-src.esm.js'
-import elementOverlay from 'https://unpkg.com/@redfish/leafletelementoverlay/elementOverlay.esm.js'
+import * as L from 'https://unpkg.com/leaflet@1.8.0/dist/leaflet-src.esm.js'
+import elementOverlay from '../vendor/elementOverlay.js'
 
 function defaultLeafletOptions() {
     return {
