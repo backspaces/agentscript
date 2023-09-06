@@ -24,7 +24,7 @@
             patchSize: 20,
         })
 
-        const aimator = new Animator(
+        const anim = new Animator(
             () => {
                 model.step()
                 view.draw()
@@ -33,7 +33,7 @@
             30 // fps
         ).startStats()
 
-        util.toWindow({ model, view, aimator })
+        util.toWindow({ model, view, anim })
 
 
         let selectedTurtle

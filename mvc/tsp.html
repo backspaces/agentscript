@@ -45,6 +45,7 @@
             () => {
                 model.step()
                 view.draw()
+                if (model.done) anim.stop()
             },
             -1, // run until model stops: best tour constant for 500 steps
             30 // 30 fps

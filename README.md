@@ -48,6 +48,7 @@ Our directory layout is:
 -   [models/](https://github.com/backspaces/agentscript/tree/master/models): simple sample/demo models. All are es6 modules used in onepagers below
 -   [src/](https://github.com/backspaces/agentscript/tree/master/src): all the agentscript source code. All are es6 modules
 -   [docs/](https://code.agentscript.org/docs/agentscript/0.10.19) Documentation for all the individual modules used by the programmer
+-   [docs/](https://code.agentscript.org/docs/) Documentation for all the individual modules used by the programmer
 
 ### Developer directories:
 
@@ -89,7 +90,7 @@ The mvc onepagers are combine Models, Views, and Controls into "apps".
 
 [mvc](https://code.agentscript.org/mvc/)
 
-AgentScript provides a way to include your models on a map. These two sets of onepagers use gis & geojson utilities to create and view models running on [Leaflet](https://leafletjs.com/) [maplibre](https://github.com/maplibre/maplibre-gl-js#readme/) maps.
+AgentScript provides a way to include your models on a map. These two sets of onepagers use gis & geojson utilities to create and view models running on [Leaflet](https://leafletjs.com/) and [maplibre](https://github.com/maplibre/maplibre-gl-js#readme/) maps.
 
 [leaflet](https://code.agentscript.org/leaflet)
 
@@ -118,7 +119,7 @@ All workflow is npm run scripts. See package.json's scripts, or use `yarn/npm ru
 
 ## License
 
-Copyright Owen Densmore, RedfishGroup LLC, 2012-2021<br>
+Copyright Owen Densmore, RedfishGroup LLC, 2012-2023<br>
 AgentScript may be freely distributed under the GPLv3 license:
 
 AgentScript is free software: you can redistribute it and/or modify
