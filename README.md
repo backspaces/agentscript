@@ -47,8 +47,7 @@ Our directory layout is:
 
 -   [models/](https://github.com/backspaces/agentscript/tree/master/models): simple sample/demo models. All are es6 modules used in onepagers below
 -   [src/](https://github.com/backspaces/agentscript/tree/master/src): all the agentscript source code. All are es6 modules
-<!-- -   [docs/](https://code.agentscript.org/docs/agentscript/0.10.19) Documentation for all the individual modules used by the programmer -->
--   [docs/](https://code.agentscript.org/docs/) Documentation for all the individual modules used by the programmer
+-   [docs/](https://code.agentscript.org/docs/) Documentation for all the individual modules used by the programmer.
 
 ### Developer directories:
 
