@@ -39,10 +39,11 @@
         "start1": "serve -L",
         "build": "npm-run-all clean build-vendor build-dist build-views build-md build-docs",
         "build-dist": "rollup -c config/rollup.dist.mjs",
-        "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.mjs",
+        "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.mjs && cp node_modules/uplot/dist/uPlot.min.css vendor/uPlot.css",
         "build-views": "node bin/models2html",
         "build-md": "bin/src2md 'models views1 views2 views25 views3 mvc leaflet maplibre' > /dev/null",
-        "build-docs": "jsdoc --configure config/jsdoc.json --verbose && cp tests/redirect.html docs/index.html",
+        "build-docs0": "jsdoc --configure config/jsdoc.json --verbose && cp tests/redirect.html docs/index.html",
+        "build-docs": "jsdoc --configure config/jsdoc.json --verbose",
         "test": "test/denomodels.js && test/deno3Dgeom.js",
         "-- END OF WORKFLOW --": "The following are verious tests, running models in various directories and browsers",
         "run1": "bin/modelsinbrowser views1",
@@ -59,18 +60,19 @@
         "safari": "bin/modelsinbrowser views1 Safari",
         "runall": "npm run run1 & npm run run2 && npm run25 run3",
         "bar": "echo $INIT_CWD",
+        "foo": "uglifycss vendor/uPlot.min.css > /tmp/upcss",
         "mytask": "cd $INIT_CWD && pwd"
     },
     "dependencies": {
-        "chart.js": "^4.4.0",
-        "three": "^0.120.0"
+        "three": "^0.120.0",
+        "uplot": "^1.6.25"
     },
     "devDependencies": {
         "@redfish/leafletelementoverlay": "^1.2.2",
         "@rollup/plugin-node-resolve": "^15.0.1",
         "@rollup/plugin-terser": "^0.1.0",
         "@turf/turf": "^6.5.0",
-        "clean-jsdoc-theme": "4.2.8",
+        "clean-jsdoc-theme": "^4.2.10",
         "esm": "^3.2.25",
         "http-server": "^14.1.1",
         "jsdoc": "4.0.2",

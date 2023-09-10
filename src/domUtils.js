@@ -342,6 +342,7 @@ export function addCssLink(url) {
     document.head.appendChild(link)
 }
 export async function fetchCssStyle(url) {
+    url = import.meta.resolve(url)
     const response = await fetch(url)
     if (!response.ok) throw Error(`fetchCssStyle: Not found: ${url}`)
     const css = await response.text()

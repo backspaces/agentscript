@@ -8,6 +8,17 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 // import resolve from 'rollup-plugin-node-resolve'
 
 export default [
+    // {
+    //     input: 'node_modules/chart.js/dist/chart.umd.js',
+    //     output: {
+    //         file: 'vendor/chart.esm.js',
+    //         format: 'esm',
+    //     },
+    //     plugins: [nodeResolve(), cleanup()],
+    //     // plugins: [resolve(), cleanup()],
+    // },
+
+    // ======== Turf ========
     {
         input: 'config/turfImports.js',
         output: {
@@ -28,7 +39,7 @@ export default [
         // plugins: [resolve(), terser()],
     },
 
-    // three.all.js = THREE & OrbitControls
+    // ======== three.all.js = THREE & OrbitControls ========
     {
         input: './config/three.all.js',
         output: {
@@ -47,7 +58,7 @@ export default [
         plugins: [terser()],
     },
 
-    // Object3D.js = THREE's geometry mathematics, used by Model
+    // ======== Object3D.js = THREE's geometry mathematics, used by Model ========
     {
         input: 'node_modules/three/src/core/Object3D.js',
         output: {
@@ -66,7 +77,7 @@ export default [
         plugins: [terser()],
     },
 
-    // stats.js and dat.gui.js are included in THREE, so we use them
+    // ======== stats.js & dat.gui.js: are in THREE, so we use them ========
     {
         input: 'node_modules/three/examples/jsm/libs/stats.module.js',
         output: {
@@ -94,6 +105,26 @@ export default [
         plugins: [terser()],
     },
 
+    // ======== uPlot, a tiny, simple plot library ========
+    {
+        input: 'node_modules/uplot/dist/uPlot.esm.js',
+        output: {
+            file: 'vendor/uPlot.js',
+            format: 'esm',
+        },
+        plugins: [cleanup()],
+    },
+
+    {
+        input: 'node_modules/uplot/dist/uPlot.esm.js',
+        output: {
+            file: 'vendor/uPlot.min.js',
+            format: 'esm',
+        },
+        plugins: [terser()],
+    },
+
+    // ======== Cody's canvas overlay for Leaflet ========
     {
         input: 'node_modules/@redfish/leafletelementoverlay/elementOverlay.esm.js',
         output: {

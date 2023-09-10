@@ -1,17 +1,9 @@
 import * as util from './utils.js'
-import uPlot from 'https://cdn.skypack.dev/uplot'
+import uPlot from '../vendor/uPlot.min.js'
 
-// util.toWindow({ util, uPlot })
+const uPlotCss = await util.fetchCssStyle('../vendor/uPlot.css')
 
-await util.fetchCssStyle('https://cdn.skypack.dev/uplot/dist/uPlot.min.css')
-
-// export interface PathBuilderFactories {
-//     linear?: LinearPathBuilderFactory;
-//     spline?: SplinePathBuilderFactory;
-//     stepped?: SteppedPathBuilderFactory;
-//     bars?: BarsPathBuilderFactory;
-//     points?: PointsPathBuilderFactory;
-// }
+util.toWindow({ util, uPlot, uPlotCss })
 
 class Plot {
     // see https://github.com/leeoniya/uPlot/tree/master/docs
@@ -51,7 +43,8 @@ class Plot {
         }
     }
 
-    // pens looks like:
+    // simple pens looks like name/color pairs
+    // complex pens are a series object above with label = key
     // pens: { // name-color pairs
     //     infected: 'red',
     //     susceptible: 'blue',
@@ -68,6 +61,7 @@ class Plot {
         const dataArrays = {}
 
         util.forLoop(pens, (val, key) => {
+            // complex pens are series objects w/ label set to key
             if (util.isObject(val)) {
                 val.label = key
                 options.series.push(val)
