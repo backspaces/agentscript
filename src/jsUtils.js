@@ -1059,6 +1059,10 @@ export function objectToString(obj, indent = 2, jsKeys = true) {
     return str
 }
 
+export function objectLength(obj) {
+    return Object.keys(obj).length
+}
+
 // Compare Objects or Arrays via JSON string. Note: TypedArrays !== Arrays
 export const objectsEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 

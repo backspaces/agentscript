@@ -67,9 +67,6 @@ class Plot {
         if (options.xRange) options.scales.x.range = options.xRange
         if (options.yRange) options.scales.y.range = options.yRange
 
-        // const data = [[]]
-        // const dataArrays = {}
-
         // Use pens object to setup colors and shapes
         util.forLoop(pens, (val, key) => {
             // complex pens are series objects w/ label set to key
@@ -91,13 +88,6 @@ class Plot {
                     stroke: val,
                 })
             }
-
-            // // data is an array of 1 + num pens empty arrays, 1 for xs + num ys
-            // data.push([])
-            // // dataArrays have num key/val pairs.
-            // // NOTE: key = the pen key, val is the associated data array above.
-            // // Adding to dataArrays arrays actually adds to the data!
-            // dataArrays[key] = data.at(-1) // -1 returns the last array in the data arrays
         })
 
         const [data, dataArrays] = this.createDataObject(pens)
@@ -119,12 +109,6 @@ class Plot {
             dataArrays[key] = data.at(-1) // -1 returns the last array in the data arrays
         })
         return [data, dataArrays]
-
-        // data.push([])
-        // // dataArrays have num key/val pairs.
-        // // NOTE: key = the pen key, val is the associated data array above.
-        // // Adding to dataArrays arrays actually adds to the data!
-        // dataArrays[key] = data.at(-1) // -1 returns the last array in the data arrays
     }
 
     numPens() {
@@ -202,40 +186,6 @@ class Plot {
         })
         if (draw) this.drawData()
     }
-    // points: like pens but the next number to be plotted
-    // points: {
-    //     infected: 42, // often like: infected: model.infected
-    //     susceptible: 55,
-    //     resistant: 23,
-    // },
-    // You can just reuse pens obj with data not colors
-    // setData(points, draw = true) {
-    //     if (util.isArray(points)) {
-    //         this.data[0] = points[0]
-    //         this.data[1] = points[1]
-    //     } else {
-    //         // for lines:
-    //         const xs = this.data[0]
-    //         xs.push(xs.length)
-    //         // console.log('xs:', xs)
-    //     }
-
-    //     if (!util.isArray(points)) {
-    //         util.forLoop(points, (val, key) => {
-    //             if (util.isNumber(val)) {
-    //                 this.dataArrays[key].push(val)
-    //             } else if (util.isArray(val)) {
-    //                 this.dataArrays[key] = val
-    //             } else {
-    //                 console.log('Oops!')
-    //             }
-    //         })
-    //     }
-
-    //     // If draw is false, don't draw, just update this.data
-    //     // This allows updating every n steps, or until the model is done.
-    //     if (draw) this.drawData()
-    // }
 
     drawData() {
         this.uplot.setData(this.data)
