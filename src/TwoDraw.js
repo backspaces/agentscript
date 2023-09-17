@@ -157,17 +157,26 @@ class TwoDraw extends TwoView {
             }
         }
 
-        // view.clear()
+        // if (patchesColor === 'random' || initPatches) {
+        //     view.clear() // patch transparent pixels do not clear the canvas!
+        //     view.drawPatches() // redraw cached patches colors onto our view canvas
+        // } else if (typeof patchesColor === 'function') {
+        //     view.drawPatches(model.patches, p => patchesColor(p))
+        // } else if (util.isImageable(patchesColor)) {
+        //     view.drawPatchesImage(patchesColor)
+        // } else {
+        //     view.clear(patchesColor)
+        // }
 
-        if (patchesColor === 'random' || initPatches) {
-            view.clear() // patch transparent pixels do not clear the canvas!
-            view.drawPatches() // redraw cached patches colors onto our view canvas
-        } else if (typeof patchesColor === 'function') {
-            view.drawPatches(model.patches, p => patchesColor(p))
-        } else if (util.isImageable(patchesColor)) {
+        if (util.isImageable(patchesColor)) {
             view.drawPatchesImage(patchesColor)
         } else {
-            view.clear(patchesColor)
+            view.clear()
+            if (patchesColor === 'random' || initPatches) {
+                view.drawPatches() // redraw cached patches colors onto our view canvas
+            } else if (typeof patchesColor === 'function') {
+                view.drawPatches(model.patches, p => patchesColor(p))
+            }
         }
 
         const checkColor = (agent, color) =>
