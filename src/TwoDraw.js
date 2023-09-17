@@ -1,5 +1,6 @@
 import * as util from './utils.js'
 import TwoView from '../src/TwoView.js'
+import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
 
 /**
@@ -171,11 +172,15 @@ class TwoDraw extends TwoView {
         if (util.isImageable(patchesColor)) {
             view.drawPatchesImage(patchesColor)
         } else {
-            view.clear()
+            // view.clear()
             if (patchesColor === 'random' || initPatches) {
+                view.clear()
                 view.drawPatches() // redraw cached patches colors onto our view canvas
             } else if (typeof patchesColor === 'function') {
+                view.clear()
                 view.drawPatches(model.patches, p => patchesColor(p))
+            } else {
+                view.clear(patchesColor)
             }
         }
 
