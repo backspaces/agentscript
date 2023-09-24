@@ -14,9 +14,11 @@
         import ColorMap from '../src/ColorMap.js'
         import Model from '../models/AntsModel.js'
         import GUI from '../src/GUI.js'
+        import Keyboard from '../src/Keyboard.js'
 
 
-        // ==== Define draw options, colors and colormaps
+        // ==== Define draw options, colors and colormaps ====
+
         const nestColor = Color.typedColor('yellow')
         const foodColor = Color.typedColor('blue')
         const nestColorMap = ColorMap.gradientColorMap(20, [
@@ -39,7 +41,8 @@
             turtlesSize: 3,
             turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
         }
-        // ==== Define model, view, aimator
+
+        // ==== Define model, view, anim ====
 
         const model = new Model()
         await model.startup()
@@ -52,7 +55,7 @@
             drawOptions,
         })
 
-        const aimator = new Animator(
+        const anim = new Animator(
             () => {
                 model.step()
                 view.draw()
@@ -61,18 +64,21 @@
             30 // fps
         ).startStats()
 
-        // ==== Define gui
-        const gui = new GUI({
+        // ==== Define gui commands ====
+
+        let template = {
             fps: { // slider
                 val: [40, [5, 60, 5]],
-                cmd: val => aimator.setFps(val),
+                cmd: val => anim.setFps(val),
             },
             stop: { // switch/toggle
-                val: false, // bool
-                cmd: val => { if (val) { aimator.stop() } else { aimator.start() } },
+                val: !anim.isRunning, // bool
+                cmd: val => { if (val) { anim.stop() } else { anim.start() } },
+                // cmd: val => anim.toggle(),
             },
             once: { // button
-                cmd: () => aimator.once()
+                cmd: () => anim.once()
+                //gui.update(stop, false)
             },
             width: { // slider
                 val: [500, [100, 1000, 25]],
@@ -89,21 +95,23 @@
             downloadCanvas: { // button
                 cmd: () => view.downloadCanvas()
             },
-        })
+        }
+        const gui = new GUI(template)
 
+        // ==== Define keyboard commands ====
 
-        // const gui = new dat.GUI()
-        // gui.add(aimator, 'fps', 1, 60, 1).onChange(() => aimator.reset())
-        // gui.add(aimator, 'toggle')
-        // gui.add(aimator, 'once')
-        // gui.add(view, 'width', 100, 1000, 25)
-        // gui.add(view.drawOptions, 'turtlesShape', ['bug', 'dart', 'person'])
-        // gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
-        // gui.add(view, 'downloadCanvas')
+        const keyModCmds = [
+            { key: 's', cmd: () => anim.toggle() },
+            { key: 'o', cmd: () => anim.once() },
+            { key: 'd', cmd: () => view.downloadCanvas() },
+        ]
+        const keyboard = new Keyboard(keyModCmds)
+        // const keyboard = new Keyboard(keyModCmds, 'alt')
+        keyboard.start()
 
         // ==== End, debug if needed
 
-        util.toWindow({ util, model, view, aimator, gui })
+        util.toWindow({ util, model, view, anim, gui, keyboard })
     </script>
     <div id="modelDiv"></div>
 </body>

@@ -12,10 +12,8 @@
         import ThreeDraw from '../src/ThreeDraw.js'
         import Model from '../models/LifeModel.js'
 
-        const livingColor = Color.typedColor('red')
-        const blankColor = Color.typedColor('white')
         const drawOptions = {
-            patchesColor: p => (p.living ? livingColor : blankColor),
+            patchesColor: p => (p.living ? 'red' : 'rgba(255, 99, 71, 0.2)'),
         }
 
         async function run() {

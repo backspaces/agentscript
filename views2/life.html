@@ -18,10 +18,9 @@
         await model.startup()
         model.setup()
 
-        const livingColor = Color.typedColor('red')
-        const blankColor = Color.typedColor('white')
         const drawOptions = {
-            patchesColor: p => (p.living ? livingColor : blankColor),
+            patchesColor: p => (p.living ? 'red' : 'rgba(255, 99, 71, 0.2)'),
+
         }
         const view = new TwoDraw(model, {
             div: 'modelDiv',

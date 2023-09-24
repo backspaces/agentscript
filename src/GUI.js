@@ -119,7 +119,7 @@ class GUI {
         }
 
         // initialize: set model etc initial values to this value
-        if (!['monitor', 'button'].includes(type)) cmd(val)
+        if (!['monitor', 'button', 'toggle'].includes(type)) cmd(val)
         // if (cmd && val && type !== 'monitor') cmd(val)
         // if (val === 'listen') this.setListener(key, cmd)
 
@@ -130,6 +130,9 @@ class GUI {
         }
 
         return control
+    }
+    updateGui(name, value) {
+        console.log('updateGui name, value', name, value)
     }
 
     isDatColor(val) {

@@ -172,11 +172,10 @@ class TwoDraw extends TwoView {
         if (util.isImageable(patchesColor)) {
             view.drawPatchesImage(patchesColor)
         } else {
-            // view.clear()
             if (patchesColor === 'random' || initPatches) {
-                view.clear()
+                view.clear() // patch transparent pixels do not clear the canvas!
                 view.drawPatches() // redraw cached patches colors onto our view canvas
-            } else if (typeof patchesColor === 'function') {
+            } else if (util.isFunction(patchesColor)) {
                 view.clear()
                 view.drawPatches(model.patches, p => patchesColor(p))
             } else {

@@ -1701,7 +1701,9 @@ function bars(opts) {
 					barWid = sizes[0] * xDim;
 				else
 					barWid = valToPosX(sizes[0], scaleX, xDim, xOff) - valToPosX(0, scaleX, xDim, xOff);
-				barWid = pxRound(barWid - strokeWidth);
+				if (strokeWidth >= barWid)
+					strokeWidth = 0;
+				barWid = pxRound(clamp(barWid - strokeWidth, minWidth, maxWidth));
 				xShift = (_dirX == 1 ? -strokeWidth / 2 : barWid + strokeWidth / 2);
 			}
 			else {
@@ -1722,9 +1724,14 @@ function bars(opts) {
 					}
 				}
 				let gapWid = colWid * gapFactor;
-				barWid = pxRound(min(maxWidth, max(minWidth, colWid - gapWid)) - strokeWidth - extraGap);
+				barWid = colWid - gapWid - extraGap;
+				if (strokeWidth >= barWid)
+					strokeWidth = 0;
+				if (gapWid + extraGap < 5)
+					pxRound = retArg0;
+				barWid = pxRound(clamp(colWid - gapWid, minWidth, maxWidth) - strokeWidth - extraGap);
 				xShift = (align == 0 ? barWid / 2 : align == _dirX ? 0 : barWid) - align * _dirX * extraGap / 2;
-				if (barWid > colWid)
+				if (barWid + strokeWidth > colWid)
 					bandClipNulls = false;
 			}
 			const _paths = {stroke: null, fill: null, clip: null, band: null, gaps: null, flags: BAND_CLIP_FILL | BAND_CLIP_STROKE};
