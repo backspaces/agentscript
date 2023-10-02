@@ -72,7 +72,7 @@
         "@rollup/plugin-node-resolve": "^15.0.1",
         "@rollup/plugin-terser": "^0.1.0",
         "@turf/turf": "^6.5.0",
-        "clean-jsdoc-theme": "^4.2.10",
+        "clean-jsdoc-theme": "^4.2.13",
         "esm": "^3.2.25",
         "http-server": "^14.1.1",
         "jsdoc": "4.0.2",
