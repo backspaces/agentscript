@@ -106,22 +106,41 @@ class Model {
      */
     step() {}
 
+    // // A trick to auto advance ticks every step
+    // setAutoTick(autoTick = true) {
+    //     const isAutoTick = this.hasOwnProperty('step')
+    //     if (autoTick) {
+    //         if (isAutoTick) return
+    //         this.step0 = this.step
+    //         this.step = this.stepAndTick
+    //     } else {
+    //         delete this.step
+    //         delete this.step0
+    //     }
+    // }
+    // stepAndTick() {
+    //     this.step0()
+    //     // super.step()
+    //     this.tick()
+    // }
+
     // A trick to auto advance ticks every step
     setAutoTick(autoTick = true) {
-        const isAutoTick = this.hasOwnProperty('step')
+        const isAutoTick = !!this.stepTarget
         if (autoTick) {
             if (isAutoTick) return
-            this.step0 = this.step
-            this.step = this.stepAndTick
+            this.stepTarget = this.step
+            this.step = new Proxy(this.stepTarget, {
+                apply: (target, thisArg, args) => {
+                    this.stepTarget()
+                    this.tick()
+                    // console.log('ticks', this.ticks)
+                },
+            })
         } else {
-            delete this.step
-            delete this.step0
+            this.step = this.stepTarget
+            delete this.stepTarget
         }
-    }
-    stepAndTick() {
-        this.step0()
-        // super.step()
-        this.tick()
     }
 
     /**
