@@ -9,7 +9,7 @@ export default class TSPModel extends Model {
     useInversion = true
     stopTickDifference = 500
 
-    onChange = (length, changes, ticks) => {} // called whenever a tour changes
+    // onChange = (length, changes, ticks) => {} // called whenever a tour changes
 
     // ======================
 
@@ -80,7 +80,7 @@ export default class TSPModel extends Model {
             this.bestTourLength = a.tourLength
             this.bestTourNodes = a.tourNodes
             this.bestTourTick = this.ticks
-            this.onChange(a.tourLength, this.tourChanges, this.ticks)
+            // this.onChange(a.tourLength, this.tourChanges, this.ticks)
             this.tourChanges++
             this.createTourLinks(this.bestTourNodes)
         }

@@ -13,6 +13,8 @@ export default class AntsModel extends Model {
     foodY = () => 0
     nestX = world => world.maxX - 6
     nestY = () => 0
+    foodSeekers = 0
+    nestSeekers = 0
 
     // ======================
 
@@ -57,10 +59,17 @@ export default class AntsModel extends Model {
         this.updatePatches()
     }
     updateTurtles() {
+        this.foodSeekers = 0
+        this.nestSeekers = 0
         this.turtles.ask(t => {
             if (t.id >= this.ticks) return // slowly release ants
             this.wiggleUphill(t)
             this.dropPheromone(t)
+            if (t.carryingFood) {
+                this.nestSeekers++
+            } else {
+                this.foodSeekers++
+            }
         })
     }
 

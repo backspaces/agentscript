@@ -43,9 +43,10 @@
 
         const anim = new Animator(
             () => {
+                if (model.done) anim.stop()
                 model.step()
                 view.draw()
-                if (model.done) anim.stop()
+                updatePlot()
             },
             -1, // run until model stops: best tour constant for 500 steps
             30 // 30 fps
@@ -103,32 +104,34 @@
             mouseCallback
         ).start()
 
-        // view.draw() // Draw once to get started ??
-
         // ============ Plot new tours  ==================
+
+        const pens = {
+            tourLength: 'red', // lines
+        }
         const options = {
-            width: 1000,
-            height: 500,
-            title: 'Tour Length',
+            title: 'Data',
+            width: 800,
+            height: 200,
+            // xAxisLabel: 'x', // default
         }
-        const plot = new Plot('plot', {
-            tourLength: 'blue',
-        }, options)
+        const plot = new Plot('plotDiv', pens, options)
 
-        // ============ Tour Change Callback  ==================
-
-        model.onChange = (length, changes, ticks) => {
-            const tourLength = Math.round(length)
-            plot.setData({ tourLength: tourLength })
-            console.log(
-                `new best tour at tick ${ticks}: ${length}, changes ${changes}`
-            )
+        let tourLength = -1
+        function updatePlot() {
+            if (model.bestTourLength == tourLength) return
+            tourLength = model.bestTourLength
+            pens.tourLength = tourLength
+            plot.linePlot(pens)
         }
+
+
+        // ============ Done w/ controllers!  ==================
 
         util.toWindow({ util, model, view, anim, gui, plot })
     </script>
     <div id="modelDiv"></div>
-    <div id="plot"></div>
+    <div id="plotDiv"></div>
     <!-- <div id="plot" style="width: 100vw"></div> -->
 </body>
 

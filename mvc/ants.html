@@ -15,6 +15,8 @@
         import Model from '../models/AntsModel.js'
         import GUI from '../src/GUI.js'
         import Keyboard from '../src/Keyboard.js'
+        import Plot from '../src/Plot.js'
+
 
 
         // ==== Define draw options, colors and colormaps ====
@@ -59,6 +61,7 @@
             () => {
                 model.step()
                 view.draw()
+                updatePlot()
             },
             -1, // run forever
             30 // fps
@@ -105,15 +108,34 @@
             { key: 'o', cmd: () => anim.once() },
             { key: 'd', cmd: () => view.downloadCanvas() },
         ]
-        const keyboard = new Keyboard(keyModCmds)
-        // const keyboard = new Keyboard(keyModCmds, 'alt')
-        keyboard.start()
+        const keyboard = new Keyboard(keyModCmds).start()
+
+        // ==== Setup Plot and provide an updater called by anim ====
+
+        const pens = {
+            foodSeekers: ['blue', 'thickLines'],
+            nestSeekers: ['#ffeb10', 'thickLines'],
+        }
+        const options = {
+            title: 'Data',
+            width: 800,
+            height: 200,
+            // xAxisLabel: 'x', // default
+        }
+        const plot = new Plot('plotDiv', pens, options)
+
+        function updatePlot() {
+            pens.foodSeekers = model.foodSeekers
+            pens.nestSeekers = model.nestSeekers
+            plot.linePlot(pens)
+        }
 
         // ==== End, debug if needed
 
         util.toWindow({ util, model, view, anim, gui, keyboard })
     </script>
     <div id="modelDiv"></div>
+    <div id="plotDiv"></div>
 </body>
 
 </html>

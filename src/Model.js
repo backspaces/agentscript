@@ -124,7 +124,7 @@ class Model {
     //     this.tick()
     // }
 
-    // A trick to auto advance ticks every step
+    // A trick to auto advance ticks every step using a Proxy
     setAutoTick(autoTick = true) {
         const isAutoTick = !!this.stepTarget
         if (autoTick) {

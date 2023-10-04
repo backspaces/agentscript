@@ -52,7 +52,7 @@ Our directory layout is:
 ### Developer directories:
 
 -   [bin/](https://github.com/backspaces/agentscript/tree/master/bin): workflow scripts
--   [dist/](https://unpkg.com/browse/agentscript@0.10.19/dist/): the umd and esm bundles with their min.js versions and src/.
+-   [dist/](https://unpkg.com/browse/agentscript/dist/): the umd and esm bundles with their min.js versions and src/.
 -   [test/](https://github.com/backspaces/agentscript/tree/master/test): testing using Deno with it's browser environment running all models/ using its test feature to report errors.
 -   [config/](https://github.com/backspaces/agentscript/tree/master/config): tools for creating "bundles".<br>
 
