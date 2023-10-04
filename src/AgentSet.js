@@ -55,7 +55,7 @@ class AgentSet extends AgentArray {
         }
         // Keep a list of this set's variables; see `own` below
         // REMIND: not really used. Remove? Create after setup()?
-        this.ownVariables = []
+        // this.ownVariables = []
         // Create a proto for our agents by having a defaults and instance layer
         // this.AgentClass = AgentClass
         this.agentProto = new AgentClass(this)
@@ -156,16 +156,16 @@ class AgentSet extends AgentArray {
         if (this.isBreedSet()) this.insert(a, 'id')
 
         // Make list of `a`'s vars and my ownvars.
-        const avars = a.agentSet.ownVariables
+        // const avars = a.agentSet.ownVariables
         // First remove `a`'s vars not in my ownVariables
-        for (const avar of avars) {
-            if (!this.ownVariables.includes(avar)) delete a[avar]
-        }
+        // for (const avar of avars) {
+        //     if (!this.ownVariables.includes(avar)) delete a[avar]
+        // }
         // Now add ownVariables to `a`'s vars, default to 0.
-        // If ownvar already in avars, it is not modified.
-        for (const ownvar of this.ownVariables) {
-            if (!avars.includes(ownvar)) a[ownvar] = 0
-        } // NOTE: NL uses 0, maybe we should use null?
+        // // If ownvar already in avars, it is not modified.
+        // for (const ownvar of this.ownVariables) {
+        //     if (!avars.includes(ownvar)) a[ownvar] = 0
+        // } // NOTE: NL uses 0, maybe we should use null?
 
         // Give `a` my defaults/statics
         return Object.setPrototypeOf(a, this.agentProto)

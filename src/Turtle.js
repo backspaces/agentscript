@@ -76,10 +76,10 @@ class Turtle {
             // turtle.setxy(this.x, this.y)
             turtle.setxy(this.x, this.y, this.z)
             turtle.theta = this.theta
-            // hatched turtle inherits parents' ownVariables
-            for (const key of breed.ownVariables) {
-                if (turtle[key] == null) turtle[key] = this[key]
-            }
+            // // hatched turtle inherits parents' ownVariables
+            // for (const key of breed.ownVariables) {
+            //     if (turtle[key] == null) turtle[key] = this[key]
+            // }
             init(turtle)
         })
     }
