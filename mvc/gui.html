@@ -8,12 +8,14 @@
 <body>
     <div id="modelDiv"></div>
     <script type="module">
-        import Animator from '../src/Animator.js'
-        import Mouse from '../src/Mouse.js'
+        import * as util from '../src/utils.js'
         import Model from '../models/HelloModel.js'
         import TwoDraw from '../src/TwoDraw.js'
-        import * as util from '../src/utils.js'
+        import Animator from '../src/Animator.js'
+
         import GUI from '../src/GUI.js'
+        import Mouse from '../src/Mouse.js'
+
 
         const model = new Model()
         await model.startup()
@@ -40,11 +42,11 @@
         const mouse = new Mouse(model, view, mouse => {
             const { x, y, action } = mouse
             if (action === "mousedown") {
-                aimator.stop()
+                anim.stop()
                 selectedTurtle = model.turtles.minOneOf(t => t.distanceXY(x, y))
             }
             if (action === "mouseup") {
-                aimator.start()
+                anim.start()
                 selectedTurtle = null
             }
             if (selectedTurtle) selectedTurtle.setxy(x, y)

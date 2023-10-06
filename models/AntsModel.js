@@ -3,7 +3,7 @@ import Model from '../src/Model.js'
 import * as util from '../src/utils.js'
 
 export default class AntsModel extends Model {
-    population = 255
+    population = 200
     speed = 1.0
     maxPheromone = 35
     diffusionRate = 0.3

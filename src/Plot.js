@@ -94,7 +94,7 @@ class Plot {
         let uplot = new uPlot(options, data, div)
         Object.assign(this, { div, options, data, dataArrays, uplot })
 
-        util.toWindow({ options, data, dataArrays })
+        // util.toWindow({ options, data, dataArrays })
     }
 
     createDataObject(pens) {

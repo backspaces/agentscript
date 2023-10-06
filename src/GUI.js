@@ -18,13 +18,15 @@ class GUI {
      *     ...
      * })
      */
-    constructor(template) {
+    // the default width is 245. You can change it via width below
+    constructor(template, width = null) {
         this.template = template
 
         this.controllers = {}
         this.values = {} // the key/val's from each template
 
         this.gui = new dat.GUI()
+        if (width) this.gui.width = width
         const guis = [this.gui]
 
         // this.folders['default'] = this.baseGui

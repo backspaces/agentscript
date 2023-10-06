@@ -17,7 +17,7 @@ class Keyboard {
      * in the caller's name space
      *
      *  Example:
-     *  const keyModCmds = [
+     *  const keyCommands = [
      *      // These use the default modifier key, in this case the 'alt' key
      *      { key: 'q', cmd: () => console.log('q') },
      *      { key: 'w', cmd: () => console.log('w') },
@@ -32,7 +32,7 @@ class Keyboard {
      *      { modifier: 'None', key: 'b', cmd: () => console.log('b') },
      *      { modifier: '', key: 'c', cmd: () => console.log('c') }
      *  ]
-     *  const keyboard = new Keyboard(keyModCmds, 'alt')
+     *  const keyboard = new Keyboard(keyCommands, 'alt')
      */
     // default is no modifier
     constructor(keyModObjs, defaultModifier) {
@@ -69,32 +69,10 @@ class Keyboard {
                 }
             }
 
-            // if (!modifiers.includes(modifier)) {
-            //     throw Error('Keyboard: ilegal modifier: ' + modifier)
-            // }
-
-            // if (
-            //     // modifier === 'None'
-            //     modifier === 'None' ||
-            //     modifier === '' ||
-            //     modifier === undefined
-            // ) {
-            //     modifier = ''
-            // } else {
-            //     if (!modifier && modifier === 'None') modifier = defaultModifier
-
-            //     if (modifier && !modifier.endsWith('Key')) modifier += 'Key'
-
-            //     if (modifier && !modifiers.includes(modifier))
-            //         throw Error('Keyboard: ilegal modifier' + modifier)
-            // }
-
-            // const keymod = modifier + key
             keymods[modifier + key] = { modifier, key, cmd }
         })
 
         console.log('keymods', keymods)
-        // Object.assign(this, { modifiers, defaultModifier, keymods })
         Object.assign(this, { modifiers, keymods })
     }
 

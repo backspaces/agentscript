@@ -11,19 +11,18 @@
         import TwoDraw from '../src/TwoDraw.js'
         import Animator from '../src/Animator.js'
         import Model from '../models/TspModel.js'
-        import Mouse from '../src/Mouse.js'
-        import dat from '../vendor/dat.gui.js'
 
+        import Mouse from '../src/Mouse.js'
+        import Keyboard from '../src/Keyboard.js'
+        import GUI from '../src/GUI.js'
         import Plot from '../src/Plot.js'
 
+        // ==== Define draw options ====
 
         const breedSize = { nodes: 2, travelers: 0 }
         const drawOptions = {
             patchesColor: 'black',
             turtlesShape: 'circle',
-            // turtlesSize of 0 will skip drawing this turle
-            // here "travelers" are skipped
-            // turtlesSize: t => (t.breed.name === 'nodes' ? nodeSize : 0),
             turtlesSize: t => breedSize[t.breed.name],
             turtlesColor: 'yellow',
             linksColor: 'red',
@@ -52,57 +51,74 @@
             30 // 30 fps
         ).startStats()
 
+        // ==== Define keyboard commands ====
+
+        const keyCommands = [
+            { key: 's', cmd: () => anim.toggle() },
+            { key: 'o', cmd: () => anim.once() },
+            { key: 'd', cmd: () => view.downloadCanvas() },
+        ]
+        const keyboard = new Keyboard(keyCommands).start()
+
         // =========== UI Elements ===================
 
-        const gui = new dat.GUI()
-        gui.width = 280 // increase dat.gui width
-        const miscGuis = {
-            stop: false
+        let template = {
+            fps: { // slider
+                val: [40, [5, 60, 5]],
+                cmd: val => anim.setFps(val),
+            },
+            stop: { // switch/toggle
+                val: !anim.isRunning, // bool
+                cmd: val => { if (val) { anim.stop() } else { anim.start() } },
+            },
+            once: { // button
+                cmd: () => anim.once()
+            },
+            modelWidth: { // slider
+                val: [500, [100, 1000, 25]],
+                cmd: val => view.width = val,
+            },
+            turtlesShape: { // chooser
+                val: ['circle', ['bug', 'dart', 'person', 'circle', 'arrow']],
+                cmd: val => view.drawOptions.turtlesShape = val,
+            },
+            turtlesSize: { // chooser
+                val: [3, [1, 10, 1]],
+                cmd: val => view.drawOptions.turtlesSize = val,
+            },
+            downloadCanvas: { // button
+                cmd: () => view.downloadCanvas()
+            },
+            bestTourLength: { // monitor
+                val: [model, 'bestTourLength'],
+            },
+            modelTicks: { // monitor
+                val: [model, 'ticks'],
+            },
+            downloadCanvas: { // button
+                cmd: () => view.downloadCanvas()
+            },
         }
+        const gui = new GUI(template, 280)
 
-        gui.add(anim, 'fps', 1, 60, 1)
-            .onChange(() => anim.reset())
-        gui.add(anim, 'toggle')
-            .onChange(() => miscGuis.stop = anim.isRunning())
-        gui.add(miscGuis, 'stop')
-            .listen()
-            .onChange(val => { if (val) { anim.stop() } else { anim.start() } })
-        gui.add(anim, 'once').onChange(() => miscGuis.stop = true)
-        gui.add(view, 'width', 100, 1000, 25)
-        gui.add(view.drawOptions, 'turtlesSize', 1, 10, 1)
-        gui.add(breedSize, 'nodes', 1, 10, 1)
-        gui.add(model, 'bestTourLength')
-            .listen()
-        gui.add(model, 'ticks')
-            .listen()
-        gui.add(view, 'downloadCanvas')
+        // ============ Mouse Handling ==================
 
-        // gui.addColor(view.drawOptions, 'patchesColor')
-
-        // ============ Independent Mouse Handling ==================
-
-        let dragNode
-        function mouseCallback(mouse) {
+        let selectedTurtle
+        const mouse = new Mouse(model, view, mouse => {
             const { x, y, action } = mouse
             switch (action) {
                 case 'mousedown':
-                    dragNode = model.nodes.minOneOf(t => t.distanceXY(x, y))
+                    selectedTurtle = model.nodes.minOneOf(t => t.distanceXY(x, y))
                     break
                 case 'mousedrag':
-                    if (dragNode) model.moveNode(dragNode, x, y)
+                    if (selectedTurtle) selectedTurtle.setxy(x, y)
                     break
                 case 'mouseup':
-                    dragNode = null
+                    selectedTurtle = null
                     break
             }
             view.draw() // Draw whenever mouse has an event
-        }
-
-        const mouse = new Mouse(
-            model,
-            view,
-            mouseCallback
-        ).start()
+        }).start()
 
         // ============ Plot new tours  ==================
 
@@ -113,26 +129,22 @@
             title: 'Data',
             width: 800,
             height: 200,
-            // xAxisLabel: 'x', // default
         }
         const plot = new Plot('plotDiv', pens, options)
 
-        let tourLength = -1
         function updatePlot() {
-            if (model.bestTourLength == tourLength) return
-            tourLength = model.bestTourLength
-            pens.tourLength = tourLength
+            if (model.bestTourLength === pens.tourLength) return
+            pens.tourLength = model.bestTourLength
             plot.linePlot(pens)
         }
-
 
         // ============ Done w/ controllers!  ==================
 
         util.toWindow({ util, model, view, anim, gui, plot })
     </script>
+
     <div id="modelDiv"></div>
     <div id="plotDiv"></div>
-    <!-- <div id="plot" style="width: 100vw"></div> -->
 </body>
 
 </html>
