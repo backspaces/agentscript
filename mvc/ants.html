@@ -8,11 +8,11 @@
 <body>
     <script type="module">
         import * as util from '../src/utils.js'
+        import Model from '../models/AntsModel.js'
         import TwoDraw from '../src/TwoDraw.js'
-        import Animator from '../src/Animator.js'
         import Color from '../src/Color.js'
         import ColorMap from '../src/ColorMap.js'
-        import Model from '../models/AntsModel.js'
+        import Animator from '../src/Animator.js'
 
         import Mouse from '../src/Mouse.js'
         import Keyboard from '../src/Keyboard.js'
@@ -67,6 +67,15 @@
             30 // fps
         ).startStats()
 
+        // ==== Define keyboard commands ====
+
+        const keyCommands = [
+            { key: 's', cmd: () => anim.toggle() },
+            { key: 'o', cmd: () => anim.once() },
+            { key: 'd', cmd: () => view.downloadCanvas() },
+        ]
+        const keyboard = new Keyboard(keyCommands).start()
+
         // ============ Mouse Handling ==================
 
         let selectedTurtle
@@ -85,7 +94,6 @@
             }
             view.draw() // Draw whenever mouse has an event
         }).start()
-
 
         // ==== Define gui commands ====
 
@@ -112,7 +120,7 @@
                 cmd: val => view.drawOptions.turtlesShape = val,
             },
             turtlesSize: { // chooser
-                val: [5, [1, 10, 1]],
+                val: [6, [1, 10, 1]],
                 cmd: val => view.drawOptions.turtlesSize = val,
             },
             modelTicks: { // monitor
@@ -124,15 +132,6 @@
         }
         const gui = new GUI(template)
 
-        // ==== Define keyboard commands ====
-
-        const keyCommands = [
-            { key: 's', cmd: () => anim.toggle() },
-            { key: 'o', cmd: () => anim.once() },
-            { key: 'd', cmd: () => view.downloadCanvas() },
-        ]
-        const keyboard = new Keyboard(keyCommands).start()
-
         // ==== Setup Plot and provide an updater called by anim ====
 
         const pens = {
@@ -143,7 +142,6 @@
             title: 'Data',
             width: 800,
             height: 200,
-            // xAxisLabel: 'x', // default
         }
         const plot = new Plot('plotDiv', pens, options)
 
