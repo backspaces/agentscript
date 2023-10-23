@@ -58,7 +58,8 @@
         "fixcrlf": "npx crlf --set=LF node_modules/.bin/live-server",
         "chrome": "bin/modelsinbrowser views1",
         "safari": "bin/modelsinbrowser views1 Safari",
-        "runall": "npm run run1 & npm run run2 && npm run25 run3",
+        "runcore": "npm run run1 & npm run run2 & npm run run25 & npm run  run3",
+        "runapps": "npm run runleaf & npm run runmvc & npm runmvc",
         "bar": "echo $INIT_CWD",
         "foo": "uglifycss vendor/uPlot.min.css > /tmp/upcss",
         "mytask": "cd $INIT_CWD && pwd"

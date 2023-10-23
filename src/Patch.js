@@ -26,26 +26,38 @@ import AgentList from './AgentList.js'
  *
  */
 class Patch {
-    // Set by AgentSet
-    agentSet
-    model
-    name
+    // static defaultsObj
+    // static setDefaults(obj) {
+    //     obj.turtles = null
+    //     obj.z = 0
+    //     obj.agentProto = obj
 
-    turtles
-    z = 0
+    //     this.defaultsObj = obj
+    //     // Patch.defaultsObj = obj
+    // }
 
-    // static defaultVariables() {
-    //     // Core variables for patches.
-    //     return {
-    //         turtles: undefined, // the turtles on me. Lazy evalued, see turtlesHere
-    //         z: 0, // default shared z val. Can be overridden
-    //     }
-    // }
-    // // Initialize a Patch given its Patches AgentSet.
-    // constructor() {
-    //     Object.assign(this, Patch.defaultVariables())
-    // }
-    // Getter for x,y derived from patch id, thus no setter.
+    static defaults = {
+        turtles: null,
+        z: 0,
+
+        // Set by AgentSet
+        agentSet: null,
+        model: null,
+        name: null,
+    }
+    static variables = {
+        // none
+    }
+
+    constructor() {
+        Object.assign(this, Patch.defaults)
+    }
+    newInstance(agentProto) {
+        const insstance = Object.create(agentProto)
+        Object.assign(insstance, Patch.variables)
+        return insstance
+    }
+
     get x() {
         return (this.id % this.model.world.width) + this.model.world.minX
     }
@@ -98,6 +110,7 @@ class Patch {
             value: n,
             enumerable: true,
         })
+        // console.log('n4', n, this.neighbors4)
         return n
     }
 

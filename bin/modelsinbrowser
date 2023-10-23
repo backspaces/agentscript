@@ -22,13 +22,23 @@ liveServer.start({
 })
 const root = 'http://127.0.0.1:9090'
 
+// https://developer.chrome.com/docs/devtools/open/
 async function run() {
     const models = shell.ls(`${dir}/*.html`) // Just the Model files
 
     models.forEach(model => shell.echo(model))
-    shell.exec(`open --new -a "${browser}" --args --new-window`)
+    // auto-open-devtools-for-tabs only works on a fresh browser.
+    shell.exec(
+        // `open --new -a "${browser}" --args --new-window  --auto-open-devtools-for-tabs`
+        `open --new  -a "${browser}" --args  --auto-open-devtools-for-tabs`
+    )
     await utils.pause(4000)
 
-    models.forEach(model => shell.exec(`open -a "${browser}" ${root}/${model}`))
+    models.forEach(model =>
+        shell.exec(
+            // `open -a "${browser}" --auto-open-devtools-for-tabs ${root}/${model}`
+            `open -a "${browser}" ${root}/${model}`
+        )
+    )
 }
 run()

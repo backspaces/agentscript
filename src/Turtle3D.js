@@ -19,26 +19,26 @@ const { checkArg, checkArgs } = util
  */
 
 class Turtle3D extends Turtle {
-    static defaultVariables() {
-        return {
-            atEdge: 'wrap',
-            hidden: false,
-        }
-    }
-    // Initialize a Turtle given its Turtles AgentSet.
     constructor() {
         super()
-        Object.assign(this, Turtle3D.defaultVariables())
-        // this.obj3d = new Object3D()
-        // this.obj3d.rotation.order = 'ZYX'
-        // this.reset()
-    }
-    // Called by ctor factory for each new agent.
-    // constructor above called only once per agentset due to two-headed agents.
-    agentConstructor() {
         this.obj3d = new Object3D()
-        this.obj3d.rotation.order = 'ZYX'
-        this.reset()
+
+        // util.pps(this, 'Turtle3D')
+    }
+    newInstance(agentProto) {
+        // const insstance = Object.create(agentProto)
+        // Object.assign(insstance, Turtle3D.variables)
+        const insstance = super.newInstance(agentProto)
+
+        // util.pps(insstance, 'Turtle3D instance')
+
+        insstance.obj3d = new Object3D()
+        insstance.obj3d.rotation.order = 'ZYX'
+        insstance.reset()
+
+        // util.pps(this, 'Turtle3D')
+
+        return insstance
     }
 
     /**
@@ -115,7 +115,9 @@ class Turtle3D extends Turtle {
     }
     set z(d) {
         checkArg(d)
-        this.obj3d.position.z = d
+        // this.obj3d.position.z = d
+        // This test is needed due to z getter called by super initialization.
+        if (this.obj3d) this.obj3d.position.z = d
     }
 
     // Trap super's setting of theta

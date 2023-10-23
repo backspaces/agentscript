@@ -21,11 +21,12 @@ class Patches extends AgentSet {
      * @param {Patch} AgentClass The Patch class managed by Patches
      * @param {string} name Name of the AgentSet
      */
-    constructor(model, AgentClass, name) {
+
+    constructor(model, AgentClass, name, baseSet = null) {
         // AgentSet sets these variables:
         // model, name, baseSet, world: model.world, agentProto: new AgentClass
         // REMIND: agentProto: defaults, agentSet, world, [name]=agentSet.baseSet
-        super(model, AgentClass, name)
+        super(model, AgentClass, name, baseSet)
 
         // Skip if a breedSet (don't rebuild patches!).
         if (this.isBreedSet()) return

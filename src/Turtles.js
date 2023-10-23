@@ -25,6 +25,10 @@ import AgentSet from './AgentSet.js'
 class Turtles extends AgentSet {
     constructor(model, AgentClass, name, baseSet = null) {
         super(model, AgentClass, name, baseSet)
+
+        console.log('Turtles name', name)
+        // util.pps(this, 'Turtles')
+        // util.pps(this.agentProto, 'Turtles.agentProto')
     }
 
     /**
@@ -38,9 +42,10 @@ class Turtles extends AgentSet {
     createOne(initFcn = turtle => {}) {
         const turtle = this.addAgent()
         // NetLogo docs: Creates number new turtles at the origin.
+
         // New turtles have random integer headings
-        // turtle.theta = util.randomFloat(Math.PI * 2)
-        turtle.heading = this.model.fromRads(util.randomFloat(Math.PI * 2))
+        turtle.theta = util.randomFloat(Math.PI * 2)
+        // turtle.heading = this.model.fromRads(util.randomFloat(Math.PI * 2))
         const p = turtle.patch
         if (p.turtles != null) {
             p.turtles.push(turtle)

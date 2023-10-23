@@ -15,15 +15,58 @@ import AgentArray from './AgentArray.js'
  * So *don't* do this:
  */
 class Link {
-    hidden = false
-    end0 = null // Turtles: end0 & 1 are turtle ends of the link
-    end1 = null
-    width = 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
+    // end0 = null // Turtles: end0 & 1 are turtle ends of the link
+    // end1 = null
 
-    // Set by AgentSet
-    agentSet
-    model
-    name
+    // static defaultsObj
+    // static setDefaults(obj) {
+    //     obj.width = 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
+    //     obj.hidden = false
+    //     obj.agentProto = obj
+
+    //     Link.defaultsObj = obj
+    // }
+
+    static defaults = {
+        width: 1, // THREE: must be 1. Canvas2D (unsupported)
+        hidden: false,
+
+        // Set by AgentSet
+        agentSet: null,
+        model: null,
+        name: null,
+    }
+    static variables = {
+        id: null,
+        theta: 0,
+        x: 0,
+        y: 0,
+    }
+    constructor() {
+        Object.assign(this, Link.defaults)
+    }
+    newInstance(agentProto) {
+        const insstance = Object.create(agentProto)
+        Object.assign(insstance, Link.variables)
+        return insstance
+    }
+
+    // // constructor(defaultsObj = {}) {
+    // constructor(agentProto) {
+    //     // const proto = Object.getPrototypeOf(this)
+    //     // proto.width = 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
+    //     // proto.hidden = false
+
+    //     if (!agentProto) return
+    //     util.spliceDefaults(this, agentProto)
+
+    //     // defaults.width = 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
+    //     // defaults.hidden = false
+    //     // defaults.agentProto = defaults
+
+    //     // console.log('Link')
+    //     // util.pps(this)
+    // }
 
     init(from, to) {
         this.end0 = from

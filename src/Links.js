@@ -7,6 +7,9 @@ import AgentSet from './AgentSet.js'
  */
 class Links extends AgentSet {
     // Use AgentSeet ctor: constructor (model, AgentClass, name)
+    constructor(model, AgentClass, name, baseSet = null) {
+        super(model, AgentClass, name, baseSet)
+    }
 
     // Factories:
     // Add 1 or more links from the from turtle to the to turtle(s) which

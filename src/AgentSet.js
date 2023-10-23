@@ -1,3 +1,4 @@
+// import * as util from './utils.js' // just for debugging
 import AgentArray from './AgentArray.js'
 
 /**
@@ -41,27 +42,27 @@ class AgentSet extends AgentArray {
     }
 
     constructor(model, AgentClass, name, baseSet = null) {
+        if (name.length === 0) debugger
         super() // create empty AgentArray
+
         baseSet = baseSet || this // if not a breed, set baseSet to this
         Object.assign(this, { model, name, baseSet, AgentClass })
-        // BaseSets know their breeds and keep the ID global
+
         if (this.isBaseSet()) {
+            // BaseSets know their breeds and keep the ID global
             this.breeds = {} // will contain breedname: breed entries
             this.ID = 0
-            // Breeds inherit frm their baseSet and add themselves to baseSet
         } else {
+            // Breeds inherit from their baseSet and add themselves to baseSet
             Object.setPrototypeOf(this, Object.getPrototypeOf(baseSet))
             this.baseSet.breeds[name] = this
         }
-        // Keep a list of this set's variables; see `own` below
-        // REMIND: not really used. Remove? Create after setup()?
-        // this.ownVariables = []
-        // Create a proto for our agents by having a defaults and instance layer
-        // this.AgentClass = AgentClass
-        this.agentProto = new AgentClass(this)
-        this.protoMixin(this.agentProto, AgentClass)
-        // }
+
+        console.log('AgentSet:', this)
+
+        this.protoMixin(AgentClass)
     }
+    // newAgentClass(AgentClass) {}
     /**
      * Add common variables to an Agent being added to this AgentSet.
      *
@@ -73,18 +74,28 @@ class AgentSet extends AgentArray {
      * @param {Object} agentProto A new instance of the Agent being added
      * @param {Patch|Turtle|Link} AgentClass It's Class
      */
-    protoMixin(agentProto, AgentClass) {
+    protoMixin(AgentClass) {
+        this.agentProto = new AgentClass()
+        const agentProto = this.agentProto
+
+        // if (agentProto.setBreed) {
+        //     console.log('agentProto.setBreed already set', this, agentProto)
+        //     // return
+        // }
+
+        // if (agentProto[this.baseSet.name]) {
+        //     console.log('Duplicate agentProto name', this.baseSet.name)
+        //     // return
+        // }
+
         Object.assign(agentProto, {
             agentSet: this,
             model: this.model,
-            // world: this.world
         })
         agentProto[this.baseSet.name] = this.baseSet
 
-        // if (this.isBaseSet()) {
-        // Model.reset should not redefine these.
-        if (!AgentClass.prototype.setBreed) {
-            Object.assign(AgentClass.prototype, {
+        if (!agentProto.setBreed) {
+            Object.assign(agentProto, {
                 setBreed(breed) {
                     breed.setBreed(this)
                 },
@@ -95,11 +106,13 @@ class AgentSet extends AgentArray {
                     return this.agentSet === breed
                 },
             })
-            Object.defineProperty(AgentClass.prototype, 'breed', {
+            Object.defineProperty(agentProto, 'breed', {
                 get: function () {
                     return this.agentSet
                 },
             })
+        } else {
+            console.log('protoMixin: agentClass.proto already set', AgentClass)
         }
     }
 
@@ -112,12 +125,15 @@ class AgentSet extends AgentArray {
      */
     addAgent(o = undefined) {
         // o only for breeds adding themselves to their baseSet
-        o = o || Object.create(this.agentProto) // REMIND: Simplify! Too slick.
+        // o = o || Object.create(this.agentProto) // REMIND: Simplify! Too slick.
+        // o = o || new this.AgentClass(this.agentProto) // REMIND: Simplify! Too slick.
+        o = o || this.agentProto.newInstance(this.agentProto) // REMIND: Simplify! Too slick.
+        // o = o || new this.AgentClass() // REMIND: Simplify! Too slick.
         if (this.isBreedSet()) {
             this.baseSet.addAgent(o)
         } else {
             o.id = this.ID++
-            if (o.agentConstructor) o.agentConstructor()
+            // if (o.agentConstructor) o.agentConstructor()
         }
         this.push(o)
         return o
@@ -141,6 +157,7 @@ class AgentSet extends AgentArray {
 
         return this
     }
+
     /**
      * Move an agent from its AgentSet/breed to be in this AgentSet/breed
      *
@@ -150,25 +167,45 @@ class AgentSet extends AgentArray {
     setBreed(a) {
         // change agent a to be in this breed
         // Return if `a` is already of my breed
-        if (a.agentSet === this) return
+        // if (a.agentSet === this) return
+        if (a.breed.name === this.name) {
+            // console.log('setBreed already has', this.name)
+            return
+        }
         // Remove/insert breeds (not baseSets) from their agentsets
-        if (a.agentSet.isBreedSet()) a.agentSet.remove(a, 'id')
-        if (this.isBreedSet()) this.insert(a, 'id')
-
-        // Make list of `a`'s vars and my ownvars.
-        // const avars = a.agentSet.ownVariables
-        // First remove `a`'s vars not in my ownVariables
-        // for (const avar of avars) {
-        //     if (!this.ownVariables.includes(avar)) delete a[avar]
-        // }
-        // Now add ownVariables to `a`'s vars, default to 0.
-        // // If ownvar already in avars, it is not modified.
-        // for (const ownvar of this.ownVariables) {
-        //     if (!avars.includes(ownvar)) a[ownvar] = 0
-        // } // NOTE: NL uses 0, maybe we should use null?
+        if (a.agentSet.isBreedSet()) {
+            a.agentSet.remove(a, 'id')
+            // console.log('removing breed:', a)
+        }
+        if (this.isBreedSet()) {
+            this.insert(a, 'id')
+            // console.log('inserting breed:', a)
+        }
 
         // Give `a` my defaults/statics
         return Object.setPrototypeOf(a, this.agentProto)
+    }
+    /**
+     * Set a default value shared by all Agents in this AgentSet
+     *
+     * @param {String} name The name of the shared value
+     * @param {any} value
+     * @returns {AgentSet} This AgentSet
+     */
+    setDefault(name, value) {
+        this.agentProto[name] = value
+        return this
+    }
+
+    /**
+     * Return a default, shared value
+     *
+     * @param {String} name The name of the default
+     * @returns {any} The default value
+     */
+    getDefault(name) {
+        return this.agentProto[name]
+        // return this.defaults[name]
     }
 
     /**
@@ -221,27 +258,6 @@ class AgentSet extends AgentArray {
     clear() {
         // die() is an agent method. sets it's id to -1
         while (!this.isEmpty()) this.last().die()
-    }
-
-    /**
-     * Set a default value shared by all Agents in this AgentSet
-     *
-     * @param {String} name The name of the shared value
-     * @param {any} value
-     * @returns {AgentSet} This AgentSet
-     */
-    setDefault(name, value) {
-        this.agentProto[name] = value
-        return this
-    }
-    /**
-     * Return a default, shared value
-     *
-     * @param {String} name The name of the default
-     * @returns {any} The default value
-     */
-    getDefault(name) {
-        return this.agentProto[name]
     }
 
     /**

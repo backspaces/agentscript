@@ -14,19 +14,48 @@ import * as util from './utils.js'
  */
 
 class Turtle {
-    atEdge = 'wrap'
-    hidden = false
-    // Set by AgentSet
-    agentSet
-    model
-    name
+    // id
+    // theta = 0
+    // x = 0
+    // y = 0
 
-    // Called by Turtle factories, not programmers
-    agentConstructor() {
-        this.theta = null
-        this.x = 0
-        this.y = 0
-        this.agentSet.setDefault('z', null)
+    // static defaultsObj
+    // static setDefaults(obj) {
+    //     obj.atEdge = 'wrap'
+    //     obj.hidden = false
+    //     obj.z = 0
+    //     obj.agentProto = obj
+
+    //     this.defaultsObj = obj
+    //     // Turtle.defaultsObj = obj
+    // }
+
+    static defaults = {
+        atEdge: 'wrap',
+        hidden: false,
+        z: 0,
+
+        // Set by AgentSet
+        agentSet: null,
+        model: null,
+        name: null,
+    }
+    static variables = {
+        id: null,
+        theta: 0,
+        x: 0,
+        y: 0,
+    }
+
+    constructor() {
+        Object.assign(this, Turtle.defaults)
+
+        // util.pps(this, 'Turtle')
+    }
+    newInstance(agentProto) {
+        const insstance = Object.create(agentProto)
+        Object.assign(insstance, Turtle.variables)
+        return insstance
     }
 
     /**

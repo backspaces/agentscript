@@ -334,13 +334,19 @@ class AgentArray extends Array {
     // Array unchanged if item not found.
     remove(o, f) {
         const i = this.agentIndex(o, f)
-        if (i !== -1) this.splice(i, 1)
-        else util.warn(`remove: ${o} not in AgentArray`)
+        if (i !== -1) {
+            this.splice(i, 1)
+        } else {
+            console.log(`remove: ${o.id} not in AgentArray`)
+        }
         return this // chaining
     }
     insert(o, f) {
         const i = this.sortedIndex(o, f)
-        if (this[i] === o) throw Error('insert: item already in AgentArray')
+        if (this[i] === o) {
+            console.log(`insert: item ${o.id} already in AgentArray`)
+            return
+        }
         this.splice(i, 0, o) // copyWithin?
     }
 
@@ -433,7 +439,8 @@ class AgentArray extends Array {
     // See [Fisher-Yates-Knuth shuffle](https://goo.gl/fWNFf)
     // for better approach for large n.
     nOf(n) {
-        if (n > this.length) throw Error('nOf: n larger than AgentArray')
+        if (n > this.length)
+            throw Error(`nOf: n larger than AgentArray: ${n} ${this.length}`)
         if (n === this.length) return this
         const result = new AgentArray()
         while (result.length < n) {

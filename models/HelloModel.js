@@ -12,9 +12,10 @@ class HelloModel extends Model {
 
     // We can use Model's constructor, due to using Model's default World.
     // If you pass in world options, Model will use them
-    // constructor() {
-    //     super() // use default world options.
-    // }
+    // undefined =>> use super's worldOptions
+    constructor(worldOptions = undefined) {
+        super(worldOptions)
+    }
 
     setup() {
         this.turtles.setDefault('atEdge', 'bounce')
