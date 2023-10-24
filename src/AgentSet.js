@@ -62,7 +62,6 @@ class AgentSet extends AgentArray {
 
         this.protoMixin(AgentClass)
     }
-    // newAgentClass(AgentClass) {}
     /**
      * Add common variables to an Agent being added to this AgentSet.
      *
@@ -124,16 +123,11 @@ class AgentSet extends AgentArray {
      * Adds the `id` property to Agent. Increment AgentSet `ID`.
      */
     addAgent(o = undefined) {
-        // o only for breeds adding themselves to their baseSet
-        // o = o || Object.create(this.agentProto) // REMIND: Simplify! Too slick.
-        // o = o || new this.AgentClass(this.agentProto) // REMIND: Simplify! Too slick.
         o = o || this.agentProto.newInstance(this.agentProto) // REMIND: Simplify! Too slick.
-        // o = o || new this.AgentClass() // REMIND: Simplify! Too slick.
         if (this.isBreedSet()) {
             this.baseSet.addAgent(o)
         } else {
             o.id = this.ID++
-            // if (o.agentConstructor) o.agentConstructor()
         }
         this.push(o)
         return o
@@ -270,68 +264,10 @@ class AgentSet extends AgentArray {
     ask(fcn) {
         if (this.length === 0) return
         const lastID = this.last().id // would fail w/o 0 check above
-        // for (let i = 0; this[i].id <= lastID; i++) { // nope.
         for (let i = 0; i < this.length && this[i].id <= lastID; i++) {
             fcn(this[i], i, this)
         }
     }
-
-    // /**
-    //  * A much stronger version of ask(fcn) with stronger mutability guards.
-    //  *
-    //  * @param {Function} fcn fcn(agent, index?, array?)
-    //  */
-    // askSet(fcn) {
-    //     // Manages immutability reasonably well.
-    //     if (this.length === 0) return
-    //     // Patches are static
-    //     if (this.name === 'patches') super.forLoop(fcn)
-    //     else if (this.isBaseSet()) this.baseSetAsk(fcn)
-    //     else if (this.isBreedSet()) this.cloneAsk(fcn)
-    // }
-
-    // // An ask function for mutable baseSets.
-    // // BaseSets can only add past the end of the array.
-    // // This allows us to manage mutations by allowing length change,
-    // // and managing deletions only within the original length.
-    // baseSetAsk(fcn) {
-    //     if (this.length === 0) return
-    //     const lastID = this.last().id
-
-    //     // Added obj's have id > lastID. Just check for deletions.
-    //     // There Be Dragons:
-    //     // - AgentSet can become length 0 if all deleted
-    //     // - For loop tricky:
-    //     //   - i can become negative w/in loop:
-    //     //   - i can become bigger than current AgentSet
-    //     //   - Guard w/ i<len & i>=0
-    //     for (let i = 0; i < this.length; i++) {
-    //         const obj = this[i]
-    //         const id = obj.id
-    //         if (id > lastID) break
-    //         fcn(obj, i, this)
-    //         if (i >= this.length) break
-    //         if (this[i].id > id) {
-    //             while (i >= 0 && this[i].id > id) i-- // ok if -1
-    //         }
-    //     }
-    // }
-
-    // // For breeds, mutations can occur in many ways.
-    // // This solves this by cloning the initial array and
-    // // managing agents that have died or changed breed.
-    // // In other words, we can be concerned only with mutations
-    // // of the agents themselves.
-    // cloneAsk(fcn) {
-    //     const clone = this.clone()
-    //     for (let i = 0; i < clone.length; i++) {
-    //         const obj = clone[i]
-    //         // obj.id > 0: obj.die() sets id to -1
-    //         if (obj.breed == this && obj.id > 0) {
-    //             fcn(obj, i, clone)
-    //         }
-    //     }
-    // }
 }
 
 export default AgentSet

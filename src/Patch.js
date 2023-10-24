@@ -26,16 +26,6 @@ import AgentList from './AgentList.js'
  *
  */
 class Patch {
-    // static defaultsObj
-    // static setDefaults(obj) {
-    //     obj.turtles = null
-    //     obj.z = 0
-    //     obj.agentProto = obj
-
-    //     this.defaultsObj = obj
-    //     // Patch.defaultsObj = obj
-    // }
-
     static defaults = {
         turtles: null,
         z: 0,

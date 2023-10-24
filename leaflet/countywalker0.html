@@ -26,7 +26,7 @@
         const counties = await fetch('../models/data/nmcounties.json').then(resp => resp.json())
         const world = new GeoWorld({ bbox: counties, patchesWidth: 100 })
         const model = new CountiesModel(world)
-        // const model = new CountiesModel() // default: { bbox: nmcounties.json, patchesWidth: 100 }
+
         await model.startup()
         model.setup()
 
@@ -46,7 +46,6 @@
         // ===== Start of map & layers
         const bbox = model.world.bbox
         const bboxCenter = model.world.bboxCenter()
-        // const counties = model.world.geojson
 
         // ===== The map using the div, model center and Z. World is a GeoWorld
         const zoom = 7

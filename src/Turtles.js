@@ -25,10 +25,7 @@ import AgentSet from './AgentSet.js'
 class Turtles extends AgentSet {
     constructor(model, AgentClass, name, baseSet = null) {
         super(model, AgentClass, name, baseSet)
-
         console.log('Turtles name', name)
-        // util.pps(this, 'Turtles')
-        // util.pps(this.agentProto, 'Turtles.agentProto')
     }
 
     /**

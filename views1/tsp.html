@@ -13,9 +13,6 @@
         await model.startup()
         model.setup()
 
-        // await util.timeoutLoop(() => {
-        //     model.step()
-        // }, 500)
         util.repeat(500, model.step)
 
         const sample = util.sampleModel(model)

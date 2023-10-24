@@ -14,22 +14,6 @@ import * as util from './utils.js'
  */
 
 class Turtle {
-    // id
-    // theta = 0
-    // x = 0
-    // y = 0
-
-    // static defaultsObj
-    // static setDefaults(obj) {
-    //     obj.atEdge = 'wrap'
-    //     obj.hidden = false
-    //     obj.z = 0
-    //     obj.agentProto = obj
-
-    //     this.defaultsObj = obj
-    //     // Turtle.defaultsObj = obj
-    // }
-
     static defaults = {
         atEdge: 'wrap',
         hidden: false,
@@ -49,8 +33,6 @@ class Turtle {
 
     constructor() {
         Object.assign(this, Turtle.defaults)
-
-        // util.pps(this, 'Turtle')
     }
     newInstance(agentProto) {
         const insstance = Object.create(agentProto)

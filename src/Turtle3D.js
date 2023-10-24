@@ -21,22 +21,15 @@ const { checkArg, checkArgs } = util
 class Turtle3D extends Turtle {
     constructor() {
         super()
+        // needed to avoid Turtle z setting. Remove after fixing z gatters
         this.obj3d = new Object3D()
-
-        // util.pps(this, 'Turtle3D')
     }
     newInstance(agentProto) {
-        // const insstance = Object.create(agentProto)
-        // Object.assign(insstance, Turtle3D.variables)
         const insstance = super.newInstance(agentProto)
-
-        // util.pps(insstance, 'Turtle3D instance')
 
         insstance.obj3d = new Object3D()
         insstance.obj3d.rotation.order = 'ZYX'
         insstance.reset()
-
-        // util.pps(this, 'Turtle3D')
 
         return insstance
     }
@@ -48,8 +41,6 @@ class Turtle3D extends Turtle {
         this.obj3d.position.set(0, 0, 0)
         this.obj3d.rotation.set(0, 0, 0)
         this.heading = 0
-        // this.pitch = 0
-        // this.roll = 0
     }
     /**
      * Set's this turtle's 3D, x y z, position
@@ -61,8 +52,6 @@ class Turtle3D extends Turtle {
     setxyz(x, y, z) {
         checkArgs(arguments)
         super.setxy(x, y, z)
-        // setxy sets this.x,y,z, includes us.
-        // this.obj3d.position.set(x, y, z)
     }
     getxyz() {
         return this.obj3d.position.toArray()

@@ -15,18 +15,6 @@ import AgentArray from './AgentArray.js'
  * So *don't* do this:
  */
 class Link {
-    // end0 = null // Turtles: end0 & 1 are turtle ends of the link
-    // end1 = null
-
-    // static defaultsObj
-    // static setDefaults(obj) {
-    //     obj.width = 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
-    //     obj.hidden = false
-    //     obj.agentProto = obj
-
-    //     Link.defaultsObj = obj
-    // }
-
     static defaults = {
         width: 1, // THREE: must be 1. Canvas2D (unsupported)
         hidden: false,
@@ -50,23 +38,6 @@ class Link {
         Object.assign(insstance, Link.variables)
         return insstance
     }
-
-    // // constructor(defaultsObj = {}) {
-    // constructor(agentProto) {
-    //     // const proto = Object.getPrototypeOf(this)
-    //     // proto.width = 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
-    //     // proto.hidden = false
-
-    //     if (!agentProto) return
-    //     util.spliceDefaults(this, agentProto)
-
-    //     // defaults.width = 1 // THREE: must be 1. Canvas2D (unsupported) has widths.
-    //     // defaults.hidden = false
-    //     // defaults.agentProto = defaults
-
-    //     // console.log('Link')
-    //     // util.pps(this)
-    // }
 
     init(from, to) {
         this.end0 = from
