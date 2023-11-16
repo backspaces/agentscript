@@ -26,10 +26,7 @@ class Mouse {
     }
 
     /**
-     * Start/stop the mouseListeners.  Note that NetLogo's model is to have
-     * mouse move events always on, rather than starting/stopping them
-     * on mouse down/up.  We may want do make that optional, using the
-     * more standard down/up enabling move events.
+     * Start the mouseListeners.
      * @returns this Return this instance for chaining
      */
     start() {
@@ -39,6 +36,11 @@ class Mouse {
         this.isRunning = true
         return this // chaining
     }
+
+    /**
+     * Start the mouseListeners.
+     * @returns this Return this instance for chaining
+     */
     stop() {
         // Note: multiple calls safe
         this.canvas.removeEventListener('mousedown', this.callMouseHandler)

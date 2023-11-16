@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: GettingStarted</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: GettingStarted</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>GettingStarted</h2>
+</header>
+
+<article>
+    <h1 id="overview">Overview</h1>
+<p>AgentScript runs in the browser. This means the models you create will be imbedded
+within an html file. It looks like these:</p>
+<h2 id="inline-model">Inline Model</h2>
+<pre class="prettyprint source lang-html"><code>&lt;html>
+    &lt;head>
+        &lt;title>Hello&lt;/title>
+    &lt;/head>
+
+    &lt;body>
+        &lt;script type=&quot;module&quot;>
+            // Your JavaScript model goes here
+        &lt;/script>
+
+        &lt;!-- You need a html &lt;div> for the model to run in (note html's comment style) -->
+        &lt;div id=&quot;modelDiv&quot;>&lt;/div>
+    &lt;/body>
+&lt;/html>
+</code></pre>
+<h2 id="external-model">External Model</h2>
+<p>You can have your Model in an external JavaScript file. The External Model would change to:</p>
+<p>HelloModel.js</p>
+<pre class="prettyprint source lang-javascript"><code>// Import external modules need by this model
+import Model from '../src/Model.js' // The URL for Model.js
+import * as util from '../src/utils.js'
+
+class HelloModel extends Model {
+    constructor(worldOptions = undefined) {
+        super(worldOptions)
+    }
+
+    async startup() {
+        // Your code to fetch external data here. Often not needed. Expert note:
+        // &quot;async&quot; means this uses Promises and is invoked by &quot;async startup()&quot;
+    }
+
+    setup() {
+        // Your initialization goes here
+    }
+
+    step() {
+        // Each step changes the model. That code goese here
+    }
+}
+
+export default HelloModel
+</code></pre>
+<p>The HTML is like the Inline Model above</p>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot;>
+    // Your JavaScript model goes here
+&lt;/script>
+</code></pre>
+<p>but with the</p>
+<blockquote>
+<p><em>// Your JavaScript model goes here</em></p>
+</blockquote>
+<p>replaced by:</p>
+<pre class="prettyprint source lang-javascript"><code>import Model from '../models/HelloModel.js' // URL for where HelloModel.js is
+</code></pre>
+<h2 id="notes">Notes</h2>
+<p>The use of &quot;../&quot; in the import URLs above are due to the file layouts:
+All the External Model files are in the top lever models/ directory while
+the two imports are in the top level src/ dir. So &quot;../&quot; gets me to the top level
+and &quot;../src&quot; into the src/ directory.</p>
+<p>Here is HelloModel.js running withiin the hello.html HTML file:
+<a href="../views1/hello.html">views1/hello.html</a></p>
+<p>You'll notice that the model simply runs 500 steps then prints out a random
+sampling of its result.</p>
+<p>Where's the pretty View?</p>
+<h2 id="views-(model%2Fview%2Fcontroller)">Views (Model/View/Controller)</h2>
+<p>The reason for this is that AgentScript uses the Model/View/Controller (MVC) architecture.
+In this case, it means the Model, by itself, is simple Data in, and updated each step().
+Thus far we've only discussed the Model. So views1/hello.html just shows the Model.</p>
+<p>Here a 2D view: <a href="../views2/hello.html">views2/hello.html</a></p>
+<p>Because the Model is separate, it is easy to create additional views as well.</p>
+<p>Here are a 2.5D and 3D version with little change.</p>
+<p>Here's 2.5D (simply adding Z): <a href="../views25/hello3d.html">views25/hello3d.html</a></p>
+<p>And here a true 3D, with Yaw, Pitch, Roll and 3D turtles: <a href="../views3/hello3d.html">views3/hello3d.html</a></p>
+<p>Because the MVC components are separate modules, it's quite easy to put Models
+in different environments, as we show above with 2D, 2.5D and 3D Vviews.
+Even more flexiblity will show up when we embed Models with 2D Views onto Maps!</p>
+<p>BTW: MVC makes building Models simpler: use the views1 &quot;View&quot; above to run just the Model.
+Then when it runs without problems, add a View.</p>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-src_geojson.html">src/geojson</a></li><li><a href="module-src_gis.html">src/gis</a></li><li><a href="module-src_utils.html">src/utils</a></li></ul><h3>Namespaces</h3><ul><li><a href="Color.html">Color</a></li><li><a href="ColorMap.html">ColorMap</a></li></ul><h3>Classes</h3><ul><li><a href="AgentArray.html">AgentArray</a></li><li><a href="AgentList.html">AgentList</a></li><li><a href="AgentSet.html">AgentSet</a></li><li><a href="Animator.html">Animator</a></li><li><a href="DataSet.html">DataSet</a></li><li><a href="GUI.html">GUI</a></li><li><a href="GeoDataSet.html">GeoDataSet</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Link.html">Link</a></li><li><a href="Links.html">Links</a></li><li><a href="Model.html">Model</a></li><li><a href="Model3D.html">Model3D</a></li><li><a href="Mouse.html">Mouse</a></li><li><a href="Patch.html">Patch</a></li><li><a href="Patches.html">Patches</a></li><li><a href="RGBDataSet.html">RGBDataSet</a></li><li><a href="ThreeDraw.html">ThreeDraw</a></li><li><a href="Turtle.html">Turtle</a></li><li><a href="Turtle3D.html">Turtle3D</a></li><li><a href="Turtles.html">Turtles</a></li><li><a href="TwoDraw.html">TwoDraw</a></li><li><a href="World.html">World</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-GettingStarted.html">GettingStarted</a></li><li><a href="tutorial-JavaScript.html">JavaScript</a></li><li><a href="tutorial-Snippets.html">Snippets</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Nov 16 2023 11:00:09 GMT-0700 (Mountain Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

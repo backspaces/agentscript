@@ -511,10 +511,10 @@ export class Obj3DMesh extends BaseMesh {
             (lastLen > agents.length || agents.last().id !== lastID)
         ) {
             // remove dead agents
-            console.log('look for dead agents')
+            // console.log('look for dead agents')
             this.meshes.forEach((mesh, agent) => {
                 if (mesh.userData.agent.id === -1) {
-                    console.log('found one:', mesh.userData.agent)
+                    // console.log('found one:', mesh.userData.agent)
                     disposeMesh(mesh)
                     this.meshes.delete(agent)
                 }

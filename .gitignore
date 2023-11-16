@@ -15,6 +15,7 @@ yarn-error.log
 /Attic/
 /test/samples.json
 /tests/
+/simple/
 
 # package-lock.json
 # yarn.lock

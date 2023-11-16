@@ -1,20 +1,30 @@
 {
     "source": {
-        "include": ["src", "README.md"],
+        "include": ["README.md", "src"],
+        "exclude": [],
         "includePattern": ".js$",
-        "excludePattern": "(node_modules/|docs)"
+        "excludePattern": "(steg|AvalancheModel)"
     },
     "plugins": ["plugins/markdown"],
     "opts": {
         "encoding": "utf8",
         "readme": "./README.md",
         "destination": "docs/",
+        "tutorials": "./tutorials",
+        "--template": "node_modules/clean-jsdoc-theme",
+
+        "templates": {
+            "default": {
+                "staticFiles": {
+                    "include": ["./tutorials/static"]
+                },
+                "includeDate": false
+            }
+        },
+
         "recurse": true,
-
         "verbose": true,
-        "template": "node_modules/clean-jsdoc-theme",
         "displayModuleHeader": true,
-
         "resizeable": {
             "navbar": {
                 "min": "300",
@@ -23,10 +33,18 @@
         },
 
         "theme_opts": {
-            "sections": ["Classes", "Modules", "Global"],
+            "sections": [
+                "Classes",
+                "Modules",
+                "Global",
+                "Tutorials",
+                "Externals"
+            ],
             "default_theme": "dark",
             "sort": false,
             "footer": "AgentScript version: 0.10.20 using clean-jsdoc-theme",
+            "static_dir": ["./tutorials/static"],
+
             "menu": [
                 {
                     "title": "Github",
@@ -37,6 +55,11 @@
                     "title": "npm",
                     "id": "npm",
                     "link": "https://www.npmjs.com/package/agentscript"
+                },
+                {
+                    "title": "unpkg",
+                    "id": "unpkg",
+                    "link": "https://unpkg.com/browse/agentscript/"
                 }
             ]
         }

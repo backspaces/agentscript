@@ -1,31 +1,29 @@
 class Keyboard {
     /**
      * Creates an instance of Keyboard.
+     * The objects in the keyModObjs look like:
      *
      * @constructor
-     * @param {{}} [keyModObjs=[]] an array of objects
-     * @param {*} [defaultModifier=undefined] if no modifier, use the default if given
-     * The objects in the keyModObjs look like:
+     * @param {Object[]} Commands array of keyboard command objects
+     * @param {String} ModifierKey default modifier key(alt, shift, ..)
+     *
+     * @example
+     * // A command object looks like:
      * {
-     *     modifier: 'alt',
      *     key: 's',
-     *     cmd: () => anim.start()
+     *     cmd: () => anim.start(),
+     *     modifier: 'alt', // if messing, use the constructor's default modifier
      * }
-     * If modifier = '', then no modifier is used
      *
-     * The cmd is generally an arrow function to insure it executes
-     * in the caller's name space
      *
-     *  Example:
+     * @example
+     * // The array of keyboard commands looks like:
      *  const keyCommands = [
      *      // These use the default modifier key, in this case the 'alt' key
      *      { key: 'q', cmd: () => console.log('q') },
-     *      { key: 'w', cmd: () => console.log('w') },
      *      { key: '2', cmd: () => console.log('2') },
      *      { key: 'F2', cmd: () => console.log('F2') },
-     *      { key: 'Backspace', cmd: () => console.log('Backspace') },
      *      { key: 'ArrowDown', cmd: () => console.log('ArrowDown') },
-     *      { key: 'Enter', cmd: () => console.log('Enter') },
      *      { key: 'Escape', cmd: () => console.log('Escape') },
      *      // Here we override the default modifier key
      *      { modifier: 'shiftKey', key: 'a', cmd: () => console.log('shift A') },
@@ -34,6 +32,7 @@ class Keyboard {
      *  ]
      *  const keyboard = new Keyboard(keyCommands, 'alt')
      */
+
     // default is no modifier
     constructor(keyModObjs, defaultModifier) {
         const modifiers = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey']

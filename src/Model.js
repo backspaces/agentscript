@@ -19,14 +19,10 @@ import Link from './Link.js'
  *
  * Convention: Three abstract methods are provided by the modeler
  *
- * - Startup(): (Optional) Called once to import images, data etc
- * - Setup(): Called to initialize the model state.
- * - Step(): Step the model. Will advance ticks.
- *
- * @param {Object|World} [worldOptions=World.defaultOptions()]
- * Can be Object of min/max X,Y,Z values or an instance of World or GeoWorld
+ * - startup(): (Optional) Called once to import images, data etc
+ * - setup(): Called to initialize the model state.
+ * - step(): Step the model. Will advance ticks.
  */
-//  * @param {boolean} [autoTick=true] Automatically advancee tick count each step if true
 
 class Model {
     world
@@ -35,6 +31,17 @@ class Model {
     links
     ticks
 
+    /**
+     * Creates an instance of Model.
+     * The worldOptions define the coordinate system for this model
+     * The  {@link World} options sets xMin, xMax, yMin, yMax
+     * and when using 3D: zMin, zMax
+     *
+     * Fine point: Can also be an instance of World or GeoWorld
+     *
+     * @constructor
+     * @param {Object} [worldOptions=World.defaultOptions()]
+     */
     constructor(worldOptions = World.defaultOptions()) {
         this.resetModel(worldOptions)
         this.setAutoTick(true)
@@ -83,6 +90,7 @@ class Model {
 
     /**
      * An abstract method to perform one-time initialization.
+     * Subclasses provide their versions of this to import data.
      *
      * @abstract
      */
@@ -90,6 +98,7 @@ class Model {
 
     /**
      * An abstract method for initializing the model
+     * Subclasses provide their version of this to initialice the model
      *
      * Note: can be used with reset(). This will reinitialize
      * the Patches, Turtles, Links for re-running the model
@@ -99,6 +108,7 @@ class Model {
      * @abstract
      */
     setup() {}
+
     /**
      * An abstract method to run the model one step.
      *

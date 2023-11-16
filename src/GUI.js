@@ -71,12 +71,12 @@ class GUI {
         throw Error('GUI type error, val: ' + val + ' cmd: ' + cmd)
     }
 
-    /**
-     *
-     * @param {Object} obj A gui object with two optional objects: 'val' and 'cmd'
-     * @param {string} key The name of the gui
-     * @returns A dat.gui control object
-     */
+    // /**
+    //  *
+    //  * @param {Object} obj A gui object with two optional objects: 'val' and 'cmd'
+    //  * @param {string} key The name of the gui
+    //  * @returns A dat.gui control object
+    //  */
     addUI(obj, key) {
         let { val, cmd } = obj
         const type = this.type(obj)

@@ -58,7 +58,7 @@ class AgentSet extends AgentArray {
             this.baseSet.breeds[name] = this
         }
 
-        console.log('AgentSet:', this)
+        // console.log('AgentSet:', this)
 
         this.protoMixin(AgentClass)
     }
