@@ -1701,7 +1701,7 @@ function bars(opts) {
 					barWid = sizes[0] * xDim;
 				else
 					barWid = valToPosX(sizes[0], scaleX, xDim, xOff) - valToPosX(0, scaleX, xDim, xOff);
-				if (strokeWidth >= barWid)
+				if (strokeWidth >= barWid / 2)
 					strokeWidth = 0;
 				barWid = pxRound(clamp(barWid - strokeWidth, minWidth, maxWidth));
 				xShift = (_dirX == 1 ? -strokeWidth / 2 : barWid + strokeWidth / 2);
@@ -1725,7 +1725,7 @@ function bars(opts) {
 				}
 				let gapWid = colWid * gapFactor;
 				barWid = colWid - gapWid - extraGap;
-				if (strokeWidth >= barWid)
+				if (strokeWidth >= barWid / 2)
 					strokeWidth = 0;
 				if (gapWid + extraGap < 5)
 					pxRound = retArg0;
@@ -1796,6 +1796,10 @@ function bars(opts) {
 			}
 			if (strokeWidth > 0)
 				_paths.stroke = multiPath ? strokePaths : stroke;
+			else if (!multiPath) {
+				_paths._fill = series.width == 0 ? series._fill : series._stroke ?? series._fill;
+				_paths.width = 0;
+			}
 			_paths.fill = multiPath ? fillPaths : stroke;
 			return _paths;
 		});
@@ -2778,22 +2782,22 @@ function uPlot(opts, data, then) {
 	function drawSeries() {
 		if (dataLen > 0) {
 			series.forEach((s, i) => {
-				if (i > 0 && s.show && s._paths == null) {
-					let _idxs = mode == 2 ? [0, data[i][0].length - 1] : getOuterIdxs(data[i]);
-					s._paths = s.paths(self, i, _idxs[0], _idxs[1]);
+				if (i > 0 && s.show) {
+					cacheStrokeFill(i, false);
+					cacheStrokeFill(i, true);
+					if (s._paths == null) {
+						let _idxs = mode == 2 ? [0, data[i][0].length - 1] : getOuterIdxs(data[i]);
+						s._paths = s.paths(self, i, _idxs[0], _idxs[1]);
+					}
 				}
 			});
 			series.forEach((s, i) => {
 				if (i > 0 && s.show) {
 					if (ctxAlpha != s.alpha)
 						ctx.globalAlpha = ctxAlpha = s.alpha;
+					s._paths != null && drawPath(i, false);
 					{
-						cacheStrokeFill(i, false);
-						s._paths && drawPath(i, false);
-					}
-					{
-						cacheStrokeFill(i, true);
-						let _gaps = s._paths ? s._paths.gaps : null;
+						let _gaps = s._paths != null ? s._paths.gaps : null;
 						let show = s.points.show(self, i, i0, i1, _gaps);
 						let idxs = s.points.filter(self, i, show, _gaps);
 						if (show || idxs) {
@@ -2815,11 +2819,17 @@ function uPlot(opts, data, then) {
 	}
 	function drawPath(si, _points) {
 		let s = _points ? series[si].points : series[si];
-		let strokeStyle = s._stroke;
-		let fillStyle   = s._fill;
-		let { stroke, fill, clip: gapsClip, flags } = s._paths;
+		let {
+			stroke,
+			fill,
+			clip: gapsClip,
+			flags,
+			_stroke: strokeStyle = s._stroke,
+			_fill:   fillStyle   = s._fill,
+			_width:  width       = s.width,
+		} = s._paths;
+		width = roundDec(width * pxRatio, 3);
 		let boundsClip = null;
-		let width = roundDec(s.width * pxRatio, 3);
 		let offset = (width % 2) / 2;
 		if (_points && fillStyle == null)
 			fillStyle = width > 0 ? "#fff" : strokeStyle;
@@ -4046,7 +4056,7 @@ function uPlot(opts, data, then) {
 			setScale(xScaleKey, pendScales[xScaleKey]);
 		else
 			autoScaleX();
-		shouldSetSelect = select.show;
+		shouldSetSelect = select.show && (select.width > 0 || select.height > 0);
 		shouldSetCursor = shouldSetLegend = true;
 		_setSize(opts.width, opts.height);
 	}

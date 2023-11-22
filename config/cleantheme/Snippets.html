@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Snippets</title>
+    <link rel="stylesheet" type="text/css" href="https://backspaces.github.io/layouts/root.css">
+    <link rel="stylesheet" type="text/css" href="https://backspaces.github.io/layouts/layouts.css">
+    <script type="module" src="https://backspaces.github.io/layouts/layouts.js"></script>
+
+    <style>
+        sidebar-layout {
+            max-inline-size: 140ch;
+        }
+
+        .note {
+            font-size: 0.85em;
+            background: #ffe8cf;
+            padding: 12px 20px;
+            line-height: 1.4em;
+            /* margin: 40px 20px; */
+        }
+
+        .pink {
+            background: #fffbfb;
+        }
+
+        code {
+            background: #d9d1ff;
+        }
+
+        button {
+            font-size: 18px;
+            height: 40px;
+            background: skyblue;
+
+            padding: 10px 14px;
+            border-width: 0;
+            margin: 0;
+        }
+
+        button.forever {
+            background: orange;
+        }
+
+        .snippet {
+            background: white;
+        }
+
+        /* ==== These are for the gradientColorMap or not used (commented out) ==== */
+
+        /* flex container */
+        #colorMapGrid {
+            display: flex;
+            height: 45px;
+            border-width: 0;
+            margin: 0;
+            padding: 0;
+
+            /* background: white;
+            flex-direction: row;  */
+        }
+
+        /* flex items */
+        #colorMapGrid * {
+            flex-grow: 1;
+            border-width: 0;
+            margin: 0;
+            padding: 0;
+            /* margin: 1px;
+            border-color: green;
+            border-width: 2;
+            padding: 3; */
+        }
+
+        pre {
+            margin: 0;
+            padding: 0;
+            white-space: pre;
+            /* background: white; */
+        }
+    </style>
+
+</head>
+
+<body class="pink">
+
+    <script>
+        function runSnippet(id) {
+            let text = document.getElementById(id).innerText;
+            eval(text)
+        }
+
+        let modelIsRunning = false
+        function runForever(id) {
+            if (id.includes('pheromone')) setPatchesColor()
+
+            let text = modelIsRunning ? '' : document.getElementById(id).innerText;
+            model.step = function () { eval(text) }
+            modelIsRunning = !modelIsRunning
+
+            const btnId = id + 'Btn'
+            let btn = document.getElementById(btnId)
+            btn.innerText = modelIsRunning ? 'stop running' : 'run forever'
+            console.log(btnId, btn);
+        }
+    </script>
+
+    <box-layout borderWidth="0px" class="pink">
+        <h1>What is Agentscript?</h1>
+        <p>Agentscript is an open source javascript library for writing <a href="https://en.wikipedia.org/wiki/Agent-based_model">agent-based models</a>.</p>
+        <p>It is inspired by a programming language called <a href="https://ccl.northwestern.edu/netlogo/">Netlogo</a>.</p>
+    </box-layout>
+
+
+
+    <!-- <sidebar-layout side="left" sideWidth="25ch" contentMin="40%" space="2ch"> -->
+    <sidebar-layout side="left" sideWidth="20%" contentMin="40%" space="2ch">
+
+        <!-- ==== Here are the code snippets, in the left sidebar ==== -->
+
+        <box-layout borderWidth="0px" class="pink">
+
+            <h2>How does it work?</h2>
+
+            <p>In Agentscript, you fill a world with three ingredients: turtles, patches, and links.</p>
+            <p>Your program describes the behavior of each of these actors and how they interact
+                with each other. Let's see an example.</p>
+
+            <h2>Turtles</h2>
+
+            <p> First things first, let's make a turtle: </p>
+
+            <box-layout id="createTurtle" contentditable: "true" class="snippet">
+                model.turtles.create(1)
+            </box-layout>
+            <button type="button" onclick="runSnippet('createTurtle')">run once</button>
+
+            <p> Click the "run once" button to execute that code once.</p>
+            <p> You'll see a turtle appear in the center of the world. It has the shape of a chevron.</p>
+
+            <p class="note">This tutorial assumes you have a little familiarity with javascript.
+                If you have never seen javascript before, or if you want a refresher, try out this interactive tutorial: <a href="https://jgthms.com/javascript-in-14-minutes/">Javascript in 14 Minutes</a>.
+            </p>
+
+            <p>Now that we have a turtle, we can ask it do something, like move forward:</p>
+
+            <box-layout id="turtleForward" contenteditable="true" class="snippet">
+                <pre>model.turtles.ask(turtle => {
+    turtle.forward(1)
+})</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('turtleForward')">run once</button>
+
+            <p class="note">If you are familiar with javascript, it may help to know that
+                <code>turtles.ask()</code> has the same meaning as <code>turtles.forEach()</code>.
+            </p>
+
+            <p>If you keep telling a turtle to move forward, it will eventually hit
+                the edge of the world and wrap around to the other side!</p>
+            <p>We can also ask turtles to rotate:</p>
+
+            <box-layout div id="turtleRotate" contenteditable="true" class="snippet">
+                <pre>model.turtles.ask(turtle => {
+    turtle.rotate(45)
+})</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('turtleRotate')">run once</button>
+
+            <p>Or both — move forward and rotate:</p>
+
+            <box-layout id="turtleBoth" contenteditable="true" class="snippet">
+                <pre>model.turtles.ask(turtle => {
+    turtle.forward(1)
+    turtle.rotate(25)
+})</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('turtleBoth')">run once</button>
+
+            <p>Try changing one of the numbers in the above code so that the turtle
+                makes smaller steps, or bigger turns.</p>
+            <p>Instead of working one step at a time, things get really interesting
+                when you run a behavior over and over again.</p>
+            <p>I added a "run forever" button to the code snippet above. Try it out!</p>
+
+            <box-layout id="turtleBoth1" contenteditable="true" class="snippet">
+                <pre>model.turtles.ask(turtle => {
+    turtle.forward(1)
+    turtle.rotate(25)
+})</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('turtleBoth1')">run once</button>
+            <button id="turtleBoth1Btn" class="forever" type="button" onclick="runForever('turtleBoth1')">
+                run forever
+            </button>
+
+            <p>How about a little randomness? Here's the same code, as before, but
+                this time using <code>util.randomInt()</code> to pick a random angle
+                to turn to the right and to the left.
+                The result is turtles that wander randomly around the world:</p>
+
+            <box-layout id="turtleRandom" contenteditable="true" class="snippet">
+                <pre>model.turtles.ask(turtle => {
+    turtle.forward(1)
+    turtle.right(util.randomInt(25))
+    turtle.left(util.randomInt(25))
+})</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('turtleRandom')">run once</button>
+            <button id="turtleRandomBtn" class="forever" type="button" onclick="runForever('turtleRandom')">
+                run forever
+            </button>
+
+            <p> If you haven't already, try adding a bunch more turtles! </p>
+
+            <box-layout id="create10Turtles" contenteditable="true" class="snippet">
+                model.turtles.create(10)
+            </box-layout>
+            <button type="button" onclick="runSnippet('create10Turtles')">run once</button>
+
+            <h2>Links</h2>
+
+            <p>Two turtles can create links between themselves.
+                This is useful for creating a network, such as streets
+                for turtles to drive on. Here is a simple example:
+                <a href="https://code.agentscript.org/views2/linktravel.html">
+                    Link Travel
+                </a>
+            </p>
+            <p>Try this, making sure you have lots of turtles. You can use the create(10) above.</p>
+
+
+            <box-layout id="createLinks" contenteditable="true" class="snippet">
+                <pre>const turtle1 = model.turtles.oneOf()
+const turtle2 =
+    model.turtles.otherOneOf(turtle1)
+turtle1.forward(5)
+turtle2.forward(5)
+const link =
+    model.links.createOne(turtle1, turtle2)</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('createLinks')">run once</button>
+
+            <h2>Patches</h2>
+
+            <p>The world where the turtles live and move is divided up into a bunch of small squares called patches.</p>
+            <p>A turtle always knows what patch it's on — this is stored in <code>turtle.patch</code>.</p>
+            <p>Right now, all the patches are black, which is why the world behind the turtles looks like a big black square.</p>
+            <p>Let's pretend like our turtles are ants, and they are dropping chemical pheromones everywhere they walk (this is in fact how ants communicate!)</p>
+
+            <box-layout id="pheromone" contenteditable="true" class="snippet">
+                <pre>model.turtles.ask(turtle => {
+    turtle.forward(1)
+    turtle.right(util.randomInt(25))
+    turtle.left(util.randomInt(25))
+    turtle.patch.pheromone += 10
+})</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('pheromone')">run once</button>
+            <button id="pheromoneBtn" class="forever" type="button" onclick=" runForever('pheromone')">
+                run forever
+            </button>
+
+            <p>The landscape is now filling up with pheromones!</p>
+            <p>I set up the patches ahead of time so that their color depends on how much pheromone they have. This is the color scale I'm using:</p>
+
+            <box-layout id="colorMap" contenteditable="true" class="snippet">
+                <pre>myColorMap = ColorMap.gradientColorMap(
+    8, ['black', 'purple', 'yellow']
+)</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('colorMap'); setColoMap(myColorMap)">run once</button>
+
+            <box-layout id="colorMapGrid"> </box-layout>
+
+
+            <p>Try changing the number or names of the colors in the code block above.</p>
+            <p>The size and number of patches that make up the world can also be configured — we'll look at how to edit that later.</p>
+            <p>Now let's make the pheromone evaporate over time:</p>
+
+            <box-layout id="pheromoneEvap" contenteditable="true" class="snippet">
+                <pre>model.turtles.ask(turtle => {
+    turtle.forward(1)
+    turtle.right(util.randomInt(25))
+    turtle.left(util.randomInt(25))
+    turtle.patch.pheromone += 10
+})
+
+    model.patches.ask(patch => {
+    patch.pheromone *= 0.99
+})</pre>
+            </box-layout>
+            <button type="button" onclick="runSnippet('pheromoneEvap')">run once</button>
+            <button id="pheromoneEvapBtn" class="forever" type="button" onclick="runForever('pheromoneEvap')">
+                run forever
+            </button>
+        </box-layout>
+
+        <!-- ==== Here is the model in the right side of the sidebar-layout ==== -->
+
+        <box-layout borderWidth="0px" class="pink">
+            <box-layout borderWidth="0px" style="position: sticky; top: 40px;" class="pink">
+                <div id="modelDiv"></div>
+                <button type="button" onclick="resetAll()">reset</button>
+                <button type="button" onclick="model.turtles.create(10)">10 turtles</button>
+            </box-layout>
+        </box-layout>
+
+    </sidebar-layout>
+
+    <script type="module">
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import Model from 'https://code.agentscript.org/src/Model.js'
+        import World from 'https://code.agentscript.org/src/World.js'
+
+        const model = new Model(World.defaultOptions(10))
+        // await model.startup()
+        // model.setup()
+
+        model.patches.ask(p => { p.pheromone = 0 })
+        let myColorMap = ColorMap.gradientColorMap(
+            8, ['black', 'purple', 'yellow']
+        )
+
+        function resetAll() {
+            // model.reset()
+            model.ticks = 0
+            model.turtles.length = 0
+            model.links.length = 0
+            view.drawOptions.patchesColor = 'black'
+            model.patches.ask(p => p.pheromone = 0)
+        }
+        function setPatchesColor() {
+            view.drawOptions.patchesColor =
+                (p) => myColorMap.scaleColor(p.pheromone, 0, 100)
+        }
+        function setColoMap(colorMap = myColorMap) {
+            myColorMap = colorMap
+            colorMapGrid()
+        }
+        function colorMapGrid() {
+            const element = document.getElementById('colorMapGrid')
+            const children = element.children
+
+            // remove current divs
+            while (element.firstChild) {
+                element.removeChild(element.firstChild);
+            }
+
+            // add new divs
+            const length = myColorMap.length
+            util.repeat(length, (i) => {
+                const div = document.createElement("div")
+                const uInts = myColorMap[i]
+                const color = `rgba(${uInts[0]},${uInts[1]},${uInts[2]},${uInts[3]})`
+                div.style.backgroundColor = color
+                element.append(div)
+            })
+        }
+        colorMapGrid() // initialize!
+
+        const drawOptions = {
+            div: 'modelDiv',
+            patchSize: 25,
+            drawOptions: {
+                turtlesSize: 2,
+                patchesColor: 'black'
+            }
+        }
+
+        let view = new TwoDraw(model, drawOptions)
+
+        const animator = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // run 500 steps
+            30 // 30 fps
+        )
+        util.toWindow({ util, model, view, ColorMap, resetAll, setPatchesColor, setColoMap })
+    </script>
+
+</body>
+
+</html>

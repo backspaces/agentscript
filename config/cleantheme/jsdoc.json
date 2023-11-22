@@ -1,0 +1,58 @@
+{
+    "source": {
+        "include": ["README.md", "src"],
+        "exclude": [],
+        "includePattern": ".js$",
+        "excludePattern": "(steg|AvalancheModel)"
+    },
+    "plugins": ["plugins/markdown"],
+    "opts": {
+        "encoding": "utf8",
+        "readme": "./README.md",
+        "destination": "docs/",
+        "recurse": true,
+        "verbose": true,
+        "template": "./node_modules/clean-jsdoc-theme",
+
+        "tutorials": "./config/cleantheme/tutorials",
+
+        "theme_opts": {
+            "default_theme": "dark",
+
+            "sections": ["Classes", "Modules", "Global", "Tutorials"],
+            "sort": false,
+            "footer": "AgentScript version: 0.10.20 using clean-jsdoc-theme",
+
+            "static_dir": ["./config/cleantheme/static"],
+
+            "include_js": [
+                {
+                    "filepath": "./config/cleantheme/agentarray.js",
+                    "targets": ["AgentArray", "tutorial-AgentArray_"]
+                }
+            ],
+
+            "menu": [
+                {
+                    "title": "Github",
+                    "id": "github",
+                    "link": "https://github.com/backspaces/agentscript"
+                },
+                {
+                    "title": "npm",
+                    "id": "npm",
+                    "link": "https://www.npmjs.com/package/agentscript"
+                },
+                {
+                    "title": "unpkg",
+                    "id": "unpkg",
+                    "link": "https://unpkg.com/browse/agentscript/"
+                }
+            ]
+        }
+    },
+    "markdown": {
+        "hardwrap": false,
+        "idInHeadings": true
+    }
+}
