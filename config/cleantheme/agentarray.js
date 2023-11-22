@@ -25,7 +25,7 @@ function addLiveCodeExampleForAgentArrayPage() {
 
     liveCodeContainer.innerHTML += `
   <strong>Coding Playground</strong>
-  <iframe src="https://code.agentscript.org/tutorials/Snippets.html" style="height:700px; width: 100%; background: white;" class="mt-20"></iframe>
+  <iframe src="https://code.agentscript.org/config/cleantheme/Snippets.html" style="height:700px; width: 100%; background: white;" class="mt-20"></iframe>
   `
 
     containerElement.append(liveCodeContainer)
