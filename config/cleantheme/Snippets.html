@@ -103,18 +103,25 @@
             btn.innerText = modelIsRunning ? 'stop running' : 'run forever'
             console.log(btnId, btn);
         }
+
+        function resetAll() {
+            // model.reset()
+            model.ticks = 0
+            model.turtles.length = 0
+            model.links.length = 0
+            view.drawOptions.patchesColor = 'black'
+            model.patches.ask(p => p.pheromone = 0)
+        }
+
     </script>
 
-    <box-layout borderWidth="0px" class="pink">
-        <h1>What is Agentscript?</h1>
-        <p>Agentscript is an open source javascript library for writing <a href="https://en.wikipedia.org/wiki/Agent-based_model">agent-based models</a>.</p>
-        <p>It is inspired by a programming language called <a href="https://ccl.northwestern.edu/netlogo/">Netlogo</a>.</p>
+    <box-layout borderWidth="0px" class="pink" style="padding-top: 0; padding-bottom: 0;">
+        <h2>What is Agentscript?</h2>
+        <p>Agentscript is an open source javascript library for writing <a href="https://en.wikipedia.org/wiki/Agent-based_model">agent-based models</a>. It is inspired by the programming language <a href="https://ccl.northwestern.edu/netlogo/">Netlogo</a>.</p>
     </box-layout>
 
-
-
     <!-- <sidebar-layout side="left" sideWidth="25ch" contentMin="40%" space="2ch"> -->
-    <sidebar-layout side="left" sideWidth="20%" contentMin="40%" space="2ch">
+    <sidebar-layout side="left" sideWidth="20%" contentMin="40%" space="2ch" style="padding-top:0;">
 
         <!-- ==== Here are the code snippets, in the left sidebar ==== -->
 
@@ -280,12 +287,11 @@ const link =
             <box-layout id="pheromoneEvap" contenteditable="true" class="snippet">
                 <pre>model.turtles.ask(turtle => {
     turtle.forward(1)
-    turtle.right(util.randomInt(25))
-    turtle.left(util.randomInt(25))
+    turtle.rotate(util.randomCentered(50))
     turtle.patch.pheromone += 10
 })
 
-    model.patches.ask(patch => {
+model.patches.ask(patch => {
     patch.pheromone *= 0.99
 })</pre>
             </box-layout>
@@ -324,14 +330,14 @@ const link =
             8, ['black', 'purple', 'yellow']
         )
 
-        function resetAll() {
-            // model.reset()
-            model.ticks = 0
-            model.turtles.length = 0
-            model.links.length = 0
-            view.drawOptions.patchesColor = 'black'
-            model.patches.ask(p => p.pheromone = 0)
-        }
+        // function resetAll() {
+        //     // model.reset()
+        //     model.ticks = 0
+        //     model.turtles.length = 0
+        //     model.links.length = 0
+        //     view.drawOptions.patchesColor = 'black'
+        //     model.patches.ask(p => p.pheromone = 0)
+        // }
         function setPatchesColor() {
             view.drawOptions.patchesColor =
                 (p) => myColorMap.scaleColor(p.pheromone, 0, 100)
@@ -363,7 +369,7 @@ const link =
 
         const drawOptions = {
             div: 'modelDiv',
-            patchSize: 25,
+            patchSize: 20,
             drawOptions: {
                 turtlesSize: 2,
                 patchesColor: 'black'

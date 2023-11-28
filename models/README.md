@@ -16,6 +16,7 @@ Code    | Run demo
 [helloPlus](https://github.com/backspaces/agentscript/tree/master/models/HelloPlusModel.js#L1) | [https://code.agentscript.org/models/run.html?helloPlus](https://code.agentscript.org/models/run.html?helloPlus)
 [life](https://github.com/backspaces/agentscript/tree/master/models/LifeModel.js#L1) | [https://code.agentscript.org/models/run.html?life](https://code.agentscript.org/models/run.html?life)
 [linkTravel](https://github.com/backspaces/agentscript/tree/master/models/LinkTravelModel.js#L1) | [https://code.agentscript.org/models/run.html?linkTravel](https://code.agentscript.org/models/run.html?linkTravel)
+[pheromone](https://github.com/backspaces/agentscript/tree/master/models/PheromoneModel.js#L1) | [https://code.agentscript.org/models/run.html?pheromone](https://code.agentscript.org/models/run.html?pheromone)
 [roads](https://github.com/backspaces/agentscript/tree/master/models/RoadsModel.js#L1) | [https://code.agentscript.org/models/run.html?roads](https://code.agentscript.org/models/run.html?roads)
 [slimeMold](https://github.com/backspaces/agentscript/tree/master/models/SlimeMoldModel.js#L1) | [https://code.agentscript.org/models/run.html?slimeMold](https://code.agentscript.org/models/run.html?slimeMold)
 [tsp](https://github.com/backspaces/agentscript/tree/master/models/TspModel.js#L1) | [https://code.agentscript.org/models/run.html?tsp](https://code.agentscript.org/models/run.html?tsp)

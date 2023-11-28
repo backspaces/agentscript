@@ -27,8 +27,8 @@
 
             "include_js": [
                 {
-                    "filepath": "./config/cleantheme/agentarray.js",
-                    "targets": ["AgentArray", "tutorial-AgentArray_"]
+                    "filepath": "./config/cleantheme/snippets.js",
+                    "targets": ["tutorial-Snippets"]
                 }
             ],
 
