@@ -6,13 +6,10 @@ import ColorMap from '../src/ColorMap.js'
 /**
  * Basic 2D view.
  *
- * **TODO: Document this class**
  */
 class TwoDraw extends TwoView {
     static defaultOptions(model) {
         return {
-            // data: {},
-
             patchesColor: 'random',
             initPatches: null,
 

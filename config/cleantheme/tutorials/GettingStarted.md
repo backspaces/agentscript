@@ -1,4 +1,4 @@
-# Overview
+<!-- # Overview -->
 
 AgentScript runs in the browser. This means the models you create will be imbedded
 within an html file. It looks like these:
@@ -16,7 +16,7 @@ within an html file. It looks like these:
             // Your JavaScript model goes here
         </script>
 
-        <!-- You need a html <div> for the model to run in (note html's comment style) -->
+        <!-- You need a html <div> for the model to run in. -->
         <div id="modelDiv"></div>
     </body>
 </html>

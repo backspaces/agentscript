@@ -1,48 +1,50 @@
 <html>
-    <head>
-        <title>shapes3d</title>
-        <link rel="icon" type="image/x-icon" href="../favicon.ico" />
-    </head>
-    <body>
-        <script type="module">
-            import * as util from '../src/utils.js'
-            import ThreeDraw from '../src/ThreeDraw.js'
-            import Model from '../models/Hello3DModel.js'
 
-            const drawOptions = {
-                // turtlesShape: 'random',
-                turtlesShape: t => ThreeDraw.shapeNames().atIndex(t.id),
-                turtlesColor: 'random',
-                turtlesSize: 2.5,
-            }
+<head>
+    <title>shapes3d</title>
+</head>
 
-            async function run() {
-                const model = new Model()
-                model.linksToo = false
-                await model.startup()
-                model.setup()
+<body>
+    <script type="module">
+        import * as util from '../src/utils.js'
+        import ThreeDraw from '../src/ThreeDraw.js'
+        import Model from '../models/Hello3DModel.js'
 
-                const view = new ThreeDraw(model, {
-                    div: 'modelDiv',
-                    turtles: { meshClass: 'Obj3DMesh', useAxes: true },
-                    drawOptions,
-                })
+        const drawOptions = {
+            // turtlesShape: 'random',
+            turtlesShape: t => ThreeDraw.shapeNames().atIndex(t.id),
+            turtlesColor: 'random',
+            turtlesSize: 2.5,
+        }
 
-                util.toWindow({ util, model, view, ThreeDraw })
+        async function run() {
+            const model = new Model()
+            model.linksToo = false
+            await model.startup()
+            model.setup()
 
-                await util.timeoutLoop(
-                    () => {
-                        model.step()
-                        view.draw()
-                    },
-                    -1, //500,
-                    0 //33
-                )
+            const view = new ThreeDraw(model, {
+                div: 'modelDiv',
+                turtles: { meshClass: 'Obj3DMesh', useAxes: true },
+                drawOptions,
+            })
 
-                view.idle()
-            }
-            run()
-        </script>
-        <div id="modelDiv"></div>
-    </body>
+            util.toWindow({ util, model, view, ThreeDraw })
+
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, //500,
+                0 //33
+            )
+
+            view.idle()
+        }
+        run()
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
 </html>

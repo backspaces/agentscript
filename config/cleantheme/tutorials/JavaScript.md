@@ -1,4 +1,4 @@
-# JavaScript
+<!-- # JavaScript -->
 
 AgentScript runs in the browser using the JavaScript language which has a fascinating
 history, having been introduced for the Netscape server in the mid 1990's.

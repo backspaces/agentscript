@@ -1,4 +1,4 @@
-# Model
+<!-- # Model -->
 
 We saw small snippets of Patches, Turtles and Links. Now we want to use those
 to create our first Model, within the file PheromoneModel.js.
@@ -130,6 +130,11 @@ Running 500 steps.
 ```
 
 Each run will differ due to being a random sampling.
+
+Lets run the [PheromoneModel:](https://code.agentscript.org/views2/pheromone.html)
+It runs 500 steps and stops. Reload it to run again.
+
+To see the actual code, use the browser's [view-source capability](https://www.computerhope.com/issues/ch000746.htm). On Chrome and Edge, just press "Control" + "U". For other browsers, use the link above.
 
 But hey, aren't we missing something? I can see the turtles etc like in the Snippits!
 
