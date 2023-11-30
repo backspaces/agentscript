@@ -16,9 +16,7 @@
             8, ['black', 'purple', 'yellow']
         )
 
-        // use model's default world options
-        const model = new Model()
-        await model.startup()
+        const model = new Model() // no arge => use default world options
         model.setup()
 
         const view = new TwoDraw(model, {

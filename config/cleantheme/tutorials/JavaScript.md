@@ -13,37 +13,37 @@ And there are several tutorials and videos to use, just google _javascript tutor
 
 One of the best for the absolute beginner is [JavaScript in 14 Minutes](https://jgthms.com/javascript-in-14-minutes). It uses the browser's developer console. It will detect your OS and default browseer. I recommend Chrome but it supports them all.
 
-![Image](config/cleantheme/static/JS14Min1.jpg)
+![Image](../static/JS14Min1.jpg)
 
 And here's the Developer Console
 
-![Image](config/cleantheme/static/JS14Min2.jpg)
+![Image](../static/JS14Min2.jpg)
 
 It gives you small snippets of code which you cut/paste into the console. here's one:
 
-![Image](config/cleantheme/static/JS14Min3.jpg)
+![Image](../static/JS14Min3.jpg)
 
 ## Eloquent Javascript
 
 Here is a much loved book: https://eloquentjavascript.net/
 
-![Image](config/cleantheme/static/Eloquent.jpg)
+![Image](../static/Eloquent.jpg)
 
 This is a complete, easy to use reference, "Modern JavaScript": https://javascript.info/
 
-![Image](config/cleantheme/static/Modern1.jpg)
+![Image](../static/Modern1.jpg)
 
-![Image](config/cleantheme/static/Modern2.jpg)
+![Image](../static/Modern2.jpg)
 
 ## MDN
 
 And the Mozilla Developer Network (fMDN) https://developer.mozilla.org/
 
-![Image](config/cleantheme/static/MDN1.jpg)
+![Image](../static/MDN1.jpg)
 
 is the _Source of All Truth_ for all things browser. The JavaScript section https://developer.mozilla.org/en-US/docs/Web/JavaScript is quite good, and you can search for any JavaScript primitive easily.
 
-![Image](config/cleantheme/static/MDN2.jpg)
+![Image](../static/MDN2.jpg)
 
 ## Developer Console
 
