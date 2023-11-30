@@ -105,14 +105,14 @@ You can quickly see your model by ommitting the drawOptions thus giving you defa
 
 ..you'll get this:
 
-![Image](../static/TwoDraw0.jpg)
+![Image](/config/cleantheme/static/TwoDraw0.jpg)
 
 .. which lets you see that the view is working.
 
 Adding back the drawOptions for turtleSize (in patches) and a function for patchesColor
 using the colorMap, you'll get:
 
-![Image](../static/TwoDraw1.jpg)
+![Image](/config/cleantheme/static/TwoDraw1.jpg)
 
 <!-- [Foo](#pheromone-output)
 

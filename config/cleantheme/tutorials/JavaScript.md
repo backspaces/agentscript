@@ -13,7 +13,7 @@ And there are several tutorials and videos to use, just google _javascript tutor
 
 One of the best for the absolute beginner is [JavaScript in 14 Minutes](https://jgthms.com/javascript-in-14-minutes). It uses the browser's developer console. It will detect your OS and default browseer. I recommend Chrome but it supports them all.
 
-![Image](../static/JS14Min1.jpg)
+![Image](/config/cleantheme/static/JS14Min1.jpg)
 
 And here's the Developer Console
 
