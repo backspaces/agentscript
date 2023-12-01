@@ -92,42 +92,41 @@ random sample when done.
 When we run this in the browser, the results look like:
 
 ```json
-Running 500 steps.
 {
-  "ticks": 500,
-  "model": [
-    "world",
-    "patches",
-    "turtles",
-    "links",
-    "ticks",
-    "stepTarget",
-    "step",
-    "toRads",
-    "fromRads",
-    "toAngleRads",
-    "fromAngleRads",
-    "toCCW",
-    "population",
-    "rotateAngle",
-    "addPheromone",
-    "evaporateToo",
-    "evaporateDelta"
-  ],
-  "patches": 961,
-  "patch": {
-    "id": 211,
-    "pheromone": 16.715235186523177
-  },
-  "turtles": 30,
-  "turtle": {
-    "id": 0,
-    "theta": 2.690935810442892,
-    "x": -3.9897254404119096,
-    "y": 2.9446740602205304,
-    "z": 0
-  },
-  "links": 0
+    "ticks": 500,
+    "model": [
+        "world",
+        "patches",
+        "turtles",
+        "links",
+        "ticks",
+        "stepTarget",
+        "step",
+        "toRads",
+        "fromRads",
+        "toAngleRads",
+        "fromAngleRads",
+        "toCCW",
+        "population",
+        "rotateAngle",
+        "addPheromone",
+        "evaporateToo",
+        "evaporateDelta"
+    ],
+    "patches": 961,
+    "patch": {
+        "id": 211,
+        "pheromone": 16.715235186523177
+    },
+    "turtles": 30,
+    "turtle": {
+        "id": 0,
+        "theta": 2.690935810442892,
+        "x": -3.9897254404119096,
+        "y": 2.9446740602205304,
+        "z": 0
+    },
+    "links": 0
 }
 ```
 
@@ -137,7 +136,7 @@ Each run will differ due to being a random sampling.
 
 ### View the source
 
-To see model's code, use the browser's [view-source capability](https://www.computerhope.com/issues/ch000746.htm). On Chrome and Edge, just press "Control" + "U". For other browsers, use the link above.
+To see model's code, use the browser's [view-source capability](https://www.computerhope.com/issues/ch000746.htm). On Chrome and Edge, just press "Control" + "U". For other browsers, use the view-source capability link above.
 
 But hey, aren't we missing something? I can see the turtles etc like in the Snippits!
 

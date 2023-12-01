@@ -1,9 +1,9 @@
 <!-- # View -->
 
-To "see" the model running, we need the V in MVC .. the View. There are several views available, we'll use [TwoDraw.js](https://code.agentscript.org/src/TwoDraw.js)
+To "see" the model running, we need the V in MVC .. the View. There are several views available, we'll use [TwoDraw.js](/src/TwoDraw.js)
 
-You can see this in action with our [PheronomeModel](/views2/pheromone.html)
-and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm) discussed in the [Model tutorial](./Model.md#view-the-source).
+fYou can see this in action with our [PheronomeModel](/views2/pheromone.html)
+and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm)
 
 ### TwoDraw
 
@@ -14,7 +14,6 @@ First, the Pheromone Model does not change. Rather you add TwoDraw and modify th
 -   We instantiate the PheromoneModel model
 -   We instantiate TwoDraw
 -   And finally we introduce an Animator which runs the model and view.
--   The util.toWindow is for debugging. It makes variables available globally. No worries!
 
 ```html
 <head>
@@ -54,6 +53,7 @@ First, the Pheromone Model does not change. Rather you add TwoDraw and modify th
             30 // 30 fps
         )
 
+        // For debugging, makes properties available globally. OK to skip.
         util.toWindow({ util, model, view, anim })
     </script>
     <div id="modelDiv"></div>

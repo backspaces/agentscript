@@ -1,6 +1,5 @@
 import * as util from './utils.js'
 import TwoView from '../src/TwoView.js'
-import Color from '../src/Color.js'
 import ColorMap from '../src/ColorMap.js'
 
 /**
