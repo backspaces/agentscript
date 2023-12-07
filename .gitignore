@@ -16,6 +16,7 @@ yarn-error.log
 /test/samples.json
 /tests/
 /simple/
+/controls/
 
 # package-lock.json
 # yarn.lock

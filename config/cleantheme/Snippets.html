@@ -115,10 +115,6 @@
 
     </script>
 
-    <box-layout borderWidth="0px" class="pink" style="padding-top: 0; padding-bottom: 0;">
-        <h2>What is Agentscript?</h2>
-        <p>Agentscript is an open source javascript library for writing <a href="https://en.wikipedia.org/wiki/Agent-based_model">agent-based models</a>. It is inspired by the programming language <a href="https://ccl.northwestern.edu/netlogo/">Netlogo</a>.</p>
-    </box-layout>
 
     <!-- <sidebar-layout side="left" sideWidth="25ch" contentMin="40%" space="2ch"> -->
     <sidebar-layout side="left" sideWidth="20%" contentMin="40%" space="2ch" style="padding-top:0;">
@@ -299,11 +295,17 @@ model.patches.ask(patch => {
             <button id="pheromoneEvapBtn" class="forever" type="button" onclick="runForever('pheromoneEvap')">
                 run forever
             </button>
+
+            <box-layout borderWidth="0px" class="pink">
+                <p>Now lets return to the <a href="/docs/tutorial-AgentScript.html">AgentScript tutorial</a></p>
+
+            </box-layout>
+
         </box-layout>
 
         <!-- ==== Here is the model in the right side of the sidebar-layout ==== -->
 
-        <box-layout borderWidth="0px" class="pink">
+        <box-layout borderWidth="1px" class="pink">
             <box-layout borderWidth="0px" style="position: sticky; top: 40px;" class="pink">
                 <div id="modelDiv"></div>
                 <button type="button" onclick="resetAll()">reset</button>

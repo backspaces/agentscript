@@ -15,6 +15,8 @@ First, the Pheromone Model does not change. Rather you add TwoDraw and modify th
 -   We instantiate TwoDraw
 -   And finally we introduce an Animator which runs the model and view.
 
+### TwoDraw HTML
+
 ```html
 <head>
     <title>Pheromone</title>

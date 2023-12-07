@@ -25,13 +25,6 @@
 
             "static_dir": ["./config/cleantheme/static"],
 
-            "include_js": [
-                {
-                    "filepath": "./config/cleantheme/snippets.js",
-                    "targets": ["tutorial-Snippets"]
-                }
-            ],
-
             "menu": [
                 {
                     "title": "Github",

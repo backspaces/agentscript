@@ -136,7 +136,7 @@ Each run will differ due to being a random sampling.
 
 ### View the source
 
-To see model's code, use the browser's [view-source capability](https://www.computerhope.com/issues/ch000746.htm). On Chrome and Edge, just press "Control" + "U". For other browsers, use the view-source capability link above.
+To see model's code, use the browser's [view-source capability](https://www.computerhope.com/issues/ch000746.htm). On Chrome and Edge, just press "Option + Control" + "U". For other browsers, use the view-source capability link above.
 
 But hey, aren't we missing something? I can see the turtles etc like in the Snippits!
 
