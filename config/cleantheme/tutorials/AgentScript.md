@@ -7,7 +7,7 @@ It is inspired by the programming language
 
 It works by creating a world inhabited by Patches, Turtles, and Links. A "step" function is used to update these. You'll call this function in an Animator that insures the Model yields to the rest of the browser each step.
 
-This is all organized by a Model that is subclassed for a particular study. Example models include a simple [HelloModel](https://code.agentscript.org/views2/hello.html), a [TravelingSalesPerson](https://code.agentscript.org/views2/tsp.html) model, and many more. You can see many of them [here](https://code.agentscript.org/views2/)
+This is all organized in a Model that is subclassed for a particular study. Example models include a simple [HelloModel](https://code.agentscript.org/views2/hello.html), a [TravelingSalesPerson](https://code.agentscript.org/views2/tsp.html) model, and many more. You can see them [here](https://code.agentscript.org/views2/)
 
 ![Image](/config/cleantheme/static/Views2.jpg)
 
@@ -22,3 +22,5 @@ All this is a bit abstract, so we've a set of [Snippets](https://code.agentscrip
 ![Image](/config/cleantheme/static/Snippets.jpg)
 
 There is a link at the end of the page to return here.
+
+Finally, we've wrapped up the snippets into a Model [pheromone.html page](https://code.agentscript.org/views2/pheromone.html).

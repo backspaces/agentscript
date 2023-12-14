@@ -14,7 +14,14 @@ class Animator {
      * @param {number} fps Max frames/second to run. Default is 30
      */
     constructor(fcn, steps = -1, fps = 30) {
-        Object.assign(this, { fcn, steps, fps, timeoutID: null, ticks: 0 })
+        Object.assign(this, { fcn, steps, fps, ticks: 0 })
+
+        this.stats = null
+        this.timeoutID = null
+        this.idle = null
+        this.idleFps = null
+        this.idleID = null
+
         this.start()
     }
     /**
@@ -23,9 +30,12 @@ class Animator {
      * @returns The animator, allows chaining
      */
     start() {
-        if (this.timeoutID) return // avoid multiple starts
+        // if (this.timeoutID) return // avoid multiple starts
+        this.clearIDs()
+
         this.timeoutID = setInterval(() => this.step(), 1000 / this.fps)
-        // this.paused = false
+        // if (this.idleID) this.idleID = clearInterval(this.idleID)
+
         return this // chaining off ctor
     }
     /**
@@ -34,8 +44,11 @@ class Animator {
      * @returns The animator, allows chaining
      */
     stop() {
-        if (this.timeoutID) clearInterval(this.timeoutID)
-        this.timeoutID = null
+        // if (this.timeoutID) this.timeoutID = clearInterval(this.timeoutID)
+        // if (this.idleID) this.idleID = clearInterval(this.idleID)
+        this.clearIDs()
+        if (this.idle)
+            this.idleID = setInterval(() => this.idle(), 1000 / this.idleFps)
         return this // chaining off ctor
     }
     step() {
@@ -48,18 +61,17 @@ class Animator {
         return this // chaining off ctor
     }
 
+    clearIDs() {
+        if (this.timeoutID) this.timeoutID = clearInterval(this.timeoutID)
+        if (this.idleID) this.idleID = clearInterval(this.idleID)
+    }
+
     isRunning() {
         return this.timeoutID != null
     }
 
     startStats(left = '0px') {
         if (this.stats) return console.log('startStats: already running')
-        // import('https://cdn.skypack.dev/stats.js').then(m => {
-        // import('../vendor/stats.js').then(m => {
-        //     this.stats = new m.default()
-        //     document.body.appendChild(this.stats.dom)
-        //     this.stats.dom.style.left = left
-        // })
         this.stats = new Stats()
         document.body.appendChild(this.stats.dom)
         this.stats.dom.style.left = left
@@ -87,7 +99,7 @@ class Animator {
     toggle() {
         // if (this.timeoutID) this.stop()
         if (this.isRunning()) this.stop()
-        else if (this.steps === 0) this.reset()
+        // else if (this.steps === 0) this.reset()
         else this.start()
     }
     // call the fcn once. stops if currently running
@@ -96,12 +108,10 @@ class Animator {
         this.step()
     }
 
-    // pause() {
-    //     this.paused = true
-    // }
-    // resume() {
-    //     this.paused = false
-    // }
+    setIdle(fcn, fps = 4) {
+        this.idle = fcn
+        this.idleFps = fps
+    }
 }
 
 export default Animator

@@ -138,7 +138,7 @@ Each run will differ due to being a random sampling.
 
 To see model's code, use the browser's [view-source capability](https://www.computerhope.com/issues/ch000746.htm). On Chrome and Edge, just press "Option + Control" + "U". For other browsers, use the view-source capability link above.
 
-But hey, aren't we missing something? I can see the turtles etc like in the Snippits!
+But hey, aren't we missing something? I can't see the turtles etc like in the Snippits!
 
 This is expected, see the GettingStarted page where MVC (Model View Controller)
 architecture is discussed. We'll next introduce an easy to use View.

@@ -34,19 +34,19 @@
             -1, // run forever
             30 // fps
         ).startStats()
+        anim.setIdle(() => view.draw())
 
         util.toWindow({ model, view, anim })
-
 
         let selectedTurtle
         const mouse = new Mouse(model, view, mouse => {
             const { x, y, action } = mouse
             if (action === "mousedown") {
-                anim.stop()
+                // anim.stop()
                 selectedTurtle = model.turtles.minOneOf(t => t.distanceXY(x, y))
             }
             if (action === "mouseup") {
-                anim.start()
+                // anim.start()
                 selectedTurtle = null
             }
             if (selectedTurtle) selectedTurtle.setxy(x, y)
@@ -54,74 +54,49 @@
         })
 
         const gui = new GUI({
-            fps: { // slider
-                val: [40, [5, 60, 5]],
-                cmd: val => aimator.setFps(val),
+            fps: {
+                slider: [40, [5, 60, 5]],
+                cmd: val => anim.setFps(val),
             },
 
             'Turtles Folder': {
-                turtlesShape: { // chooser
-                    val: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
+                turtlesShape: {
+                    chooser: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
                     cmd: val => view.drawOptions.turtlesShape = val,
                 },
-                turtlesSize: { // slider
-                    val: [1, [0.5, 10, 0.5]],
-                    // val: { Small: 1, Medium: 3, Large: 5 },
+                turtlesSize: {
+                    slider: [1, [0.5, 10, 0.5]],
                     cmd: val => view.drawOptions.turtlesSize = val,
                 },
-                'Test Folder': {
-                    turtlesColor: { // color
-                        val: '#ff0000',
-                        cmd: val => view.drawOptions.turtlesColor = val,
-                    },
-                }
-            },
-
-            downloadCanvas: { // button
-                cmd: () => view.downloadCanvas(),
-            },
-            stop: { // switch/toggle
-                val: false, // bool
-                cmd: val => { if (val) { aimator.stop() } else { aimator.start() } },
-            },
-            useMouse: { // switch/toggle
-                val: false, // bool
-                cmd: val => { if (val) { mouse.start() } else { mouse.stop() } },
-            },
-            setTitle: { // input
-                val: 'Play',
-                cmd: val => document.title = val
-            },
-            modelTicks: { // monitor
-                val: [model, 'ticks'], // the object and property to monitor
-            },
-        })
-
-        util.toWindow({ GUI, gui })
-        // util.toWindow({ model, view, aimator, GUI, gui })
-    </script>
-</body>
-
-</html>
-
-
-<!--
-
-            'Turtles Folder': {
-                turtlesShape: { // chooser
-                    val: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
-                    cmd: val => view.drawOptions.turtlesShape = val,
-                },
-                turtlesSize: { // slider
-                    val: [1, [0.5, 10, 0.5]],
-                    // val: { Small: 1, Medium: 3, Large: 5 },
-                    cmd: val => view.drawOptions.turtlesSize = val,
-                },
-                turtlesColor: { // color
-                    val: '#ff0000',
+                turtlesColor: {
+                    color: '#ff0000',
                     cmd: val => view.drawOptions.turtlesColor = val,
                 },
             },
 
+            downloadCanvas: {
+                button: () => view.downloadCanvas(),
+            },
+            stop: {
+                switch: false,
+                cmd: val => { if (val) { anim.stop() } else { anim.start() } },
+            },
+            useMouse: {
+                switch: false,
+                cmd: val => { if (val) { mouse.start() } else { mouse.stop() } },
+            },
+            setTitle: {
+                input: 'Play',
+                cmd: val => document.title = val
+            },
+            modelTicks: {
+                monitor: [model, 'ticks'], // the object and property to monitor
+            },
+        })
 
- -->
+        util.toWindow({ GUI, gui })
+        // util.toWindow({ model, view, anim, GUI, gui })
+    </script>
+</body>
+
+</html>

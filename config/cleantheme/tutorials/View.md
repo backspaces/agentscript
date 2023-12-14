@@ -2,8 +2,7 @@
 
 To "see" the model running, we need the V in MVC .. the View. There are several views available, we'll use [TwoDraw.js](/src/TwoDraw.js)
 
-fYou can see this in action with our [PheronomeModel](/views2/pheromone.html)
-and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm)
+You can see this in action with our [PheronomeModel](/views2/pheromone.html) and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm)
 
 ### TwoDraw
 

@@ -30,42 +30,42 @@
 
         const anim = new Animator(
             () => {
+                if (model.done) anim.stop()
                 model.step()
                 view.draw()
-                gui.update()
+                // updatePlot()
             },
-            -1, // run forever
+            -1, // run until model stops: best tour constant for 500 steps
             30 // 30 fps
         ).startStats()
+        anim.setIdle(() => view.draw())
 
         const gui = new GUI({
-            fps: { // val numeric array: slider
-                val: [30, [5, 60, 5]],
+            fps: {
+                slider: [30, [5, 60, 5]],
                 cmd: val => anim.setFps(val),
             },
-            turtlesShape: { // val string array: chooser
-                val: ['bug', ['bug', 'dart', 'person']],
+            turtlesShape: {
+                chooser: ['bug', ['bug', 'dart', 'person']],
                 cmd: val => view.drawOptions.turtlesShape = val,
             },
-            turtlesColor: { // val color string: color picker
-                val: '#ff0000',
+            turtlesColor: {
+                color: '#ff0000',
                 cmd: val => view.drawOptions.turtlesColor = val,
             },
-            pause: { // val bool: switch/toggle
-                val: false,
+            pause: {
+                switch: false,
                 cmd: val => { if (val) { anim.stop() } else { anim.start() } },
             },
-            setTitle: { // val string: input
-                val: document.title,
+            setTitle: {
+                input: document.title,
                 cmd: val => document.title = val
             },
-            downloadCanvas: { // no val: button
-                cmd: () => view.downloadCanvas(),
+            downloadCanvas: {
+                button: () => view.downloadCanvas(),
             },
-            modelTicks: { // monitor
-                val: [model, 'ticks'],
-                // cmd: val => val = model.ticks,
-                // cmd: () => model.ticks,
+            modelTicks: {
+                monitor: [model, 'ticks'],
             },
         })
 

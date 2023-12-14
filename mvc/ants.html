@@ -65,6 +65,7 @@
             -1, // run forever
             30 // fps
         ).startStats()
+        anim.setIdle(() => view.draw())
 
         // ==== Define keyboard commands ====
 
@@ -97,36 +98,34 @@
         // ==== Define gui commands ====
 
         let template = {
-            fps: { // slider
-                val: [20, [5, 60, 5]],
+            fps: {
+                slider: [20, [5, 60, 5]],
                 cmd: val => anim.setFps(val),
             },
-            stop: { // switch/toggle
-                val: !anim.isRunning, // bool
+            stop: {
+                switch: !anim.isRunning, // bool
                 cmd: val => { if (val) { anim.stop() } else { anim.start() } },
-                // cmd: val => anim.toggle(),
             },
-            once: { // button
-                cmd: () => anim.once()
-                //gui.update(stop, false)
+            once: {
+                button: () => anim.once()
             },
-            modelWidth: { // slider
-                val: [500, [100, 1000, 25]],
+            modelWidth: {
+                slider: [500, [100, 1000, 25]],
                 cmd: val => view.width = val,
             },
-            turtlesShape: { // chooser
-                val: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
+            turtlesShape: {
+                chooser: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
                 cmd: val => view.drawOptions.turtlesShape = val,
             },
-            turtlesSize: { // chooser
-                val: [6, [1, 10, 1]],
+            turtlesSize: {
+                slider: [6, [1, 10, 1]],
                 cmd: val => view.drawOptions.turtlesSize = val,
             },
-            modelTicks: { // monitor
-                val: [model, 'ticks'],
+            modelTicks: {
+                monitor: [model, 'ticks'],
             },
-            downloadCanvas: { // button
-                cmd: () => view.downloadCanvas()
+            downloadCanvas: {
+                button: () => view.downloadCanvas()
             },
         }
         const gui = new GUI(template)

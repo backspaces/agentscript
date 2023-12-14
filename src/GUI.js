@@ -1,6 +1,16 @@
 import * as util from '../src/utils.js'
 import dat from '../vendor/dat.gui.js'
 
+const guiTypes = [
+    'color',
+    'button',
+    'input',
+    'slider',
+    'chooser',
+    'monitor',
+    'switch',
+]
+
 /** @class */
 class GUI {
     /**
@@ -8,12 +18,12 @@ class GUI {
      *
      * @example
      * const gui = new GUI ({
-     *     opacity: { // slider
-     *         val: [canvas.opacity, [0, 1, 0.1]],
+     *     opacity: {
+     *         slider: [canvas.opacity, [0, 1, 0.1]],
      *         cmd: val => canvas.setOpacity(val),
      *     },
-     *     download: { // button
-     *         cmd: () => util.downloadBlob(data, 'data.json', false),
+     *     download: {
+     *         button: () => util.downloadBlob(data, 'data.json', false),
      *     },
      *     ...
      * })
@@ -29,20 +39,18 @@ class GUI {
         if (width) this.gui.width = width
         const guis = [this.gui]
 
-        // this.folders['default'] = this.baseGui
-
-        let newFolder = obj => !obj.val && !obj.cmd
         const parseGuis = obj => {
             util.forLoop(obj, (obj, key) => {
-                if (newFolder(obj)) {
-                    console.log('new follder', key)
-
+                if (this.isFolder(obj)) {
+                    console.log('new folder', obj, key)
                     this.gui = this.gui.addFolder(key)
                     guis.push(this.gui)
                     parseGuis(obj)
                     guis.pop()
                     this.gui = guis.at(-1)
                 } else {
+                    // console.log('new ui', obj, key)
+                    // obj.type = this.objType(obj)
                     this.controllers[key] = this.addUI(obj, key)
                 }
             })
@@ -52,23 +60,15 @@ class GUI {
         console.log('controllers, values', this.controllers, this.values, guis)
     }
 
-    type(obj) {
-        const { val, cmd } = obj
-        const valType = util.typeOf(val)
-        const cmdType = util.typeOf(cmd)
-
-        if (this.isDatColor(val)) return 'color'
-        if (valType === 'undefined') return 'button'
-        if (valType === 'boolean') return 'toggle'
-        if (valType === 'string') return 'input'
-        if (valType === 'array' && val.length === 2) {
-            if (util.typeOf(val[0]) === 'number') return 'slider'
-            if (util.typeOf(val[0]) === 'string') return 'chooser'
-            if (util.typeOf(val[0]) === 'object') return 'monitor'
-            if (util.typeOf(val[0]) === 'array') return 'monitor'
-        }
-
-        throw Error('GUI type error, val: ' + val + ' cmd: ' + cmd)
+    objType(obj) {
+        let keys = Object.keys(obj)
+        keys = keys.filter(elem => elem !== 'cmd')
+        if (keys.length != 1) return false
+        const key = keys[0]
+        return guiTypes.includes(key) ? key : false
+    }
+    isFolder(obj) {
+        return this.objType(obj) === false
     }
 
     // /**
@@ -78,14 +78,17 @@ class GUI {
     //  * @returns A dat.gui control object
     //  */
     addUI(obj, key) {
-        let { val, cmd } = obj
-        const type = this.type(obj)
+        const type = this.objType(obj)
+        if (type === false) throw Error('GUI type error:' + obj)
+
+        let val = obj[type]
+        let cmd = obj.cmd
 
         let control, extent
 
         if (type === 'monitor') cmd = () => val[0][val[1]]
+        if (type === 'button') cmd = val
         if (['slider', 'chooser'].includes(type)) [val, extent] = val
-        if (type === 'button') val = cmd
 
         console.log('addUI:', type, key, val, cmd)
 
@@ -106,7 +109,7 @@ class GUI {
                 break
 
             case 'button':
-            case 'toggle':
+            case 'switch':
             case 'input':
                 control = this.gui.add(this.values, key)
                 break
@@ -120,49 +123,21 @@ class GUI {
         }
 
         // initialize: set model etc initial values to this value
-        if (!['monitor', 'button', 'toggle'].includes(type)) cmd(val)
-        // if (cmd && val && type !== 'monitor') cmd(val)
-        // if (val === 'listen') this.setListener(key, cmd)
+        if (!['monitor', 'button', 'switch'].includes(type)) cmd(val)
 
         if (cmd) {
             // if (val === 'listen') control.listen().onChange(cmd)
-            if (type === 'monitor') control.listen() //.onChange(cmd)
-            else control.onChange(cmd)
+            if (type === 'monitor') {
+                control.listen() //.onChange(cmd)}
+            } else {
+                control.onChange(cmd)
+            }
         }
 
         return control
     }
-    updateGui(name, value) {
-        console.log('updateGui name, value', name, value)
-    }
-
-    isDatColor(val) {
-        if (util.typeOf(val) === 'string') {
-            if (val[0] === '#') return val.length === 7 || val.length === 4
-            if (val.startsWith('rgb(') || val.startsWith('rgba('))
-                return val.endsWith(')')
-            if (val.startsWith('hsl(') || val.startsWith('hsla('))
-                return val.endsWith(')')
-            if (val.startsWith('hsv(') || val.startsWith('hsva('))
-                return val.endsWith(')')
-        }
-
-        if (util.typeOf(val) === 'object')
-            return val.h != null && val.s != null && val.v != null
-        // if (util.typeOf(val) === 'array') {
-        //     if (val.length === 3 || val.length === 4)
-        //         return val.every(i => util.typeOf(i) === 'number')
-        // }
-
-        return false
-    }
-    // setListener(key, cmd) {
-    //     this.values[key] = cmd()
-    // }
-    // update() {
-    //     util.forLoop(this.template, (obj, key) => {
-    //         if (obj.val === 'listen') this.setListener(key, obj.cmd)
-    //     })
+    // updateGui(name, value) {
+    //     console.log('updateGui name, value', name, value)
     // }
 }
 

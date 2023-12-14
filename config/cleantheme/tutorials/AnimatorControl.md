@@ -8,7 +8,7 @@ We've already used one in the [View tutorial](/config/cleantheme/tutorials/View#
 
 To explore the Animator control, we'll use the browser's Developer Console
 
-### Browser's Developer Console
+<!-- ### Browser's Developer Console
 
 We'll be using the browser's [Developer's Console](https://balsamiq.com/support/faqs/browserconsole/).
 This is a bit like our [view-source capability](https://www.computerhope.com/issues/ch000746.htm).
@@ -23,7 +23,7 @@ Chrome's looks like this:
 
 ![Image](/config/cleantheme/static/DevConsole.jpg)
 
-In the row of choices, click on "Console". You'll get the view shown above
+In the row of choices, click on "Console". You'll get the view shown above -->
 
 ### Animator
 

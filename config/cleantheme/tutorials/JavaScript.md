@@ -25,11 +25,11 @@ It gives you small snippets of code which you cut/paste into the console. here's
 
 ## Eloquent Javascript
 
-Here is a much loved book: https://eloquentjavascript.net/
+Here is a much loved free online book: https://eloquentjavascript.net/
 
 ![Image](/config/cleantheme/static/Eloquent.jpg)
 
-This is a complete, easy to use reference, "Modern JavaScript": https://javascript.info/
+Also there is a complete, easy to use reference, "Modern JavaScript": https://javascript.info/
 
 ![Image](/config/cleantheme/static/Modern1.jpg)
 
@@ -37,7 +37,7 @@ This is a complete, easy to use reference, "Modern JavaScript": https://javascri
 
 ## MDN
 
-And the Mozilla Developer Network (fMDN) https://developer.mozilla.org/
+Finally there's the Mozilla Developer Network (fMDN) https://developer.mozilla.org/
 
 ![Image](/config/cleantheme/static/MDN1.jpg)
 
@@ -45,8 +45,18 @@ is the _Source of All Truth_ for all things browser. The JavaScript section http
 
 ![Image](/config/cleantheme/static/MDN2.jpg)
 
-## Developer Console
+<!-- ## Developer Console
 
 ```js script
 console.log('you got executed from an markdown file')
-```
+``` -->
+
+With all these resources, you might ask: how do I actuall write JavvaScript? The easiest way is simple use the browser's Developer Tools discussed in the Browser tutorial.
+
+Lets try it. Open a new Browser tab. Then get to the Developer Console, "Option" + "Control" + "J" or equivalent for your browser. Grab the console and make it most of the page.
+
+![Image](/config/cleantheme/static/DevConsole2.jpg)
+
+Now you can write simple JavaScript tests.
+
+![Image](/config/cleantheme/static/DevConsoleCode.jpg)
