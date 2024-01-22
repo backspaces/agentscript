@@ -25,11 +25,11 @@ It gives you small snippets of code which you cut/paste into the console. here's
 
 ## Eloquent Javascript
 
-Here is a much loved free online book: https://eloquentjavascript.net/
+[Eloquent Javascript](https://eloquentjavascript.net/) is a much loved free online book:
 
 ![Image](/config/cleantheme/static/Eloquent.jpg)
 
-Also there is a complete, easy to use reference, "Modern JavaScript": https://javascript.info/
+Also there is a complete, easy to use reference, ["Modern JavaScript"](https://javascript.info/)
 
 ![Image](/config/cleantheme/static/Modern1.jpg)
 
@@ -51,7 +51,7 @@ is the _Source of All Truth_ for all things browser. The JavaScript section http
 console.log('you got executed from an markdown file')
 ``` -->
 
-With all these resources, you might ask: how do I actuall write JavvaScript? The easiest way is simple use the browser's Developer Tools discussed in the Browser tutorial.
+With all these resources, you might ask: how do I actuall write JavaScript? The easiest way is simple use the browser's Developer Tools discussed in the Browser tutorial.
 
 Lets try it. Open a new Browser tab. Then get to the Developer Console, "Option" + "Control" + "J" or equivalent for your browser. Grab the console and make it most of the page.
 

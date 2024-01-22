@@ -1,0 +1,84 @@
+The GUI control provides a drop-down menu with multiple types of items.
+The current set of items is:
+
+-   slider: Select a numeric value
+-   chooser: Select a text value among a list
+-   switch: Switch between two values via a boolean value
+-   button: Execute a command
+-   color: Choose a color mongst a colors pop-up
+-   monitor: Follow of the progress of an object and one of it's properties
+-   input: Enter text to be used by the item
+
+The API for these is a key-object pair:
+
+-   The text label for the item and
+-   An obect with the item name with it's available values, and a command
+    that is executed when the item is chosen. Here's an example of each type:
+
+```javascript
+const gui = new GUI({
+    turtlesSize: {
+        slider: [1, [0.5, 10, 0.5]],
+        cmd: val => (view.drawOptions.turtlesSize = val),
+    },
+    turtlesShape: {
+        chooser: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
+        cmd: val => (view.drawOptions.turtlesShape = val),
+    },
+    useMouse: {
+        switch: false,
+        cmd: val => {
+            if (val) {
+                mouse.start()
+            } else {
+                mouse.stop()
+            }
+        },
+    },
+    downloadCanvas: {
+        button: () => view.downloadCanvas(),
+    },
+    turtlesColor: {
+        color: '#ff0000',
+        cmd: val => (view.drawOptions.turtlesColor = val),
+    },
+    modelTicks: {
+        monitor: [model, 'ticks'],
+    },
+    setTitle: {
+        input: 'Play',
+        cmd: val => (document.title = val),
+    },
+})
+```
+
+This would result in this menu:
+
+![Image](/config/cleantheme/static/GuiDropdown.jpg)
+
+Here is [an example](https://code.agentscript.org/mvc/hello.html) using each one of them.
+
+Finally, there is the ability to "nest" GUI items in folders.
+
+![Image](/config/cleantheme/static/GuiFolder.jpg)
+
+[Here is an example, a Turtles Folder](https://code.agentscript.org/mvc/gui.html)
+
+Folders are created like this:
+
+```javascript
+'Turtles Folder': {
+    turtlesShape: {
+        chooser: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
+        cmd: val => view.drawOptions.turtlesShape = val,
+    },
+    turtlesSize: {
+        slider: [1, [0.5, 10, 0.5]],
+        cmd: val => view.drawOptions.turtlesSize = val,
+    },
+    turtlesColor: {
+        color: '#ff0000',
+        cmd: val => view.drawOptions.turtlesColor = val,
+    },
+},
+```

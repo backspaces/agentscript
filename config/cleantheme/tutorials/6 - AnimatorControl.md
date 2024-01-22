@@ -68,6 +68,14 @@ Then `anim.start()` to restart with the new parameters.
 
 ![Image](/config/cleantheme/static/RestartAnim.jpg)
 
+The animator also provides an idle() function
+
+`anim.idle(fcn)` // When animator is stopped, use idle to perform fcn at 4 fps
+
+This is primarily used in some GUIs where users can stop/start the animator.
+Generally the fcn redraws the model so that if stopped, and changes are made
+in the GUI, not the Model, the view is updated.
+
 A few more functions:
 
 `anim.startStats()` // puts a fps widget on screen

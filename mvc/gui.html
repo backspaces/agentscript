@@ -41,17 +41,20 @@
         let selectedTurtle
         const mouse = new Mouse(model, view, mouse => {
             const { x, y, action } = mouse
-            if (action === "mousedown") {
-                // anim.stop()
-                selectedTurtle = model.turtles.minOneOf(t => t.distanceXY(x, y))
+            switch (action) {
+                case 'mousedown':
+                    // anim.stop()
+                    selectedTurtle = model.turtles.minOneOf(t => t.distanceXY(x, y))
+                    break
+                case 'mousedrag':
+                    if (selectedTurtle) selectedTurtle.setxy(x, y)
+                    break
+                case 'mouseup':
+                    // anim.start()
+                    selectedTurtle = null
+                    break
             }
-            if (action === "mouseup") {
-                // anim.start()
-                selectedTurtle = null
-            }
-            if (selectedTurtle) selectedTurtle.setxy(x, y)
-            view.draw()
-        })
+        }).start()
 
         const gui = new GUI({
             fps: {

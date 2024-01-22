@@ -31,13 +31,15 @@ Here's an article on finding your browser's [Developer's Console](https://balsam
 
 In Chrome and Safari (after enabling the feature), "Option" + "Control" + "J" opens the Developer's console. Use the link above to find how to access all the browsers console.
 
-To get started, go to our [pheromone.html page](https://code.agentscript.org/views2/pheromone.html). Then open the Developer Console as above.
+<!-- o get started, go to our [pheromone.html page](https://code.agentscript.org/views2/pheromone.html) Then open the Developer Console as above. -->
+
+To get started, go to our <a href="https://code.agentscript.org/views2/pheromone.html" target="_blank"> pheromone.html page</a> Then open the Developer Console as above.
 
 Chrome's looks like this:
 
 ![Image](/config/cleantheme/static/DevConsole.jpg)
 
-In the row of choices, click on "Console". You'll get the view shown above.
+In the row of choices, click on "Console" if not already highlighted. You'll get the view shown above. The text "toWindow ..." is used by the model to make these variables available for debugging. Type "model" at the prompt to see the model's state.
 
 <!-- This is a bit like our [view-source capability](https://www.computerhope.com/issues/ch000746.htm).
 Both are very useful in exploring and debugging.
