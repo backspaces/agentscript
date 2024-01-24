@@ -113,7 +113,7 @@ for (const key of Object.keys(results)) {
             assert(true)
         } else {
             const areEqual = util.objectsEqual(results[key], oldResults[key])
-            // assert(areEqual)
+            assert(areEqual)
             assert(true)
         }
     })
