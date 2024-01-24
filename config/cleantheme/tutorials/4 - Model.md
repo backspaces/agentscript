@@ -3,7 +3,7 @@
 We saw small snippets of Patches, Turtles and Links. Now we want to use those
 to create our first Model, within the file PheromoneModel.js.
 
-### Pheromone Model
+## Pheromone Model
 
 ```javascript
 import Model from '../src/Model.js' // Import the modules we need.
@@ -58,7 +58,7 @@ export default class PheromoneModel extends Model {
 }
 ```
 
-### Pheromone HTML
+## Pheromone HTML
 
 Then we run it in the browser for 500 steps printing out a
 random sample when done.
@@ -87,7 +87,7 @@ random sample when done.
 </html>
 ```
 
-### Pheromone Output
+## Pheromone Output
 
 When we run this in the browser, the results look like:
 
@@ -134,7 +134,7 @@ When we run this in the browser, the results look like:
 
 Each run will differ due to being a random sampling.
 
-### View the source
+## View the source
 
 To see model's code, use the browser's [view-source capability](https://www.computerhope.com/issues/ch000746.htm). On Chrome and Edge, just press "Option + Control" + "U". For other browsers, use the view-source capability link above.
 

@@ -4,7 +4,7 @@ To "see" the model running, we need the V in MVC .. the View. There are several 
 
 You can see this in action with our [PheronomeModel](/views2/pheromone.html) and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm)
 
-### TwoDraw
+## TwoDraw
 
 First, the Pheromone Model does not change. Rather you add TwoDraw and modify the HTML.
 
@@ -14,7 +14,7 @@ First, the Pheromone Model does not change. Rather you add TwoDraw and modify th
 -   We instantiate TwoDraw
 -   And finally we introduce an Animator which runs the model and view.
 
-### TwoDraw HTML
+## TwoDraw HTML
 
 ```html
 <head>
@@ -63,7 +63,7 @@ First, the Pheromone Model does not change. Rather you add TwoDraw and modify th
 </html>
 ```
 
-### TwoDraw Options
+## TwoDraw Options
 
 TwoDraw above takes the HTML div where we will place the view and the size of patches in pixels.
 It also takes drawOptions containing the drawing properties. Here are the defaults.

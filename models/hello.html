@@ -6,28 +6,15 @@
 
 <body>
     <script type="module">
-        // An html file for running the ./HelloModel.js
-        // Run any other model by changing the import's path (i.e. ./MyModel.js)
         import * as util from '../src/utils.js'
         import Model from './HelloModel.js'
-        // import Model from '../models/HelloModel.js'
 
-        // Run the model 500 steps. Async used for startup() and timeoutLoop().
-        // Startup not needed by Hello but others will need it..
-        // Avoid a white screen puzzling the user!
         util.printToPage(`Running for 500 steps.`)
 
-        // Now create, init and run the model 500 steps
         const model = new Model()
-        await model.startup()
         model.setup()
-        await util.timeoutLoop(() => {
-            model.step()
-        }, 500)
-        // That's it!
+        util.repeat(500, model.step)
 
-        // For our use, we print out a sample of the model's variables.
-        // It will be different each run of the model
         const sample = util.sampleModel(model)
         util.printToPage(sample)
     </script>

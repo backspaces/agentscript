@@ -3,7 +3,7 @@
 One of the simplest controls is the KeyboardControl. It also is easy to setup.
 We'll use the pheromone example, adding keyboard controls
 
-### Keyboard
+## Keyboard
 
 The input to the Keyboard control is an array of objects, each with a key and cmd value. It looks like:
 
@@ -25,7 +25,7 @@ The `o key` will call the animator "once" function.
 
 The `d key` will download the view's image.
 
-### Modifiers
+## Modifiers
 
 We also support modifiers like: `AltKey, ctrlKey, metaKey, shiftKey` so that "Alt-o", the Alt key down and the o key pressed, is the trigger for `anim.once()` above.
 
