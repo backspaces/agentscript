@@ -4,22 +4,27 @@ import Model from '../src/Model3D.js'
 export default class Camera3DModel extends Model {
     width = 32
     height = 24
-    heading = 0
-    tilt = 0
-    roll = 0
-    sphereRadius = 8
+    sphereRadius = 12
     fieldOfView = 90
+
+    // the camera's 3D orientation
+    heading = 0
+    pitch = 0
+    roll = 0
+
+    // used for animation of the camera in step()
+    pitchDelta = 0
+    rollDelta = 0
+    headingDelta = 0
 
     // ======================
 
     // constructor(worldDptions) { // not needed
     //     super(worldDptions) // default world options if "undefined"
     // }
+
     setup() {
-        // this.setGeometry('degrees')
-        // util.setGeometry(this, 'degrees')
         this.turtleBreeds('cameras pixels')
-        // this.links.setDefault('hidden', true)
 
         this.camera = this.cameras.createOne()
 
@@ -32,35 +37,51 @@ export default class Camera3DModel extends Model {
             }
         }
 
-        // this.pixels.ask(px => this.links.createOne(px, this.camera))
-
         this.moveCamera()
     }
 
     toggleLinks() {
-        // this.links.setDefault('hidden', !this.links.getDefault('hidden'))
         if (this.links.length === 0) {
             this.pixels.ask(px => this.links.createOne(px, this.camera))
         } else {
             this.links.clear()
         }
     }
+
     reset() {
-        this.heading = this.tilt = this.roll = 0
-        this.sphereRadius = 8
+        this.heading = this.pitch = this.roll = 0
+        this.headingDelta = this.pitchDelta = this.rollDelta = 0
+        this.sphereRadius = 12
         this.fieldOfView = 90
-        this.moveCamera()
+        this.links.clear()
+
+        // this.moveCamera()
+    }
+
+    setHeadingPitchRoll(heading, pitch, roll) {
+        this.heading = heading
+        his.pitch = pitch
+        this.roll = roll
+    }
+
+    setHeadingPitchRollDelta(headingDelta, pitchDelta, rollDelta) {
+        this.headingDelta = headingDelta
+        this.pitchDelta = pitchDelta
+        this.rollDelta = rollDelta
     }
 
     step() {
-        // No-op for now, dat.gui manipulates the scene
+        this.heading = util.mod180180(this.heading + this.headingDelta)
+        this.pitch = util.mod180180(this.pitch + this.pitchDelta)
+        this.roll = util.mod180180(this.roll + this.rollDelta)
+        this.moveCamera()
     }
 
     moveCamera() {
         const aspectRatio = this.width / this.height
 
         this.camera.heading = this.heading
-        this.camera.pitch = this.tilt
+        this.camera.pitch = this.pitch
         this.camera.roll = this.roll
 
         this.pixels.ask(px => {

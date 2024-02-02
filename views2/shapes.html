@@ -10,13 +10,13 @@
     <!-- <p>I am copyright &copy; I am a lion &#129409; Me too &#x1F981; </p> -->
 
     <script type="module">
-        import * as util from '../src/utils.js'
-        import TwoDraw from '../src/TwoDraw.js'
-        import Animator from '../src/Animator.js'
-        import Model from '../models/HelloModel.js'
-        import World from '../src/World.js'
-        import Shapes from '../src/Shapes.js'
-        import * as emoji from '../src/emoji.js'
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import Model from 'https://code.agentscript.org/models/HelloModel.js'
+        import World from 'https://code.agentscript.org/src/World.js'
+        import Shapes from 'https://code.agentscript.org/src/Shapes.js'
+        import * as emoji from 'https://code.agentscript.org/src/emoji.js'
 
         // JS emojies
         // console.log("At: \x40, Sum: \u2211, Tree: \u{1F332}")
@@ -30,11 +30,11 @@
         async function addImages() {
             await shapes.imagePathPromise(
                 'twitter',
-                '../models/data/twitter.png'
+                'https://code.agentscript.org/models/data/twitter.png'
             )
             await shapes.imagePathPromise(
                 'redfish',
-                '../models/data/redfish.png'
+                'https://code.agentscript.org/models/data/redfish.png'
             )
             createEmojiPath('lion', 0x1F981)
             createEmojiPath('smiley', 0x1F600)

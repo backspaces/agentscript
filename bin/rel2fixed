@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+const shell = require('shelljs')
+// shell.config.silent = true
+
+let dir = process.argv[2]
+if (!dir) throw Error('Needs dir argument')
+
+shell.cd(dir)
+// shell.cd('views2')
+const files = shell.ls('*html')
+
+files.forEach(file => {
+    shell.echo(file)
+    shell.sed('-i', `'../`, `'https://code.agentscript.org/`, file)
+    // .to('code' + file)
+})
+// const urlRoot = `https://code.agentscript.org/${dir}/`

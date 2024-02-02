@@ -13,7 +13,8 @@ class CountiesModel extends HelloModel {
     }
 
     constructor(options = CountiesModel.defaultOptions()) {
-        console.log('counties: ctor options', Object.keys(options))
+        // console.log('counties: ctor options', Object.keys(options))
+        console.log('counties: ctor options', options)
         super(options)
     }
     setup() {

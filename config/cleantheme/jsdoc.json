@@ -32,6 +32,11 @@
                     "link": "https://github.com/backspaces/agentscript"
                 },
                 {
+                    "title": "AgentScript.org",
+                    "id": "AgentScript",
+                    "link": "https://code.agentscript.org"
+                },
+                {
                     "title": "npm",
                     "id": "npm",
                     "link": "https://www.npmjs.com/package/agentscript"

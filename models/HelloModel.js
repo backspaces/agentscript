@@ -1,3 +1,4 @@
+import World from 'https://code.agentscript.org/src/World.js'
 import Model from 'https://code.agentscript.org/src/Model.js'
 import * as util from 'https://code.agentscript.org/src/utils.js'
 
@@ -6,8 +7,8 @@ class HelloModel extends Model {
     speed = 0.1 // step size in patch units
     wiggleAngle = 10 // wiggle angle in degrees
 
-    constructor() {
-        super() // call "Model"s constructor
+    constructor(worldOptions = World.defaultOptions()) {
+        super(worldOptions) // call "Model"s constructor
     }
 
     setup() {

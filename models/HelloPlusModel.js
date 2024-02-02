@@ -4,24 +4,22 @@ import * as util from '../src/utils.js'
 // Here is a simple modification that allows setting the population dynamically.
 // Note that speed & wiggle are already dynamic.
 export default class HelloPlusModel extends HelloModel {
-    population = 200 // override HelloModel
-    minPopulation = 10
-    maxPopulation = 500
-    changeTick = 50 // set to null to avoid auto population changes
+    population = 15 // override HelloModel
+    minPopulation = 5
+    maxPopulation = 25
+    changeTick = 25 // set to null to avoid auto population changes
 
     // ======================
 
     // We can use Model's constructor, due to using Model's default World.
     // If you pass in world options, Model will use them
-    // constructor() {
-    //     super() // use default world options.
-    // }
+    constructor() {
+        super() // use default world options.
+    }
 
     step() {
-        if (
-            this.changeTick & (this.ticks !== 0) &&
-            util.mod(this.ticks, this.changeTick) === 0
-        ) {
+        if (util.mod(this.ticks, this.changeTick) === 0) {
+            // true when ticks = 0
             this.population = util.randomInt2(
                 this.minPopulation,
                 this.maxPopulation
@@ -47,7 +45,7 @@ export default class HelloPlusModel extends HelloModel {
         }
         // make sure all turtles have at least one link
         this.turtles.ask(t => {
-            if (t.population > 1 && t.links.length === 0) {
+            if (t.links.length === 0) {
                 this.links.create(t, this.turtles.otherOneOf(t))
             }
         })

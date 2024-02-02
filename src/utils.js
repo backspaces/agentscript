@@ -405,11 +405,14 @@ export function mod360(degrees) {
 export function mod2pi(radians) {
     return mod(radians, 2 * PI)
 }
-export function modpipi(radians) {
-    return mod(radians, 2 * PI) - PI
-}
+
+// export function modpipi(radians) {
+//     return mod(radians, 2 * PI) - PI
+// }
 export function mod180180(degrees) {
-    return mod360(degrees) - 180
+    let theta = mod360(degrees)
+    if (theta > 180) theta -= 360
+    return theta
 }
 
 // Heading & Radians: coord system

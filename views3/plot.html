@@ -17,7 +17,7 @@
         import * as util from '../src/utils.js'
         import Color from '../src/Color.js'
         import ThreeDraw from '../src/ThreeDraw.js'
-        import Model from './Camera3DModel.js'
+        import Model from '../models/Camera3DModel.js'
         import Chart from 'https://cdn.skypack.dev/chart.js@2.9.4'
         import dat from '../vendor/dat.gui.js'
 
@@ -81,7 +81,7 @@
             }
 
             guiAddVal(model, 'heading', -180, 180, 5)
-            guiAddVal(model, 'tilt', -180, 180, 5)
+            guiAddVal(model, 'pitch', -180, 180, 5)
             guiAddVal(model, 'roll', -180, 180, 5)
             guiAddVal(model, 'sphereRadius', 0, 16, 1)
             guiAddVal(model, 'fieldOfView', 1, 180, 1)

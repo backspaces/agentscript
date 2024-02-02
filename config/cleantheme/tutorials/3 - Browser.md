@@ -2,7 +2,7 @@ AgentScript runs in the browser. This means the models you create will be contai
 
 ## HTML Files
 
-An HTML file for AgentScrit models looks like these:
+An HTML file for AgentScript models looks like these:
 
 ```html
 <html>
@@ -60,7 +60,7 @@ You can see this in action with our PheronomeModel above, and see the code via "
 
 Don't be concerned about all the new concepts! Here are the main ideas:
 
--   The import's bring modules into our program.
+-   The import's bring modules into our program, including the PheromoneModel itslef.
 -   The colorMap is used to color the Model's patches (background squares)
 -   The Model is our [PheromoneModel](https://code.agentscript.org/models/PheromoneModel.js), the parts of which are discussed in our [Snippets](https://code.agentscript.org/config/cleantheme/Snippets.html) demo.
 -   A new instance of the Model is created using the "new" operator.

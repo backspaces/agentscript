@@ -1,6 +1,210 @@
 <!-- # Model -->
 
-We saw small snippets of Patches, Turtles and Links. Now we want to use those
+We saw Snippets of Patches, Turtles and Links. Now we want to use those
+to create our first Model, our Hello World model.
+
+There will be three parts:
+
+-   Creating the HelloModel.js, and
+-   Creating the hello.html file which uses HelloModel.js and
+-   Using a browser to run hello.html
+
+## Model
+
+Our HelloModel.js is simple, yet uses all the elements of more complex models.
+
+Lets look at [HelloModel.js](https://code.agentscript.org/models/HelloModel.js)
+
+![Image](/config/cleantheme/static/HelloModel.jpg)
+
+We first import two modules fromout src/ folder
+
+-   Model.js: This is used by all models and creates the Patches, Turtles and Links.
+-   utils.js: A collection of useful utility functions. We'll use util.randomCentered
+
+Then we create a [Class](https://javascript.info/class) which [inherits](https://javascript.info/class-inheritance) from the Model.js import (which manages the Patches, Turtles, Links). All Models start out inheriting from Model.js.
+
+The class has 3 variables, a constructor, and two methods.
+
+-   The constructor just calles the Model.js super class
+-   The three variables are used in the 2 methods to create the model's behavior
+-   setup:
+    -   creates "population" turtles
+    -   create a link from every turtle to a random other turtle
+-   step:
+    -   use "wiggleAngle" to ask each turtle to turn randomly from -(wiggleAngle/2) to +(wiggleAngle/2)
+    -   use "speed" to move each turtle forward
+-   Finally we export HelloModel to be used elsewhere. For example, in the HTML below.
+
+## HTML
+
+The HTML used by the browser is quite simple. It provides a title, and a script which imports the HelloModel.js above, calls model.step 500 times, and it prints a start message and a random sample of the model's data.
+
+![Image](/config/cleantheme/static/HelloHtml.jpg)
+
+You can run it [here](https://code.agentscript.org/models/hello.html). Click the browser's reload button to get a new random sampling. They look like:
+
+![Image](/config/cleantheme/static/RandomSample.jpg)
+
+## Run models locally
+
+This is a good time to have your work locally on your desktop.
+
+Start by creating a local folder and moving there, we'll call it models/. I'm using my home directory. You can create a folder with your system folders, or with the terminal:
+
+Terminal:
+
+-   cd # go to my home dir
+-   mkdir models # make my models/ dir
+
+System Folder:
+
+![Image](/config/cleantheme/static/SystemFolder.jpg)
+
+Lets start with the two examples we've just used: HelloModel.js & hello.html.
+
+The easiest way to do this is to go to github above. Once there, click on the models folder on the right where the two demos live. Click on HelloModel.js, then click on the upper right download icon (downward arrow).
+
+![Image](/config/cleantheme/static/GithubSource.jpg)
+
+This will download HelloModel.js to your downloads folder. Similarly download hello.html. You should see this on you local downloads folder.
+
+![Image](/config/cleantheme/static/DownloadModel.jpg)
+
+Move these to your models/ folder. You can use the terminal:
+
+-   cd to your downloads folder (In my home dir on my system .. cd ~/Downloads)
+-   mv hello.html HelloModel.js ~/models
+
+Or you can use your system folders:
+
+Open two folders, Downloads and you models folder.
+
+Drag and Drop the two files to your models folder.
+
+Should look like:
+
+![Image](/config/cleantheme/static/ModelsDir.jpg)
+
+Lets make sure it works. Make sure you have a browser open. Then do any of the following:
+
+-   Drag and drop the hello.html file from your folder to the browser.
+-   Double click on hello.html
+-   From the models dir: open hello.html
+
+The model should be running in the browser.
+
+It will have a "file url": file:///Users/owen/models/hello.html
+
+Now lets modify/play with the two files. You'll need an editor. The best by far in the developer community is [vscode](https://code.visualstudio.com/). And you don't need to install it if you don't want to, you can [run it in your browser](https://vscode.dev/)
+
+![Image](/config/cleantheme/static/VscodeDev.jpg)
+
+Change HelloModel.js:
+
+-   change population from 10 to 100
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+... etc
+
+But wait! Where's the pretty View?
+
+## View xxxxxxx
+
+The reason for this is that AgentScript uses the Model, View, Controller architecture.
+In this case, it means the Model, by itself, is simple data in (startup), updated each step(), printing the random sample when done (500 steps). The printout is our "View".
+
+Thus far we've only discussed the Model. So views1/hello.html just shows the Model.
+
+No worries, we'll use a nice View shortly. But in the mean time we have to figure out how run hello.html.
+
+## Run demos locally
+
+We've been running demos on code.agentscript.org. Now lets get these and run them on your desktop! Yay!
+
+So first let's get the two files: HelloModel.js & hello.html. Lets get them from Github, see link above.
+
+Running the hello.html file has two parts:
+
+-   Getting the HelloModel.js and hello.html files into a folder.
+-   Using a "developer server" on your desktop
+
+Start by creating a local folder and moving there, we'll call it models/:
+
+-   mkdir models
+-   cd models
+
+<!-- One way to do this is to get them from code.agentscript.org, them use the view-source technique introduced in the Browser tutorial:
+
+Use the browser to view https://code.agentscript.org/models/HelloModel.js. It will show you the code and you can cut/paste it to to HelloModel.js in your new folder.
+
+Then use the browser to view https://code.agentscript.org/models/hello.html. It will actually show it running. Then you use view-source to view the html file which you can cut/past into the folder
+
+Looks like this:
+
+![Image](/config/cleantheme/static/ViewSource1.jpg)
+
+This can also be done on one step on chrome:
+
+-   HelloModel.js: `view-source:https://code.agentscript.org/models/HelloModel.js`
+-   hello.html: `view-source:https://code.agentscript.org/models/hello.html`
+ -->
+
+One approach is to click Github on the top of this page. (or brouse directly to https://github.com/backspaces/agentscript/)
+
+Then click on models/ then click on HelloModel.js and hello.html in turn. Both show the code. Click the download icon (downward arrow) which puts them in your downloads, where you can move them to your folder.
+
+![Image](/config/cleantheme/static/GithubSource.jpg)
+
+If for some reason this doesn't work, you can just copy the raw files, and paste them into any text editor, then saving them to your folder (make sure you save to the right names!)
+
+## Notes
+
+Running the hello.html file has two parts:
+
+-   Getting the HelloModel.js and hello.html files into a folder.
+-   Using a "developer server" on your desktop
+
+The use of "../" in the import URLs above are due to the file layouts:
+All the External Model files are in the top lever models/ directory while
+the two imports are in the top level src/ dir. So "../" gets me to the top level
+and "../src" into the src/ directory.
+
+Here is HelloModel.js running withiin the hello.html HTML file:
+[views1/hello.html](../views1/hello.html)
+
+You'll notice that the model simply runs 500 steps then prints out a random
+sampling of its result.
+
+Where's the pretty View?
+
+## Views (Model/View/Controller)
+
+The reason for this is that AgentScript uses the Model/View/Controller (MVC) architecture.
+In this case, it means the Model, by itself, is simple Data in, and updated each step().
+Thus far we've only discussed the Model. So views1/hello.html just shows the Model.
+
+Here a 2D view: [views2/hello.html](../views2/hello.html)
+
+Because the Model is separate, it is easy to create additional views as well.
+
+Here are a 2.5D and 3D version with little change.
+
+Here's 2.5D (simply adding Z): [views25/hello3d.html](../views25/hello3d.html)
+
+And here a true 3D, with Yaw, Pitch, Roll and 3D turtles: [views3/hello3d.html](../views3/hello3d.html)
+
+Because the MVC components are separate modules, it's quite easy to put Models
+in different environments, as we show above with 2D, 2.5D and 3D Vviews.
+Even more flexiblity will show up when we embed Models with 2D Views onto Maps!
+
+BTW: MVC makes building Models simpler: use the views1 "View" above to run just the Model.
+Then when it runs without problems, add a View.
+
+# Foo
+
+We saw small Snippets of Patches, Turtles and Links. Now we want to use those
 to create our first Model, within the file PheromoneModel.js.
 
 ## Pheromone Model
