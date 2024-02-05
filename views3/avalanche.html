@@ -44,7 +44,9 @@
             drawOptions
         )
 
-        const anim = new Animator(
+        util.toWindow({ util, model, view, ColorMap, Color })
+
+        await new Animator(
             () => {
                 model.step()
                 view.draw()
@@ -53,8 +55,7 @@
             30 // 30 fps
         )
 
-        util.toWindow({ util, model, view, anim, ColorMap, Color })
-
+        view.idle()
     </script>
     <div id="modelDiv"></div>
 </body>

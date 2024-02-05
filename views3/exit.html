@@ -13,54 +13,52 @@
         import World from '../src/World.js'
 
         import Turtle3D from '../src/Turtle3D.js'
+        import Animator from '../src/Animator.js'
         import Model from '../models/ExitModel.js'
 
-        async function run() {
-            const model = new Model()
-            await model.startup()
-            model.setup()
+        const model = new Model()
+        await model.startup()
+        model.setup()
 
-            // DrawOptions here due to using model
-            const patchColors = model.patches.map(p => {
-                switch (p.breed.name) {
-                    case 'exits':
-                        return ColorMap.Basic16.atIndex(p.exitNumber + 4)
-                    case 'inside':
-                        return Color.typedColor('black')
-                    case 'wall':
-                        return Color.typedColor('gray')
-                    default:
-                        return ColorMap.LightGray.randomColor()
-                }
-            })
-            const drawOptions = {
-                turtlesMesh: 'Obj3DMesh',
-                turtlesShape: 'Cone',
-                turtlesColor: t => patchColors[t.exit.id],
-                turtlesSize: 1,
-                initPatches: (model, view) => patchColors,
+        // DrawOptions here due to using model
+        const patchColors = model.patches.map(p => {
+            switch (p.breed.name) {
+                case 'exits':
+                    return ColorMap.Basic16.atIndex(p.exitNumber + 4)
+                case 'inside':
+                    return Color.typedColor('black')
+                case 'wall':
+                    return Color.typedColor('gray')
+                default:
+                    return ColorMap.LightGray.randomColor()
             }
-
-            const view = new ThreeDraw(
-                model,
-                { div: 'modelDiv' },
-                drawOptions
-            )
-
-            util.toWindow({ util, model, view })
-
-            await util.timeoutLoop(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500,
-                33
-            )
-
-            view.idle()
+        })
+        const drawOptions = {
+            turtlesMesh: 'Obj3DMesh',
+            turtlesShape: 'Cone',
+            turtlesColor: t => patchColors[t.exit.id],
+            turtlesSize: 1,
+            initPatches: (model, view) => patchColors,
         }
-        run()
+
+        const view = new ThreeDraw(
+            model,
+            { div: 'modelDiv' },
+            drawOptions
+        )
+
+        util.toWindow({ util, model, view })
+
+        await new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        )
+
+        view.idle()
     </script>
     <div id="modelDiv"></div>
 </body>

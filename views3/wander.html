@@ -8,6 +8,7 @@
     <script type="module">
         import * as util from '../src/utils.js'
         import ThreeDraw from '../src/ThreeDraw.js'
+        import Animator from '../src/Animator.js'
         import Model from '../models/Wander3DModel.js'
 
         const drawOptions = {
@@ -16,34 +17,31 @@
             turtlesSize: 3,
         }
 
-        async function run() {
-            const model = new Model()
-            await model.startup()
-            model.setup()
+        const model = new Model()
+        await model.startup()
+        model.setup()
 
-            const view = new ThreeDraw(
-                model,
-                {
-                    div: document.body, //'modelDiv',
-                    turtles: { meshClass: 'Obj3DMesh', useAxes: true },
-                },
-                drawOptions
-            )
+        const view = new ThreeDraw(
+            model,
+            {
+                div: document.body, //'modelDiv',
+                turtles: { meshClass: 'Obj3DMesh', useAxes: true },
+            },
+            drawOptions
+        )
 
-            util.toWindow({ util, model, view })
+        util.toWindow({ util, model, view })
 
-            await util.timeoutLoop(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                -1, //500,
-                33 // 33
-            )
+        await new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500,
+            30
+        )
 
-            view.idle()
-        }
-        run()
+        view.idle()
     </script>
     <div id="modelDiv"></div>
 </body>

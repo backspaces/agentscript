@@ -10,6 +10,7 @@
         import World from '../src/World.js'
         import { redfishUSA, mapzen, maptiler } from '../src/TileData.js' //maptilerUrl
         import * as gis from '../src/gis.js'
+        import Animator from '../src/Animator.js'
         import Model from '../models/HelloModel.js'
         import { THREE } from '../vendor/three.js'
 
@@ -65,13 +66,13 @@
 
         util.toWindow({ util, model, view })
 
-        util.timeoutLoop(
+        await new Animator(
             () => {
                 model.step()
                 view.draw()
             },
-            5, // 500, just draw once, is static
-            33
+            1, // 500, just draw once, is static
+            30
         )
 
         view.idle()

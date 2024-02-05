@@ -40,14 +40,16 @@
 
         util.toWindow({ util, model, view })
 
-        const anim = new Animator(
+        await new Animator(
             () => {
                 model.step()
                 view.draw()
             },
-            500,
-            33
+            500, // run 500 steps
+            30 // 30 fps
         )
+
+        view.idle()
     </script>
     <div id="modelDiv"></div>
 </body>

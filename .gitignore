@@ -13,6 +13,7 @@ yarn-error.log
 **/.DS_Store
 
 /Attic/
+**/Attic
 /test/samples.json
 /tests/
 /simple/
