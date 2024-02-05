@@ -6,11 +6,11 @@
 
 <body>
     <script type="module">
-        import * as util from '../src/utils.js'
-        import ThreeDraw from '../src/ThreeDraw.js'
-        import Model from '../models/Hello3DModel.js'
-        import Animator from '../src/Animator.js'
-        import dat from '../vendor/dat.gui.js'
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
+        import Model from 'https://code.agentscript.org/models/Hello3DModel.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import dat from 'https://code.agentscript.org/vendor/dat.gui.js'
 
         const drawOptions = {
             turtlesShape: t => (t.id === 0 ? 'Dart' : 'Sphere'),
@@ -21,7 +21,7 @@
         const model = new Model()
         model.population = 2
         model.linksToo = false
-        // model.setGeometry('degrees') // works fine, euclidean
+        // model.setGeometry('degrees'https://code.agentscript.org// works fine, euclidean
         await model.startup()
         model.setup()
 
