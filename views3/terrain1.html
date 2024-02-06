@@ -16,7 +16,6 @@
         import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
 
         const [Z, X, Y] = [13, 1594, 3339]
-        // const elevation = await redfishUSDataSet(Z, X, Y)
         const elevation = await redfishUSA.zxyToDataSet(Z, X, Y)
         const el0to10 = elevation.scale(0, 10)
 
@@ -63,7 +62,7 @@
                 model.step()
                 view.draw()
             },
-            1, // 500, just draw once, is static
+            1, // just draw once, is static
             30
         )
 
