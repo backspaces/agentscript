@@ -25,11 +25,11 @@ It gives you small snippets of code which you cut/paste into the console. here's
 
 ## Eloquent Javascript
 
-[Eloquent Javascript](https://eloquentjavascript.net/) is a much loved free online book which has a sanbox for every example in the book.
+[Eloquent Javascript](https://eloquentjavascript.net/) is a much loved free online book which has a sanbox for running every example in the book.
 
 ![Image](/config/cleantheme/static/Eloquent.jpg)
 
-Here is an [example for chapter 2](https://eloquentjavascript.net/code/#2.1). To see their solution, click `look at the solution` then `run code`
+Here is an [example for chapter 2](https://eloquentjavascript.net/code/#2.1). To see their solution, click `look at the solution` then `run code` buttons.
 
 ## Modern Javascript
 
@@ -51,17 +51,11 @@ It is _the reference_ for all things browser: HTML, CSS and JavaScript. The [Jav
 
 ![Image](/config/cleantheme/static/MDN2.jpg)
 
-<!-- ## Developer Console
+## Writing simple JavaScript
 
-```js script
-console.log('you got executed from an markdown file')
-``` -->
+With all these resources, you might ask: how do I actuall write JavaScript? The easiest way is simple: use the browser's Developer Tools.
 
-## Developer Tools
-
-With all these resources, you might ask: how do I actuall write JavaScript? The easiest way is simple use the browser's Developer Tools.
-
-Lets try it. Open a new Browser tab. Then get to the Developer Console. For Chrome, use `View > Developer > JavaScript Console`, or "Option" + "Control" + "J".
+Lets try it. Open a new Browser tab. Then get to the Developer Console. For Chrome, use `View > Developer > JavaScript Console`, For others, use the help menu, typing "dev" shoud find it. (See the Browser tutorial for more)
 
 You can click-drag the console menu bar to make it larger.
 

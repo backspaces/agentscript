@@ -12,6 +12,9 @@ class HelloModel extends Model {
     }
 
     setup() {
+        // Have turtles "bounce" at the Patches edges. Default is to wrap
+        this.turtles.setDefault('atEdge', 'bounce')
+
         // create "population" turtles placed on random patches
         this.turtles.create(this.population, t => {
             const patch = this.patches.oneOf()

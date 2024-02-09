@@ -4,6 +4,7 @@ Code    | Run demo
 [camera](https://github.com/backspaces/agentscript/tree/master/views3/camera.html#L1) | [https://code.agentscript.org/views3/camera.html](https://code.agentscript.org/views3/camera.html)
 [cameraplot](https://github.com/backspaces/agentscript/tree/master/views3/cameraplot.html#L1) | [https://code.agentscript.org/views3/cameraplot.html](https://code.agentscript.org/views3/cameraplot.html)
 [exit](https://github.com/backspaces/agentscript/tree/master/views3/exit.html#L1) | [https://code.agentscript.org/views3/exit.html](https://code.agentscript.org/views3/exit.html)
+[hello](https://github.com/backspaces/agentscript/tree/master/views3/hello.html#L1) | [https://code.agentscript.org/views3/hello.html](https://code.agentscript.org/views3/hello.html)
 [hello3d](https://github.com/backspaces/agentscript/tree/master/views3/hello3d.html#L1) | [https://code.agentscript.org/views3/hello3d.html](https://code.agentscript.org/views3/hello3d.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views3/shapes.html#L1) | [https://code.agentscript.org/views3/shapes.html](https://code.agentscript.org/views3/shapes.html)
 [terrain](https://github.com/backspaces/agentscript/tree/master/views3/terrain.html#L1) | [https://code.agentscript.org/views3/terrain.html](https://code.agentscript.org/views3/terrain.html)

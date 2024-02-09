@@ -8,11 +8,12 @@
 <body>
     <div id="modelDiv"></div>
     <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import GUI from 'https://code.agentscript.org/src/GUI.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import * as util from 'https://code.agentscript.org/src/utils.js'
+        import Model from 'https://code.agentscript.org/models/HelloModel.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+
+        import GUI from 'https://code.agentscript.org/src/GUI.js'
 
         const model = new Model()
         await model.startup()
@@ -33,13 +34,13 @@
                 if (model.done) anim.stop()
                 model.step()
                 view.draw()
-                // updatePlot()
             },
-            -1, // run until model stops: best tour constant for 500 steps
+            -1, // run forever
             30 // 30 fps
         ).startStats()
         anim.setIdle(() => view.draw())
 
+        // Each of the 7 gui types:
         const gui = new GUI({
             fps: {
                 slider: [30, [5, 60, 5]],
