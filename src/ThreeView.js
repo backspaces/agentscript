@@ -120,7 +120,10 @@ class ThreeView {
         )
         // perspectiveCam.position.set(width + centerX, -width - centerY, width)
         // perspectiveCam.position.set(width, -width, width)
-        perspectiveCam.position.set(width, width, width)
+
+        perspectiveCam.position.set(width, -width, 1.2 * width)
+        // perspectiveCam.position.set(width, width, width)
+
         // perspectiveCam.lookAt(new THREE.Vector3(centerX, centerY, 0))
         perspectiveCam.up.set(0, 0, 1)
 

@@ -7,6 +7,7 @@
 <body>
     <script type="module">
         import * as util from '../src/utils.js'
+        import Animator from '../src/Animator.js'
         import ThreeDraw from '../src/ThreeDraw.js'
         import Model from '../models/HelloModel.js'
         import World from '../src/World.js'
@@ -28,36 +29,33 @@
             return shapes.nameAtIndex(t.id)
         }
 
-        async function run() {
-            await addImages()
+        await addImages()
 
-            const model = new Model(World.defaultOptions(25, 16))
-            model.population = 100
-            await model.startup()
-            model.setup()
+        const model = new Model(World.defaultOptions(25, 16))
+        model.population = 100
+        await model.startup()
+        model.setup()
 
-            const view = new ThreeDraw(
-                model,
-                {
-                    div: 'modelDiv',
-                    patchSize: 20,
-                },
-                {
-                    turtlesShape: t => turtleName(t),
-                    turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
-                }
-            )
+        const view = new ThreeDraw(
+            model,
+            {
+                div: 'modelDiv',
+                patchSize: 20,
+            },
+            {
+                turtlesShape: t => turtleName(t),
+                turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
+            }
+        )
 
-            await util.timeoutLoop(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500,
-                33
-            )
-        }
-        run()
+        await new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500,
+            30
+        )
     </script>
     <div id="modelDiv"></div>
 </body>

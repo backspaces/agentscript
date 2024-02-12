@@ -7,6 +7,7 @@
 <body>
     <script type="module">
         import * as util from '../src/utils.js'
+        import Animator from '../src/Animator.js'
         import ThreeDraw from '../src/ThreeDraw.js'
         import Model from '../models/ButtonsModel.js'
 
@@ -18,31 +19,28 @@
             linksColor: 'rgba(255, 255, 255, 0.50',
         }
 
-        async function run() {
-            model = new Model() // define model here.
-            await model.startup()
-            model.setup()
+        model = new Model() // define model here.
+        await model.startup()
+        model.setup()
 
-            const view = new ThreeDraw(
-                model,
-                { div: 'modelDiv' },
-                drawOptions
-            )
+        const view = new ThreeDraw(
+            model,
+            { div: 'modelDiv' },
+            drawOptions
+        )
 
-            util.toWindow({ util, model, view })
+        util.toWindow({ util, model, view })
 
-            await util.timeoutLoop(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500,
-                33
-            )
+        await new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500,
+            30
+        )
 
-            view.idle()
-        }
-        run()
+        view.idle()
     </script>
     <div id="modelDiv"></div>
 </body>

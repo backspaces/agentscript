@@ -7,6 +7,7 @@
 <body>
     <script type="module">
         import * as util from '../src/utils.js'
+        import Animator from '../src/Animator.js'
         import ColorMap from '../src/ColorMap.js'
         import ThreeDraw from '../src/ThreeDraw.js'
         import Model from '../models/WaterModel.js'
@@ -18,32 +19,29 @@
             patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
         }
 
-        async function run() {
-            const model = new Model()
-            await model.startup()
-            model.setup()
+        const model = new Model()
+        await model.startup()
+        model.setup()
 
-            const view = new ThreeDraw(
-                model,
-                { div: 'modelDiv' },
-                drawOptions
-            )
+        const view = new ThreeDraw(
+            model,
+            { div: 'modelDiv' },
+            drawOptions
+        )
 
-            util.toWindow({ util, model, view })
-            view.setPatchesSmoothing(true) // make water smoother
+        util.toWindow({ util, model, view })
+        view.setPatchesSmoothing(true) // make water smoother
 
-            await util.timeoutLoop(
-                () => {
-                    model.step()
-                    view.draw()
-                },
-                500,
-                33
-            )
+        await new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500,
+            30
+        )
 
-            view.idle()
-        }
-        run()
+        view.idle()
     </script>
     <div id="modelDiv"></div>
 </body>
