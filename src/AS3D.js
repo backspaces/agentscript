@@ -2,7 +2,7 @@
 // I.e. 2D/3D Models and 2D/3D views
 // It is generally only used by Rollup for bundling.
 
-export * as utils from './utils.js'
+export * as util from './utils.js'
 export * as steg from './steg.js'
 export * as turfImports from '../vendor/turfImports.js'
 

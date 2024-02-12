@@ -42,7 +42,7 @@ The HTML used by the browser is quite simple. It provides a title, and a script 
 
 ![Image](/config/cleantheme/static/HelloHtml.jpg)
 
-You can run it [here](https://code.agentscript.org/models/hello.html). Click the browser's reload button to get a new random sampling. They look like:
+You can run it [here](https://code.agentscript.org/views1/hello.html). Click the browser's reload button to get a new random sampling. They look like:
 
 ![Image](/config/cleantheme/static/RandomSample.jpg)
 
@@ -96,7 +96,7 @@ Lets make sure it works. Make sure you have a browser open. Then do any of the f
 
 The model should be running in the browser.
 
-It will have a "file url": file:///Users/owen/models/hello.html
+It will have a "file url": file:///Users/owen/views1/hello.html
 
 ![Image](/config/cleantheme/static/FileURL.jpg)
 
@@ -143,7 +143,7 @@ Start by creating a local folder and moving there, we'll call it models/:
 
 Use the browser to view https://code.agentscript.org/models/HelloModel.js. It will show you the code and you can cut/paste it to to HelloModel.js in your new folder.
 
-Then use the browser to view https://code.agentscript.org/models/hello.html. It will actually show it running. Then you use view-source to view the html file which you can cut/past into the folder
+Then use the browser to view https://code.agentscript.org/views1/hello.html. It will actually show it running. Then you use view-source to view the html file which you can cut/past into the folder
 
 Looks like this:
 
@@ -152,7 +152,7 @@ Looks like this:
 This can also be done on one step on chrome:
 
 -   HelloModel.js: `view-source:https://code.agentscript.org/models/HelloModel.js`
--   hello.html: `view-source:https://code.agentscript.org/models/hello.html`
+-   hello.html: `view-source:https://code.agentscript.org/views1/hello.html`
  -->
 
 One approach is to click Github on the top of this page. (or brouse directly to https://github.com/backspaces/agentscript/)
@@ -176,7 +176,7 @@ the two imports are in the top level src/ dir. So "../" gets me to the top level
 and "../src" into the src/ directory.
 
 Here is HelloModel.js running withiin the hello.html HTML file:
-[views1/hello.html](../views1/hello.html)
+[views1/hello.html](https://code.agentscript.org/views1/hello.html)
 
 You'll notice that the model simply runs 500 steps then prints out a random
 sampling of its result.
@@ -189,7 +189,7 @@ The reason for this is that AgentScript uses the Model/View/Controller (MVC) arc
 In this case, it means the Model, by itself, is simple Data in, and updated each step().
 Thus far we've only discussed the Model. So views1/hello.html just shows the Model.
 
-Here a 2D view: [views2/hello.html](../views2/hello.html)
+Here a 2D view: [views2/hello.html](https://code.agentscript.org/views2/hello.html)
 
 Because the Model is separate, it is easy to create additional views as well.
 
