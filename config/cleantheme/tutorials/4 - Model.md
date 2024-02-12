@@ -63,11 +63,13 @@ System Folder:
 
 Lets start with the two examples we've just used: HelloModel.js & hello.html.
 
-The easiest way to do this is to go to github above. Once there, click on the models folder on the right where the two demos live. Click on HelloModel.js, then click on the upper right download icon (downward arrow).
+The easiest way to do this is to go to github above (https://github.com/backspaces/agentscript).
+
+Once there, click on the models folder then on HelloModel.js then click on the upper right download icon (downward arrow). This places HelloModel.js in your downloads folder.
 
 ![Image](/config/cleantheme/static/GithubSource.jpg)
 
-This will download HelloModel.js to your downloads folder. Similarly download hello.html. You should see this on you local downloads folder.
+Similarly click on "backspaces/agentscript" to go back to the top of the repo and click on Views2 > hello.html and click the downloads icon again, adding it to the downloads folder.
 
 ![Image](/config/cleantheme/static/DownloadModel.jpg)
 
@@ -84,7 +86,7 @@ Drag and Drop the two files to your models folder.
 
 Should look like:
 
-![Image](/config/cleantheme/static/ModelsDir.jpg)
+![Image](/config/cleantheme/static/ModelsFolder.jpg)
 
 Lets make sure it works. Make sure you have a browser open. Then do any of the following:
 
@@ -95,6 +97,8 @@ Lets make sure it works. Make sure you have a browser open. Then do any of the f
 The model should be running in the browser.
 
 It will have a "file url": file:///Users/owen/models/hello.html
+
+![Image](/config/cleantheme/static/FileURL.jpg)
 
 Now lets modify/play with the two files. You'll need an editor. The best by far in the developer community is [vscode](https://code.visualstudio.com/). And you don't need to install it if you don't want to, you can [run it in your browser](https://vscode.dev/)
 
