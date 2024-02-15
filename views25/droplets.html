@@ -42,7 +42,7 @@
 
         util.toWindow({ util, model, view })
 
-        util.timeoutLoop(
+        await new Animator(
             () => {
                 model.step()
                 view.draw()

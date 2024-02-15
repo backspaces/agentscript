@@ -1,6 +1,6 @@
 // This is the importer/exporter of our modules w/ dependencies.
-// I.e. 2D/3D Models and 2D views
-// It is only used by Rollup for bundling.
+// I.e. 2D/3D Models and 2D/3D views
+// It is generally only used by Rollup for bundling.
 
 export * as util from './utils.js'
 export * as steg from './steg.js'
@@ -40,9 +40,9 @@ export { default as TwoDraw } from './TwoDraw.js'
 export { default as TwoView } from './TwoView.js'
 
 // ThreeJS Views, excluded from smaller rollups
-// export { default as ThreeDraw } from './ThreeDraw.js'
-// export { default as ThreeMeshes } from './ThreeMeshes.js'
-// export { default as ThreeView } from './ThreeView.js'
+export { default as ThreeDraw } from './ThreeDraw.js'
+export { default as ThreeMeshes } from './ThreeMeshes.js'
+export { default as ThreeView } from './ThreeView.js'
 
 // Controls
 export { default as Animator } from './Animator.js'
@@ -53,8 +53,3 @@ export { default as Mouse } from './Mouse.js'
 export * as gis from './gis.js'
 export * as geojson from './geojson.js'
 export { default as GeoWorld } from './GeoWorld.js'
-
-// import
-// export function installAll() {
-//     import
-// }
