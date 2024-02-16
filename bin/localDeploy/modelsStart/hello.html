@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <title>hello</title>
+</head>
+
+<body>
+    <script type="module">
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import Model from 'https://code.agentscript.org/models/HelloModel.js'
+
+        // use model's default world options
+        const model = new Model()
+        await model.startup()
+        model.setup()
+
+        // use defalt drawOptions
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 20,
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        )
+
+        util.toWindow({ util, model, view, anim })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>
