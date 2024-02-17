@@ -6,16 +6,16 @@
 
 <body>
     <script type="module">
-        import * as util from '../src/utils.js'
-        import Animator from '../src/Animator.js'
-        import ThreeDraw from '../src/ThreeDraw.js'
-        import Model from '../models/RoadsModel.js'
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
+        import Model from 'https://code.agentscript.org/models/RoadsModel.js'
 
         const model = new Model()
         await model.startup()
         model.setup()
 
-        const baseUrl = '../models/data/roads14.png'
+        const baseUrl = 'https://code.agentscript.org/models/data/roads14.png'
         const baseMapTile = await util.imagePromise(baseUrl)
         const breedColor = { nodes: 'red', intersections: 'blue', drivers: 'green' }
         const breedSize = { nodes: 1, intersections: 2, drivers: 5 }
