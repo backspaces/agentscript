@@ -14,7 +14,6 @@
         const model = new Model()
         await model.startup()
         model.setup()
-        model.turtles.ask(turtle => turtle.z = util.randomCentered(10))
 
         // defalt drawOptions!
         const view = new ThreeDraw(model, { div: 'modelDiv' })
