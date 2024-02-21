@@ -20,7 +20,6 @@
         const model = new Model()
         await model.startup()
         model.setup()
-        model.turtles.ask(t => t.z = util.randomCentered(20))
 
         const view = new ThreeDraw(model, {
             div: 'modelDiv',
