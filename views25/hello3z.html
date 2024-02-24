@@ -28,16 +28,16 @@
             drawOptions
         )
 
-        util.toWindow({ util, model, view })
-
-        await new Animator(
+        const anim = new Animator(
             () => {
                 model.step()
                 view.draw()
             },
-            -1, // 500,
+            500,
             30
         )
+
+        util.toWindow({ util, model, view, anim })
 
         view.idle()
     </script>

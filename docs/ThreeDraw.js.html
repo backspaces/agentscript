@@ -168,22 +168,28 @@ class ThreeDraw extends ThreeView {
         } = this.drawOptions
         const { model, view } = this
 
+        // color === 'random'
+        //     ? map.atIndex(agent.id)
+        //     : typeof color === 'function'
+        //     ? checkColor(agent, color(agent))
+        //     : color
+
         // Helpers for converting color, shape, size below
         const getColor = (agent, color, map) =>
             color === 'random'
                 ? map.atIndex(agent.id)
                 : typeof color === 'function'
-                ? checkColor(agent, color(agent))
-                : color
+                ? Color.toTypedColor(color(agent))
+                : Color.toTypedColor(color)
         const getShape = (agent, shape) =>
             typeof shape === 'function' ? shape(agent) : shape
         const getSize = (agent, size) =>
             typeof size === 'function' ? size(agent) : size
 
-        const checkColor = (agent, color, map = turtlesMap) =>
-            color === 'random'
-                ? map.atIndex(agent.id) //.css
-                : Color.toTypedColor(color)
+        // const checkColor = (agent, color, map = turtlesMap) =>
+        //     color === 'random'
+        //         ? map.atIndex(agent.id) //.css
+        //         : Color.toTypedColor(color)
 
         let lastImage, lastClearColor
         if (this.meshName('patches') === 'PatchesMesh') {
