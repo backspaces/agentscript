@@ -11,6 +11,7 @@ Code    | Run demo
 [hello](https://github.com/backspaces/agentscript/tree/master/views25/hello.html#L1) | [https://code.agentscript.org/views25/hello.html](https://code.agentscript.org/views25/hello.html)
 [hello3d](https://github.com/backspaces/agentscript/tree/master/views25/hello3d.html#L1) | [https://code.agentscript.org/views25/hello3d.html](https://code.agentscript.org/views25/hello3d.html)
 [hello3z](https://github.com/backspaces/agentscript/tree/master/views25/hello3z.html#L1) | [https://code.agentscript.org/views25/hello3z.html](https://code.agentscript.org/views25/hello3z.html)
+[helloPatches](https://github.com/backspaces/agentscript/tree/master/views25/helloPatches.html#L1) | [https://code.agentscript.org/views25/helloPatches.html](https://code.agentscript.org/views25/helloPatches.html)
 [helloplus](https://github.com/backspaces/agentscript/tree/master/views25/helloplus.html#L1) | [https://code.agentscript.org/views25/helloplus.html](https://code.agentscript.org/views25/helloplus.html)
 [life](https://github.com/backspaces/agentscript/tree/master/views25/life.html#L1) | [https://code.agentscript.org/views25/life.html](https://code.agentscript.org/views25/life.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views25/linktravel.html#L1) | [https://code.agentscript.org/views25/linktravel.html](https://code.agentscript.org/views25/linktravel.html)
