@@ -6,6 +6,7 @@ class HelloModel extends Model {
     population = 10 // number of turtles
     speed = 0.1 // step size in patch units
     wiggleAngle = 10 // wiggle angle in degrees
+    linksToo = true // handy to show just turtles if false
 
     constructor(worldOptions = World.defaultOptions()) {
         super(worldOptions) // call "Model"s constructor
@@ -22,9 +23,10 @@ class HelloModel extends Model {
         })
 
         // create a link from every turtle to a random other turtle
-        this.turtles.ask(t => {
-            this.links.create(t, this.turtles.otherOneOf(t))
-        })
+        if (this.linksToo)
+            this.turtles.ask(t => {
+                this.links.create(t, this.turtles.otherOneOf(t))
+            })
     }
 
     step() {
