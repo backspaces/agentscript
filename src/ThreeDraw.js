@@ -143,6 +143,40 @@ class ThreeDraw extends ThreeView {
         return this.meshes[agentSet].name
     }
 
+    getColor(agent) {
+        const type = agent.agentSet.name
+        const colorName = type + 'Color'
+        const map =
+            type === 'patches'
+                ? this.drawOptions['patchesMap']
+                : this.drawOptions['turtlesMap']
+        const color = this.drawOptions[colorName]
+        const result =
+            color === 'random'
+                ? map.atIndex(agent.id)
+                : typeof color === 'function'
+                ? Color.toTypedColor(color(agent))
+                : Color.toTypedColor(color)
+        return result
+    }
+    // getColor(agent, color, map = this.drawOptions.turtlesMap) {
+    //     const result =
+    //         color === 'random'
+    //             ? map.atIndex(agent.id)
+    //             : typeof color === 'function'
+    //             ? Color.toTypedColor(color(agent))
+    //             : Color.toTypedColor(color)
+    //     return result
+    // }
+    // getShape(agent, shape) {
+    //     const result = typeof shape === 'function' ? shape(agent) : shape
+    //     return result
+    // }
+    // getSize(agent, size) {
+    //     const result = typeof size === 'function' ? size(agent) : size
+    //     return result
+    // }
+
     draw() {
         let {
             patchesColor,
@@ -172,6 +206,11 @@ class ThreeDraw extends ThreeView {
         //     ? checkColor(agent, color(agent))
         //     : color
 
+        // const checkColor = (agent, color, map = turtlesMap) =>
+        //     color === 'random'
+        //         ? map.atIndex(agent.id) //.css
+        //         : Color.toTypedColor(color)
+
         // Helpers for converting color, shape, size below
         const getColor = (agent, color, map) =>
             color === 'random'
@@ -183,11 +222,8 @@ class ThreeDraw extends ThreeView {
             typeof shape === 'function' ? shape(agent) : shape
         const getSize = (agent, size) =>
             typeof size === 'function' ? size(agent) : size
-
-        // const checkColor = (agent, color, map = turtlesMap) =>
-        //     color === 'random'
-        //         ? map.atIndex(agent.id) //.css
-        //         : Color.toTypedColor(color)
+        // const { getColor, getShape, getSize } = this
+        // const { getShape, getSize } = this
 
         let lastImage, lastClearColor
         if (this.meshName('patches') === 'PatchesMesh') {
