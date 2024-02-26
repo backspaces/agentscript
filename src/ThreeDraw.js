@@ -43,6 +43,8 @@ class ThreeDraw extends ThreeView {
             // textProperty: null,
             // textSize: 0.5,
             // textColor: 'black',
+            lastClearColor: null,
+            lastImage: null,
         }
     }
 
@@ -197,6 +199,7 @@ class ThreeDraw extends ThreeView {
             // textProperty,
             // textSize,
             // textColor,
+            lastClearColor,
         } = this.drawOptions
         const { model, view } = this
 
@@ -225,7 +228,7 @@ class ThreeDraw extends ThreeView {
         // const { getColor, getShape, getSize } = this
         // const { getShape, getSize } = this
 
-        let lastImage, lastClearColor
+        // let lastImage, lastClearColor
         if (this.meshName('patches') === 'PatchesMesh') {
             if (patchesColor === 'random' || initPatches) {
                 // Already in gpu
@@ -241,8 +244,8 @@ class ThreeDraw extends ThreeView {
                 // Should be static color for clear() call
                 // Already in gpu?
                 if (patchesColor !== lastClearColor) {
+                    this.drawOptions.lastClearColor = patchesColor
                     view.clearPatches(patchesColor)
-                    lastClearColor = patchesColor
                 }
             }
         } else {

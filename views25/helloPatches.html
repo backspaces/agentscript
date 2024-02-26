@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>hello</title>
+    <title>helloPatches</title>
 </head>
 
 <body>
@@ -21,10 +21,12 @@
 
         const drawOptions = {
             turtlesSize: 4,
-            patchesColor: p => {
-                const ts = p.turtlesHere
-                return ts.length === 0 ? 'rgba(255,255,255,0.1)' : view.getColor(ts[0])
-            }
+            patchesColor: 'rgba(255,255,255,0.15)',
+
+            // patchesColor: p => {
+            //     const ts = p.turtlesHere
+            //     return ts.length === 0 ? 'rgba(255,255,255,0.1)' : view.getColor(ts[0])
+            // }
         }
 
         const view = new ThreeDraw(model, {
