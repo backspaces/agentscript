@@ -6,28 +6,38 @@
 
 <body>
     <script type="module">
-        // Note: we don't use animator, but model is driven by mouse behavior!
         import * as util from 'https://code.agentscript.org/src/utils.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/HelloModel.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        // import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        import TwoDraw from '../src/TwoDraw.js'
 
         import Mouse from 'https://code.agentscript.org/src/Mouse.js'
 
         const model = new Model()
+        await model.startup()
         model.setup()
+
+        const drawOptions = {
+            turtlesSize: 2,
+            linksWidth: l => l === selectedLink ? 5 : 2,
+        }
 
         const view = new TwoDraw(
             model,
             {
                 patchSize: 20,
+                drawOptions
             },
-            {
-                patchesColor: 'black',
-                linksColor: l => (l === selectedLink ? 'red' : 'gray'),
-                linksWidth: 2,
-                turtlesShape: 'circle',
-                turtlesColor: 'random',
-            }
+        )
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // run forever, use GUI to start/stop
+            30 // 30 fps
         )
 
         let selectedTurtle, selectedLink
@@ -52,14 +62,11 @@
                     selectedTurtle = null
                     break
             }
-            view.draw() // Draw whenever mouse has an event
         }
 
         const mouse = new Mouse(
             model, view, mouseCallback
         ).setContinuous().start()
-
-        view.draw() // Draw once to get started
 
         util.toWindow({ util, model, view, mouse })
     </script>

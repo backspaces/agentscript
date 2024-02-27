@@ -35,10 +35,9 @@
                 model.step()
                 view.draw()
             },
-            -1, // run forever
+            -1, // run forever, use GUI to start/stop
             30 // 30 fps
-        ).startStats()
-        anim.setIdle(() => view.draw())
+        )
 
         // Each of the 7 gui types:
         const gui = new GUI({
@@ -71,8 +70,6 @@
         })
 
         util.toWindow({ model, view, anim, GUI, gui })
-
-        console.log(gui)
     </script>
 </body>
 

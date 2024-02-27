@@ -189,7 +189,9 @@ class TwoDraw extends TwoView {
                     : typeof linksColor === 'function'
                     ? checkColor(l, linksColor(l))
                     : linksColor,
-            width: linksWidth,
+            // width: linksWidth,
+            width:
+                typeof linksWidth === 'function' ? linksWidth(l) : linksWidth,
         }))
 
         view.drawTurtles(turtles, t => ({
