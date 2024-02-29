@@ -29,24 +29,12 @@
      */
 
     constructor(keyTemplates) {
-        // const modifiers = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey']
-
-        const keyCommands = {}
+        this.keyCommands = {}
         keyTemplates.forEach(obj => {
-            // let { modifier, key, cmd } = obj
             let { key, cmd } = obj
-
             if (!cmd) throw Error('No cmd given for ' + obj)
-
-            // if (modifier &amp;&amp; !modifiers.includes(modifier)) {
-            //     throw Error('Keyboard: ilegal modifier: ' + modifier)
-            // }
-
-            keyCommands[key] = { key, cmd }
+            this.keyCommands[key] = { key, cmd }
         })
-
-        // Object.assign(this, { modifiers, keyCommands })
-        Object.assign(this, { keyCommands })
         console.log(this)
     }
 
