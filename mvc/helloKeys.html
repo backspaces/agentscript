@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <title>Keys</title>
+</head>
+
+<body>
+    <script type="module">
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+        import Model from 'https://code.agentscript.org/models/HelloModel.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+
+        // import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
+        import Keyboard from '../src/Keyboard.js'
+
+        const model = new Model()
+        await model.startup()
+        model.setup()
+
+        const drawOptions = {
+            turtlesSize: 2,
+            linksWidth: 2,
+        }
+
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 20,
+            drawOptions
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // run forever
+            30 // 30 fps
+        )
+
+        const keyCommands = [
+            { key: 't', cmd: () => anim.toggle() },
+
+            { key: '1', cmd: () => anim.setFps(10) },
+            { key: '2', cmd: () => anim.setFps(30) },
+            { key: '3', cmd: () => anim.setFps(100) },
+
+            { key: '<', cmd: () => console.log('key < hit') },
+            { key: 'å', cmd: () => console.log('alt a hit') },
+            { key: '©', cmd: () => console.log('alt g hit') },
+        ]
+        const keyboard = new Keyboard(keyCommands).start()
+
+        // util.toWindow({ anim, model, view, keyboard, keyCommands })
+
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>
