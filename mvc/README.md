@@ -4,7 +4,7 @@ Code    | Run demo
 [camera](https://github.com/backspaces/agentscript/tree/master/mvc/camera.html#L1) | [https://code.agentscript.org/mvc/camera.html](https://code.agentscript.org/mvc/camera.html)
 [flock](https://github.com/backspaces/agentscript/tree/master/mvc/flock.html#L1) | [https://code.agentscript.org/mvc/flock.html](https://code.agentscript.org/mvc/flock.html)
 [gui](https://github.com/backspaces/agentscript/tree/master/mvc/gui.html#L1) | [https://code.agentscript.org/mvc/gui.html](https://code.agentscript.org/mvc/gui.html)
-[helloGUI](https://github.com/backspaces/agentscript/tree/master/mvc/helloGUI.html#L1) | [https://code.agentscript.org/mvc/helloGUI.html](https://code.agentscript.org/mvc/helloGUI.html)
+[helloeGui](https://github.com/backspaces/agentscript/tree/master/mvc/helloeGui.html#L1) | [https://code.agentscript.org/mvc/helloeGui.html](https://code.agentscript.org/mvc/helloeGui.html)
 [helloKeys](https://github.com/backspaces/agentscript/tree/master/mvc/helloKeys.html#L1) | [https://code.agentscript.org/mvc/helloKeys.html](https://code.agentscript.org/mvc/helloKeys.html)
 [helloMouse](https://github.com/backspaces/agentscript/tree/master/mvc/helloMouse.html#L1) | [https://code.agentscript.org/mvc/helloMouse.html](https://code.agentscript.org/mvc/helloMouse.html)
 [mouse](https://github.com/backspaces/agentscript/tree/master/mvc/mouse.html#L1) | [https://code.agentscript.org/mvc/mouse.html](https://code.agentscript.org/mvc/mouse.html)

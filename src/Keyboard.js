@@ -63,12 +63,16 @@ class Keyboard {
             return
         }
 
-        console.log('event', event)
-        console.log('e.key, e.code:', event.key, event.code)
+        // const modifiers = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey']
 
         const key = this.keyCommands[event.key]
         if (key) {
+            console.log('key:', key.key, 'cmd:', key.cmd)
             key.cmd()
+        } else {
+            if (event.key.length === 1) {
+                console.log('you typed key:', event.key + '; key event:', event)
+            }
         }
     }
 }

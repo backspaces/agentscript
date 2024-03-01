@@ -2,6 +2,18 @@
 
 <head>
     <title>mouse</title>
+    <style>
+        .flex-container {
+            display: flex;
+        }
+
+        .flex-container>div {
+            margin: 10px;
+            padding: 20px;
+            font-size: 15px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -64,8 +76,18 @@
         const mouse = new Mouse(
             model, view, mouseCallback
         ).setContinuous().start() // continuous for mouse move, selectedLink
+
+        util.printToPage(`The mouse actions are:
+mouse down + drag: sellect and move closest turtle.
+mouse move: increase width of closest link`,
+            'textDiv')
+
     </script>
-    <div id="modelDiv"></div>
+
+    <div class="flex-container">
+        <div id="modelDiv"></div>
+        <div id="textDiv"></div>
+    </div>
 </body>
 
 </html>

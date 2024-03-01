@@ -2,6 +2,17 @@
 
 <head>
     <title>Keys</title>
+    <style>
+        .flex-container {
+            display: flex;
+        }
+
+        .flex-container>div {
+            margin: 10px;
+            padding: 20px;
+            font-size: 15px;
+        }
+    </style>
 </head>
 
 <body>
@@ -38,6 +49,20 @@
             30 // 30 fps
         )
 
+        function bumpTurtleSize(n) {
+            view.drawOptions.turtlesSize += n
+            view.drawOptions.turtlesSize = Math.max(0, view.drawOptions.turtlesSize)
+        }
+        function swapModelLinks() {
+            if (model.links.length > 0) {
+                // "model.links.ask(l => l.die())" fails! each die changes links
+                while (model.links.length > 0) model.links[0].die()
+            } else {
+                model.turtles.ask(t => {
+                    model.links.create(t, model.turtles.otherOneOf(t))
+                })
+            }
+        }
         const keyCommands = [
             { key: 't', cmd: () => anim.toggle() },
 
@@ -45,16 +70,42 @@
             { key: '2', cmd: () => anim.setFps(30) },
             { key: '3', cmd: () => anim.setFps(100) },
 
-            { key: '<', cmd: () => console.log('key < hit') },
-            { key: 'å', cmd: () => console.log('alt a hit') },
-            { key: '©', cmd: () => console.log('alt g hit') },
+            { key: '<', cmd: () => bumpTurtleSize(-1) },
+            { key: '>', cmd: () => bumpTurtleSize(+1) },
+
+            { key: 'd', cmd: () => view.drawOptions.turtlesShape = 'dart' },
+            { key: 'b', cmd: () => view.drawOptions.turtlesShape = 'bug' },
+            { key: 'p', cmd: () => view.drawOptions.turtlesShape = 'person' },
+            { key: 'a', cmd: () => view.drawOptions.turtlesShape = 'arrow' },
+
+            { key: 'l', cmd: () => swapModelLinks() },
+            { key: '¬', cmd: () => swapModelLinks() },  // option l
         ]
         const keyboard = new Keyboard(keyCommands).start()
 
-        // util.toWindow({ anim, model, view, keyboard, keyCommands })
+        util.printToPage('Our keyboard commands are:', 'textDiv')
+        const keyCmds = []
+        keyCommands.forEach(kc => keyCmds.push('key: ' + kc.key + '; cmd: ' + kc.cmd))
+        util.printToPage(keyCmds, 'textDiv')
+        util.printToPage(`Try each of thm to see the results.
+
+Note that ¬ above is the result of Alt-l (Alt = Option on Mac).
+And <, > are Shift-, and Shift-. as shown on the keyboard.
+
+To find the character for any modified character such as Alt-l,
+simply type it in an editor, terminal, or browser dev tools.
+
+Example: type Shift + Alt + a in an editor, and you'll get Å`,
+            'textDiv')
+
+        util.toWindow({ anim, model, view, keyboard, keyCommands })
 
     </script>
-    <div id="modelDiv"></div>
+
+    <div class="flex-container">
+        <div id="modelDiv"></div>
+        <div id="textDiv"></div>
+    </div>
 </body>
 
 </html>
