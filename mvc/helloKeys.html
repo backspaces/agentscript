@@ -23,7 +23,6 @@
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
         import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
-        // import Keyboard from '../src/Keyboard.js'
 
         const model = new Model()
         await model.startup()
@@ -78,8 +77,21 @@
             { key: 'p', cmd: () => view.drawOptions.turtlesShape = 'person' },
             { key: 'a', cmd: () => view.drawOptions.turtlesShape = 'arrow' },
 
-            { key: 'l', cmd: () => swapModelLinks() },
-            { key: '¬', cmd: () => swapModelLinks() },  // option l
+            { key: 'L', cmd: () => swapModelLinks() },
+
+            { key: 'F2', cmd: () => view.drawOptions.turtlesColor = 'red' },
+            { key: 'F3', cmd: () => view.drawOptions.turtlesColor = 'random' },
+
+            { key: 'å', cmd: () => view.drawOptions.linksWidth = 2 }, // alt a
+            { key: 'Å', cmd: () => view.drawOptions.linksWidth = 4 }, // alt A
+
+            { key: 'Escape', cmd: () => model.turtles.ask(t => t.rotate(90)) },
+
+            { key: 'ArrowDown', cmd: () => model.turtles.ask(t => t.heading = 180) },
+            { key: 'ArrowUp', cmd: () => model.turtles.ask(t => t.heading = 0) },
+            { key: 'ArrowRight', cmd: () => model.turtles.ask(t => t.heading = 90) },
+            { key: 'ArrowLeft', cmd: () => model.turtles.ask(t => t.heading = 270) },
+
         ]
         const keyboard = new Keyboard(keyCommands).start()
 
@@ -99,7 +111,6 @@ Example: type Shift + Alt + a in an editor, and you'll get Å`,
             'textDiv')
 
         util.toWindow({ anim, model, view, keyboard, keyCommands })
-
     </script>
 
     <div class="flex-container">
