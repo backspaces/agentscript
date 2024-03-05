@@ -29,7 +29,7 @@ It gives you small snippets of code which you cut/paste into the console. here's
 
 ![Image](/config/cleantheme/static/Eloquent.jpg)
 
-Here is an [example for chapter 2](https://eloquentjavascript.net/code/#2.1). To see their solution, click `look at the solution` then `run code` buttons.
+Here is an [example for chapter 2](https://eloquentjavascript.net/code/#2.1). To see their solution, click "look at the solution" then "run code" buttons.
 
 ## Modern Javascript
 
@@ -55,7 +55,7 @@ It is _the reference_ for all things browser: HTML, CSS and JavaScript. The [Jav
 
 With all these resources, you might ask: how do I actuall write JavaScript? The easiest way is simple: use the browser's Developer Tools.
 
-Lets try it. Open a new Browser tab. Then get to the Developer Console. For Chrome, use `View > Developer > JavaScript Console`, For others, use the help menu, typing "dev" shoud find it. (See the Browser tutorial for more)
+Lets try it. Open a new Browser tab. Then open the Developer Console. For Chrome, use "View > Developer > JavaScript Console" Menu, or the "Cmd-Option-J" keyboard shortcut. For others, use the help menu, typing "dev" shoud find it. (See the Browser tutorial for more)
 
 You can click-drag the console menu bar to make it larger.
 

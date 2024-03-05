@@ -1,4 +1,4 @@
-AgentScript runs in the browser. This means the models you create will be contained within [an HTML](https://firstsiteguide.com/html-for-beginners/) file.
+AgentScript runs in the browser. This means the models you create will be contained within [an HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started) file.
 
 ## HTML Files
 
@@ -21,15 +21,15 @@ An HTML file for AgentScript models is very simple:
 </html>
 ```
 
-Your JavaScript code goes in the script area. You also need a simple area, the div above, in which we display the running model. We'll build some of these later. (Note the two different comment types: // for JavaScript and \<!-- .. --> for HTML)
+Your JavaScript code goes in the script area. You also need a simple area, the "div" above, in which we display the running model. We'll build some of these later. (Note the two different comment types: // for JavaScript and \<!-- .. --> for HTML)
 
-You can put your Model's code in the script area, or you can create a separate .js file and import it into the html file. This has one huge advantage: you can use the same Model in many different HTML files. For example, we have a "Hello World" HelloModel.js that is used in
+You can put your Model's code in the script area, or you can create a separate .js file and import it into the html file. Imports have one huge advantage: you can use the same Model in many different HTML files. For example, we have a "Hello World" HelloModel.js that is used in
 [Text](https://code.agentscript.org/views1/hello.html),
 [2D](https://code.agentscript.org/views2/hello.html),
 [2.5D](https://code.agentscript.org/views25/hello.html),
 [3D](https://code.agentscript.org/views3/hello.html),
 [GIS](https://code.agentscript.org/maplibre/hellomodel.html),
-[MVC](https://code.agentscript.org/mvc/hello.html)
+[MVC](https://code.agentscript.org/mvc/helloKeys.html)
 and more!
 
 ## Browser's Developer Console
@@ -65,7 +65,7 @@ In addition to the browser's Developer Console, the Browser has a way to look at
 
 Like opening the Developer's Console with "Option" + "Control" + "J" in Chrome, using "Option" + "Control" + "U" will open a new tab showing the current page's HTML.
 
-The view-source details are [detailed here:](https://www.computerhope.com/issues/ch000746.htm) in case your browser uses a different scheme.
+The view-source details are [discussed here:](https://www.computerhope.com/issues/ch000746.htm) in case your browser uses a different scheme.
 
 You can see this in action with our PheronomeModel above, and see the code via "Option" + "Control" + "U" or equivalent. You'll see:
 

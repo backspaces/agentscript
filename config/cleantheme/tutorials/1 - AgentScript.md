@@ -3,7 +3,7 @@
 AgentScript is an open source javascript library for writing
 [agent-based models](https://en.wikipedia.org/wiki/Agent-based_model).
 It is inspired by the programming language
-[Netlogo](https://ccl.northwestern.edu/netlogo). It uses the [Model, View, Controller](https://developer.mozilla.org/en-US/docs/Glossary/MVC) (MVC) architecture. It lives on Github and is publicly available on our AgentScript.org server, see above.
+[Netlogo](https://ccl.northwestern.edu/netlogo). It uses the [Model, View, Controller](https://developer.mozilla.org/en-US/docs/Glossary/MVC) (MVC) architecture. It lives on Github and is publicly available on our AgentScript.org server, see [Home](https://code.agentscript.org/docs/) above.
 
 AgentScript creates Models inhabited by Patches, Turtles, and Links. You'll use all three in the "Snippets" example below.
 
@@ -11,7 +11,7 @@ All your models will have a _startup()_ and _step()_ function, which initializes
 
 ## MVC
 
-In terms of MVC, the Model contains the data (the Patches, Turtles, and Links). The View uses this data to visualize the Model. The Controller provides the user a way to modify the running model. An example would be a GUI for pause/start the model.
+In terms of MVC, the Model contains the data (the Patches, Turtles, and Links). The View uses this data to visualize the Model. The Controller provides the user a way to modify the running model. An example Controller would be a GUI for pause/start the model.
 
 ![Image](/config/cleantheme/static/MVC.jpg)
 
@@ -41,9 +41,7 @@ Here it is [running](https://code.agentscript.org/views1/hello.html)
 
 Similarly, the View makes this visible like this [2D view](https://code.agentscript.org/views2/hello.html) or this [3D view](https://code.agentscript.org/views25/hello3d.html), both with the same Model! This is important: once a Model is defined, it can be viewed in many different ways.
 
-Finally, the Controllers let you interact with the Model & View. Here's an example using a [GUI Controller](https://code.agentscript.org/mvc/hello.html).
-
-<!-- You'll call this function in an Animator that insures the Model yields to the rest of the browser each step. -->
+Finally, the Controllers let you interact with the Model & View. Here's an example using a [GUI Controller](https://code.agentscript.org/mvc/helloGui.html).
 
 ## Examples
 
@@ -86,5 +84,5 @@ The key take-aways are:
 -   [Snippets](https://code.agentscript.org/config/cleantheme/Snippets.html) let you play with these.
 -   Models are Classes with a constructor, startup() and step() methods.
 -   The MVC architecture is used, separating the Model, View, and Controller.
--   This lets the same Model be deployed in 2D, 3D and so on.
+-   This lets the same Model be deployed in 2D, 3D, GIS and so on.
 -   The Controllers give you an easy way to interact with the Model and View.
