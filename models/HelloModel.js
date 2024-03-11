@@ -1,4 +1,3 @@
-import World from 'https://code.agentscript.org/src/World.js'
 import Model from 'https://code.agentscript.org/src/Model.js'
 import * as util from 'https://code.agentscript.org/src/utils.js'
 
@@ -8,8 +7,9 @@ class HelloModel extends Model {
     wiggleAngle = 10 // wiggle angle in degrees
     linksToo = true // handy to show just turtles if false
 
-    constructor(worldOptions = World.defaultOptions()) {
-        super(worldOptions) // call "Model"s constructor
+    // use default patches: 33 x 33 patches with 0,0 origin at the center.
+    constructor() {
+        super() // call "Model"s constructor
     }
 
     setup() {
