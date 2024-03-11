@@ -17,7 +17,7 @@ Lets look at [HelloModel.js](https://code.agentscript.org/models/HelloModel.js)
 
 ![Image](/config/cleantheme/static/HelloModel.jpg)
 
-We first import two modules fromout src/ folder
+We first import two modules from our src/ folder
 
 -   Model.js: This is used by all models and creates the Patches, Turtles and Links.
 -   utils.js: A collection of useful utility functions. We'll use util.randomCentered

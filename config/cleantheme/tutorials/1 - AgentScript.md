@@ -37,7 +37,7 @@ class HelloModel extends Model {
 }
 ```
 
-Here it is [running](https://code.agentscript.org/views1/hello.html)
+Here it is [running](https://code.agentscript.org/views1/hello.html) 500 steps and printing a sample of the resultant data.
 
 Similarly, the View makes this visible like this [2D view](https://code.agentscript.org/views2/hello.html) or this [3D view](https://code.agentscript.org/views25/hello3d.html), both with the same Model! This is important: once a Model is defined, it can be viewed in many different ways.
 
@@ -45,7 +45,18 @@ Finally, the Controllers let you interact with the Model & View. Here's an examp
 
 ## Examples
 
-Example models include a simple [HelloModel](https://code.agentscript.org/views2/hello.html), a [TravelingSalesPerson](https://code.agentscript.org/views2/tsp.html) model, and many more. You can see 2D versions [here](https://code.agentscript.org/views2/).
+Agentscript has many (over 100!) example models in several directies:
+
+-   [views1](https://code.agentscript.org/views1) Runs models in a HTML text view
+-   [views2](https://code.agentscript.org/views2) Runs 2D models with x, y coordinates
+-   [views25](https://code.agentscript.org/views25) Runs "2 and a half D" models with x, y, z coordinates
+-   [views3](https://code.agentscript.org/views3) Runs 3D models with x, y, z coordinates, 3D shapes with tilt, pitch and roll capabilities.
+-   [mvc](https://code.agentscript.org/mvc) Adds controllers to some of the above views.
+-   [leaflet](https://code.agentscript.org/leaflet) and [maplibre](https://code.agentscript.org/maplibre) GIS models using the Leaflet and MapLibre libraries.
+
+Click on the views2 direectory above, you'll see:
+
+<!-- You can see 2D versions [here](https://code.agentscript.org/views2/). -->
 
 ![Image](/config/cleantheme/static/Views2.jpg)
 
@@ -55,9 +66,9 @@ Here's what the [LinkTravel model](https://code.agentscript.org/views2/linktrave
 
 ![Image](/config/cleantheme/static/LinkTravel.jpg)
 
-Go on over there to see more nifty models, maybe see on you would like to understand and modify.
+Go on over there to see more nifty models, maybe see one you would like to understand and modify. We'll show how in our Server tutorial.
 
-Oh, and these are shown in 2D. Here you can see [2.5D](https://code.agentscript.org/views25/) and [3D](https://code.agentscript.org/views3/)
+Oh, and these are shown in 2D. Here you can see [2.5D](https://code.agentscript.org/views25/) and [3D](https://code.agentscript.org/views3/) demos. And note the "hello" demos in each case use the same Model, but with different Views. Explore all the directories!f
 
 ## Snippets
 
