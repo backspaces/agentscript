@@ -18,7 +18,7 @@ Lets create our first Pen .. click on the "Go make one!" button or the Pen butto
 
 We'll go to directly to [GitHub](https://github.com/backspaces/agentscript) for our models rather than downloading as we did in _Running Locally_ in the View tutorial.
 
-Lets start with the views25 folder. Click on it and then the hello.html file. Click on Raw, then paste the results in you Pen's HTML area
+Lets start with the views25 folder in the list on the left. Click on it and then the hello.html file. Click on Raw, then paste the results in you Pen's HTML area
 
 ![Image](/config/cleantheme/static/Views25Html.jpg)
 
@@ -107,7 +107,7 @@ const drawOptions = {
 
 Drag the view around, looking at it at several angles.
 
-![Image](/config/cleantheme/static/TransparentPatches.jpg)
+<!-- ![Image](/config/cleantheme/static/TransparentPatches.jpg) -->
 
 While we're doing this, lets lose the links which are cluttering up our view. The Model has a variable, "linksToo" which we can set as false right after creating it.
 
