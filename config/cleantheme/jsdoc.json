@@ -18,6 +18,7 @@
 
         "theme_opts": {
             "default_theme": "dark",
+            "favicon": "./config/cleantheme/favicon.ico",
 
             "sections": ["Classes", "Modules", "Global", "Tutorials"],
             "sort": false,

@@ -25,9 +25,9 @@ class HelloModel extends Model {
     wiggleAngle = 10 // wiggle angle in degrees
     linksToo = true // handy to show just turtles if false
 
-    // use default patches: 33 x 33 patches with 0,0 origin at the center.
-    constructor() {
-        super() // call "Model"s constructor
+    // default worldOptions: 33 x 33 patches with 0,0 origin at the center.
+    constructor(worldOptions = undefined) {
+        super(worldOptions)
     }
 
     setup() {

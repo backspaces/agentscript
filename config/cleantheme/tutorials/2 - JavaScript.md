@@ -17,7 +17,7 @@ One of the best tutorials for the absolute beginner is [JavaScript in 14 Minutes
 
 And here's the Developer Console
 
-![Image](/config/cleantheme/static/JS14Min2.jpg)
+![Image](/)
 
 It gives you small snippets of code which you cut/paste into the console. here's one:
 

@@ -68,7 +68,7 @@ It looks like this:
 
 This is available at: [https://code.agentscript.org/views2/pheromone.html](https://code.agentscript.org/views2/pheromone.html).
 
-## Running locally
+## Running Locally
 
 While we're here, lets run this locally in the browser. We'll down load the above by going to github: [https://github.com/backspaces/agentscript/blob/master/views2/pheromone.html](https://github.com/backspaces/agentscript/blob/master/views2/pheromone.html)
 
@@ -158,7 +158,9 @@ using the colorMap, you'll get the color version above.
 
 ## More pheromone.html Options
 
-Edit your local pheromone.html, changing 30 to 1, save it and restart it in the browser. You'll get very slow turtles.
+Here are several changes to pheromone.html to try:
+
+Edit your local pheromone.html, changing 30 (fps) to 1, save it and restart it in the browser. You'll get very slow turtles.
 
 Edit changing 1 to 60 and they'll zoom along!
 
@@ -191,7 +193,7 @@ model.population = 100
 model.setup()
 ```
 
-Save and restart .. you'll see the patches yellow arrives faster due to more turtles dropping pheromones.
+Save and restart .. you'll see the patches yellow arrives faster due to more turtles dropping pheromone.
 
 Similarly change rotateAngle to zero and the wiggle goes away.
 

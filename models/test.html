@@ -14,26 +14,23 @@
         const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
         const className = name[0].toUpperCase() + name.slice(1)
 
-        async function run() {
-            const module = await import(`./${className}.js`)
-            const Model = module.default
+        const module = await import(`./${className}.js`)
+        const Model = module.default
 
-            util.randomSeed() // so tests have same results
+        util.randomSeed() // so tests have same results
 
-            const model = new Model()
+        const model = new Model()
 
-            await model.startup()
-            model.setup()
-            await util.timeoutLoop(() => {
-                model.step()
-            }, 500)
+        await model.startup()
+        model.setup()
+        await util.timeoutLoop(() => {
+            model.step()
+        }, 500)
 
-            const sample = util.sampleModel(model)
-            util.printToPage(sample)
+        const sample = util.sampleModel(model)
+        util.printToPage(sample)
 
-            window.modelSample = JSON.stringify(sample)
-        }
-        run()
+        window.modelSample = JSON.stringify(sample)
     </script>
     <div id="modelDiv"></div>
 </body>

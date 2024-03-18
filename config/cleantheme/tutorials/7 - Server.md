@@ -1,4 +1,4 @@
-Generally a model is deployed via a web server. AgentScript is deployed via github pages (which turns a repo into a server) and by publishing to [NPM](https://docs.npmjs.com/). Recently Content Delivery Networks have picked up the NPM deployments. AgentScript is available on [unpkg.com](https://unpkg.com/)
+Generally a model is deployed via a web server. AgentScript is deployed via github pages (which turns a repo into a server) and by publishing to [NPM](https://docs.npmjs.com/) (Node Package Manager). Recently Content Delivery Networks (CDNs) have picked up the NPM deployments. AgentScript is available on [unpkg.com](https://unpkg.com/)
 
 We'll show how to use a special kind of web server, a [playground](https://www.geeksforgeeks.org/top-javascript-playgrounds-every-developer-should-try/) which requires no installation on your desktop and instead runs completely in the browser. We'll use [CodePen](https://codepen.io/), one of the most popular playgrounds.
 
@@ -10,13 +10,13 @@ Start by going to CodePen and creating a free account. It'll start out something
 
 ## Create a Pen
 
-Lets create our first Pen .. click on the "Go make one!" button or the Pen button on the top left sidebar. Click on Untitled and give your Pen a name. I'll use HelloView25. Save it.
+Lets create our first Pen .. click on the "Go make one!" button or the Pen button on the top left sidebar above. Click on Untitled and give your Pen a name. I'll use HelloView25. Save it.
 
 ![Image](/config/cleantheme/static/CodePenLayout.jpg)
 
 ## Add hello.html
 
-We'll go to directly to [GitHub](https://github.com/backspaces/agentscript) for our models rather than downloading as we did in LoocalDeplooy.
+We'll go to directly to [GitHub](https://github.com/backspaces/agentscript) for our models rather than downloading as we did in _Running Locally_ in the View tutorial.
 
 Lets start with the views25 folder. Click on it and then the hello.html file. Click on Raw, then paste the results in you Pen's HTML area
 
