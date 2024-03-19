@@ -1,9 +1,9 @@
-## What is Agentscript?
+## What is AgentScript?
 
 AgentScript is an open source javascript library for writing
 [agent-based models](https://en.wikipedia.org/wiki/Agent-based_model).
 It is inspired by the programming language
-[Netlogo](https://ccl.northwestern.edu/netlogo). It uses the [Model, View, Controller](https://developer.mozilla.org/en-US/docs/Glossary/MVC) (MVC) architecture. It lives on Github and is publicly available on our AgentScript.org server, see [Home](https://code.agentscript.org/docs/) above.
+[NetLogo](https://ccl.northwestern.edu/netlogo). It uses the [Model, View, Controller](https://developer.mozilla.org/en-US/docs/Glossary/MVC) (MVC) architecture. It lives on Github and is publicly available on our AgentScript.org server, see [Home](https://code.agentscript.org/docs/) above.
 
 AgentScript creates Models inhabited by Patches, Turtles, and Links. You'll use all three in the "Snippets" example below.
 
@@ -15,7 +15,7 @@ In terms of MVC, the Model contains the data (the Patches, Turtles, and Links). 
 
 ![Image](/config/cleantheme/static/MVC.jpg)
 
-Concretely, the Model very roughtly follows this outline:
+Concretely, the Model very roughly follows this outline:
 
 ```javascript
 // Extend the core Model for our Model, here HelloModel
@@ -45,7 +45,7 @@ Finally, the Controllers let you interact with the Model & View. Here's an examp
 
 ## Examples
 
-Agentscript has many (over 100!) example models in several directies:
+AgentScript has many (over 100!) example models in several directories:
 
 -   [views1](https://code.agentscript.org/views1) Runs models in a HTML text view
 -   [views2](https://code.agentscript.org/views2) Runs 2D models with x, y coordinates
@@ -54,7 +54,7 @@ Agentscript has many (over 100!) example models in several directies:
 -   [mvc](https://code.agentscript.org/mvc) Adds controllers to some of the above views.
 -   [leaflet](https://code.agentscript.org/leaflet) and [maplibre](https://code.agentscript.org/maplibre) GIS models using the Leaflet and MapLibre libraries.
 
-Click on the views2 direectory above, you'll see:
+Click on the views2 directory above, you'll see:
 
 <!-- You can see 2D versions [here](https://code.agentscript.org/views2/). -->
 
@@ -87,9 +87,9 @@ Finally, we've wrapped up the Snippets into a Model: [pheromone.html](https://co
 ## Don't Panic!!
 
 This has been a pretty quick ride through what AgentScript can do.
-It can be pretty overwhelming, but dont worry, we'll dig into how you can make these models soon.
+It can be pretty overwhelming, but don't worry, we'll dig into how you can make these models soon.
 
-The key take-aways are:
+The key take-away's are:
 
 -   Models are made up of Patches, Turtles and Links.
 -   [Snippets](https://code.agentscript.org/config/cleantheme/Snippets.html) let you play with these.

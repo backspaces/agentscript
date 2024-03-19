@@ -125,7 +125,7 @@
 
             <h2>How does it work?</h2>
 
-            <p>In Agentscript, you fill a world with three ingredients: turtles, patches, and links.</p>
+            <p>In AgentScript, you fill a world with three ingredients: turtles, patches, and links.</p>
             <p>Your program describes the behavior of each of these actors and how they interact
                 with each other. Let's see an example.</p>
 
@@ -133,7 +133,7 @@
 
             <p> First things first, let's make a turtle: </p>
 
-            <box-layout id="createTurtle" contentditable: "true" class="snippet">
+            <box-layout id="createTurtle" contenteditable: "true" class="snippet">
                 model.turtles.create(1)
             </box-layout>
             <button type="button" onclick="runSnippet('createTurtle')">run once</button>
@@ -354,12 +354,12 @@ model.patches.ask(patch => {
             const element = document.getElementById('colorMapGrid')
             const children = element.children
 
-            // remove current divs
+            // remove current div's
             while (element.firstChild) {
                 element.removeChild(element.firstChild);
             }
 
-            // add new divs
+            // add new div's
             const length = myColorMap.length
             util.repeat(length, (i) => {
                 const div = document.createElement("div")
