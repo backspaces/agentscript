@@ -84,7 +84,7 @@ The class has 4 variables, a constructor, and two methods.
 The HTML used by the browser is quite simple. It provides a title, and a script which imports the HelloModel.js above, calls model.step 500 times, and it prints a start message and a random sample of the model's data.
 
 ```html
-<html>
+<h
     <head>
         <title>Hello</title>
     </head>
