@@ -9,8 +9,8 @@ node_modules
 web_modules
 npm-debug.log
 yarn-error.log
-/.vscode/
 **/.DS_Store
+.vscode
 
 /Attic/
 **/Attic
@@ -18,6 +18,8 @@ yarn-error.log
 /tests/
 /simple/
 /controls/
+/vscode/
+vscode.zip
 
 # package-lock.json
 # yarn.lock

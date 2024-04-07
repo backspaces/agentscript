@@ -16,6 +16,8 @@
         "/views2/",
         "/views25/",
         "/views3/",
+        "/vscode/",
+        "/vscode.zip/",
         "/mvc/",
         "/leaflet/",
         "/maplibre/"
@@ -36,12 +38,13 @@
     "scripts": {
         "clean": "shx rm -rf dist vendor views1 && shx mkdir dist vendor views1",
         "start": "http-server -o --silent > /dev/null &",
-        "build": "npm-run-all clean build-vendor build-dist build-views build-md build-docs",
+        "build": "npm-run-all clean build-vendor build-dist build-views build-md build-docs build-vscode",
         "build-dist": "rollup -c config/rollup.dist.mjs",
         "build-vendor": "yarn && shx rm -f vendor/* && rollup -c config/rollup.vendor.mjs && cp node_modules/uplot/dist/uPlot.min.css vendor/uPlot.css",
         "build-views": "node bin/models2html",
         "build-md": "bin/src2md 'models views1 views2 views25 views3 mvc leaflet maplibre' > /dev/null",
         "build-docs": "rm -rf docs/* && jsdoc -c config/cleantheme/jsdoc.json",
+        "build-vscode": "rm vscode.zip; zip -r vscode.zip vscode",
         "test": "test/denomodels.js && test/deno3Dgeom.js",
         "pub0": "yarn version --patch && git push --follow-tags",
         "pub": "npm version --patch && git push --follow-tags",
