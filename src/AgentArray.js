@@ -2,7 +2,7 @@ import * as util from './utils.js'
 
 /**
  * Subclass of Array with convenience methods used by NetLogo.
- * Tipically the items in the array are Objects but can be any type.
+ * Typically the items in the array are Objects but can be any type.
  */
 class AgentArray extends Array {
     /**

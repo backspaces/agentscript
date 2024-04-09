@@ -72,7 +72,7 @@ The HelloModel is imported into the script area, with the rest of the script run
 
 ## Browser's Developer Console
 
-As mentioned in the JavaScript tutorial. browsers all support a Developer Console which lets you step through your model to see the state of the model at a given place in your code. It also provides a handy `console.log()` function to print values within JavaScript code to the Developer Console.
+As mentioned in the JavaScript tutorial, browsers all support a Developer Console which lets you step through your model to see the state of the model at a given place in your code. It also provides a handy `console.log()` function to print values within JavaScript code to the Developer Console.
 
 Here's an article on finding your browser's [Developer's Console](https://balsamiq.com/support/faqs/browserconsole/). Or you can use your browser's help menu (type "dev" should do it).
 

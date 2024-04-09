@@ -24,11 +24,12 @@ class HelloModel extends Model {
             t.setxy(patch.x, patch.y)
         })
 
-        // create a link from every turtle to a random other turtle
-        if (this.linksToo)
+        // If links.too is true, create a link from every turtle to another turtle
+        if (this.linksToo) {
             this.turtles.ask(t => {
                 this.links.create(t, this.turtles.otherOneOf(t))
             })
+        }
     }
 
     step() {

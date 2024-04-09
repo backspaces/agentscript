@@ -11,21 +11,27 @@ And there are several tutorials and videos to use, just google _javascript tutor
 
 ## JavaScript in 14 Minutes
 
-One of the best tutorials for the absolute beginner is [JavaScript in 14 Minutes](https://jgthms.com/javascript-in-14-minutes). It uses the browser's developer console. It will detect your OS and default browseer. I recommend Chrome but it supports them all.
+One of the best tutorials for the absolute beginner is [JavaScript in 14 Minutes](https://jgthms.com/javascript-in-14-minutes). It uses the browser's developer console. It will detect your OS and default browser. I use Chrome but it supports them all.
 
 ![Image](/config/cleantheme/static/JS14Min1.jpg)
 
-And here's the Developer Console
+Clicking on "get started" results in:
 
-![Image](/)
+![Image](/config/cleantheme/static/DevConsole3.jpg)
 
-It gives you small snippets of code which you cut/paste into the console. here's one:
+Click on "Copy to clipboard" above, then open a new tab, and typing the keys suggested above, "option+command+J" for me, gives:
 
-![Image](/config/cleantheme/static/JS14Min3.jpg)
+![Image](/config/cleantheme/static/DevConsole2.jpg)
+
+Finally, paste the clipboard into the console, next to the ">". This results in:
+
+![Image](/config/cleantheme/static/DevConsole4.jpg)
+
+Try typing simple JavaScript values like "1 + 2" and "Math.PI" in the console.
 
 ## Eloquent Javascript
 
-[Eloquent Javascript](https://eloquentjavascript.net/) is a much loved free online book which has a sanbox for running every example in the book.
+[Eloquent Javascript](https://eloquentjavascript.net/) is a much loved free online book which has a [javascript sandbox](https://eloquentjavascript.net/code/) for running every example in the book.
 
 ![Image](/config/cleantheme/static/Eloquent.jpg)
 
@@ -53,9 +59,9 @@ It is _the reference_ for all things browser: HTML, CSS and JavaScript. The [Jav
 
 ## Writing simple JavaScript
 
-With all these resources, you might ask: how do I actuall write JavaScript? The easiest way is simple: use the browser's Developer Tools.
+With all these resources, you might ask: how do I actually write JavaScript? The easiest way is simple: use the browser's Developer Tools.
 
-Lets try it. Open a new Browser tab. Then open the Developer Console. For Chrome, use "View > Developer > JavaScript Console" Menu, or the "Cmd-Option-J" keyboard shortcut. For others, use the help menu, typing "dev" shoud find it. (See the Browser tutorial for more)
+Lets try it. Open a new Browser tab. Then open the Developer Console. For Chrome, use "View > Developer > JavaScript Console" Menu, or the "Cmd-Option-J" keyboard shortcut. For others, use the help menu, typing "dev" should find it. (See the Browser tutorial for more)
 
 You can click-drag the console menu bar to make it larger.
 

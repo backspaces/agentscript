@@ -18,13 +18,12 @@ In terms of MVC, the Model contains the data (the Patches, Turtles, and Links). 
 Concretely, the Model very roughly follows this outline:
 
 ```javascript
-// Extend the core Model for our Model, here HelloModel
+// Subclass class Model to create our new model, HelloModel
 class HelloModel extends Model {
-    // define data to bue used by the model
-
-    constructor(..) {
-        // sets up the Patches (a width/height grid) and
-        // initializes an empty Turtles & Links array
+    // worldOptions = undefined, means use default worldOptions:
+    // 33 x 33 patches with 0,0 origin at the center.
+    constructor(worldOptions = undefined) {
+        super(worldOptions)
     }
 
     setup() {
@@ -68,7 +67,7 @@ Here's what the [LinkTravel model](https://code.agentscript.org/views2/linktrave
 
 Go on over there to see more nifty models, maybe see one you would like to understand and modify. We'll show how in our Server tutorial.
 
-Oh, and these are shown in 2D. Here you can see [2.5D](https://code.agentscript.org/views25/) and [3D](https://code.agentscript.org/views3/) demos. And note the "hello" demos in each case use the same Model, but with different Views. Explore all the directories!f
+Oh, and these are shown in 2D. Here you can see [2.5D](https://code.agentscript.org/views25/) and [3D](https://code.agentscript.org/views3/) demos. And note the "hello" demos in each case use the same Model, but with different Views. Explore all the directories!
 
 ## Snippets
 
