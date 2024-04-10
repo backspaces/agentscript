@@ -69,12 +69,12 @@ Then we create a [Class](https://javascript.info/class) which [inherits](https:/
 
 The class has 4 variables, a constructor, and two methods.
 
--   The constructor just calles the Model.js super class using the default "world".
+-   The constructor just calls the Model.js super class using the default "world".
     -   The default world is 33 x 33 patches with 0,0 origin at the center.
 -   The 4 variables are used in the 2 methods to create the model's behavior
 -   setup:
     -   creates "population" turtles
-    -   If "linsksToo" then create a link from every turtle to a random other turtle
+    -   If links.too is true, create a link from every turtle to another turtle
 -   step:
     -   use "wiggleAngle" to ask each turtle to turn randomly from -(wiggleAngle/2) to +(wiggleAngle/2)
     -   use "speed" to move each turtle forward by speed patches

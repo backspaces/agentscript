@@ -2,7 +2,7 @@
 
 To "see" the model running, we need the "V" in MVC .. the View. There are several views available, we'll use [TwoDraw.js](/src/TwoDraw.js)
 
-You can see this in action with our [PheronomeModel](/views2/pheromone.html) and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm)
+You can see this in action with our [PheromoneModel](/views2/pheromone.html) and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm)
 
 ## TwoDraw
 
@@ -38,7 +38,7 @@ It looks like this:
                 'yellow',
             ])
 
-            const model = new Model() // no arge => use default world options
+            const model = new Model() // no arguments => use default world options
             model.setup()
 
             const view = new TwoDraw(model, {
@@ -86,7 +86,7 @@ Now just double-click this. Your browser will show:
 
 Notice the file url shown in the browser url area.
 
-The file url: file:///Users/owen/Downloads/pheromone.html has limitations our https:// urls do not have but this is still useful for simple modificaations.
+The file url: file:///Users/owen/Downloads/pheromone.html has limitations our https:// urls do not have but this is still useful for simple modifications.
 
 ## TwoDraw Options
 
@@ -120,7 +120,7 @@ It also takes drawOptions containing the drawing properties. Here are the defaul
     }
 ```
 
-You can quickly see your model by ommitting the drawOptions thus giving you defaults. Comment out the draw options in your local pheromone.html:
+You can quickly see your model by omitting the drawOptions thus giving you defaults. Comment out the draw options in your local pheromone.html:
 
 ```javascript
 drawOptions: {
@@ -180,7 +180,7 @@ If we look at [https://code.agentscript.org/models/PheromoneModel.js](https://co
 // Here are the variables we'll use. They are accessed via "this.population" etc.
 population = 30 // number of turtles
 rotateAngle = 50 // rotate between -25 & +25
-addPheromone = 10 // how mutch to add to patches under a turtle
+addPheromone = 10 // how much to add to patches under a turtle
 evaporateToo = true // decrease all patches pheromone too?
 evaporateDelta = 0.99 // how much to decrease pheromone as fraction
 ```
@@ -188,7 +188,7 @@ evaporateDelta = 0.99 // how much to decrease pheromone as fraction
 We can change these right before model.setup() to different values. Here's how we can change to 100 turtles:
 
 ```javascript
-const model = new Model() // no arge => use default world options
+const model = new Model() // no arguments => use default world options
 model.population = 100
 model.setup()
 ```

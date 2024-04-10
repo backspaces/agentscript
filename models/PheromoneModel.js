@@ -7,7 +7,7 @@ export default class PheromoneModel extends Model {
     // Here are the variables we'll use. They are accessed via "this.population" etc.
     population = 30 // number of turtles
     rotateAngle = 50 // rotate between -25 & +25
-    addPheromone = 10 // how mutch to add to patches under a turtle
+    addPheromone = 10 // how much to add to patches under a turtle
     evaporateToo = true // decrease all patches pheromone too?
     evaporateDelta = 0.99 // how much to decrease pheromone as fraction
 

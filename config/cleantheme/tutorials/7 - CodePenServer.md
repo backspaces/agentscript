@@ -63,7 +63,7 @@ Oh and you can click on the button to the right of Settings to change the View. 
 
 ## Modify the HTML and JS panels
 
-Our first update will be to move all the turtles above the patches. This is good because the patches and links interfer a bit now.
+Our first update will be to move all the turtles above the patches. This is good because the patches and links interfere a bit now.
 
 Just after `model.setup()` in the HTML, add: `model.turtles.ask(t => t.z = 1)` and run it, changing the turtle's z value from 0 to 1.
 
@@ -150,7 +150,7 @@ const drawOptions = {
 
 Again, drag the view around, looking at it at several angles.
 
-Finally, lets change the turtles to be circules of size 2:
+Finally, lets change the turtles to be circles of size 2:
 
 ![Image](/config/cleantheme/static/CircleTurtles.jpg)
 

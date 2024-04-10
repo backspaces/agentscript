@@ -47,7 +47,6 @@
         "build-md": "bin/src2md 'models views1 views2 views25 views3 mvc leaflet maplibre' > /dev/null",
         "build-docs": "rm -rf docs/* && jsdoc -c config/cleantheme/jsdoc.json",
         "test": "test/denomodels.js && test/deno3Dgeom.js",
-        "rmstore0": "git add package.json && find . -name \".DS_Store\" -delete",
         "rmstore": "find . -name \".DS_Store\" -delete",
         "build-vscode": "rm vscode.zip; zip -r vscode.zip vscode",
         "-- END OF WORKFLOW --": "The following are versions tests, running models in various directories and browsers",
