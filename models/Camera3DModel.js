@@ -19,8 +19,8 @@ export default class Camera3DModel extends Model {
 
     // ======================
 
-    // constructor(worldDptions) { // not needed
-    //     super(worldDptions) // default world options if "undefined"
+    // constructor(worldOptions) { // not needed
+    //     super(worldOptions) // default world options if "undefined"
     // }
 
     setup() {

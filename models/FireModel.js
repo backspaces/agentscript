@@ -7,8 +7,8 @@ export default class FireModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(125)) {
-        super(worldDptions)
+    constructor(worldOptions = World.defaultOptions(125)) {
+        super(worldOptions)
     }
 
     setup() {

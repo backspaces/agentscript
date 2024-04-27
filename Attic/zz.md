@@ -122,8 +122,8 @@ export default class PheromoneModel extends Model {
     evaporateDelta = 0.99 // how much to decrease pheromone as fraction
 
     // worldOptions: min/max for x, y. defaultOptions(15) helper sets x, y between -15 to +15
-    constructor(worldDptions = World.defaultOptions(15)) {
-        super(worldDptions)
+    constructor(worldOptions = World.defaultOptions(15)) {
+        super(worldOptions)
     }
 
     // setup is called once to initialize the model.

@@ -8,8 +8,8 @@ export default class LifeModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(50)) {
-        super(worldDptions)
+    constructor(worldOptions = World.defaultOptions(50)) {
+        super(worldOptions)
     }
 
     setup() {

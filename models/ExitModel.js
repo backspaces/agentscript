@@ -7,8 +7,8 @@ export default class ExitModel extends Model {
 
     // ======================
 
-    constructor(worldDptions = World.defaultOptions(35, 35, 1)) {
-        super(worldDptions)
+    constructor(worldOptions = World.defaultOptions(35, 35, 1)) {
+        super(worldOptions)
     }
 
     setup() {

@@ -16,6 +16,9 @@ export function inNode() {
 export function inDeno() {
     return typeof globalThis.Deno !== 'undefined'
 }
+export function hasCanvas() {
+    return globalThis.canvas !== 'undefined'
+}
 
 // ### Async & I/O
 
