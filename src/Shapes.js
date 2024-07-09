@@ -69,8 +69,7 @@ class Shapes {
 
     imageName(name, pixels, fill, stroke) {
         const path = this.getPath(name)
-        if (!Number.isInteger(pixels))
-            throw Error(`imageName: pixels is not integer: ${name}`)
+        if (!Number.isInteger(pixels)) throw Error(`imageName: pixels is not integer: ${name}`)
         if (!path) throw Error(`imageName: ${name} not in Shapes`)
 
         if (path.name === 'imagePath') return `${name}_${pixels}_image`
