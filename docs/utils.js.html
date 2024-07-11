@@ -18,6 +18,9 @@ export function inNode() {
 export function inDeno() {
     return typeof globalThis.Deno !== 'undefined'
 }
+export function hasCanvas() {
+    return globalThis.canvas !== 'undefined'
+}
 
 // ### Async &amp; I/O
 
@@ -564,6 +567,7 @@ export async function runModel(model, steps = 500, useSeed = true) {
     }
     return model
 }
+
 
 // From Model
 // needsStartup() {

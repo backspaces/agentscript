@@ -38,7 +38,7 @@
         "url": "https://github.com/backspaces/agentscript/issues"
     },
     "scripts": {
-        "start": "http-server -o --silent > /dev/null &",
+        "start": "http-server -p 9000 -o --silent > /dev/null &",
         "clean": "rm -rf dist vendor views1 && mkdir dist vendor views1",
         "build": "npm-run-all rmstore clean build-vendor build-dist build-views build-md build-docs",
         "build-dist": "rollup -c config/rollup.dist.mjs",

@@ -1,8 +1,10 @@
 Code    | Run demo
 ------- | ------
 [ants](https://github.com/backspaces/agentscript/tree/master/views2/ants.html#L1) | [https://code.agentscript.org/views2/ants.html](https://code.agentscript.org/views2/ants.html)
+[ants1](https://github.com/backspaces/agentscript/tree/master/views2/ants1.html#L1) | [https://code.agentscript.org/views2/ants1.html](https://code.agentscript.org/views2/ants1.html)
 [avalanche](https://github.com/backspaces/agentscript/tree/master/views2/avalanche.html#L1) | [https://code.agentscript.org/views2/avalanche.html](https://code.agentscript.org/views2/avalanche.html)
 [buttons](https://github.com/backspaces/agentscript/tree/master/views2/buttons.html#L1) | [https://code.agentscript.org/views2/buttons.html](https://code.agentscript.org/views2/buttons.html)
+[buttons1](https://github.com/backspaces/agentscript/tree/master/views2/buttons1.html#L1) | [https://code.agentscript.org/views2/buttons1.html](https://code.agentscript.org/views2/buttons1.html)
 [diffuse](https://github.com/backspaces/agentscript/tree/master/views2/diffuse.html#L1) | [https://code.agentscript.org/views2/diffuse.html](https://code.agentscript.org/views2/diffuse.html)
 [droplets](https://github.com/backspaces/agentscript/tree/master/views2/droplets.html#L1) | [https://code.agentscript.org/views2/droplets.html](https://code.agentscript.org/views2/droplets.html)
 [exit](https://github.com/backspaces/agentscript/tree/master/views2/exit.html#L1) | [https://code.agentscript.org/views2/exit.html](https://code.agentscript.org/views2/exit.html)
@@ -10,6 +12,7 @@ Code    | Run demo
 [flock](https://github.com/backspaces/agentscript/tree/master/views2/flock.html#L1) | [https://code.agentscript.org/views2/flock.html](https://code.agentscript.org/views2/flock.html)
 [gridpath](https://github.com/backspaces/agentscript/tree/master/views2/gridpath.html#L1) | [https://code.agentscript.org/views2/gridpath.html](https://code.agentscript.org/views2/gridpath.html)
 [hello](https://github.com/backspaces/agentscript/tree/master/views2/hello.html#L1) | [https://code.agentscript.org/views2/hello.html](https://code.agentscript.org/views2/hello.html)
+[hello1](https://github.com/backspaces/agentscript/tree/master/views2/hello1.html#L1) | [https://code.agentscript.org/views2/hello1.html](https://code.agentscript.org/views2/hello1.html)
 [helloplus](https://github.com/backspaces/agentscript/tree/master/views2/helloplus.html#L1) | [https://code.agentscript.org/views2/helloplus.html](https://code.agentscript.org/views2/helloplus.html)
 [hellotext](https://github.com/backspaces/agentscript/tree/master/views2/hellotext.html#L1) | [https://code.agentscript.org/views2/hellotext.html](https://code.agentscript.org/views2/hellotext.html)
 [life](https://github.com/backspaces/agentscript/tree/master/views2/life.html#L1) | [https://code.agentscript.org/views2/life.html](https://code.agentscript.org/views2/life.html)

@@ -33,12 +33,25 @@ class TwoDraw extends TwoView {
             turtlesMap: 'Basic16',
         }
     }
+    static drawKeys() {
+        const defaults = this.defaultOptions({})
+        return Object.keys(defaults)
+    }
     static separateDrawOptions(viewOptions, drawOptions) {
         if (viewOptions.drawOptions) {
             // drawOptions = viewOptions.drawOptions
             Object.assign(drawOptions, viewOptions.drawOptions)
             delete viewOptions.drawOptions
         }
+
+        const keys = TwoDraw.drawKeys()
+        keys.forEach(k => {
+            if (viewOptions[k]) {
+                drawOptions[k] = viewOptions[k]
+                delete viewOptions[k]
+            }
+        })
+
         return drawOptions
         // return [viewOptions, drawOptions]
     }
