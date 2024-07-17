@@ -1,5 +1,5 @@
 import * as util from './utils.js'
-// import * as emoji from './emoji.js'
+import * as emoji from './emoji.js'
 
 function cssColor(color) {
     if (color) return color.css || color
@@ -72,6 +72,10 @@ class Shapes {
     //     const can = emoji.emoji2can(codePoint)
     //     this.createImagePath(name, can)
     // }
+    createEmojiPath(name, codePoint) {
+        const can = emoji.emoji2can(codePoint)
+        this.createImagePath(name, can)
+    }
 
     imageName(name, pixels, fill, stroke) {
         const path = this.getPath(name)

@@ -105,6 +105,7 @@ class TurtlesView {
     }
 
     drawShape(name, x, y, theta = 0, size = 1, fill, stroke) {
+        console.log(name)
         const ctx = this.ctx
         ctx.save()
 
