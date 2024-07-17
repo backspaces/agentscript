@@ -6,46 +6,8 @@
 
 <body>
     <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Color from 'https://code.agentscript.org/src/Color.js'
-        import Model from 'https://code.agentscript.org/models/FireModel.js'
-
-        const typeColors = {
-            dirt: Color.cssToPixel('yellow'),
-            tree: Color.cssToPixel('green'),
-            fire: Color.cssToPixel('red'),
-            ember4: Color.rgbaToPixel(255 - 25, 0, 0),
-            ember3: Color.rgbaToPixel(255 - 50, 0, 0),
-            ember2: Color.rgbaToPixel(255 - 75, 0, 0),
-            ember1: Color.rgbaToPixel(255 - 100, 0, 0),
-            ember0: Color.rgbaToPixel(255 - 125, 0, 0),
-        }
-        const drawOptions = {
-            patchesColor: p => typeColors[p.type],
-        }
-
-        const model = new Model()
-        await model.startup()
-        model.setup()
-
-        const view = new TwoDraw(
-            model,
-            { div: 'modelDiv', patchSize: 4 },
-            drawOptions
-        )
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // run 500 steps
-            30 // 30 fps
-        )
-
-        util.toWindow({ util, model, view, anim })
+        import runModel from './fire.js'
+        const results = await runModel("modelDiv") // default steps, fps
     </script>
     <div id="modelDiv"></div>
 </body>

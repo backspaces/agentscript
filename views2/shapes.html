@@ -5,60 +5,9 @@
 </head>
 
 <body>
-
     <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import World from 'https://code.agentscript.org/src/World.js'
-        import Shapes from 'https://code.agentscript.org/src/Shapes.js'
-
-        const shapes = new Shapes()
-
-        await shapes.imagePathPromise(
-            'twitter',
-            'https://code.agentscript.org/models/data/twitter.png'
-        )
-        await shapes.imagePathPromise(
-            'redfish',
-            'https://code.agentscript.org/models/data/redfish.png'
-        )
-        shapes.createEmojiPath('lion', 0x1F981)
-        shapes.createEmojiPath('smiley', 0x1F600)
-        shapes.createEmojiPath('tree', 0x1F332)
-
-        const model = new Model(World.defaultOptions(25, 16))
-        model.population = 100
-        await model.startup()
-        model.setup()
-
-        function turtleName(t) {
-            return shapes.nameAtIndex(t.id)
-        }
-        const view = new TwoDraw(
-            model,
-            {
-                div: 'modelDiv',
-                patchSize: 20,
-            },
-            {
-                turtlesShape: t => turtleName(t),
-                turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
-                turtlesRotate: t => (!["lion", "smiley", "tree"].includes(turtleName(t))),
-            }
-        )
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // run 500 steps
-            30 // 30 fps
-        )
-
-        // util.toWindow({ util, model, view, anim })
+        import runModel from './shapes.js'
+        const results = await runModel("modelDiv") // default steps, fps
     </script>
     <div id="modelDiv"></div>
 </body>

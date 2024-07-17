@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <title>Life</title>
+</head>
+
+<body>
+    <script type="module">
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import Model from 'https://code.agentscript.org/models/LifeModel.js'
+        import Color from 'https://code.agentscript.org/src/Color.js'
+
+        // use model's default world options
+        const model = new Model()
+        await model.startup()
+        model.setup()
+
+        const drawOptions = {
+            patchesColor: p => (p.living ? 'red' : 'rgba(255, 99, 71, 0.2)'),
+
+        }
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 6,
+            drawOptions,
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        ) //.startStats()
+
+        util.toWindow({ util, model, view, anim })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

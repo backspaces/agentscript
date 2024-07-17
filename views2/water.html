@@ -6,37 +6,8 @@
 
 <body>
     <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Model from 'https://code.agentscript.org/models/WaterModel.js'
-
-        const patchColors = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
-        const maxZ = 10
-        const drawOptions = {
-            // Patches only model:
-            patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
-        }
-
-        const model = new Model()
-        await model.startup()
-        model.setup()
-
-        const view = new TwoDraw(model, { div: 'modelDiv' }, drawOptions)
-
-        view.setPatchesSmoothing(true) // make water smoother
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // run 500 steps
-            30 // 30 fps
-        )
-
-        util.toWindow({ util, model, view, anim })
+        import runModel from './water.js'
+        const results = await runModel("modelDiv") // default steps, fps
     </script>
     <div id="modelDiv"></div>
 </body>

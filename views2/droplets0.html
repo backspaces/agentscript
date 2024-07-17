@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <title>droplets</title>
+</head>
+
+<body>
+    <script type="module">
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import Model from 'https://code.agentscript.org/models/DropletsModel.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+
+        import Color from 'https://code.agentscript.org/src/Color.js'
+        import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
+
+        const drawOptions = {
+            turtlesShape: 'square',
+            turtlesRotate: false,
+            turtlesSize: 0.8,
+            turtlesColor: 'yellow',
+            initPatches: (model, view) => {
+                const elevation = model.patches.exportDataSet('elevation')
+                const grays = elevation.scale(0, 255).data
+                const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
+                const localMinColor = Color.typedColor(255, 0, 0)
+                model.localMins.forEach(p => {
+                    colors[p.id] = localMinColor
+                })
+                return colors
+            },
+        }
+
+        const model = new Model()
+        await model.startup()
+        model.setup()
+
+        const view = new TwoDraw(
+            model,
+            {
+                div: 'modelDiv',
+                useSprites: true, // lots of turtles, sprites faster
+            },
+            drawOptions
+        )
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            500, // run 500 steps
+            30 // 30 fps
+        )
+
+        util.toWindow({ util, model, view, anim })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>

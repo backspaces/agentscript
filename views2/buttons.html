@@ -6,39 +6,8 @@
 
 <body>
     <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Model from 'https://code.agentscript.org/models/ButtonsModel.js'
-
-        let model // declare model here so can be used in drawOptions
-        const drawOptions = {
-            turtlesColor: t => (model.cluster.has(t) ? 'red' : 'random'),
-            turtlesShape: 'circle',
-            turtlesSize: 2,
-            linksColor: 'rgba(255, 255, 255, 0.50',
-        }
-
-        model = new Model() // define model here.
-        await model.startup()
-        model.setup()
-
-        const view = new TwoDraw(
-            model,
-            { div: 'modelDiv', patchSize: 20 },
-            drawOptions
-        )
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // run 500 steps
-            30 // 30 fps
-        )
-
-        util.toWindow({ util, model, view, anim })
+        import runModel from './buttons.js'
+        const results = await runModel("modelDiv") // default steps, fps
     </script>
     <div id="modelDiv"></div>
 </body>
