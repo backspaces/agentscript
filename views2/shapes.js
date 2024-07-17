@@ -3,7 +3,6 @@ import Animator from 'https://code.agentscript.org/src/Animator.js'
 
 import World from 'https://code.agentscript.org/src/World.js'
 import Shapes from 'https://code.agentscript.org/src/Shapes.js'
-import * as emoji from 'https://code.agentscript.org/src/emoji.js'
 
 import Model from 'https://code.agentscript.org/models/HelloModel.js'
 
@@ -17,27 +16,17 @@ export default async function runModel(div, steps = 500, fps = 30) {
 
     const shapes = new Shapes()
 
-    function createEmojiPath(name, codePoint) {
-        const can = emoji.emoji2can(codePoint)
-        shapes.createImagePath(name, can)
-    }
-    async function addImages() {
-        await shapes.imagePathPromise(
-            'twitter',
-            'https://code.agentscript.org/models/data/twitter.png'
-        )
-        await shapes.imagePathPromise(
-            'redfish',
-            'https://code.agentscript.org/models/data/redfish.png'
-        )
-        // shapes.createEmojiPath('lion', 0x1F981)
-        // shapes.createEmojiPath('smiley', 0x1F600)
-        // shapes.createEmojiPath('tree', 0x1F332)
-        createEmojiPath('lion', 0x1f981)
-        createEmojiPath('smiley', 0x1f600)
-        createEmojiPath('tree', 0x1f332)
-    }
-    await addImages()
+    await shapes.imagePathPromise(
+        'twitter',
+        'https://code.agentscript.org/models/data/twitter.png'
+    )
+    await shapes.imagePathPromise(
+        'redfish',
+        'https://code.agentscript.org/models/data/redfish.png'
+    )
+    shapes.createEmojiPath('lion', 0x1f981)
+    shapes.createEmojiPath('smiley', 0x1f600)
+    shapes.createEmojiPath('tree', 0x1f332)
 
     ////
 
