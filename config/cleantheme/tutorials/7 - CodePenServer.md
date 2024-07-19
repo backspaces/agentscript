@@ -28,7 +28,7 @@ Paste that into your Pen's HTML pane. The model starts up right away! That's bec
 
 ## Add HelloModel.js
 
-Our next step is to put the Model code in our JS pane. On github navigate to our HelloModel.js by clicking on agentscript > modeels > HelloModel.js. Again click on Raw, then paste the results in you Pen's JS area.
+Our next step is to put the Model code in our JS pane. On github navigate to our HelloModel.js by clicking on agentscript > models > HelloModel.js. Again click on Raw, then paste the results in you Pen's JS area.
 
 ![Image](/config/cleantheme/static/CodePenJS.jpg)
 
@@ -107,7 +107,7 @@ const drawOptions = {
 
 Drag the view around, looking at it at several angles.
 
-<!-- ![Image](/config/cleantheme/static/TransparentPatches.jpg) -->
+<!--  ![Image](/config/cleantheme/static/TransparentPatches.jpg) -->
 
 While we're doing this, lets lose the links which are cluttering up our view. The Model has a variable, "linksToo" which we can set as false right after creating it.
 
