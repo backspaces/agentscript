@@ -26,7 +26,7 @@ export default async function runModel(div, steps = 500, fps = 30) {
         }
     })
     const drawOptions = {
-        // turtlesShape: 'circle',
+        turtlesShape: 'circle',
         turtlesColor: t => patchColors[t.exit.id],
         turtlesSize: 1,
         initPatches: (model, view) => patchColors,

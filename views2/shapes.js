@@ -7,7 +7,7 @@ import Shapes from 'https://code.agentscript.org/src/Shapes.js'
 import Model from 'https://code.agentscript.org/models/HelloModel.js'
 
 export default async function runModel(div, steps = 500, fps = 30) {
-    const model = new Model(World.defaultOptions(25, 16))
+    const model = new Model(World.defaultOptions(25, 16)) // override Model's size
     model.population = 100
     await model.startup()
     model.setup()

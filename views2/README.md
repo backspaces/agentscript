@@ -6,6 +6,7 @@ Code    | Run demo
 [diffuse](https://github.com/backspaces/agentscript/tree/master/views2/diffuse.html#L1) | [https://code.agentscript.org/views2/diffuse.html](https://code.agentscript.org/views2/diffuse.html)
 [droplets](https://github.com/backspaces/agentscript/tree/master/views2/droplets.html#L1) | [https://code.agentscript.org/views2/droplets.html](https://code.agentscript.org/views2/droplets.html)
 [exit](https://github.com/backspaces/agentscript/tree/master/views2/exit.html#L1) | [https://code.agentscript.org/views2/exit.html](https://code.agentscript.org/views2/exit.html)
+[exit2](https://github.com/backspaces/agentscript/tree/master/views2/exit2.html#L1) | [https://code.agentscript.org/views2/exit2.html](https://code.agentscript.org/views2/exit2.html)
 [fire](https://github.com/backspaces/agentscript/tree/master/views2/fire.html#L1) | [https://code.agentscript.org/views2/fire.html](https://code.agentscript.org/views2/fire.html)
 [flock](https://github.com/backspaces/agentscript/tree/master/views2/flock.html#L1) | [https://code.agentscript.org/views2/flock.html](https://code.agentscript.org/views2/flock.html)
 [gridpath](https://github.com/backspaces/agentscript/tree/master/views2/gridpath.html#L1) | [https://code.agentscript.org/views2/gridpath.html](https://code.agentscript.org/views2/gridpath.html)

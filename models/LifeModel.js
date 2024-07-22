@@ -1,6 +1,6 @@
-import Model from '../src/Model.js'
-import World from '../src/World.js'
-import * as util from '../src/utils.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
+import World from 'https://code.agentscript.org/src/World.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
 
 export default class LifeModel extends Model {
     population = 10 // number of turtles

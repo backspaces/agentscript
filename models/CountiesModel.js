@@ -1,4 +1,4 @@
-import * as util from '../src/utils.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
 import HelloModel from './HelloModel.js'
 import { booleanPointInPolygon } from '../vendor/turfImports.js'
 

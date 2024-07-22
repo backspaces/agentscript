@@ -1,7 +1,7 @@
-import World from '../src/World.js'
-import Model from '../src/Model.js'
-import { mapzen as provider } from '../src/TileData.js'
-import { xyz2bbox, bboxMetricSize } from '../src/gis.js'
+import World from 'https://code.agentscript.org/src/World.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
+import { mapzen as provider } from 'https://code.agentscript.org/src/TileData.js'
+import { xyz2bbox } from 'https://code.agentscript.org/src/gis.js'
 
 const pi = Math.PI
 /**

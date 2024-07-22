@@ -1,8 +1,8 @@
-import * as util from '../src/utils.js'
-import * as gis from '../src/gis.js'
-import World from '../src/World.js'
-import Model from '../src/Model.js'
-import { lineStringsToLinks } from '../src/geojson.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
+import * as gis from 'https://code.agentscript.org/src/gis.js'
+import World from 'https://code.agentscript.org/src/World.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
+import { lineStringsToLinks } from 'https://code.agentscript.org/src/geojson.js'
 
 // The json data is pre-computed due to being very difficult to compute here.
 // Thus done offline via node/deno cli's

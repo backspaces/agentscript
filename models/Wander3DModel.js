@@ -1,5 +1,4 @@
 import * as util from '../src/utils.js'
-// import Model3D from '../src/Model3D.js'
 import Model from '../src/Model3D.js'
 
 export default class Wander3DModel extends Model {
@@ -20,7 +19,7 @@ export default class Wander3DModel extends Model {
         this.turtles.setDefault('atEdge', 'bounce')
 
         this.turtles.create(this.population, t => {
-            t.setxyz(...this.world.random3DPoint())
+            t.setxyz(this.world.random3DPoint())
         })
     }
 

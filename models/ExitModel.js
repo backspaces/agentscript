@@ -1,5 +1,5 @@
-import World from '../src/World.js'
-import Model from '../src/Model.js'
+import World from 'https://code.agentscript.org/src/World.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
 
 export default class ExitModel extends Model {
     numExits = 10

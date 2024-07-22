@@ -125,7 +125,9 @@ export function waitUntilDone(done, ms = 10) {
 // ### Debug
 
 // error checking:
-let skipChecks = false
+let skipChecks = true // fix!
+// Function expected a number, got -1.7766780716149864,4.371793401308164,-14.268209308169977
+
 export function skipErrorChecks(bool) {
     skipChecks = bool
 }
