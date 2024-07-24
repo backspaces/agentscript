@@ -50,14 +50,14 @@ class Turtle3D extends Turtle {
      * @param {number} z float for z position
      */
     setxyz(x, y, z) {
-        checkArgs(arguments)
+        // checkArgs(arguments)
         super.setxy(x, y, z)
     }
     getxyz() {
         return this.obj3d.position.toArray()
     }
     setRotation(x, y, z) {
-        checkArgs(arguments)
+        // checkArgs(arguments)
         this.obj3d.rotation.set(x, y, z)
         // super/this.theta = this.obj3d.rotation.z ????
     }
@@ -89,21 +89,21 @@ class Turtle3D extends Turtle {
         return this.obj3d.position.x
     }
     set x(d) {
-        checkArg(d)
+        // checkArg(d)
         this.obj3d.position.x = d
     }
     get y() {
         return this.obj3d.position.y
     }
     set y(d) {
-        checkArg(d)
+        // checkArg(d)
         this.obj3d.position.y = d
     }
     get z() {
         return this.obj3d.position.z
     }
     set z(d) {
-        checkArg(d)
+        // checkArg(d)
         // this.obj3d.position.z = d
         // This test is needed due to z getter called by super initialization.
         if (this.obj3d) this.obj3d.position.z = d
@@ -115,7 +115,7 @@ class Turtle3D extends Turtle {
         return this.obj3d.rotation.z
     }
     set theta(rad) {
-        checkArg(rad)
+        // checkArg(rad)
         // util.warn('theta is deprecated, use heading instead')
         if (this.obj3d) this.obj3d.rotation.z = rad
     }
@@ -124,7 +124,7 @@ class Turtle3D extends Turtle {
         return this.model.fromRads(this.obj3d.rotation.z)
     }
     set heading(angle) {
-        checkArg(angle)
+        // checkArg(angle)
         this.obj3d.rotation.z = this.model.toRads(angle)
     }
     get pitch() {
@@ -133,7 +133,7 @@ class Turtle3D extends Turtle {
         return -this.model.fromAngleRads(this.obj3d.rotation.y)
     }
     set pitch(angle) {
-        checkArg(angle)
+        // checkArg(angle)
         // this.obj3d.rotation.y = -this.model.toRads(angle)
         // this.obj3d.rotation.y = -this.model.toAngleRads(angle)
         this.obj3d.rotation.y = -this.model.toAngleRads(angle)
@@ -144,7 +144,7 @@ class Turtle3D extends Turtle {
         return this.model.fromAngleRads(this.obj3d.rotation.x)
     }
     set roll(angle) {
-        checkArg(angle)
+        // checkArg(angle)
         // this.obj3d.rotation.x = this.model.toRads(angle)
         // this.obj3d.rotation.x = this.model.toAngleRads(angle)
         this.obj3d.rotation.x = this.model.toAngleRads(angle)
@@ -152,7 +152,7 @@ class Turtle3D extends Turtle {
 
     // Move along the turtle's X axis
     forward(d) {
-        checkArg(d)
+        // checkArg(d)
         const p0 = this.patch
         this.obj3d.translateX(d)
         super.checkXYZ(p0)
@@ -167,7 +167,7 @@ class Turtle3D extends Turtle {
         // this.theta = this.obj3d.rotation.z
     }
     left(angle) {
-        checkArg(angle)
+        // checkArg(angle)
         this.obj3d.rotateZ(this.model.toAngleRads(angle))
         // this.right(-angle)
     }
@@ -176,12 +176,12 @@ class Turtle3D extends Turtle {
         this.tiltDown(-angle)
     }
     tiltDown(angle) {
-        checkArg(angle)
+        // checkArg(angle)
         this.obj3d.rotateY(this.model.toAngleRads(angle))
         // this.tiltUp(-angle)
     }
     rollRight(angle) {
-        checkArg(angle)
+        // checkArg(angle)
         this.obj3d.rotateX(this.model.toAngleRads(angle))
     }
     rollLeft(angle) {
@@ -189,7 +189,7 @@ class Turtle3D extends Turtle {
     }
 
     facexyz(x1, y1, z1) {
-        checkArgs(arguments)
+        // checkArgs(arguments)
 
         // const headingTowards = this.model.toRads(this.towardsXY(x1, y1))
         // const pitchTowards = this.model.toRads(this.towardsPitchXYZ(x1, y1, z1)
@@ -204,12 +204,12 @@ class Turtle3D extends Turtle {
         // this.roll = roll
     }
     face(agent) {
-        checkArg(agent, 'object')
+        // checkArg(agent, 'object')
         const { x, y, z } = agent
         this.facexyz(x, y, z)
     }
     towardsPitchXYZ(x1, y1, z1) {
-        checkArgs(arguments)
+        // checkArgs(arguments)
         const [x, y, z] = this.getxyz()
         const [dx, dy, dz] = [x1 - x, y1 - y, z1 - z]
         const xyhypot = Math.hypot(dx, dy)
@@ -217,18 +217,18 @@ class Turtle3D extends Turtle {
         return this.model.fromAngleRads(pitchRads)
     }
     towardsPitch(agent) {
-        checkArg(agent, 'object')
+        // checkArg(agent, 'object')
         const { x, y, z } = agent
         this.towardsPitchXYZ(x, y, z)
     }
 
     distance(agent) {
-        checkArg(agent, 'object')
+        // checkArg(agent, 'object')
         const { x, y, z } = agent
         return this.distanceXYZ(x, y, z)
     }
     distanceXYZ(x1, y1, z1) {
-        checkArgs(arguments)
+        // checkArgs(arguments)
         const { x, y, z } = this
         return util.distance3(x, y, z, x1, y1, z1)
     }

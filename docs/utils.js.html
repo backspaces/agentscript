@@ -124,28 +124,24 @@ export function waitUntilDone(done, ms = 10) {
 
 // ### Debug
 
-// error checking:
 let skipChecks = true // fix!
 // Function expected a number, got -1.7766780716149864,4.371793401308164,-14.268209308169977
 
-// export function skipErrorChecks(bool) {
-//     skipChecks = bool
-// }
 export function checkArg(arg, type = 'number', name = 'Function') {
-    // console.log(arg, type, name)
-    if (skipChecks) return
-    const argType = typeof arg
-    if (argType !== type) {
-        throw new Error(`${name} expected a ${type}, got ${arg}`)
-    }
+    // // console.log(arg, type, name)
+    // if (skipChecks) return
+    // const argType = typeof arg
+    // if (argType !== type) {
+    //     throw new Error(`${name} expected a ${type}, got ${arg}`)
+    // }
 }
 export function checkArgs(argsArray, type = 'number', name = 'Function') {
-    if (skipChecks) return
-    if (typeOf(argsArray) === 'arguments') argsArray = Array.from(argsArray)
-    // console.log(argsArray, type, name)
-    argsArray.forEach(val => {
-        checkArg(val, type, name)
-    })
+    // if (skipChecks) return
+    // if (typeOf(argsArray) === 'arguments') argsArray = Array.from(argsArray)
+    // // console.log(argsArray, type, name)
+    // argsArray.forEach(val => {
+    //     checkArg(val, type, name)
+    // })
 }
 
 // Print a message just once.
