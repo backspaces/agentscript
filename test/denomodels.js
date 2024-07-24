@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno test -A --trace-ops --unstable-ffi
+#!/usr/bin/env -S deno test -A --trace-leaks --unstable-ffi
 // if using hashbang, must be called from repo root:
 //   test/denomodels.js
 // if run from npm script, it will be run in repo root.
@@ -55,9 +55,36 @@ const ls = new TextDecoder().decode(await p.output()).split('\n')
 const models = util
     .grep(ls, /^[A-Z].*js$/)
     .filter(name => !nonworkers.includes(name))
-// .filter(name => name === 'CountiesModel.js')
-// .filter(name => name === 'AvalancheModel.js')
+// // .filter(name => name === 'CountiesModel.js')
+// // .filter(name => name === 'HelloPlusModel.js')
 
+// const models = [
+//     // 'AntsModel.js',
+//     // 'AvalancheModel.js',
+//     // 'ButtonsModel.js',
+//     'Camera3DModel.js',
+//     // 'CountiesModel.js',
+//     // 'DiffuseModel.js',
+//     // 'DropletsModel.js',
+//     // 'ExitModel.js',
+//     // 'FireModel.js',
+//     // 'FlockModel.js',
+//     // 'GridPathModel.js',
+//     // 'Hello3DModel.js',
+//     // 'Hello3ZModel.js',
+//     // 'HelloModel.js',
+//     // 'HelloPlusModel.js',
+//     // 'LifeModel.js',
+//     // 'LinkTravelModel.js',
+//     // 'PheromoneModel.js',
+//     // 'RoadsModel.js',
+//     // 'SlimeMoldModel.js',
+//     // 'TspModel.js',
+//     // 'VirusModel.js',
+//     // 'WallFollowerModel.js',
+//     'Wander3DModel.js',
+//     // 'WaterModel.js',
+// ]
 console.log('models', models)
 
 // ------------------ run models in main thread ------------------
@@ -94,7 +121,9 @@ function runInWorker(name) {
 }
 for (const name of models) {
     runInWorker(name)
+    // if (numResults == 1) close()
 }
+
 await util.waitUntilDone(() => numResults === models.length)
 
 // ------------------ compare results ------------------
