@@ -132,7 +132,7 @@ let skipChecks = false // fix!
 //     skipChecks = bool
 // }
 export function checkArg(arg, type = 'number', name = 'Function') {
-    console.log(arg, type, name)
+    // console.log(arg, type, name)
     if (skipChecks) return
     const argType = typeof arg
     if (argType !== type) {
