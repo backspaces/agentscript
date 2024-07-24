@@ -1,14 +1,14 @@
-#!/usr/bin/env -S deno test -A --trace-ops --unstable
+#!/usr/bin/env -S deno test -A --trace-ops --unstable-ffi
 // if using hashbang, must be called from repo root:
 //   test/denomodels.js
 // if run from npm script, it will be run in repo root.
-//   "denomodels": "deno test -A --unstable test/denomodels.js",
+//   "denomodels": "deno test -A --unstable-ffi test/denomodels.js",
 // or
 //   "denomodels": "test/denomodels.js",
 // to run from cli, from repo root:
-//    deno test -A --unstable test/denomodels.js
+//    deno test -A --unstable-ffi test/denomodels.js
 // to debug:
-//    deno test -A --unstable --inspect-brk test/denomodels.js
+//    deno test -A --unstable-ffi --inspect-brk test/denomodels.js
 
 import * as util from '../src/utils.js'
 import { assert } from 'https://deno.land/std@0.92.0/testing/asserts.ts'
