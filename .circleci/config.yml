@@ -4,50 +4,32 @@
 #
 version: 2.1
 orbs:
-    # browser-tools: circleci/browser-tools@1.1.0
     browser-tools: circleci/browser-tools@1.4.6
-
-permissions:
-    id-token: write
-    contents: read
 
 jobs:
     build:
         docker:
-            # - image: cimg/node:18.3.0
             - image: cimg/node:current-browsers
-            # - image: circleci/node:latest-browsers
-            # - image: circleci/node:10-jessie-browsers
 
         working_directory: ~/repo
 
         steps:
             - checkout
-            # - browser-tools/install-chrome
-            # - browser-tools/install-chromedriver
 
             - restore_cache:
                   keys:
                       - v1-dependencies-{{ checksum "package.json" }}
 
-            # - run:
-            #       command: |
-            #           google-chrome --version
-            #           chromedriver --version
-
             - run: yarn install
 
             - run: yarn build
 
-            # deno used for 3D testing: deno test test/geom.js
+            # Install Deno
             - run: curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/local sh
 
-            # - run:
-            #       name: Cache dependencies
-            #       command: deno cache --lock=lock.json --lock-write
-
-            - name: Cache dependencies
-                run: deno cache --lock=lock.json --lock-write
+            - run:
+                  name: Cache dependencies
+                  command: deno cache --lock=lock.json --lock-write
 
             - run:
                   command: mkdir -p ~/reports
