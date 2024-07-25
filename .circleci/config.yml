@@ -29,7 +29,7 @@ jobs:
 
             - run:
                   name: Cache dependencies
-                  command: deno cache --lock=lock.json --lock-write
+                  command: deno cache --lock=lock.json --lock-write test/denomodels.js
 
             - run:
                   command: mkdir -p ~/reports
