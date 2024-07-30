@@ -1,6 +1,7 @@
 {
   "version": "3",
   "remote": {
+    "https://code.agentscript.org/models/HelloModel.js": "25f99b61d24ce0f58abbfc190d3c526c9eaaae15b6ed930cfe8c2d8f6499fa87",
     "https://code.agentscript.org/src/AgentArray.js": "1f08d058facd13ed00a9ea3a8bb80f8a3cc23daaf1c97aa2520b580f4b76f8d1",
     "https://code.agentscript.org/src/AgentList.js": "202a8391bf0fa354ffa091c821fa3fe0dc71f0deec11922e9d20e2654a0a46ab",
     "https://code.agentscript.org/src/AgentSet.js": "c0a0b8c5f106e83eeb58d47479407d5989211958e079fed486d6b3eac61deb5b",
@@ -111,6 +112,7 @@
         "npm:esm@^3.2.25",
         "npm:http-server@^14.1.1",
         "npm:jsdoc@4.0.2",
+        "npm:live-server@^1.2.2",
         "npm:npm-run-all@^4.1.5",
         "npm:rollup-plugin-cleanup@^3.2.1",
         "npm:rollup@^3.2.5",

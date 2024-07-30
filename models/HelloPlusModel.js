@@ -1,4 +1,5 @@
-import HelloModel from './HelloModel.js'
+// import HelloModel from './HelloModel.js'
+import HelloModel from 'https://code.agentscript.org/models/HelloModel.js'
 import * as util from 'https://code.agentscript.org/src/utils.js'
 
 // Here is a simple modification that allows setting the population dynamically.
