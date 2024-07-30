@@ -17,7 +17,7 @@
         await model.startup()
         model.setup()
 
-        const view = new TwoDraw(model, TwoDrawOptions(model, "modelDiv"))
+        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))
 
         const anim = new Animator(
             () => {
