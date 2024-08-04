@@ -3,7 +3,7 @@ import * as util from 'https://code.agentscript.org/src/utils.js'
 const baseUrl = 'https://code.agentscript.org/models/data/roads14.png'
 const baseMapTile = await util.imagePromise(baseUrl)
 
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 4) {
     const breedColor = {
         nodes: 'red',
         intersections: 'blue',
@@ -23,6 +23,6 @@ export default function TwoDrawOptions(div, model) {
         linksColor: 'black',
     }
 
-    const twoDrawOptions = { div, patchSize: 4, drawOptions }
+    const twoDrawOptions = { div, patchSize, drawOptions }
     return twoDrawOptions
 }

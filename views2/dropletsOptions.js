@@ -1,7 +1,7 @@
 import Color from 'https://code.agentscript.org/src/Color.js'
 import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 10) {
     const drawOptions = {
         turtlesShape: 'square',
         turtlesRotate: false,
@@ -19,7 +19,7 @@ export default function TwoDrawOptions(div, model) {
         },
     }
 
-    // lots of turtles, sprites faster. use default patchSize (10).
-    const twoDrawOptions = { div, useSprites: true, drawOptions }
+    // many turtle shapes difficult to draw, use small images
+    const twoDrawOptions = { div, useSprites: true, patchSize, drawOptions }
     return twoDrawOptions
 }

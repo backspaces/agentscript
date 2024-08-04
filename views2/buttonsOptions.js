@@ -1,4 +1,4 @@
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 20) {
     const drawOptions = {
         turtlesColor: t => (model.cluster.has(t) ? 'red' : 'random'),
         turtlesShape: 'circle',
@@ -6,6 +6,6 @@ export default function TwoDrawOptions(div, model) {
         linksColor: 'rgba(255, 255, 255, 0.50',
     }
 
-    const twoDrawOptions = { div, patchSize: 20, drawOptions }
+    const twoDrawOptions = { div, patchSize, drawOptions }
     return twoDrawOptions
 }

@@ -15,11 +15,14 @@
         import TwoDrawOptions from './antsOptions.js'
 
 
-        const model = new Model()
+        const patchSize = 10
+        const options = TwoDraw.fullScreenOptions(patchSize)
+
+        const model = new Model(options)
         await model.startup()
         model.setup()
 
-        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))
+        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model, patchSize))
 
         const anim = new Animator(
             () => {
@@ -29,6 +32,10 @@
             500, // how many steps
             30 // at fps steps/second
         )
+
+        // window.addEventListener('resize', () => {
+        //     run()
+        // })
     </script>
     <div id="modelDiv"></div>
 </body>

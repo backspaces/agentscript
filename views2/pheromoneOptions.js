@@ -1,6 +1,6 @@
 import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 20) {
     const colorMap = ColorMap.gradientColorMap(8, ['black', 'purple', 'yellow'])
 
     const drawOptions = {
@@ -8,6 +8,6 @@ export default function TwoDrawOptions(div, model) {
         patchesColor: p => colorMap.scaleColor(p.pheromone, 0, 100),
     }
 
-    const twoDrawOptions = { div, patchSize: 20, drawOptions }
+    const twoDrawOptions = { div, patchSize, drawOptions }
     return twoDrawOptions
 }

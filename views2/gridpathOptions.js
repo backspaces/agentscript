@@ -1,4 +1,4 @@
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 50) {
     const drawOptions = {
         turtlesShape: 'circle',
         turtlesColor: 'red',
@@ -10,6 +10,6 @@ export default function TwoDrawOptions(div, model) {
         textSize: 0.3,
     }
 
-    const twoDrawOptions = { div, patchSize: 50, drawOptions }
+    const twoDrawOptions = { div, patchSize, drawOptions }
     return twoDrawOptions
 }

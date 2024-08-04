@@ -1,7 +1,7 @@
 import Color from 'https://code.agentscript.org/src/Color.js'
 import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 10) {
     const nestColor = Color.typedColor('yellow')
     const foodColor = Color.typedColor('blue')
     const nestColorMap = ColorMap.gradientColorMap(20, ['black', nestColor])
@@ -21,6 +21,6 @@ export default function TwoDrawOptions(div, model) {
     }
 
     // ant shape difficult to draw, use small images
-    const twoDrawOptions = { div, useSprites: true, patchSize: 10, drawOptions }
+    const twoDrawOptions = { div, useSprites: true, patchSize, drawOptions }
     return twoDrawOptions
 }

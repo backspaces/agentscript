@@ -1,4 +1,4 @@
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 20) {
     const isNode = t => t.breed.name === 'nodes'
     const drawOptions = {
         patchesColor: 'black',
@@ -7,6 +7,6 @@ export default function TwoDrawOptions(div, model) {
         turtlesSize: t => (isNode(t) ? 0.5 : 1.25),
     }
 
-    const twoDrawOptions = { div, patchSize: 20, drawOptions }
+    const twoDrawOptions = { div, patchSize, drawOptions }
     return twoDrawOptions
 }

@@ -1,7 +1,7 @@
 import Color from 'https://code.agentscript.org/src/Color.js'
 import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 8) {
     const patchColors = model.patches.map(p => {
         switch (p.breed.name) {
             case 'exits':
@@ -21,6 +21,6 @@ export default function TwoDrawOptions(div, model) {
         initPatches: (model, view) => patchColors,
     }
 
-    const twoDrawOptions = { div, patchSize: 8, drawOptions }
+    const twoDrawOptions = { div, patchSize, drawOptions }
     return twoDrawOptions
 }

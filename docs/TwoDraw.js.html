@@ -56,6 +56,28 @@ class TwoDraw extends TwoView {
         // return [viewOptions, drawOptions]
     }
 
+    static fullScreenOptions(patchSize) {
+        const bodyStyles = window.getComputedStyle(document.body)
+        const marginTop = parseInt(bodyStyles.marginTop, 10)
+        const marginRight = parseInt(bodyStyles.marginRight, 10)
+        const marginBottom = parseInt(bodyStyles.marginBottom, 10)
+        const marginLeft = parseInt(bodyStyles.marginLeft, 10)
+
+        const width = window.innerWidth - (marginRight + marginLeft)
+        const height = window.innerHeight - (marginTop + marginBottom)
+        const maxX = Math.floor(width / (2 * patchSize))
+        const maxY = Math.floor(height / (2 * patchSize))
+        const maxZ = 1
+
+        return {
+            maxX: maxX,
+            maxY: maxY,
+            maxZ: maxZ,
+            minX: -maxX,
+            minY: -maxY,
+            minZ: -maxZ,
+        }
+    }
     // ======================
 
     constructor(model, viewOptions = {}, drawOptions = {}) {
@@ -67,11 +89,7 @@ class TwoDraw extends TwoView {
         // ;[viewOptions, drawOptions] =
         drawOptions = TwoDraw.separateDrawOptions(viewOptions, drawOptions)
 
-        drawOptions = Object.assign(
-            // {},
-            TwoDraw.defaultOptions(model),
-            drawOptions
-        )
+        drawOptions = Object.assign(TwoDraw.defaultOptions(model), drawOptions)
 
         // super(model.world, viewOptions) // TwoView
         super(model, viewOptions) // TwoView

@@ -1,6 +1,6 @@
 import Color from 'https://code.agentscript.org/src/Color.js'
 
-export default function TwoDrawOptions(div, model) {
+export default function TwoDrawOptions(div, model, patchSize = 4) {
     const typeColors = {
         dirt: Color.cssToPixel('yellow'),
         tree: Color.cssToPixel('green'),
@@ -15,6 +15,6 @@ export default function TwoDrawOptions(div, model) {
         patchesColor: p => typeColors[p.type],
     }
 
-    const twoDrawOptions = { div, patchSize: 4, drawOptions }
+    const twoDrawOptions = { div, patchSize, drawOptions }
     return twoDrawOptions
 }
