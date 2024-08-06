@@ -21,7 +21,10 @@ yarn-error.log
 /vscode/
 vscode.zip
 
-# /test
+/test/
+deno.lock
+lock.json
+yarn.lock
 
 # package-lock.json
 # yarn.lock
