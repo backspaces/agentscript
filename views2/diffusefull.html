@@ -12,11 +12,14 @@
         import Model from 'https://code.agentscript.org/models/DiffuseModel.js'
         import TwoDrawOptions from 'https://code.agentscript.org/views2/diffuseOptions.js'
 
-        const model = new Model()
+        const patchSize = 3
+        const options = TwoDraw.fullScreenOptions(patchSize)
+
+        const model = new Model(options)
         await model.startup()
         model.setup()
 
-        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))
+        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model, patchSize))
 
         const anim = new Animator(
             () => {

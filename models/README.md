@@ -19,6 +19,7 @@ Code    | Run demo
 [linkTravel](https://github.com/backspaces/agentscript/tree/master/models/LinkTravelModel.js#L1) | [https://code.agentscript.org/models/run.html?linkTravel](https://code.agentscript.org/models/run.html?linkTravel)
 [pheromone](https://github.com/backspaces/agentscript/tree/master/models/PheromoneModel.js#L1) | [https://code.agentscript.org/models/run.html?pheromone](https://code.agentscript.org/models/run.html?pheromone)
 [roads](https://github.com/backspaces/agentscript/tree/master/models/RoadsModel.js#L1) | [https://code.agentscript.org/models/run.html?roads](https://code.agentscript.org/models/run.html?roads)
+[shapes](https://github.com/backspaces/agentscript/tree/master/models/ShapesModel.js#L1) | [https://code.agentscript.org/models/run.html?shapes](https://code.agentscript.org/models/run.html?shapes)
 [slimeMold](https://github.com/backspaces/agentscript/tree/master/models/SlimeMoldModel.js#L1) | [https://code.agentscript.org/models/run.html?slimeMold](https://code.agentscript.org/models/run.html?slimeMold)
 [tsp](https://github.com/backspaces/agentscript/tree/master/models/TspModel.js#L1) | [https://code.agentscript.org/models/run.html?tsp](https://code.agentscript.org/models/run.html?tsp)
 [virus](https://github.com/backspaces/agentscript/tree/master/models/VirusModel.js#L1) | [https://code.agentscript.org/models/run.html?virus](https://code.agentscript.org/models/run.html?virus)

@@ -19,6 +19,7 @@ Code    | Run demo
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views1/linktravel.html#L1) | [https://code.agentscript.org/views1/linktravel.html](https://code.agentscript.org/views1/linktravel.html)
 [pheromone](https://github.com/backspaces/agentscript/tree/master/views1/pheromone.html#L1) | [https://code.agentscript.org/views1/pheromone.html](https://code.agentscript.org/views1/pheromone.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views1/roads.html#L1) | [https://code.agentscript.org/views1/roads.html](https://code.agentscript.org/views1/roads.html)
+[shapes](https://github.com/backspaces/agentscript/tree/master/views1/shapes.html#L1) | [https://code.agentscript.org/views1/shapes.html](https://code.agentscript.org/views1/shapes.html)
 [slimemold](https://github.com/backspaces/agentscript/tree/master/views1/slimemold.html#L1) | [https://code.agentscript.org/views1/slimemold.html](https://code.agentscript.org/views1/slimemold.html)
 [tsp](https://github.com/backspaces/agentscript/tree/master/views1/tsp.html#L1) | [https://code.agentscript.org/views1/tsp.html](https://code.agentscript.org/views1/tsp.html)
 [virus](https://github.com/backspaces/agentscript/tree/master/views1/virus.html#L1) | [https://code.agentscript.org/views1/virus.html](https://code.agentscript.org/views1/virus.html)
