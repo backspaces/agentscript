@@ -3,12 +3,8 @@ import Model from 'https://code.agentscript.org/src/Model.js'
 import { mapzen as provider } from 'https://code.agentscript.org/src/TileData.js'
 import { xyz2bbox } from 'https://code.agentscript.org/src/gis.js'
 
+// Cody's Avalanche model
 const pi = Math.PI
-/**
- *
- * Model
- *
- * **/
 export default class AvalancheModel extends Model {
     // ======================
     constructor(worldOptions = World.defaultOptions(50)) {
