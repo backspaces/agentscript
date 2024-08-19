@@ -54,17 +54,13 @@ class TwoDraw extends TwoView {
         // return [viewOptions, drawOptions]
     }
 
-    static fullScreenOptions(patchSize, background = 'black') {
+    static fullScreenOptions(patchSize, background = 'red', margin = 10) {
         document.body.style.backgroundColor = background
+        document.body.style.margin = `${margin}px`
 
-        const bodyStyles = window.getComputedStyle(document.body)
-        const marginTop = parseInt(bodyStyles.marginTop, 10)
-        const marginRight = parseInt(bodyStyles.marginRight, 10)
-        const marginBottom = parseInt(bodyStyles.marginBottom, 10)
-        const marginLeft = parseInt(bodyStyles.marginLeft, 10)
+        const width = window.innerWidth - 2 * margin // - 2
+        const height = window.innerHeight - 2 * margin // - 2
 
-        const width = window.innerWidth - (marginRight + marginLeft) - 2
-        const height = window.innerHeight - (marginTop + marginBottom) - 2
         const maxX = Math.floor(width / (2 * patchSize))
         const maxY = Math.floor(height / (2 * patchSize))
         const maxZ = 1
