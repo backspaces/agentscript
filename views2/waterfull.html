@@ -9,8 +9,10 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
-        import Model from 'https://code.agentscript.org/models/WaterModel.js'
-        import TwoDrawOptions from 'https://code.agentscript.org/views2/waterOptions.js'
+        // import Model from 'https://code.agentscript.org/models/WaterModel.js'
+        import Model from '../models/WaterModel.js'
+        // import TwoDrawOptions from 'https://code.agentscript.org/views2/waterOptions.js'
+        import TwoDrawOptions from './waterOptions.js'
 
         const patchSize = 2
         const options = TwoDraw.fullScreenOptions(patchSize)
@@ -20,6 +22,7 @@
         model.setup()
 
         const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model, patchSize))
+        view.setPatchesSmoothing(true) // make water smoother
 
         const anim = new Animator(
             () => {

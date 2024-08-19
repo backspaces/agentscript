@@ -6,11 +6,11 @@ export default class WaterModel extends Model {
     strength = 100
     surfaceTension = 56
     friction = 0.99
-    drip = 25
+    drip = 30 // create new wave every drip steps
 
     // ======================
 
-    constructor(worldOptions = World.defaultOptions(150)) {
+    constructor(worldOptions = World.defaultOptions(120)) {
         super(worldOptions)
     }
 
