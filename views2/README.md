@@ -14,6 +14,7 @@ Code    | Run demo
 [flock](https://github.com/backspaces/agentscript/tree/master/views2/flock.html#L1) | [https://code.agentscript.org/views2/flock.html](https://code.agentscript.org/views2/flock.html)
 [gridpath](https://github.com/backspaces/agentscript/tree/master/views2/gridpath.html#L1) | [https://code.agentscript.org/views2/gridpath.html](https://code.agentscript.org/views2/gridpath.html)
 [hello](https://github.com/backspaces/agentscript/tree/master/views2/hello.html#L1) | [https://code.agentscript.org/views2/hello.html](https://code.agentscript.org/views2/hello.html)
+[hellofull](https://github.com/backspaces/agentscript/tree/master/views2/hellofull.html#L1) | [https://code.agentscript.org/views2/hellofull.html](https://code.agentscript.org/views2/hellofull.html)
 [hellotext](https://github.com/backspaces/agentscript/tree/master/views2/hellotext.html#L1) | [https://code.agentscript.org/views2/hellotext.html](https://code.agentscript.org/views2/hellotext.html)
 [life](https://github.com/backspaces/agentscript/tree/master/views2/life.html#L1) | [https://code.agentscript.org/views2/life.html](https://code.agentscript.org/views2/life.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views2/linktravel.html#L1) | [https://code.agentscript.org/views2/linktravel.html](https://code.agentscript.org/views2/linktravel.html)
