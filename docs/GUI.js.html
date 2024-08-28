@@ -62,6 +62,13 @@ class GUI {
         console.log('controllers, values', this.controllers, this.values, guis)
     }
 
+    close() {
+        this.gui.close()
+    }
+    open() {
+        this.gui.open()
+    }
+
     objType(obj) {
         let keys = Object.keys(obj)
         keys = keys.filter(elem => elem !== 'cmd')

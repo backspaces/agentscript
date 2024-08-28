@@ -33,7 +33,7 @@ class Keyboard {
             if (!cmd) throw Error('No cmd given for ' + obj)
             this.keyCommands[key] = { key, cmd }
         })
-        console.log(this)
+        // console.log(this)
     }
 
     /**
