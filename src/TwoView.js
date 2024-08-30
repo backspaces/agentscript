@@ -24,25 +24,28 @@ class TwoView {
         // Object.assign(this, TwoView.defaultOptions(), options)
         options = Object.assign(TwoView.defaultOptions(), options)
         if (options.width) {
-            // options.patchSize = Math.round(options.width / world.width)
             options.patchSize = options.width / world.width
-            // if (options.useSprites)
-            //     options.patchSize = Math.round(options.patchSize)
             delete options.width
         }
-        // this.div = options.div
 
-        // let div = this.div
         let div = options.div
-        let can = div
         div = util.isString(div) ? document.getElementById(div) : div
-        if (!util.isCanvas(can)) {
-            // can = util.createCanvas(0, 0, false) // not offscreen
+
+        const children = div.children
+        console.log('div children: ', children)
+        let can
+        if (children.length === 0) {
             can = util.createCanvas(0, 0, true) // not offscreen, preferDOM
             div.appendChild(can)
-            // div = can
+        } else {
+            can = div.firstChild
         }
-        // this.div = div
+
+        // let can = div
+        // if (!util.isCanvas(can)) {
+        //     can = util.createCanvas(0, 0, true) // not offscreen, preferDOM
+        //     div.appendChild(can)
+        // }
 
         this.ctx = can.getContext('2d')
         this.world = world
