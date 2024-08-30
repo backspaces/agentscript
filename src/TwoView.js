@@ -41,12 +41,6 @@ class TwoView {
             can = div.firstChild
         }
 
-        // let can = div
-        // if (!util.isCanvas(can)) {
-        //     can = util.createCanvas(0, 0, true) // not offscreen, preferDOM
-        //     div.appendChild(can)
-        // }
-
         this.ctx = can.getContext('2d')
         this.world = world
 
@@ -56,6 +50,7 @@ class TwoView {
         this.ticks = 0
         this.clear()
     }
+
     tick() {
         this.ticks++
     }
@@ -72,12 +67,6 @@ class TwoView {
     //     this.turtlesView.patchSize
     // }
     reset(patchSize, useSprites = this.useSprites) {
-        // if (this.width) this.width = patchSizeOrWidth
-        // this.patchSize = this.width
-        //     ? this.width / this.world.width
-        //     : patchSizeOrWidth
-        // this.patchSize = patchSize
-        // this.useSprites = useSprites
         this.turtlesView.reset(patchSize, useSprites)
     }
 

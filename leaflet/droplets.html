@@ -207,9 +207,10 @@
                 chooser: ['Transparent', ['Transparent', 'Jet', 'Gray', 'Hue', 'Basic16']],
                 cmd: val => {
                     view.drawOptions.patchesMap = val
+                    // view.reset(view.drawOptions)
                     view.resetOptions(view.drawOptions)
                     // drawOptions = view.resetOptions(drawOptions)
-                    if (!anim.isRunning()) view.draw()
+                    // if (!anim.isRunning()) view.draw()
                 },
             },
 

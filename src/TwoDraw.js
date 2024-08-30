@@ -87,15 +87,11 @@ class TwoDraw extends TwoView {
 
         drawOptions = Object.assign(TwoDraw.defaultOptions(model), drawOptions)
 
-        // super(model.world, viewOptions) // TwoView
         super(model, viewOptions) // TwoView
         this.model = model
 
         this.checkOptions(drawOptions)
         this.drawOptions = drawOptions
-        // this.view = this
-        // this.checkOptions(drawOptions)
-        // this.drawOptions = drawOptions
     }
 
     // The parameters are easily mistaken: check they are all in the defaults.
@@ -136,9 +132,21 @@ class TwoDraw extends TwoView {
         this.checkOptions(drawOptions)
         this.drawOptions = drawOptions
         this.ticks = 0
+        this.draw()
         // this.view.ticks = 0
-        return drawOptions
+        // return drawOptions
     }
+    // reset(drawOptions = this.drawOptions) {
+    //     // this.resetOptions(drawOptions)
+    //     // this.patchesView = new PatchesView(this.world.width, this.world.height)
+    //     // this.turtlesView = new TurtlesView(this.ctx, this.world, options)
+    //     // super.reset()
+    //     super.initView()
+    //     this.ticks = 0
+    //     // this.clear()
+    //     // super.reset(this.viewOptions.patchSize)
+    //     // this.draw()
+    // }
 
     draw() {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)
