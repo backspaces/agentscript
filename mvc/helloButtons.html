@@ -14,7 +14,7 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
-        import Buttons from '../src/Buttons.js'
+        import Buttons from 'https://code.agentscript.org/src/Buttons.js'
 
         const model = new Model()
         await model.startup()
@@ -32,7 +32,6 @@
 
         const anim = new Animator(
             () => {
-                if (model.done) anim.stop()
                 model.step()
                 view.draw()
             },
@@ -40,20 +39,19 @@
             30 // 30 fps
         )
 
+        function setShape(shape) {
+            view.drawOptions.turtlesShape = shape;
+            view.draw();
+        }
         const buttons = new Buttons('buttonsDiv', [
-            { name: "toggle", cmd: () => anim.toggle() },
-            { name: "download", cmd: () => view.downloadCanvas() },
+            { name: "on/off", cmd: () => anim.toggle() },
 
-            { name: "circle", cmd: () => (view.drawOptions.turtlesShape = "circle") },
-            { name: "arrow", cmd: () => (view.drawOptions.turtlesShape = "arrow") },
+            { name: "circle", cmd: () => setShape("circle") },
+            { name: "arrow", cmd: () => setShape("arrow") },
+            { name: "dart", cmd: () => setShape("dart") },
+
+            { name: "make image", cmd: () => view.downloadCanvas() },
         ])
-
-        // const modelDiv = document.getElementById('modelDiv')
-        // const buttonsDiv = document.getElementById('buttonsDiv')
-        // modelDiv.style.margin = '0px'
-        // modelDiv.style.padding = '0px'
-
-        util.toWindow({ model, view, anim, buttons })
     </script>
 </body>
 
