@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <title>Model</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="modelDiv"></div>
+
+    <div id="textDiv">
+        <div class="title">Agentscript</div>
+        <div class="subtitle">agent based modeling in the browser</div>
+        <a class="learnmore" href="./Snippets.html">learn more</a>
+    </div>
+
+    <div id="navDiv">
+        <div class="button-row">
+            <a class="nav-button" href="https://agentscript-ide.glitch.me/">agentscript</a>
+            <div class="spacer"></div>
+            <!-- <a class="nav-button" href="/tutorials/">Tutorials</a> -->
+            <a class="nav-button" href="https://code.agentscript.org/views2">Examples</a>
+            <a class="nav-button" href="https://glitch.com/edit/#!/agentscript-template?path=README.md">Editor</a>
+            <a class="nav-button" href="https://code.agentscript.org/docs">Docs</a>
+            <a class="nav-button" href="https://code.agentscript.org/">Code</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import Animator from "https://code.agentscript.org/src/Animator.js";
+        import TwoDraw from "https://code.agentscript.org/src/TwoDraw.js";
+
+        import Model from 'https://code.agentscript.org/models/HelloModel.js'
+
+        let anim;
+        function updateSize() {
+            if (anim) {
+                anim.stop();
+            }
+
+            const patchSize = 20;
+            const options = TwoDraw.fullScreenOptions(patchSize, "white", 0);
+
+            const model = new Model(options);
+            model.population = 40;
+            model.speed = 0.3;
+            model.wiggleAngle = 10;
+            model.linksToo = false
+            model.setup();
+
+            const drawOptions = {
+                turtlesSize: 3,
+                patchesColor: "white",
+            }
+            const view = new TwoDraw(
+                model,
+                { div: 'modelDiv', patchSize, drawOptions },
+            );
+
+            anim = new Animator(
+                () => {
+                    model.step();
+                    view.draw();
+                },
+                -1, // run forever
+                30 // at 30 steps/second
+            );
+        }
+
+        updateSize();
+        window.addEventListener("resize", updateSize);
+
+        document
+            .getElementById("modelDiv")
+            .addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+            });
+        document
+            .getElementById("textDiv")
+            .addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+            });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Lato', sans-serif;
+    user-select: none;
+}
+
+#navDiv {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 1;
+    background: #d8d8d8;
+}
+.button-row {
+    display: flex;
+    align-items: center;
+    margin: 0px 40px;
+    height: 50px;
+    justify-content: center;
+}
+.button-row .spacer {
+    flex-grow: 1;
+}
+.button-row .nav-button {
+    margin-right: 80px;
+    color: black;
+    text-decoration: none;
+}
+.button-row .nav-button:hover {
+    text-decoration: underline;
+}
+.button-row .nav-button:last-child {
+    margin-right: 0px;
+}
+
+#modelDiv {
+    /*   position: relative; */
+    width: 100vw;
+    height: 100vh;
+}
+
+#textDiv {
+    position: absolute;
+
+    top: 50%;
+    left: 30%;
+    transform: translate(-30%, -50%);
+
+    z-index: 1;
+}
+
+#textDiv .title {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background: rgba(248, 248, 248, 0.86);
+    display: inline-block;
+    padding: 0px 8px;
+}
+#textDiv .subtitle {
+    font-size: 40px;
+    font-weight: normal;
+    background: rgba(248, 248, 248, 0.86);
+    /*   display: inline-block; */
+    padding: 0px 8px;
+    /*   margin-bottom: 10px; */
+}
+#textDiv .learnmore {
+    font-size: 30px;
+    text-decoration: none;
+
+    position: absolute;
+    margin-top: 40px;
+    /*   display: inline-block; */
+    background: orange;
+    cursor: pointer;
+    padding: 10px 14px;
+}
+#textDiv .learnmore:hover {
+    background: #f9d086;
+}
