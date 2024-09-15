@@ -27,59 +27,63 @@
     </div>
 
     <script type="module">
-        import Animator from "https://code.agentscript.org/src/Animator.js";
-        import TwoDraw from "https://code.agentscript.org/src/TwoDraw.js";
+        import Animator from "https://code.agentscript.org/src/Animator.js"
+        import TwoDraw from "https://code.agentscript.org/src/TwoDraw.js"
 
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
+        import AntsOptions from './Ants.js'
+        import DartsOptions from './Darts.js'
 
-        let anim;
-        function updateSize() {
-            if (anim) {
-                anim.stop();
-            }
+        console.log('Ants', AntsOptions)
+        console.log('Darts', DartsOptions)
 
-            const patchSize = 20;
-            const options = TwoDraw.fullScreenOptions(patchSize, "white", 0);
+        let ModelOptions = DartsOptions
 
-            const model = new Model(options);
-            model.population = 40;
-            model.speed = 0.3;
-            model.wiggleAngle = 10;
-            model.linksToo = false
-            model.setup();
+        // let { Model, patchSize, drawOptions } = ModelOptions
 
-            const drawOptions = {
-                turtlesSize: 3,
-                patchesColor: "white",
-            }
+        let anim
+        async function updateSize() {
+            if (anim) anim.stop()
+
+            const { Model, patchSize, drawOptions } = ModelOptions
+
+            const options = TwoDraw.fullScreenOptions(patchSize, "white", 0)
+            const model = new Model(options)
+            model.setup()
+
             const view = new TwoDraw(
                 model,
                 { div: 'modelDiv', patchSize, drawOptions },
-            );
+            )
 
             anim = new Animator(
                 () => {
-                    model.step();
-                    view.draw();
+                    model.step()
+                    view.draw()
+                    if (anim.ticks === 250) switchModel()
                 },
                 -1, // run forever
                 30 // at 30 steps/second
-            );
+            )
+        }
+        function switchModel() {
+            anim.reset()
+            ModelOptions = ModelOptions === AntsOptions ? DartsOptions : AntsOptions
+            updateSize()
         }
 
-        updateSize();
-        window.addEventListener("resize", updateSize);
+        updateSize()
+        window.addEventListener("resize", updateSize)
 
         document
             .getElementById("modelDiv")
             .addEventListener("contextmenu", (e) => {
-                e.preventDefault();
-            });
+                e.preventDefault()
+            })
         document
             .getElementById("textDiv")
             .addEventListener("contextmenu", (e) => {
-                e.preventDefault();
-            });
+                e.preventDefault()
+            })
     </script>
 </body>
 

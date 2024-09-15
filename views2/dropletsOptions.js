@@ -20,6 +20,5 @@ export default function TwoDrawOptions(div, model, patchSize = 10) {
     }
 
     // many turtle shapes difficult to draw, use small images
-    const twoDrawOptions = { div, useSprites: true, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, useSprites: true, patchSize, drawOptions }
 }

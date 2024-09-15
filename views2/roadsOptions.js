@@ -23,6 +23,5 @@ export default function TwoDrawOptions(div, model, patchSize = 4) {
         linksColor: 'black',
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

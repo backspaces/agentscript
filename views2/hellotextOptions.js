@@ -6,6 +6,5 @@ export default function TwoDrawOptions(div, model, patchSize = 20) {
         textSize: 0.8, // text size in patches
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

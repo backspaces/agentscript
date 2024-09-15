@@ -20,7 +20,6 @@ export default function TwoDrawOptions(div, model, patchSize = 10) {
         turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
     }
 
-    // ant shape difficult to draw, use small images
-    const twoDrawOptions = { div, useSprites: true, patchSize, drawOptions }
-    return twoDrawOptions
+    // ant shape difficult to draw, use sprites, small images
+    return { div, useSprites: true, patchSize, drawOptions }
 }

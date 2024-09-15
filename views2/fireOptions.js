@@ -15,6 +15,5 @@ export default function TwoDrawOptions(div, model, patchSize = 4) {
         patchesColor: p => typeColors[p.type],
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

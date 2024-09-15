@@ -8,6 +8,5 @@ export default function TwoDrawOptions(div, model, patchSize = 15) {
         patchesColor: p => colorMap.scaleColor(p.pheromone, 0, 100),
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

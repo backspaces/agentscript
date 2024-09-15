@@ -26,6 +26,5 @@ export default async function TwoDrawOptions(div, model, patchSize = 20) {
         turtlesRotate: t => !['lion', 'smiley', 'tree'].includes(turtleName(t)),
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

@@ -3,6 +3,5 @@ export default function TwoDrawOptions(div, model, patchSize = 6) {
         patchesColor: p => (p.living ? 'red' : 'rgba(255, 99, 71, 0.2)'),
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

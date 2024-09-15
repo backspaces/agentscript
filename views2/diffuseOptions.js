@@ -7,6 +7,5 @@ export default function TwoDrawOptions(div, model, patchSize = 3) {
         turtlesSize: 8,
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

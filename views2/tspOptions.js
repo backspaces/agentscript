@@ -9,6 +9,5 @@ export default function TwoDrawOptions(div, model, patchSize = 6) {
         linksColor: 'red',
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

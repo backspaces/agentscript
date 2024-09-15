@@ -21,6 +21,5 @@ export default function TwoDrawOptions(div, model, patchSize = 8) {
         initPatches: (model, view) => patchColors,
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }

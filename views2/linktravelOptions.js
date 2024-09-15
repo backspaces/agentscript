@@ -7,6 +7,5 @@ export default function TwoDrawOptions(div, model, patchSize = 20) {
         turtlesSize: t => (isNode(t) ? 0.5 : 1.25),
     }
 
-    const twoDrawOptions = { div, patchSize, drawOptions }
-    return twoDrawOptions
+    return { div, patchSize, drawOptions }
 }
