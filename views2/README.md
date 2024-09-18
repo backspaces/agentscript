@@ -21,6 +21,7 @@ Code    | Run demo
 [pheromone](https://github.com/backspaces/agentscript/tree/master/views2/pheromone.html#L1) | [https://code.agentscript.org/views2/pheromone.html](https://code.agentscript.org/views2/pheromone.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views2/roads.html#L1) | [https://code.agentscript.org/views2/roads.html](https://code.agentscript.org/views2/roads.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views2/shapes.html#L1) | [https://code.agentscript.org/views2/shapes.html](https://code.agentscript.org/views2/shapes.html)
+[shapesfull](https://github.com/backspaces/agentscript/tree/master/views2/shapesfull.html#L1) | [https://code.agentscript.org/views2/shapesfull.html](https://code.agentscript.org/views2/shapesfull.html)
 [slimemold](https://github.com/backspaces/agentscript/tree/master/views2/slimemold.html#L1) | [https://code.agentscript.org/views2/slimemold.html](https://code.agentscript.org/views2/slimemold.html)
 [tsp](https://github.com/backspaces/agentscript/tree/master/views2/tsp.html#L1) | [https://code.agentscript.org/views2/tsp.html](https://code.agentscript.org/views2/tsp.html)
 [tspfull](https://github.com/backspaces/agentscript/tree/master/views2/tspfull.html#L1) | [https://code.agentscript.org/views2/tspfull.html](https://code.agentscript.org/views2/tspfull.html)

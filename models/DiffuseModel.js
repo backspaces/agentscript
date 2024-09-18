@@ -13,7 +13,7 @@ export default class DiffuseModel extends Model {
 
     // ======================
 
-    constructor(worldOptions = World.defaultOptions(200, 100)) {
+    constructor(worldOptions = World.defaultOptions(100)) {
         super(worldOptions)
     }
 

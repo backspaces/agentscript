@@ -72,12 +72,20 @@ class TwoView {
 
     // name need not end ".png", will be added if needed.
     // if name undefined use model name, lowerCase'd w/ "Model" removed
-    downloadCanvas(name = undefined) {
+    downloadCanvas(width = undefined, height = undefined, name = undefined) {
+        let can = this.canvas
         if (!name)
             name = this.model.constructor.name
                 .toLowerCase()
                 .replace(/model$/, '')
-        util.downloadCanvas(this.canvas, name)
+        if (width && height) {
+            can = document.createElement('canvas')
+            can.width = width
+            can.height = height
+            const ctx = can.getContext('2d')
+            ctx.drawImage(this.canvas, 0, 0, width, height)
+        }
+        util.downloadCanvas(can, name)
     }
 
     get width() {

@@ -9,7 +9,8 @@ export default class ShapesModel extends HelloModel {
 
     // ======================
 
-    constructor(worldOptions = World.defaultOptions(25, 16)) {
+    // constructor(worldOptions = World.defaultOptions(25, 16)) {
+    constructor(worldOptions = World.defaultOptions(16)) {
         super(worldOptions)
     }
 
