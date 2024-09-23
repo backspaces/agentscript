@@ -1,38 +1,77 @@
 <html>
 
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>Examples</title>
-    <link rel="stylesheet" href="style.css" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Ubuntu+Mono&display=swap" rel="stylesheet" />
+
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <link rel="stylesheet" href="benny.css" />
 </head>
 
 <body>
-    <div id="navDiv">
-        <div class="button-row">
-            <a class="nav-button" href="https://agentscript-ide.glitch.me/">agentscript</a>
+    <header class="header">
+        <nav class="button-row">
+            <a class="nav-button" href="./index.html">agentscript</a>
             <div class="spacer"></div>
-            <!-- <a class="nav-button" href="/tutorials/">Tutorials</a> -->
             <a class="nav-button" href="./examples.html">Examples</a>
             <a class="nav-button" href="https://glitch.com/edit/#!/agentscript-template?path=README.md">Editor</a>
             <a class="nav-button" href="https://code.agentscript.org/docs">Docs</a>
             <a class="nav-button" href="https://code.agentscript.org/">Code</a>
-        </div>
-    </div>
+        </nav>
+    </header>
 
-    <div class="center-column">
+
+    <section class="center-column">
         <h1>Example Models</h1>
         <div class="tutorials-grid">
-            <a class="tutorial-panel" href="https://glitch.com/edit/#!/slime-mold-model">
-                <img class="model-thumb" src="./thumbs/slimemold.png">
-                <div class="tutorial-title">Cellular Slime Mold</div>
-                <p class="tutorial-description">How do many single-celled organisms coordinate to form groups?</p>
-            </a>
-            <a class="tutorial-panel" href="https://glitch.com/edit/#!/ants-model">
+            <a class="tutorial-panel" href="https://glitch.com/edit/#!/agentscript-ants" target=”_blank”>
                 <img class="model-thumb" src="./thumbs/ants.png">
                 <div class="tutorial-title">Ant Foraging</div>
                 <p class="tutorial-description">Ants find the shortest path to food by leaving a trail of evaporating pheromones in their environment. A classic example of stigmergic behavior.</p>
             </a>
+            <a class="tutorial-panel" href="https://glitch.com/edit/#!/agentscript-diffuse" target=”_blank”>
+                <img class="model-thumb" src="./thumbs/diffuse.png">
+                <div class="tutorial-title">Diffusion</div>
+                <p class="tutorial-description">Diffusion is the process by which particles move from an area of higher concentration to an area of lower concentration. Here two turtles travel through patches, dropping a random value on patches and diffusing these values.</p>
+            </a>
+            <a class="tutorial-panel" href="https://glitch.com/edit/#!/agentscript-fire" target=”_blank”>
+                <img class="model-thumb" src="./thumbs/fire.png">
+                <div class="tutorial-title">Fire</div>
+                <p class="tutorial-description">Fire spreading on patches based on neighbor probabilities.</p>
+            </a>
+            <a class="tutorial-panel" href="https://glitch.com/edit/#!/agentscript-flock" target=”_blank”>
+                <img class="model-thumb" src="./thumbs/flock.png">
+                <div class="tutorial-title">Flocking</div>
+                <p class="tutorial-description">How do flocks form without a leader? Craig Reynolds, in 1986, found that three simple rules for individuals birds results in flocking behaviour.</p>
+            </a>
+            <a class="tutorial-panel" href="https://glitch.com/edit/#!/agentscript-slimemold" target=”_blank”>
+                <img class="model-thumb" src="./thumbs/slimemold.png">
+                <div class="tutorial-title">Slime Mold</div>
+                <p class="tutorial-description">How do many single-celled organisms coordinate to form groups?</p>
+            </a>
+            <a class="tutorial-panel" href="https://glitch.com/edit/#!/agentscript-template" target=”_blank”>
+                <img class="model-thumb" src="./thumbs/template.png">
+                <div class="tutorial-title">Template</div>
+                <p class="tutorial-description">This is a template for starting out a new Model from scratch. It has the Model and DrawOptions files, along with an index.html to run them.</p>
+            </a>
+            <a class="tutorial-panel" href="https://glitch.com/edit/#!/agentscript-tsp" target=”_blank”>
+                <img class="model-thumb" src="./thumbs/tsp.png">
+                <div class="tutorial-title">TSP</div>
+                <p class="tutorial-description">The Traveling Sales Person which computes the shortest distance touching each node in a graph.</p>
+            </a>
+            <a class="tutorial-panel" href="https://glitch.com/edit/#!/agentscript-tsp-mvc" target=”_blank”>
+                <img class="model-thumb" src="./thumbs/tsp-mvc.jpg">
+                <div class="tutorial-title">TSP-MVC</div>
+                <p class="tutorial-description">The Traveling Sales Person which computes the shortest distance touching each node in a graph. This version has several Controllers, the "C" in MVC.</p>
+            </a>
+
         </div>
-    </div>
+    </section>
 
 </body>
 

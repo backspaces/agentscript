@@ -21,6 +21,7 @@ Code    | Run demo
 [roads](https://github.com/backspaces/agentscript/tree/master/models/RoadsModel.js#L1) | [https://code.agentscript.org/models/run.html?roads](https://code.agentscript.org/models/run.html?roads)
 [shapes](https://github.com/backspaces/agentscript/tree/master/models/ShapesModel.js#L1) | [https://code.agentscript.org/models/run.html?shapes](https://code.agentscript.org/models/run.html?shapes)
 [slimeMold](https://github.com/backspaces/agentscript/tree/master/models/SlimeMoldModel.js#L1) | [https://code.agentscript.org/models/run.html?slimeMold](https://code.agentscript.org/models/run.html?slimeMold)
+[template](https://github.com/backspaces/agentscript/tree/master/models/TemplateModel.js#L1) | [https://code.agentscript.org/models/run.html?template](https://code.agentscript.org/models/run.html?template)
 [tsp](https://github.com/backspaces/agentscript/tree/master/models/TspModel.js#L1) | [https://code.agentscript.org/models/run.html?tsp](https://code.agentscript.org/models/run.html?tsp)
 [virus](https://github.com/backspaces/agentscript/tree/master/models/VirusModel.js#L1) | [https://code.agentscript.org/models/run.html?virus](https://code.agentscript.org/models/run.html?virus)
 [wallFollower](https://github.com/backspaces/agentscript/tree/master/models/WallFollowerModel.js#L1) | [https://code.agentscript.org/models/run.html?wallFollower](https://code.agentscript.org/models/run.html?wallFollower)

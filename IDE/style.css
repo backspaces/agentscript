@@ -1,20 +1,24 @@
 html,
 body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
     font-family: 'Lato', sans-serif;
+    margin: 0px;
+    font-size: 22px;
+    /* overflow-x: hidden; */
+
+    /* height: 100%; */
+
+    padding: 0px;
     user-select: none;
 }
 
-#navDiv {
+/* #navDiv {
     top: 0px;
     left: 0px;
     right: 0px;
-    /* z-index: 1; */
     background: #d8d8d8;
-}
-#navDivAbs {
+} */
+
+#navDiv {
     position: absolute; /* So that model can take full screen */
     top: 0px;
     left: 0px;
@@ -26,7 +30,7 @@ body {
     display: flex;
     align-items: center;
     margin: 0px 40px;
-    height: 50px;
+    height: 80px;
     justify-content: center;
 }
 .button-row .spacer {
@@ -59,7 +63,6 @@ body {
 
     z-index: 1;
 }
-
 #textDiv .title {
     font-size: 60px;
     font-weight: bold;

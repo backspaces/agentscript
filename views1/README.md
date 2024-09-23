@@ -21,6 +21,7 @@ Code    | Run demo
 [roads](https://github.com/backspaces/agentscript/tree/master/views1/roads.html#L1) | [https://code.agentscript.org/views1/roads.html](https://code.agentscript.org/views1/roads.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views1/shapes.html#L1) | [https://code.agentscript.org/views1/shapes.html](https://code.agentscript.org/views1/shapes.html)
 [slimemold](https://github.com/backspaces/agentscript/tree/master/views1/slimemold.html#L1) | [https://code.agentscript.org/views1/slimemold.html](https://code.agentscript.org/views1/slimemold.html)
+[template](https://github.com/backspaces/agentscript/tree/master/views1/template.html#L1) | [https://code.agentscript.org/views1/template.html](https://code.agentscript.org/views1/template.html)
 [tsp](https://github.com/backspaces/agentscript/tree/master/views1/tsp.html#L1) | [https://code.agentscript.org/views1/tsp.html](https://code.agentscript.org/views1/tsp.html)
 [virus](https://github.com/backspaces/agentscript/tree/master/views1/virus.html#L1) | [https://code.agentscript.org/views1/virus.html](https://code.agentscript.org/views1/virus.html)
 [wallfollower](https://github.com/backspaces/agentscript/tree/master/views1/wallfollower.html#L1) | [https://code.agentscript.org/views1/wallfollower.html](https://code.agentscript.org/views1/wallfollower.html)

@@ -7,6 +7,7 @@ export default function TwoDrawOptions(div, model, patchSize = 6) {
         turtlesSize: t => (t.breed.name === 'nodes' ? 2 : 0),
         turtlesColor: 'yellow',
         linksColor: 'red',
+        linksWidth: 2,
     }
 
     return { div, patchSize, drawOptions }

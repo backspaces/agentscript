@@ -23,6 +23,7 @@ Code    | Run demo
 [shapes](https://github.com/backspaces/agentscript/tree/master/views2/shapes.html#L1) | [https://code.agentscript.org/views2/shapes.html](https://code.agentscript.org/views2/shapes.html)
 [shapesfull](https://github.com/backspaces/agentscript/tree/master/views2/shapesfull.html#L1) | [https://code.agentscript.org/views2/shapesfull.html](https://code.agentscript.org/views2/shapesfull.html)
 [slimemold](https://github.com/backspaces/agentscript/tree/master/views2/slimemold.html#L1) | [https://code.agentscript.org/views2/slimemold.html](https://code.agentscript.org/views2/slimemold.html)
+[template](https://github.com/backspaces/agentscript/tree/master/views2/template.html#L1) | [https://code.agentscript.org/views2/template.html](https://code.agentscript.org/views2/template.html)
 [tsp](https://github.com/backspaces/agentscript/tree/master/views2/tsp.html#L1) | [https://code.agentscript.org/views2/tsp.html](https://code.agentscript.org/views2/tsp.html)
 [tspfull](https://github.com/backspaces/agentscript/tree/master/views2/tspfull.html#L1) | [https://code.agentscript.org/views2/tspfull.html](https://code.agentscript.org/views2/tspfull.html)
 [virus](https://github.com/backspaces/agentscript/tree/master/views2/virus.html#L1) | [https://code.agentscript.org/views2/virus.html](https://code.agentscript.org/views2/virus.html)
