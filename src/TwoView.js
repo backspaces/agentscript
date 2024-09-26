@@ -6,7 +6,8 @@ import TurtlesView from './TurtlesView.js'
 class TwoView {
     static defaultOptions() {
         return {
-            div: document.body,
+            // div: document.body,
+            div: 'modelDiv',
             useSprites: false,
             patchSize: 10,
             // width: null,

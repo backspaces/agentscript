@@ -65,7 +65,7 @@
     "dependencies": {
         "live-server": "^1.2.2",
         "three": "^0.120.0",
-        "uplot": "^1.6.25"
+        "uplot": "^1.6.30"
     },
     "devDependencies": {
         "@redfish/leafletelementoverlay": "^1.2.2",
