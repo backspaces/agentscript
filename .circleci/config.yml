@@ -21,7 +21,7 @@ jobs:
             - run: yarn build
 
             # Install Deno
-            - run: curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/local sh
+            # - run: curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/local sh
 
             # Cache dependencies and update the lock file
             - run:
