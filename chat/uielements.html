@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic UI Elements controlling an Ants model</title>
+    <!-- Link the external CSS file -->
+    <link rel="stylesheet" href="uielements.css">
+</head>
+
+<body>
+
+    <!-- Control panel for adding UI elements -->
+    <div id="controlPanel">
+        <button onclick="ui.showPopup('button')">Add Button</button>
+        <button onclick="ui.showPopup('range')">Add Slider</button>
+        <button onclick="ui.showPopup('checkbox')">Add Checkbox</button>
+        <button onclick="ui.showPopup('dropdown')">Add Dropdown</button>
+        <button onclick="ui.showPopup('output')">Add Monitor</button>
+    </div>
+
+    <!-- Container for dynamically added UI elements -->
+    <div id="uiContainer"></div>
+
+    <!-- Modal (Popup) form for initializing elements -->
+    <div id="popupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Initialize Element</div>
+            <div id="formContainer"></div>
+            <div class="modal-footer">
+                <button onclick="ui.cancel()">Cancel</button>
+                <button onclick="ui.submitForm()">Add Element</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as ui from './uielements.js';
+        window.ui = Object.assign({}, ui); // create obj from import (immutable)
+        console.log('ui', ui)
+    </script>
+
+    <div id="modelDiv"></div>
+    <script type="module">
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+
+        import Model from 'https://code.agentscript.org/models/AntsModel.js'
+        import TwoDrawOptions from 'https://code.agentscript.org/views2/antsOptions.js'
+
+        const model = new Model()
+        await model.startup()
+        model.setup()
+
+        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // how many steps
+            30 // at fps steps/second
+        ).stop()
+
+        Object.assign(window.ui, { model, view, anim })
+        console.log('ui', ui)
+    </script>
+
+</body>
+
+</html>

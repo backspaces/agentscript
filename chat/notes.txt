@@ -1,0 +1,14 @@
+pause: checkbox.checked ? ui.anim.stop() : ui.anim.start()
+
+speed: ui.model.speed = range.value
+ui.model.speed = 3
+0 10 1 1
+
+
+const sliderValue = range.value; // Gets the current value of the slider
+
+const isChecked = checkbox.checked; // true or false
+
+const dropdownValue = select.value; // Gets the selected value
+
+range.value checkbox.checked select.value
