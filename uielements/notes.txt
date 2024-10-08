@@ -1,0 +1,78 @@
+pause:
+checkbox.checked ? ui.anim.stop() : ui.anim.start()
+
+start & stop:
+ui.anim.start()
+ui.anim.stop()
+
+speed: ui.model.speed = range.value
+0 10 1 1
+ui.model.speed = 3
+
+color
+red, yellow, blue
+ui.view.turtlesColor = select.value
+ui.view.turtlesColor = red
+
+size
+ui.view.drawOptions.turtlesSize=select.value
+
+ticks
+ui.model.ticks
+
+
+const sliderValue = range.value; // Gets the current value of the slider
+
+const isChecked = checkbox.checked; // true or false
+
+const dropdownValue = select.value; // Gets the selected value
+
+range.value checkbox.checked select.value
+
+
+ToDo
+* Delete: Gets called via pass through?
+* Show: Show/log() the form key/val pairs.
+* Unified value: range.value, checkbox.checked, select.value => value
+
+Fixed
+* Text Highlighting: Stop dragging within text being selected (user-select css).
+* Monitor: Remove command field, Monitor just need a variable/fcn to watch.
+* Form Label: Replace "Initialize Element" with name of type: Button, Slider, ...
+* Form Label: styled the name to be bold, centered, background gray
+
+
+Examples:
+* Buttons
+Start ui.anim.start()
+Stop  ui.anim.stop()
+
+* Slider
+Speed ui.model.speed = range.value 0 10 1 1
+ui.model.speed = value 0 10 1 1
+
+* Checkbox
+Pause checkbox.checked ? ui.anim.stop() : ui.anim.start()
+value ? ui.anim.stop() : ui.anim.start()
+
+* Dropdown
+Shape circle, dart, person, bug
+ui.view.drawOptions.turtlesShape = select.value
+ui.view.drawOptions.turtlesShape = value
+
+* Monitor
+Ticks ui.model.ticks
+
+
+Oct 8: cleanup from chat json
+- uielements.js
+    - include window.ui object
+    - fill window.ui with 3 exports: {cancel, showPopup, submitForm}
+    - set window.ui.json to empty array
+- uielements.html:
+    - import './uielements.js';
+    - add {model, view, anim} to window.ui object
+    - add back ants model
+- uielements.css:
+    - styling for body & #modelDiv (used by ants model)
+    - user-select: none;

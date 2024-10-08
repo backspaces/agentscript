@@ -1,3 +1,7 @@
+// Initialize the ui object if not already defined
+window.ui = window.ui || {} // Ensure 'ui' exists
+window.ui.json = [] // Initialize the json array
+
 document.getElementById('uiContainer').addEventListener('contextmenu', e => {
     e.preventDefault()
 })
@@ -16,17 +20,25 @@ export function showPopup(type) {
     let formContent = `
     <label for="name">Name:</label>
     <input type="text" id="elementName" required><br>
+    `
+
+    if (type !== 'output') {
+        formContent += `
     <label for="command">Command:</label>
     <input type="text" id="elementCommand" required><br>
     `
+    }
 
     // Append specific fields based on the type of element
+    let modelTitle = 'Button'
     if (type === 'checkbox') {
+        modelTitle = 'Checkbox'
         formContent += `
     <label for="checked">Checked (true/false):</label>
     <input type="checkbox" id="elementChecked"><br>
     `
     } else if (type === 'dropdown') {
+        modelTitle = 'Dropdown'
         formContent += `
     <label for="values">Dropdown Options (comma separated):</label>
     <input type="text" id="elementOptions" required><br>
@@ -34,6 +46,7 @@ export function showPopup(type) {
     <input type="text" id="elementSelected" required><br>
     `
     } else if (type === 'range') {
+        modelTitle = 'Slider'
         formContent += `
     <label for="min">Min:</label>
     <input type="number" id="elementMin" required><br>
@@ -45,6 +58,7 @@ export function showPopup(type) {
     <input type="number" id="elementValue" required><br>
     `
     } else if (type === 'output') {
+        modelTitle = 'Monitor'
         formContent += `
     <label for="monitor">Value/Function to Monitor:</label>
     <input type="text" id="elementMonitor" required><br>
@@ -52,6 +66,9 @@ export function showPopup(type) {
     <input type="number" id="elementFps" value="10"><br>
     `
     }
+
+    // console.log('modelTitle', modelTitle)
+    document.getElementById('modal-header').innerText = modelTitle
 
     formContainer.innerHTML = formContent
     document.getElementById('popupModal').style.display = 'flex'
@@ -119,6 +136,7 @@ export function submitForm() {
 
         checkbox.addEventListener('change', function () {
             try {
+                const value = checkbox.checked
                 eval(command) // Execute command on checkbox change
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -155,6 +173,7 @@ export function submitForm() {
 
         select.addEventListener('change', function () {
             try {
+                const value = select.value
                 eval(command) // Execute command on dropdown change
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -183,6 +202,7 @@ export function submitForm() {
         range.addEventListener('input', function () {
             valueLabel.innerText = range.value
             try {
+                const value = range.value
                 eval(command) // Execute command on range input
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -283,3 +303,5 @@ function closeDragElement() {
     document.onmousemove = null
     document.onmouseup = null
 }
+
+Object.assign(window.ui, { showPopup, submitForm, cancel })

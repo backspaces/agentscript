@@ -1,10 +1,20 @@
+html,
+body {
+    margin: 0px;
+    padding: 0px;
+    user-select: none;
+}
+
 #uiContainer {
-    width: 100vw;
+    width: 40vw;
+    /* width: 400px; */
     height: calc(100vh - 50px);
     /* Adjust height to leave space for the control panel */
     border: 1px solid #ccc;
     position: relative;
     overflow: hidden;
+
+    float: left;
 }
 
 .ui-element {
@@ -49,9 +59,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.modal-header {
+#modal-header {
+    background-color: #ccc;
     font-size: 18px;
+    font-weight: bold;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .modal-footer {
@@ -76,4 +89,9 @@
 .dropdown-wrapper label,
 .output-wrapper label {
     display: block;
+}
+
+#modelDiv {
+    /* display: inline-block; */
+    float: right;
 }
