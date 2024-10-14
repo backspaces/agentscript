@@ -14,8 +14,7 @@ yarn-error.log
 
 /Attic/
 **/Attic
-# /test/samples.json
-/test/
+/test/samples.json
 /tests/
 /simple/
 /controls/

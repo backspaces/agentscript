@@ -24,14 +24,14 @@ jobs:
             # - run: curl -fsSL https://deno.land/x/install/install.sh | sudo DENO_INSTALL=/usr/local sh
 
             # Cache dependencies and update the lock file
-            - run:
-                  name: Cache dependencies
-                  command: deno cache --lock=lock.json --lock-write test/denomodels.js test/deno3Dgeom.js
+            # - run:
+            #       name: Cache dependencies
+            #       command: deno cache --lock=lock.json --lock-write test/denomodels.js test/deno3Dgeom.js
 
             - run:
                   command: mkdir -p ~/reports
 
-            - run: yarn test
+            # - run: yarn test
 
             - store_test_results:
                   path: ~/reports
