@@ -147,6 +147,10 @@ class TwoDraw extends TwoView {
     //     // super.reset(this.viewOptions.patchSize)
     //     // this.draw()
     // }
+    reset(redraw = true) {
+        this.ticks = 0
+        if (redraw) this.draw()
+    }
 
     draw() {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)

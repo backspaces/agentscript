@@ -67,13 +67,11 @@
         Object.assign(window.ui, { model, view, anim })
 
         function reset() {
-            model.turtles.clear()
-            model.turtles.ID = 0
-            model.ticks = 0
-            model.setup()
+            model.reset()
 
-            view.ticks = 0
-            view.draw()
+            // view.ticks = 0
+            // view.draw()
+            view.reset()
 
             anim.reset()
         }
