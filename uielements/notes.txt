@@ -1,24 +1,30 @@
-pause:
-checkbox.checked ? ui.anim.stop() : ui.anim.start()
-
-start & stop:
+Examples:
+* Buttons
+Start
 ui.anim.start()
+Stop
 ui.anim.stop()
 
-speed: ui.model.speed = range.value
+* Slider
+Speed
+ui.model.speed = range.value
 0 10 1 1
-ui.model.speed = 3
 
-color
-red, yellow, blue
-ui.view.turtlesColor = select.value
-ui.view.turtlesColor = red
+* Checkbox
+Pause
+checkbox.checked ? ui.anim.stop() : ui.anim.start()
 
-size
-ui.view.drawOptions.turtlesSize=select.value
+* Dropdown
+Shape
+circle, dart, person, bug
+circle,dart,person,bug
+bug
+ui.view.drawOptions.turtlesShape = select.value
 
-ticks
+* Monitor
+Ticks
 ui.model.ticks
+
 
 
 const sliderValue = range.value; // Gets the current value of the slider
@@ -42,27 +48,6 @@ Fixed
 * Form Label: styled the name to be bold, centered, background gray
 
 
-Examples:
-* Buttons
-Start ui.anim.start()
-Stop  ui.anim.stop()
-
-* Slider
-Speed ui.model.speed = range.value 0 10 1 1
-ui.model.speed = value 0 10 1 1
-
-* Checkbox
-Pause checkbox.checked ? ui.anim.stop() : ui.anim.start()
-value ? ui.anim.stop() : ui.anim.start()
-
-* Dropdown
-Shape circle, dart, person, bug
-ui.view.drawOptions.turtlesShape = select.value
-ui.view.drawOptions.turtlesShape = value
-
-* Monitor
-Ticks ui.model.ticks
-
 
 Oct 8: cleanup from chat json
 - uielements.js
@@ -76,3 +61,31 @@ Oct 8: cleanup from chat json
 - uielements.css:
     - styling for body & #modelDiv (used by ants model)
     - user-select: none;
+
+
+Before we used an id: Date().getTime() so that deletions could work. Lets do that.
+Also lets add the rest of the json entries for the given type.
+Is there a reason to add an empty command entry for output elements? If not, lets leave it out.
+
+The json is created properly and the elements are created, but the elements no longer work:
+- delete with double click no longer creates an alert
+- click on elements no longer run the command
+- output elements no longer show the monitored values
+
+It still doesn't work.
+cliccking on a checkbox gives this error:
+    uielements.js:367 Command failed: ReferenceError: checkbox is not defined
+double click: only the placeholder works. for some reason e.ctrlKey fails.
+(if i remove the placeholder check and do not use ctrlKey use, the delete dialog works)
+
+Only json works:
+1: element deletion does not work unless i remove the ctrlKey check.
+2: commands do not execute
+3: output monitoring does not work and does not show the text area for the value
+4: json management works
+
+button: ok
+checkbox: ok
+slider: doesn't work and label should be on top of slider
+dropdown: doesn't work
+monitor: doesn't work: label is "loading.." and shows ticks

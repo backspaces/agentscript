@@ -43,7 +43,7 @@ class Model {
      * @param {Object} [worldOptions=World.defaultOptions()]
      */
     constructor(worldOptions = World.defaultOptions()) {
-        this.resetModel(worldOptions)
+        this.initModel(worldOptions)
         this.setAutoTick(true)
         this.setGeometry('heading')
     }
@@ -57,7 +57,14 @@ class Model {
             ? new GeoWorld(worldOptions)
             : new World(worldOptions)
     }
-    resetModel(worldOptions) {
+    /**
+     * Initialize model to initial state w/ new Patches, Turtles, Links.
+     * The worldOptions will default to initial values but can be
+     * changed by modeler.
+     *
+     * @param {Object|World} [worldOptions=this.world] World object
+     */
+    initModel(worldOptions) {
         this.ticks = 0
         this.world =
             worldOptions.maxXcor === undefined // is already a world object
@@ -70,15 +77,16 @@ class Model {
     }
 
     /**
-     * Resets model to initial state w/ new Patches, Turtles, Links.
-     * The worldOptions will default to initial values but can be
-     * changed by modeler. Setup() often called after reset() to
-     * re-initialize the model.
+     * Reset the model by clearing the turtles, setting ID & ticks to 0
+     * and calling setup()
      *
-     * @param {Object|World} [worldOptions=this.world] World object
+     * @param {boolean} [callSetup=true]
      */
-    reset(worldOptions = this.world) {
-        this.resetModel(worldOptions)
+    reset(callSetup = true) {
+        this.turtles.clear()
+        this.turtles.ID = 0
+        this.ticks = 0
+        if (callSetup) this.setup()
     }
 
     /**
@@ -99,11 +107,6 @@ class Model {
     /**
      * An abstract method for initializing the model
      * Subclasses provide their version of this to initialice the model
-     *
-     * Note: can be used with reset(). This will reinitialize
-     * the Patches, Turtles, Links for re-running the model
-     *  * reset()
-     *  * setup()
      *
      * @abstract
      */

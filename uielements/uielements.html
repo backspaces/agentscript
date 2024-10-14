@@ -63,8 +63,24 @@
         ).stop()
 
         view.draw()
+
         Object.assign(window.ui, { model, view, anim })
-        console.log('ui', ui)
+
+        function reset() {
+            model.turtles.clear()
+            model.turtles.ID = 0
+            model.ticks = 0
+            model.setup()
+
+            view.ticks = 0
+            view.draw()
+
+            anim.reset()
+        }
+        window.ui.reset = reset
+
+        window.ui.loadUIState()
+        console.log('ui', window.ui)
     </script>
 
 </body>
