@@ -5,42 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic UI Elements controlling an Ants model</title>
-    <link rel="stylesheet" href="uielements.css">
 </head>
 
 <body>
-
-    <!-- Control panel for adding UI elements -->
-    <div id="controlPanel">
-        <button onclick="ui.showPopup('button')">Add Button</button>
-        <button onclick="ui.showPopup('range')">Add Slider</button>
-        <button onclick="ui.showPopup('checkbox')">Add Checkbox</button>
-        <button onclick="ui.showPopup('dropdown')">Add Dropdown</button>
-        <button onclick="ui.showPopup('output')">Add Monitor</button>
-    </div>
-
-    <!-- Container for dynamically added UI elements -->
-    <div id="uiContainer"></div>
-
-    <!-- Modal (Popup) form for initializing elements -->
-    <div id="popupModal" class="modal">
-        <div class="modal-content">
-            <!-- <div class="modal-header">Initialize Element</div> -->
-            <div id="modal-header">Initialize Element</div>
-            <div id="formContainer"></div>
-            <div class="modal-footer">
-                <button onclick="ui.cancel()">Cancel</button>
-                <button onclick="ui.submitForm()">Add Element</button>
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
-        import './uielements.js'; // import for side-effects only
-    </script>
-
     <div id="modelDiv"></div>
     <script type="module">
+        // Only additional import added to basic models
+        import * as UI from './uielements.js'
+        // import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
+
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
@@ -58,27 +31,18 @@
                 model.step()
                 view.draw()
             },
-            -1, // how many steps
+            500, // how many steps
             30 // at fps steps/second
-        ).stop()
+        )
 
-        view.draw()
+        // Additional code for uielements usage:
+        // UI.clearElements()
+        UI.setAppState(model, view, anim) // do this first
 
-        Object.assign(window.ui, { model, view, anim })
+        UI.checkMinElements() // if no elements, install minimal set
+        UI.createElements() // create elements from ui.json
 
-        function reset() {
-            model.reset()
-
-            // view.ticks = 0
-            // view.draw()
-            view.reset()
-
-            anim.reset()
-        }
-        window.ui.reset = reset
-
-        window.ui.loadUIState()
-        console.log('ui', window.ui)
+        anim.setSteps(-1) // in case you want to run forever
     </script>
 
 </body>

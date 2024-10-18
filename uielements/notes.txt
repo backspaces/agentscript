@@ -4,6 +4,9 @@ Start
 ui.anim.start()
 Stop
 ui.anim.stop()
+Reset
+ui.reset()
+
 
 * Slider
 Speed
@@ -16,17 +19,23 @@ checkbox.checked ? ui.anim.stop() : ui.anim.start()
 
 * Dropdown
 Shape
-circle, dart, person, bug
-circle,dart,person,bug
-bug
 ui.view.drawOptions.turtlesShape = select.value
+circle, dart, person, bug
+bug
 
 * Monitor
 Ticks
 ui.model.ticks
 
 
+=======================================
+To convert any of the view2/ demos:
+Add: import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
+Set anim steps to -1
+Add a bit of boiler plate:
 
+
+=======================================
 const sliderValue = range.value; // Gets the current value of the slider
 
 const isChecked = checkbox.checked; // true or false

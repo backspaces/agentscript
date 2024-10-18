@@ -37,7 +37,7 @@
     "bugs": {
         "url": "https://github.com/backspaces/agentscript/issues",
         "test": "ls models/*js && exit 0",
-        "test": "test/denomodels.js && test/deno3Dgeom.js"
+        "dtest": "test/denomodels.js && test/deno3Dgeom.js"
     },
     "scripts": {
         "start": "http-server -p 9000 -o --silent > /dev/null &",
