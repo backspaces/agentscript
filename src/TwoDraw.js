@@ -136,9 +136,10 @@ class TwoDraw extends TwoView {
         // this.view.ticks = 0
         // return drawOptions
     }
+
     // reset(drawOptions = this.drawOptions) {
     //     // this.resetOptions(drawOptions)
-    //     // this.patchesView = new PatchesView(this.world.width, this.world.height)
+    //     // this.patchesView = new PatchesView(this.world.numX, this.world.numY)
     //     // this.turtlesView = new TurtlesView(this.ctx, this.world, options)
     //     // super.reset()
     //     super.initView()
@@ -147,9 +148,15 @@ class TwoDraw extends TwoView {
     //     // super.reset(this.viewOptions.patchSize)
     //     // this.draw()
     // }
-    reset(redraw = true) {
+    // reset(redraw = true) {
+    //     this.ticks = 0
+    //     if (redraw) this.draw()
+    //     super.reset()
+    // }
+    reset(patchSize) {
         this.ticks = 0
-        if (redraw) this.draw()
+        super.reset(patchSize)
+        this.draw()
     }
 
     draw() {

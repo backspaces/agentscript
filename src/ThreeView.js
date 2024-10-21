@@ -77,10 +77,7 @@ class ThreeView {
         }
 
         if (options.patches && options.patches.meshClass === 'PatchesMesh') {
-            this.patchesView = new PatchesView(
-                this.world.width,
-                this.world.height
-            )
+            this.patchesView = new PatchesView(this.world.numX, this.world.numY)
         }
 
         this.initThree()
@@ -240,7 +237,7 @@ class ThreeView {
         //     document.body.appendChild(helpers.stats.dom)
         // }
         if (useLights) {
-            const width = world.width
+            const width = world.numX
 
             helpers.directionalLight = new THREE.DirectionalLight(0xffffff, 1)
             helpers.directionalLight.position.set(width, width, width)

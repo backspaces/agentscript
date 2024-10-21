@@ -27,7 +27,7 @@ export async function mapLoadPromise(map) {
 
 // function defaultZoom(world) {
 //     const height = document.body.clientHeight
-//     const worldHeight = world.height
+//     const worldHeight = world.numY
 //     const bbox = world.bbox
 //     // calc a zoom
 // }

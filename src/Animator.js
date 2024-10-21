@@ -81,7 +81,7 @@ class Animator {
 
     setFps(fps) {
         if (fps <= 0) {
-            console.log('fps must be > 0, using.00000001')
+            console.log('fps must be > 0, using 0.00000001')
             fps = 0.00000001
         }
         this.reset(this.steps, fps)

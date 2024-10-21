@@ -148,7 +148,7 @@ function createElementWrapper(element, id) {
     return wrapper
 }
 function handleDeletion() {
-    if (window.ui.json.length === 0) {
+    if (window.ui.json && window.ui.json.length === 0) {
         document.getElementById('uiContainer').innerHTML = '' // Clear the container if empty
     }
 }
@@ -422,10 +422,10 @@ function closeDragElement() {
         jsonElement.position.x = parseInt(currentDragElement.style.left, 10)
         jsonElement.position.y = parseInt(currentDragElement.style.top, 10)
 
-        // // Optionally save the updated state to localStorage
+        // // save the updated state to localStorage
         // loadJsonToStorage()
     }
-    // Optionally save the updated state to localStorage
+    // save the updated state to localStorage
     loadJsonToStorage()
 }
 
@@ -445,9 +445,10 @@ function loadElementsFromJSON() {
 // =================== localStorage utilities ===================
 
 // let containerDiv = 'uiContainer' // div for dynamically added UI elements
-let localStorageName = 'uiState' // localStorage name for caching current elements
+let localStorageName // default localStorage name for caching current elements
 export function setStorageName(name) {
     localStorageName = name
+    // set storage to empty obj if not existing element??
 }
 
 // move ui.json to localStorage
@@ -456,35 +457,19 @@ function loadJsonToStorage() {
     const jsonString = JSON.stringify(window.ui.json) // Convert to string
     localStorage.setItem(localStorageName, jsonString) // Save it to localStorage
 }
-function loadStorageToJson() {
-    if (!localStorageName) return
-    const storage = getStorage()
-    window.ui.json = JSON.parse(storage) // Convert to json
-}
 
 // move localStorage to ui.json and create elements from ui.json
-export function createElements() {
-    if (!localStorageName) return
-    // loadStorageToJson()
-    // loadElementsFromJSON()
-    const savedState = getStorage()
-    if (savedState) {
-        window.ui.json = JSON.parse(savedState) // Convert back to array
-        loadElementsFromJSON() // Load the elements into the UI
-    }
-}
 export function clearElements() {
     if (!localStorageName) return
     localStorage.removeItem(localStorageName)
     window.ui.json = []
 }
-export function checkMinElements() {
-    if (getStorage()) return
-    // clearElements()
-    window.ui.json = minJson
-    loadJsonToStorage()
-    createElements()
-}
+// export function checkMinElements() {
+//     if (getStorage()) return
+//     window.ui.json = minJson
+//     loadJsonToStorage()
+//     // createElements()
+// }
 function getStorage() {
     return localStorage.getItem(localStorageName)
 }
@@ -492,7 +477,6 @@ const jsonString =
     '[{"command":"ui.anim.start()","id":1728678676436,"name":"start","position":{"x":29,"y":33},"type":"button"},{"command":"ui.anim.stop()","id":1728927362120,"name":"stop","position":{"x":92,"y":34},"type":"button"},{"command":"ui.reset()","id":1728927569824,"name":"reset","position":{"x":59,"y":68},"type":"button"},{"command":"ui.anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":330,"y":37},"monitor":"ui.model.ticks","fps":"10"}]'
 const minJson = JSON.parse(jsonString)
 
-// '[{"command":"ui.anim.start()","id":1728678676436,"name":"start","position":{"x":29,"y":105},"type":"button"},{"command":"ui.anim.stop()","id":1728927362120,"name":"stop","position":{"x":91,"y":104},"type":"button"},{"command":"ui.reset()","id":1728927569824,"name":"reset","position":{"x":60,"y":144},"type":"button"},{"command":"ui.anim.setFps(value)","id":1728682054456,"max":"60","min":"1","name":"fps","position":{"x":165,"y":112},"step":"1","type":"range","value":"30"},{"id":1729269112145,"type":"output","name":"ticks","position":{"x":328,"y":112},"monitor":"ui.model.ticks","fps":"10"}]'
 // =================== misc utilities ===================
 
 // let AppName
@@ -511,10 +495,30 @@ export function setAppState(
     console.log('localStorageName', localStorageName)
 }
 
+export function createElements(useMinElements = true) {
+    if (!localStorageName) return
+    const savedState = getStorage()
+    if (savedState) {
+        window.ui.json = JSON.parse(savedState) // Convert back to array
+        // loadElementsFromJSON() // Load the elements into the UI
+    } else if (useMinElements) {
+        window.ui.json = minJson
+    } else {
+        return
+    }
+    loadElementsFromJSON()
+
+    // const savedState = getStorage()
+    // if (savedState) {
+    //     window.ui.json = JSON.parse(savedState) // Convert back to array
+    //     loadElementsFromJSON() // Load the elements into the UI
+    // }
+}
+
 // a bit risky: depends on model, view, anim stored in ui by app
 function reset() {
     window.ui.model.reset()
-    window.ui.view.reset()
+    // window.ui.view.reset()
     window.ui.anim.reset()
 }
 

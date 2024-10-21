@@ -38,7 +38,7 @@
         util.toWindow({ util, model, view })
 
         // REMIND: Move to ThreeView as a general helper.
-        view.perspectiveCam.position.set(0, 0, 1.5 * model.world.width)
+        view.perspectiveCam.position.set(0, 0, 1.5 * model.world.numX)
         view.orbitControls.update()
 
         const step = runGui(turtle, target)

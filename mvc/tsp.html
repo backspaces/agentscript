@@ -8,7 +8,8 @@
     <script type="module">
         import * as util from 'https://code.agentscript.org/src/utils.js'
         import Model from 'https://code.agentscript.org/models/TspModel.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        // import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        import TwoDraw from '../src/TwoDraw.js'
         import Animator from 'https://code.agentscript.org/src/Animator.js'
 
         import Mouse from 'https://code.agentscript.org/src/Mouse.js'
@@ -78,16 +79,16 @@
             once: {
                 button: () => anim.once()
             },
-            modelWidth: {
-                slider: [500, [100, 1000, 25]],
-                cmd: val => view.width = val,
+            patchSize: {
+                slider: [4, [0, 15, 1]],
+                cmd: val => view.reset(val),
             },
             turtlesShape: {
                 chooser: ['circle', ['bug', 'dart', 'person', 'circle', 'arrow']],
                 cmd: val => view.drawOptions.turtlesShape = val,
             },
             turtlesSize: {
-                slider: [3, [1, 10, 1]],
+                slider: [3, [1, 15, 1]],
                 cmd: val => view.drawOptions.turtlesSize = val,
             },
             downloadCanvas: {

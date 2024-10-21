@@ -49,11 +49,11 @@ class Patch {
     }
 
     get x() {
-        return (this.id % this.model.world.width) + this.model.world.minX
+        return (this.id % this.model.world.numX) + this.model.world.minX
     }
     get y() {
         return (
-            this.model.world.maxY - Math.floor(this.id / this.model.world.width)
+            this.model.world.maxY - Math.floor(this.id / this.model.world.numX)
         )
     }
     // get z() {

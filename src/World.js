@@ -209,9 +209,12 @@ class World {
 
     // ### Following functions use PatchSize
 
-    // Get the world size in pixels. PatchSize is optional, defalting to 1
-    getWorldSize(patchSize = 1) {
-        return [this.numX * patchSize, this.numY * patchSize]
+    // Get the world size in pixels. PatchSize is optional, defaulting to 1
+    // getWorldSize(patchSize = 1) {
+    //     return [this.numX * patchSize, this.numY * patchSize]
+    // }
+    getWorldSize() {
+        return [this.numX, this.numY]
     }
 
     // Convert a canvas context to world euclidean coordinates
@@ -229,9 +232,12 @@ class World {
     // Error if canvas patch width/height differ.
     patchSize(canvas) {
         const { numX, numY } = this
-        const { clientWidth: width, clientHeight: height } = canvas
-        const xSize = width / numX
-        const ySize = height / numY
+        // const { clientWidth: width, clientHeight: height } = canvas
+        // const xSize = width / numX
+        // const ySize = height / numY
+        const { clientWidth, clientHeight } = canvas
+        const xSize = clientWidth / numX
+        const ySize = clientHeight / numY
         if (xSize !== ySize) {
             throw Error(`World patchSize: x/y sizes differ ${xSize}, ${ySize}`)
         }
@@ -240,8 +246,9 @@ class World {
     // Change canvas size to this world's size.
     // Does not change size if already the same, preserving the ctx content.
     setCanvasSize(canvas, patchSize) {
-        const [width, height] = this.getWorldSize(patchSize)
-        util.setCanvasSize(canvas, width, height)
+        // const [width, height] = this.getWorldSize(patchSize)
+        // const [width, height] = this.getWorldSize()
+        util.setCanvasSize(canvas, this.numX * patchSize, this.numY * patchSize)
     }
 
     // Convert pixel location (top/left offset i.e. mouse) to patch coords (float)

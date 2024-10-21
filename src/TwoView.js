@@ -25,7 +25,7 @@ class TwoView {
         // Object.assign(this, TwoView.defaultOptions(), options)
         options = Object.assign(TwoView.defaultOptions(), options)
         if (options.width) {
-            options.patchSize = options.width / world.width
+            options.patchSize = options.width / world.numX
             delete options.width
         }
 
@@ -45,7 +45,7 @@ class TwoView {
         this.ctx = can.getContext('2d')
         this.world = world
 
-        this.patchesView = new PatchesView(this.world.width, this.world.height)
+        this.patchesView = new PatchesView(this.world.numX, this.world.numY)
         this.turtlesView = new TurtlesView(this.ctx, this.world, options)
 
         this.ticks = 0
@@ -62,7 +62,7 @@ class TwoView {
     //     this.reset(patchSize)
     // }
     // setWidth(width) {
-    //     this.reset(width / this.world.width)
+    //     this.reset(width / this.world.numX)
     // }
     // get patchSize() {
     //     this.turtlesView.patchSize
@@ -90,11 +90,11 @@ class TwoView {
     }
 
     get width() {
-        // return this.world.width * this.turtlesView.patchSize // this.patchSize
-        return this.world.width * this.patchSize
+        // return this.world.numX * this.turtlesView.patchSize // this.patchSize
+        return this.world.numX * this.patchSize
     }
     set width(val) {
-        this.reset(val / this.world.width)
+        this.reset(val / this.world.numX)
     }
     get patchSize() {
         return this.turtlesView.patchSize

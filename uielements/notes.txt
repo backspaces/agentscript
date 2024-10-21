@@ -29,6 +29,10 @@ ui.model.ticks
 
 
 =======================================
+ui.view.reset(value)
+ui.view.downloadCanvas()
+ui.view.drawOptions.turtlesSize = value
+=======================================
 To convert any of the view2/ demos:
 Add: import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
 Set anim steps to -1
