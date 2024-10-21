@@ -1070,6 +1070,9 @@ export function downloadBlob(blobable, name = 'download', format = true) {
 
     URL.revokeObjectURL(url)
 }
+export function downloadJson(json) {
+    downloadBlob(json, 'JSON.js')
+}
 
 // ### Canvas & Image
 

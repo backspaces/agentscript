@@ -1,3 +1,6 @@
+// import * as util from 'https://code.agentscript.org/src/utils.js'
+import * as util from '../src/utils.js'
+
 // =================== initialization ===================
 // loading links
 const link = document.createElement('link')
@@ -516,7 +519,7 @@ export function createElements(useMinElements = true) {
 }
 
 // a bit risky: depends on model, view, anim stored in ui by app
-function reset() {
+export function reset() {
     window.ui.model.reset()
     // window.ui.view.reset()
     window.ui.anim.reset()
@@ -527,4 +530,5 @@ Object.assign(window.ui, {
     submitForm,
     cancel,
     reset,
+    util,
 })
