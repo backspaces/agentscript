@@ -9,13 +9,12 @@ link.href = 'uielements.css'
 link.type = 'text/css'
 document.head.appendChild(link)
 
-// loading divs.html
 await fetch('./divs.html')
     .then(response => response.text())
     .then(html => {
-        // Insert after <body> tag starts
+        // Insert the HTML content for the menu into the DOM
         document.body.insertAdjacentHTML('afterbegin', html)
-        // console.log('fetch divs.html')
+        console.log('divs.html loaded and parsed')
     })
 
 // Initialize the window.ui object if not already defined
@@ -30,74 +29,109 @@ document.getElementById('uiContainer').addEventListener('contextmenu', e => {
 
 let elementType = ''
 let currentDragElement = null
+let selectedWrapper
+let editingElementId = null
+let selectedElementId
 let offsetX = 0
 let offsetY = 0
 
-// Show popup modal to create new elements
-export function showPopup(type) {
+// Show popup modal to create new elements, called from divs.html
+export function showPopup(type, jsonData = null) {
     elementType = type
     const formContainer = document.getElementById('formContainer')
     formContainer.innerHTML = '' // Clear previous form inputs
 
+    // Set default modelTitle and add type-specific fields
+    let modelTitle = 'Button'
     let formContent = `
     <label for="name">Name:</label>
-    <input type="text" id="elementName" required><br>
+    <input type="text" id="elementName" value="${
+        jsonData ? jsonData.name : ''
+    }" required><br>
     `
 
+    // Include the command field for all types except 'output'
     if (type !== 'output') {
         formContent += `
     <label for="command">Command:</label>
-    <input type="text" id="elementCommand" required><br>
+    <input type="text" id="elementCommand" value="${
+        jsonData ? jsonData.command : ''
+    }" required><br>
     `
     }
 
     // Append specific fields based on the type of element
-    let modelTitle = 'Button'
     if (type === 'checkbox') {
         modelTitle = 'Checkbox'
         formContent += `
-    <label for="checked">Checked (true/false):</label>
-    <input type="checkbox" id="elementChecked"><br>
+    <label for="checked">Checked:</label>
+    <input type="checkbox" id="elementChecked" ${
+        jsonData && jsonData.checked ? 'checked' : ''
+    }><br>
     `
     } else if (type === 'dropdown') {
         modelTitle = 'Dropdown'
         formContent += `
     <label for="values">Dropdown Options (comma separated):</label>
-    <input type="text" id="elementOptions" required><br>
+    <input type="text" id="elementOptions" value="${
+        jsonData ? jsonData.options.join(', ') : ''
+    }" required><br>
     <label for="selected">Selected Value:</label>
-    <input type="text" id="elementSelected" required><br>
+    <input type="text" id="elementSelected" value="${
+        jsonData ? jsonData.selected : ''
+    }" required><br>
     `
     } else if (type === 'range') {
         modelTitle = 'Slider'
         formContent += `
     <label for="min">Min:</label>
-    <input type="number" id="elementMin" required><br>
+    <input type="number" id="elementMin" value="${
+        jsonData ? jsonData.min : ''
+    }" required><br>
     <label for="max">Max:</label>
-    <input type="number" id="elementMax" required><br>
-    <label for="step">Step (default 1):</label>
-    <input type="number" id="elementStep" value=1 required><br>
+    <input type="number" id="elementMax" value="${
+        jsonData ? jsonData.max : ''
+    }" required><br>
+    <label for="step">Step:</label>
+    <input type="number" id="elementStep" value="${
+        jsonData ? jsonData.step : 1
+    }" required><br>
     <label for="value">Current Value:</label>
-    <input type="number" id="elementValue" required><br>
+    <input type="number" id="elementValue" value="${
+        jsonData ? jsonData.value : ''
+    }" required><br>
     `
     } else if (type === 'output') {
         modelTitle = 'Monitor'
         formContent += `
     <label for="monitor">Value/Function to Monitor:</label>
-    <input type="text" id="elementMonitor" required><br>
+    <input type="text" id="elementMonitor" value="${
+        jsonData ? jsonData.monitor : ''
+    }" required><br>
     <label for="fps">Frames per Second (FPS):</label>
-    <input type="number" id="elementFps" value="10"><br>
+    <input type="number" id="elementFps" value="${
+        jsonData ? jsonData.fps : 10
+    }"><br>
     `
     }
 
-    // console.log('modelTitle', modelTitle)
-    document.getElementById('modal-header').innerText = modelTitle
+    // Set form header based on whether we're adding or editing
+    document.getElementById('modal-header').innerText = jsonData
+        ? `Edit ${modelTitle}`
+        : `Add ${modelTitle}`
+
+    // Set the button label in the modal footer
+    document.querySelector('.modal-footer button:last-child').innerText =
+        jsonData ? 'Edit Element' : 'Add Element'
 
     formContainer.innerHTML = formContent
     document.getElementById('popupModal').style.display = 'flex'
+
+    // Track if editing an existing element
+    editingElementId = jsonData ? jsonData.id : null
 }
 
 // Cancel the popup
-
 export function cancel() {
     document.getElementById('popupModal').style.display = 'none'
 }
@@ -109,136 +143,187 @@ function createElementWrapper(element, id) {
     wrapper.className = 'ui-element'
     wrapper.dataset.id = id // Store the id in the wrapper for reference
 
-    // Set initial pixel-based position for the new element
+    // Set initial position for the new element
     const containerRect = document
         .getElementById('uiContainer')
         .getBoundingClientRect()
-    wrapper.style.left = containerRect.width / 2 - 50 + 'px' // Centered horizontally
-    wrapper.style.top = containerRect.height / 2 - 25 + 'px' // Centered vertically
-
+    wrapper.style.left = containerRect.width / 2 - 50 + 'px'
+    wrapper.style.top = containerRect.height / 2 - 25 + 'px'
     wrapper.appendChild(element)
 
-    // Make the element draggable
+    // Handle dragging with Ctrl + mousedown
     wrapper.onmousedown = function (e) {
-        // Only start dragging if Ctrl key is held down and it’s a single click
-        if (e.ctrlKey && e.detail === 1) {
+        if (e.ctrlKey) {
             dragMouseDown(e)
-        }
-    }
-
-    // Allow the element to be deleted on double click with shift key down
-    wrapper.ondblclick = function (e) {
-        if (e.shiftKey) {
-            const confirmDelete = confirm('Do you want to delete this control?')
-            if (confirmDelete) {
-                wrapper.remove() // Remove the element
-
-                // Remove the element from the JSON array using the id
-                const elementId = wrapper.dataset.id
-                const elementIndex = window.ui.json.findIndex(
-                    el => el.id == elementId
-                )
-                if (elementIndex !== -1) {
-                    window.ui.json.splice(elementIndex, 1)
-                }
-                // Check if any elements are left, and clear the UI if none are
-                handleDeletion()
-                loadJsonToStorage()
-            }
+        } else if (e.shiftKey) {
+            // Prevent default behavior and show popup menu
+            e.preventDefault()
+            showPopupMenu(e, wrapper)
         }
     }
 
     return wrapper
 }
-function handleDeletion() {
-    if (window.ui.json && window.ui.json.length === 0) {
-        document.getElementById('uiContainer').innerHTML = '' // Clear the container if empty
+
+// Menu option handlers (global scope)
+document.getElementById('deleteOption').onclick = function (e) {
+    e.stopPropagation() // Prevent bubbling to document handler
+    console.log('Delete option clicked')
+    const confirmDelete = confirm('Do you want to delete this control?')
+    if (confirmDelete) {
+        // const wrapper = window.selectedWrapper
+        const wrapper = selectedWrapper
+        wrapper.remove() // Remove the element from the dom
+
+        // Remove the element from the JSON array using the id
+        // const elementId = window.selectedElementId
+        const elementId = selectedElementId
+        // to let id & elementId be string or number, use !=
+        window.ui.json = window.ui.json.filter(el => el.id != elementId)
+
+        jsonToStorage() // Save the updated state
     }
+    closePopupMenu() // Hide the popup menu
+}
+
+document.getElementById('cancelOption').onclick = function (e) {
+    e.stopPropagation() // Prevent bubbling to document handler
+    console.log('Cancel option clicked')
+    closePopupMenu() // Just hide the popup menu
+}
+
+document.getElementById('editOption').onclick = function (e) {
+    e.stopImmediatePropagation()
+    console.log('Edit option clicked')
+
+    const elementId = selectedElementId
+    const jsonElement = window.ui.json?.find(el => el.id == elementId)
+
+    if (jsonElement) {
+        // Use showPopup for editing, passing in jsonElement for pre-filled values
+        showPopup(jsonElement.type, jsonElement)
+    }
+    closePopupMenu() // Close the popup menu
+}
+
+// Function to show the popup menu and start listening for outside clicks
+function showPopupMenu(e, wrapper) {
+    const popupMenu = document.getElementById('popupMenu')
+    popupMenu.style.display = 'block'
+    popupMenu.style.left = `${e.pageX}px`
+    popupMenu.style.top = `${e.pageY}px`
+
+    // window.selectedElementId = wrapper.dataset.id
+    // window.selectedWrapper = wrapper
+    selectedElementId = wrapper.dataset.id
+    selectedWrapper = wrapper
+
+    // Start listening for clicks outside of the menu when it is shown
+    document.addEventListener('mousedown', handleOutsideClick)
+
+    // Prevent further propagation
+    e.stopPropagation()
+}
+
+// Function to handle clicks outside the popup menu
+function handleOutsideClick(e) {
+    const popupMenu = document.getElementById('popupMenu')
+
+    // If the click is outside the menu, close it
+    if (!popupMenu.contains(e.target)) {
+        console.log('Clicked outside, closing menu')
+        closePopupMenu()
+    }
+}
+
+// Function to close the popup menu and stop listening for outside clicks
+function closePopupMenu() {
+    const popupMenu = document.getElementById('popupMenu')
+    popupMenu.style.display = 'none'
+
+    // Stop listening for clicks outside the menu
+    document.removeEventListener('mousedown', handleOutsideClick)
 }
 
 // =================== create ui form & json from popups ===================
 
-// Submit the form and add the element. called by divs
+// Submit the form and add the element. called from divs
 export function submitForm() {
     const name = document.getElementById('elementName').value
-    const id = Date.now() // Generate unique ID for each element
-    let command
-    if (elementType !== 'output')
-        command = document.getElementById('elementCommand').value
+    const command =
+        elementType !== 'output'
+            ? document.getElementById('elementCommand').value
+            : null
+    const id = editingElementId || Date.now() // Use existing ID if editing, otherwise create new
 
-    // Calculate center position of the uiContainer
-    const uiContainer = document.getElementById('uiContainer')
-    const containerRect = uiContainer.getBoundingClientRect()
-    const centerX = containerRect.width / 2 - 50 // Adjust based on element width
-    const centerY = containerRect.height / 2 - 25 // Adjust based on element height
+    // Find or initialize JSON element
+    let jsonElement = window.ui.json.find(el => el.id === id) // == not needed here
 
-    // Create a JSON object with initial position at the center of the uiContainer
-    let jsonElement = {
-        id: id,
-        type: elementType,
-        name: name,
-        command: command,
-        position: {
-            x: centerX,
-            y: centerY,
-        },
+    if (jsonElement) {
+        // Update existing JSON data
+        jsonElement.name = name
+        jsonElement.command = command
+    } else {
+        // Calculate center position of the uiContainer for a new element
+        const uiContainer = document.getElementById('uiContainer')
+        const containerRect = uiContainer.getBoundingClientRect()
+        const centerX = containerRect.width / 2 - 50 // Adjust for element width
+        const centerY = containerRect.height / 2 - 25 // Adjust for element height
+
+        // Create a new JSON object with initial position at the center
+        jsonElement = {
+            id: id,
+            type: elementType,
+            name: name,
+            command: command,
+            position: {
+                x: centerX,
+                y: centerY,
+            },
+        }
+        window.ui.json.push(jsonElement) // Add to JSON array
     }
 
-    // Populate additional properties based on element type
+    // Populate specific fields based on the element type
     if (elementType === 'checkbox') {
-        jsonElement.checked = document.getElementById('elementChecked').checked
+        jsonElement.checked =
+            document.getElementById('elementChecked')?.checked || false
     } else if (elementType === 'dropdown') {
-        jsonElement.options = document
-            .getElementById('elementOptions')
-            .value.split(/,\s*/)
-        jsonElement.selected = document.getElementById('elementSelected').value
+        jsonElement.options =
+            document.getElementById('elementOptions')?.value.split(/,\s*/) || []
+        jsonElement.selected =
+            document.getElementById('elementSelected')?.value || ''
     } else if (elementType === 'range') {
-        jsonElement.min = document.getElementById('elementMin').value
-        jsonElement.max = document.getElementById('elementMax').value
-        jsonElement.step = document.getElementById('elementStep').value
-        jsonElement.value = document.getElementById('elementValue').value
+        jsonElement.min = document.getElementById('elementMin')?.value || 0
+        jsonElement.max = document.getElementById('elementMax')?.value || 100
+        jsonElement.step = document.getElementById('elementStep')?.value || 1
+        jsonElement.value = document.getElementById('elementValue')?.value || 50
     } else if (elementType === 'output') {
-        jsonElement.monitor = document.getElementById('elementMonitor').value
-        jsonElement.fps = document.getElementById('elementFps').value || 10
+        jsonElement.monitor =
+            document.getElementById('elementMonitor')?.value || ''
+        jsonElement.fps = document.getElementById('elementFps')?.value || 10
     }
 
-    // Add JSON to the array
-    window.ui.json.push(jsonElement)
-
-    // Use the JSON to create the UI element
+    // Remove and re-create the element in the UI with updated data if editing
+    if (editingElementId) {
+        const existingWrapper = document.querySelector(`[data-id="${id}"]`)
+        if (existingWrapper) {
+            existingWrapper.remove() // Remove the old element from the UI
+        }
+    }
     createElementFromJSON(jsonElement)
 
-    // Optionally save the updated state
-    loadJsonToStorage()
+    // Save changes to local storage
+    jsonToStorage()
 
-    // Close the modal after adding the element
+    // Close popup and reset editing state
     document.getElementById('popupModal').style.display = 'none'
+    editingElementId = null
 }
 
-// =================== json to element ===================
+// =================== json to html element ===================
 function createElementFromJSON(jsonElement) {
     let elementWrapper
-
-    // Common command execution function
-    // function executeCommand(command) {
-    //     try {
-    //         eval(command)
-    //     } catch (error) {
-    //         console.error('Command execution failed: ', error)
-    //     }
-    // }
-    // function executeCommand(command, value) {
-    //     try {
-    //         // Replace any placeholder in the command with the provided value
-    //         const finalCommand = command.replace(
-    //             /\bvalue\b/g,
-    //             JSON.stringify(value)
-    //         )
-    //         eval(finalCommand)
-    //     } catch (error) {
-    //         console.error('Command execution failed: ', error)
-    //     }
-    // }
 
     // Handle element creation based on type
     if (jsonElement.type === 'button') {
@@ -259,11 +344,15 @@ function createElementFromJSON(jsonElement) {
         label.innerText = jsonElement.name
         label.classList.add('checkbox-label')
 
-        // checkbox.addEventListener('change', () => eval(jsonElement.command))
         checkbox.addEventListener('change', function () {
-            const value = checkbox.checked
-            const checked = checkbox.checked
-            eval(jsonElement.command)
+            try {
+                // values available within the command
+                const value = checkbox
+                const checked = checkbox.checked
+                eval(jsonElement.command)
+            } catch (error) {
+                console.error('Command execution failed: ', error)
+            }
         })
 
         checkboxWrapper.appendChild(checkbox)
@@ -290,10 +379,14 @@ function createElementFromJSON(jsonElement) {
         selectWrapper.appendChild(label)
         selectWrapper.appendChild(select)
 
-        // select.addEventListener('change', () => eval(jsonElement.command))
         select.addEventListener('change', function () {
-            const value = select.value
-            eval(jsonElement.command)
+            try {
+                // values available within the command
+                const value = select.value
+                eval(jsonElement.command)
+            } catch (error) {
+                console.error('Command execution failed: ', error)
+            }
         })
 
         elementWrapper = createElementWrapper(selectWrapper, jsonElement.id)
@@ -314,11 +407,15 @@ function createElementFromJSON(jsonElement) {
         const valueLabel = document.createElement('span')
         valueLabel.innerText = range.value
 
-        // range.addEventListener('input', () => eval(jsonElement.command))
         range.addEventListener('input', function () {
             valueLabel.innerText = range.value
-            const value = range.value
-            eval(jsonElement.command)
+            try {
+                // values available within the command
+                const value = range.value
+                eval(jsonElement.command)
+            } catch (error) {
+                console.error('Command execution failed: ', error)
+            }
         })
 
         rangeLabel.appendChild(nameLabel)
@@ -362,11 +459,7 @@ function createElementFromJSON(jsonElement) {
     // Apply the element's position from JSON
     elementWrapper.style.left = jsonElement.position.x + 'px'
     elementWrapper.style.top = jsonElement.position.y + 'px'
-
-    // Append the recreated element to the UI container
-    // document.getElementById('uiContainer').appendChild(elementWrapper)
     document.getElementById('uiContainer').appendChild(elementWrapper)
-    // }
 }
 
 // =================== ui element utilities ===================
@@ -383,19 +476,12 @@ function dragMouseDown(e) {
     const uiContainerTop = document
         .getElementById('uiContainer')
         .getBoundingClientRect().top
+
     offsetX = e.clientX - currentDragElement.getBoundingClientRect().left
     offsetY =
         e.clientY -
         currentDragElement.getBoundingClientRect().top +
         uiContainerTop
-
-    console.log('Initial Mouse Position:', e.clientX, e.clientY)
-    console.log(
-        'Initial Element Position:',
-        currentDragElement.style.left,
-        currentDragElement.style.top
-    )
-    console.log('Calculated Offsets:', offsetX, offsetY)
 
     document.onmousemove = elementDrag
     document.onmouseup = closeDragElement
@@ -418,18 +504,16 @@ function closeDragElement() {
 
     // Update the associated JSON's position after dragging stops
     const elementId = currentDragElement.dataset.id
+    // to let id & elementId be string or number, use ==
     const jsonElement = window.ui.json.find(el => el.id == elementId)
 
     if (jsonElement) {
         // Get the current position directly (relative to the parent container)
         jsonElement.position.x = parseInt(currentDragElement.style.left, 10)
         jsonElement.position.y = parseInt(currentDragElement.style.top, 10)
-
-        // // save the updated state to localStorage
-        // loadJsonToStorage()
     }
     // save the updated state to localStorage
-    loadJsonToStorage()
+    jsonToStorage()
 }
 
 // Functions to recreate all elements from stored JSON
@@ -447,42 +531,18 @@ function loadElementsFromJSON() {
 
 // =================== localStorage utilities ===================
 
-// let containerDiv = 'uiContainer' // div for dynamically added UI elements
-let localStorageName // default localStorage name for caching current elements
-export function setStorageName(name) {
-    localStorageName = name
-    // set storage to empty obj if not existing element??
-}
+const minJsonString =
+    '[{"command":"ui.anim.start()","id":1728678676436,"name":"start","position":{"x":29,"y":33},"type":"button"},{"command":"ui.anim.stop()","id":1728927362120,"name":"stop","position":{"x":92,"y":34},"type":"button"},{"command":"ui.reset()","id":1728927569824,"name":"reset","position":{"x":59,"y":68},"type":"button"},{"command":"ui.anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":330,"y":37},"monitor":"ui.model.ticks","fps":"10"}]'
+const minJson = JSON.parse(minJsonString)
 
-// move ui.json to localStorage
-function loadJsonToStorage() {
-    if (!localStorageName) return
+function jsonToStorage() {
     const jsonString = JSON.stringify(window.ui.json) // Convert to string
     localStorage.setItem(localStorageName, jsonString) // Save it to localStorage
 }
 
-// move localStorage to ui.json and create elements from ui.json
-export function clearElements() {
-    if (!localStorageName) return
-    localStorage.removeItem(localStorageName)
-    window.ui.json = []
-}
-// export function checkMinElements() {
-//     if (getStorage()) return
-//     window.ui.json = minJson
-//     loadJsonToStorage()
-//     // createElements()
-// }
-function getStorage() {
-    return localStorage.getItem(localStorageName)
-}
-const jsonString =
-    '[{"command":"ui.anim.start()","id":1728678676436,"name":"start","position":{"x":29,"y":33},"type":"button"},{"command":"ui.anim.stop()","id":1728927362120,"name":"stop","position":{"x":92,"y":34},"type":"button"},{"command":"ui.reset()","id":1728927569824,"name":"reset","position":{"x":59,"y":68},"type":"button"},{"command":"ui.anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":330,"y":37},"monitor":"ui.model.ticks","fps":"10"}]'
-const minJson = JSON.parse(jsonString)
+// =================== functions called by users html file ===================
 
-// =================== misc utilities ===================
-
-// let AppName
+let localStorageName
 export function setAppState(
     model,
     view,
@@ -490,7 +550,7 @@ export function setAppState(
     storageName = model.constructor.name
 ) {
     Object.assign(window.ui, { model, view, anim })
-    setStorageName(storageName)
+    localStorageName = storageName
 
     anim.stop() // stop the animation, use uielements to control
     view.draw() // draw once to see the model before running animator
@@ -498,37 +558,41 @@ export function setAppState(
     console.log('localStorageName', localStorageName)
 }
 
+// was loadUIState, now includes minJson for new html file
 export function createElements(useMinElements = true) {
-    if (!localStorageName) return
-    const savedState = getStorage()
+    const savedState = localStorage.getItem(localStorageName)
     if (savedState) {
         window.ui.json = JSON.parse(savedState) // Convert back to array
-        // loadElementsFromJSON() // Load the elements into the UI
     } else if (useMinElements) {
         window.ui.json = minJson
     } else {
         return
     }
     loadElementsFromJSON()
-
-    // const savedState = getStorage()
-    // if (savedState) {
-    //     window.ui.json = JSON.parse(savedState) // Convert back to array
-    //     loadElementsFromJSON() // Load the elements into the UI
-    // }
 }
 
 // a bit risky: depends on model, view, anim stored in ui by app
-export function reset() {
+function reset() {
     window.ui.model.reset()
     // window.ui.view.reset()
     window.ui.anim.reset()
+    window.ui.view.draw()
+}
+
+function setJson(json) {
+    window.ui.json = json
+    jsonToStorage()
+    loadElementsFromJSON()
 }
 
 Object.assign(window.ui, {
+    // used in divs.html
     showPopup,
     submitForm,
     cancel,
+    // used by commands
     reset,
     util,
+    // used in devtools
+    setJson,
 })

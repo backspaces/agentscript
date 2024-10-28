@@ -1,23 +1,32 @@
-    <!-- Control panel for adding UI elements -->
-    <div id="controlPanel">
-        <button onclick="window.ui.showPopup('button')">Add Button</button>
-        <button onclick="window.ui.showPopup('range')">Add Slider</button>
-        <button onclick="window.ui.showPopup('checkbox')">Add Checkbox</button>
-        <button onclick="window.ui.showPopup('dropdown')">Add Dropdown</button>
-        <button onclick="window.ui.showPopup('output')">Add Monitor</button>
-    </div>
+<!-- Control panel for adding UI elements -->
+<div id="controlPanel">
+    <button onclick="window.ui.showPopup('button')">Add Button</button>
+    <button onclick="window.ui.showPopup('range')">Add Slider</button>
+    <button onclick="window.ui.showPopup('checkbox')">Add Checkbox</button>
+    <button onclick="window.ui.showPopup('dropdown')">Add Dropdown</button>
+    <button onclick="window.ui.showPopup('output')">Add Monitor</button>
+</div>
 
-    <!-- Modal (Popup) form for initializing elements -->
-    <div id="popupModal" class="modal">
-        <div class="modal-content">
-            <div id="modal-header"></div>
-            <div id="formContainer"></div>
-            <div class="modal-footer">
-                <button onclick="window.ui.cancel()">Cancel</button>
-                <button onclick="window.ui.submitForm()">Add Element</button>
-            </div>
+<!-- Modal (Popup) form for initializing elements -->
+<div id="popupModal" class="modal">
+    <div class="modal-content">
+        <div id="modal-header"></div>
+        <div id="formContainer"></div>
+        <div class="modal-footer">
+            <button onclick="window.ui.cancel()">Cancel</button>
+            <button onclick="window.ui.submitForm()">Add Element</button>
         </div>
     </div>
+</div>
 
-    <!-- Container for dynamically added UI elements -->
-    <div id="uiContainer"></div>
+<!-- Popup menu for UI elements -->
+<div id="popupMenu" class="popup-menu" style="display: none; position: absolute;">
+    <ul>
+        <li id="editOption">Edit</li>
+        <li id="deleteOption">Delete</li>
+        <li id="cancelOption">Cancel</li>
+    </ul>
+</div>
+
+<!-- Container for dynamically added UI elements -->
+<div id="uiContainer"></div>

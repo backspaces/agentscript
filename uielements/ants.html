@@ -10,9 +10,12 @@
 <body>
     <div id="modelDiv"></div>
     <script type="module">
-        // Only additional import added to basic models
+        // ====== Import uielements.js, only additional import needed ======
+
         import * as UI from './uielements.js'
         // import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
+
+        // ====== The views2 code as-is ======
 
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         // import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
@@ -42,9 +45,6 @@
 
         UI.setAppState(model, view, anim) // connect model to uielements
         UI.createElements() // create elements from local storage
-
-        console.log('util', ui.util);
-
 
     </script>
 

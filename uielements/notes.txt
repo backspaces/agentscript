@@ -1,30 +1,35 @@
 Examples:
+
 * Buttons
-Start
+start
 ui.anim.start()
-Stop
+stop
 ui.anim.stop()
-Reset
+reset
 ui.reset()
 
 
 * Slider
-Speed
+speed
 ui.model.speed = range.value
 0 10 1 1
 
+fps
+ui.anim.setFps(value)
+0 60 1 30
+
 * Checkbox
-Pause
+pause
 checkbox.checked ? ui.anim.stop() : ui.anim.start()
 
 * Dropdown
-Shape
+shape
 ui.view.drawOptions.turtlesShape = select.value
 circle, dart, person, bug
 bug
 
 * Monitor
-Ticks
+ticks
 ui.model.ticks
 
 
@@ -34,6 +39,11 @@ ui.view.drawOptions.turtlesSize = value
 
 ui.view.downloadCanvas()
 ui.util.downloadJson(ui.json)
+
+    window.selectedElementId = wrapper.dataset.id
+    window.selectedWrapper = wrapper
+wrapper.dataset.id
+
 =======================================
 To convert any of the view2/ demos:
 Add: import * as UI from 'https://code.agentscript.org/uielements/uielements.js'

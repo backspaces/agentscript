@@ -95,3 +95,36 @@ body {
     /* display: inline-block; */
     float: right;
 }
+
+/* Popup menu styles */
+.popup-menu {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    font-size: 14px;
+}
+
+.popup-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.popup-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.popup-menu li:hover {
+    background-color: #f0f0f0;
+}
+
+.popup-menu li:last-child {
+    border-bottom: none;
+}
