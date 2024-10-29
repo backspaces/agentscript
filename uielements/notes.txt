@@ -22,6 +22,9 @@ ui.anim.setFps(value)
 pause
 checkbox.checked ? ui.anim.stop() : ui.anim.start()
 
+run
+checkbox.checked ? ui.anim.start() : ui.anim.stop()
+
 * Dropdown
 shape
 ui.view.drawOptions.turtlesShape = select.value

@@ -1,5 +1,4 @@
-// import * as util from 'https://code.agentscript.org/src/utils.js'
-import * as util from '../src/utils.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
 
 // =================== initialization ===================
 // loading links
@@ -330,7 +329,16 @@ function createElementFromJSON(jsonElement) {
         const button = document.createElement('button')
         button.innerText = jsonElement.name
 
-        button.addEventListener('click', () => eval(jsonElement.command))
+        // button.addEventListener('click', () => eval(jsonElement.command))
+        button.addEventListener('click', function () {
+            try {
+                // values available within the command
+                const { model, view, anim, reset, util } = ui
+                eval(jsonElement.command)
+            } catch (error) {
+                console.error('Command execution failed: ', error)
+            }
+        })
 
         elementWrapper = createElementWrapper(button, jsonElement.id)
     } else if (jsonElement.type === 'checkbox') {
@@ -347,6 +355,7 @@ function createElementFromJSON(jsonElement) {
         checkbox.addEventListener('change', function () {
             try {
                 // values available within the command
+                const { model, view, anim, reset, util } = ui
                 const value = checkbox
                 const checked = checkbox.checked
                 eval(jsonElement.command)
@@ -382,6 +391,7 @@ function createElementFromJSON(jsonElement) {
         select.addEventListener('change', function () {
             try {
                 // values available within the command
+                const { model, view, anim, reset, util } = ui
                 const value = select.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -411,6 +421,7 @@ function createElementFromJSON(jsonElement) {
             valueLabel.innerText = range.value
             try {
                 // values available within the command
+                const { model, view, anim, reset, util } = ui
                 const value = range.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -438,6 +449,7 @@ function createElementFromJSON(jsonElement) {
         function checkValue() {
             let currentValue
             try {
+                const { model, view, anim, reset, util } = ui
                 currentValue = eval(jsonElement.monitor)
             } catch (error) {
                 console.error('Monitor command execution failed: ', error)
