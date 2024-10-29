@@ -543,18 +543,20 @@ function loadElementsFromJSON() {
 
 // =================== localStorage utilities ===================
 
+let localStorageName
+
 const minJsonString =
-    '[{"command":"ui.anim.start()","id":1728678676436,"name":"start","position":{"x":29,"y":33},"type":"button"},{"command":"ui.anim.stop()","id":1728927362120,"name":"stop","position":{"x":92,"y":34},"type":"button"},{"command":"ui.reset()","id":1728927569824,"name":"reset","position":{"x":59,"y":68},"type":"button"},{"command":"ui.anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":330,"y":37},"monitor":"ui.model.ticks","fps":"10"}]'
+    '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":23,"y":70},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":331,"y":33},"monitor":"model.ticks","fps":"10"},{"id":1730215309523,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":25,"y":37},"checked":false},{"id":1730223001632,"type":"dropdown","name":"shaape","command":"view.drawOptions.turtlesShape = value","position":{"x":86,"y":36},"options":["circle","dart","person","bug"],"selected":"bug"}]'
 const minJson = JSON.parse(minJsonString)
+const Json9String =
+    '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":32,"y":63},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":179,"y":38},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":336,"y":37},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchSize","command":"view.reset(value)","position":{"x":191,"y":155},"min":"1","max":"15","step":"1","value":"10"},{"id":1729463877025,"type":"button","name":"downloadCanvas","command":"view.downloadCanvas()","position":{"x":56,"y":232}},{"id":1729464380401,"type":"range","name":"turtleSize","command":"view.drawOptions.turtlesSize = value","position":{"x":33,"y":159},"min":"1","max":"10","step":"1","value":"3"},{"id":1729535684833,"type":"button","name":"downloadJson","command":"util.downloadJson(json)","position":{"x":190,"y":231}},{"id":1729638667060,"type":"dropdown","name":"shape","command":"view.drawOptions.turtlesShape = value","position":{"x":97,"y":37},"options":["circle","dart","person","bug"],"selected":"bug"},{"id":1730141024864,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":28,"y":32},"checked":false}]'
+const Json9 = JSON.parse(Json9String)
 
 function jsonToStorage() {
     const jsonString = JSON.stringify(window.ui.json) // Convert to string
     localStorage.setItem(localStorageName, jsonString) // Save it to localStorage
 }
 
-// =================== functions called by users html file ===================
-
-let localStorageName
 export function setAppState(
     model,
     view,
@@ -573,7 +575,7 @@ export function setAppState(
 // was loadUIState, now includes minJson for new html file
 export function createElements(useMinElements = true) {
     const savedState = localStorage.getItem(localStorageName)
-    if (savedState) {
+    if (savedState && savedState.length > 0) {
         window.ui.json = JSON.parse(savedState) // Convert back to array
     } else if (useMinElements) {
         window.ui.json = minJson
@@ -582,6 +584,8 @@ export function createElements(useMinElements = true) {
     }
     loadElementsFromJSON()
 }
+
+// =================== functions called by users commands ===================
 
 // a bit risky: depends on model, view, anim stored in ui by app
 function reset() {
@@ -607,4 +611,8 @@ Object.assign(window.ui, {
     util,
     // used in devtools
     setJson,
+    minJsonString,
+    minJson,
+    Json9String,
+    Json9,
 })

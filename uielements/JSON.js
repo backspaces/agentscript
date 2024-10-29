@@ -1,32 +1,23 @@
+// prettier-ignore
 [
   {
-    "command": "ui.anim.stop()",
-    "id": 1728927362120,
-    "name": "stop",
-    "position": {
-      "x": 97,
-      "y": 33
-    },
-    "type": "button"
-  },
-  {
-    "command": "ui.reset()",
+    "command": "reset()",
     "id": 1728927569824,
     "name": "reset",
     "position": {
-      "x": 59,
-      "y": 68
+      "x": 32,
+      "y": 63
     },
     "type": "button"
   },
   {
-    "command": "ui.anim.setFps(value)",
+    "command": "anim.setFps(value)",
     "id": 1728682054456,
     "max": "60",
     "min": "0",
     "name": "fps",
     "position": {
-      "x": 164,
+      "x": 179,
       "y": 38
     },
     "step": "1",
@@ -38,20 +29,21 @@
     "type": "output",
     "name": "ticks",
     "position": {
-      "x": 330,
+      "x": 336,
       "y": 37
     },
-    "monitor": "ui.model.ticks",
-    "fps": "10"
+    "monitor": "model.ticks",
+    "fps": "10",
+    "command": null
   },
   {
     "id": 1729463191305,
     "type": "range",
     "name": "patchSize",
-    "command": "ui.view.reset(value)",
+    "command": "view.reset(value)",
     "position": {
-      "x": 19,
-      "y": 143
+      "x": 191,
+      "y": 155
     },
     "min": "1",
     "max": "15",
@@ -62,20 +54,20 @@
     "id": 1729463877025,
     "type": "button",
     "name": "downloadCanvas",
-    "command": "ui.view.downloadCanvas()",
+    "command": "view.downloadCanvas()",
     "position": {
-      "x": 27,
-      "y": 217
+      "x": 56,
+      "y": 232
     }
   },
   {
     "id": 1729464380401,
     "type": "range",
     "name": "turtleSize",
-    "command": "ui.view.drawOptions.turtlesSize = value",
+    "command": "view.drawOptions.turtlesSize = value",
     "position": {
-      "x": 304,
-      "y": 144
+      "x": 33,
+      "y": 159
     },
     "min": "1",
     "max": "10",
@@ -86,30 +78,20 @@
     "id": 1729535684833,
     "type": "button",
     "name": "downloadJson",
-    "command": "ui.util.downloadJson(ui.json)",
+    "command": "util.downloadJson(json)",
     "position": {
-      "x": 27,
-      "y": 251
-    }
-  },
-  {
-    "id": 1729637941009,
-    "type": "button",
-    "name": "start",
-    "command": "ui.anim.start()",
-    "position": {
-      "x": 30,
-      "y": 35
+      "x": 190,
+      "y": 231
     }
   },
   {
     "id": 1729638667060,
     "type": "dropdown",
     "name": "shape",
-    "command": "ui.view.drawOptions.turtlesShape = value",
+    "command": "view.drawOptions.turtlesShape = value",
     "position": {
-      "x": 196,
-      "y": 146
+      "x": 97,
+      "y": 37
     },
     "options": [
       "circle",
@@ -118,5 +100,16 @@
       "bug"
     ],
     "selected": "bug"
+  },
+  {
+    "id": 1730141024864,
+    "type": "checkbox",
+    "name": "run",
+    "command": "checked ? anim.start() : anim.stop()",
+    "position": {
+      "x": 28,
+      "y": 32
+    },
+    "checked": false
   }
 ]
