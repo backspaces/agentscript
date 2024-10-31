@@ -1,4 +1,5 @@
-import * as util from 'https://code.agentscript.org/src/utils.js'
+// import * as util from 'https://code.agentscript.org/src/utils.js'
+import * as util from '../src/utils.js'
 
 // =================== initialization ===================
 // loading links
@@ -322,6 +323,7 @@ export function submitForm() {
 
 // =================== json to html element ===================
 function createElementFromJSON(jsonElement) {
+    // should this also set local storage?
     let elementWrapper
 
     // Handle element creation based on type
@@ -333,7 +335,7 @@ function createElementFromJSON(jsonElement) {
         button.addEventListener('click', function () {
             try {
                 // values available within the command
-                const { model, view, anim, reset, util } = ui
+                const { model, view, anim, reset, util, json } = ui
                 eval(jsonElement.command)
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -355,7 +357,7 @@ function createElementFromJSON(jsonElement) {
         checkbox.addEventListener('change', function () {
             try {
                 // values available within the command
-                const { model, view, anim, reset, util } = ui
+                const { model, view, anim, reset, util, json } = ui
                 const value = checkbox
                 const checked = checkbox.checked
                 eval(jsonElement.command)
@@ -391,7 +393,7 @@ function createElementFromJSON(jsonElement) {
         select.addEventListener('change', function () {
             try {
                 // values available within the command
-                const { model, view, anim, reset, util } = ui
+                const { model, view, anim, reset, util, json } = ui
                 const value = select.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -421,7 +423,7 @@ function createElementFromJSON(jsonElement) {
             valueLabel.innerText = range.value
             try {
                 // values available within the command
-                const { model, view, anim, reset, util } = ui
+                const { model, view, anim, reset, util, json } = ui
                 const value = range.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -449,7 +451,7 @@ function createElementFromJSON(jsonElement) {
         function checkValue() {
             let currentValue
             try {
-                const { model, view, anim, reset, util } = ui
+                const { model, view, anim, reset, util, json } = ui
                 currentValue = eval(jsonElement.monitor)
             } catch (error) {
                 console.error('Monitor command execution failed: ', error)
@@ -545,16 +547,32 @@ function loadElementsFromJSON() {
 
 let localStorageName
 
-const minJsonString =
+const minJsonString0 =
     '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":23,"y":70},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":331,"y":33},"monitor":"model.ticks","fps":"10"},{"id":1730215309523,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":25,"y":37},"checked":false},{"id":1730223001632,"type":"dropdown","name":"shaape","command":"view.drawOptions.turtlesShape = value","position":{"x":86,"y":36},"options":["circle","dart","person","bug"],"selected":"bug"}]'
+const minJsonString =
+    '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":23,"y":70},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":331,"y":33},"monitor":"model.ticks","fps":"10"},{"id":1730215309523,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":25,"y":37},"checked":false},{"id":1730223001632,"type":"dropdown","name":"shaape","command":"view.drawOptions.turtlesShape = value","position":{"x":86,"y":36},"options":["circle","dart","person","bug"],"selected":"bug"},{"id":1730394519738,"type":"button","name":"downloadJson","command":"util.downloadJsonModule(json)","position":{"x":390,"y":44}}]'
 const minJson = JSON.parse(minJsonString)
 const Json9String =
-    '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":32,"y":63},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":179,"y":38},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":336,"y":37},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchSize","command":"view.reset(value)","position":{"x":191,"y":155},"min":"1","max":"15","step":"1","value":"10"},{"id":1729463877025,"type":"button","name":"downloadCanvas","command":"view.downloadCanvas()","position":{"x":56,"y":232}},{"id":1729464380401,"type":"range","name":"turtleSize","command":"view.drawOptions.turtlesSize = value","position":{"x":33,"y":159},"min":"1","max":"10","step":"1","value":"3"},{"id":1729535684833,"type":"button","name":"downloadJson","command":"util.downloadJson(json)","position":{"x":190,"y":231}},{"id":1729638667060,"type":"dropdown","name":"shape","command":"view.drawOptions.turtlesShape = value","position":{"x":97,"y":37},"options":["circle","dart","person","bug"],"selected":"bug"},{"id":1730141024864,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":28,"y":32},"checked":false}]'
+    '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":32,"y":63},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":179,"y":38},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":336,"y":37},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchSize","command":"view.reset(value)","position":{"x":191,"y":155},"min":"1","max":"15","step":"1","value":"10"},{"id":1729463877025,"type":"button","name":"downloadCanvas","command":"view.downloadCanvas()","position":{"x":56,"y":232}},{"id":1729464380401,"type":"range","name":"turtleSize","command":"view.drawOptions.turtlesSize = value","position":{"x":33,"y":159},"min":"1","max":"10","step":"1","value":"3"},{"id":1729535684833,"type":"button","name":"downloadJson","command":"util.downloadJsonModule(json)","position":{"x":190,"y":231}},{"id":1729638667060,"type":"dropdown","name":"shape","command":"view.drawOptions.turtlesShape = value","position":{"x":97,"y":37},"options":["circle","dart","person","bug"],"selected":"bug"},{"id":1730141024864,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":28,"y":32},"checked":false}]'
 const Json9 = JSON.parse(Json9String)
 
 function jsonToStorage() {
     const jsonString = JSON.stringify(window.ui.json) // Convert to string
     localStorage.setItem(localStorageName, jsonString) // Save it to localStorage
+}
+
+function storageToJson() {
+    const savedState = localStorage.getItem(localStorageName)
+    return JSON.parse(savedState)
+}
+
+// function clearElements(backup = true) {
+//     if (backup) downloadJson() // what's best??
+//     localStorage.removeItem(localStorageName)
+// }
+
+function downloadJsonModule() {
+    util.downloadJsonModule(window.ui.json)
 }
 
 export function setAppState(
@@ -573,14 +591,19 @@ export function setAppState(
 }
 
 // was loadUIState, now includes minJson for new html file
-export function createElements(useMinElements = true) {
-    const savedState = localStorage.getItem(localStorageName)
-    if (savedState && savedState.length > 0) {
-        window.ui.json = JSON.parse(savedState) // Convert back to array
-    } else if (useMinElements) {
-        window.ui.json = minJson
+export function createElements(json = true) {
+    if (typeof json === 'object') {
+        window.ui.json = json
+        jsonToStorage()
     } else {
-        return
+        const savedState = localStorage.getItem(localStorageName)
+        if (savedState) {
+            window.ui.json = JSON.parse(savedState) // Convert back to array
+        } else if (json) {
+            window.ui.json = minJson
+        } else {
+            return
+        }
     }
     loadElementsFromJSON()
 }
@@ -600,6 +623,9 @@ function setJson(json) {
     jsonToStorage()
     loadElementsFromJSON()
 }
+function getJson() {
+    return window.ui.json
+}
 
 Object.assign(window.ui, {
     // used in divs.html
@@ -611,8 +637,9 @@ Object.assign(window.ui, {
     util,
     // used in devtools
     setJson,
-    minJsonString,
+    getJson,
+    storageToJson,
+    downloadJsonModule,
     minJson,
-    Json9String,
     Json9,
 })

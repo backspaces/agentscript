@@ -13,9 +13,9 @@
         import TwoDrawOptions from 'https://code.agentscript.org/views2/exitOptions.js'
 
         const patchSize = 10
-        const options = TwoDraw.fullScreenOptions(patchSize)
+        const modelOptions = TwoDraw.fullScreenOptions(patchSize)
 
-        const model = new Model(options)
+        const model = new Model(modelOptions)
         await model.startup()
         model.setup()
 

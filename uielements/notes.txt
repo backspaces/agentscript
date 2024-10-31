@@ -41,7 +41,7 @@ ui.view.reset(value)
 ui.view.drawOptions.turtlesSize = value
 
 ui.view.downloadCanvas()
-ui.util.downloadJson(ui.json)
+ui.util.downloadJsonModule(ui.json)
 
     window.selectedElementId = wrapper.dataset.id
     window.selectedWrapper = wrapper
