@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ants</title>
+
+    <!-- See uielements.css, uploaded in uielements.js -->
 </head>
 
 <body>
-    <div id="modelDiv"></div>
+    <!-- See divs.html, uploaded in uielements.js -->
+
     <script type="module">
         // ====== Import uielements.js, only additional import needed ======
 
         import * as UI from './uielements.js'
-        // import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
-        // import json from './antsJson.js'
-        // console.log(json);
+        // import elements from './antsElements.js'
 
         // ====== The views2 code as-is ======
 
@@ -45,10 +43,11 @@
         anim.setSteps(-1) // in case you want to run forever
 
         UI.setAppState(model, view, anim) // connect model to uielements
-        // UI.createElements(json) // create elements from local storage
         UI.createElements() // create elements from local storage
+        // UI.createElements(elements) // create elements from import
 
     </script>
+    <div id="modelDiv"></div>
 
 </body>
 

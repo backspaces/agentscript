@@ -5,6 +5,12 @@ body {
     user-select: none;
 }
 
+#modelDiv {
+    /* display: inline-block; */
+    float: right;
+}
+
+/* The ui elements */
 #uiContainer {
     width: 40vw;
     /* width: 400px; */
@@ -91,11 +97,6 @@ body {
     display: block;
 }
 
-#modelDiv {
-    /* display: inline-block; */
-    float: right;
-}
-
 /* Popup menu styles */
 .popup-menu {
     display: none;
@@ -127,4 +128,20 @@ body {
 
 .popup-menu li:last-child {
     border-bottom: none;
+}
+
+#popupModal .modal-content input[type='text'],
+#popupModal .modal-content input[type='number'],
+#popupModal .modal-content input[type='checkbox'],
+#popupModal .modal-content textarea {
+    width: 100%; /* Makes inputs fill the width of the modal content */
+    padding: 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+#popupModal .modal-content label {
+    font-size: 14px;
+    margin-top: 8px;
+    display: inline-block;
 }

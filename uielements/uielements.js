@@ -9,6 +9,7 @@ link.href = 'uielements.css'
 link.type = 'text/css'
 document.head.appendChild(link)
 
+// load the divs.html
 await fetch('./divs.html')
     .then(response => response.text())
     .then(html => {
@@ -27,13 +28,13 @@ document.getElementById('uiContainer').addEventListener('contextmenu', e => {
 
 // =================== create ui forms for popups ===================
 
-let elementType = ''
-let currentDragElement = null
-let selectedWrapper
-let editingElementId = null
-let selectedElementId
-let offsetX = 0
-let offsetY = 0
+let elementType = '' // Holds the type of element being added or edited (e.g., 'button', 'checkbox').
+let currentDragElement = null // Tracks the element currently being dragged for smooth dragging.
+let selectedWrapper // Reference to the wrapper element of the selected element in the UI.
+let editingElementId = null // Holds the ID of the element currently being edited, if any.
+let selectedElementId // Stores the ID of the element selected in the popup menu for actions like edit or delete.
+let offsetX = 0 // Used to manage x-offset during dragging to align the element to cursor position.
+let offsetY = 0 // Used to manage y-offset during dragging to align the element to cursor position.
 
 // Show popup modal to create new elements, called from divs.html
 export function showPopup(type, jsonData = null) {
@@ -41,8 +42,13 @@ export function showPopup(type, jsonData = null) {
     const formContainer = document.getElementById('formContainer')
     formContainer.innerHTML = '' // Clear previous form inputs
 
-    // Set default modelTitle and add type-specific fields
-    let modelTitle = 'Button'
+    let modelTitle = 'Element'
+    if (type === 'button') modelTitle = 'Button'
+    else if (type === 'checkbox') modelTitle = 'Checkbox'
+    else if (type === 'dropdown') modelTitle = 'Dropdown'
+    else if (type === 'range') modelTitle = 'Slider'
+    else if (type === 'output') modelTitle = 'Monitor'
+
     let formContent = `
     <label for="name">Name:</label>
     <input type="text" id="elementName" value="${
@@ -50,7 +56,6 @@ export function showPopup(type, jsonData = null) {
     }" required><br>
     `
 
-    // Include the command field for all types except 'output'
     if (type !== 'output') {
         formContent += `
     <label for="command">Command:</label>
@@ -60,21 +65,18 @@ export function showPopup(type, jsonData = null) {
     `
     }
 
-    // Append specific fields based on the type of element
     if (type === 'checkbox') {
-        modelTitle = 'Checkbox'
         formContent += `
-    <label for="checked">Checked:</label>
+    <label for="elementChecked">Checked:</label>
     <input type="checkbox" id="elementChecked" ${
         jsonData && jsonData.checked ? 'checked' : ''
     }><br>
     `
     } else if (type === 'dropdown') {
-        modelTitle = 'Dropdown'
         formContent += `
     <label for="values">Dropdown Options (comma separated):</label>
     <input type="text" id="elementOptions" value="${
-        jsonData ? jsonData.options.join(', ') : ''
+        jsonData && jsonData.options ? jsonData.options.join(', ') : ''
     }" required><br>
     <label for="selected">Selected Value:</label>
     <input type="text" id="elementSelected" value="${
@@ -82,7 +84,6 @@ export function showPopup(type, jsonData = null) {
     }" required><br>
     `
     } else if (type === 'range') {
-        modelTitle = 'Slider'
         formContent += `
     <label for="min">Min:</label>
     <input type="number" id="elementMin" value="${
@@ -101,8 +102,14 @@ export function showPopup(type, jsonData = null) {
         jsonData ? jsonData.value : ''
     }" required><br>
     `
+        // } else if (type === 'button') {
+        //     formContent += `
+        // <label for="buttonText">Button Text:</label>
+        // <input type="text" id="elementButtonText" value="${
+        //     jsonData ? jsonData.name : ''
+        // }" required><br>
+        // `
     } else if (type === 'output') {
-        modelTitle = 'Monitor'
         formContent += `
     <label for="monitor">Value/Function to Monitor:</label>
     <input type="text" id="elementMonitor" value="${
@@ -115,12 +122,9 @@ export function showPopup(type, jsonData = null) {
     `
     }
 
-    // Set form header based on whether we're adding or editing
     document.getElementById('modal-header').innerText = jsonData
         ? `Edit ${modelTitle}`
         : `Add ${modelTitle}`
-
-    // Set the button label in the modal footer
     document.querySelector('.modal-footer button:last-child').innerText =
         jsonData ? 'Edit Element' : 'Add Element'
 
@@ -130,6 +134,100 @@ export function showPopup(type, jsonData = null) {
     // Track if editing an existing element
     editingElementId = jsonData ? jsonData.id : null
 }
+
+// export function showPopupxx(type, jsonData = null) {
+//     elementType = type
+//     const formContainer = document.getElementById('formContainer')
+//     formContainer.innerHTML = '' // Clear previous form inputs
+
+//     // Set default modelTitle and add type-specific fields
+//     let modelTitle = 'Button'
+//     let formContent = `
+//     <label for="name">Name:</label>
+//     <input type="text" id="elementName" value="${
+//         jsonData ? jsonData.name : ''
+//     }" required><br>
+//     `
+
+//     // Include the command field for all types except 'output'
+//     if (type !== 'output') {
+//         formContent += `
+//     <label for="command">Command:</label>
+//     <input type="text" id="elementCommand" value="${
+//         jsonData ? jsonData.command : ''
+//     }" required><br>
+//     `
+//     }
+
+//     if (type === 'checkbox') {
+//         modelTitle = 'Checkbox'
+//         formContent += `
+//     <label for="checked">Checked:</label>
+//     <input type="checkbox" id="elementChecked" ${
+//         jsonData && jsonData.checked ? 'checked' : ''
+//     }><br>
+//     `
+//     } else if (type === 'dropdown') {
+//         modelTitle = 'Dropdown'
+//         formContent += `
+//     <label for="values">Dropdown Options (comma separated):</label>
+//     <input type="text" id="elementOptions" value="${
+//         jsonData ? jsonData.options.join(', ') : ''
+//     }" required><br>
+//     <label for="selected">Selected Value:</label>
+//     <input type="text" id="elementSelected" value="${
+//         jsonData ? jsonData.selected : ''
+//     }" required><br>
+//     `
+//     } else if (type === 'range') {
+//         modelTitle = 'Slider'
+//         formContent += `
+//     <label for="min">Min:</label>
+//     <input type="number" id="elementMin" value="${
+//         jsonData ? jsonData.min : ''
+//     }" required><br>
+//     <label for="max">Max:</label>
+//     <input type="number" id="elementMax" value="${
+//         jsonData ? jsonData.max : ''
+//     }" required><br>
+//     <label for="step">Step:</label>
+//     <input type="number" id="elementStep" value="${
+//         jsonData ? jsonData.step : 1
+//     }" required><br>
+//     <label for="value">Current Value:</label>
+//     <input type="number" id="elementValue" value="${
+//         jsonData ? jsonData.value : ''
+//     }" required><br>
+//     `
+//     } else if (type === 'output') {
+//         modelTitle = 'Monitor'
+//         formContent += `
+//     <label for="monitor">Value/Function to Monitor:</label>
+//     <input type="text" id="elementMonitor" value="${
+//         jsonData ? jsonData.monitor : ''
+//     }" required><br>
+//     <label for="fps">Frames per Second (FPS):</label>
+//     <input type="number" id="elementFps" value="${
+//         jsonData ? jsonData.fps : 10
+//     }"><br>
+//     `
+//     }
+
+//     // Set form header based on whether we're adding or editing
+//     document.getElementById('modal-header').innerText = jsonData
+//         ? `Edit ${modelTitle}`
+//         : `Add ${modelTitle}`
+
+//     // Set the button label in the modal footer
+//     document.querySelector('.modal-footer button:last-child').innerText =
+//         jsonData ? 'Edit Element' : 'Add Element'
+
+//     formContainer.innerHTML = formContent
+//     document.getElementById('popupModal').style.display = 'flex'
+
+//     // Track if editing an existing element
+//     editingElementId = jsonData ? jsonData.id : null
+// }
 
 // Cancel the popup
 export function cancel() {
@@ -171,12 +269,10 @@ document.getElementById('deleteOption').onclick = function (e) {
     console.log('Delete option clicked')
     const confirmDelete = confirm('Do you want to delete this control?')
     if (confirmDelete) {
-        // const wrapper = window.selectedWrapper
         const wrapper = selectedWrapper
         wrapper.remove() // Remove the element from the dom
 
         // Remove the element from the JSON array using the id
-        // const elementId = window.selectedElementId
         const elementId = selectedElementId
         // to let id & elementId be string or number, use !=
         window.ui.json = window.ui.json.filter(el => el.id != elementId)
@@ -207,23 +303,146 @@ document.getElementById('editOption').onclick = function (e) {
 }
 
 // Function to show the popup menu and start listening for outside clicks
+// function showPopupMenu(e, wrapper) {
+//     const popupMenu = document.getElementById('popupMenu')
+//     popupMenu.style.display = 'block'
+//     popupMenu.style.left = `${e.pageX}px`
+//     popupMenu.style.top = `${e.pageY}px`
+
+//     selectedElementId = wrapper.dataset.id
+//     selectedWrapper = wrapper
+
+//     // Start listening for clicks outside of the menu when it is shown
+//     document.addEventListener('mousedown', handleOutsideClick)
+
+//     // Prevent further propagation
+//     e.stopPropagation()
+// }
 function showPopupMenu(e, wrapper) {
+    e.preventDefault() // Prevent default behavior (e.g., text selection)
+
+    // Set the selected element ID to reference in edit or delete actions
+    selectedElementId = wrapper.dataset.id
+
+    // Position the popup menu near the mouse click
     const popupMenu = document.getElementById('popupMenu')
     popupMenu.style.display = 'block'
     popupMenu.style.left = `${e.pageX}px`
     popupMenu.style.top = `${e.pageY}px`
 
-    // window.selectedElementId = wrapper.dataset.id
-    // window.selectedWrapper = wrapper
-    selectedElementId = wrapper.dataset.id
-    selectedWrapper = wrapper
-
-    // Start listening for clicks outside of the menu when it is shown
-    document.addEventListener('mousedown', handleOutsideClick)
-
-    // Prevent further propagation
-    e.stopPropagation()
+    // Listen for mouseup event to handle menu option selection
+    document.addEventListener('mouseup', handleMouseUp)
 }
+function handleMouseUp(event) {
+    const popupMenu = document.getElementById('popupMenu')
+    popupMenu.style.display = 'none'
+    document.removeEventListener('mouseup', handleMouseUp)
+
+    const selectedOption = event.target
+
+    if (selectedOption.id === 'editOption') {
+        const elementId = selectedElementId
+        const jsonElement = window.ui.json.find(el => el.id == elementId)
+
+        if (jsonElement) {
+            showPopup(jsonElement.type, jsonElement) // Open the form in edit mode
+        }
+    } else if (selectedOption.id === 'deleteOption') {
+        const confirmDelete = confirm('Do you want to delete this control?')
+        if (confirmDelete) {
+            const wrapper = document.querySelector(
+                `[data-id="${selectedElementId}"]`
+            )
+            if (wrapper) {
+                wrapper.remove()
+                window.ui.json = window.ui.json.filter(
+                    el => el.id !== selectedElementId
+                )
+                jsonToStorage() // Save updated state
+            }
+        }
+    }
+
+    selectedElementId = null
+}
+
+// function showPopupMenu(event, wrapper) {
+//     event.preventDefault() // Prevent default actions, such as text selection
+//     event.stopPropagation() // Stop this event from bubbling to the wrapper's command
+
+//     const popupMenu = document.getElementById('popupMenu')
+//     popupMenu.style.display = 'block'
+//     popupMenu.style.left = `${event.pageX}px`
+//     popupMenu.style.top = `${event.pageY}px`
+
+//     // Track the selected menu item on hover
+//     let selectedOption = null
+
+//     // Set up event listeners for menu options
+//     const editOption = document.getElementById('editOption')
+//     const deleteOption = document.getElementById('deleteOption')
+//     const cancelOption = document.getElementById('cancelOption')
+
+//     function handleMouseOver() {
+//         selectedOption = this // Track hovered item
+//     }
+
+//     function handleMouseUp() {
+//         popupMenu.style.display = 'none'
+//         document.removeEventListener('mouseup', handleMouseUp)
+
+//         // Execute the selected option, if any
+//         if (selectedOption === editOption) {
+//             showEditForm(wrapper)
+//         } else if (selectedOption === deleteOption) {
+//             const confirmDelete = confirm('Do you want to delete this control?')
+//             if (confirmDelete) {
+//                 wrapper.remove() // Remove the element wrapper
+//                 window.ui.json = window.ui.json.filter(
+//                     el => el.id !== wrapper.dataset.id
+//                 )
+//                 jsonToStorage()
+//             }
+//         }
+//         // Clean up
+//         selectedOption = null
+//     }
+
+//     function showEditForm(wrapper) {
+//         // Find the JSON element in `ui.json` based on the wrapper's ID
+//         const elementId = wrapper.dataset.id
+//         const jsonElement = window.ui.json.find(el => el.id == elementId)
+
+//         if (!jsonElement) {
+//             console.error(`Element with id ${elementId} not found`)
+//             return
+//         }
+
+//         // Display the edit form
+//         const editForm = document.getElementById('editForm')
+//         editForm.style.display = 'block'
+
+//         // Populate form fields with the current values of the element
+//         document.getElementById('editName').value = jsonElement.name || ''
+//         document.getElementById('editCommand').value = jsonElement.command || ''
+
+//         // Track the element being edited by storing its ID globally
+//         window.currentlyEditingElement = jsonElement.id
+//     }
+
+//     // Set up event listeners for mouse events on menu options
+//     editOption.addEventListener('mouseover', handleMouseOver)
+//     deleteOption.addEventListener('mouseover', handleMouseOver)
+//     cancelOption.addEventListener('mouseover', handleMouseOver)
+
+//     // Listen for `mouseup` anywhere to execute the option
+//     document.addEventListener('mouseup', handleMouseUp)
+
+//     // Prevent click from bubbling to the wrapper
+//     document.addEventListener('mousedown', e => e.stopPropagation(), {
+//         once: true,
+//     })
+// }
 
 // Function to handle clicks outside the popup menu
 function handleOutsideClick(e) {
@@ -322,8 +541,8 @@ export function submitForm() {
 }
 
 // =================== json to html element ===================
+
 function createElementFromJSON(jsonElement) {
-    // should this also set local storage?
     let elementWrapper
 
     // Handle element creation based on type
@@ -331,10 +550,8 @@ function createElementFromJSON(jsonElement) {
         const button = document.createElement('button')
         button.innerText = jsonElement.name
 
-        // button.addEventListener('click', () => eval(jsonElement.command))
         button.addEventListener('click', function () {
             try {
-                // values available within the command
                 const { model, view, anim, reset, util, json } = ui
                 eval(jsonElement.command)
             } catch (error) {
@@ -345,18 +562,22 @@ function createElementFromJSON(jsonElement) {
         elementWrapper = createElementWrapper(button, jsonElement.id)
     } else if (jsonElement.type === 'checkbox') {
         const checkboxWrapper = document.createElement('div')
+
+        // Create a label that wraps both the checkbox and label text
+        const checkboxLabel = document.createElement('label')
+        checkboxLabel.classList.add('checkbox-label')
+
         const checkbox = document.createElement('input')
         checkbox.type = 'checkbox'
-        checkbox.name = jsonElement.name
+        checkbox.id = jsonElement.id // Set unique ID for the checkbox
         checkbox.checked = jsonElement.checked
 
-        const label = document.createElement('label')
-        label.innerText = jsonElement.name
-        label.classList.add('checkbox-label')
+        // Set label text and make it clickable by wrapping both elements
+        checkboxLabel.innerText = jsonElement.name
+        checkboxLabel.prepend(checkbox) // Place checkbox before text in the label
 
         checkbox.addEventListener('change', function () {
             try {
-                // values available within the command
                 const { model, view, anim, reset, util, json } = ui
                 const value = checkbox
                 const checked = checkbox.checked
@@ -366,8 +587,7 @@ function createElementFromJSON(jsonElement) {
             }
         })
 
-        checkboxWrapper.appendChild(checkbox)
-        checkboxWrapper.appendChild(label)
+        checkboxWrapper.appendChild(checkboxLabel)
         elementWrapper = createElementWrapper(checkboxWrapper, jsonElement.id)
     } else if (jsonElement.type === 'dropdown') {
         const selectWrapper = document.createElement('div')
@@ -392,7 +612,6 @@ function createElementFromJSON(jsonElement) {
 
         select.addEventListener('change', function () {
             try {
-                // values available within the command
                 const { model, view, anim, reset, util, json } = ui
                 const value = select.value
                 eval(jsonElement.command)
@@ -422,7 +641,6 @@ function createElementFromJSON(jsonElement) {
         range.addEventListener('input', function () {
             valueLabel.innerText = range.value
             try {
-                // values available within the command
                 const { model, view, anim, reset, util, json } = ui
                 const value = range.value
                 eval(jsonElement.command)
@@ -470,10 +688,12 @@ function createElementFromJSON(jsonElement) {
         elementWrapper = createElementWrapper(monitorWrapper, jsonElement.id)
     }
 
-    // Apply the element's position from JSON
-    elementWrapper.style.left = jsonElement.position.x + 'px'
-    elementWrapper.style.top = jsonElement.position.y + 'px'
-    document.getElementById('uiContainer').appendChild(elementWrapper)
+    // Ensure elementWrapper is created before applying position
+    if (elementWrapper) {
+        elementWrapper.style.left = jsonElement.position.x + 'px'
+        elementWrapper.style.top = jsonElement.position.y + 'px'
+        document.getElementById('uiContainer').appendChild(elementWrapper)
+    }
 }
 
 // =================== ui element utilities ===================
@@ -547,14 +767,8 @@ function loadElementsFromJSON() {
 
 let localStorageName
 
-const minJsonString0 =
-    '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":23,"y":70},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":331,"y":33},"monitor":"model.ticks","fps":"10"},{"id":1730215309523,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":25,"y":37},"checked":false},{"id":1730223001632,"type":"dropdown","name":"shaape","command":"view.drawOptions.turtlesShape = value","position":{"x":86,"y":36},"options":["circle","dart","person","bug"],"selected":"bug"}]'
-const minJsonString =
-    '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":23,"y":70},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":331,"y":33},"monitor":"model.ticks","fps":"10"},{"id":1730215309523,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":25,"y":37},"checked":false},{"id":1730223001632,"type":"dropdown","name":"shaape","command":"view.drawOptions.turtlesShape = value","position":{"x":86,"y":36},"options":["circle","dart","person","bug"],"selected":"bug"},{"id":1730394519738,"type":"button","name":"downloadJson","command":"util.downloadJsonModule(json)","position":{"x":390,"y":44}}]'
+const minJsonString = `[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":94,"y":35},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":331,"y":33},"monitor":"model.ticks","fps":"10"},{"id":1730215309523,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":25,"y":37},"checked":false},{"id":1730223001632,"type":"dropdown","name":"shape","command":"view.drawOptions.turtlesShape = value","position":{"x":147,"y":131},"options":["circle","dart","person","bug"],"selected":"bug"},{"id":1730394519738,"type":"button","name":"download","command":"util.downloadJsonModule(json, 'elements.js')","position":{"x":19,"y":133}}]`
 const minJson = JSON.parse(minJsonString)
-const Json9String =
-    '[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":32,"y":63},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":179,"y":38},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":336,"y":37},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchSize","command":"view.reset(value)","position":{"x":191,"y":155},"min":"1","max":"15","step":"1","value":"10"},{"id":1729463877025,"type":"button","name":"downloadCanvas","command":"view.downloadCanvas()","position":{"x":56,"y":232}},{"id":1729464380401,"type":"range","name":"turtleSize","command":"view.drawOptions.turtlesSize = value","position":{"x":33,"y":159},"min":"1","max":"10","step":"1","value":"3"},{"id":1729535684833,"type":"button","name":"downloadJson","command":"util.downloadJsonModule(json)","position":{"x":190,"y":231}},{"id":1729638667060,"type":"dropdown","name":"shape","command":"view.drawOptions.turtlesShape = value","position":{"x":97,"y":37},"options":["circle","dart","person","bug"],"selected":"bug"},{"id":1730141024864,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":28,"y":32},"checked":false}]'
-const Json9 = JSON.parse(Json9String)
 
 function jsonToStorage() {
     const jsonString = JSON.stringify(window.ui.json) // Convert to string
@@ -641,5 +855,4 @@ Object.assign(window.ui, {
     storageToJson,
     downloadJsonModule,
     minJson,
-    Json9,
 })

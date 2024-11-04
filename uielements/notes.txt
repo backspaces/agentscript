@@ -2,46 +2,58 @@ Examples:
 
 * Buttons
 start
-ui.anim.start()
+anim.start()
 stop
-ui.anim.stop()
+anim.stop()
 reset
-ui.reset()
-
+reset()
+download
+util.downloadJsonModule(json, 'elements.js')
 
 * Slider
 speed
-ui.model.speed = range.value
+model.speed = value
 0 10 1 1
 
 fps
-ui.anim.setFps(value)
+anim.setFps(value)
 0 60 1 30
 
 * Checkbox
 pause
-checkbox.checked ? ui.anim.stop() : ui.anim.start()
+checked ? anim.stop() : anim.start()
 
 run
-checkbox.checked ? ui.anim.start() : ui.anim.stop()
+checkbox.checked ? anim.start() : anim.stop()
 
 * Dropdown
 shape
-ui.view.drawOptions.turtlesShape = select.value
+view.drawOptions.turtlesShape = value
 circle, dart, person, bug
 bug
 
 * Monitor
 ticks
-ui.model.ticks
+model.ticks
 
 
 =======================================
-ui.view.reset(value)
-ui.view.drawOptions.turtlesSize = value
 
-ui.view.downloadCanvas()
-ui.util.downloadJsonModule(ui.json)
+try {
+    // values available within the command
+    const { model, view, anim, reset, util, json } = ui
+    eval(jsonElement.command)
+} catch (error) {
+    console.error('Command execution failed: ', error)
+}
+
+=======================================
+
+view.reset(value)
+view.drawOptions.turtlesSize = value
+
+view.downloadCanvas()
+util.downloadJsonModule(json)
 
     window.selectedElementId = wrapper.dataset.id
     window.selectedWrapper = wrapper
@@ -117,3 +129,4 @@ checkbox: ok
 slider: doesn't work and label should be on top of slider
 dropdown: doesn't work
 monitor: doesn't work: label is "loading.." and shows ticks
+

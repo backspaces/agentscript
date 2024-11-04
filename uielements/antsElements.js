@@ -77,7 +77,7 @@ const json = [
         id: 1729535684833,
         type: 'button',
         name: 'downloadJson',
-        command: 'util.downloadJsonModule(json)',
+        command: "util.downloadJsonModule(json, 'elements.js')",
         position: {
             x: 190,
             y: 231,
