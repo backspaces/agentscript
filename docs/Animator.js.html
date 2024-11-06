@@ -72,14 +72,47 @@ class Animator {
         return this.timeoutID != null
     }
 
-    startStats(left = '0px') {
-        if (this.stats) return console.log('startStats: already running')
-        this.stats = new Stats()
-        document.body.appendChild(this.stats.dom)
-        this.stats.dom.style.left = left
+    startStats(statsPosition = 'top:0px;left:0px', parentID = document.body) {
+        if (this.stats) {
+            this.stopStats()
+        }
 
-        return this // chaining off ctor
+        const stats = new Stats()
+
+        const parent =
+            typeof parentID === 'string'
+                ? document.getElementById(parentID)
+                : parentID
+        if (parent != document.body) {
+            parent.style.position = 'relative'
+        }
+
+        parent.appendChild(stats.dom)
+        stats.dom.style.cssText = statsPosition // 'top:10px;right:20px;'
+        stats.dom.style.position = 'absolute'
+
+        this.stats = stats
     }
+    stopStats() {
+        const stats = this.stats
+
+        if (stats &amp;&amp; stats.dom &amp;&amp; stats.dom.parentNode) {
+            stats.dom.parentNode.removeChild(stats.dom)
+        } else {
+            console.warn('Stats panel not found or already removed.')
+        }
+
+        this.stats = null
+    }
+
+    // startStats(left = '0px') {
+    //     if (this.stats) return console.log('startStats: already running')
+    //     this.stats = new Stats()
+    //     document.body.appendChild(this.stats.dom)
+    //     this.stats.dom.style.left = left
+
+    //     return this // chaining off ctor
+    // }
 
     setFps(fps) {
         if (fps &lt;= 0) {

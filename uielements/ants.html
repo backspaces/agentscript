@@ -17,7 +17,8 @@
 
         // ====== The views2 code as-is ======
 
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        // import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import Animator from '../src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
         import Model from 'https://code.agentscript.org/models/AntsModel.js'
@@ -40,6 +41,9 @@
 
         // ====== Additional code for uielements usage ======
 
+        // anim.startStats('right:0px;top:0px')
+        anim.startStats('left:0px;top:0px', 'modelDiv')
+        // anim.startStats('right:10px;top:0px', 'controlPanel')
         anim.setSteps(-1) // in case you want to run forever
 
         UI.setAppState(model, view, anim) // connect model to uielements
