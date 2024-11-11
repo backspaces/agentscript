@@ -145,3 +145,16 @@ body {
     margin-top: 8px;
     display: inline-block;
 }
+
+/* Fix checkbox */
+#popupModal .modal-content label,
+#popupModal .modal-content input[type='checkbox'] {
+    display: inline-block; /* Align checkbox and label on the same line */
+    vertical-align: middle; /* Center align with the label text */
+    margin-top: 0; /* Remove top margin */
+}
+
+#popupModal .modal-content input[type='checkbox'] {
+    width: auto; /* Prevent checkbox from taking the full width */
+    margin-right: 5px; /* Add spacing between checkbox and label text */
+}

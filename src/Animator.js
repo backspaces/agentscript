@@ -90,6 +90,8 @@ class Animator {
         stats.dom.style.position = 'absolute'
 
         this.stats = stats
+
+        return this // chaining off ctor
     }
     stopStats() {
         const stats = this.stats
@@ -101,6 +103,8 @@ class Animator {
         }
 
         this.stats = null
+
+        return this // chaining off ctor
     }
 
     // startStats(left = '0px') {
@@ -130,6 +134,14 @@ class Animator {
         this.ticks = 0
         this.fps = fps
         if (wasRunning) this.start()
+    }
+
+    restart(model, view, ctrl = undefined) {
+        model.reset()
+        // window.ui.view.reset()
+        this.reset()
+        view.draw()
+        if (ctrl) ctrl.reset()
     }
     // stop if running, start otherwise
     // if starting and steps === 0, reset with steps = -1, forever.

@@ -10,12 +10,14 @@
         import Model from 'https://code.agentscript.org/models/TspModel.js'
         // import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import TwoDraw from '../src/TwoDraw.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        // import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import Animator from '../src/Animator.js'
 
         import Mouse from 'https://code.agentscript.org/src/Mouse.js'
         import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
         import GUI from 'https://code.agentscript.org/src/GUI.js'
-        import Plot from 'https://code.agentscript.org/src/Plot.js'
+        // import Plot from 'https://code.agentscript.org/src/Plot.js'
+        import Plot from '../src/Plot.js'
 
 
         //NOTE: model width doesn't show until a step taken
@@ -131,14 +133,18 @@
             tourLength: 'red' // red lines
         }
         const options = {
-            title: 'Data',
+            title: 'TourLength',
             width: 800,
             height: 200,
+            legend: {
+                show: true
+            }
         }
         const plot = new Plot('plotDiv', pens, options)
 
+
         function updatePlot() {
-            if (model.bestTourLength === pens.tourLength) return
+            // if (model.bestTourLength === pens.tourLength) return
             pens.tourLength = model.bestTourLength
             plot.linePlot(pens)
         }

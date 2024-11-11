@@ -1,5 +1,6 @@
 // import * as util from 'https://code.agentscript.org/src/utils.js'
 import * as util from '../src/utils.js'
+// import { initializePlot, updatePlot } from './plot.js'
 
 // =================== initialization ===================
 // loading links
@@ -25,6 +26,11 @@ window.ui.json = [] // Initialize the json array
 document.getElementById('uiContainer').addEventListener('contextmenu', e => {
     e.preventDefault()
 })
+
+// console.log('initializePlot', initializePlot)
+// console.log('updatePlot', updatePlot)
+// // document.addEventListener('DOMContentLoaded', initializePlot)
+// initializePlot()
 
 // =================== create ui forms for popups ===================
 
@@ -826,10 +832,11 @@ export function createElements(json = true) {
 
 // a bit risky: depends on model, view, anim stored in ui by app
 function reset() {
-    window.ui.model.reset()
-    // window.ui.view.reset()
-    window.ui.anim.reset()
-    window.ui.view.draw()
+    window.ui.anim.restart(ui.model, ui.view)
+    // window.ui.model.reset()
+    // // window.ui.view.reset()
+    // window.ui.anim.reset()
+    // window.ui.view.draw()
 }
 
 function setJson(json) {
@@ -842,6 +849,7 @@ function getJson() {
 }
 
 Object.assign(window.ui, {
+    // already has model view anim
     // used in divs.html
     showPopup,
     submitForm,

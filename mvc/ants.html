@@ -12,12 +12,14 @@
         import TwoDraw from '../src/TwoDraw.js'
         import Color from 'https://code.agentscript.org/src/Color.js'
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        // import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import Animator from '../src/Animator.js'
 
         import Mouse from 'https://code.agentscript.org/src/Mouse.js'
         import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
         import GUI from 'https://code.agentscript.org/src/GUI.js'
-        import Plot from 'https://code.agentscript.org/src/Plot.js'
+        // import Plot from 'https://code.agentscript.org/src/Plot.js'
+        import Plot from '../src/Plot.js'
 
         // ==== Define draw options, colors and colormaps ====
 
@@ -107,6 +109,9 @@
                 switch: !anim.isRunning, // bool
                 cmd: val => { if (val) { anim.stop() } else { anim.start() } },
             },
+            restart: {
+                button: () => anim.restart(model, view, plot)
+            },
             once: {
                 button: () => anim.once()
             },
@@ -138,9 +143,12 @@
             nestSeekers: ['#ffeb40', 'thickLines'],
         }
         const options = {
-            title: 'Data',
+            title: 'food and nest seekers',
             width: 800,
             height: 200,
+            legend: {
+                show: false
+            }
         }
         const plot = new Plot('plotDiv', pens, options)
 

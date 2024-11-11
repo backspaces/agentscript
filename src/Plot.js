@@ -1,15 +1,77 @@
 import * as util from './utils.js'
 import uPlot from '../vendor/uPlot.min.js'
 
-const uPlotCss = await util.fetchCssStyle('../vendor/uPlot.css')
+await util.fetchCssStyle('../vendor/uPlot.css')
 
-util.toWindow({ util, uPlot, uPlotCss })
+function uPlotTooltipPlugin(parentDiv) {
+    let tooltip = document.createElement('div')
+    tooltip.className = 'uplot-tooltip'
+
+    // Append tooltip to the plot's parent div
+    parentDiv.appendChild(tooltip)
+
+    return {
+        hooks: {
+            setCursor: u => {
+                if (u.cursor.idx === null) {
+                    tooltip.style.display = 'none'
+                    return
+                }
+
+                tooltip.style.display = 'block'
+                let { left, top } = u.cursor
+                tooltip.style.left = left + 'px'
+                tooltip.style.top = top + 'px'
+
+                let x = u.data[0][u.cursor.idx]
+                let content = `x: ${x}\n`
+
+                Object.keys(u.series).forEach((_, index) => {
+                    if (index === 0) return // Skip the x-axis series
+                    let y = u.data[index][u.cursor.idx]
+                    content += `${u.series[index].label}: ${y}\n`
+                })
+
+                tooltip.textContent = content
+            },
+        },
+    }
+}
+
+function injectTooltipCSS() {
+    // Check if the tooltip CSS is already added to avoid duplicates
+    if (!document.getElementById('uplot-tooltip-css')) {
+        const style = document.createElement('style')
+        style.id = 'uplot-tooltip-css'
+        style.textContent = `
+            .uplot-tooltip {
+                position: absolute;
+
+                // background: rgba(0, 0, 0, 0.7);
+                // color: white;
+                background: rgba(0, 0, 0, 0.2);
+                color: black;
+                border: 2px solid black;
+                font-weight: bold;
+
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                pointer-events: none;
+                z-index: 10;
+                white-space: pre; /* Preserve line breaks for each pen value */
+            }
+        `
+        document.head.appendChild(style)
+    }
+}
 
 class Plot {
     // see https://github.com/leeoniya/uPlot/tree/master/docs
     static defaultOptions() {
         return {
-            title: 'Data',
+            // title: 'Data',
+            title: undefined, // default: don't show title
             width: 600,
             height: 300,
 
@@ -58,11 +120,29 @@ class Plot {
     //     resistant: 'gray',
     // },
     constructor(div, pens, options = {}) {
+        const useToolTips = !options.legend.show
+
+        // // Inject tooltip CSS if not already present
+        // injectTooltipCSS()
+
         options = Object.assign(Plot.defaultOptions(), options)
         if (util.isString(div)) div = document.getElementById(div)
 
+        if (useToolTips) {
+            injectTooltipCSS()
+            if (div !== document.body) {
+                div.style.position = 'relative'
+            }
+            options.plugins = [uPlotTooltipPlugin(div)]
+        }
+
         options.scales.x.time = options.xIsTime
         options.series[0].label = options.xAxisLabel
+
+        // Set parent position to relative if it's not document.body
+        // if (div !== document.body) {
+        //     div.style.position = 'relative'
+        // }
 
         if (options.xRange) options.scales.x.range = options.xRange
         if (options.yRange) options.scales.y.range = options.yRange
@@ -90,11 +170,13 @@ class Plot {
             }
         })
 
+        // // Pass pens to the tooltip plugin for dynamic series handling
+        // options.plugins = [uPlotTooltipPlugin(div)]
+
         const [data, dataArrays] = this.createDataObject(pens)
         let uplot = new uPlot(options, data, div)
-        Object.assign(this, { div, options, data, dataArrays, uplot })
 
-        // util.toWindow({ options, data, dataArrays })
+        Object.assign(this, { div, options, pens, data, dataArrays, uplot })
     }
 
     createDataObject(pens) {
@@ -158,6 +240,18 @@ class Plot {
         ]
     }
 
+    reset() {
+        const { options, pens, div } = this
+
+        this.uplot.destroy()
+
+        const [data, dataArrays] = this.createDataObject(pens)
+        const uplot = new uPlot(options, data, div)
+        Object.assign(this, { data, dataArrays, uplot })
+
+        this.drawData()
+    }
+
     scatterPlot(pens) {
         util.forLoop(pens, (val, key) => {
             // each val is an array of {x,y} objects. convert to array
@@ -170,14 +264,8 @@ class Plot {
 
             this.drawData()
         })
-
-        // const xys = util.sortObjs(arrayOfXYs, 'x')
-        // const xs = xys.map(o => o.x)
-        // const ys = xys.map(o => o.y)
-        // this.data[0] = xs
-        // this.data[1] = ys
-        // this.drawData()
     }
+
     linePlot(pens, draw = true) {
         const xs = this.data[0]
         xs.push(xs.length)
