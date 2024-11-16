@@ -1,6 +1,6 @@
 // import * as util from 'https://code.agentscript.org/src/utils.js'
 import * as util from '../src/utils.js'
-// import { initializePlot, updatePlot } from './plot.js'
+import Plot from '../src/Plot.js'
 
 // =================== initialization ===================
 // loading links
@@ -26,11 +26,6 @@ window.ui.json = [] // Initialize the json array
 document.getElementById('uiContainer').addEventListener('contextmenu', e => {
     e.preventDefault()
 })
-
-// console.log('initializePlot', initializePlot)
-// console.log('updatePlot', updatePlot)
-// // document.addEventListener('DOMContentLoaded', initializePlot)
-// initializePlot()
 
 // =================== create ui forms for popups ===================
 
@@ -141,100 +136,6 @@ export function showPopup(type, jsonData = null) {
     editingElementId = jsonData ? jsonData.id : null
 }
 
-// export function showPopupxx(type, jsonData = null) {
-//     elementType = type
-//     const formContainer = document.getElementById('formContainer')
-//     formContainer.innerHTML = '' // Clear previous form inputs
-
-//     // Set default modelTitle and add type-specific fields
-//     let modelTitle = 'Button'
-//     let formContent = `
-//     <label for="name">Name:</label>
-//     <input type="text" id="elementName" value="${
-//         jsonData ? jsonData.name : ''
-//     }" required><br>
-//     `
-
-//     // Include the command field for all types except 'output'
-//     if (type !== 'output') {
-//         formContent += `
-//     <label for="command">Command:</label>
-//     <input type="text" id="elementCommand" value="${
-//         jsonData ? jsonData.command : ''
-//     }" required><br>
-//     `
-//     }
-
-//     if (type === 'checkbox') {
-//         modelTitle = 'Checkbox'
-//         formContent += `
-//     <label for="checked">Checked:</label>
-//     <input type="checkbox" id="elementChecked" ${
-//         jsonData && jsonData.checked ? 'checked' : ''
-//     }><br>
-//     `
-//     } else if (type === 'dropdown') {
-//         modelTitle = 'Dropdown'
-//         formContent += `
-//     <label for="values">Dropdown Options (comma separated):</label>
-//     <input type="text" id="elementOptions" value="${
-//         jsonData ? jsonData.options.join(', ') : ''
-//     }" required><br>
-//     <label for="selected">Selected Value:</label>
-//     <input type="text" id="elementSelected" value="${
-//         jsonData ? jsonData.selected : ''
-//     }" required><br>
-//     `
-//     } else if (type === 'range') {
-//         modelTitle = 'Slider'
-//         formContent += `
-//     <label for="min">Min:</label>
-//     <input type="number" id="elementMin" value="${
-//         jsonData ? jsonData.min : ''
-//     }" required><br>
-//     <label for="max">Max:</label>
-//     <input type="number" id="elementMax" value="${
-//         jsonData ? jsonData.max : ''
-//     }" required><br>
-//     <label for="step">Step:</label>
-//     <input type="number" id="elementStep" value="${
-//         jsonData ? jsonData.step : 1
-//     }" required><br>
-//     <label for="value">Current Value:</label>
-//     <input type="number" id="elementValue" value="${
-//         jsonData ? jsonData.value : ''
-//     }" required><br>
-//     `
-//     } else if (type === 'output') {
-//         modelTitle = 'Monitor'
-//         formContent += `
-//     <label for="monitor">Value/Function to Monitor:</label>
-//     <input type="text" id="elementMonitor" value="${
-//         jsonData ? jsonData.monitor : ''
-//     }" required><br>
-//     <label for="fps">Frames per Second (FPS):</label>
-//     <input type="number" id="elementFps" value="${
-//         jsonData ? jsonData.fps : 10
-//     }"><br>
-//     `
-//     }
-
-//     // Set form header based on whether we're adding or editing
-//     document.getElementById('modal-header').innerText = jsonData
-//         ? `Edit ${modelTitle}`
-//         : `Add ${modelTitle}`
-
-//     // Set the button label in the modal footer
-//     document.querySelector('.modal-footer button:last-child').innerText =
-//         jsonData ? 'Edit Element' : 'Add Element'
-
-//     formContainer.innerHTML = formContent
-//     document.getElementById('popupModal').style.display = 'flex'
-
-//     // Track if editing an existing element
-//     editingElementId = jsonData ? jsonData.id : null
-// }
-
 // Cancel the popup
 export function cancel() {
     document.getElementById('popupModal').style.display = 'none'
@@ -309,21 +210,6 @@ document.getElementById('editOption').onclick = function (e) {
 }
 
 // Function to show the popup menu and start listening for outside clicks
-// function showPopupMenu(e, wrapper) {
-//     const popupMenu = document.getElementById('popupMenu')
-//     popupMenu.style.display = 'block'
-//     popupMenu.style.left = `${e.pageX}px`
-//     popupMenu.style.top = `${e.pageY}px`
-
-//     selectedElementId = wrapper.dataset.id
-//     selectedWrapper = wrapper
-
-//     // Start listening for clicks outside of the menu when it is shown
-//     document.addEventListener('mousedown', handleOutsideClick)
-
-//     // Prevent further propagation
-//     e.stopPropagation()
-// }
 function showPopupMenu(e, wrapper) {
     e.preventDefault() // Prevent default behavior (e.g., text selection)
 
@@ -371,84 +257,6 @@ function handleMouseUp(event) {
 
     selectedElementId = null
 }
-
-// function showPopupMenu(event, wrapper) {
-//     event.preventDefault() // Prevent default actions, such as text selection
-//     event.stopPropagation() // Stop this event from bubbling to the wrapper's command
-
-//     const popupMenu = document.getElementById('popupMenu')
-//     popupMenu.style.display = 'block'
-//     popupMenu.style.left = `${event.pageX}px`
-//     popupMenu.style.top = `${event.pageY}px`
-
-//     // Track the selected menu item on hover
-//     let selectedOption = null
-
-//     // Set up event listeners for menu options
-//     const editOption = document.getElementById('editOption')
-//     const deleteOption = document.getElementById('deleteOption')
-//     const cancelOption = document.getElementById('cancelOption')
-
-//     function handleMouseOver() {
-//         selectedOption = this // Track hovered item
-//     }
-
-//     function handleMouseUp() {
-//         popupMenu.style.display = 'none'
-//         document.removeEventListener('mouseup', handleMouseUp)
-
-//         // Execute the selected option, if any
-//         if (selectedOption === editOption) {
-//             showEditForm(wrapper)
-//         } else if (selectedOption === deleteOption) {
-//             const confirmDelete = confirm('Do you want to delete this control?')
-//             if (confirmDelete) {
-//                 wrapper.remove() // Remove the element wrapper
-//                 window.ui.json = window.ui.json.filter(
-//                     el => el.id !== wrapper.dataset.id
-//                 )
-//                 jsonToStorage()
-//             }
-//         }
-//         // Clean up
-//         selectedOption = null
-//     }
-
-//     function showEditForm(wrapper) {
-//         // Find the JSON element in `ui.json` based on the wrapper's ID
-//         const elementId = wrapper.dataset.id
-//         const jsonElement = window.ui.json.find(el => el.id == elementId)
-
-//         if (!jsonElement) {
-//             console.error(`Element with id ${elementId} not found`)
-//             return
-//         }
-
-//         // Display the edit form
-//         const editForm = document.getElementById('editForm')
-//         editForm.style.display = 'block'
-
-//         // Populate form fields with the current values of the element
-//         document.getElementById('editName').value = jsonElement.name || ''
-//         document.getElementById('editCommand').value = jsonElement.command || ''
-
-//         // Track the element being edited by storing its ID globally
-//         window.currentlyEditingElement = jsonElement.id
-//     }
-
-//     // Set up event listeners for mouse events on menu options
-//     editOption.addEventListener('mouseover', handleMouseOver)
-//     deleteOption.addEventListener('mouseover', handleMouseOver)
-//     cancelOption.addEventListener('mouseover', handleMouseOver)
-
-//     // Listen for `mouseup` anywhere to execute the option
-//     document.addEventListener('mouseup', handleMouseUp)
-
-//     // Prevent click from bubbling to the wrapper
-//     document.addEventListener('mousedown', e => e.stopPropagation(), {
-//         once: true,
-//     })
-// }
 
 // Function to handle clicks outside the popup menu
 function handleOutsideClick(e) {
@@ -558,7 +366,7 @@ function createElementFromJSON(jsonElement) {
 
         button.addEventListener('click', function () {
             try {
-                const { model, view, anim, reset, util, json } = ui
+                const { model, view, anim, reset, util, json, runPlot } = ui
                 eval(jsonElement.command)
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -847,6 +655,11 @@ function setJson(json) {
 function getJson() {
     return window.ui.json
 }
+function runPlot(str) {
+    // '800x300, foodSeekers, nestSeekers'
+    const plot = Plot.stringToPlot(str)
+    plot.monitorPlot(ui.model)
+}
 
 Object.assign(window.ui, {
     // already has model view anim
@@ -857,6 +670,7 @@ Object.assign(window.ui, {
     // used by commands
     reset,
     util,
+    runPlot,
     // used in devtools
     setJson,
     getJson,

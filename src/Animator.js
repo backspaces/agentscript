@@ -143,6 +143,7 @@ class Animator {
         view.draw()
         if (ctrl) ctrl.reset()
     }
+
     // stop if running, start otherwise
     // if starting and steps === 0, reset with steps = -1, forever.
     toggle() {

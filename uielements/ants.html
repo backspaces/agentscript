@@ -7,19 +7,21 @@
 </head>
 
 <body>
+
     <!-- See divs.html, uploaded in uielements.js -->
 
     <script type="module">
         // ====== Import uielements.js, only additional import needed ======
 
         import * as UI from './uielements.js'
-        // import elements from './antsElements.js'
+        import elements from './antsElements.js'
 
         // ====== The views2 code as-is ======
 
         // import Animator from 'https://code.agentscript.org/src/Animator.js'
         import Animator from '../src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        // import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        import TwoDraw from '../src/TwoDraw.js'
 
         import Model from 'https://code.agentscript.org/models/AntsModel.js'
         import TwoDrawOptions from 'https://code.agentscript.org/views2/antsOptions.js'
@@ -41,17 +43,26 @@
 
         // ====== Additional code for uielements usage ======
 
-        // anim.startStats('right:0px;top:0px')
-        anim.startStats('left:0px;top:0px', 'modelDiv')
+        // anim.startStats('left:0px;top:0px', 'modelDiv')
         // anim.startStats('right:10px;top:0px', 'controlPanel')
+        // anim.startStats('left:20px;top:576px', 'uiContainerWrapper')
         anim.setSteps(-1) // in case you want to run forever
 
         UI.setAppState(model, view, anim) // connect model to uielements
         UI.createElements() // create elements from local storage
-        // UI.createElements(elements) // create elements from import
-
+        // UI.createElements(elements) // create elements from file
     </script>
-    <div id="modelDiv"></div>
+
+    <!-- <div id="modelDiv"></div>
+    <div id="plotDiv"></div> -->
+    <!-- <div id="modelDiv">
+        <div id="plotDiv"></div>
+    </div> -->
+
+    <div>
+        <div id="modelDiv"></div>
+        <div id="plotDiv"></div>
+    </div>
 
 </body>
 

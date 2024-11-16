@@ -51,7 +51,7 @@
                 if (model.done) anim.stop()
                 model.step()
                 view.draw()
-                updatePlot()
+                plot.updatePlot(pens, model)
             },
             -1, // run until model stops: best tour constant for 500 steps
             30 // 30 fps
@@ -130,7 +130,7 @@
         // ============ Plot new tours  ==================
 
         const pens = {
-            tourLength: 'red' // red lines
+            bestTourLength: 'red' // red lines
         }
         const options = {
             title: 'TourLength',
@@ -141,13 +141,6 @@
             }
         }
         const plot = new Plot('plotDiv', pens, options)
-
-
-        function updatePlot() {
-            // if (model.bestTourLength === pens.tourLength) return
-            pens.tourLength = model.bestTourLength
-            plot.linePlot(pens)
-        }
 
         // ============ Done w/ controllers!  ==================
 

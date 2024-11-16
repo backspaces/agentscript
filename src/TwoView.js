@@ -32,10 +32,14 @@ class TwoView {
         let div = options.div
         div = util.isString(div) ? document.getElementById(div) : div
 
-        const children = div.children
-        console.log('div children: ', children)
+        const children = Array.from(div.children)
+        const canvases = children.filter(child => util.isCanvas(child))
+        console.log('div children: ', children, ' canvases', canvases)
+        util.toWindow({ children, canvases })
+
         let can
-        if (children.length === 0) {
+        // if (children.length === 0) {
+        if (canvases.length === 0) {
             can = util.createCanvas(0, 0, true) // not offscreen, preferDOM
             div.appendChild(can)
         } else {

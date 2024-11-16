@@ -3,74 +3,34 @@ import uPlot from '../vendor/uPlot.min.js'
 
 await util.fetchCssStyle('../vendor/uPlot.css')
 
-function uPlotTooltipPlugin(parentDiv) {
-    let tooltip = document.createElement('div')
-    tooltip.className = 'uplot-tooltip'
-
-    // Append tooltip to the plot's parent div
-    parentDiv.appendChild(tooltip)
-
-    return {
-        hooks: {
-            setCursor: u => {
-                if (u.cursor.idx === null) {
-                    tooltip.style.display = 'none'
-                    return
-                }
-
-                tooltip.style.display = 'block'
-                let { left, top } = u.cursor
-                tooltip.style.left = left + 'px'
-                tooltip.style.top = top + 'px'
-
-                let x = u.data[0][u.cursor.idx]
-                let content = `x: ${x}\n`
-
-                Object.keys(u.series).forEach((_, index) => {
-                    if (index === 0) return // Skip the x-axis series
-                    let y = u.data[index][u.cursor.idx]
-                    content += `${u.series[index].label}: ${y}\n`
-                })
-
-                tooltip.textContent = content
-            },
-        },
-    }
-}
-
-function injectTooltipCSS() {
-    // Check if the tooltip CSS is already added to avoid duplicates
-    if (!document.getElementById('uplot-tooltip-css')) {
-        const style = document.createElement('style')
-        style.id = 'uplot-tooltip-css'
-        style.textContent = `
-            .uplot-tooltip {
-                position: absolute;
-
-                // background: rgba(0, 0, 0, 0.7);
-                // color: white;
-                background: rgba(0, 0, 0, 0.2);
-                color: black;
-                border: 2px solid black;
-                font-weight: bold;
-
-                padding: 4px 8px;
-                border-radius: 4px;
-                font-size: 12px;
-                pointer-events: none;
-                z-index: 10;
-                white-space: pre; /* Preserve line breaks for each pen value */
-            }
-        `
-        document.head.appendChild(style)
-    }
-}
-
 class Plot {
-    // see https://github.com/leeoniya/uPlot/tree/master/docs
+    // uPlot: see https://github.com/leeoniya/uPlot/tree/master/docs
+    static stringToPlot(str) {
+        // example: '400x300, foodSeeker, nestSeeker'
+        const div = 'plotDiv'
+        const pens = {}
+        const options = {
+            title: undefined,
+            width: 800,
+            height: 200,
+            legend: {
+                show: true,
+            },
+        }
+
+        const parts = str.split(/,\s*/)
+        const size = parts.shift().split('x')
+        const [width, height] = size
+        options.width = Number(width)
+        options.height = Number(height)
+
+        const colors = ['red', 'blue', 'green']
+        parts.forEach((str, i) => (pens[str] = colors[i]))
+
+        return new Plot(div, pens, options)
+    }
     static defaultOptions() {
         return {
-            // title: 'Data',
             title: undefined, // default: don't show title
             width: 600,
             height: 300,
@@ -120,13 +80,13 @@ class Plot {
     //     resistant: 'gray',
     // },
     constructor(div, pens, options = {}) {
-        const useToolTips = !options.legend.show
-
         // // Inject tooltip CSS if not already present
         // injectTooltipCSS()
 
         options = Object.assign(Plot.defaultOptions(), options)
         if (util.isString(div)) div = document.getElementById(div)
+
+        const useToolTips = !options.legend.show
 
         if (useToolTips) {
             injectTooltipCSS()
@@ -266,6 +226,13 @@ class Plot {
         })
     }
 
+    updatePlot(pens, model) {
+        util.forLoop(pens, (val, key) => {
+            pens[key] = model[key]
+        })
+        this.linePlot(pens)
+    }
+
     linePlot(pens, draw = true) {
         const xs = this.data[0]
         xs.push(xs.length)
@@ -277,6 +244,85 @@ class Plot {
 
     drawData() {
         this.uplot.setData(this.data)
+    }
+
+    // monitorPlot(pens, model, fps = 60) {
+    monitorPlot(model, fps = 60) {
+        const intervalMs = 1000 / fps
+        let lastTick = -1 // model.ticks
+
+        this.intervalID = setInterval(() => {
+            if (model.ticks > lastTick) {
+                this.updatePlot(this.pens, model)
+                lastTick = model.ticks
+            }
+        }, intervalMs)
+    }
+    stopMonitoring() {
+        if (this.intervalID) this.intervalID = clearInterval(this.intervalID)
+    }
+}
+
+function uPlotTooltipPlugin(parentDiv) {
+    let tooltip = document.createElement('div')
+    tooltip.className = 'uplot-tooltip'
+
+    // Append tooltip to the plot's parent div
+    parentDiv.appendChild(tooltip)
+
+    return {
+        hooks: {
+            setCursor: u => {
+                if (u.cursor.idx === null) {
+                    tooltip.style.display = 'none'
+                    return
+                }
+
+                tooltip.style.display = 'block'
+                let { left, top } = u.cursor
+                tooltip.style.left = left + 'px'
+                tooltip.style.top = top + 'px'
+
+                let x = u.data[0][u.cursor.idx]
+                let content = `x: ${x}\n`
+
+                Object.keys(u.series).forEach((_, index) => {
+                    if (index === 0) return // Skip the x-axis series
+                    let y = u.data[index][u.cursor.idx]
+                    content += `${u.series[index].label}: ${y}\n`
+                })
+
+                tooltip.textContent = content
+            },
+        },
+    }
+}
+
+function injectTooltipCSS() {
+    // Check if the tooltip CSS is already added to avoid duplicates
+    if (!document.getElementById('uplot-tooltip-css')) {
+        const style = document.createElement('style')
+        style.id = 'uplot-tooltip-css'
+        style.textContent = `
+            .uplot-tooltip {
+                position: absolute;
+
+                // background: rgba(0, 0, 0, 0.7);
+                // color: white;
+                background: rgba(0, 0, 0, 0.2);
+                color: black;
+                border: 2px solid black;
+                font-weight: bold;
+
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                pointer-events: none;
+                z-index: 10;
+                white-space: pre; /* Preserve line breaks for each pen value */
+            }
+        `
+        document.head.appendChild(style)
     }
 }
 

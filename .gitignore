@@ -9,6 +9,7 @@ node_modules
 web_modules
 npm-debug.log
 yarn-error.log
+package-lock.json
 **/.DS_Store
 .vscode
 

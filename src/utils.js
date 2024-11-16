@@ -951,12 +951,12 @@ export const isObject = obj => isType(obj, 'object')
 // export const isArray = obj => isType(obj, 'array')
 export const isArray = obj => Array.isArray(obj)
 export const isNumber = obj => isType(obj, 'number')
+// Is a number an integer (rather than a float w/ non-zero fractional part)
 export const isInteger = n => Number.isInteger(n)
 // export const isFloat = n => isNumber(n) && n % 1 !== 0 // https://goo.gl/6MS0Tm
 export const isFunction = obj => isType(obj, 'function')
 export const isImage = obj => isType(obj, 'image')
 
-// Is a number an integer (rather than a float w/ non-zero fractional part)
 export const isCanvas = obj =>
     isOneOfTypes(obj, ['htmlcanvaselement', 'offscreencanvas'])
 export const isImageable = obj =>

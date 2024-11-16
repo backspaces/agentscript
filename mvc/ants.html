@@ -63,7 +63,7 @@
             () => {
                 model.step()
                 view.draw()
-                updatePlot()
+                plot.updatePlot(pens, model)
             },
             -1, // run forever
             30 // fps
@@ -139,8 +139,8 @@
         // ==== Setup Plot and provide an updater called by anim ====
 
         const pens = {
-            foodSeekers: ['blue', 'thickLines'],
-            nestSeekers: ['#ffeb40', 'thickLines'],
+            foodSeekers: 'blue',
+            nestSeekers: 'red',
         }
         const options = {
             title: 'food and nest seekers',
@@ -151,12 +151,6 @@
             }
         }
         const plot = new Plot('plotDiv', pens, options)
-
-        function updatePlot() {
-            pens.foodSeekers = model.foodSeekers
-            pens.nestSeekers = model.nestSeekers
-            plot.linePlot(pens)
-        }
 
         // ==== End, debug if needed
 
