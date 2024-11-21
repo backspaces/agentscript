@@ -628,10 +628,6 @@ export function createElements(json = true) {
 // a bit risky: depends on model, view, anim stored in ui by app
 function reset() {
     window.ui.anim.restart(ui.model, ui.view, ui.plot)
-    // window.ui.model.reset()
-    // // window.ui.view.reset()
-    // window.ui.anim.reset()
-    // window.ui.view.draw()
 }
 
 function setJson(json = ui.json) {
@@ -657,10 +653,8 @@ Object.assign(window.ui, {
     // used by commands
     reset,
     util,
-    // runPlot,
     // used in devtools
     setJson,
-    // getJson,
     storageToJson,
     downloadJsonModule,
     minJson,
