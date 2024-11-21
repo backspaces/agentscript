@@ -480,6 +480,8 @@ function createElementFromJSON(jsonElement) {
             height: jsonElement.height,
         })
 
+        plot.updatePlotFromModel(ui.model)
+
         // Start monitoring the plot
         plot.monitorModel(ui.model, jsonElement.fps)
 
@@ -625,7 +627,6 @@ export function createElements(json = true) {
 
 // =================== functions called by users commands ===================
 
-// a bit risky: depends on model, view, anim stored in ui by app
 function reset() {
     window.ui.anim.restart(ui.model, ui.view, ui.plot)
 }
@@ -635,14 +636,6 @@ function setJson(json = ui.json) {
     jsonToStorage()
     loadElementsFromJSON()
 }
-// function getJson() {
-//     return window.ui.json
-// }
-// function runPlot(str) {
-//     // '800x300, foodSeekers, nestSeekers'
-//     const plot = Plot.stringToPlot(str)
-//     plot.monitorModel(ui.model)
-// }
 
 Object.assign(window.ui, {
     // already has model view anim
