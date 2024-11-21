@@ -49,6 +49,7 @@ export function showPopup(type, jsonData = null) {
     else if (type === 'dropdown') modelTitle = 'Dropdown'
     else if (type === 'range') modelTitle = 'Slider'
     else if (type === 'output') modelTitle = 'Monitor'
+    else if (type === 'plot') modelTitle = 'Plot'
 
     let formContent = `
     <label for="name">Name:</label>
@@ -57,7 +58,7 @@ export function showPopup(type, jsonData = null) {
     }" required><br>
     `
 
-    if (type !== 'output') {
+    if (type !== 'output' && type !== 'plot') {
         formContent += `
     <label for="command">Command:</label>
     <input type="text" id="elementCommand" value="${
@@ -65,7 +66,6 @@ export function showPopup(type, jsonData = null) {
     }" required><br>
     `
     }
-
     if (type === 'checkbox') {
         formContent += `
     <label for="elementChecked">Checked:</label>
@@ -103,13 +103,6 @@ export function showPopup(type, jsonData = null) {
         jsonData ? jsonData.value : ''
     }" required><br>
     `
-        // } else if (type === 'button') {
-        //     formContent += `
-        // <label for="buttonText">Button Text:</label>
-        // <input type="text" id="elementButtonText" value="${
-        //     jsonData ? jsonData.name : ''
-        // }" required><br>
-        // `
     } else if (type === 'output') {
         formContent += `
     <label for="monitor">Value/Function to Monitor:</label>
@@ -120,6 +113,25 @@ export function showPopup(type, jsonData = null) {
     <input type="number" id="elementFps" value="${
         jsonData ? jsonData.fps : 10
     }"><br>
+    `
+    } else if (type === 'plot') {
+        formContent += `
+    <label for="width">Width:</label>
+    <input type="number" id="plotWidth" value="${
+        jsonData ? jsonData.width : 400
+    }" required><br>
+    <label for="height">Height:</label>
+    <input type="number" id="plotHeight" value="${
+        jsonData ? jsonData.height : 150
+    }" required><br>
+    <label for="pens">Pens (comma separated):</label>
+    <input type="text" id="plotPens" value="${
+        jsonData && jsonData.pens ? jsonData.pens.join(', ') : ''
+    }" required><br>
+    <label for="fps">Frames per Second (FPS):</label>
+    <input type="number" id="plotFps" value="${
+        jsonData ? jsonData.fps : 60
+    }" required><br>
     `
     }
 
@@ -170,101 +182,48 @@ function createElementWrapper(element, id) {
     return wrapper
 }
 
-// Menu option handlers (global scope)
-document.getElementById('deleteOption').onclick = function (e) {
-    e.stopPropagation() // Prevent bubbling to document handler
-    console.log('Delete option clicked')
-    const confirmDelete = confirm('Do you want to delete this control?')
-    if (confirmDelete) {
-        const wrapper = selectedWrapper
-        wrapper.remove() // Remove the element from the dom
-
-        // Remove the element from the JSON array using the id
-        const elementId = selectedElementId
-        // to let id & elementId be string or number, use !=
-        window.ui.json = window.ui.json.filter(el => el.id != elementId)
-
-        jsonToStorage() // Save the updated state
-    }
-    closePopupMenu() // Hide the popup menu
-}
-
-document.getElementById('cancelOption').onclick = function (e) {
-    e.stopPropagation() // Prevent bubbling to document handler
-    console.log('Cancel option clicked')
-    closePopupMenu() // Just hide the popup menu
-}
-
-document.getElementById('editOption').onclick = function (e) {
-    e.stopImmediatePropagation()
-    console.log('Edit option clicked')
-
-    const elementId = selectedElementId
-    const jsonElement = window.ui.json?.find(el => el.id == elementId)
-
-    if (jsonElement) {
-        // Use showPopup for editing, passing in jsonElement for pre-filled values
-        showPopup(jsonElement.type, jsonElement)
-    }
-    closePopupMenu() // Close the popup menu
-}
-
 // Function to show the popup menu and start listening for outside clicks
 function showPopupMenu(e, wrapper) {
-    e.preventDefault() // Prevent default behavior (e.g., text selection)
-
-    // Set the selected element ID to reference in edit or delete actions
-    selectedElementId = wrapper.dataset.id
-
-    // Position the popup menu near the mouse click
     const popupMenu = document.getElementById('popupMenu')
     popupMenu.style.display = 'block'
     popupMenu.style.left = `${e.pageX}px`
     popupMenu.style.top = `${e.pageY}px`
 
-    // Listen for mouseup event to handle menu option selection
-    document.addEventListener('mouseup', handleMouseUp)
-}
-function handleMouseUp(event) {
-    const popupMenu = document.getElementById('popupMenu')
-    popupMenu.style.display = 'none'
-    document.removeEventListener('mouseup', handleMouseUp)
+    // Set global references
+    selectedWrapper = wrapper
+    selectedElementId = wrapper.dataset.id
 
-    const selectedOption = event.target
-
-    if (selectedOption.id === 'editOption') {
-        const elementId = selectedElementId
-        const jsonElement = window.ui.json.find(el => el.id == elementId)
-
-        if (jsonElement) {
-            showPopup(jsonElement.type, jsonElement) // Open the form in edit mode
-        }
-    } else if (selectedOption.id === 'deleteOption') {
-        const confirmDelete = confirm('Do you want to delete this control?')
+    // Attach dynamic listeners for menu options
+    document.getElementById('deleteOption').onclick = function (e) {
+        e.stopPropagation()
+        console.log('Delete option clicked')
+        const confirmDelete = confirm('Do you want to delete this element?')
         if (confirmDelete) {
-            const wrapper = document.querySelector(
-                `[data-id="${selectedElementId}"]`
+            selectedWrapper.remove()
+            window.ui.json = window.ui.json.filter(
+                el => el.id != selectedElementId
             )
-            if (wrapper) {
-                wrapper.remove()
-                window.ui.json = window.ui.json.filter(
-                    el => el.id !== selectedElementId
-                )
-                jsonToStorage() // Save updated state
-            }
+            jsonToStorage()
+            console.log('Element deleted successfully:', selectedElementId)
         }
+        closePopupMenu()
     }
 
-    selectedElementId = null
-}
+    document.getElementById('editOption').onclick = function (e) {
+        e.stopPropagation()
+        console.log('Edit option clicked')
+        const jsonElement = window.ui.json.find(
+            el => el.id == selectedElementId
+        )
+        if (jsonElement) {
+            showPopup(jsonElement.type, jsonElement)
+        }
+        closePopupMenu()
+    }
 
-// Function to handle clicks outside the popup menu
-function handleOutsideClick(e) {
-    const popupMenu = document.getElementById('popupMenu')
-
-    // If the click is outside the menu, close it
-    if (!popupMenu.contains(e.target)) {
-        console.log('Clicked outside, closing menu')
+    document.getElementById('cancelOption').onclick = function (e) {
+        e.stopPropagation()
+        console.log('Cancel option clicked')
         closePopupMenu()
     }
 }
@@ -273,9 +232,8 @@ function handleOutsideClick(e) {
 function closePopupMenu() {
     const popupMenu = document.getElementById('popupMenu')
     popupMenu.style.display = 'none'
-
-    // Stop listening for clicks outside the menu
-    document.removeEventListener('mousedown', handleOutsideClick)
+    selectedWrapper = null
+    selectedElementId = null
 }
 
 // =================== create ui form & json from popups ===================
@@ -284,7 +242,7 @@ function closePopupMenu() {
 export function submitForm() {
     const name = document.getElementById('elementName').value
     const command =
-        elementType !== 'output'
+        elementType !== 'output' && elementType !== 'plot'
             ? document.getElementById('elementCommand').value
             : null
     const id = editingElementId || Date.now() // Use existing ID if editing, otherwise create new
@@ -335,6 +293,14 @@ export function submitForm() {
         jsonElement.monitor =
             document.getElementById('elementMonitor')?.value || ''
         jsonElement.fps = document.getElementById('elementFps')?.value || 10
+    } else if (elementType === 'plot') {
+        jsonElement.width = document.getElementById('plotWidth').value
+        jsonElement.height = document.getElementById('plotHeight').value
+
+        const pensInput = document.getElementById('plotPens').value.trim()
+        jsonElement.pens = pensInput ? pensInput.split(/,\s*/) : [] // Default to an empty array
+
+        jsonElement.fps = document.getElementById('plotFps').value || 60
     }
 
     // Remove and re-create the element in the UI with updated data if editing
@@ -366,7 +332,7 @@ function createElementFromJSON(jsonElement) {
 
         button.addEventListener('click', function () {
             try {
-                const { model, view, anim, reset, util, json, runPlot } = ui
+                const { model, view, anim, reset, util, json } = ui
                 eval(jsonElement.command)
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -500,6 +466,27 @@ function createElementFromJSON(jsonElement) {
         monitorWrapper.appendChild(label)
         monitorWrapper.appendChild(output)
         elementWrapper = createElementWrapper(monitorWrapper, jsonElement.id)
+    } else if (jsonElement.type === 'plot') {
+        // Create a container for the plot
+        const plotDiv = document.createElement('div')
+        plotDiv.id = `plot-${jsonElement.id}`
+        plotDiv.classList.add('plot-container')
+        plotDiv.style.width = `${jsonElement.width}px`
+        plotDiv.style.height = `${jsonElement.height}px`
+
+        // Initialize the plot using Plot.js
+        const plot = new Plot(plotDiv, jsonElement.pens, {
+            width: jsonElement.width,
+            height: jsonElement.height,
+        })
+
+        // Start monitoring the plot
+        plot.monitorModel(ui.model, jsonElement.fps)
+
+        ui.plot = plot
+
+        // Wrap the plotDiv in a draggable wrapper
+        elementWrapper = createElementWrapper(plotDiv, jsonElement.id)
     }
 
     // Ensure elementWrapper is created before applying position
@@ -640,26 +627,26 @@ export function createElements(json = true) {
 
 // a bit risky: depends on model, view, anim stored in ui by app
 function reset() {
-    window.ui.anim.restart(ui.model, ui.view)
+    window.ui.anim.restart(ui.model, ui.view, ui.plot)
     // window.ui.model.reset()
     // // window.ui.view.reset()
     // window.ui.anim.reset()
     // window.ui.view.draw()
 }
 
-function setJson(json) {
+function setJson(json = ui.json) {
     window.ui.json = json
     jsonToStorage()
     loadElementsFromJSON()
 }
-function getJson() {
-    return window.ui.json
-}
-function runPlot(str) {
-    // '800x300, foodSeekers, nestSeekers'
-    const plot = Plot.stringToPlot(str)
-    plot.monitorPlot(ui.model)
-}
+// function getJson() {
+//     return window.ui.json
+// }
+// function runPlot(str) {
+//     // '800x300, foodSeekers, nestSeekers'
+//     const plot = Plot.stringToPlot(str)
+//     plot.monitorModel(ui.model)
+// }
 
 Object.assign(window.ui, {
     // already has model view anim
@@ -670,10 +657,10 @@ Object.assign(window.ui, {
     // used by commands
     reset,
     util,
-    runPlot,
+    // runPlot,
     // used in devtools
     setJson,
-    getJson,
+    // getJson,
     storageToJson,
     downloadJsonModule,
     minJson,

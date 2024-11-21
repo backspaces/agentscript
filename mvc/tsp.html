@@ -51,7 +51,7 @@
                 if (model.done) anim.stop()
                 model.step()
                 view.draw()
-                plot.updatePlot(pens, model)
+                plot.updatePlotFromModel(model)
             },
             -1, // run until model stops: best tour constant for 500 steps
             30 // 30 fps

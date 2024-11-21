@@ -3,32 +3,41 @@ import uPlot from '../vendor/uPlot.min.js'
 
 await util.fetchCssStyle('../vendor/uPlot.css')
 
+//  'white silver gray black red maroon yellow orange olive lime green cyan teal blue navy magenta purple'
+const penColors = ['red', 'blue', 'green', 'black', 'gray', 'yellow']
+function namesToPens(names) {
+    const obj = {}
+    names.forEach((name, i) => (obj[name] = penColors[i]))
+    console.log('arrayToPens', obj)
+    return obj
+}
+
 class Plot {
     // uPlot: see https://github.com/leeoniya/uPlot/tree/master/docs
-    static stringToPlot(str) {
-        // example: '400x300, foodSeeker, nestSeeker'
-        const div = 'plotDiv'
-        const pens = {}
-        const options = {
-            title: undefined,
-            width: 800,
-            height: 200,
-            legend: {
-                show: true,
-            },
-        }
+    // static stringToPlot(str) {
+    //     // example: '400x300, foodSeeker, nestSeeker'
+    //     const div = 'plotDiv'
+    //     const pens = {}
+    //     const options = {
+    //         title: undefined,
+    //         width: 800,
+    //         height: 200,
+    //         legend: {
+    //             show: true,
+    //         },
+    //     }
 
-        const parts = str.split(/,\s*/)
-        const size = parts.shift().split('x')
-        const [width, height] = size
-        options.width = Number(width)
-        options.height = Number(height)
+    //     const parts = str.split(/,\s*/)
+    //     const size = parts.shift().split('x')
+    //     const [width, height] = size
+    //     options.width = Number(width)
+    //     options.height = Number(height)
 
-        const colors = ['red', 'blue', 'green']
-        parts.forEach((str, i) => (pens[str] = colors[i]))
+    //     const colors = ['red', 'blue', 'green']
+    //     parts.forEach((str, i) => (pens[str] = colors[i]))
 
-        return new Plot(div, pens, options)
-    }
+    //     return new Plot(div, pens, options)
+    // }
     static defaultOptions() {
         return {
             title: undefined, // default: don't show title
@@ -82,6 +91,11 @@ class Plot {
     constructor(div, pens, options = {}) {
         // // Inject tooltip CSS if not already present
         // injectTooltipCSS()
+
+        if (Array.isArray(pens)) pens = namesToPens(pens)
+
+        // pens are modified by plotting, create a copy for our use
+        pens = structuredClone(pens)
 
         options = Object.assign(Plot.defaultOptions(), options)
         if (util.isString(div)) div = document.getElementById(div)
@@ -209,6 +223,12 @@ class Plot {
         const uplot = new uPlot(options, data, div)
         Object.assign(this, { data, dataArrays, uplot })
 
+        // this.updatePlotFromModel(this.model)
+        if (this.isMonitoring()) {
+            this.stopMonitoring()
+            this.monitorModel(this.model)
+        }
+
         this.drawData()
     }
 
@@ -226,13 +246,6 @@ class Plot {
         })
     }
 
-    updatePlot(pens, model) {
-        util.forLoop(pens, (val, key) => {
-            pens[key] = model[key]
-        })
-        this.linePlot(pens)
-    }
-
     linePlot(pens, draw = true) {
         const xs = this.data[0]
         xs.push(xs.length)
@@ -246,22 +259,44 @@ class Plot {
         this.uplot.setData(this.data)
     }
 
-    // monitorPlot(pens, model, fps = 60) {
-    monitorPlot(model, fps = 60) {
+    // ====== agentscript model based plots ======
+
+    updatePlotFromModel(model) {
+        const pens = this.pens
+
+        util.forLoop(pens, (val, key) => {
+            pens[key] = model[key]
+        })
+
+        this.linePlot(pens)
+    }
+
+    monitorModel(model, fps = 60) {
+        this.model = model
+
         const intervalMs = 1000 / fps
-        let lastTick = -1 // model.ticks
+        // let lastTick = -1 // model.ticks
+        let lastTick = 0 // model.ticks
 
         this.intervalID = setInterval(() => {
             if (model.ticks > lastTick) {
-                this.updatePlot(this.pens, model)
+                this.updatePlotFromModel(model)
                 lastTick = model.ticks
             }
         }, intervalMs)
     }
+
+    isMonitoring() {
+        return this.intervalID != null
+    }
+
     stopMonitoring() {
         if (this.intervalID) this.intervalID = clearInterval(this.intervalID)
+        this.intervalID = null
     }
 }
+
+// =============== ToolTips =======================
 
 function uPlotTooltipPlugin(parentDiv) {
     let tooltip = document.createElement('div')

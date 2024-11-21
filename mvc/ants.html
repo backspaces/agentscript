@@ -63,7 +63,7 @@
             () => {
                 model.step()
                 view.draw()
-                plot.updatePlot(pens, model)
+                plot.updatePlotFromModel(model)
             },
             -1, // run forever
             30 // fps

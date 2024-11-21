@@ -158,3 +158,7 @@ body {
     width: auto; /* Prevent checkbox from taking the full width */
     margin-right: 5px; /* Add spacing between checkbox and label text */
 }
+
+.plot-container {
+    position: relative;
+}
