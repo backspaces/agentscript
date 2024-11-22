@@ -25,7 +25,8 @@ export default class GridPathModel extends Model {
     }
 
     step() {
-        if (this.done()) return
+        if (this.done) return
+
         this.floodFill()
 
         const ok = this.okNeighbors(this.walker.patch)
@@ -41,7 +42,7 @@ export default class GridPathModel extends Model {
 
         this.probability /= ok.length
 
-        if (this.done())
+        if (this.done)
             this.walker.choices = this.okNeighbors(this.walker.patch).length
     }
 

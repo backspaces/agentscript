@@ -23,7 +23,6 @@ export default class TSPModel extends Model {
         this.nodes.setDefault('theta', 0) // override promotion to random angle
 
         // globals
-        this.done = false
         this.bestTourNodes = []
         this.bestTourLength = 0
         this.bestTourTick = 0
@@ -50,6 +49,7 @@ export default class TSPModel extends Model {
 
     step() {
         if (this.done) return
+
         this.travelers.ask(t => this.makeTour(t))
         this.installBestTour()
         this.stopIfDone()
@@ -136,6 +136,5 @@ export default class TSPModel extends Model {
         this.travelers.ask(
             t => (t.tourLength = this.lengthFromNodes(t.tourNodes))
         )
-        this.done = false
     }
 }

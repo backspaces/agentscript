@@ -31,6 +31,9 @@ class Model {
     links
     ticks
 
+    // set to true by subclasses to let animator and others know we're done
+    done = false
+
     /**
      * Creates an instance of Model.
      * The worldOptions define the coordinate system for this model
@@ -86,6 +89,7 @@ class Model {
         this.turtles.clear()
         this.turtles.ID = 0
         this.ticks = 0
+        this.done = false
         if (callSetup) this.setup()
     }
 

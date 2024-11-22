@@ -390,7 +390,7 @@ model.patches.ask(patch => {
                 model.step()
                 view.draw()
             },
-            -1, // run 500 steps
+            -1, // run forever
             30 // 30 fps
         )
         util.toWindow({ util, model, view, ColorMap, resetAll, setPatchesColor, setColoMap })

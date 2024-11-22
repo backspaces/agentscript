@@ -39,6 +39,8 @@ export default class FireModel extends Model {
     }
 
     step() {
+        if (this.done) return
+
         this.fires.ask(p => {
             p.neighbors4.ask(n => {
                 if (this.isTree(n)) this.ignite(n)
@@ -46,6 +48,9 @@ export default class FireModel extends Model {
             p.setBreed(this.embers)
         })
         this.fadeEmbers()
+
+        this.done = this.fires.length + this.embers.length === 0
+        if (this.done) console.log(`Model done at tick: ${this.ticks}`)
     }
 
     isTree(p) {
@@ -54,9 +59,9 @@ export default class FireModel extends Model {
     percentBurned() {
         return (this.burnedTrees / this.initialTrees) * 100
     }
-    isDone() {
-        return this.fires.length + this.embers.length === 0
-    }
+    // isDone() {
+    //     return this.fires.length + this.embers.length === 0
+    // }
 
     ignite(p) {
         p.type = this.fireType

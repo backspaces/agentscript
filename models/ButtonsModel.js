@@ -15,7 +15,6 @@ export default class ButtonsModel extends Model {
         this.turtles.setDefault('theta', 0) // override promotion to random angle
 
         this.cluster = new Set()
-        this.done = false
 
         this.turtles.create(this.population, t =>
             t.setxy(...this.world.randomPatchPoint())
@@ -23,7 +22,7 @@ export default class ButtonsModel extends Model {
     }
 
     step() {
-        if (this.done) return // done, idleing
+        if (this.done) return
 
         const b1 = this.turtles.oneOf()
         const b2 = this.turtles.otherOneOf(b1)
@@ -35,7 +34,7 @@ export default class ButtonsModel extends Model {
 
         if (this.cluster.size === this.turtles.length) {
             this.done = true
-            console.log(`Done at tick: ${this.ticks}`)
+            console.log(`Model done at tick: ${this.ticks}`)
         }
     }
 

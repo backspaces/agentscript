@@ -53,7 +53,7 @@
                 view.draw()
                 plot.updatePlotFromModel(model)
             },
-            -1, // run until model stops: best tour constant for 500 steps
+            -1, // run until model stops
             30 // 30 fps
         ).startStats()
         anim.setIdle(() => view.draw())

@@ -19,7 +19,6 @@ export default class VirusModel extends Model {
     }
 
     setup() {
-        this.done = false
         this.setupNodes()
         this.setupNetwork()
         this.turtles.nOf(this.outbreakSize).ask(t => this.becomeInfected(t))
@@ -59,6 +58,7 @@ export default class VirusModel extends Model {
         this.doVirusChecks()
 
         this.done = this.turtles.all(o => !o.infected)
+        if (this.done) console.log(`Model done at tick: ${this.ticks}`)
     }
 
     becomeInfected(t) {

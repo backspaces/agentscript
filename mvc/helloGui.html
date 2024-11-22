@@ -31,7 +31,6 @@
 
         const anim = new Animator(
             () => {
-                if (model.done) anim.stop()
                 model.step()
                 view.draw()
             },
