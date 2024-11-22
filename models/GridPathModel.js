@@ -1,13 +1,11 @@
 import AgentArray from 'https://code.agentscript.org/src/AgentArray.js'
 import Model from 'https://code.agentscript.org/src/Model.js'
 
+// prettier-ignore
 const WorldOptions = {
-    minX: 0,
-    minY: 0,
-    minZ: 0,
-    maxX: 9,
-    maxY: 9,
-    maxZ: 2,
+    minX: 0, maxX: 9,
+    minY: 0, maxY: 9,
+    minZ: 0, maxZ: 2,
 }
 
 export default class GridPathModel extends Model {
@@ -21,7 +19,7 @@ export default class GridPathModel extends Model {
         this.walker = this.turtles.createOne()
         this.walker.moveTo(this.patches.first())
         this.walker.patch.occupied = true
-        // this.walker.choices = 2
+        // this.walker.choices = 2 // used by view to show the number of choices
     }
 
     step() {
@@ -42,13 +40,17 @@ export default class GridPathModel extends Model {
 
         this.probability /= ok.length
 
-        if (this.done)
+        this.done = this.patches.last().occupied
+
+        if (this.done) {
             this.walker.choices = this.okNeighbors(this.walker.patch).length
+            console.log(`Model done at tick: ${this.ticks}`)
+        }
     }
 
-    done() {
-        return this.patches.last().occupied
-    }
+    // isDone() {
+    //     return this.patches.last().occupied
+    // }
     okNeighbors(p) {
         return p.neighbors4.filter(p => p.ok)
     }

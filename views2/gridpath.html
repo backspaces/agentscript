@@ -7,7 +7,8 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
-        import Model from 'https://code.agentscript.org/models/GridPathModel.js'
+        // import Model from 'https://code.agentscript.org/models/GridPathModel.js'
+        import Model from '../models/GridPathModel.js'
         import TwoDrawOptions from 'https://code.agentscript.org/views2/gridpathOptions.js'
 
         const model = new Model()
@@ -20,8 +21,9 @@
             () => {
                 model.step()
                 view.draw()
+                if (model.done) anim.stop()
             },
-            500, // how many steps
+            -1, // run forever
             30 // at fps steps/second
         )
     </script>

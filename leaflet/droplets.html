@@ -142,10 +142,11 @@
                         model.step()
                         view.draw()
                         // gui.update()
-                        if (model.moves === 0) {
-                            anim.stop()
-                            console.log('No moves, stopping at step', model.ticks)
-                        }
+                        if (model.done) anim.stop()
+                        // if (model.done) {
+                        //     anim.stop()
+                        //     console.log('No moves, stopping at step', model.ticks)
+                        // }
                     },
                     -1, // run forever
                     30 // 10 // 30 // 30 fps

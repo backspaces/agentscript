@@ -134,6 +134,8 @@ export default class DropletsModel extends Model {
     }
 
     step() {
+        if (this.done) return
+
         this.moves = 0
         this.turtles.ask(t => {
             if (t.done) return
@@ -151,6 +153,8 @@ export default class DropletsModel extends Model {
                 t.done = true
             }
         })
+        this.done = this.moves === 0
+        if (this.done) console.log('No moves, stopping at step', this.ticks)
     }
 
     // Useful informational function: (not used by model but can be used by "app")

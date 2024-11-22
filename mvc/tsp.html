@@ -48,10 +48,10 @@
 
         const anim = new Animator(
             () => {
-                if (model.done) anim.stop()
                 model.step()
                 view.draw()
                 plot.updatePlotFromModel(model)
+                if (model.done) anim.stop()
             },
             -1, // run until model stops
             30 // 30 fps
