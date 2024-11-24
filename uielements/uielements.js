@@ -478,6 +478,7 @@ function createElementFromJSON(jsonElement) {
         const plot = new Plot(plotDiv, jsonElement.pens, {
             width: jsonElement.width,
             height: jsonElement.height,
+            legend: { show: false },
         })
 
         plot.updatePlotFromModel(ui.model)
