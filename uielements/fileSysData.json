@@ -1,0 +1,156 @@
+[
+  {
+    "command": "reset()",
+    "id": 1728927569824,
+    "name": "reset",
+    "position": {
+      "x": 33,
+      "y": 70
+    },
+    "type": "button"
+  },
+  {
+    "command": "anim.setFps(value)",
+    "id": 1728682054456,
+    "max": "50",
+    "min": "0",
+    "name": "fps",
+    "position": {
+      "x": 177,
+      "y": 36
+    },
+    "step": "1",
+    "type": "range",
+    "value": "30"
+  },
+  {
+    "id": 1729270887157,
+    "type": "output",
+    "name": "ticks",
+    "position": {
+      "x": 336,
+      "y": 37
+    },
+    "monitor": "model.ticks",
+    "fps": "10",
+    "command": null
+  },
+  {
+    "id": 1729463191305,
+    "type": "range",
+    "name": "patchSize",
+    "command": "view.reset(value)",
+    "position": {
+      "x": 191,
+      "y": 155
+    },
+    "min": "1",
+    "max": "15",
+    "step": "1",
+    "value": "10"
+  },
+  {
+    "id": 1729463877025,
+    "type": "button",
+    "name": "downloadCanvas",
+    "command": "view.downloadCanvas()",
+    "position": {
+      "x": 56,
+      "y": 232
+    }
+  },
+  {
+    "id": 1729464380401,
+    "type": "range",
+    "name": "turtleSize",
+    "command": "view.drawOptions.turtlesSize = value",
+    "position": {
+      "x": 33,
+      "y": 159
+    },
+    "min": "1",
+    "max": "10",
+    "step": "1",
+    "value": "3"
+  },
+  {
+    "id": 1729535684833,
+    "type": "button",
+    "name": "downloadJson",
+    "command": "util.downloadJsonModule(json, 'elements.js')",
+    "position": {
+      "x": 190,
+      "y": 231
+    }
+  },
+  {
+    "id": 1729638667060,
+    "type": "dropdown",
+    "name": "shape",
+    "command": "view.drawOptions.turtlesShape = value",
+    "position": {
+      "x": 98,
+      "y": 34
+    },
+    "options": [
+      "circle",
+      "dart",
+      "person",
+      "bug",
+      "arrow"
+    ],
+    "selected": "bug"
+  },
+  {
+    "id": 1730141024864,
+    "type": "checkbox",
+    "name": "run",
+    "command": "checked ? anim.start() : anim.stop()",
+    "position": {
+      "x": 33,
+      "y": 35
+    },
+    "checked": false
+  },
+  {
+    "id": 1731189397631,
+    "type": "output",
+    "name": "foodSeekers",
+    "command": null,
+    "position": {
+      "x": 349,
+      "y": 149
+    },
+    "monitor": "model.foodSeekers",
+    "fps": "10"
+  },
+  {
+    "id": 1732139806352,
+    "type": "plot",
+    "name": "foodSeekers, nestSeekers",
+    "command": null,
+    "position": {
+      "x": 34,
+      "y": 406
+    },
+    "width": "450",
+    "height": "150",
+    "pens": [
+      "foodSeekers",
+      "nestSeekers"
+    ],
+    "fps": "60"
+  },
+  {
+    "id": 1732212640249,
+    "type": "output",
+    "name": "nestSeekers",
+    "command": null,
+    "position": {
+      "x": 352,
+      "y": 202
+    },
+    "monitor": "model.nestSeekers",
+    "fps": "10"
+  }
+]

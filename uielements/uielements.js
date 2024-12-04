@@ -476,9 +476,10 @@ function createElementFromJSON(jsonElement) {
 
         // Initialize the plot using Plot.js
         const plot = new Plot(plotDiv, jsonElement.pens, {
-            width: jsonElement.width,
-            height: jsonElement.height,
-            legend: { show: false },
+            title: jsonElement.name,
+            width: Number(jsonElement.width),
+            height: Number(jsonElement.height),
+            // legend: { show: true },
         })
 
         plot.updatePlotFromModel(ui.model)
@@ -490,6 +491,15 @@ function createElementFromJSON(jsonElement) {
 
         // Wrap the plotDiv in a draggable wrapper
         elementWrapper = createElementWrapper(plotDiv, jsonElement.id)
+
+        setTimeout(() => {
+            // Find the .uplot container
+            const uplotElement = plotDiv.querySelector('.uplot')
+            // Set wrapper height to uplot height
+            if (uplotElement) {
+                elementWrapper.style.height = `${uplotElement.clientHeight}px`
+            }
+        }, 50) // wait 50ms
     }
 
     // Ensure elementWrapper is created before applying position
@@ -577,6 +587,7 @@ const minJson = JSON.parse(minJsonString)
 function jsonToStorage() {
     const jsonString = JSON.stringify(window.ui.json) // Convert to string
     localStorage.setItem(localStorageName, jsonString) // Save it to localStorage
+    console.log('json: ', jsonString)
 }
 
 function storageToJson() {

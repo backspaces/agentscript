@@ -216,6 +216,30 @@ export function logAll(obj) {
     Object.keys(obj).forEach(key => console.log('  ', key, obj[key]))
 }
 
+export function cssTrace(
+    elementName,
+    names = ['position', 'cursor', 'display', 'width', 'height']
+) {
+    let element = document.querySelector(elementName)
+
+    while (element) {
+        const styles = window.getComputedStyle(element)
+        console.log('element:', element)
+        // console.log('styles:', styles)
+        console.log('tag:', element.tagName)
+
+        names.forEach(name => console.log(name + ':', styles[name]))
+
+        // console.log('Position:', styles.position)
+        // console.log('Top:', styles.top)
+        // console.log('Left:', styles.left)
+        // console.log('Display:', styles.display)
+
+        console.log('------------------------')
+        element = element.parentElement // Move up to the parent
+    }
+}
+
 // ### Dom
 
 // ### Math

@@ -161,4 +161,28 @@ body {
 
 .plot-container {
     position: relative;
+    /* cursor: crosshair; */
 }
+.uplot {
+    cursor: default;
+}
+
+/* .ui-element {
+    overflow: visible;
+} */
+
+/* .uplot-tooltip {
+    position: absolute;
+    cursor: crosshair;
+    background: rgba(0, 0, 0, 0.2);
+    color: black;
+    border: 2px solid black;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 10;
+    white-space: pre;
+} */
+/* white-space: pre; ..Preserve line breaks for each pen value */

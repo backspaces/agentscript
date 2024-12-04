@@ -1,7 +1,16 @@
 import * as util from './utils.js'
-import uPlot from '../vendor/uPlot.min.js'
-
+import uPlot from '../vendor/uPlot.js'
 await util.fetchCssStyle('../vendor/uPlot.css')
+// import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
+// await util.fetchCssStyle('https://unpkg.com/uplot/dist/uPlot.min.css')
+
+// const style = document.createElement('style')
+// style.textContent = `
+// .u-series th {
+//     cursor: crosshair;
+// }
+// `
+// document.head.appendChild(style)
 
 //  'white silver gray black red maroon yellow orange olive lime green cyan teal blue navy magenta purple'
 const penColors = ['red', 'blue', 'green', 'black', 'gray', 'yellow']
@@ -13,31 +22,6 @@ function namesToPens(names) {
 }
 
 class Plot {
-    // uPlot: see https://github.com/leeoniya/uPlot/tree/master/docs
-    // static stringToPlot(str) {
-    //     // example: '400x300, foodSeeker, nestSeeker'
-    //     const div = 'plotDiv'
-    //     const pens = {}
-    //     const options = {
-    //         title: undefined,
-    //         width: 800,
-    //         height: 200,
-    //         legend: {
-    //             show: true,
-    //         },
-    //     }
-
-    //     const parts = str.split(/,\s*/)
-    //     const size = parts.shift().split('x')
-    //     const [width, height] = size
-    //     options.width = Number(width)
-    //     options.height = Number(height)
-
-    //     const colors = ['red', 'blue', 'green']
-    //     parts.forEach((str, i) => (pens[str] = colors[i]))
-
-    //     return new Plot(div, pens, options)
-    // }
     static defaultOptions() {
         return {
             title: undefined, // default: don't show title
@@ -47,10 +31,8 @@ class Plot {
             cursor: { show: true },
             legend: { show: true },
 
-            xRange: null, // static x values, use [0,100] format
-            yRange: null, // ditto for y
-            xIsTime: false,
-            xAxisLabel: 'x',
+            precision: 2, // decimal digits
+            stacked: false,
 
             series: [
                 {
@@ -82,44 +64,28 @@ class Plot {
     }
 
     // simple pens looks like name/color pairs
-    // complex pens are a series object above with label = key
     // pens: { // name-color pairs
     //     infected: 'red',
     //     susceptible: 'blue',
     //     resistant: 'gray',
     // },
+    // complex pens are a series object above with label = key
     constructor(div, pens, options = {}) {
-        // // Inject tooltip CSS if not already present
-        // injectTooltipCSS()
-
         if (Array.isArray(pens)) pens = namesToPens(pens)
 
         // pens are modified by plotting, create a copy for our use
-        pens = structuredClone(pens)
+        // pens = structuredClone(pens)
 
         options = Object.assign(Plot.defaultOptions(), options)
         if (util.isString(div)) div = document.getElementById(div)
 
         const useToolTips = !options.legend.show
-
         if (useToolTips) {
             injectTooltipCSS()
-            if (div !== document.body) {
-                div.style.position = 'relative'
-            }
-            options.plugins = [uPlotTooltipPlugin(div)]
+            options.plugins = [
+                uPlotTooltipPlugin(div, options.precision, options.stacked),
+            ]
         }
-
-        options.scales.x.time = options.xIsTime
-        options.series[0].label = options.xAxisLabel
-
-        // Set parent position to relative if it's not document.body
-        // if (div !== document.body) {
-        //     div.style.position = 'relative'
-        // }
-
-        if (options.xRange) options.scales.x.range = options.xRange
-        if (options.yRange) options.scales.y.range = options.yRange
 
         // Use pens object to setup colors and shapes
         util.forLoop(pens, (val, key) => {
@@ -142,13 +108,16 @@ class Plot {
                     stroke: val,
                 })
             }
+            const series = options.series.at(-1)
+            series.value = (u, v) => (v ? v.toFixed(options.precision) : '--')
         })
 
-        // // Pass pens to the tooltip plugin for dynamic series handling
-        // options.plugins = [uPlotTooltipPlugin(div)]
+        console.log('Plot options', options)
 
         const [data, dataArrays] = this.createDataObject(pens)
         let uplot = new uPlot(options, data, div)
+
+        console.log('uplot', uplot)
 
         Object.assign(this, { div, options, pens, data, dataArrays, uplot })
     }
@@ -298,7 +267,12 @@ class Plot {
 
 // =============== ToolTips =======================
 
-function uPlotTooltipPlugin(parentDiv) {
+function uPlotTooltipPlugin(parentDiv, precision = 2, stacked = false) {
+    // The tooltip div will be absolute, requiring the parent to be relative
+    if (parentDiv !== document.body) {
+        parentDiv.style.position = 'relative'
+    }
+
     let tooltip = document.createElement('div')
     tooltip.className = 'uplot-tooltip'
 
@@ -318,13 +292,17 @@ function uPlotTooltipPlugin(parentDiv) {
                 tooltip.style.left = left + 'px'
                 tooltip.style.top = top + 'px'
 
-                let x = u.data[0][u.cursor.idx]
-                let content = `x: ${x}\n`
-
+                // let x = u.data[0][u.cursor.idx]
+                // // let content = `x: ${x}\n`
+                // let content = stacked ? `x: ${x}\n` : `x: ${x}  `
+                let content
                 Object.keys(u.series).forEach((_, index) => {
-                    if (index === 0) return // Skip the x-axis series
+                    // if (index === 0) return // Skip the x-axis series
                     let y = u.data[index][u.cursor.idx]
-                    content += `${u.series[index].label}: ${y}\n`
+                    y = y.toFixed(precision)
+                    // content += `${u.series[index].label}: ${y}  \n`
+                    content += `${u.series[index].label}: ${y}`
+                    content += stacked ? '\n' : '  '
                 })
 
                 tooltip.textContent = content
@@ -333,6 +311,7 @@ function uPlotTooltipPlugin(parentDiv) {
     }
 }
 
+// via chatgpt
 function injectTooltipCSS() {
     // Check if the tooltip CSS is already added to avoid duplicates
     if (!document.getElementById('uplot-tooltip-css')) {
@@ -341,17 +320,14 @@ function injectTooltipCSS() {
         style.textContent = `
             .uplot-tooltip {
                 position: absolute;
-
-                // background: rgba(0, 0, 0, 0.7);
-                // color: white;
+                cursor: crosshair; /* or 'none' if desired */
                 background: rgba(0, 0, 0, 0.2);
                 color: black;
                 border: 2px solid black;
                 font-weight: bold;
-
                 padding: 4px 8px;
                 border-radius: 4px;
-                font-size: 12px;
+                font-size: 14px;
                 pointer-events: none;
                 z-index: 10;
                 white-space: pre; /* Preserve line breaks for each pen value */
@@ -362,3 +338,29 @@ function injectTooltipCSS() {
 }
 
 export default Plot
+
+// uPlot: see https://github.com/leeoniya/uPlot/tree/master/docs
+// static stringToPlot(str) {
+//     // example: '400x300, foodSeeker, nestSeeker'
+//     const div = 'plotDiv'
+//     const pens = {}
+//     const options = {
+//         title: undefined,
+//         width: 800,
+//         height: 200,
+//         legend: {
+//             show: true,
+//         },
+//     }
+
+//     const parts = str.split(/,\s*/)
+//     const size = parts.shift().split('x')
+//     const [width, height] = size
+//     options.width = Number(width)
+//     options.height = Number(height)
+
+//     const colors = ['red', 'blue', 'green']
+//     parts.forEach((str, i) => (pens[str] = colors[i]))
+
+//     return new Plot(div, pens, options)
+// }
