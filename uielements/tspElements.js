@@ -39,7 +39,7 @@ const json = [
         id: 1729463191305,
         type: 'range',
         name: 'patchSize',
-        command: 'view.reset(value)',
+        command: "view.setValue('turtlesSize', value)",
         position: {
             x: 191,
             y: 155,

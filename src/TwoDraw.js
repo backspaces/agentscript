@@ -153,9 +153,26 @@ class TwoDraw extends TwoView {
     //     if (redraw) this.draw()
     //     super.reset()
     // }
-    reset(patchSize) {
+    reset(patchesSize) {
         this.ticks = 0
-        super.reset(patchSize)
+        super.reset(patchesSize)
+        this.draw()
+    }
+
+    setValue(key, val) {
+        if (key === 'patchesSize') {
+            this.reset(val)
+            return
+        }
+
+        // const keys = TwoDraw.drawKeys()
+        // keys.unshift('patchesSize')
+        const keys = ['patchesSize'].concat(TwoDraw.drawKeys())
+        if (!keys.includes(key)) {
+            throw new Error(`setValue: ${key} not a valid TwoDraw key. Valid keys:
+            ${keys.join()}`)
+        }
+        this.drawOptions[key] = val
         this.draw()
     }
 

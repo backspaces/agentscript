@@ -581,7 +581,7 @@ function loadElementsFromJSON() {
 
 let localStorageName
 
-const minJsonString = `[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":94,"y":35},"type":"button"},{"command":"anim.setFps(value)","id":1728682054456,"max":"60","min":"0","name":"fps","position":{"x":165,"y":35},"step":"1","type":"range","value":"30"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":331,"y":33},"monitor":"model.ticks","fps":"10"},{"id":1730215309523,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":25,"y":37},"checked":false},{"id":1730223001632,"type":"dropdown","name":"shape","command":"view.drawOptions.turtlesShape = value","position":{"x":147,"y":131},"options":["circle","dart","person","bug"],"selected":"bug"},{"id":1730394519738,"type":"button","name":"download","command":"util.downloadJsonModule(json, 'elements.js')","position":{"x":19,"y":133}}]`
+const minJsonString = `[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":439,"y":21},"type":"button"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":367,"y":22},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchesSize","command":"view.setValue('patchesSize', value)","position":{"x":184,"y":22},"min":"1","max":"15","step":"1","value":"10"},{"id":1730141024864,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":20,"y":21},"checked":false},{"id":1733442807622,"type":"dropdown","name":"fps","command":"anim.setFps(value)","position":{"x":108,"y":21},"options":["2","5","10","20","30","60"],"selected":"30"}]`
 const minJson = JSON.parse(minJsonString)
 
 function jsonToStorage() {
@@ -644,13 +644,18 @@ function reset() {
 }
 
 function setJson(json = ui.json) {
+    const currentJson = ui.json
+
+    if (util.isString(json)) json = JSON.parse(json)
     window.ui.json = json
     jsonToStorage()
     loadElementsFromJSON()
+
+    return currentJson
 }
 
 Object.assign(window.ui, {
-    // already has model view anim
+    // already has: model view anim
     // used in divs.html
     showPopup,
     submitForm,

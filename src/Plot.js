@@ -267,6 +267,7 @@ class Plot {
 
 // =============== ToolTips =======================
 
+// Also see https://github.com/leeoniya/uPlot/issues/931
 function uPlotTooltipPlugin(parentDiv, precision = 2, stacked = false) {
     // The tooltip div will be absolute, requiring the parent to be relative
     if (parentDiv !== document.body) {

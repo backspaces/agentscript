@@ -39,7 +39,7 @@ const json = [
     "id": 1729463191305,
     "type": "range",
     "name": "patchSize",
-    "command": "view.reset(value)",
+    "command": "view.setValue('patchesSize', value)",
     "position": {
       "x": 191,
       "y": 155
@@ -63,7 +63,7 @@ const json = [
     "id": 1729464380401,
     "type": "range",
     "name": "turtleSize",
-    "command": "view.drawOptions.turtlesSize = value",
+    "command": "view.setValue('turtlesSize', value)",
     "position": {
       "x": 33,
       "y": 159
@@ -87,7 +87,7 @@ const json = [
     "id": 1729638667060,
     "type": "dropdown",
     "name": "shape",
-    "command": "view.drawOptions.turtlesShape = value",
+    "command": "view.setValue('turtlesShape', value)",
     "position": {
       "x": 98,
       "y": 34
