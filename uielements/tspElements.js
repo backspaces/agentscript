@@ -1,102 +1,85 @@
 const json = [
-    {
-        command: 'reset()',
-        id: 1728927569824,
-        name: 'reset',
-        position: {
-            x: 33,
-            y: 70,
-        },
-        type: 'button',
+  {
+    "command": "reset()",
+    "id": 1728927569824,
+    "name": "reset",
+    "position": {
+      "x": 439,
+      "y": 21
     },
-    {
-        command: 'anim.setFps(value)',
-        id: 1728682054456,
-        max: '50',
-        min: '0',
-        name: 'fps',
-        position: {
-            x: 177,
-            y: 36,
-        },
-        step: '1',
-        type: 'range',
-        value: '30',
+    "type": "button"
+  },
+  {
+    "id": 1729270887157,
+    "type": "output",
+    "name": "ticks",
+    "position": {
+      "x": 369,
+      "y": 22
     },
-    {
-        id: 1729270887157,
-        type: 'output',
-        name: 'ticks',
-        position: {
-            x: 336,
-            y: 37,
-        },
-        monitor: 'model.ticks',
-        fps: '10',
-        command: null,
+    "monitor": "model.ticks",
+    "fps": "10",
+    "command": null
+  },
+  {
+    "id": 1729463191305,
+    "type": "range",
+    "name": "patchesSize",
+    "command": "view.setValue('patchesSize', value)",
+    "position": {
+      "x": 184,
+      "y": 22
     },
-    {
-        id: 1729463191305,
-        type: 'range',
-        name: 'patchSize',
-        command: "view.setValue('turtlesSize', value)",
-        position: {
-            x: 191,
-            y: 155,
-        },
-        min: '1',
-        max: '15',
-        step: '1',
-        value: '10',
+    "min": "1",
+    "max": "15",
+    "step": "1",
+    "value": "10"
+  },
+  {
+    "id": 1730141024864,
+    "type": "checkbox",
+    "name": "run",
+    "command": "checked ? anim.start() : anim.stop()",
+    "position": {
+      "x": 20,
+      "y": 21
     },
-    {
-        id: 1729463877025,
-        type: 'button',
-        name: 'downloadCanvas',
-        command: 'view.downloadCanvas()',
-        position: {
-            x: 56,
-            y: 232,
-        },
+    "checked": false
+  },
+  {
+    "id": 1733442807622,
+    "type": "dropdown",
+    "name": "fps",
+    "command": "anim.setFps(value)",
+    "position": {
+      "x": 108,
+      "y": 21
     },
-    {
-        id: 1729535684833,
-        type: 'button',
-        name: 'downloadJson',
-        command: "util.downloadJsonModule(json, 'elements.js')",
-        position: {
-            x: 190,
-            y: 231,
-        },
+    "options": [
+      "2",
+      "5",
+      "10",
+      "20",
+      "30",
+      "60"
+    ],
+    "selected": "30"
+  },
+  {
+    "id": 1734033577558,
+    "type": "plot",
+    "name": "Best Tour Length",
+    "command": null,
+    "position": {
+      "x": 78,
+      "y": 239
     },
-    // {
-    //   "id": 1729638667060,
-    //   "type": "dropdown",
-    //   "name": "shape",
-    //   "command": "view.drawOptions.turtlesShape = value",
-    //   "position": {
-    //     "x": 98,
-    //     "y": 34
-    //   },
-    //   "options": [
-    //     "circle",
-    //     "dart",
-    //     "person",
-    //     "bug",
-    //     "arrow"
-    //   ],
-    //   "selected": "bug"
-    // },
-    {
-        id: 1730141024864,
-        type: 'checkbox',
-        name: 'run',
-        command: 'checked ? anim.start() : anim.stop()',
-        position: {
-            x: 33,
-            y: 35,
-        },
-        checked: false,
-    },
+    "width": "450",
+    "height": "150",
+    "pens": [
+      "bestTourLength"
+    ],
+    "fps": "60"
+  }
 ]
 export default json

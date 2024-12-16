@@ -49,6 +49,7 @@ export default class ExitModel extends Model {
     }
 
     step() {
+        let numMoves = 0
         const emptyNeighbors = turtle =>
             turtle.patch.neighbors.filter(
                 n => n.breed !== this.wall && n.turtlesHere.length === 0
@@ -61,11 +62,21 @@ export default class ExitModel extends Model {
                     if (t.distance(t.exit) > min.distance(t.exit)) {
                         t.face(min)
                         t.setxy(min.x, min.y)
+                        numMoves++
                     }
                 }
             } else {
                 t.forward(1)
+                numMoves++
             }
         })
+        this.done = numMoves === 0
+        if (this.done)
+            console.log(
+                'model done at step',
+                this.ticks,
+                'turtles left',
+                this.turtles.length
+            )
     }
 }

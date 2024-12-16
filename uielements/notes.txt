@@ -1,14 +1,11 @@
 Examples:
 
 * Buttons
-start
-anim.start()
-stop
-anim.stop()
-reset
-reset()
-download
-util.downloadJsonModule(json, 'elements.js')
+start  anim.start()
+stop  anim.stop()
+reset  reset()
+downloadJson  util.downloadJsonModule(json, 'elements.js')
+downloadCanvas  view.downloadCanvas()
 
 * Slider
 speed

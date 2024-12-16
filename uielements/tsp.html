@@ -38,11 +38,14 @@
 
         // ====== Additional code for uielements usage ======
 
+        anim.stop() // let uielements start/stop animator
         anim.setSteps(-1) // in case you want to run forever
 
-        UI.setAppState(model, view, anim) // connect model to uielements
-        UI.createElements() // create elements from local storage
-        // UI.createElements(elements) // create elements from file
+        await UI.setAppState(model, view, anim, 'owen') // connect model to uielements
+        // UI.createElements() // create elements from local storage
+        UI.createElements(elements) // create elements from file
+        UI.autoDownload(true)
+
     </script>
 
     <!-- <div id="modelDiv"></div>

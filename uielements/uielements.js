@@ -1,6 +1,13 @@
 // import * as util from 'https://code.agentscript.org/src/utils.js'
 import * as util from '../src/utils.js'
 import Plot from '../src/Plot.js'
+import { createClient } from 'https://www.unpkg.com/webdav@5.7.1/dist/web/index.js'
+
+const client = createClient('https://node.redfish.com:3334', {
+    username: 'user',
+    password: 'l3n4str33t',
+})
+console.log('root: ', await client.getDirectoryContents('/'))
 
 // =================== initialization ===================
 // loading links
@@ -118,7 +125,7 @@ export function showPopup(type, jsonData = null) {
         formContent += `
     <label for="width">Width:</label>
     <input type="number" id="plotWidth" value="${
-        jsonData ? jsonData.width : 400
+        jsonData ? jsonData.width : 450
     }" required><br>
     <label for="height">Height:</label>
     <input type="number" id="plotHeight" value="${
@@ -312,7 +319,7 @@ export function submitForm() {
     }
     createElementFromJSON(jsonElement)
 
-    // Save changes to local storage
+    // Save changes to storage
     jsonToStorage()
 
     // Close popup and reset editing state
@@ -332,7 +339,7 @@ function createElementFromJSON(jsonElement) {
 
         button.addEventListener('click', function () {
             try {
-                const { model, view, anim, reset, util, json } = ui
+                const { model, view, anim, reset, downloadJson } = ui
                 eval(jsonElement.command)
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -358,7 +365,7 @@ function createElementFromJSON(jsonElement) {
 
         checkbox.addEventListener('change', function () {
             try {
-                const { model, view, anim, reset, util, json } = ui
+                const { model, view, anim, reset, downloadJson } = ui
                 const value = checkbox
                 const checked = checkbox.checked
                 eval(jsonElement.command)
@@ -392,7 +399,7 @@ function createElementFromJSON(jsonElement) {
 
         select.addEventListener('change', function () {
             try {
-                const { model, view, anim, reset, util, json } = ui
+                const { model, view, anim, reset, downloadJson } = ui
                 const value = select.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -421,7 +428,7 @@ function createElementFromJSON(jsonElement) {
         range.addEventListener('input', function () {
             valueLabel.innerText = range.value
             try {
-                const { model, view, anim, reset, util, json } = ui
+                const { model, view, anim, reset, downloadJson } = ui
                 const value = range.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -449,7 +456,7 @@ function createElementFromJSON(jsonElement) {
         function checkValue() {
             let currentValue
             try {
-                const { model, view, anim, reset, util, json } = ui
+                const { model, view, anim, reset, downloadJson } = ui
                 currentValue = eval(jsonElement.monitor)
             } catch (error) {
                 console.error('Monitor command execution failed: ', error)
@@ -487,7 +494,7 @@ function createElementFromJSON(jsonElement) {
         // Start monitoring the plot
         plot.monitorModel(ui.model, jsonElement.fps)
 
-        ui.plot = plot
+        window.ui.plot = plot
 
         // Wrap the plotDiv in a draggable wrapper
         elementWrapper = createElementWrapper(plotDiv, jsonElement.id)
@@ -560,7 +567,7 @@ function closeDragElement() {
         jsonElement.position.x = parseInt(currentDragElement.style.left, 10)
         jsonElement.position.y = parseInt(currentDragElement.style.top, 10)
     }
-    // save the updated state to localStorage
+    // save the updated state to storage
     jsonToStorage()
 }
 
@@ -577,74 +584,99 @@ function loadElementsFromJSON() {
     })
 }
 
-// =================== localStorage utilities ===================
-
-let localStorageName
+// =================== storage utilities ===================
 
 const minJsonString = `[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":439,"y":21},"type":"button"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":367,"y":22},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchesSize","command":"view.setValue('patchesSize', value)","position":{"x":184,"y":22},"min":"1","max":"15","step":"1","value":"10"},{"id":1730141024864,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":20,"y":21},"checked":false},{"id":1733442807622,"type":"dropdown","name":"fps","command":"anim.setFps(value)","position":{"x":108,"y":21},"options":["2","5","10","20","30","60"],"selected":"30"}]`
 const minJson = JSON.parse(minJsonString)
 
+// userName, modelName, userPath set in setAppState()
+const persistentStorage = {
+    useLocalStorage: true,
+    root: '/agentscript/ui',
+    autoDownload: false,
+    get: async function () {
+        const jsonString = this.useLocalStorage
+            ? localStorage.getItem(this.userName + this.modelName)
+            : await client.getFileContents(`${this.userPath}/data.json`, {
+                  format: 'text',
+              })
+
+        return JSON.parse(jsonString)
+    },
+    put: async function (json) {
+        const jsonString = JSON.stringify(json)
+        this.useLocalStorage
+            ? localStorage.setItem(this.userName + this.modelName, jsonString)
+            : await client.putFileContents(
+                  `${this.userPath}/data.json`,
+                  jsonString,
+                  { overwrite: true }
+              )
+        if (this.autoDownload) downloadJson()
+    },
+}
+
 function jsonToStorage() {
-    const jsonString = JSON.stringify(window.ui.json) // Convert to string
-    localStorage.setItem(localStorageName, jsonString) // Save it to localStorage
-    console.log('json: ', jsonString)
+    const json = window.ui.json
+    persistentStorage.put(json)
+    console.log('json: ', json)
 }
 
-function storageToJson() {
-    const savedState = localStorage.getItem(localStorageName)
-    return JSON.parse(savedState)
-}
-
-// function clearElements(backup = true) {
-//     if (backup) downloadJson() // what's best??
-//     localStorage.removeItem(localStorageName)
-// }
-
-function downloadJsonModule() {
-    util.downloadJsonModule(window.ui.json)
-}
-
-export function setAppState(
+export async function setAppState(
     model,
     view,
     anim,
-    storageName = model.constructor.name
+    userName = 'user',
+    modelName = model.constructor.name
 ) {
+    const userPath = `${persistentStorage.root}/${userName}/${modelName}`
+    console.log('userPath', userPath)
+
+    console.log('root: ', await client.getDirectoryContents('/'))
+    if ((await client.exists(userPath)) === false) {
+        await client.createDirectory(userPath, { recursive: true })
+    }
+    console.log('userPath: ', await client.getDirectoryContents(userPath))
+
     Object.assign(window.ui, { model, view, anim })
-    localStorageName = storageName
+    Object.assign(persistentStorage, { userName, modelName, userPath })
 
     anim.stop() // stop the animation, use uielements to control
     view.draw() // draw once to see the model before running animator
 
-    console.log('localStorageName', localStorageName)
+    console.log('persistentStorage:', persistentStorage)
 }
 
-// was loadUIState, now includes minJson for new html file
-export function createElements(json = true) {
+export async function createElements(json) {
     if (typeof json === 'object') {
         window.ui.json = json
-        jsonToStorage()
+        // jsonToStorage()
+        document.getElementById('controlPanel').style.display = 'none'
     } else {
-        const savedState = localStorage.getItem(localStorageName)
-        if (savedState) {
-            window.ui.json = JSON.parse(savedState) // Convert back to array
-        } else if (json) {
-            window.ui.json = minJson
+        const savedJson = await persistentStorage.get()
+        console.log('savedJson', savedJson)
+        if (savedJson) {
+            window.ui.json = savedJson
         } else {
-            return
+            window.ui.json = minJson
+            jsonToStorage()
         }
     }
     loadElementsFromJSON()
 }
 
+export function autoDownload(bool) {
+    persistentStorage.autoDownload = bool
+}
+
 // =================== functions called by users commands ===================
 
 function reset() {
-    window.ui.anim.restart(ui.model, ui.view, ui.plot)
+    window.ui.anim.restart(window.ui.model, window.ui.view, window.ui.plot)
 }
 
-function setJson(json = ui.json) {
-    const currentJson = ui.json
+function setJson(json = window.ui.json) {
+    const currentJson = window.ui.json
 
     if (util.isString(json)) json = JSON.parse(json)
     window.ui.json = json
@@ -652,6 +684,18 @@ function setJson(json = ui.json) {
     loadElementsFromJSON()
 
     return currentJson
+}
+
+function moveJson() {
+    persistentStorage.useLocalStorage = !persistentStorage.useLocalStorage
+    persistentStorage.put(window.ui.json)
+    persistentStorage.useLocalStorage = !persistentStorage.useLocalStorage
+}
+
+function downloadJson() {
+    const modelName = persistentStorage.modelName
+    const name = modelName.replace('Model', '').toLowerCase() + 'Elements.js'
+    util.downloadJsonModule(window.ui.json, name)
 }
 
 Object.assign(window.ui, {
@@ -662,10 +706,12 @@ Object.assign(window.ui, {
     cancel,
     // used by commands
     reset,
-    util,
+    // util,
+    downloadJson,
     // used in devtools
     setJson,
-    storageToJson,
-    downloadJsonModule,
     minJson,
+    moveJson,
+    // downloadJsonModule,
+    // persistentStorage,
 })

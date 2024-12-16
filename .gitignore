@@ -21,6 +21,7 @@ package-lock.json
 /controls/
 /vscode/
 vscode.zip
+/views2x/
 
 /test/
 deno.lock
