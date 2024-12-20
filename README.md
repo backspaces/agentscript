@@ -68,7 +68,7 @@ The views1 onepagers import models from the models/ dir and run for 500 steps, p
 
 The views2 onepagers import models from the models/ dir and add a 2D Canvas view.
 
-[views2](https://code.agentscript.org/views2mv/)
+[views2](https://code.agentscript.org/views2/)
 
 The views2mv (mv: model/view) onepagers import models from the models/ dir and add a 2D Canvas view as a separate file.
 
