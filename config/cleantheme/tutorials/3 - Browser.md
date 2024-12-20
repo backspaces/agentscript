@@ -28,7 +28,7 @@ Or you can create a separate .js file that is your Model, and import it into the
 
 Imports have a huge advantage: you can use the same Model in many different HTML files. For example, we have a "Hello World" [HelloModel.js](https://code.agentscript.org/models/HelloModel.js) that is used in
 [Text](https://code.agentscript.org/views1/hello.html),
-[2D](https://code.agentscript.org/views2/hello.html),
+[2D](https://code.agentscript.org/views2mv/hello.html),
 [2.5D](https://code.agentscript.org/views25/hello.html),
 [3D](https://code.agentscript.org/views3/hello.html),
 [GIS](https://code.agentscript.org/maplibre/hello.html),
@@ -80,7 +80,7 @@ Here's an article on finding your browser's [Developer's Console](https://balsam
 
 Also there are keyboard shortcuts: Chrome "Option" + "Command" + "J". Safari uses "Option" + "Command" + "C". Edge uses "Control" + "Shift" + i.
 
-To get started, go to our [pheromone.html](https://code.agentscript.org/views2/pheromone.html) page. Then open the Developer Console as above.
+To get started, go to our [pheromone.html](https://code.agentscript.org/views2mv/pheromone.html) page. Then open the Developer Console as above.
 
 Chrome's looks like this:
 

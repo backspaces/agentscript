@@ -7,7 +7,7 @@ let dir = process.argv[2]
 if (!dir) throw Error('Needs dir argument')
 
 shell.cd(dir)
-// shell.cd('views2')
+// shell.cd('views2mv')
 const files = shell.ls('*html')
 
 files.forEach(file => {

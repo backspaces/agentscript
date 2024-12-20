@@ -66,9 +66,9 @@ The views1 onepagers import models from the models/ dir and run for 500 steps, p
 
 [views1](https://code.agentscript.org/views1/)
 
-The views2 onepagers import models from the models/ dir and add a 2D Canvas view.
+The views2mv onepagers import models from the models/ dir and add a 2D Canvas view.
 
-[views2](https://code.agentscript.org/views2/)
+[views2mv](https://code.agentscript.org/views2mv/)
 
 The views25 onepagers import models from the models/ dir and add a Three.js webgl 2.5D view.
 

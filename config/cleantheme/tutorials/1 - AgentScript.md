@@ -38,7 +38,7 @@ class HelloModel extends Model {
 
 Here it is [running](https://code.agentscript.org/views1/hello.html) 500 steps and printing a sample of the resultant data.
 
-Similarly, the View makes this visible like this [2D view](https://code.agentscript.org/views2/hello.html) or this [3D view](https://code.agentscript.org/views25/hello3d.html), both with the same Model! This is important: once a Model is defined, it can be viewed in many different ways.
+Similarly, the View makes this visible like this [2D view](https://code.agentscript.org/views2mv/hello.html) or this [3D view](https://code.agentscript.org/views25/hello3d.html), both with the same Model! This is important: once a Model is defined, it can be viewed in many different ways.
 
 Finally, the Controllers let you interact with the Model & View. Here's an example using a [GUI Controller](https://code.agentscript.org/mvc/helloGui.html).
 
@@ -47,21 +47,21 @@ Finally, the Controllers let you interact with the Model & View. Here's an examp
 AgentScript has many (over 100!) example models in several directories:
 
 -   [views1](https://code.agentscript.org/views1) Runs models in a HTML text view
--   [views2](https://code.agentscript.org/views2) Runs 2D models with x, y coordinates
+-   [views2mv](https://code.agentscript.org/views2mv) Runs 2D models with x, y coordinates
 -   [views25](https://code.agentscript.org/views25) Runs "2 and a half D" models with x, y, z coordinates
 -   [views3](https://code.agentscript.org/views3) Runs 3D models with x, y, z coordinates, 3D shapes with tilt, pitch and roll capabilities.
 -   [mvc](https://code.agentscript.org/mvc) Adds controllers to some of the above views.
 -   [leaflet](https://code.agentscript.org/leaflet) and [maplibre](https://code.agentscript.org/maplibre) GIS models using the Leaflet and MapLibre libraries.
 
-Click on the views2 directory above, you'll see:
+Click on the views2mv directory above, you'll see:
 
-<!-- You can see 2D versions [here](https://code.agentscript.org/views2/). -->
+<!-- You can see 2D versions [here](https://code.agentscript.org/views2mv/). -->
 
-![Image](/config/cleantheme/static/Views2.jpg)
+![Image](/config/cleantheme/static/views2mv.jpg)
 
 The left column links to the GitHub source code while the right column runs the models. They generally run 500 steps at 30 fps.
 
-Here's what the [LinkTravel model](https://code.agentscript.org/views2/linktravel.html) looks like:
+Here's what the [LinkTravel model](https://code.agentscript.org/views2mv/linktravel.html) looks like:
 
 ![Image](/config/cleantheme/static/LinkTravel.jpg)
 
@@ -79,7 +79,7 @@ It looks like this:
 
 ![Image](/config/cleantheme/static/Snippets.jpg)
 
-Finally, we've wrapped up the Snippets into a Model: [pheromone.html](https://code.agentscript.org/views2/pheromone.html) using the Snippet's examples.
+Finally, we've wrapped up the Snippets into a Model: [pheromone.html](https://code.agentscript.org/views2mv/pheromone.html) using the Snippet's examples.
 
 ![Image](/config/cleantheme/static/PheromoneView.jpg)
 

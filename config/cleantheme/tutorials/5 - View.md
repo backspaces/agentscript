@@ -2,7 +2,7 @@
 
 To "see" the model running, we need the "V" in MVC .. the View. There are several views available, we'll use [TwoDraw.js](/src/TwoDraw.js)
 
-You can see this in action with our [PheromoneModel](/views2/pheromone.html) and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm)
+You can see this in action with our [PheromoneModel](/views2mv/pheromone.html) and see the code via the [view-source capability](https://www.computerhope.com/issues/ch000746.htm)
 
 ## TwoDraw
 
@@ -66,11 +66,11 @@ It looks like this:
 </html>
 ```
 
-This is available at: [https://code.agentscript.org/views2/pheromone.html](https://code.agentscript.org/views2/pheromone.html).
+This is available at: [https://code.agentscript.org/views2mv/pheromone.html](https://code.agentscript.org/views2mv/pheromone.html).
 
 ## Running Locally
 
-While we're here, lets run this locally in the browser. We'll down load the above by going to github: [https://github.com/backspaces/agentscript/blob/master/views2/pheromone.html](https://github.com/backspaces/agentscript/blob/master/views2/pheromone.html)
+While we're here, lets run this locally in the browser. We'll down load the above by going to github: [https://github.com/backspaces/agentscript/blob/master/views2mv/pheromone.html](https://github.com/backspaces/agentscript/blob/master/views2mv/pheromone.html)
 
 ![Image](/config/cleantheme/static/PheromoneHtml.jpg)
 
