@@ -10,12 +10,12 @@
         import TwoDraw from "https://code.agentscript.org/src/TwoDraw.js"
 
         import Model from "https://code.agentscript.org/models/TemplateModel.js"
-        import DrawOptions from "https://code.agentscript.org/views2/templateOptions.js"
+        import TwoDrawOptions from "./templateOptions.js"
 
         const model = new Model()
         model.setup()
 
-        const view = new TwoDraw(model, DrawOptions("modelDiv", model))
+        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))
 
         const anim = new Animator(
             () => {

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Hello</title>
+    <title>HelloText</title>
 </head>
 
 <body>
@@ -10,16 +10,12 @@
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
         import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import TwoDrawOptions from 'https://code.agentscript.org/views2/helloOptions.js'
+        import TwoDrawOptions from './hellotextOptions.js'
 
-        const patchSize = 20
-        const modelOptions = TwoDraw.fullScreenOptions(patchSize)
-
-        const model = new Model(modelOptions)
-        await model.startup()
+        const model = new Model()
         model.setup()
 
-        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model, patchSize))
+        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))
 
         const anim = new Animator(
             () => {

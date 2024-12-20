@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>LinkTravel</title>
+    <title>Shapes</title>
 </head>
 
 <body>
@@ -9,11 +9,12 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
-        import Model from 'https://code.agentscript.org/models/LinkTravelModel.js'
-        import TwoDrawOptions from 'https://code.agentscript.org/views2/linktravelOptions.js'
+        // import Model from 'https://code.agentscript.org/models/ShapesModel.js'
+        // import TwoDrawOptions from './shapesOptions.js'
+        import Model from '../models/ShapesModel.js'
+        import TwoDrawOptions from '../views2mv/shapesOptions.js'
 
         const model = new Model()
-        await model.startup()
         model.setup()
 
         const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Fire</title>
+    <title>Roads</title>
 </head>
 
 <body>
@@ -9,17 +9,14 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
-        import Model from 'https://code.agentscript.org/models/FireModel.js'
-        import TwoDrawOptions from 'https://code.agentscript.org/views2/fireOptions.js'
+        import Model from 'https://code.agentscript.org/models/RoadsModel.js'
+        import TwoDrawOptions from './roadsOptions.js'
 
-        const patchSize = 4
-        const modelOptions = TwoDraw.fullScreenOptions(patchSize)
-
-        const model = new Model(modelOptions)
+        const model = new Model()
         await model.startup()
         model.setup()
 
-        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model, patchSize))
+        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))
 
         const anim = new Animator(
             () => {
