@@ -10,14 +10,16 @@
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/AntsModel.js'
 
-        import Color from 'https://code.agentscript.org/src/Color.js'
+        // import Color from 'https://code.agentscript.org/src/Color.js'
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
         const model = new Model()
         model.setup()
 
-        const nestColor = Color.typedColor('yellow')
-        const foodColor = Color.typedColor('blue')
+        // const nestColor = Color.typedColor('yellow')
+        // const foodColor = Color.typedColor('blue')
+        const nestColor = 'yellow'
+        const foodColor = 'blue'
         const nestColorMap = ColorMap.gradientColorMap(20, ['black', nestColor])
         const foodColorMap = ColorMap.gradientColorMap(20, ['black', foodColor])
         const drawOptions = {

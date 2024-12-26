@@ -10,7 +10,7 @@
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/ExitModel.js'
 
-        import Color from 'https://code.agentscript.org/src/Color.js'
+        // import Color from 'https://code.agentscript.org/src/Color.js'
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
         const model = new Model() // use model's default world options
@@ -21,9 +21,11 @@
                 case 'exits':
                     return ColorMap.Basic16.atIndex(p.exitNumber + 4)
                 case 'inside':
-                    return Color.typedColor('black')
+                    // return Color.typedColor('black')
+                    return 'black'
                 case 'wall':
-                    return Color.typedColor('gray')
+                    // return Color.typedColor('gray')
+                    return 'gray'
                 default:
                     return ColorMap.LightGray.randomColor()
             }

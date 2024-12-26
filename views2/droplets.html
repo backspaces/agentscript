@@ -10,7 +10,7 @@
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/DropletsModel.js'
 
-        import Color from 'https://code.agentscript.org/src/Color.js'
+        // import Color from 'https://code.agentscript.org/src/Color.js'
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
         const model = new Model()
@@ -26,7 +26,8 @@
                 const elevation = model.patches.exportDataSet('elevation')
                 const grays = elevation.scale(0, 255).data
                 const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
-                const localMinColor = Color.typedColor(255, 0, 0)
+                // const localMinColor = Color.typedColor(255, 0, 0)
+                const localMinColor = 'white'
                 model.localMins.forEach(p => {
                     colors[p.id] = localMinColor
                 })

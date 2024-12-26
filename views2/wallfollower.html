@@ -10,13 +10,11 @@
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/WallFollowerModel.js'
 
-        import Color from 'https://code.agentscript.org/src/Color.js'
-
         const model = new Model()
         model.setup()
 
-        const wallsColor = Color.typedColor(222, 184, 135)
-        const backgroundColor = Color.typedColor('black')
+        const wallsColor = 'rgb(222, 184, 135)'
+        const backgroundColor = 'black'
         const drawOptions = {
             patchesColor: p =>
                 p.breed.name === 'walls' ? wallsColor : backgroundColor,

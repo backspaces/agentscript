@@ -23,6 +23,20 @@ export default [
         },
         plugins: [terser()],
     },
+    // {
+    //     input: 'src/AS.js',
+    //     output: {
+    //         file: 'dist/agentscript.umd.js',
+    //         format: 'iife', // Immediately invoked function expression
+    //         name: 'AS', // window will have AS an the individual classes/objects
+    //         footer: `
+    //     (function(exports) {
+    //         Object.assign(window, exports); // Explicitly use window
+    //     })(AS); // Pass the exported object to the function
+    //     `,
+    //     },
+    //     plugins: [cleanup()],
+    // },
     {
         input: 'src/AS.js',
         output: {
@@ -50,6 +64,20 @@ export default [
         },
         plugins: [terser()],
     },
+    // {
+    //     input: 'src/AS2D.js',
+    //     output: {
+    //         file: 'dist/agentscript2d.umd.js',
+    //         format: 'iife', // Immediately invoked function expression
+    //         name: 'AS', // window will have AS an the individual classes/objects
+    //         footer: `
+    //     (function(exports) {
+    //         Object.assign(window, exports); // Explicitly use window
+    //     })(AS); // Pass the exported object to the function
+    //     `,
+    //     },
+    //     plugins: [cleanup()],
+    // },
     {
         input: 'src/AS2D.js',
         output: {

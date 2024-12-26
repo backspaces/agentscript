@@ -1,5 +1,5 @@
 # Files to not include in git. See
-# https://git-scm.com/docs/gitignore and
+# https://git-scm.com/docs/gitignore
 # https://gist.github.com/octocat/9257657
 
 # Derived files other than docs/
@@ -16,6 +16,7 @@ package-lock.json
 /Attic/
 **/Attic
 /test/samples.json
+/test/
 /tests/
 /simple/
 /controls/
@@ -23,7 +24,6 @@ package-lock.json
 vscode.zip
 /views2x/
 
-/test/
 deno.lock
 lock.json
 yarn.lock

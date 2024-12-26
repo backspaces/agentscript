@@ -15,7 +15,8 @@
         const model = new Model()
         model.setup()
 
-        const typeColors = {
+        const patchesPixel = {
+            // pixel values for patches, huge speedup via patches pixel rect
             dirt: Color.cssToPixel('yellow'),
             tree: Color.cssToPixel('green'),
             fire: Color.cssToPixel('red'),
@@ -24,9 +25,17 @@
             ember2: Color.rgbaToPixel(255 - 75, 0, 0),
             ember1: Color.rgbaToPixel(255 - 100, 0, 0),
             ember0: Color.rgbaToPixel(255 - 125, 0, 0),
+            // dirt: 4278255615,
+            // tree: 4278222848,
+            // fire: 4278190335,
+            // ember4: 4278190310,
+            // ember3: 4278190285,
+            // ember2: 4278190260,
+            // ember1: 4278190235,
+            // ember0: 4278190210,
         }
         const drawOptions = {
-            patchesColor: p => typeColors[p.type],
+            patchesColor: p => patchesPixel[p.type],
         }
         const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 4, drawOptions })
 
