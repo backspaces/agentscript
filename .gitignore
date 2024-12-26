@@ -15,7 +15,7 @@ package-lock.json
 
 /Attic/
 **/Attic
-/test/samples.json
+# /test/samples.json
 /test/
 /tests/
 /simple/
