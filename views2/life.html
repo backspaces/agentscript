@@ -13,10 +13,13 @@
         const model = new Model()
         model.setup()
 
-        const drawOptions = {
-            patchesColor: p => (p.living ? 'red' : 'rgba(255, 99, 71, 0.2)'),
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 7, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 7,
+            drawOptions: {
+                patchesColor: p => (p.living ? 'red' : 'rgba(255, 99, 71, 0.2)'),
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -31,3 +34,9 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        patchesColor: p => (p.living ? 'red' : 'rgba(255, 99, 71, 0.2)'),
+        }
+ -->

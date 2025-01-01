@@ -11,17 +11,20 @@
         const model = new Model()
         model.setup()
 
-        const drawOptions = {
-            turtlesShape: 'circle',
-            turtlesColor: 'red',
-            turtlesSize: 0.5,
-            linksColor: 'red',
-            patchesMap: 'LightGray',
-            textProperty: 'choices',
-            textColor: 'white',
-            textSize: 0.3,
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 50, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 50,
+            drawOptions: {
+                turtlesShape: 'circle',
+                turtlesColor: 'red',
+                turtlesSize: 0.5,
+                linksColor: 'red',
+                patchesMap: 'LightGray',
+                textProperty: 'choices',
+                textColor: 'white',
+                textSize: 0.3,
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -37,3 +40,16 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        turtlesShape: 'circle',
+        turtlesColor: 'red',
+        turtlesSize: 0.5,
+        linksColor: 'red',
+        patchesMap: 'LightGray',
+        textProperty: 'choices',
+        textColor: 'white',
+        textSize: 0.3,
+        }
+ -->

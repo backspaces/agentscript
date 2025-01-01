@@ -13,15 +13,18 @@
         const model = new Model()
         model.setup()
 
-        const drawOptions = {
-            turtlesColor: 'yellow',
-            turtlesSize: 3,
-            turtlesShape: 'bug',
-            linksColor: 'red',
-            linksWidth: 3,
-            // patchesMap: 'Jet',
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 20, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 20,
+            drawOptions: {
+                turtlesColor: 'yellow',
+                turtlesSize: 3,
+                turtlesShape: 'bug',
+                linksColor: 'red',
+                linksWidth: 3,
+                // patchesMap: 'Jet',
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -36,3 +39,14 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        turtlesColor: 'yellow',
+        turtlesSize: 3,
+        turtlesShape: 'bug',
+        linksColor: 'red',
+        linksWidth: 3,
+        // patchesMap: 'Jet',
+        }
+ -->

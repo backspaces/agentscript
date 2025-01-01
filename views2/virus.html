@@ -18,16 +18,16 @@
             susceptible: 'blue',
             resistant: 'gray',
         }
-        const drawOptions = {
-            patchesColor: 'black',
-            turtlesShape: 'circle',
-            turtlesSize: 1.5,
-            turtlesColor: t => turtleColors[t.state],
-            // linksColor: 'rgba(255, 255, 255, 0.50',
-            linksColor: 'white',
-            linksWidth: 2,
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 10, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv', patchSize: 10, drawOptions: {
+                patchesColor: 'black',
+                turtlesShape: 'circle',
+                turtlesSize: 1.5,
+                turtlesColor: t => turtleColors[t.state],
+                linksColor: 'white',
+                linksWidth: 2,
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -42,3 +42,14 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        patchesColor: 'black',
+        turtlesShape: 'circle',
+        turtlesSize: 1.5,
+        turtlesColor: t => turtleColors[t.state],
+        // linksColor: 'rgba(255, 255, 255, 0.50',
+        linksColor: 'white',
+        linksWidth: 2,
+        } -->

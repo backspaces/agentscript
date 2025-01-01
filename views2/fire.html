@@ -9,7 +9,6 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/FireModel.js'
-
         import Color from 'https://code.agentscript.org/src/Color.js'
 
         const model = new Model()
@@ -25,19 +24,14 @@
             ember2: Color.rgbaToPixel(255 - 75, 0, 0),
             ember1: Color.rgbaToPixel(255 - 100, 0, 0),
             ember0: Color.rgbaToPixel(255 - 125, 0, 0),
-            // dirt: 4278255615,
-            // tree: 4278222848,
-            // fire: 4278190335,
-            // ember4: 4278190310,
-            // ember3: 4278190285,
-            // ember2: 4278190260,
-            // ember1: 4278190235,
-            // ember0: 4278190210,
         }
-        const drawOptions = {
-            patchesColor: p => patchesPixel[p.type],
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 4, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 4,
+            drawOptions: {
+                patchesColor: p => patchesPixel[p.type],
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -53,3 +47,18 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+            patchesColor: p => patchesPixel[p.type],
+        }
+
+    // dirt: 4278255615,
+    // tree: 4278222848,
+    // fire: 4278190335,
+    // ember4: 4278190310,
+    // ember3: 4278190285,
+    // ember2: 4278190260,
+    // ember1: 4278190235,
+    // ember0: 4278190210,
+-->

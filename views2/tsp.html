@@ -13,17 +13,20 @@
         const model = new Model()
         model.setup()
 
-        const drawOptions = {
-            patchesColor: 'black',
-            turtlesShape: 'circle',
-            // turtlesSize of 0 will skip drawing this turle
-            // here "travelers" are skipped
-            turtlesSize: t => (t.breed.name === 'nodes' ? 2 : 0),
-            turtlesColor: 'yellow',
-            linksColor: 'red',
-            linksWidth: 2,
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 6, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 6,
+            drawOptions: {
+                patchesColor: 'black',
+                turtlesShape: 'circle',
+                // turtlesSize of 0 will skip drawing this turle
+                // here "travelers" are skipped
+                turtlesSize: t => (t.breed.name === 'nodes' ? 2 : 0),
+                turtlesColor: 'yellow',
+                linksColor: 'red',
+                linksWidth: 2,
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -39,3 +42,16 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        patchesColor: 'black',
+        turtlesShape: 'circle',
+        // turtlesSize of 0 will skip drawing this turle
+        // here "travelers" are skipped
+        turtlesSize: t => (t.breed.name === 'nodes' ? 2 : 0),
+        turtlesColor: 'yellow',
+        linksColor: 'red',
+        linksWidth: 2,
+        }
+ -->

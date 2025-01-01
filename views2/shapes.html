@@ -9,29 +9,29 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/ShapesModel.js'
-
         import Shapes from 'https://code.agentscript.org/src/Shapes.js'
 
         const model = new Model()
         model.setup()
 
-        const shapes = new Shapes()
-        // add an image and emoji shapes
+        const shapes = new Shapes() // add an image and emoji shapes
         await shapes.imagePathPromise(
             'twitter',
             'https://code.agentscript.org/models/data/twitter.png'
         )
         shapes.createEmojiPath('tree', 0x1f332)
-        // scan through the available shapes by turtle id
-        function turtleName(t) {
+        function turtleName(t) {   // scan through the available shapes by turtle id
             return shapes.nameAtIndex(t.id)
         }
-        const drawOptions = {
-            turtlesShape: t => turtleName(t),
-            turtlesSize: t => 3,
-            turtlesRotate: t => !['lion', 'smiley', 'tree'].includes(turtleName(t)),
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 20, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 20,
+            drawOptions: {
+                turtlesShape: t => turtleName(t),
+                turtlesSize: t => 3,
+                turtlesRotate: t => !['lion', 'smiley', 'tree'].includes(turtleName(t)),
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -46,3 +46,11 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        turtlesShape: t => turtleName(t),
+        turtlesSize: t => 3,
+        turtlesRotate: t => !['lion', 'smiley', 'tree'].includes(turtleName(t)),
+        }
+ -->

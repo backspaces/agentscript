@@ -9,18 +9,20 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/PheromoneModel.js'
-
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
         const model = new Model()
         model.setup()
 
         const colorMap = ColorMap.gradientColorMap(8, ['black', 'purple', 'yellow'])
-        const drawOptions = {
-            turtlesSize: 2,
-            patchesColor: p => colorMap.scaleColor(p.pheromone, 0, 100),
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 20, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 20,
+            drawOptions: {
+                turtlesSize: 2,
+                patchesColor: p => colorMap.scaleColor(p.pheromone, 0, 100),
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -35,3 +37,10 @@
 </body>
 
 </html>
+
+
+<!--
+        const drawOptions = {
+        turtlesSize: 2,
+        patchesColor: p => colorMap.scaleColor(p.pheromone, 0, 100),
+        } -->

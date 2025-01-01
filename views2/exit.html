@@ -9,7 +9,6 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/ExitModel.js'
-
         // import Color from 'https://code.agentscript.org/src/Color.js'
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
@@ -30,13 +29,16 @@
                     return ColorMap.LightGray.randomColor()
             }
         })
-        const drawOptions = {
-            turtlesShape: 'circle',
-            turtlesColor: t => patchColors[t.exit.id],
-            turtlesSize: 1,
-            initPatches: (model, view) => patchColors,
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 10, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 10,
+            drawOptions: {
+                turtlesShape: 'circle',
+                turtlesColor: t => patchColors[t.exit.id],
+                turtlesSize: 1,
+                initPatches: (model, view) => patchColors,
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -52,3 +54,11 @@
 </body>
 
 </html>
+<!--
+        const drawOptions = {
+        turtlesShape: 'circle',
+        turtlesColor: t => patchColors[t.exit.id],
+        turtlesSize: 1,
+        initPatches: (model, view) => patchColors,
+        }
+-->

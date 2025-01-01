@@ -9,7 +9,6 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/DropletsModel.js'
-
         // import Color from 'https://code.agentscript.org/src/Color.js'
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
@@ -17,24 +16,27 @@
         await model.startup()
         model.setup()
 
-        const drawOptions = {
-            turtlesShape: 'square',
-            turtlesRotate: false,
-            turtlesSize: 0.8,
-            turtlesColor: 'yellow',
-            initPatches: (model, view) => {
-                const elevation = model.patches.exportDataSet('elevation')
-                const grays = elevation.scale(0, 255).data
-                const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
-                // const localMinColor = Color.typedColor(255, 0, 0)
-                const localMinColor = 'white'
-                model.localMins.forEach(p => {
-                    colors[p.id] = localMinColor
-                })
-                return colors
-            },
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 10, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 10,
+            drawOptions: {
+                turtlesShape: 'square',
+                turtlesRotate: false,
+                turtlesSize: 0.8,
+                turtlesColor: 'yellow',
+                initPatches: (model, view) => {
+                    const elevation = model.patches.exportDataSet('elevation')
+                    const grays = elevation.scale(0, 255).data
+                    const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
+                    // const localMinColor = Color.typedColor(255, 0, 0)
+                    const localMinColor = 'white'
+                    model.localMins.forEach(p => {
+                        colors[p.id] = localMinColor
+                    })
+                    return colors
+                },
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -50,3 +52,23 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        turtlesShape: 'square',
+        turtlesRotate: false,
+        turtlesSize: 0.8,
+        turtlesColor: 'yellow',
+        initPatches: (model, view) => {
+        const elevation = model.patches.exportDataSet('elevation')
+        const grays = elevation.scale(0, 255).data
+        const colors = grays.map(d => ColorMap.Gray[Math.round(d)])
+        // const localMinColor = Color.typedColor(255, 0, 0)
+        const localMinColor = 'white'
+        model.localMins.forEach(p => {
+        colors[p.id] = localMinColor
+        })
+        return colors
+        },
+        }
+ -->

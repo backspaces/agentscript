@@ -9,18 +9,20 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/DiffuseModel.js'
-
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
         const model = new Model()
         model.setup()
 
-        const drawOptions = {
-            patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
-            turtlesColor: 'red',
-            turtlesSize: 8,
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 3, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 3,
+            drawOptions: {
+                patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
+                turtlesColor: 'red',
+                turtlesSize: 8,
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -35,3 +37,11 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        patchesColor: p => ColorMap.Rgb256.scaleColor(p.ran, 0, 1),
+        turtlesColor: 'red',
+        turtlesSize: 8,
+        }
+ -->

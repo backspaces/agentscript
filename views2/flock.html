@@ -13,10 +13,13 @@
         const model = new Model()
         model.setup()
 
-        const drawOptions = {
-            turtlesSize: 1.5,
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 20, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 20,
+            drawOptions: {
+                turtlesSize: 1.5,
+            }
+        })
 
         const anim = new Animator(
             () => {
@@ -31,3 +34,8 @@
 </body>
 
 </html>
+<!--
+        const drawOptions = {
+        turtlesSize: 1.5,
+        }
+ -->

@@ -9,7 +9,6 @@
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         import Model from 'https://code.agentscript.org/models/WaterModel.js'
-
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
         const model = new Model()
@@ -17,11 +16,13 @@
 
         const patchColors = ColorMap.gradientColorMap(256, ['navy', 'aqua'])
         const maxZ = 10
-        const drawOptions = {
-            // Patches only model:
-            patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
-        }
-        const view = new TwoDraw(model, { div: 'modelDiv', patchSize: 2, drawOptions })
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 2,
+            drawOptions: { // Patches only model:
+                patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
+            }
+        })
         view.setPatchesSmoothing(true) // make water smoother
 
         const anim = new Animator(
@@ -37,3 +38,10 @@
 </body>
 
 </html>
+
+<!--
+        const drawOptions = {
+        // Patches only model:
+        patchesColor: p => patchColors.scaleColor(p.zpos, -maxZ, maxZ),
+        }
+ -->
