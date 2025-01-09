@@ -3,7 +3,7 @@ name: GitHub Pages
 on:
     push:
         branches:
-            - master # Deploy whenever the master branch is updated
+            - master # Deploy  whenever the master branch is updated
 
 permissions:
     contents: read
