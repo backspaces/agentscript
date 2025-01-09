@@ -1,6 +1,6 @@
 # AgentScript
 
-AgentScript is a minimalist Agent Based modeling system based on [NetLogo](https://ccl.northwestern.edu/netlogo/) semantics.
+AgentScript is a minimalist Agent Based modeling system based on [NetLogo](https://ccl.northwestern.edu/netlogo/) semantics .
 
 It has a Model/View/Control (MVC) architecture which cleanly separates the three components.
 
