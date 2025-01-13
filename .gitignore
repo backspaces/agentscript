@@ -32,4 +32,4 @@ yarn.lock
 # package-lock.json
 # yarn.lock
 
-.github/workflows/pages.yml
+# .github/workflows/pages.yml
