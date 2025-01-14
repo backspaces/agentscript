@@ -228,7 +228,8 @@
             <p>Two turtles can create links between themselves.
                 This is useful for creating a network, such as streets
                 for turtles to drive on. Here is a simple example:
-                <a href="https://code.agentscript.org/views2mv/linktravel.html">
+                <!-- <a href="https://code.agentscript.org/views2mv/linktravel.html"> -->
+                <a href="../views2mv/linktravel.html">
                     Link Travel
                 </a>
             </p>
@@ -321,12 +322,19 @@ model.patches.ask(patch => {
     </sidebar-layout>
 
     <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Model from 'https://code.agentscript.org/src/Model.js'
-        import World from 'https://code.agentscript.org/src/World.js'
+        // import * as util from 'https://code.agentscript.org/src/utils.js'
+        // import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        // import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
+        // import Animator from 'https://code.agentscript.org/src/Animator.js'
+        // import Model from 'https://code.agentscript.org/src/Model.js'
+        // import World from 'https://code.agentscript.org/src/World.js'
+
+        import * as util from '../src/utils.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import ColorMap from '../src/ColorMap.js'
+        import Animator from '../src/Animator.js'
+        import Model from '../src/Model.js'
+        import World from '../src/World.js'
 
         const model = new Model(World.defaultOptions(10))
         // await model.startup()
