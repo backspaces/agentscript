@@ -15,6 +15,7 @@ Code    | Run demo
 [hello3d](https://github.com/backspaces/agentscript/tree/master/views1/hello3d.html#L1) | [https://code.agentscript.org/views1/hello3d.html](https://code.agentscript.org/views1/hello3d.html)
 [hello3z](https://github.com/backspaces/agentscript/tree/master/views1/hello3z.html#L1) | [https://code.agentscript.org/views1/hello3z.html](https://code.agentscript.org/views1/hello3z.html)
 [helloplus](https://github.com/backspaces/agentscript/tree/master/views1/helloplus.html#L1) | [https://code.agentscript.org/views1/helloplus.html](https://code.agentscript.org/views1/helloplus.html)
+[kelpforest](https://github.com/backspaces/agentscript/tree/master/views1/kelpforest.html#L1) | [https://code.agentscript.org/views1/kelpforest.html](https://code.agentscript.org/views1/kelpforest.html)
 [life](https://github.com/backspaces/agentscript/tree/master/views1/life.html#L1) | [https://code.agentscript.org/views1/life.html](https://code.agentscript.org/views1/life.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views1/linktravel.html#L1) | [https://code.agentscript.org/views1/linktravel.html](https://code.agentscript.org/views1/linktravel.html)
 [pheromone](https://github.com/backspaces/agentscript/tree/master/views1/pheromone.html#L1) | [https://code.agentscript.org/views1/pheromone.html](https://code.agentscript.org/views1/pheromone.html)

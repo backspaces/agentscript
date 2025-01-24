@@ -56,6 +56,7 @@
         "build-vscode": "rm vscode.zip; zip -r vscode.zip vscode",
         "test": "test/denomodels.js && test/deno3Dgeom.js",
         "-- END OF WORKFLOW --": "The following are versions tests, running models in various directories and browsers",
+        "serv": "live-server",
         "runmodels": "bin/runnodemodels",
         "run1": "bin/modelsinbrowser views1",
         "run2": "bin/modelsinbrowser views2",

@@ -52,11 +52,10 @@ class Animator {
         return this // chaining off ctor
     }
     step() {
-        // if (this.steps === 0) return this.stop()
         if (this.ticks === this.steps) return this.stop()
-        this.ticks++
-        // this.steps--
+        // this.ticks++ // inside fcn anim.ticks starts at one
         this.fcn()
+        this.ticks++ // inside fcn anim.ticks starts at zero
         if (this.stats) this.stats.update()
         return this // chaining off ctor
     }

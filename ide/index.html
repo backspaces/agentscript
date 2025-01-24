@@ -64,7 +64,7 @@
                 () => {
                     model.step()
                     view.draw()
-                    if (anim.ticks === 250) switchModel()
+                    if (model.ticks === 250) switchModel()
                 },
                 -1, // run forever
                 30 // at 30 steps/second

@@ -15,6 +15,7 @@ Code    | Run demo
 [hello3Z](https://github.com/backspaces/agentscript/tree/master/models/Hello3ZModel.js#L1) | [https://code.agentscript.org/models/run.html?hello3Z](https://code.agentscript.org/models/run.html?hello3Z)
 [hello](https://github.com/backspaces/agentscript/tree/master/models/HelloModel.js#L1) | [https://code.agentscript.org/models/run.html?hello](https://code.agentscript.org/models/run.html?hello)
 [helloPlus](https://github.com/backspaces/agentscript/tree/master/models/HelloPlusModel.js#L1) | [https://code.agentscript.org/models/run.html?helloPlus](https://code.agentscript.org/models/run.html?helloPlus)
+[kelpForest](https://github.com/backspaces/agentscript/tree/master/models/KelpForestModel.js#L1) | [https://code.agentscript.org/models/run.html?kelpForest](https://code.agentscript.org/models/run.html?kelpForest)
 [life](https://github.com/backspaces/agentscript/tree/master/models/LifeModel.js#L1) | [https://code.agentscript.org/models/run.html?life](https://code.agentscript.org/models/run.html?life)
 [linkTravel](https://github.com/backspaces/agentscript/tree/master/models/LinkTravelModel.js#L1) | [https://code.agentscript.org/models/run.html?linkTravel](https://code.agentscript.org/models/run.html?linkTravel)
 [pheromone](https://github.com/backspaces/agentscript/tree/master/models/PheromoneModel.js#L1) | [https://code.agentscript.org/models/run.html?pheromone](https://code.agentscript.org/models/run.html?pheromone)

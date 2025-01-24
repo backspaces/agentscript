@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <title>KelpForest</title>
+</head>
+
+<body>
+    <script type="module">
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        // import Model from 'https://code.agentscript.org/models/KelpForestModel.js'
+        import Model from '../models/KelpForestModel.js'
+
+        const model = new Model()
+        model.setup()
+
+        const drawOptions = {
+            turtlesSize: (t) => {
+                if (t.breed.name === "urchin") {
+                    return 1;
+                } else if (t.breed.name === "kelp") {
+                    return 2;
+                } else if (t.breed.name === "seaStar") {
+                    return 1.5;
+                } else {
+                    return 1; // Default size for any other breeds
+                }
+            },
+            turtlesColor: (t) => {
+                if (t.breed.name === "kelp") {
+                    return "green";
+                } else if (t.breed.name === "urchin") {
+                    // return "purple";
+                    return "white";
+                } else if (t.breed.name === "seaStar") {
+                    return "orange";
+                } else {
+                    return grey;
+                }
+            },
+            turtlesShape: (t) => {
+                if (t.breed.name === "urchin") {
+                    return "circle";
+                } else if (t.breed.name === "kelp") {
+                    return "dart";
+                } else {
+                    return "pentagon";
+                }
+            },
+        }
+
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            // patchSize: 10,
+            patchSize: 20,
+            drawOptions
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            5 * 365, // how many steps, here 5 years,
+            30 // at fps steps/second
+        )
+
+        Object.assign(window, { model, view, anim })
+    </script>
+    <div id="modelDiv"></div>
+</body>
+
+</html>
+
+<!--
+        const drawOptions = {
+        patchesColor: p => {
+        if (p.isNest) return nestColor
+        if (p.isFood) return foodColor
+        return p.foodPheromone > p.nestPheromone
+        ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
+        : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+        },
+        turtlesShape: 'bug',
+        turtlesSize: 3,
+        turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
+        } -->
