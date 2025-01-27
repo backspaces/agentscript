@@ -1,6 +1,7 @@
 import * as util from 'https://code.agentscript.org/src/utils.js'
 import World from 'https://code.agentscript.org/src/World.js'
-import Model from 'https://code.agentscript.org/src/Model.js'
+// import Model from 'https://code.agentscript.org/src/Model.js'
+import Model from '../src/Model.js'
 
 // util.randomSeed() // causes each run to have same results for debugging
 
@@ -37,14 +38,16 @@ class KelpForestModel extends Model {
         })
     }
 
-    day() {
+    // we pass ticks as an option defaulting to the model's ticks.
+    // this allows us to use them from the animator and other environments.
+    // or outside of step() where this.ticks is off by one.
+    day(ticks = this.ticks) {
         // days go from 0 to 364
-        return this.ticks % 365
+        return ticks % 365
     }
-
-    year() {
+    year(ticks = this.ticks) {
         // years start at 1
-        return Math.floor(this.ticks / 365) + 1
+        return 1 + Math.floor(ticks / 365)
     }
 
     spawnUrchin() {
@@ -85,6 +88,8 @@ class KelpForestModel extends Model {
     }
 
     step() {
+        // console.log('year', this.year())
+
         this.urchin.ask(t => {
             const closestSeaStar = this.closestNeighbor(t, this.seaStar)
 

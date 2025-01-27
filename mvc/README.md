@@ -8,6 +8,7 @@ Code    | Run demo
 [helloGui](https://github.com/backspaces/agentscript/tree/master/mvc/helloGui.html#L1) | [https://code.agentscript.org/mvc/helloGui.html](https://code.agentscript.org/mvc/helloGui.html)
 [helloKeys](https://github.com/backspaces/agentscript/tree/master/mvc/helloKeys.html#L1) | [https://code.agentscript.org/mvc/helloKeys.html](https://code.agentscript.org/mvc/helloKeys.html)
 [helloMouse](https://github.com/backspaces/agentscript/tree/master/mvc/helloMouse.html#L1) | [https://code.agentscript.org/mvc/helloMouse.html](https://code.agentscript.org/mvc/helloMouse.html)
+[kelpforest](https://github.com/backspaces/agentscript/tree/master/mvc/kelpforest.html#L1) | [https://code.agentscript.org/mvc/kelpforest.html](https://code.agentscript.org/mvc/kelpforest.html)
 [mouse](https://github.com/backspaces/agentscript/tree/master/mvc/mouse.html#L1) | [https://code.agentscript.org/mvc/mouse.html](https://code.agentscript.org/mvc/mouse.html)
 [navigate3d](https://github.com/backspaces/agentscript/tree/master/mvc/navigate3d.html#L1) | [https://code.agentscript.org/mvc/navigate3d.html](https://code.agentscript.org/mvc/navigate3d.html)
 [tsp](https://github.com/backspaces/agentscript/tree/master/mvc/tsp.html#L1) | [https://code.agentscript.org/mvc/tsp.html](https://code.agentscript.org/mvc/tsp.html)
