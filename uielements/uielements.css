@@ -33,6 +33,8 @@ body {
 }
 
 #controlPanel {
+    display: none;
+
     padding: 10px;
     background-color: #f0f0f0;
     border-bottom: 1px solid #ccc;
@@ -45,6 +47,7 @@ body {
 
 .modal {
     display: none;
+
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -100,6 +103,7 @@ body {
 /* Popup menu styles */
 .popup-menu {
     display: none;
+
     position: absolute;
     z-index: 1000;
     background-color: white;

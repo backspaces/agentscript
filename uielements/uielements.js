@@ -167,6 +167,8 @@ function createElementWrapper(element, id) {
 
 // Function to show the popup menu and start listening for outside clicks
 function showPopupMenu(e, wrapper) {
+    if (window.ui.isStaticMode) return // Disable menu in static mode
+
     const popupMenu = document.getElementById('popupMenu')
     popupMenu.style.display = 'block'
     popupMenu.style.left = `${e.pageX}px`
@@ -489,6 +491,13 @@ function createElementFromJSON(jsonElement) {
     if (elementWrapper) {
         elementWrapper.style.left = jsonElement.position.x + 'px'
         elementWrapper.style.top = jsonElement.position.y + 'px'
+
+        // if (window.ui.isStaticMode) {
+        //     elementWrapper.onmousedown = null // Disable dragging
+        //     elementWrapper.oncontextmenu = e => e.preventDefault() // Disable right-click menu
+        //     // elementWrapper.classList.add('static-element') // Optional: add styling for static mode
+        // }
+
         document.getElementById('uiContainer').appendChild(elementWrapper)
     }
 }
@@ -614,10 +623,12 @@ export async function setAppState(
 let initialJson
 export async function createElements(json) {
     if (typeof json === 'object') {
+        window.ui.isStaticMode = true // Set static mode
         window.ui.json = json
         // jsonToStorage()
-        document.getElementById('controlPanel').style.display = 'none'
     } else {
+        window.ui.isStaticMode = false // Allow editing if loaded from storage
+        document.getElementById('controlPanel').style.display = 'block' // Show control panel for local storage mode
         const savedJson = await persistentStorage.get()
         console.log('savedJson', savedJson)
         if (savedJson) {
@@ -638,12 +649,12 @@ window.addEventListener('beforeunload', event => {
         event.preventDefault()
         event.returnValue = '' // Triggers the built-in browser warning
 
-        // Delay showing our custom alert until after the user cancels
-        setTimeout(() => {
-            alert(
-                "You have unsaved changes!\n\nTo save your work, click the 'Save' button or use the menu option to download your JSON."
-            )
-        }, 10)
+        // // Delay showing our custom alert until after the user cancels
+        // setTimeout(() => {
+        //     alert(
+        //         "You have unsaved changes!\n\nTo save your work, click the 'Save' button or use the menu option to download your JSON."
+        //     )
+        // }, 10)
     }
 })
 

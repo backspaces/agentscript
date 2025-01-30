@@ -13,7 +13,7 @@
         // ====== Import uielements.js, only additional import needed ======
 
         import * as UI from './uielements.js'
-        // import elements from './tspElements.js'
+        import elements from './tspElements.js'
 
         // ====== The views2mv code as-is ======
 
@@ -46,7 +46,7 @@
 
         await UI.setAppState(model, view, anim, 'owen') // connect model to uielements
         UI.createElements() // create elements from local storage
-        UI.createElements(elements) // create elements from file
+        // UI.createElements(elements) // create elements from file
         // UI.autoDownload(true)
 
     </script>
