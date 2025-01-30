@@ -1,30 +1,6 @@
 // import * as util from 'https://code.agentscript.org/src/utils.js'
 import * as util from '../src/utils.js'
 import Plot from '../src/Plot.js'
-import { createClient } from 'https://www.unpkg.com/webdav@5.7.1/dist/web/index.js'
-
-const client = createClient('https://node.redfish.com:3334', {
-    username: 'user',
-    password: 'l3n4str33t',
-})
-console.log('root: ', await client.getDirectoryContents('/'))
-
-// =================== initialization ===================
-// loading links
-const link = document.createElement('link')
-link.rel = 'stylesheet'
-link.href = 'uielements.css'
-link.type = 'text/css'
-document.head.appendChild(link)
-
-// load the divs.html
-await fetch('./divs.html')
-    .then(response => response.text())
-    .then(html => {
-        // Insert the HTML content for the menu into the DOM
-        document.body.insertAdjacentHTML('afterbegin', html)
-        console.log('divs.html loaded and parsed')
-    })
 
 // Initialize the window.ui object if not already defined
 window.ui = window.ui || {} // Ensure 'ui' exists
@@ -589,29 +565,18 @@ function loadElementsFromJSON() {
 const minJsonString = `[{"command":"reset()","id":1728927569824,"name":"reset","position":{"x":439,"y":21},"type":"button"},{"id":1729270887157,"type":"output","name":"ticks","position":{"x":367,"y":22},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchesSize","command":"view.setValue('patchesSize', value)","position":{"x":184,"y":22},"min":"1","max":"15","step":"1","value":"10"},{"id":1730141024864,"type":"checkbox","name":"run","command":"checked ? anim.start() : anim.stop()","position":{"x":20,"y":21},"checked":false},{"id":1733442807622,"type":"dropdown","name":"fps","command":"anim.setFps(value)","position":{"x":108,"y":21},"options":["2","5","10","20","30","60"],"selected":"30"}]`
 const minJson = JSON.parse(minJsonString)
 
-// userName, modelName, userPath set in setAppState()
+// userName, modelName set in setAppState()
 const persistentStorage = {
     useLocalStorage: true,
-    root: '/agentscript/ui',
+    // root: '/agentscript/ui',
     autoDownload: false,
-    get: async function () {
-        const jsonString = this.useLocalStorage
-            ? localStorage.getItem(this.userName + this.modelName)
-            : await client.getFileContents(`${this.userPath}/data.json`, {
-                  format: 'text',
-              })
-
+    get: function () {
+        const jsonString = localStorage.getItem(this.userName + this.modelName)
         return JSON.parse(jsonString)
     },
-    put: async function (json) {
+    put: function (json) {
         const jsonString = JSON.stringify(json)
-        this.useLocalStorage
-            ? localStorage.setItem(this.userName + this.modelName, jsonString)
-            : await client.putFileContents(
-                  `${this.userPath}/data.json`,
-                  jsonString,
-                  { overwrite: true }
-              )
+        localStorage.setItem(this.userName + this.modelName, jsonString)
         if (this.autoDownload) downloadJson()
     },
 }
@@ -622,6 +587,10 @@ function jsonToStorage() {
     console.log('json: ', json)
 }
 
+export function autoDownload(bool) {
+    persistentStorage.autoDownload = bool
+}
+
 export async function setAppState(
     model,
     view,
@@ -629,17 +598,12 @@ export async function setAppState(
     userName = 'user',
     modelName = model.constructor.name
 ) {
-    const userPath = `${persistentStorage.root}/${userName}/${modelName}`
-    console.log('userPath', userPath)
-
-    console.log('root: ', await client.getDirectoryContents('/'))
-    if ((await client.exists(userPath)) === false) {
-        await client.createDirectory(userPath, { recursive: true })
-    }
-    console.log('userPath: ', await client.getDirectoryContents(userPath))
+    // const userPath = `${persistentStorage.root}/${userName}/${modelName}`
+    // console.log('userPath', userPath)
 
     Object.assign(window.ui, { model, view, anim })
-    Object.assign(persistentStorage, { userName, modelName, userPath })
+    // Object.assign(persistentStorage, { userName, modelName, userPath })
+    Object.assign(persistentStorage, { userName, modelName })
 
     anim.stop() // stop the animation, use uielements to control
     view.draw() // draw once to see the model before running animator
@@ -647,6 +611,7 @@ export async function setAppState(
     console.log('persistentStorage:', persistentStorage)
 }
 
+let initialJson
 export async function createElements(json) {
     if (typeof json === 'object') {
         window.ui.json = json
@@ -663,11 +628,24 @@ export async function createElements(json) {
         }
     }
     loadElementsFromJSON()
+    initialJson = JSON.stringify(window.ui.json)
 }
+function hasUnsavedChanges() {
+    return initialJson !== JSON.stringify(window.ui.json)
+}
+window.addEventListener('beforeunload', event => {
+    if (hasUnsavedChanges()) {
+        event.preventDefault()
+        event.returnValue = '' // Triggers the built-in browser warning
 
-export function autoDownload(bool) {
-    persistentStorage.autoDownload = bool
-}
+        // Delay showing our custom alert until after the user cancels
+        setTimeout(() => {
+            alert(
+                "You have unsaved changes!\n\nTo save your work, click the 'Save' button or use the menu option to download your JSON."
+            )
+        }, 10)
+    }
+})
 
 // =================== functions called by users commands ===================
 
@@ -686,21 +664,49 @@ function setJson(json = window.ui.json) {
     return currentJson
 }
 
-function moveJson() {
-    persistentStorage.useLocalStorage = !persistentStorage.useLocalStorage
-    persistentStorage.put(window.ui.json)
-    persistentStorage.useLocalStorage = !persistentStorage.useLocalStorage
-}
-
-function downloadJson() {
+// function downloadJson() {
+//     const modelName = persistentStorage.modelName
+//     const name = modelName.replace('Model', '').toLowerCase() + 'Elements.js'
+//     util.downloadJsonModule(window.ui.json, name)
+// }
+async function downloadJson() {
     const modelName = persistentStorage.modelName
-    const name = modelName.replace('Model', '').toLowerCase() + 'Elements.js'
-    util.downloadJsonModule(window.ui.json, name)
+    const fileName =
+        modelName.replace('Model', '').toLowerCase() + 'Elements.js'
+
+    // Convert JSON to an ES module format
+    const jsonModuleContent = `export default ${JSON.stringify(
+        window.ui.json,
+        null,
+        2
+    )};`
+
+    try {
+        // Open the file picker
+        const fileHandle = await window.showSaveFilePicker({
+            suggestedName: fileName,
+            types: [
+                {
+                    description: 'JavaScript Module',
+                    accept: { 'application/javascript': ['.js'] },
+                },
+            ],
+        })
+
+        // Write the file
+        const writable = await fileHandle.createWritable()
+        await writable.write(jsonModuleContent)
+        await writable.close()
+
+        console.log(`File saved: ${fileHandle.name}`)
+    } catch (error) {
+        console.error('File save cancelled or failed:', error)
+    }
 }
 
 Object.assign(window.ui, {
     // already has: model view anim
-    // used in divs.html
+    // used in uielements.html
     showPopup,
     submitForm,
     cancel,
@@ -711,7 +717,4 @@ Object.assign(window.ui, {
     // used in devtools
     setJson,
     minJson,
-    moveJson,
-    // downloadJsonModule,
-    // persistentStorage,
 })

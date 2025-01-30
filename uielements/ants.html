@@ -3,16 +3,13 @@
 <head>
     <title>Ants</title>
 
-    <!-- See uielements.css, uploaded in uielements.js -->
+    <script type="module" src="./uielements.html.js"></script>
+    <link rel="stylesheet" href="./uielements.css" />
 </head>
 
 <body>
 
-    <!-- See divs.html, uploaded in uielements.js -->
-
     <script type="module">
-        // ====== Import uielements.js, only additional import needed ======
-
         import * as UI from './uielements.js'
         import elements from './antsElements.js'
 
@@ -25,7 +22,6 @@
         import TwoDrawOptions from 'https://code.agentscript.org/views2mv/antsOptions.js'
 
         const model = new Model()
-        await model.startup()
         model.setup()
 
         const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model, 8))

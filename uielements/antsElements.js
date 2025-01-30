@@ -1,146 +1,161 @@
-const json = [
-    {
-        command: 'reset()',
-        id: 1728927569824,
-        name: 'reset',
-        position: {
-            x: 439,
-            y: 21,
-        },
-        type: 'button',
+export default [
+  {
+    "command": "reset()",
+    "id": 1728927569824,
+    "name": "reset",
+    "position": {
+      "x": 439,
+      "y": 21
     },
-    {
-        id: 1729270887157,
-        type: 'output',
-        name: 'ticks',
-        position: {
-            x: 367,
-            y: 22,
-        },
-        monitor: 'model.ticks',
-        fps: '10',
-        command: null,
+    "type": "button"
+  },
+  {
+    "id": 1729270887157,
+    "type": "output",
+    "name": "ticks",
+    "position": {
+      "x": 356,
+      "y": 22
     },
-    {
-        id: 1729463191305,
-        type: 'range',
-        name: 'patchesSize',
-        command: "view.setValue('patchesSize', value)",
-        position: {
-            x: 184,
-            y: 22,
-        },
-        min: '1',
-        max: '15',
-        step: '1',
-        value: '10',
+    "monitor": "model.ticks",
+    "fps": "10",
+    "command": null
+  },
+  {
+    "id": 1729463191305,
+    "type": "range",
+    "name": "patchesSize",
+    "command": "view.setValue('patchesSize', value)",
+    "position": {
+      "x": 184,
+      "y": 22
     },
-    {
-        id: 1729463877025,
-        type: 'button',
-        name: 'downloadCanvas',
-        command: 'view.downloadCanvas()',
-        position: {
-            x: 38,
-            y: 231,
-        },
+    "min": "1",
+    "max": "15",
+    "step": "1",
+    "value": "10"
+  },
+  {
+    "id": 1729463877025,
+    "type": "button",
+    "name": "downloadCanvas",
+    "command": "view.downloadCanvas()",
+    "position": {
+      "x": 38,
+      "y": 231
+    }
+  },
+  {
+    "id": 1729464380401,
+    "type": "range",
+    "name": "turtleSize",
+    "command": "view.setValue('turtlesSize', value)",
+    "position": {
+      "x": 33,
+      "y": 158
     },
-    {
-        id: 1729464380401,
-        type: 'range',
-        name: 'turtleSize',
-        command: "view.setValue('turtlesSize', value)",
-        position: {
-            x: 33,
-            y: 158,
-        },
-        min: '1',
-        max: '10',
-        step: '1',
-        value: '3',
+    "min": "1",
+    "max": "10",
+    "step": "1",
+    "value": "4"
+  },
+  {
+    "id": 1729535684833,
+    "type": "button",
+    "name": "downloadJson",
+    "command": "downloadJson()",
+    "position": {
+      "x": 184,
+      "y": 230
+    }
+  },
+  {
+    "id": 1729638667060,
+    "type": "dropdown",
+    "name": "shape",
+    "command": "view.setValue('turtlesShape', value)",
+    "position": {
+      "x": 311,
+      "y": 214
     },
-    {
-        id: 1729535684833,
-        type: 'button',
-        name: 'downloadJson',
-        command: 'downloadJson()',
-        position: {
-            x: 182,
-            y: 229,
-        },
+    "options": [
+      "circle",
+      "dart",
+      "person",
+      "bug",
+      "arrow"
+    ],
+    "selected": "bug"
+  },
+  {
+    "id": 1730141024864,
+    "type": "checkbox",
+    "name": "run",
+    "command": "checked ? anim.start() : anim.stop()",
+    "position": {
+      "x": 20,
+      "y": 22
     },
-    {
-        id: 1729638667060,
-        type: 'dropdown',
-        name: 'shape',
-        command: "view.setValue('turtlesShape', value)",
-        position: {
-            x: 311,
-            y: 214,
-        },
-        options: ['circle', 'dart', 'person', 'bug', 'arrow'],
-        selected: 'bug',
+    "checked": false
+  },
+  {
+    "id": 1731189397631,
+    "type": "output",
+    "name": "foodSeekers",
+    "command": null,
+    "position": {
+      "x": 308,
+      "y": 158
     },
-    {
-        id: 1730141024864,
-        type: 'checkbox',
-        name: 'run',
-        command: 'checked ? anim.start() : anim.stop()',
-        position: {
-            x: 20,
-            y: 21,
-        },
-        checked: false,
+    "monitor": "model.foodSeekers",
+    "fps": "10"
+  },
+  {
+    "id": 1732139806352,
+    "type": "plot",
+    "name": "foodSeekers & nestSeekers",
+    "command": null,
+    "position": {
+      "x": 26,
+      "y": 303
     },
-    {
-        id: 1731189397631,
-        type: 'output',
-        name: 'foodSeekers',
-        command: null,
-        position: {
-            x: 308,
-            y: 158,
-        },
-        monitor: 'model.foodSeekers',
-        fps: '10',
+    "width": "450",
+    "height": "150",
+    "pens": [
+      "foodSeekers",
+      "nestSeekers"
+    ],
+    "fps": "60"
+  },
+  {
+    "id": 1732212640249,
+    "type": "output",
+    "name": "nestSeekers",
+    "command": null,
+    "position": {
+      "x": 203,
+      "y": 160
     },
-    {
-        id: 1732139806352,
-        type: 'plot',
-        name: 'foodSeekers & nestSeekers',
-        command: null,
-        position: {
-            x: 77,
-            y: 309,
-        },
-        width: '450',
-        height: '150',
-        pens: ['foodSeekers', 'nestSeekers'],
-        fps: '60',
+    "monitor": "model.nestSeekers",
+    "fps": "10"
+  },
+  {
+    "id": 1733442807622,
+    "type": "dropdown",
+    "name": "fps",
+    "command": "anim.setFps(value)",
+    "position": {
+      "x": 108,
+      "y": 21
     },
-    {
-        id: 1732212640249,
-        type: 'output',
-        name: 'nestSeekers',
-        command: null,
-        position: {
-            x: 203,
-            y: 160,
-        },
-        monitor: 'model.nestSeekers',
-        fps: '10',
-    },
-    {
-        id: 1733442807622,
-        type: 'dropdown',
-        name: 'fps',
-        command: 'anim.setFps(value)',
-        position: {
-            x: 108,
-            y: 21,
-        },
-        options: ['2', '5', '10', '20', '30', '60'],
-        selected: '30',
-    },
-]
-export default json
+    "options": [
+      "2",
+      "5",
+      "10",
+      "20",
+      "30",
+      "60"
+    ],
+    "selected": "30"
+  }
+];
