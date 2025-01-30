@@ -1,4 +1,4 @@
-await fetch('./uielements.html')
+await fetch('https://code.agentscript.org/uielements/uielements.html')
     .then(response => response.text())
     .then(html => {
         // Insert the HTML content for the menu into the DOM
