@@ -492,11 +492,11 @@ function createElementFromJSON(jsonElement) {
         elementWrapper.style.left = jsonElement.position.x + 'px'
         elementWrapper.style.top = jsonElement.position.y + 'px'
 
-        // if (window.ui.isStaticMode) {
-        //     elementWrapper.onmousedown = null // Disable dragging
-        //     elementWrapper.oncontextmenu = e => e.preventDefault() // Disable right-click menu
-        //     // elementWrapper.classList.add('static-element') // Optional: add styling for static mode
-        // }
+        if (window.ui.isStaticMode) {
+            elementWrapper.onmousedown = null // Disable dragging
+            elementWrapper.oncontextmenu = e => e.preventDefault() // Disable right-click menu
+            // elementWrapper.classList.add('static-element') // Optional: add styling for static mode
+        }
 
         document.getElementById('uiContainer').appendChild(elementWrapper)
     }
@@ -681,6 +681,11 @@ function setJson(json = window.ui.json) {
 //     util.downloadJsonModule(window.ui.json, name)
 // }
 async function downloadJson() {
+    if (window.ui.isStaticMode) {
+        console.warn('Download disabled in static mode.')
+        return
+    }
+
     const modelName = persistentStorage.modelName
     const fileName =
         modelName.replace('Model', '').toLowerCase() + 'Elements.js'

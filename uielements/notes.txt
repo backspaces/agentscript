@@ -1,3 +1,15 @@
+Glitch
+- can't close index.html pane
+- download doesn't work:
+  File save cancelled or failed: SecurityError:
+  Failed to execute 'showSaveFilePicker' on 'Window':
+  Cross origin sub frames aren't allowed to show a file picker.
+- isStaticMode fails, can move elements
+  - window may not be available, window.ui seems to not be there
+
+
+=======================================
+
 Examples:
 
 * Buttons
