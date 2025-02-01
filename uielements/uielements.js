@@ -576,9 +576,9 @@ const minJson = JSON.parse(minJsonString)
 
 // userName, modelName set in setAppState()
 const persistentStorage = {
-    useLocalStorage: true,
+    // useLocalStorage: true,
     // root: '/agentscript/ui',
-    autoDownload: false,
+    // autoDownload: false,
     get: function () {
         const jsonString = localStorage.getItem(this.userName + this.modelName)
         return JSON.parse(jsonString)
@@ -586,7 +586,7 @@ const persistentStorage = {
     put: function (json) {
         const jsonString = JSON.stringify(json)
         localStorage.setItem(this.userName + this.modelName, jsonString)
-        if (this.autoDownload) downloadJson()
+        // if (this.autoDownload) downloadJson()
     },
 }
 
@@ -596,9 +596,9 @@ function jsonToStorage() {
     console.log('json: ', json)
 }
 
-export function autoDownload(bool) {
-    persistentStorage.autoDownload = bool
-}
+// export function autoDownload(bool) {
+//     persistentStorage.autoDownload = bool
+// }
 
 export async function setAppState(
     model,
@@ -680,6 +680,14 @@ function setJson(json = window.ui.json) {
 //     const name = modelName.replace('Model', '').toLowerCase() + 'Elements.js'
 //     util.downloadJsonModule(window.ui.json, name)
 // }
+
+// function isInIframe() {
+//     return window.self !== window.top
+// }
+// function isRunningInGlitch() {
+//     return window.location.hostname.endsWith('.glitch.me')
+// }
+
 async function downloadJson() {
     if (window.ui.isStaticMode) {
         console.warn('Download disabled in static mode.')
@@ -716,7 +724,13 @@ async function downloadJson() {
 
         console.log(`File saved: ${fileHandle.name}`)
     } catch (error) {
-        console.error('File save cancelled or failed:', error)
+        if (error.name === 'AbortError') {
+            console.warn('User canceled the file save dialog.')
+        } else {
+            console.error('File save failed:', error)
+            console.log('Trying Download/ folder')
+            util.downloadJsonModule(window.ui.json, modelName)
+        }
     }
 }
 
@@ -733,4 +747,6 @@ Object.assign(window.ui, {
     // used in devtools
     setJson,
     minJson,
+    // isInIframe,
+    // isRunningInGlitch,
 })
