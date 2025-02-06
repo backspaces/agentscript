@@ -3,6 +3,9 @@
 const shell = require('shelljs')
 // shell.config.silent = true
 
+// const markdownit = require('markdown-it')
+// const md = markdownit()
+
 let dirs = process.argv[2]
 
 if (!dirs) throw Error('Needs dirs argument')
@@ -36,6 +39,16 @@ dirs.forEach(dir => {
         shell.echo(`${srcUrl} | ${linkUrl}`).toEnd('README.md')
         // shell.echo(`${name} | ${url}`).toEnd('README.md')
     })
+
+    // console.log('\n\n')
+
+    // var str = shell.cat('README.md')
+    // console.log('str', str)
+
+    // console.log('\n\n')
+
+    // const result = md.render(str)
+    // console.log('result', result)
 
     shell.cd('..')
 })
