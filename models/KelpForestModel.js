@@ -1,7 +1,7 @@
 import * as util from 'https://code.agentscript.org/src/utils.js'
 import World from 'https://code.agentscript.org/src/World.js'
-// import Model from 'https://code.agentscript.org/src/Model.js'
-import Model from '../src/Model.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
+// import Model from '../src/Model.js'
 
 // util.randomSeed() // causes each run to have same results for debugging
 
