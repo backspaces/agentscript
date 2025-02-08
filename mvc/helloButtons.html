@@ -6,28 +6,29 @@
 </head>
 
 <body>
-    <div id="modelDiv"></div>
-    <div id="buttonsDiv"></div>
     <script type="module">
         import * as util from 'https://code.agentscript.org/src/utils.js'
         import Model from 'https://code.agentscript.org/models/HelloModel.js'
+        // import Model from 'https://code.agentscript.org/models/TemplateModel.js'
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
         import Buttons from 'https://code.agentscript.org/src/Buttons.js'
 
         const model = new Model()
-        await model.startup()
         model.setup()
-
-        const drawOptions = {
-            turtlesSize: 3,
-        }
 
         const view = new TwoDraw(model, {
             div: 'modelDiv',
             patchSize: 20,
-            drawOptions
+            drawOptions: {
+                turtlesColor: 'yellow',
+                turtlesSize: 3,
+                turtlesShape: 'bug',
+                linksColor: 'red',
+                linksWidth: 3,
+                // patchesMap: 'Jet',
+            }
         })
 
         const anim = new Animator(
@@ -46,13 +47,16 @@
         const buttons = new Buttons('buttonsDiv', [
             { name: "on/off", cmd: () => anim.toggle() },
 
-            { name: "circle", cmd: () => setShape("circle") },
+            { name: "bug", cmd: () => setShape("bug") },
             { name: "arrow", cmd: () => setShape("arrow") },
             { name: "dart", cmd: () => setShape("dart") },
 
-            { name: "make image", cmd: () => view.downloadCanvas() },
+            { name: "download image", cmd: () => view.downloadCanvas() },
         ])
     </script>
+
+    <div id="modelDiv"></div>
+    <div id="buttonsDiv"></div>
 </body>
 
 </html>

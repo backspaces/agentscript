@@ -2,21 +2,9 @@
 
 <head>
     <title>mouse</title>
-    <style>
-        .flex-container {
-            display: flex;
-        }
-
-        .flex-container>div {
-            margin: 10px;
-            padding: 20px;
-            font-size: 15px;
-        }
-    </style>
-
 </head>
 
-<body>
+<body style="font-family: 'Arial', sans-serif; font-size: 16px;">
     <script type="module">
         import * as util from 'https://code.agentscript.org/src/utils.js'
         import Model from 'https://code.agentscript.org/models/HelloModel.js'
@@ -81,10 +69,9 @@
 mouse down + drag: sellect and move closest turtle.
 mouse move: increase width of closest link`,
             'textDiv')
-
     </script>
 
-    <div class="flex-container">
+    <div style="display: flex; gap: 20px">
         <div id="modelDiv"></div>
         <div id="textDiv"></div>
     </div>

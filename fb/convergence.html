@@ -1,20 +1,23 @@
 <html>
-    <head>
-        <title>Convergence</title>
-    </head>
-    <body>
-        <script type="module">
-            import DefineTransform from './DefineTransform.js'
 
-            const transform = new DefineTransform()
+<head>
+    <title>Convergence</title>
+</head>
 
-            const onValue = transform.defineTransform(
-                'flock',
-                'convergence',
-                `return  model.flockVectorSize()`
-            )
+<body>
+    <script type="module">
+        import DefineTransform from './DefineTransform.js'
 
-            onValue(value => console.log('flock', 'convergence', value))
-        </script>
-    </body>
+        const transform = new DefineTransform()
+
+        const onValue = transform.defineTransform(
+            'flock',
+            'convergence',
+            `return  model.flockCohesion()`
+        )
+
+        onValue(value => console.log('flock', 'convergence', value))
+    </script>
+</body>
+
 </html>

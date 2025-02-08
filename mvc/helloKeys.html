@@ -2,20 +2,9 @@
 
 <head>
     <title>Keys</title>
-    <style>
-        .flex-container {
-            display: flex;
-        }
-
-        .flex-container>div {
-            margin: 10px;
-            padding: 20px;
-            font-size: 15px;
-        }
-    </style>
 </head>
 
-<body>
+<body style="font-family: 'Arial', sans-serif; font-size: 16px;">
     <script type="module">
         import * as util from 'https://code.agentscript.org/src/utils.js'
         import Model from 'https://code.agentscript.org/models/HelloModel.js'
@@ -25,18 +14,15 @@
         import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
 
         const model = new Model()
-        await model.startup()
         model.setup()
-
-        const drawOptions = {
-            turtlesSize: 2,
-            linksWidth: 2,
-        }
 
         const view = new TwoDraw(model, {
             div: 'modelDiv',
             patchSize: 20,
-            drawOptions
+            drawOptions: {
+                turtlesSize: 2,
+                linksWidth: 2,
+            }
         })
 
         const anim = new Animator(
@@ -113,7 +99,7 @@ Example: type Shift + Alt + a and you'll get Å above`,
         util.toWindow({ anim, model, view, keyboard, keyCommands })
     </script>
 
-    <div class="flex-container">
+    <div style="display: flex; gap: 20px">
         <div id="modelDiv"></div>
         <div id="textDiv"></div>
     </div>

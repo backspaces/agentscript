@@ -317,7 +317,7 @@ function createElementFromJSON(jsonElement) {
 
         button.addEventListener('click', function () {
             try {
-                const { model, view, anim, reset, downloadJson } = ui
+                const { model, view, anim, reset, downloadJson } = window.ui
                 eval(jsonElement.command)
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -343,7 +343,7 @@ function createElementFromJSON(jsonElement) {
 
         checkbox.addEventListener('change', function () {
             try {
-                const { model, view, anim, reset, downloadJson } = ui
+                const { model, view, anim, reset, downloadJson } = window.ui
                 const value = checkbox
                 const checked = checkbox.checked
                 eval(jsonElement.command)
@@ -377,7 +377,7 @@ function createElementFromJSON(jsonElement) {
 
         select.addEventListener('change', function () {
             try {
-                const { model, view, anim, reset, downloadJson } = ui
+                const { model, view, anim, reset, downloadJson } = window.ui
                 const value = select.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -406,7 +406,7 @@ function createElementFromJSON(jsonElement) {
         range.addEventListener('input', function () {
             valueLabel.innerText = range.value
             try {
-                const { model, view, anim, reset, downloadJson } = ui
+                const { model, view, anim, reset, downloadJson } = window.ui
                 const value = range.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -434,7 +434,7 @@ function createElementFromJSON(jsonElement) {
         function checkValue() {
             let currentValue
             try {
-                const { model, view, anim, reset, downloadJson } = ui
+                const { model, view, anim, reset, downloadJson } = window.ui
                 currentValue = eval(jsonElement.monitor)
             } catch (error) {
                 console.error('Monitor command execution failed: ', error)
@@ -467,10 +467,10 @@ function createElementFromJSON(jsonElement) {
             // legend: { show: true },
         })
 
-        plot.updatePlotFromModel(ui.model)
+        plot.updatePlotFromModel(window.ui.model)
 
         // Start monitoring the plot
-        plot.monitorModel(ui.model, jsonElement.fps)
+        plot.monitorModel(window.ui.model, jsonElement.fps)
 
         window.ui.plot = plot
 

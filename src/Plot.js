@@ -234,7 +234,11 @@ class Plot {
         const pens = this.pens
 
         util.forLoop(pens, (val, key) => {
-            pens[key] = model[key]
+            if (model[key] == null) throw Error(`Plot key is null`)
+
+            util.isFunction(model[key])
+                ? (pens[key] = model[key]())
+                : (pens[key] = model[key])
         })
 
         this.linePlot(pens)

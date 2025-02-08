@@ -29,10 +29,10 @@ export default class FlockModel extends Model {
         this.turtles.ask(t => {
             this.flock(t)
         })
-        // if (this.ticks % 50 === 49) this.report()
+        if (this.ticks % 50 === 49) this.report()
     }
     report() {
-        console.log('step', this.ticks + 1, 'cohesion:', this.flockVectorSize())
+        console.log('step', this.ticks + 1, 'cohesion:', this.flockCohesion())
     }
 
     flock(t) {
@@ -81,7 +81,7 @@ export default class FlockModel extends Model {
         return util.radToHeading(Math.atan2(dy, dx))
     }
 
-    flockVectorSize() {
+    flockCohesion() {
         const thetas = this.turtles.map(t => t.theta)
         const dx = thetas.map(theta => Math.cos(theta)).reduce((x, y) => x + y)
         const dy = thetas.map(theta => Math.sin(theta)).reduce((x, y) => x + y)

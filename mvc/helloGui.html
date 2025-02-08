@@ -6,7 +6,6 @@
 </head>
 
 <body>
-    <div id="modelDiv"></div>
     <script type="module">
         import * as util from 'https://code.agentscript.org/src/utils.js'
         import Model from 'https://code.agentscript.org/models/HelloModel.js'
@@ -16,17 +15,15 @@
         import GUI from 'https://code.agentscript.org/src/GUI.js'
 
         const model = new Model()
-        await model.startup()
         model.setup()
-
-        const drawOptions = {
-            turtlesSize: 3,
-        }
 
         const view = new TwoDraw(model, {
             div: 'modelDiv',
             patchSize: 20,
-            drawOptions
+            drawOptions: {
+                turtlesSize: 3,
+            }
+
         })
 
         const anim = new Animator(
@@ -68,6 +65,8 @@
             },
         })
     </script>
+
+    <div id="modelDiv"></div>
 </body>
 
 </html>

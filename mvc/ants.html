@@ -4,16 +4,17 @@
     <title>ants</title>
 </head>
 
-<body>
+<body style="font-family: 'Arial', sans-serif; font-size: 16px;">
+
     <script type="module">
         import * as util from 'https://code.agentscript.org/src/utils.js'
         import Model from 'https://code.agentscript.org/models/AntsModel.js'
-        // import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import TwoDraw from '../src/TwoDraw.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        // import TwoDraw from '../src/TwoDraw.js'
         import Color from 'https://code.agentscript.org/src/Color.js'
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
-        // import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Animator from '../src/Animator.js'
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        // import Animator from '../src/Animator.js'
 
         import Mouse from 'https://code.agentscript.org/src/Mouse.js'
         import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
@@ -49,7 +50,6 @@
         // ==== Define model, view, anim ====
 
         const model = new Model()
-        await model.startup()
         model.setup()
 
         const view = new TwoDraw(model, {
@@ -156,7 +156,24 @@
 
         util.toWindow({ util, model, view, anim, gui, keyboard })
     </script>
-    <div id="modelDiv"></div>
+
+    <div id="wrapper" style="display: flex; gap: 30px;">
+        <div id="modelDiv"></div>
+        <div id="textDiv">
+            <h3 style="margin-bottom: 4px;">Keyboard</h3>
+            <ul style="margin: 0;">
+                <li>t: toggle: run/pause</li>
+                <li>o: once: run one step</li>
+                <li>d: download: image canvas</li>
+            </ul>
+
+            <h3 style="margin-bottom: 4px;">Mouse</h3>
+            <ul style="margin: 0;">
+                <li>click on turtle to select & drag it</li>
+            </ul>
+        </div>
+    </div>
+
     <div id="plotDiv"></div>
 </body>
 

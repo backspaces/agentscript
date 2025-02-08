@@ -1,4 +1,4 @@
-const json = [
+export default [
   {
     "command": "reset()",
     "id": 1728927569824,
@@ -71,8 +71,8 @@ const json = [
     "name": "Best Tour Length",
     "command": null,
     "position": {
-      "x": 78,
-      "y": 239
+      "x": 30,
+      "y": 151
     },
     "width": "450",
     "height": "150",
@@ -81,5 +81,4 @@ const json = [
     ],
     "fps": "60"
   }
-]
-export default json
+];
