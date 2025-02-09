@@ -1,8 +1,7 @@
 import * as util from './utils.js'
 import uPlot from '../vendor/uPlot.js'
+
 await util.fetchCssStyle('../vendor/uPlot.css')
-// import uPlot from 'https://unpkg.com/uplot/dist/uPlot.esm.js'
-// await util.fetchCssStyle('https://unpkg.com/uplot/dist/uPlot.min.css')
 
 // const style = document.createElement('style')
 // style.textContent = `

@@ -1,4 +1,3 @@
-// import * as util from './utils.js' // just for debugging
 import AgentArray from './AgentArray.js'
 
 /**

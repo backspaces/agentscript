@@ -1,4 +1,3 @@
-// import * as util from 'https://code.agentscript.org/src/utils.js'
 import * as util from '../src/utils.js'
 import Plot from '../src/Plot.js'
 

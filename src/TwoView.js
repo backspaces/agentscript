@@ -1,5 +1,4 @@
 import * as util from './utils.js'
-// import World from './World.js'
 import PatchesView from './PatchesView.js'
 import TurtlesView from './TurtlesView.js'
 

@@ -1,4 +1,4 @@
-import Model from 'https://code.agentscript.org/src/Model.js' // Import the modules we need.
+import Model from 'https://code.agentscript.org/src/Model.js'
 import World from 'https://code.agentscript.org/src/World.js'
 import * as util from 'https://code.agentscript.org/src/utils.js'
 

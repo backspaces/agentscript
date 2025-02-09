@@ -2,7 +2,6 @@
 
 import { THREE } from '../vendor/three.js'
 import AgentArray from './AgentArray.js'
-// import Color from './Color.js'
 import * as util from './utils.js'
 
 // ========== global utilities ==========

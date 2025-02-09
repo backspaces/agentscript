@@ -10,22 +10,21 @@
         import * as util from 'https://code.agentscript.org/src/utils.js'
         import Model from 'https://code.agentscript.org/models/AntsModel.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        // import TwoDraw from '../src/TwoDraw.js'
-        import Color from 'https://code.agentscript.org/src/Color.js'
+        // import Color from 'https://code.agentscript.org/src/Color.js'
         import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
         import Animator from 'https://code.agentscript.org/src/Animator.js'
-        // import Animator from '../src/Animator.js'
 
         import Mouse from 'https://code.agentscript.org/src/Mouse.js'
         import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
         import GUI from 'https://code.agentscript.org/src/GUI.js'
-        // import Plot from 'https://code.agentscript.org/src/Plot.js'
-        import Plot from '../src/Plot.js'
+        import Plot from 'https://code.agentscript.org/src/Plot.js'
 
         // ==== Define draw options, colors and colormaps ====
 
-        const nestColor = Color.typedColor('yellow')
-        const foodColor = Color.typedColor('blue')
+        // const nestColor = Color.typedColor('yellow')
+        // const foodColor = Color.typedColor('blue')
+        const nestColor = 'yellow'
+        const foodColor = 'blue'
         const nestColorMap = ColorMap.gradientColorMap(20, [
             'black',
             nestColor,
@@ -76,6 +75,7 @@
             { key: 't', cmd: () => anim.toggle() },
             { key: 'o', cmd: () => anim.once() },
             { key: 'd', cmd: () => view.downloadCanvas() },
+            { key: '+', cmd: () => view.downloadCanvas() },
         ]
         const keyboard = new Keyboard(keyCommands).start()
 
@@ -175,6 +175,7 @@
     </div>
 
     <div id="plotDiv"></div>
+
 </body>
 
 </html>

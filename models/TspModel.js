@@ -9,8 +9,6 @@ export default class TSPModel extends Model {
     useInversion = true
     stopTickDifference = 500
 
-    // onChange = (length, changes, ticks) => {} // called whenever a tour changes
-
     // ======================
 
     constructor(worldOptions = World.defaultOptions(50)) {

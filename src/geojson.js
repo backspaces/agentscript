@@ -1,4 +1,3 @@
-// import { typeOf } from './utils.js'
 import * as gis from './gis.js'
 
 // /** @exports */
