@@ -45,11 +45,11 @@
         anim.stop() // let uielements start/stop animator
         anim.setSteps(-1) // in case you want to run forever
 
-        await UI.setAppState(model, view, anim, 'owen') // connect model to uielements
+        await UI.setAppState(model, view, anim) // connect model to uielements
 
         // UI.createElements() // use minElements, editable
-        // UI.createElements(elements, true) // use elements from file, editable
-        UI.createElements(minElements, true) // use elements from file, editable
+        UI.createElements(elements, true) // use elements from file, editable
+        // UI.createElements(minElements, true) // use elements from file, editable
         // UI.createElements(elements) // use elements from file, not editable
 
     </script>

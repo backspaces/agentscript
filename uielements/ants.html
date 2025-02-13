@@ -40,9 +40,10 @@
         anim.stop() // let uielements start/stop animator
         anim.setSteps(-1) // in case you want to run forever
 
-        await UI.setAppState(model, view, anim, 'owen') // connect model to uielements
-        UI.createElements() // create elements from persistent storage
-        // UI.createElements(elements) // create elements from file
+        await UI.setAppState(model, view, anim) // connect model to uielements
+
+        // UI.createElements() // create elements from persistent storage
+        UI.createElements(elements, true) // create elements from file
     </script>
 
     <!-- <div>

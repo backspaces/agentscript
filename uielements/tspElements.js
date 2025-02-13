@@ -1,21 +1,11 @@
 export default [
     {
-        command: 'reset()',
-        id: 1728927569824,
-        name: 'reset',
-        position: {
-            x: 439,
-            y: 21,
-        },
-        type: 'button',
-    },
-    {
         id: 1729270887157,
         type: 'output',
         name: 'ticks',
         position: {
-            x: 369,
-            y: 22,
+            x: 342,
+            y: 21,
         },
         monitor: 'model.ticks',
         fps: '10',
@@ -27,8 +17,8 @@ export default [
         name: 'patchesSize',
         command: "view.setValue('patchesSize', value)",
         position: {
-            x: 184,
-            y: 22,
+            x: 172,
+            y: 21,
         },
         min: '1',
         max: '15',
@@ -38,7 +28,7 @@ export default [
     {
         id: 1730141024864,
         type: 'checkbox',
-        name: 'run',
+        name: 'Run',
         command: 'checked ? anim.start() : anim.stop()',
         position: {
             x: 20,
@@ -52,7 +42,7 @@ export default [
         name: 'fps',
         command: 'anim.setFps(value)',
         position: {
-            x: 108,
+            x: 100,
             y: 21,
         },
         options: ['2', '5', '10', '20', '30', '60'],
@@ -61,13 +51,23 @@ export default [
     {
         id: 1729535684833,
         type: 'button',
-        name: 'downloadJson',
+        name: 'Save',
         command: 'downloadJson()',
         position: {
-            x: 22,
-            y: 106,
+            x: 405,
+            y: 21,
         },
     },
+    // {
+    //     command: 'reset()',
+    //     id: 1728927569824,
+    //     name: 'reset',
+    //     position: {
+    //         x: 439,
+    //         y: 21,
+    //     },
+    //     type: 'button',
+    // },
     {
         id: 1734033577558,
         type: 'plot',

@@ -26,8 +26,8 @@
 
         const view = new TwoDraw(model, {
             div: 'modelDiv',
-            patchSize: 20,
-            drawOptions: {}
+            patchSize: 10,
+            drawOptions: { turtlesSize: 2.5 }
         })
 
         const anim = new Animator(
@@ -44,13 +44,13 @@
         anim.stop() // let uielements start/stop animator
         anim.setSteps(-1) // in case you want to run forever
 
-        await UI.setAppState(model, view, anim, 'owen') // connect model to uielements
+        await UI.setAppState(model, view, anim) // connect model to uielements
 
-        // UI.createElements() // use minElements, editable
-        UI.createElements(elements, true) // use elements from file, editable
-        // UI.createElements(minElements, true) // use elements from file, editable
+        UI.createElements() // use minElements, editable
+        // UI.createElements(elements, true) // use elements from file, editable
         // UI.createElements(elements) // use elements from file, not editable
 
+        console.log(JSON.stringify(elements));
     </script>
 
     <!-- <div id="modelDiv"></div>

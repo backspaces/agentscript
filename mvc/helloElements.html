@@ -11,7 +11,7 @@
 <body>
     <script type="module">
         import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
-        import elements from 'https://code.agentscript.org/uielements/tspElements.js'
+        import elements from 'https://code.agentscript.org/uielements/minElements.js'
 
         // ====== The views2 code ======
 
@@ -44,10 +44,10 @@
         anim.stop() // let uielements start/stop animator
         anim.setSteps(-1) // in case you want to run forever
 
-        await UI.setAppState(model, view, anim, 'owen') // connect model to uielements
+        await UI.setAppState(model, view, anim) // connect model to uielements
 
-        // UI.createElements() // create elements from persistent storage
-        UI.createElements(elements) // create elements from file
+        UI.createElements() // create elements from persistent storage
+        // UI.createElements(elements) // create elements from file
 
     </script>
     <div id="modelDiv"></div>
