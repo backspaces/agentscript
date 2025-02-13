@@ -1,9 +1,8 @@
 import * as util from '../src/utils.js'
 import Plot from '../src/Plot.js'
 
-// Initialize the window.ui object if not already defined
-window.ui = window.ui || {} // Ensure 'ui' exists
-window.ui.json = [] // Initialize the json array
+const params = {}
+params.json = []
 
 document.getElementById('uiContainer').addEventListener('contextmenu', e => {
     e.preventDefault()
@@ -166,7 +165,7 @@ function createElementWrapper(element, id) {
 
 // Function to show the popup menu and start listening for outside clicks
 function showPopupMenu(e, wrapper) {
-    if (window.ui.isStaticMode) return // Disable menu in static mode
+    if (isStaticMode) return // Disable menu in static mode
 
     const popupMenu = document.getElementById('popupMenu')
     popupMenu.style.display = 'block'
@@ -184,9 +183,7 @@ function showPopupMenu(e, wrapper) {
         const confirmDelete = confirm('Do you want to delete this element?')
         if (confirmDelete) {
             selectedWrapper.remove()
-            window.ui.json = window.ui.json.filter(
-                el => el.id != selectedElementId
-            )
+            params.json = params.json.filter(el => el.id != selectedElementId)
             jsonToStorage()
             console.log('Element deleted successfully:', selectedElementId)
         }
@@ -196,9 +193,7 @@ function showPopupMenu(e, wrapper) {
     document.getElementById('editOption').onclick = function (e) {
         e.stopPropagation()
         console.log('Edit option clicked')
-        const jsonElement = window.ui.json.find(
-            el => el.id == selectedElementId
-        )
+        const jsonElement = params.json.find(el => el.id == selectedElementId)
         if (jsonElement) {
             showPopup(jsonElement.type, jsonElement)
         }
@@ -232,7 +227,7 @@ export function submitForm() {
     const id = editingElementId || Date.now() // Use existing ID if editing, otherwise create new
 
     // Find or initialize JSON element
-    let jsonElement = window.ui.json.find(el => el.id === id) // == not needed here
+    let jsonElement = params.json.find(el => el.id === id) // == not needed here
 
     if (jsonElement) {
         // Update existing JSON data
@@ -256,7 +251,7 @@ export function submitForm() {
                 y: centerY,
             },
         }
-        window.ui.json.push(jsonElement) // Add to JSON array
+        params.json.push(jsonElement) // Add to JSON array
     }
 
     // Populate specific fields based on the element type
@@ -316,7 +311,7 @@ function createElementFromJSON(jsonElement) {
 
         button.addEventListener('click', function () {
             try {
-                const { model, view, anim, reset, downloadJson } = window.ui
+                const { model, view, anim, reset, downloadJson } = params
                 eval(jsonElement.command)
             } catch (error) {
                 console.error('Command execution failed: ', error)
@@ -342,7 +337,7 @@ function createElementFromJSON(jsonElement) {
 
         checkbox.addEventListener('change', function () {
             try {
-                const { model, view, anim, reset, downloadJson } = window.ui
+                const { model, view, anim, reset, downloadJson } = params
                 const value = checkbox
                 const checked = checkbox.checked
                 eval(jsonElement.command)
@@ -376,7 +371,7 @@ function createElementFromJSON(jsonElement) {
 
         select.addEventListener('change', function () {
             try {
-                const { model, view, anim, reset, downloadJson } = window.ui
+                const { model, view, anim, reset, downloadJson } = params
                 const value = select.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -405,7 +400,7 @@ function createElementFromJSON(jsonElement) {
         range.addEventListener('input', function () {
             valueLabel.innerText = range.value
             try {
-                const { model, view, anim, reset, downloadJson } = window.ui
+                const { model, view, anim, reset, downloadJson } = params
                 const value = range.value
                 eval(jsonElement.command)
             } catch (error) {
@@ -433,7 +428,7 @@ function createElementFromJSON(jsonElement) {
         function checkValue() {
             let currentValue
             try {
-                const { model, view, anim, reset, downloadJson } = window.ui
+                const { model, view, anim, reset, downloadJson } = params
                 currentValue = eval(jsonElement.monitor)
             } catch (error) {
                 console.error('Monitor command execution failed: ', error)
@@ -466,12 +461,12 @@ function createElementFromJSON(jsonElement) {
             // legend: { show: true },
         })
 
-        plot.updatePlotFromModel(window.ui.model)
+        plot.updatePlotFromModel(params.model)
 
         // Start monitoring the plot
-        plot.monitorModel(window.ui.model, jsonElement.fps)
+        plot.monitorModel(params.model, jsonElement.fps)
 
-        window.ui.plot = plot
+        params.plot = plot
 
         // Wrap the plotDiv in a draggable wrapper
         elementWrapper = createElementWrapper(plotDiv, jsonElement.id)
@@ -491,7 +486,7 @@ function createElementFromJSON(jsonElement) {
         elementWrapper.style.left = jsonElement.position.x + 'px'
         elementWrapper.style.top = jsonElement.position.y + 'px'
 
-        if (window.ui.isStaticMode) {
+        if (isStaticMode) {
             elementWrapper.onmousedown = null // Disable dragging
             elementWrapper.oncontextmenu = e => e.preventDefault() // Disable right-click menu
             // elementWrapper.classList.add('static-element') // Optional: add styling for static mode
@@ -544,7 +539,7 @@ function closeDragElement() {
     // Update the associated JSON's position after dragging stops
     const elementId = currentDragElement.dataset.id
     // to let id & elementId be string or number, use ==
-    const jsonElement = window.ui.json.find(el => el.id == elementId)
+    const jsonElement = params.json.find(el => el.id == elementId)
 
     if (jsonElement) {
         // Get the current position directly (relative to the parent container)
@@ -562,8 +557,8 @@ function loadElementsFromJSON() {
     // Clear existing elements to avoid duplication
     uiContainer.innerHTML = ''
 
-    // Loop through each element in the window.ui.json array
-    window.ui.json.forEach(jsonElement => {
+    // Loop through each element in the params.json array
+    params.json.forEach(jsonElement => {
         createElementFromJSON(jsonElement) // Create each element from JSON
     })
 }
@@ -575,9 +570,10 @@ const minJson = JSON.parse(minJsonString)
 
 // userName, modelName set in setAppState()
 const persistentStorage = {
-    // useLocalStorage: true,
-    // root: '/agentscript/ui',
     // autoDownload: false,
+    userName: null,
+    modelName: null,
+    fileName: null,
     get: function () {
         const jsonString = localStorage.getItem(this.userName + this.modelName)
         return JSON.parse(jsonString)
@@ -590,7 +586,7 @@ const persistentStorage = {
 }
 
 function jsonToStorage() {
-    const json = window.ui.json
+    const json = params.json
     persistentStorage.put(json)
     console.log('json: ', json)
 }
@@ -606,12 +602,11 @@ export async function setAppState(
     userName = 'user',
     modelName = model.constructor.name
 ) {
-    // const userPath = `${persistentStorage.root}/${userName}/${modelName}`
-    // console.log('userPath', userPath)
+    const fileName =
+        modelName.replace('Model', '').toLowerCase() + 'Elements.js'
 
-    Object.assign(window.ui, { model, view, anim })
-    // Object.assign(persistentStorage, { userName, modelName, userPath })
-    Object.assign(persistentStorage, { userName, modelName })
+    Object.assign(params, { model, view, anim })
+    Object.assign(persistentStorage, { userName, modelName, fileName })
 
     anim.stop() // stop the animation, use uielements to control
     view.draw() // draw once to see the model before running animator
@@ -619,90 +614,121 @@ export async function setAppState(
     console.log('persistentStorage:', persistentStorage)
 }
 
-let initialJson
-export async function createElements(json) {
-    if (typeof json === 'object') {
-        window.ui.isStaticMode = true // Set static mode
-        window.ui.json = json
-        // jsonToStorage()
-    } else {
-        window.ui.isStaticMode = false // Allow editing if loaded from storage
-        document.getElementById('controlPanel').style.display = 'block' // Show control panel for local storage mode
-        const savedJson = await persistentStorage.get()
-        console.log('savedJson', savedJson)
-        if (savedJson) {
-            window.ui.json = savedJson
-        } else {
-            window.ui.json = minJson
-            jsonToStorage()
-        }
+let initialJson, isStaticMode
+export async function createElements(json = null, isEditable = json == null) {
+    isStaticMode = !isEditable
+    if (isEditable) {
+        // Show control panel
+        document.getElementById('controlPanel').style.display = 'block'
     }
+
+    params.json = json == null ? minJson : json
+    initialJson = JSON.stringify(params.json)
+
+    jsonToStorage()
     loadElementsFromJSON()
-    initialJson = JSON.stringify(window.ui.json)
 }
 function hasUnsavedChanges() {
-    return initialJson !== JSON.stringify(window.ui.json)
+    return initialJson !== JSON.stringify(params.json)
 }
+
+// Automatically save when the page is hidden (tab switch, minimize, or closing)
+// document.addEventListener('visibilitychange', async () => {
+//     console.log('visibilitychange')
+
+//     if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
+//         console.warn('User switched tabs, minimized, or is closing. Saving...')
+//         await downloadJson() // Save automatically before leaving
+//         initialJson = JSON.stringify(params.json) // Reset changes after saving
+//     }
+// })
+// document.addEventListener('visibilitychange', () => {
+//     if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
+//         console.warn(
+//             'User switched tabs, minimized, or is closing. Attempting to save...'
+//         )
+
+//         // Ensure params is available before calling downloadJson()
+//         if (params && typeof downloadJson === 'function') {
+//             setTimeout(() => {
+//                 downloadJson()
+//                 initialJson = JSON.stringify(params.json) // Reset changes after saving
+//             }, 100) // Small delay to ensure visibilitychange is in the correct scope
+//         } else {
+//             console.error(
+//                 'params is undefined. Cannot save JSON on visibilitychange.'
+//             )
+//         }
+//     }
+// })
+// document.addEventListener('visibilitychange', () => {
+//     if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
+//         console.warn(
+//             'User switched tabs, minimized, or is closing. Auto-saving to localStorage...'
+//         )
+//         localStorage.setItem('unsavedUIElements', JSON.stringify(params.json))
+//     }
+// })
+// document.addEventListener('visibilitychange', () => {
+//     if (document.visibilityState === 'visible') {
+//         const unsavedJson = localStorage.getItem('unsavedUIElements')
+//         if (unsavedJson && hasUnsavedChanges()) {
+//             if (
+//                 confirm(
+//                     'You have unsaved changes. Do you want to save them now?'
+//                 )
+//             ) {
+//                 downloadJson() // Now it runs with a user gesture!
+//             }
+//         }
+//     }
+// })
+// document.addEventListener('visibilitychange', () => {
+//     if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
+//         console.warn(
+//             'User switched tabs, minimized, or is closing. Auto-saving to localStorage...'
+//         )
+//         localStorage.setItem('unsavedUIElements', JSON.stringify(params.json))
+//     }
+
+//     if (document.visibilityState === 'visible') {
+//         const unsavedJson = localStorage.getItem('unsavedUIElements')
+//         if (unsavedJson && hasUnsavedChanges()) {
+//             alert(
+//                 "You have unsaved changes. Click 'Save Now' to download them."
+//             )
+//             // document.getElementById('saveNowButton').style.display = 'block' // Show the save button
+//         }
+//     }
+// })
 window.addEventListener('beforeunload', event => {
     if (hasUnsavedChanges()) {
         event.preventDefault()
-        event.returnValue = '' // Triggers the built-in browser warning
+        event.returnValue = '' // Triggers the browser warning
 
-        // // Delay showing our custom alert until after the user cancels
-        // setTimeout(() => {
-        //     alert(
-        //         "You have unsaved changes!\n\nTo save your work, click the 'Save' button or use the menu option to download your JSON."
-        //     )
-        // }, 10)
+        // Show manual save option (but async saving is blocked here)
+        setTimeout(() => {
+            alert(
+                "You have unsaved changes. Click 'Save Now' before reloading."
+            )
+        }, 10)
     }
 })
 
-// =================== functions called by users commands ===================
-
-function reset() {
-    window.ui.anim.restart(window.ui.model, window.ui.view, window.ui.plot)
-}
-
-function setJson(json = window.ui.json) {
-    const currentJson = window.ui.json
-
-    if (util.isString(json)) json = JSON.parse(json)
-    window.ui.json = json
-    jsonToStorage()
-    loadElementsFromJSON()
-
-    return currentJson
-}
-
-// function downloadJson() {
-//     const modelName = persistentStorage.modelName
-//     const name = modelName.replace('Model', '').toLowerCase() + 'Elements.js'
-//     util.downloadJsonModule(window.ui.json, name)
-// }
-
-// function isInIframe() {
-//     return window.self !== window.top
-// }
-// function isRunningInGlitch() {
-//     return window.location.hostname.endsWith('.glitch.me')
-// }
-
 async function downloadJson() {
-    if (window.ui.isStaticMode) {
+    if (isStaticMode) {
         console.warn('Download disabled in static mode.')
         return
     }
 
-    const modelName = persistentStorage.modelName
-    const fileName =
-        modelName.replace('Model', '').toLowerCase() + 'Elements.js'
-
+    const fileName = persistentStorage.fileName
     // Convert JSON to an ES module format
     const jsonModuleContent = `export default ${JSON.stringify(
-        window.ui.json,
+        params.json,
         null,
         2
     )};`
+    console.log(fileName, jsonModuleContent)
 
     try {
         // Open the file picker
@@ -722,30 +748,35 @@ async function downloadJson() {
         await writable.close()
 
         console.log(`File saved: ${fileHandle.name}`)
+        initialJson = JSON.stringify(params.json)
     } catch (error) {
         if (error.name === 'AbortError') {
             console.warn('User canceled the file save dialog.')
         } else {
             console.error('File save failed:', error)
             console.log('Trying Download/ folder')
-            util.downloadJsonModule(window.ui.json, modelName)
+            util.downloadJsonModule(params.json, fileName)
+            initialJson = JSON.stringify(params.json)
         }
     }
 }
 
-Object.assign(window.ui, {
-    // already has: model view anim
-    // used in uielements.html
+// =================== functions called by users commands ===================
+
+function reset() {
+    params.anim.restart(params.model, params.view, params.plot)
+}
+
+window.ui = {
     showPopup,
     submitForm,
     cancel,
-    // used by commands
+}
+Object.assign(params, {
+    // already has: model view anim
     reset,
-    // util,
     downloadJson,
-    // used in devtools
-    setJson,
-    minJson,
-    // isInIframe,
-    // isRunningInGlitch,
 })
+
+console.log('params', params)
+console.log('window.ui', window.ui)

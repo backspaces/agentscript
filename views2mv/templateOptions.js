@@ -5,7 +5,7 @@ export default function TwoDrawOptions(div, model, patchSize = 20) {
         turtlesShape: 'bug',
         linksColor: 'red',
         linksWidth: 3,
-        // patchesMap: 'Jet',
+        // patchesMap: 'Jet', // for bright patch colors!
     }
 
     return { div, patchSize, drawOptions }

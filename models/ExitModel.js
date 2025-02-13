@@ -71,12 +71,12 @@ export default class ExitModel extends Model {
             }
         })
         this.done = numMoves === 0
-        if (this.done)
-            console.log(
-                'model done at step',
-                this.ticks,
-                'turtles left',
-                this.turtles.length
-            )
+        // if (this.done)
+        //     console.log(
+        //         'model done at step',
+        //         this.ticks,
+        //         'turtles left',
+        //         this.turtles.length
+        //     )
     }
 }

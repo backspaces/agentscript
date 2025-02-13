@@ -14,6 +14,7 @@ Code    | Run demo
 [kelpforest](https://github.com/backspaces/agentscript/tree/master/views2/kelpforest.html#L1) | [https://code.agentscript.org/views2/kelpforest.html](https://code.agentscript.org/views2/kelpforest.html)
 [life](https://github.com/backspaces/agentscript/tree/master/views2/life.html#L1) | [https://code.agentscript.org/views2/life.html](https://code.agentscript.org/views2/life.html)
 [linktravel](https://github.com/backspaces/agentscript/tree/master/views2/linktravel.html#L1) | [https://code.agentscript.org/views2/linktravel.html](https://code.agentscript.org/views2/linktravel.html)
+[min](https://github.com/backspaces/agentscript/tree/master/views2/min.html#L1) | [https://code.agentscript.org/views2/min.html](https://code.agentscript.org/views2/min.html)
 [pheromone](https://github.com/backspaces/agentscript/tree/master/views2/pheromone.html#L1) | [https://code.agentscript.org/views2/pheromone.html](https://code.agentscript.org/views2/pheromone.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views2/roads.html#L1) | [https://code.agentscript.org/views2/roads.html](https://code.agentscript.org/views2/roads.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views2/shapes.html#L1) | [https://code.agentscript.org/views2/shapes.html](https://code.agentscript.org/views2/shapes.html)

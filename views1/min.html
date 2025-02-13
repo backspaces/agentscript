@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>Min</title>
+</head>
+<body>
+    <script type="module">
+        import * as util from 'https://code.agentscript.org/src/utils.js'
+        import Model from 'https://code.agentscript.org/models/MinModel.js'
+
+        util.printToPage('Running for 500 steps.')
+
+        const model = new Model()
+        await model.startup()
+        model.setup()
+
+        util.repeat(500, model.step)
+
+        const sample = util.sampleModel(model)
+        util.printToPage(sample)
+    </script>
+</body>
+</html>

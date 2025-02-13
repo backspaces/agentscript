@@ -18,6 +18,7 @@ Code    | Run demo
 [kelpForest](https://github.com/backspaces/agentscript/tree/master/models/KelpForestModel.js#L1) | [https://code.agentscript.org/models/run.html?kelpForest](https://code.agentscript.org/models/run.html?kelpForest)
 [life](https://github.com/backspaces/agentscript/tree/master/models/LifeModel.js#L1) | [https://code.agentscript.org/models/run.html?life](https://code.agentscript.org/models/run.html?life)
 [linkTravel](https://github.com/backspaces/agentscript/tree/master/models/LinkTravelModel.js#L1) | [https://code.agentscript.org/models/run.html?linkTravel](https://code.agentscript.org/models/run.html?linkTravel)
+[min](https://github.com/backspaces/agentscript/tree/master/models/MinModel.js#L1) | [https://code.agentscript.org/models/run.html?min](https://code.agentscript.org/models/run.html?min)
 [pheromone](https://github.com/backspaces/agentscript/tree/master/models/PheromoneModel.js#L1) | [https://code.agentscript.org/models/run.html?pheromone](https://code.agentscript.org/models/run.html?pheromone)
 [roads](https://github.com/backspaces/agentscript/tree/master/models/RoadsModel.js#L1) | [https://code.agentscript.org/models/run.html?roads](https://code.agentscript.org/models/run.html?roads)
 [shapes](https://github.com/backspaces/agentscript/tree/master/models/ShapesModel.js#L1) | [https://code.agentscript.org/models/run.html?shapes](https://code.agentscript.org/models/run.html?shapes)

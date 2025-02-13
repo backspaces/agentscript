@@ -4,21 +4,21 @@ import { booleanPointInPolygon } from '../vendor/turfImports.js'
 
 const url = import.meta.resolve('./data/nmcounties.json')
 const counties = await fetch(url).then(resp => resp.json())
-console.log('counties: url', url, 'counties', counties.features.length)
+// console.log('counties: url', url, 'counties', counties.features.length)
 
 class CountiesModel extends HelloModel {
     static defaultOptions() {
-        console.log('counties: defaultOptions called')
+        // console.log('counties: defaultOptions called')
         return { bbox: counties, patchesWidth: 100 }
     }
 
     constructor(options = CountiesModel.defaultOptions()) {
         // console.log('counties: ctor options', Object.keys(options))
-        console.log('counties: ctor options', options)
+        // console.log('counties: ctor options', options)
         super(options)
     }
     setup() {
-        console.log('counties: setup')
+        // console.log('counties: setup')
 
         super.setup()
         this.patches.ask(p => {
