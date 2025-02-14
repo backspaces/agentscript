@@ -565,7 +565,7 @@ function loadElementsFromJSON() {
 
 // =================== storage utilities ===================
 
-let minJsonString = `[{"id":1729270887157,"type":"output","name":"ticks","position":{"x":342,"y":21},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchesSize","command":"view.setValue('patchesSize', value)","position":{"x":172,"y":21},"min":"1","max":"15","step":"1","value":"10"},{"id":1730141024864,"type":"checkbox","name":"Run","command":"checked ? anim.start() : anim.stop()","position":{"x":20,"y":21},"checked":false},{"id":1733442807622,"type":"dropdown","name":"fps","command":"anim.setFps(value)","position":{"x":100,"y":21},"options":["2","5","10","20","30","60"],"selected":"30"},{"id":1729535684833,"type":"button","name":"Save","command":"downloadJson()","position":{"x":405,"y":21}}]`
+let minJsonString = `[{"id":1729270887157,"type":"output","name":"ticks","position":{"x":342,"y":21},"monitor":"model.ticks","fps":"10","command":null},{"id":1729463191305,"type":"range","name":"patchesSize","command":"view.setValue('patchesSize', value)","position":{"x":172,"y":21},"min":"1","max":"20","step":"1","value":"12"},{"id":1730141024864,"type":"checkbox","name":"Run","command":"checked ? anim.start() : anim.stop()","position":{"x":20,"y":21},"checked":false},{"id":1733442807622,"type":"dropdown","name":"fps","command":"anim.setFps(value)","position":{"x":100,"y":21},"options":["2","5","10","20","30","60"],"selected":"30"},{"id":1729535684833,"type":"button","name":"Save","command":"downloadJson()","position":{"x":405,"y":21}}]`
 const minJson = JSON.parse(minJsonString)
 
 // userName, modelName set in setAppState()
@@ -573,7 +573,7 @@ const persistentStorage = {
     // autoDownload: false,
     // userName: null,
     modelName: null,
-    fileName: null,
+    elementsName: null,
     get: function () {
         // const jsonString = localStorage.getItem(this.userName + this.modelName)
         const jsonString = localStorage.getItem(this.modelName)
@@ -597,25 +597,21 @@ function jsonToStorage() {
 //     persistentStorage.autoDownload = bool
 // }
 
-export async function setAppState(
-    model,
-    view,
-    anim
-    // userName = 'user'
-    // modelName = model.constructor.name
-) {
+export async function setAppState(model, view, anim) {
     const modelName = model.constructor.name
-    const fileName =
+    const elementsName =
         modelName.replace('Model', '').toLowerCase() + 'Elements.js'
 
     Object.assign(params, { model, view, anim })
-    // Object.assign(persistentStorage, { userName, modelName, fileName })
-    Object.assign(persistentStorage, { modelName, fileName })
+    // Object.assign(persistentStorage, { userName, modelName, elementsName })
+    Object.assign(persistentStorage, { modelName, elementsName })
 
     anim.stop() // stop the animation, use uielements to control
     view.draw() // draw once to see the model before running animator
 
     console.log('persistentStorage:', persistentStorage)
+
+    util.toWindow({ model, view, anim })
 }
 
 let initialJson, isStaticMode
@@ -627,7 +623,8 @@ export async function createElements(json = null, isEditable = json == null) {
     }
 
     params.json = json == null ? minJson : json
-    initialJson = JSON.stringify(params.json)
+    initialJson = json == null ? '[]' : JSON.stringify(params.json)
+    console.log('hasUnsavedChanges:', hasUnsavedChanges())
 
     jsonToStorage()
     loadElementsFromJSON()
@@ -636,76 +633,9 @@ function hasUnsavedChanges() {
     return initialJson !== JSON.stringify(params.json)
 }
 
-// Automatically save when the page is hidden (tab switch, minimize, or closing)
-// document.addEventListener('visibilitychange', async () => {
-//     console.log('visibilitychange')
-
-//     if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
-//         console.warn('User switched tabs, minimized, or is closing. Saving...')
-//         await downloadJson() // Save automatically before leaving
-//         initialJson = JSON.stringify(params.json) // Reset changes after saving
-//     }
-// })
-// document.addEventListener('visibilitychange', () => {
-//     if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
-//         console.warn(
-//             'User switched tabs, minimized, or is closing. Attempting to save...'
-//         )
-
-//         // Ensure params is available before calling downloadJson()
-//         if (params && typeof downloadJson === 'function') {
-//             setTimeout(() => {
-//                 downloadJson()
-//                 initialJson = JSON.stringify(params.json) // Reset changes after saving
-//             }, 100) // Small delay to ensure visibilitychange is in the correct scope
-//         } else {
-//             console.error(
-//                 'params is undefined. Cannot save JSON on visibilitychange.'
-//             )
-//         }
-//     }
-// })
-// document.addEventListener('visibilitychange', () => {
-//     if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
-//         console.warn(
-//             'User switched tabs, minimized, or is closing. Auto-saving to localStorage...'
-//         )
-//         localStorage.setItem('unsavedUIElements', JSON.stringify(params.json))
-//     }
-// })
-// document.addEventListener('visibilitychange', () => {
-//     if (document.visibilityState === 'visible') {
-//         const unsavedJson = localStorage.getItem('unsavedUIElements')
-//         if (unsavedJson && hasUnsavedChanges()) {
-//             if (
-//                 confirm(
-//                     'You have unsaved changes. Do you want to save them now?'
-//                 )
-//             ) {
-//                 downloadJson() // Now it runs with a user gesture!
-//             }
-//         }
-//     }
-// })
-// document.addEventListener('visibilitychange', () => {
-//     if (document.visibilityState === 'hidden' && hasUnsavedChanges()) {
-//         console.warn(
-//             'User switched tabs, minimized, or is closing. Auto-saving to localStorage...'
-//         )
-//         localStorage.setItem('unsavedUIElements', JSON.stringify(params.json))
-//     }
-
-//     if (document.visibilityState === 'visible') {
-//         const unsavedJson = localStorage.getItem('unsavedUIElements')
-//         if (unsavedJson && hasUnsavedChanges()) {
-//             alert(
-//                 "You have unsaved changes. Click 'Save Now' to download them."
-//             )
-//             // document.getElementById('saveNowButton').style.display = 'block' // Show the save button
-//         }
-//     }
-// })
 window.addEventListener('beforeunload', event => {
+    console.log('hasUnsavedChanges', hasUnsavedChanges())
+
     if (hasUnsavedChanges()) {
         event.preventDefault()
         event.returnValue = '' // Triggers the browser warning
@@ -725,19 +655,19 @@ async function downloadJson() {
         return
     }
 
-    const fileName = persistentStorage.fileName
+    const elementsName = persistentStorage.elementsName
     // Convert JSON to an ES module format
     const jsonModuleContent = `export default ${JSON.stringify(
         params.json,
         null,
         4
     )}`
-    console.log(fileName, jsonModuleContent)
+    console.log(elementsName, jsonModuleContent)
 
     try {
         // Open the file picker
         const fileHandle = await window.showSaveFilePicker({
-            suggestedName: fileName,
+            suggestedName: elementsName,
             types: [
                 {
                     description: 'JavaScript Module',
@@ -759,7 +689,7 @@ async function downloadJson() {
         } else {
             console.error('File save failed:', error)
             console.log('Trying Download/ folder')
-            util.downloadJsonModule(params.json, fileName)
+            util.downloadJsonModule(params.json, elementsName)
             initialJson = JSON.stringify(params.json)
         }
     }

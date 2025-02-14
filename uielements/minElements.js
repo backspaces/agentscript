@@ -21,9 +21,9 @@ export default [
             y: 21,
         },
         min: '1',
-        max: '15',
+        max: '20',
         step: '1',
-        value: '10',
+        value: '12',
     },
     {
         id: 1730141024864,

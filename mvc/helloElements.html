@@ -10,21 +10,23 @@
 
 <body>
     <script type="module">
-        import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
-        import elements from 'https://code.agentscript.org/uielements/minElements.js'
+        // import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
+        // import elements from 'https://code.agentscript.org/uielements/minElements.js'
+        import * as UI from '../uielements/uielements.js'
+        // import elements from './helloElements.js'
 
         // ====== The views2 code ======
 
         import Animator from 'https://code.agentscript.org/src/Animator.js'
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/FlockModel.js'
+        import Model from 'https://code.agentscript.org/models/HelloModel.js'
 
         const model = new Model()
         model.setup()
 
         const view = new TwoDraw(model, {
             div: 'modelDiv',
-            patchSize: 20,
+            patchSize: 10,
             drawOptions: {
                 turtlesSize: 1.5,
             }
@@ -46,8 +48,9 @@
 
         await UI.setAppState(model, view, anim) // connect model to uielements
 
-        UI.createElements() // create elements from persistent storage
-        // UI.createElements(elements) // create elements from file
+        UI.createElements() // use minElements, editable
+        // UI.createElements(elements, true) // use elements from file, editable
+        // UI.createElements(elements) // use elements from file, not editable
 
     </script>
     <div id="modelDiv"></div>
