@@ -19,10 +19,9 @@ class HelloModel extends Model {
         this.turtles.setDefault('atEdge', 'bounce')
 
         // create "population" turtles placed on random patches
-        this.turtles.create(this.population, t => {
-            const patch = this.patches.oneOf()
-            t.setxy(patch.x, patch.y)
-        })
+        this.turtles.create(this.population, t =>
+            t.moveTo(this.patches.oneOf())
+        )
 
         // If links.too is true, create a link from every turtle to another turtle
         if (this.linksToo) {

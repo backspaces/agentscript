@@ -19,17 +19,16 @@ export default class LinkTravelModel extends Model {
     setup() {
         this.turtleBreeds('nodes drivers')
 
-        // Create the graph node turtles
-        this.patches.nOf(this.numNodes).ask(p => {
-            p.sprout(1, this.nodes, t => {
-                if (this.nodes.length > 2) {
-                    this.links.create(t, this.turtles.otherNOf(2, t))
-                }
-            })
-        })
+        this.nodes.create(this.numNodes)
+
+        // create two links per node to random other nodes.
+        // two so that there is always an outgoing link other than the incomming one.
+        this.nodes.ask(n => this.links.create(n, this.nodes.otherNOf(2, n)))
 
         if (this.layoutCircle) {
             this.nodes.layoutCircle(this.world.maxX - 1)
+        } else {
+            this.nodes.ask(n => n.moveTo(this.patches.oneOf()))
         }
 
         util.repeat(this.numDrivers, () => {

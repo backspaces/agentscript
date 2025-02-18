@@ -21,19 +21,16 @@ class KelpForestModel extends Model {
         this.turtleBreeds('kelp urchin seaStar')
 
         this.kelp.create(this.numKelp, t => {
-            const patch = this.patches.oneOf()
-            t.setxy(patch.x, patch.y)
+            t.moveTo(this.patches.oneOf())
         })
 
         this.seaStar.create(this.numSeastar, t => {
-            const patch = this.patches.oneOf()
-            t.setxy(patch.x, patch.y)
+            t.moveTo(this.patches.oneOf())
         })
         this.seaStar.setDefault('atEdge', 'bounce')
 
         this.urchin.create(this.numUrchin, t => {
-            const patch = this.patches.oneOf()
-            t.setxy(patch.x, patch.y)
+            t.moveTo(this.patches.oneOf())
         })
     }
 
@@ -52,8 +49,7 @@ class KelpForestModel extends Model {
     spawnUrchin() {
         if (this.day() === 0 && this.year() > 1) {
             this.urchin.create(this.urchin.length * 2, t => {
-                const patch = this.patches.oneOf()
-                t.setxy(patch.x, patch.y)
+                t.moveTo(this.patches.oneOf())
             })
         }
     }
@@ -61,8 +57,7 @@ class KelpForestModel extends Model {
     reseedKelp() {
         if (this.day() === 0 && this.year() > 1) {
             this.kelp.create(this.kelp.length * 3, t => {
-                const patch = this.patches.oneOf()
-                t.setxy(patch.x, patch.y)
+                t.moveTo(this.patches.oneOf())
             })
         }
     }
@@ -71,8 +66,7 @@ class KelpForestModel extends Model {
         if (this.day() === 0 && this.year() > 1) {
             if (this.seaStar.length > 0) {
                 this.seaStar.create(2, t => {
-                    const patch = this.patches.oneOf()
-                    t.setxy(patch.x, patch.y)
+                    t.moveTo(this.patches.oneOf())
                 })
             }
         }

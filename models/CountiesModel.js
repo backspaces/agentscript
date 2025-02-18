@@ -1,5 +1,5 @@
 import * as util from 'https://code.agentscript.org/src/utils.js'
-import HelloModel from './HelloModel.js'
+import HelloModel from 'https://code.agentscript.org/models/HelloModel.js'
 import { booleanPointInPolygon } from '../vendor/turfImports.js'
 
 const url = import.meta.resolve('./data/nmcounties.json')

@@ -38,10 +38,7 @@ export default class HelloPlusModel extends HelloModel {
         if (delta < 0) {
             util.repeat(-delta, () => this.turtles.oneOf().die())
         } else {
-            this.turtles.create(delta, t => {
-                const patch = this.patches.oneOf()
-                t.setxy(patch.x, patch.y)
-            })
+            this.turtles.create(delta, t => t.moveTo(this.patches.oneOf()))
         }
         // make sure all turtles have at least one link
         this.turtles.ask(t => {

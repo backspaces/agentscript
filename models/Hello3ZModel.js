@@ -20,8 +20,7 @@ export default class HelloModel extends Model {
         this.turtles.setDefault('atEdge', 'bounce')
 
         this.turtles.create(this.population, t => {
-            const patch = this.patches.oneOf()
-            t.setxy(patch.x, patch.y)
+            t.moveTo(this.patches.oneOf())
             this.moveToSphere(t)
         })
 

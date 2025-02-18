@@ -20,8 +20,7 @@ export default class PheromoneModel extends Model {
     setup() {
         // create population turtles, placing them randomly on the patches
         this.turtles.create(this.population, turtle => {
-            const patch = this.patches.oneOf()
-            turtle.setxy(patch.x, patch.y)
+            turtle.moveTo(this.patches.oneOf())
         })
 
         // initialize the patches with the pheromone value of 0
