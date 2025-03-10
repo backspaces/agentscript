@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Orbit</title>
+
+    <script type="module" src="./uielements.html.js"></script>
+    <link rel="stylesheet" href="./uielements.css" />
+</head>
+
+<body>
+
+    <script type="module">
+        // ====== Import uielements.js, only additional import needed ======
+
+        import * as UI from './uielements.js'
+        import elements from './orbitElements.js'
+
+        // ====== The views2 code as-is ======
+
+        import Animator from 'https://code.agentscript.org/src/Animator.js'
+        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+        import Model from '../models/OrbitModel.js'
+
+        const model = new Model()
+        model.setup()
+
+        const isRocket = t => t.breed.name === 'rockets'
+        const view = new TwoDraw(model, {
+            div: 'modelDiv',
+            patchSize: 25,
+            drawOptions: {
+                patchesColor: 'black',
+                linksColor: 'red',
+                turtlesShape: 'circle',
+                turtlesSize: (t) => {
+                    if (t.breed.name === "rockets") return 0.5
+                    if (t.breed.name === "earths") return 2 * model.earthRadius
+                    return 0.17 // trails & nodes
+                },
+                turtlesColor: (t) => {
+                    if (t.breed.name === "rockets") return "yellow"
+                    if (t.breed.name === "earths") return "blue"
+                    return "orange" // trails & nodes
+                },
+            }
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // 500, // how many steps
+            30 // at fps steps/second
+        )
+
+        // ====== Additional code for uielements usage ======
+
+        anim.stop() // let uielements start/stop animator
+        anim.setSteps(-1) // in case you want to run forever
+
+        await UI.setAppState(model, view, anim) // connect model to uielements
+
+        // UI.createElements() // use minElements, editable
+        UI.createElements(elements, true) // use elements from file, editable
+        // UI.createElements(elements) // use elements from file, not editable
+
+        // console.log(JSON.stringify(elements));
+
+        // Object.assign(window, { model, view, anim })
+
+    </script>
+
+    <!-- <div id="modelDiv"></div>
+    <div id="plotDiv"></div> -->
+    <div id="modelDiv"></div>
+
+</body>
+
+</html>

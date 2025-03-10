@@ -21,9 +21,9 @@ export default [
             "y": 21
         },
         "min": "1",
-        "max": "15",
+        "max": "30",
         "step": "1",
-        "value": "10"
+        "value": "20"
     },
     {
         "id": 1730141024864,
@@ -66,29 +66,55 @@ export default [
         }
     },
     {
-        "id": 1734033577558,
-        "type": "plot",
-        "name": "Best Tour Length",
-        "command": null,
-        "position": {
-            "x": 30,
-            "y": 151
-        },
-        "width": "450",
-        "height": "150",
-        "pens": [
-            "bestTourLength"
-        ],
-        "fps": "60"
-    },
-    {
-        "id": 1739476878449,
+        "id": 1740081151576,
         "type": "button",
         "name": "Reset",
         "command": "reset()",
         "position": {
-            "x": 403,
-            "y": 63
+            "x": 472,
+            "y": 20
         }
+    },
+    {
+        "id": 1740082006239,
+        "type": "range",
+        "name": "LEOHeight",
+        "command": "model.setLEOHeight(value)",
+        "position": {
+            "x": 23,
+            "y": 130
+        },
+        "min": "0",
+        "max": "0.1",
+        "step": "0.01",
+        "value": "0.03"
+    },
+    {
+        "id": 1740092781037,
+        "type": "range",
+        "name": "earthRadius",
+        "command": "model.setEarthRadius(value)",
+        "position": {
+            "x": 228,
+            "y": 130
+        },
+        "min": "0.1",
+        "max": "0.9",
+        "step": "0.05",
+        "value": "0.2"
+    },
+    {
+        "id": 1740331647865,
+        "type": "range",
+        "name": "gravity",
+        "command": "model.setGravity(value)",
+        "position": {
+            "x": 417,
+            "y": 129
+        },
+        "min": "0.005",
+        "max": "0.02",
+        "step": "0.001",
+        "value": "0.01"
     }
 ]

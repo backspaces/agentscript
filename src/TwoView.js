@@ -33,7 +33,7 @@ class TwoView {
 
         const children = Array.from(div.children)
         const canvases = children.filter(child => util.isCanvas(child))
-        console.log('div children: ', children, ' canvases', canvases)
+        // console.log('div children: ', children, ' canvases', canvases)
         // util.toWindow({ children, canvases })
 
         let can
