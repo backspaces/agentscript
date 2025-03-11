@@ -1,12 +1,21 @@
 import * as util from '../src/utils.js'
 import * as gis from '../src/gis.js'
-import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
+// import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
+// import maplibregl from 'https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.js'
+import maplibregl from 'https://esm.sh/maplibre-gl@3.4.0'
+
+// console.log('maplibre', maplibregl)
+// util.toWindow({ maplibregl })
 
 let mapLibreCss
 export async function importMapLibre() {
-    if (mapLibreCss) return maplibregl
+    if (mapLibreCss) {
+        console.log('importMapLibre: mapLibreCss already loaded')
+        return maplibregl
+    }
     mapLibreCss = await util.fetchCssStyle(
-        'https://unpkg.com/maplibre-gl/dist/maplibre-gl.css'
+        // 'https://unpkg.com/maplibre-gl/dist/maplibre-gl.css'
+        'https://esm.sh/maplibre-gl@3.4.0/dist/maplibre-gl.css'
     )
     await util.fetchCssStyle('./fullScreen.css')
     return maplibregl
@@ -62,33 +71,7 @@ export async function newMap(center, zoom = 10, div = 'map') {
 
     return map
 }
-export function onLoad(map, msg = 'A load event occurred.') {
-    map.on('load', function () {
-        console.log(msg)
-    })
-}
 
-// let startupMessageShown = false
-// const startupFcn = message => alert(message)
-// export function startupMessage(map, message) {
-//     if (startupMessageShown) {
-//         map.off('idle', startupFcn)
-//     } else {
-//         map.on('idle', startupFcn(message))
-//         startupMessageShown = true
-//     }
-// }
-// const startupFcn = message => {
-//     alert(message)
-//     map.off('idle', startupFcn)
-// }
-// export function startupMessage(map, message) {
-//     const startupFcn = message => {
-//         alert(message)
-//         map.off('idle', startupFcn)
-//     }
-//     map.on('idle', startupFcn(message))
-// }
 export async function startupMessage(message) {
     await util.pause(1000)
     alert(message)
@@ -365,3 +348,31 @@ export function mouseRect(map, ev, fcn) {
 
     down(ev)
 }
+
+// export function onLoad(map, msg = 'A load event occurred.') {
+//     map.on('load', function () {
+//         console.log(msg)
+//     })
+// }
+
+// let startupMessageShown = false
+// const startupFcn = message => alert(message)
+// export function startupMessage(map, message) {
+//     if (startupMessageShown) {
+//         map.off('idle', startupFcn)
+//     } else {
+//         map.on('idle', startupFcn(message))
+//         startupMessageShown = true
+//     }
+// }
+// const startupFcn = message => {
+//     alert(message)
+//     map.off('idle', startupFcn)
+// }
+// export function startupMessage(map, message) {
+//     const startupFcn = message => {
+//         alert(message)
+//         map.off('idle', startupFcn)
+//     }
+//     map.on('idle', startupFcn(message))
+// }

@@ -1,25 +1,21 @@
 import * as util from 'https://code.agentscript.org/src/utils.js'
 import HelloModel from 'https://code.agentscript.org/models/HelloModel.js'
 import { booleanPointInPolygon } from '../vendor/turfImports.js'
+import counties from './data/nmcounties.json' with { type: 'json' }
 
-const url = import.meta.resolve('./data/nmcounties.json')
-const counties = await fetch(url).then(resp => resp.json())
+// const url = import.meta.resolve('./data/nmcounties.json')
+// const counties = await fetch(url).then(resp => resp.json())
 // console.log('counties: url', url, 'counties', counties.features.length)
 
 class CountiesModel extends HelloModel {
     static defaultOptions() {
-        // console.log('counties: defaultOptions called')
         return { bbox: counties, patchesWidth: 100 }
     }
 
     constructor(options = CountiesModel.defaultOptions()) {
-        // console.log('counties: ctor options', Object.keys(options))
-        // console.log('counties: ctor options', options)
         super(options)
     }
     setup() {
-        // console.log('counties: setup')
-
         super.setup()
         this.patches.ask(p => {
             const pt = this.world.toGeo(p.x, p.y)
@@ -49,6 +45,3 @@ class CountiesModel extends HelloModel {
 
 export default CountiesModel
 
-// const counties = await fetch('../models/data/nmcounties.json').then(resp =>
-//     resp.json()
-// )
