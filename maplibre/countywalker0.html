@@ -1,33 +1,43 @@
+<!--
+    This is the same as countryWaleer.html but without the mltools.js helpers.
+    This is useful for modelers wanting to use mapLibre directly.
+-->
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>CountyWalker0</title>
-    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css">
+    <link rel="stylesheet" href="https://esm.sh/maplibre-gl@5.2.0/dist/maplibre-gl.css">
     <link rel="stylesheet" href="./fullScreen.css">
 </head>
 
 <body>
+    <!-- apparently maplibre requires "map" -->
+    <!-- <div id="mapDiv"></div> -->
     <div id="map"></div>
 
     <script type="module">
-        import MapDraw from '../src/MapDraw.js'
+        import * as util from '../src/utils.js'
+        // import MapDraw from '../src/MapDraw.js'
+        import TwoDraw from '../src/MapDraw.js'
         import Animator from '../src/Animator.js'
         import Model from '../models/CountiesModel.js'
-        // import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
-        import maplibregl from 'https://esm.sh/maplibre-gl@3.4.0'
+        import maplibregl from 'https://esm.sh/maplibre-gl@5.2.0'
 
         // Use default model options: { bbox: nmcounties.json, patchesWidth: 100 }
         // where nmcounties.json is fetched in CountiesModel.js
+        // NOTE: CountiesModel will use GeoWorld rather than World
         const model = new Model()
-        await model.startup()
+        // await model.startup()
         model.setup()
 
-        // MapDraw has default patchesColor & div as commented out below
-        const view = new MapDraw(model, {
-            // div: util.createCanvas(0, 0), // default & the view will resize
+        // The div above is for the map, while the div in TwoDraw is for the model.
+        // const view = new MapDraw(model, {
+        const view = new TwoDraw(model, {
+            div: util.createCanvas(0, 0), // default in MapDraw
             drawOptions: {
-                // patchesColor: 'transparent', // default in MapDraw
+                patchesColor: 'transparent', // default in MapDraw
                 linksColor: 'gray',
                 linksWidth: 4,
                 turtlesSize: 6,
@@ -39,6 +49,7 @@
 
         const map = new maplibregl.Map({
             container: 'map', // container id
+            // container: 'mapDiv', // container id
             center: model.world.bboxCenter(), // [-105.941109, 35.68222],
             zoom: 5,
             style: {
@@ -134,16 +145,6 @@
             -1, // run forever
             20 // 30 // 30 fps
         )
-
-        // setTimeout(() => {
-        //     alert(
-        //         'The same as countryWaleer.html but without the mapLibre helpers.' +
-        //         '\nThis is useful for modelers wanting to use mapLibre directly.' +
-        //         '\nThe random walkers change colors as they enter a new county' +
-        //         '\nClick on a county polygon to get it\'s name and population.' +
-        //         '\nYou can use the return key to remove this'
-        //     )
-        // }, 1000);
     </script>
 </body>
 

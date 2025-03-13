@@ -14,7 +14,6 @@
 
         import Model from '../models/CountiesModel.js'
         import MapDraw from '../src/MapDraw.js'
-        // import RunModelView from '../src/RunModelView.js'
         import RunModelView from './RunModelView.js'
 
         const viewOptions = {
@@ -41,6 +40,7 @@
         const elevation = gis.elevationTemplate('mapzen')
 
         const map = await mltools.newMap(world.bboxCenter(), 5)
+        // map.onLoad(...) // not needed, await above includes onload
 
         mltools.addRasterLayer(map, 'osm', terrain)
 

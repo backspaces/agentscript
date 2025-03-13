@@ -8,6 +8,9 @@ import counties from './data/nmcounties.json' with { type: 'json' }
 // console.log('counties: url', url, 'counties', counties.features.length)
 
 class CountiesModel extends HelloModel {
+    linksToo = false // don't include links between turtles
+
+    // Note these options cause HelloModel => Model to use GeoWorld
     static defaultOptions() {
         return { bbox: counties, patchesWidth: 100 }
     }

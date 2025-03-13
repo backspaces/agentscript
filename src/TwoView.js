@@ -31,18 +31,24 @@ class TwoView {
         let div = options.div
         div = util.isString(div) ? document.getElementById(div) : div
 
-        const children = Array.from(div.children)
-        const canvases = children.filter(child => util.isCanvas(child))
+        // const children = Array.from(div.children)
+        // const canvases = children.filter(child => util.isCanvas(child))
         // console.log('div children: ', children, ' canvases', canvases)
         // util.toWindow({ children, canvases })
 
         let can
         // if (children.length === 0) {
-        if (canvases.length === 0) {
-            can = util.createCanvas(0, 0, true) // not offscreen, preferDOM
-            div.appendChild(can)
+        if (util.isCanvas(div)) {
+            can = div
         } else {
-            can = div.firstChild
+            const children = Array.from(div.children)
+            const canvases = children.filter(child => util.isCanvas(child))
+            if (canvases.length === 0) {
+                can = util.createCanvas(0, 0, true) // not offscreen, preferDOM
+                div.appendChild(can)
+            } else {
+                can = div.firstChild
+            }
         }
 
         this.ctx = can.getContext('2d')
