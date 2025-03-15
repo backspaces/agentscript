@@ -6,60 +6,64 @@
 
 <body>
     <script type="module">
-        import * as gis from '../src/gis.js'
         import * as mltools from './mltools.js'
 
         import Model from '../models/HelloModel.js'
-        import MapDraw from '../src/MapDraw.js'
-        import RunModelView from './RunModelView.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
 
-        const bbox = gis.santaFeBBox
-        const viewOptions = {
-            // div: util.createCanvas(0, 0), // view default & the view will resize
-            patchSize: 5,
+        const bbox = mltools.santaFeBBox
+        const worldOptions = { bbox: bbox, patchesWidth: 100 }
+
+        const model = new Model(worldOptions)
+        model.setup()
+
+        const view = new TwoDraw(model, {
+            div: mltools.newCanvas(),
+            patchSize: 20,
             drawOptions: {
-                // patchesColor: 'transparent', // MapDraw default
+                patchesColor: 'transparent',
                 turtlesSize: 4,
                 linksWidth: 0.2,
             },
-        }
-
-        const modelView = new RunModelView(Model, MapDraw, viewOptions)
-        await modelView.setWorld({ bbox: bbox, patchesWidth: 100 })
+        })
 
         // ===== Start of map & layers
 
-        // terrain sources: osm topo topo1 smooth usgs
-        // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
-        const terrain = gis.template('usgs')
+        const terrain = mltools.terrain('osm')
 
         const map = await mltools.newMap(bbox, 10)
 
         mltools.addRasterLayer(map, 'terrain', terrain)
 
-        // Equivalent to:
-        // mltools.addGeojsonFillLayer(map, 'bbox', bbox, 'rgba(255, 0, 0, 0.2)')
-        // mltools.addGeojsonLineLayer(map, 'bboxLines', bbox, 'red', 3)
         mltools.addGeojsonLayer(map, 'rectangle', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 
-        mltools.addCanvasLayer(map, 'model', modelView.canvas, bbox)
+        mltools.addCanvasLayer(map, 'model', view.canvas, bbox)
 
         mltools.addLayerCursor(map, 'rectangle')
 
         // fcn args: fcn(bbox) where bbox is dragged rectangle in geo coords
         // const fcn = bbox => console.log(bbox)
-        const fcn = async bbox => {
-            await modelView.setWorld({ bbox: bbox, patchesWidth: 100 })
-            // modelView.run() // not needed, initial run steps is -1, forever
-            mltools.updateGeojson(map, 'rectangle', bbox)
-            mltools.updateCanvas(map, 'model', modelView.canvas, bbox)
-            map.panTo(gis.bboxCenter(bbox))
-        }
-        mltools.addDragRect(map, fcn)
+        // const fcn = async bbox => {
+        //     await modelView.setWorld({ bbox: bbox, patchesWidth: 100 })
+        //     // modelView.run() // not needed, initial run steps is -1, forever
+        //     mltools.updateGeojson(map, 'rectangle', bbox)
+        //     mltools.updateCanvas(map, 'model', modelView.canvas, bbox)
+        //     map.panTo(mltools.bboxCenter(bbox))
+        // }
+        // mltools.addDragRect(map, fcn)
 
         // ===== End of map & layers
 
-        modelView.run(-1, 30) // steps, fps. steps of -1 goes forever
+        new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // run forever
+            30 // fps
+        )
+
     </script>
     <div id="map"></div>
 </body>

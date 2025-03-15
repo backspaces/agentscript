@@ -6,37 +6,32 @@
 
 <body>
     <script type="module">
-        import * as gis from '../src/gis.js'
         import * as mltools from './mltools.js'
 
         import Animator from '../src/Animator.js'
+        import TwoDraw from '../src/TwoDraw.js'
         import Model from '../models/HelloModel.js'
-        import MapDraw from '../src/MapDraw.js'
 
-        const bbox = gis.santaFeBBox
+        const bbox = mltools.santaFeBBox
         const worldOptions = { bbox: bbox, patchesWidth: 100 }
 
         const model = new Model(worldOptions)
-        await model.startup()
         model.setup()
 
-        const view = new MapDraw(model, {
-            // div: util.createCanvas(0, 0), // default & the view will resize
+        const view = new TwoDraw(model, {
+            div: mltools.newCanvas(),
             patchSize: 5,
             drawOptions: {
-                // patchesColor: 'transparent', // default in MapDraw
+                patchesColor: 'transparent', // default in MapDraw
                 turtlesSize: 4,
                 linksWidth: 0.2,
             },
         })
 
-
         // ===== Start of map & layers
 
-        // terrain sources: osm topo topo1 smooth usgs
-        // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
-        const terrain = gis.template('usgs')
-        const elevation = gis.elevationTemplate('mapzen')
+        const terrain = mltools.terrain('usgs')
+        const elevation = mltools.elevation('mapzen')
 
         const map = await mltools.newMap(bbox, 10)
 
@@ -44,9 +39,6 @@
 
         mltools.addRasterLayer(map, 'elevation', elevation, 0.2)
 
-        // Equivalent to:
-        // mltools.addGeojsonFillLayer(map, 'bbox', bbox, 'rgba(255, 0, 0, 0.2)')
-        // mltools.addGeojsonLineLayer(map, 'bboxLines', bbox, 'red', 3)
         mltools.addGeojsonLayer(map, 'santaFe', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 
         mltools.addCanvasLayer(map, 'model', view.canvas, bbox)

@@ -14,6 +14,13 @@ export async function importMapLibre() {
     return maplibregl
 }
 
+// export function createCanvas(width, height) {
+//     return util.createCanvas(width, height)
+// }
+export function newCanvas() {
+    return util.createCanvas(0, 0)
+}
+
 function isBBox(obj) {
     if (!Array.isArray(obj) || obj.length !== 4) return false
     // const isNumberArray = obj.every(val => util.isNumber(val))
@@ -52,7 +59,8 @@ function emptyMap(center, zoom, div) {
 export async function newMap(center, zoom = 10, div = 'map') {
     zoom = Math.round(zoom) // needed for tile, bbox, etc calculations
 
-    if (isBBox(center)) center = gis.bboxCenter(center)
+    // if (isBBox(center)) center = gis.bboxCenter(center)
+    if (isBBox(center)) center = this.bboxCenter(center)
 
     await importMapLibre() // is no-op if css already loaded
 
@@ -69,6 +77,26 @@ export function onLoad(map, msg = 'A load event occurred.') {
         console.log(msg)
     })
 }
+
+// terrain sources: osm topo topo1 smooth usgs
+// elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
+export function terrain(template) {
+    return gis.template(template)
+}
+export function elevation(template) {
+    return gis.elevationTemplate(template)
+}
+
+export function bboxCenter(bbox) {
+    return gis.bboxCenter(bbox)
+}
+
+export const santaFeBBox = gis.santaFeBBox
+export const santaFeCenter = gis.santaFeCenter
+export const newMexicoBBox = gis.newMexicoBBox
+export const newMexicoCenter = gis.newMexicoCenter
+export const usaBBox = gis.usaBBox
+export const usaCenter = gis.usaCenter
 
 // let startupMessageShown = false
 // const startupFcn = message => alert(message)
@@ -194,6 +222,9 @@ export function addGeojsonLineLayer(map, id, geojson, color, width = 1) {
     })
 }
 
+// Equivalent to:
+// mltools.addGeojsonFillLayer(map, 'bbox', bbox, 'rgba(255, 0, 0, 0.2)')
+// mltools.addGeojsonLineLayer(map, 'bboxLines', bbox, 'red', 3)
 export function addGeojsonLayer(map, id, geojson, fill, stroke, width = 2) {
     if (isBBox(geojson)) geojson = gis.bboxFeature(geojson)
     // if (Array.isArray(geojson)) geojson = bboxFeature(geojson)

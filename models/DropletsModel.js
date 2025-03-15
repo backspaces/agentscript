@@ -16,7 +16,7 @@ import tileDataSet from './data/tile101x101.js'
 import { mapzen as provider } from 'https://code.agentscript.org/src/TileData.js'
 import BBoxDataSet from 'https://code.agentscript.org/src/BBoxDataSet.js'
 
-export default class DropletsModel extends Model {
+class DropletsModel extends Model {
     speed = 0.5
     // stepType choices:
     //    'minNeighbor',
@@ -162,3 +162,5 @@ export default class DropletsModel extends Model {
         return this.localMins.reduce((acc, p) => acc + p.turtlesHere.length, 0)
     }
 }
+
+export default DropletsModel

@@ -9,16 +9,16 @@
 		import * as gis from '../src/gis.js'
 		import * as mltools from './mltools.js'
 
-		const bbox = gis.santaFeBBox
+		const bbox = mltools.santaFeBBox
 		let zoom = 10 // int for computing usages, maplibre uses fractional zooms
 
 		// ===== Start of map & layers
 
 		// terrain sources: osm topo topo1 smooth usgs
 		// elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
-		const terrain = gis.template('usgs')
-		const contour = gis.template('contour')
-		const elevation = gis.elevationTemplate('mapzen')
+		const terrain = mltools.terrain('usgs')
+		const elevation = mltools.elevation('mapzen')
+		const contour = mltools.terrain('contour')
 
 		const map = await mltools.newMap(bbox, zoom)
 		mltools.showTileBoundaries(map)

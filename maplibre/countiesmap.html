@@ -7,18 +7,15 @@
 <body>
     <div id="map"></div>
     <script type="module">
-        import * as util from '../src/utils.js'
-        import * as gis from '../src/gis.js'
         import * as mltools from './mltools.js'
         import statecodes from '../models/data/statecodes.js'
+        import uscounties from
+            'https://backspaces.s3.amazonaws.com/uscounties.json' with { type: 'json' }
+        import usstates from
+            'https://backspaces.s3.amazonaws.com/usstates.json' with { type: 'json' }
 
-        const uscountiesUrl = 'https://backspaces.s3.amazonaws.com/uscounties.json'
-        const usstatesUrl = 'https://backspaces.s3.amazonaws.com/usstates.json'
-        const uscounties = await fetch(uscountiesUrl).then(res => res.json())
-        const usstates = await fetch(usstatesUrl).then(res => res.json())
-
-        const usaCenter = gis.usaCenter
-        const terrain = gis.template('usgs')
+        const usaCenter = mltools.usaCenter
+        const terrain = mltools.terrain('usgs')
 
         const map = await mltools.newMap(usaCenter, 4)
 
@@ -34,8 +31,6 @@
         mltools.addLayerClickPopup(map, 'countiesFill', msg, 'bottom-left')
 
         mltools.addLayerCursor(map, 'countiesFill')
-
-        util.toWindow({ util, gis, map, mltools, usstates })
     </script>
 </body>
 

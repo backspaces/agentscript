@@ -1,3 +1,11 @@
+<!--
+    This uses a helper library, mltools, to make models simpler
+    than the maplibre core API.
+    See countryWalker0.html for a version with the
+    core maplibre library without mltools.
+    Maplibre docs: https://maplibre.org/maplibre-gl-js/docs/
+-->
+
 <!DOCTYPE html>
 <html>
 
@@ -6,38 +14,39 @@
 </head>
 
 <body>
+    <!-- apparently maplibre requires "map" -->
     <div id="map"></div>
 
     <script type="module">
-        import * as gis from '../src/gis.js'
         import * as mltools from './mltools.js'
-
         import Model from '../models/CountiesModel.js'
-        import MapDraw from '../src/MapDraw.js'
-        import RunModelView from './RunModelView.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
 
-        const viewOptions = {
-            // div: util.createCanvas(0, 0), // default & the view will resize
+        const model = new Model()
+        model.setup()
+
+        // The div "map" above is for the map, while the div in
+        // TwoDraw is for the model which runs on top of the map
+        const view = new TwoDraw(model, {
+            div: mltools.newCanvas(),
             drawOptions: {
-                // patchesColor: 'transparent', // default in MapDraw
+                patchesColor: 'transparent',
                 linksColor: 'gray',
                 linksWidth: 4,
                 turtlesSize: 6,
-                turtlesColor: t => modelView.view.drawOptions.turtlesMap.atIndex(t.county + 1),
+                turtlesColor: t => view.drawOptions.turtlesMap.atIndex(t.county + 1),
             },
-        }
-
-        const modelView = new RunModelView(Model, MapDraw, viewOptions)
-        await modelView.setWorld() // use CountiesModel's default
+        })
 
         // ===== Start of map & layers
 
-        const world = modelView.world // use the model's world object below
+        const world = model.world // use the model's world object below
 
         const counties = world.geojson
         const countiesBBox = world.bbox
-        const terrain = gis.template('osm')
-        const elevation = gis.elevationTemplate('mapzen')
+        const terrain = mltools.terrain('osm')
+        const elevation = mltools.elevation('mapzen')
 
         const map = await mltools.newMap(world.bboxCenter(), 5)
         // map.onLoad(...) // not needed, await above includes onload
@@ -50,14 +59,21 @@
 
         mltools.addGeojsonLineLayer(map, 'countiesBBox', countiesBBox, 'blue')
 
-        mltools.addCanvasLayer(map, 'model', modelView.canvas, world.bboxCoords())
+        mltools.addCanvasLayer(map, 'model', view.canvas, world.bboxCoords())
 
         const msg = props => props.NAME + ', pop: ' + props.population.toLocaleString()
         mltools.addLayerClickPopup(map, 'counties', msg, 'bottom-right')
 
         // ===== End of map & layers
 
-        modelView.run(-1, 30) // steps, fps. steps of -1 goes forever
+        new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // run forever
+            20 // fps
+        )
     </script>
 </body>
 
