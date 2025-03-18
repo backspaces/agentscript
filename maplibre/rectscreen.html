@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <title>RectScreen</title>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script type="module">
+        import * as mltools from './mltools.js'
+
+        // ===== Start of map & layers
+
+        const map = await mltools.newMap(mltools.santaFeCenter, 10)
+
+        mltools.addRasterLayer(map, 'terrain', mltools.terrain('usgs'))
+
+        const bbox = mltools.mapbbox(map)
+        mltools.addGeojsonLayer(map, 'rectangle', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
+
+        const update = (map, bbox, id) =>
+            mltools.updateExistingLayers(map, bbox, 'rectangle')
+        mltools.bboxListener(map, update)
+        // mltools.bboxListener(map, mltools.updateExistingLayers)
+
+        // mltools.addLayerCursor(map, 'rectangle')
+
+        // Change rectangle to a new point-of-view. See console for bbox coords
+        // fcn args: fcn(bbox) where bbox is dragged rectangle in geo coords
+        // const fcn = async bbox => {
+        //     mltools.updateGeojson(map, 'rectangle', bbox)
+        //     map.panTo(mltools.bboxCenter(bbox))
+        //     console.log('rect bbox', bbox)
+        // }
+        // mltools.addDragRect(map, fcn)
+
+        // ===== End of map & layers
+    </script>
+</body>
+
+</html>

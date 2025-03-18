@@ -34,12 +34,6 @@ export async function mapLoadPromise(map) {
     })
 }
 
-// function defaultZoom(world) {
-//     const height = document.body.clientHeight
-//     const worldHeight = world.numY
-//     const bbox = world.bbox
-//     // calc a zoom
-// }
 function emptyMap(center, zoom, div) {
     // "world" can be a model who's world we can use (model.world)
     // if (world.world) world = world.world
@@ -56,6 +50,7 @@ function emptyMap(center, zoom, div) {
     })
     return map
 }
+
 export async function newMap(center, zoom = 10, div = 'map') {
     zoom = Math.round(zoom) // needed for tile, bbox, etc calculations
 
@@ -91,38 +86,87 @@ export function bboxCenter(bbox) {
     return gis.bboxCenter(bbox)
 }
 
+export function mapbbox(map) {
+    const bounds = map.getBounds() // Returns a LngLatBounds object
+    return [
+        bounds.getWest(), // Left longitude
+        bounds.getSouth(), // Bottom latitude
+        bounds.getEast(), // Right longitude
+        bounds.getNorth(), // Top latitude
+    ]
+}
+
+export function updateExistingLayers(map, bbox, layerID = 'rectangle') {
+    if (map.getSource(layerID)) {
+        const geojsonData = gis.bboxFeature(bbox) // Convert bbox to GeoJSON
+        map.getSource(layerID).setData(geojsonData)
+    } else {
+        console.warn(`Layer "${layerID}" does not exist. Skipping update.`)
+    }
+}
+
+export function bboxListener(map, fcn) {
+    function updateBoundingBox() {
+        const newBBox = mapbbox(map)
+
+        console.log('Updated Bounding Box:', newBBox)
+        fcn(map, newBBox)
+    }
+
+    // Update bounding box on map move and zoom events
+    map.on('moveend', updateBoundingBox)
+    map.on('zoomend', updateBoundingBox)
+}
+
+export function dragRectListener(map, layerID = 'rectangle') {
+    let startLngLat = null
+    let isDrawing = false
+
+    function getBBoxFromPoints(start, end) {
+        return [
+            Math.min(start.lng, end.lng), // west
+            Math.min(start.lat, end.lat), // south
+            Math.max(start.lng, end.lng), // east
+            Math.max(start.lat, end.lat), // north
+        ]
+    }
+
+    function startDrawing(event) {
+        if (!event.originalEvent.shiftKey) return // Require Shift key to start
+
+        event.preventDefault()
+        startLngLat = event.lngLat
+        isDrawing = true
+    }
+
+    function updateDrawing(event) {
+        if (!isDrawing || !startLngLat) return
+
+        const bbox = getBBoxFromPoints(startLngLat, event.lngLat)
+        updateExistingLayers(map, bbox, layerID)
+    }
+
+    function stopDrawing(event) {
+        if (!isDrawing) return
+
+        isDrawing = false
+        console.log(
+            'Updated Bounding Box:',
+            getBBoxFromPoints(startLngLat, event.lngLat)
+        )
+    }
+
+    map.on('mousedown', startDrawing)
+    map.on('mousemove', updateDrawing)
+    map.on('mouseup', stopDrawing)
+}
+
 export const santaFeBBox = gis.santaFeBBox
 export const santaFeCenter = gis.santaFeCenter
 export const newMexicoBBox = gis.newMexicoBBox
 export const newMexicoCenter = gis.newMexicoCenter
 export const usaBBox = gis.usaBBox
 export const usaCenter = gis.usaCenter
-
-// let startupMessageShown = false
-// const startupFcn = message => alert(message)
-// export function startupMessage(map, message) {
-//     if (startupMessageShown) {
-//         map.off('idle', startupFcn)
-//     } else {
-//         map.on('idle', startupFcn(message))
-//         startupMessageShown = true
-//     }
-// }
-// const startupFcn = message => {
-//     alert(message)
-//     map.off('idle', startupFcn)
-// }
-// export function startupMessage(map, message) {
-//     const startupFcn = message => {
-//         alert(message)
-//         map.off('idle', startupFcn)
-//     }
-//     map.on('idle', startupFcn(message))
-// }
-// export async function startupMessage(message) {
-//     await util.pause(1000)
-//     alert(message)
-// }
 
 export function getZoom(map, round = true) {
     let zoom = map.getZoom()
@@ -319,82 +363,146 @@ export function addLayerCursor(map, fillID, cursor = 'pointer') {
     })
 }
 
-export function addDragRect(map, fcn) {
-    map.on('mousedown', function (ev) {
-        mouseRect(map, ev, fcn)
-    })
-}
-export function mouseRect(map, ev, fcn) {
-    if (!(ev.originalEvent.altKey && ev.originalEvent.button === 0)) return
+// export function bboxListener(map, fcn, threshold = 0.01) {
+//     // threshold 0.01 degrees ~ 1.1km
+//     let previousBBox = mapbbox(map) // Store the initial bounding box
 
-    let corner1, corner2, isOut
-    const bboxID = 'bboxID'
-    let debug = false
+//     // function hasSignificantChange(newBBox) {
+//     //     if (!previousBBox) return true
 
-    const logEvent = ev => {
-        if (debug) console.log(ev.type, ev.lngLat, ev)
-    }
+//     //     // Compare each coordinate difference against the threshold
+//     //     return (
+//     //         Math.abs(newBBox[0] - previousBBox[0]) > threshold || // West
+//     //         Math.abs(newBBox[1] - previousBBox[1]) > threshold || // South
+//     //         Math.abs(newBBox[2] - previousBBox[2]) > threshold || // East
+//     //         Math.abs(newBBox[3] - previousBBox[3]) > threshold // North
+//     //     )
+//     // }
+//     function updateBoundingBox() {
+//         const newBBox = mapbbox(map)
 
-    const getBBox = () => {
-        // console.log(corner1, corner2)
-        let [lon1, lat1] = [corner1.lng, corner1.lat]
-        let [lon2, lat2] = [corner2.lng, corner2.lat]
+//         console.log('Updated Bounding Box:', newBBox)
+//         fcn(map, newBBox)
 
-        const minLon = Math.min(lon1, lon2),
-            maxLon = Math.max(lon1, lon2),
-            minLat = Math.min(lat1, lat2),
-            maxLat = Math.max(lat1, lat2)
+//         // if (hasSignificantChange(newBBox)) {
+//         //     console.log('Updated Bounding Box:', newBBox)
+//         //     fcn(map, newBBox)
+//         //     previousBBox = newBBox // Update the stored bounding box
+//         // } else {
+//         //     console.log('slight change')
+//         // }
+//     }
 
-        const bbox = [minLon, minLat, maxLon, maxLat]
-        // console.log('bbox', bbox.toLocaleString())
-        return bbox
-    }
-    const setBBox = () => {
-        const bbox = getBBox()
+//     // Update bounding box on map move and zoom events
+//     map.on('moveend', updateBoundingBox)
+//     map.on('zoomend', updateBoundingBox)
 
-        const source = map.getSource(bboxID)
-        if (!source) {
-            addGeojsonLineLayer(map, bboxID, bbox, 'red', 4)
-        } else {
-            source.setData(gis.bboxFeature(bbox))
-        }
-    }
+//     // Initial log when the function is first called
+//     // updateBoundingBox()
+// }
 
-    const down = ev => {
-        logEvent(ev)
+// export function addDragRect(map, fcn) {
+//     map.on('mousedown', function (ev) {
+//         mouseRect(map, ev, fcn)
+//     })
+// }
+// export function mouseRect(map, ev, fcn) {
+//     if (!(ev.originalEvent.altKey && ev.originalEvent.button === 0)) return
 
-        corner1 = corner2 = ev.lngLat
-        isOut = false
+//     let corner1, corner2, isOut
+//     const bboxID = 'bboxID'
+//     let debug = false
 
-        setBBox()
+//     const logEvent = ev => {
+//         if (debug) console.log(ev.type, ev.lngLat, ev)
+//     }
 
-        map.on('mousemove', move)
-        map.on('mouseup', up)
-        // map.on('mouseout', out)
-        map.dragPan.disable()
-    }
-    const move = ev => {
-        logEvent(ev)
+//     const getBBox = () => {
+//         // console.log(corner1, corner2)
+//         let [lon1, lat1] = [corner1.lng, corner1.lat]
+//         let [lon2, lat2] = [corner2.lng, corner2.lat]
 
-        corner2 = ev.lngLat
-        setBBox()
-    }
-    const up = ev => {
-        logEvent(ev)
+//         const minLon = Math.min(lon1, lon2),
+//             maxLon = Math.max(lon1, lon2),
+//             minLat = Math.min(lat1, lat2),
+//             maxLat = Math.max(lat1, lat2)
 
-        corner2 = ev.lngLat
-        const bbox = getBBox()
+//         const bbox = [minLon, minLat, maxLon, maxLat]
+//         // console.log('bbox', bbox.toLocaleString())
+//         return bbox
+//     }
+//     const setBBox = () => {
+//         const bbox = getBBox()
 
-        map.removeLayer(bboxID)
-        map.removeSource(bboxID)
+//         const source = map.getSource(bboxID)
+//         if (!source) {
+//             addGeojsonLineLayer(map, bboxID, bbox, 'red', 4)
+//         } else {
+//             source.setData(gis.bboxFeature(bbox))
+//         }
+//     }
 
-        map.off('mousemove', move)
-        map.off('mouseup', up)
-        // map.off('mouseout', out)
-        map.dragPan.enable()
+//     const down = ev => {
+//         logEvent(ev)
 
-        fcn(bbox)
-    }
+//         corner1 = corner2 = ev.lngLat
+//         isOut = false
 
-    down(ev)
-}
+//         setBBox()
+
+//         map.on('mousemove', move)
+//         map.on('mouseup', up)
+//         // map.on('mouseout', out)
+//         map.dragPan.disable()
+//     }
+//     const move = ev => {
+//         logEvent(ev)
+
+//         corner2 = ev.lngLat
+//         setBBox()
+//     }
+//     const up = ev => {
+//         logEvent(ev)
+
+//         corner2 = ev.lngLat
+//         const bbox = getBBox()
+
+//         map.removeLayer(bboxID)
+//         map.removeSource(bboxID)
+
+//         map.off('mousemove', move)
+//         map.off('mouseup', up)
+//         // map.off('mouseout', out)
+//         map.dragPan.enable()
+
+//         fcn(bbox)
+//     }
+
+//     down(ev)
+// }
+
+// let startupMessageShown = false
+// const startupFcn = message => alert(message)
+// export function startupMessage(map, message) {
+//     if (startupMessageShown) {
+//         map.off('idle', startupFcn)
+//     } else {
+//         map.on('idle', startupFcn(message))
+//         startupMessageShown = true
+//     }
+// }
+// const startupFcn = message => {
+//     alert(message)
+//     map.off('idle', startupFcn)
+// }
+// export function startupMessage(map, message) {
+//     const startupFcn = message => {
+//         alert(message)
+//         map.off('idle', startupFcn)
+//     }
+//     map.on('idle', startupFcn(message))
+// }
+// export async function startupMessage(message) {
+//     await util.pause(1000)
+//     alert(message)
+// }

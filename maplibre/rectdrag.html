@@ -1,0 +1,31 @@
+<html>
+
+<head>
+    <title>RectDrag</title>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script type="module">
+        import * as mltools from './mltools.js'
+
+
+        // ===== Start of map & layers
+
+        const terrain = mltools.terrain('usgs')
+
+        const map = await mltools.newMap(mltools.santaFeCenter, 10)
+
+        mltools.addRasterLayer(map, 'terrain', mltools.terrain('usgs'))
+
+        // Draw a rect of this bbox on map.
+        mltools.addGeojsonLayer(map,
+            'rectangle', mltools.santaFeBBox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
+
+        mltools.dragRectListener(map, 'rectangle')
+
+        // ===== End of map & layers
+    </script>
+</body>
+
+</html>

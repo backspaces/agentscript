@@ -6,5 +6,7 @@ Code    | Run demo
 [droplets](https://github.com/backspaces/agentscript/tree/master/maplibre/droplets.html#L1) | [https://code.agentscript.org/maplibre/droplets.html](https://code.agentscript.org/maplibre/droplets.html)
 [hello](https://github.com/backspaces/agentscript/tree/master/maplibre/hello.html#L1) | [https://code.agentscript.org/maplibre/hello.html](https://code.agentscript.org/maplibre/hello.html)
 [hello0](https://github.com/backspaces/agentscript/tree/master/maplibre/hello0.html#L1) | [https://code.agentscript.org/maplibre/hello0.html](https://code.agentscript.org/maplibre/hello0.html)
-[rectmap](https://github.com/backspaces/agentscript/tree/master/maplibre/rectmap.html#L1) | [https://code.agentscript.org/maplibre/rectmap.html](https://code.agentscript.org/maplibre/rectmap.html)
+[rectdrag](https://github.com/backspaces/agentscript/tree/master/maplibre/rectdrag.html#L1) | [https://code.agentscript.org/maplibre/rectdrag.html](https://code.agentscript.org/maplibre/rectdrag.html)
+[rectscreen](https://github.com/backspaces/agentscript/tree/master/maplibre/rectscreen.html#L1) | [https://code.agentscript.org/maplibre/rectscreen.html](https://code.agentscript.org/maplibre/rectscreen.html)
+[rectstatic](https://github.com/backspaces/agentscript/tree/master/maplibre/rectstatic.html#L1) | [https://code.agentscript.org/maplibre/rectstatic.html](https://code.agentscript.org/maplibre/rectstatic.html)
 [vectormap](https://github.com/backspaces/agentscript/tree/master/maplibre/vectormap.html#L1) | [https://code.agentscript.org/maplibre/vectormap.html](https://code.agentscript.org/maplibre/vectormap.html)

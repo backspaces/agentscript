@@ -6,7 +6,6 @@
 
 <body>
 	<script type="module">
-		import * as gis from '../src/gis.js'
 		import * as mltools from './mltools.js'
 
 		const bbox = mltools.santaFeBBox
@@ -14,8 +13,6 @@
 
 		// ===== Start of map & layers
 
-		// terrain sources: osm topo topo1 smooth usgs
-		// elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
 		const terrain = mltools.terrain('usgs')
 		const elevation = mltools.elevation('mapzen')
 		const contour = mltools.terrain('contour')
