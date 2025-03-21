@@ -9,20 +9,17 @@
     <script type="module">
         import * as mltools from './mltools.js'
 
-
         // ===== Start of map & layers
 
-        const terrain = mltools.terrain('usgs')
-
-        const map = await mltools.newMap(mltools.santaFeCenter, 10)
+        const map = await mltools.newMap(mltools.santaFeCenter, 10) // zoom: 10
 
         mltools.addRasterLayer(map, 'terrain', mltools.terrain('usgs'))
 
-        // Draw a rect of this bbox on map.
-        mltools.addGeojsonLayer(map,
-            'rectangle', mltools.santaFeBBox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
+        // Create a rect layer of this bbox on map.
+        mltools.addGeojsonLayer(map, 'rectangle', mltools.santaFeBBox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 
-        mltools.dragRectListener(map, 'rectangle')
+        // modify the geojason above by dragging a new rect
+        mltools.dragRectListener(map, 'rectangle', (bbox) => console.log(bbox))
 
         // ===== End of map & layers
     </script>

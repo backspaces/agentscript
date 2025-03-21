@@ -4,13 +4,46 @@ import * as gis from '../src/gis.js'
 // import maplibregl from 'https://esm.sh/maplibre-gl@3.4.0'
 import maplibregl from 'https://esm.sh/maplibre-gl@5.2.0'
 
+// ========== init
+
+// // fix: avoid user having to have fullScreen.css file
+// const css = `body {
+//     margin: 0;
+//     padding: 0;
+// }
+
+// #map {
+//     width: 100vw;
+//     height: 100vh;
+// }
+// `
+util.addCssStyle(`body {
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    width: 100vw;
+    height: 100vh;
+}
+`)
+
 let mapLibreCss
 export async function importMapLibre() {
     if (mapLibreCss) return maplibregl
     mapLibreCss = await util.fetchCssStyle(
         'https://esm.sh/maplibre-gl@3.4.0/dist/maplibre-gl.css'
     )
-    await util.fetchCssStyle('./fullScreen.css')
+    // await util.fetchCssStyle('./fullScreen.css')
+    util.addCssStyle(`
+body {
+    margin: 0;
+    padding: 0;
+}
+#map {
+    width: 100vw;
+    height: 100vh;
+}`)
     return maplibregl
 }
 
@@ -33,6 +66,19 @@ export async function mapLoadPromise(map) {
         map.on('load', () => resolve())
     })
 }
+
+export function bboxCenter(bbox) {
+    return gis.bboxCenter(bbox)
+}
+
+export const santaFeBBox = gis.santaFeBBox
+export const santaFeCenter = gis.santaFeCenter
+export const newMexicoBBox = gis.newMexicoBBox
+export const newMexicoCenter = gis.newMexicoCenter
+export const usaBBox = gis.usaBBox
+export const usaCenter = gis.usaCenter
+
+// ========== map
 
 function emptyMap(center, zoom, div) {
     // "world" can be a model who's world we can use (model.world)
@@ -82,10 +128,6 @@ export function elevation(template) {
     return gis.elevationTemplate(template)
 }
 
-export function bboxCenter(bbox) {
-    return gis.bboxCenter(bbox)
-}
-
 export function mapbbox(map) {
     const bounds = map.getBounds() // Returns a LngLatBounds object
     return [
@@ -96,16 +138,19 @@ export function mapbbox(map) {
     ]
 }
 
-export function updateExistingLayers(map, bbox, layerID = 'rectangle') {
-    if (map.getSource(layerID)) {
-        const geojsonData = gis.bboxFeature(bbox) // Convert bbox to GeoJSON
-        map.getSource(layerID).setData(geojsonData)
-    } else {
-        console.warn(`Layer "${layerID}" does not exist. Skipping update.`)
-    }
+export function getZoom(map, round = true) {
+    let zoom = map.getZoom()
+    if (round) zoom = Math.round(zoom)
+    return zoom
 }
 
-export function bboxListener(map, fcn) {
+export function showTileBoundaries(map, show = true) {
+    map.showTileBoundaries = show
+}
+
+// ========== listeners
+
+export function mapListener(map, fcn) {
     function updateBoundingBox() {
         const newBBox = mapbbox(map)
 
@@ -118,9 +163,10 @@ export function bboxListener(map, fcn) {
     map.on('zoomend', updateBoundingBox)
 }
 
-export function dragRectListener(map, layerID = 'rectangle') {
+export function dragRectListener(map, id, callback = null) {
     let startLngLat = null
     let isDrawing = false
+    let bbox = null
 
     function getBBoxFromPoints(start, end) {
         return [
@@ -137,23 +183,24 @@ export function dragRectListener(map, layerID = 'rectangle') {
         event.preventDefault()
         startLngLat = event.lngLat
         isDrawing = true
+        bbox = null
     }
 
     function updateDrawing(event) {
         if (!isDrawing || !startLngLat) return
 
-        const bbox = getBBoxFromPoints(startLngLat, event.lngLat)
-        updateExistingLayers(map, bbox, layerID)
+        bbox = getBBoxFromPoints(startLngLat, event.lngLat)
+
+        updateGeojson(map, id, bbox)
     }
 
     function stopDrawing(event) {
         if (!isDrawing) return
 
+        if (bbox && callback) callback(bbox)
+
         isDrawing = false
-        console.log(
-            'Updated Bounding Box:',
-            getBBoxFromPoints(startLngLat, event.lngLat)
-        )
+        bbox = null
     }
 
     map.on('mousedown', startDrawing)
@@ -161,22 +208,7 @@ export function dragRectListener(map, layerID = 'rectangle') {
     map.on('mouseup', stopDrawing)
 }
 
-export const santaFeBBox = gis.santaFeBBox
-export const santaFeCenter = gis.santaFeCenter
-export const newMexicoBBox = gis.newMexicoBBox
-export const newMexicoCenter = gis.newMexicoCenter
-export const usaBBox = gis.usaBBox
-export const usaCenter = gis.usaCenter
-
-export function getZoom(map, round = true) {
-    let zoom = map.getZoom()
-    if (round) zoom = Math.round(zoom)
-    return zoom
-}
-
-export function showTileBoundaries(map, show = true) {
-    map.showTileBoundaries = show
-}
+// ========== layers
 
 export const getLayer = (map, id) => map.getLayer(id)
 export const getLayers = map => map.getStyle().layers
@@ -184,6 +216,8 @@ export const getPaintProperties = (map, id) =>
     map.getLayer(id).paint._properties.properties
 export const getPaintPropertiesKeys = (map, id) =>
     Object.keys(getPaintProperties(map, id))
+
+// ========== raster layer
 
 export function addRasterLayer(map, id, url, opacity = 1) {
     map.addSource(id, {
@@ -199,6 +233,8 @@ export function addRasterLayer(map, id, url, opacity = 1) {
         paint: { 'raster-opacity': opacity },
     })
 }
+
+// ========== vector layer
 
 export function addVectorLayer(map, id, url, color = 'red', width = 3) {
     map.addSource(id, {
@@ -220,6 +256,8 @@ export function addVectorLayer(map, id, url, color = 'red', width = 3) {
         },
     })
 }
+
+// ========== geojson layer
 
 // Note both geojson layers can share their sources due to often
 // using the same geojson for lines and fills.
@@ -271,7 +309,6 @@ export function addGeojsonLineLayer(map, id, geojson, color, width = 1) {
 // mltools.addGeojsonLineLayer(map, 'bboxLines', bbox, 'red', 3)
 export function addGeojsonLayer(map, id, geojson, fill, stroke, width = 2) {
     if (isBBox(geojson)) geojson = gis.bboxFeature(geojson)
-    // if (Array.isArray(geojson)) geojson = bboxFeature(geojson)
     const sourceID = util.isString(geojson) ? geojson : id
 
     if (sourceID === id) {
@@ -295,10 +332,17 @@ export function addGeojsonLayer(map, id, geojson, fill, stroke, width = 2) {
     })
 }
 
-export function addCanvasLayer(map, id, canvas, coords) {
-    if (isBBox(coords)) coords = gis.bboxCoords(coords)
+export function updateGeojson(map, id, geojson) {
+    if (isBBox(geojson)) geojson = gis.bboxFeature(geojson)
+    map.getSource(id).setData(geojson)
+}
 
-    console.log('addCanvasLayer:', map, id, canvas, coords)
+// ========== canvas layer
+
+export function addCanvasLayer(map, id, canvas, coords) {
+    console.log('addCanvasLayer:', id, canvas, coords)
+
+    if (isBBox(coords)) coords = gis.bboxCoords(coords)
 
     map.addSource(id, {
         type: 'canvas',
@@ -312,23 +356,20 @@ export function addCanvasLayer(map, id, canvas, coords) {
     })
 }
 
-export function updateGeojson(map, id, geojson) {
-    if (isBBox(geojson)) geojson = gis.bboxFeature(geojson)
-    map.getSource(id).setData(geojson)
-}
-
 export function updateCanvas(map, id, canvas, coords) {
     map.removeLayer(id)
     map.removeSource(id)
     addCanvasLayer(map, id, canvas, coords)
 }
 
-export function addLayerClick(map, layerID, fcn) {
-    map.on('click', layerID, fcn)
+// ========== layer utils
+
+export function addLayerClick(map, id, fcn) {
+    map.on('click', id, fcn)
 }
 
-export function addLayerClickPopup(map, layerID, msg, anchor = 'bottom') {
-    map.on('click', layerID, function (ev) {
+export function addLayerClickPopup(map, id, msg, anchor = 'bottom') {
+    map.on('click', id, function (ev) {
         const props = ev.features[0].properties
         const html = msg(props, ev)
         // msg = msg.toLocaleString()
@@ -340,8 +381,8 @@ export function addLayerClickPopup(map, layerID, msg, anchor = 'bottom') {
 }
 
 let popup
-export function addLayerMovePopup(map, layerID, msg, anchor = 'bottom') {
-    map.on('mousemove', layerID, function (ev) {
+export function addLayerMovePopup(map, id, msg, anchor = 'bottom') {
+    map.on('mousemove', id, function (ev) {
         const props = ev.features[0].properties
         if (props) {
             if (popup) popup.remove()
@@ -354,155 +395,11 @@ export function addLayerMovePopup(map, layerID, msg, anchor = 'bottom') {
     })
 }
 
-export function addLayerCursor(map, fillID, cursor = 'pointer') {
-    map.on('mouseenter', fillID, () => {
+export function addLayerCursor(map, id, cursor = 'pointer') {
+    map.on('mouseenter', id, () => {
         map.getCanvas().style.cursor = cursor
     })
-    map.on('mouseleave', fillID, () => {
+    map.on('mouseleave', id, () => {
         map.getCanvas().style.cursor = ''
     })
 }
-
-// export function bboxListener(map, fcn, threshold = 0.01) {
-//     // threshold 0.01 degrees ~ 1.1km
-//     let previousBBox = mapbbox(map) // Store the initial bounding box
-
-//     // function hasSignificantChange(newBBox) {
-//     //     if (!previousBBox) return true
-
-//     //     // Compare each coordinate difference against the threshold
-//     //     return (
-//     //         Math.abs(newBBox[0] - previousBBox[0]) > threshold || // West
-//     //         Math.abs(newBBox[1] - previousBBox[1]) > threshold || // South
-//     //         Math.abs(newBBox[2] - previousBBox[2]) > threshold || // East
-//     //         Math.abs(newBBox[3] - previousBBox[3]) > threshold // North
-//     //     )
-//     // }
-//     function updateBoundingBox() {
-//         const newBBox = mapbbox(map)
-
-//         console.log('Updated Bounding Box:', newBBox)
-//         fcn(map, newBBox)
-
-//         // if (hasSignificantChange(newBBox)) {
-//         //     console.log('Updated Bounding Box:', newBBox)
-//         //     fcn(map, newBBox)
-//         //     previousBBox = newBBox // Update the stored bounding box
-//         // } else {
-//         //     console.log('slight change')
-//         // }
-//     }
-
-//     // Update bounding box on map move and zoom events
-//     map.on('moveend', updateBoundingBox)
-//     map.on('zoomend', updateBoundingBox)
-
-//     // Initial log when the function is first called
-//     // updateBoundingBox()
-// }
-
-// export function addDragRect(map, fcn) {
-//     map.on('mousedown', function (ev) {
-//         mouseRect(map, ev, fcn)
-//     })
-// }
-// export function mouseRect(map, ev, fcn) {
-//     if (!(ev.originalEvent.altKey && ev.originalEvent.button === 0)) return
-
-//     let corner1, corner2, isOut
-//     const bboxID = 'bboxID'
-//     let debug = false
-
-//     const logEvent = ev => {
-//         if (debug) console.log(ev.type, ev.lngLat, ev)
-//     }
-
-//     const getBBox = () => {
-//         // console.log(corner1, corner2)
-//         let [lon1, lat1] = [corner1.lng, corner1.lat]
-//         let [lon2, lat2] = [corner2.lng, corner2.lat]
-
-//         const minLon = Math.min(lon1, lon2),
-//             maxLon = Math.max(lon1, lon2),
-//             minLat = Math.min(lat1, lat2),
-//             maxLat = Math.max(lat1, lat2)
-
-//         const bbox = [minLon, minLat, maxLon, maxLat]
-//         // console.log('bbox', bbox.toLocaleString())
-//         return bbox
-//     }
-//     const setBBox = () => {
-//         const bbox = getBBox()
-
-//         const source = map.getSource(bboxID)
-//         if (!source) {
-//             addGeojsonLineLayer(map, bboxID, bbox, 'red', 4)
-//         } else {
-//             source.setData(gis.bboxFeature(bbox))
-//         }
-//     }
-
-//     const down = ev => {
-//         logEvent(ev)
-
-//         corner1 = corner2 = ev.lngLat
-//         isOut = false
-
-//         setBBox()
-
-//         map.on('mousemove', move)
-//         map.on('mouseup', up)
-//         // map.on('mouseout', out)
-//         map.dragPan.disable()
-//     }
-//     const move = ev => {
-//         logEvent(ev)
-
-//         corner2 = ev.lngLat
-//         setBBox()
-//     }
-//     const up = ev => {
-//         logEvent(ev)
-
-//         corner2 = ev.lngLat
-//         const bbox = getBBox()
-
-//         map.removeLayer(bboxID)
-//         map.removeSource(bboxID)
-
-//         map.off('mousemove', move)
-//         map.off('mouseup', up)
-//         // map.off('mouseout', out)
-//         map.dragPan.enable()
-
-//         fcn(bbox)
-//     }
-
-//     down(ev)
-// }
-
-// let startupMessageShown = false
-// const startupFcn = message => alert(message)
-// export function startupMessage(map, message) {
-//     if (startupMessageShown) {
-//         map.off('idle', startupFcn)
-//     } else {
-//         map.on('idle', startupFcn(message))
-//         startupMessageShown = true
-//     }
-// }
-// const startupFcn = message => {
-//     alert(message)
-//     map.off('idle', startupFcn)
-// }
-// export function startupMessage(map, message) {
-//     const startupFcn = message => {
-//         alert(message)
-//         map.off('idle', startupFcn)
-//     }
-//     map.on('idle', startupFcn(message))
-// }
-// export async function startupMessage(message) {
-//     await util.pause(1000)
-//     alert(message)
-// }

@@ -4,6 +4,7 @@ Code    | Run demo
 [countywalker](https://github.com/backspaces/agentscript/tree/master/maplibre/countywalker.html#L1) | [https://code.agentscript.org/maplibre/countywalker.html](https://code.agentscript.org/maplibre/countywalker.html)
 [countywalker0](https://github.com/backspaces/agentscript/tree/master/maplibre/countywalker0.html#L1) | [https://code.agentscript.org/maplibre/countywalker0.html](https://code.agentscript.org/maplibre/countywalker0.html)
 [droplets](https://github.com/backspaces/agentscript/tree/master/maplibre/droplets.html#L1) | [https://code.agentscript.org/maplibre/droplets.html](https://code.agentscript.org/maplibre/droplets.html)
+[droplets0](https://github.com/backspaces/agentscript/tree/master/maplibre/droplets0.html#L1) | [https://code.agentscript.org/maplibre/droplets0.html](https://code.agentscript.org/maplibre/droplets0.html)
 [hello](https://github.com/backspaces/agentscript/tree/master/maplibre/hello.html#L1) | [https://code.agentscript.org/maplibre/hello.html](https://code.agentscript.org/maplibre/hello.html)
 [hello0](https://github.com/backspaces/agentscript/tree/master/maplibre/hello0.html#L1) | [https://code.agentscript.org/maplibre/hello0.html](https://code.agentscript.org/maplibre/hello0.html)
 [rectdrag](https://github.com/backspaces/agentscript/tree/master/maplibre/rectdrag.html#L1) | [https://code.agentscript.org/maplibre/rectdrag.html](https://code.agentscript.org/maplibre/rectdrag.html)

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Droplets</title>
+    <title>Droplets0</title>
 </head>
 
 <body>
@@ -17,21 +17,20 @@
         const patchesWidth = 250
         const zoom = 10
 
-        let model = new Model({ bbox, patchesWidth }) // bbox => GeoWorld.js
+        const model = new Model({ bbox, patchesWidth }) // bbox => GeoWorld.js
         await model.startup(zoom) // DropletsModel needs startup
         model.setup()
 
-        const drawOptions = {
-            patchesColor: 'transparent',
-            turtlesShape: 'square',
-            turtlesRotate: false,
-            turtlesSize: 0.8, // 0.5,
-            turtlesColor: 'blue',
-        }
-        let view = new TwoDraw(model, {
+        const view = new TwoDraw(model, {
             div: mltools.newCanvas(),
             patchSize: 10,
-            drawOptions,
+            drawOptions: {
+                patchesColor: 'transparent',
+                turtlesShape: 'square',
+                turtlesRotate: false,
+                turtlesSize: 1.5,
+                turtlesColor: 'blue',
+            },
         })
 
         // ===== Start of map & layers
@@ -39,46 +38,20 @@
         // terrain sources: osm topo topo1 smooth usgs
         // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
         const terrain = mltools.terrain('usgs')
+
         const elevation = mltools.elevation('mapzen')
 
         const map = await mltools.newMap(bbox, zoom)
-        map.setMaxZoom(15)
 
         mltools.addRasterLayer(map, 'terrain', terrain)
-
-        mltools.addRasterLayer(map, 'elevation', elevation, 0.1)
 
         mltools.addGeojsonLayer(map, 'bbox', bbox, 'transparent', 'red', 3)
 
         mltools.addCanvasLayer(map, 'model', view.canvas, bbox)
 
-        // modify the geojason above by dragging a new rect
-        mltools.dragRectListener(map, 'bbox', async (bbox) => {
-            anim.stop()
-
-            const zoom = Math.floor(map.getZoom())
-
-            model = new Model({ bbox, patchesWidth })
-            await model.startup(zoom)
-            model.setup(zoom)
-
-            view = new TwoDraw(model, {
-                div: mltools.newCanvas(),
-                patchSize: 10,
-                drawOptions
-            })
-
-            mltools.updateGeojson(map, 'bbox', bbox)
-            mltools.updateCanvas(map, 'model', view.canvas, bbox)
-
-            // anim.restart(model, view)
-            anim.reset()
-            anim.start()
-        })
-
         // ===== End of map & layers
 
-        const anim = new Animator(
+        new Animator(
             () => {
                 model.step()
                 view.draw()
