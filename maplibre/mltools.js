@@ -1,22 +1,10 @@
 import * as util from '../src/utils.js'
 import * as gis from '../src/gis.js'
-// import maplibregl from 'https://cdn.skypack.dev/maplibre-gl'
-// import maplibregl from 'https://esm.sh/maplibre-gl@3.4.0'
 import maplibregl from 'https://esm.sh/maplibre-gl@5.2.0'
 
 // ========== init
 
-// // fix: avoid user having to have fullScreen.css file
-// const css = `body {
-//     margin: 0;
-//     padding: 0;
-// }
-
-// #map {
-//     width: 100vw;
-//     height: 100vh;
-// }
-// `
+// avoid user having to have fullScreen.css file
 util.addCssStyle(`body {
     margin: 0;
     padding: 0;
@@ -257,6 +245,19 @@ export function addVectorLayer(map, id, url, color = 'red', width = 3) {
     })
 }
 
+// ========== terrain layer
+
+export function addTerrainSource(map, id, url, maxzoom = 14) {
+    map.addSource(id, {
+        type: 'raster-dem',
+        tiles: [url],
+        tileSize: 256,
+        maxzoom: maxzoom,
+        encoding: 'terrarium', // or 'mapbox' depending on provider
+        attribution: '&copy; Elevation data provider',
+    })
+}
+
 // ========== geojson layer
 
 // Note both geojson layers can share their sources due to often
@@ -340,8 +341,7 @@ export function updateGeojson(map, id, geojson) {
 // ========== canvas layer
 
 export function addCanvasLayer(map, id, canvas, coords) {
-    console.log('addCanvasLayer:', id, canvas, coords)
-
+    // https://maplibre.org/maplibre-gl-js/docs/API/classes/CanvasSource/
     if (isBBox(coords)) coords = gis.bboxCoords(coords)
 
     map.addSource(id, {
@@ -368,30 +368,29 @@ export function addLayerClick(map, id, fcn) {
     map.on('click', id, fcn)
 }
 
-export function addLayerClickPopup(map, id, msg, anchor = 'bottom') {
+export function addLayerClickPopup(map, id, msg) {
     map.on('click', id, function (ev) {
         const props = ev.features[0].properties
         const html = msg(props, ev)
-        // msg = msg.toLocaleString()
-        new maplibregl.Popup({ maxWidth: 'none', anchor })
+        new maplibregl.Popup({ maxWidth: 'none' })
             .setLngLat(ev.lngLat)
             .setHTML(html)
             .addTo(map)
     })
 }
 
-let popup
-export function addLayerMovePopup(map, id, msg, anchor = 'bottom') {
+let popup // each move pops up a new value
+export function addLayerMovePopup(map, id, msg) {
     map.on('mousemove', id, function (ev) {
         const props = ev.features[0].properties
-        if (props) {
-            if (popup) popup.remove()
-            const html = msg(props, ev)
-            popup = new maplibregl.Popup({ maxWidth: 'none', anchor })
-                .setLngLat(ev.lngLat)
-                .setHTML(html)
-                .addTo(map)
-        }
+        // if (props) {
+        if (popup) popup.remove()
+        const html = msg(props, ev)
+        popup = new maplibregl.Popup({ maxWidth: 'none' })
+            .setLngLat(ev.lngLat)
+            .setHTML(html)
+            .addTo(map)
+        // }
     })
 }
 

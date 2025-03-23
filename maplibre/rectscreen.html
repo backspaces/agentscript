@@ -21,8 +21,6 @@
         mltools.addGeojsonLayer(map, 'rectangle', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 
         // update geojson layer above wnenever the map changes
-        // const update = (map, id, bbox) => mltools.updateGeojson(map, id, bbox)
-        // mltools.bboxListener(map, 'rectangle', update)
         const update = (map, bbox) => mltools.updateGeojson(map, 'rectangle', bbox)
         mltools.mapListener(map, update)
 

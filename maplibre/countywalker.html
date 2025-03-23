@@ -61,8 +61,12 @@
 
         mltools.addCanvasLayer(map, 'model', view.canvas, world.bboxCoords())
 
-        const msg = props => props.NAME + ', pop: ' + props.population.toLocaleString()
-        mltools.addLayerClickPopup(map, 'counties', msg, 'bottom-right')
+        mltools.addLayerCursor(map, 'counties')
+
+
+        const msg = props => // toLocaleString inserts commas 1234 => 1,234
+            props.NAME + ', pop: ' + props.population.toLocaleString()
+        mltools.addLayerClickPopup(map, 'counties', msg)
 
         // ===== End of map & layers
 

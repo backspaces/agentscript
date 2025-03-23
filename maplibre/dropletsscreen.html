@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <title>DropletsDrag</title>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script type="module">
+        import * as mltools from './mltools.js'
+        import Model from '../models/DropletsModel.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+
+        const zoom = 10
+
+        const map = await mltools.newMap(mltools.santaFeCenter, zoom)
+        map.setMaxZoom(15)
+
+        const bbox = mltools.mapbbox(map)
+        const patchesWidth = 250
+
+        let model = new Model({ bbox, patchesWidth }) // bbox => GeoWorld.js
+        await model.startup(zoom) // DropletsModel needs startup
+        model.setup()
+
+        const drawOptions = {
+            patchesColor: 'transparent',
+            turtlesShape: 'square',
+            turtlesRotate: false,
+            turtlesSize: 0.8, // 0.5,
+            turtlesColor: 'blue',
+        }
+        let view = new TwoDraw(model, {
+            div: mltools.newCanvas(),
+            patchSize: 10,
+            drawOptions,
+        })
+
+        // ===== Start of map & layers
+
+        // terrain sources: osm topo topo1 smooth usgs
+        // elevation sources: mapzen maptiler redfishUSA redfishWorld mapbox
+        const terrain = mltools.terrain('usgs')
+        const elevation = mltools.elevation('mapzen')
+
+        mltools.addRasterLayer(map, 'terrain', terrain)
+
+        mltools.addRasterLayer(map, 'elevation', elevation, 0.1)
+
+        mltools.addGeojsonLayer(map, 'bbox', bbox, 'transparent', 'red', 3)
+
+        mltools.addCanvasLayer(map, 'model', view.canvas, bbox)
+
+        // update geojson & canvas layers above wnenever the map changes
+        mltools.mapListener(map, async (map, bbox) => {
+            anim.stop()
+
+            const zoom = Math.floor(map.getZoom())
+
+            model = new Model({ bbox, patchesWidth })
+            await model.startup(zoom)
+            model.setup(zoom)
+
+            view = new TwoDraw(model, {
+                div: mltools.newCanvas(),
+                patchSize: 10,
+                drawOptions
+            })
+
+            mltools.updateGeojson(map, 'bbox', bbox)
+            mltools.updateCanvas(map, 'model', view.canvas, bbox)
+
+            anim.reset()
+            anim.start()
+        })
+
+        // ===== End of map & layers
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // run forever
+            10 // fps
+        )
+
+    </script>
+</body>
+
+</html>

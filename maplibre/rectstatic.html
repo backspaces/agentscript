@@ -13,9 +13,12 @@
 
         const map = await mltools.newMap(mltools.santaFeCenter, 10)
 
-        mltools.addRasterLayer(map, 'terrain', mltools.terrain('usgs'))
+        // mltools.addRasterLayer(map, 'terrain', mltools.terrain('usgs'))
 
-        // Create a rect layer of the santaFeBBox on map.
+        mltools.addTerrainSource(map, 'terrain', mltools.terrain('usgs'))
+        map.setTerrain({ source: 'terrain', exaggeration: 1.5 })
+
+
         mltools.addGeojsonLayer(map, 'rectangle', mltools.santaFeBBox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 
         // ===== End of map & layers

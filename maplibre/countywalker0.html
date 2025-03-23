@@ -10,6 +10,18 @@
 
 <head>
     <title>CountyWalker0</title>
+    <link rel="stylesheet" href="https://esm.sh/maplibre-gl@3.4.0/dist/maplibre-gl.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,10 +30,10 @@
 
     <script type="module">
         import * as util from '../src/utils.js'
+        import maplibregl from 'https://esm.sh/maplibre-gl@5.2.0'
         import Model from '../models/CountiesModel.js'
         import TwoDraw from '../src/MapDraw.js'
         import Animator from '../src/Animator.js'
-        import maplibregl from 'https://esm.sh/maplibre-gl@5.2.0'
 
         const model = new Model()
         model.setup()
@@ -119,14 +131,22 @@
                 source: 'model',
             })
 
+            map.on('mouseenter', 'counties', () => {
+                map.getCanvas().style.cursor = 'pointer'
+            })
+            map.on('mouseleave', 'counties', () => {
+                map.getCanvas().style.cursor = ''
+            })
+
             map.on('click', 'counties', function (e) {
                 const props = e.features[0].properties
-                const msg = props.NAME + ', pop: ' + props.population.toLocaleString()
+                const msg = // toLocaleString inserts commas 1234 => 1,234
+                    props.NAME + ', pop: ' + props.population.toLocaleString()
                 new maplibregl.Popup({ maxWidth: 'none' })
                     .setLngLat(e.lngLat)
                     .setHTML(msg)
-                    .addTo(map);
-            });
+                    .addTo(map)
+            })
         })
         // ===== End of map & layers
 
