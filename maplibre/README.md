@@ -11,4 +11,5 @@ Code    | Run demo
 [rectdrag](https://github.com/backspaces/agentscript/tree/master/maplibre/rectdrag.html#L1) | [https://code.agentscript.org/maplibre/rectdrag.html](https://code.agentscript.org/maplibre/rectdrag.html)
 [rectscreen](https://github.com/backspaces/agentscript/tree/master/maplibre/rectscreen.html#L1) | [https://code.agentscript.org/maplibre/rectscreen.html](https://code.agentscript.org/maplibre/rectscreen.html)
 [rectstatic](https://github.com/backspaces/agentscript/tree/master/maplibre/rectstatic.html#L1) | [https://code.agentscript.org/maplibre/rectstatic.html](https://code.agentscript.org/maplibre/rectstatic.html)
+[streetsdata](https://github.com/backspaces/agentscript/tree/master/maplibre/streetsdata.html#L1) | [https://code.agentscript.org/maplibre/streetsdata.html](https://code.agentscript.org/maplibre/streetsdata.html)
 [vectormap](https://github.com/backspaces/agentscript/tree/master/maplibre/vectormap.html#L1) | [https://code.agentscript.org/maplibre/vectormap.html](https://code.agentscript.org/maplibre/vectormap.html)

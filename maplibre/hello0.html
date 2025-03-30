@@ -13,7 +13,7 @@
         import Model from '../models/HelloModel.js'
 
         const bbox = mltools.santaFeBBox
-        const worldOptions = { bbox: bbox, patchesWidth: 100 }
+        const worldOptions = { bbox, patchesWidth: 100 }
 
         const model = new Model(worldOptions)
         model.setup()
@@ -30,14 +30,15 @@
 
         // ===== Start of map & layers
 
-        const terrain = mltools.terrain('usgs')
+        // const terrain = mltools.terrain('usgs')
+        const terrain = mltools.terrain('osm')
         const elevation = mltools.elevation('mapzen')
 
         const map = await mltools.newMap(bbox, 10)
 
         mltools.addRasterLayer(map, 'terrain', terrain)
 
-        mltools.addRasterLayer(map, 'elevation', elevation, 0.2)
+        // mltools.addRasterLayer(map, 'elevation', elevation, 0.2)
 
         mltools.addGeojsonLayer(map, 'santaFe', bbox, 'rgba(255, 0, 0, 0.2)', 'red', 3)
 

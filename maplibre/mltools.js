@@ -1,11 +1,26 @@
 import * as util from '../src/utils.js'
 import * as gis from '../src/gis.js'
-import maplibregl from 'https://esm.sh/maplibre-gl@5.2.0'
+import maplibregl from 'https://esm.sh/maplibre-gl@5.3.0'
+
+await util.fetchCssStyle(
+    'https://esm.sh/maplibre-gl@5.3.0/dist/maplibre-gl.css'
+)
+
+util.addCssStyle(`
+body {
+    margin: 0;
+    padding: 0;
+}
+#map {
+    width: 100vw;
+    height: 100vh;
+}`)
 
 // ========== init
 
 // avoid user having to have fullScreen.css file
-util.addCssStyle(`body {
+util.addCssStyle(`
+body {
     margin: 0;
     padding: 0;
 }
@@ -16,24 +31,24 @@ util.addCssStyle(`body {
 }
 `)
 
-let mapLibreCss
-export async function importMapLibre() {
-    if (mapLibreCss) return maplibregl
-    mapLibreCss = await util.fetchCssStyle(
-        'https://esm.sh/maplibre-gl@3.4.0/dist/maplibre-gl.css'
-    )
-    // await util.fetchCssStyle('./fullScreen.css')
-    util.addCssStyle(`
-body {
-    margin: 0;
-    padding: 0;
-}
-#map {
-    width: 100vw;
-    height: 100vh;
-}`)
-    return maplibregl
-}
+// let mapLibreCss
+// async function importMapLibre() {
+//     if (mapLibreCss) return maplibregl
+//     mapLibreCss = await util.fetchCssStyle(
+//         'https://esm.sh/maplibre-gl@5.3.0/dist/maplibre-gl.css'
+//     )
+//     // await util.fetchCssStyle('./fullScreen.css')
+//     util.addCssStyle(`
+// body {
+//     margin: 0;
+//     padding: 0;
+// }
+// #map {
+//     width: 100vw;
+//     height: 100vh;
+// }`)
+//     return maplibregl
+// }
 
 // export function createCanvas(width, height) {
 //     return util.createCanvas(width, height)
@@ -57,6 +72,10 @@ export async function mapLoadPromise(map) {
 
 export function bboxCenter(bbox) {
     return gis.bboxCenter(bbox)
+}
+
+export function jsonToBBox(json) {
+    return gis.jsonToBBox(json)
 }
 
 export const santaFeBBox = gis.santaFeBBox
@@ -91,7 +110,7 @@ export async function newMap(center, zoom = 10, div = 'map') {
     // if (isBBox(center)) center = gis.bboxCenter(center)
     if (isBBox(center)) center = this.bboxCenter(center)
 
-    await importMapLibre() // is no-op if css already loaded
+    // await importMapLibre() // is no-op if css already loaded
 
     const map = emptyMap(center, zoom, div)
     await mapLoadPromise(map)
@@ -210,7 +229,7 @@ export const getPaintPropertiesKeys = (map, id) =>
 export function addRasterLayer(map, id, url, opacity = 1) {
     map.addSource(id, {
         type: 'raster',
-        tiles: [url],
+        tiles: Array.isArray(url) ? url : [url],
         tileSize: 256,
         attribution: '&copy; OpenStreetMap Contributors',
     })
@@ -250,7 +269,7 @@ export function addVectorLayer(map, id, url, color = 'red', width = 3) {
 export function addTerrainSource(map, id, url, maxzoom = 14) {
     map.addSource(id, {
         type: 'raster-dem',
-        tiles: [url],
+        tiles: Array.isArray(url) ? url : [url],
         tileSize: 256,
         maxzoom: maxzoom,
         encoding: 'terrarium', // or 'mapbox' depending on provider
@@ -402,3 +421,17 @@ export function addLayerCursor(map, id, cursor = 'pointer') {
         map.getCanvas().style.cursor = ''
     })
 }
+
+// ========== streets
+
+export async function fetchStreetsJson(bbox) {
+    return await gis.fetchStreetsJson(bbox)
+}
+
+// ========== misc
+
+// tiles: [
+//   'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//   'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//   'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
+// ],

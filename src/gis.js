@@ -1,4 +1,6 @@
 import * as util from '../src/utils.js'
+import * as geojson from '../src/geojson.js'
+import * as geofilters from '../src/geofilters.js'
 
 // This module primarily manages various GIS structures:
 // * xyz: The slippy map coords array [x, y, z(oom)] integers.
@@ -160,6 +162,10 @@ export function bboxBounds(bbox) {
     ]
 }
 
+export function jsonToBBox(json) {
+    return geojson.geojsonBBox(json)
+}
+
 // Return a geojson feature for this bbox
 export function bboxFeature(bbox, properties = {}) {
     const coords = bboxCoords(bbox)
@@ -217,20 +223,90 @@ export function bboxMetricAspect(bbox) {
 // https://api.openstreetmap.org/api/0.6/map?bbox=11.54,48.14,11.543,48.145
 export function getOsmURL(south, west, north, east) {
     const url = 'https://overpass-api.de/api/interpreter?data='
-    const params = `\
-[out:json][timeout:180][bbox:${south},${west},${north},${east}];
-way[highway];
-(._;>;);
-out;`
-    return url + encodeURIComponent(params)
+    //     const params = `\
+    // [out:json][timeout:180][bbox:${south},${west},${north},${east}];
+    // way[highway];
+    // (._;>;);
+    // out;`
+    const query = `
+    [out:json][timeout:25];
+    (
+      way["highway"](${south},${west},${north},${east});
+    );
+    (._;>;);
+    out body;
+  `.trim()
+
+    return url + encodeURIComponent(query)
 }
 // Use the osm url to grab data. The overpass wiki sez:
 // The API is limited to bounding boxes of about 0.5 degree by 0.5 degree
-export async function bbox2osm(bbox) {
+// export async function bbox2osm(bbox) {
+async function bbox2osm(bbox) {
     const [west, south, east, north] = bbox
     const url = getOsmURL(south, west, north, east)
+
     const osm = await fetch(url).then(resp => resp.json())
+
     return osm
+}
+
+// Downloads OSM street data as JSON within a bounding box.
+export async function fetchStreetsJson(bbox) {
+    const osmJson = await bbox2osm(bbox)
+
+    console.log('osmJson', osmJson, osmJson.elements.length.toLocaleString())
+
+    const roads = parseOSMStreets(osmJson)
+    const geojson0 = roadsToGeoJSON(roads)
+    const geojson = geofilters.streetsFilter(geojson0)
+
+    console.log('geojson', geojson, geojson.features.length.toLocaleString())
+
+    return geojson
+}
+
+function parseOSMStreets(osmJson) {
+    const nodes = new Map() // not "map" as in gis! js map object
+    const roads = []
+
+    for (const el of osmJson.elements) {
+        if (el.type === 'node') {
+            nodes.set(el.id, { lat: el.lat, lon: el.lon })
+        }
+    }
+
+    for (const el of osmJson.elements) {
+        if (el.type === 'way' && el.nodes && el.tags && el.tags.highway) {
+            const path = el.nodes.map(id => nodes.get(id)).filter(Boolean)
+            if (path.length > 1) {
+                roads.push({
+                    name: el.tags.name || '(unnamed)',
+                    type: el.tags.highway,
+                    path,
+                })
+            }
+        }
+    }
+
+    return roads
+}
+
+function roadsToGeoJSON(roads) {
+    return {
+        type: 'FeatureCollection',
+        features: roads.map(road => ({
+            type: 'Feature',
+            properties: {
+                name: road.name,
+                highway: road.type,
+            },
+            geometry: {
+                type: 'LineString',
+                coordinates: road.path.map(pt => [pt.lon, pt.lat]),
+            },
+        })),
+    }
 }
 
 // https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
@@ -332,3 +408,28 @@ export function elevationTemplate(who = 'mapzen') {
     }
     throw Error('gis.elevationTemplate: name unknown:', who)
 }
+
+// const [west, south, east, north] = bbox
+
+//     const query = `
+//     [out:json][timeout:25];
+//     (
+//       way["highway"](${south},${west},${north},${east});
+//     );
+//     (._;>;);
+//     out body;
+//   `.trim()
+
+//     const response = await fetch('https://overpass-api.de/api/interpreter', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//         body: `data=${encodeURIComponent(query)}`,
+//     })
+
+//     if (!response.ok) {
+//         throw new Error(
+//             `Overpass API error: ${response.status} ${response.statusText}`
+//         )
+//     }
+
+// const osmJson = await response.json()

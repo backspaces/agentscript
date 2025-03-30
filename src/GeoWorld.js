@@ -38,9 +38,9 @@ class GeoWorld extends World {
             maxZ: maxZ,
         })
 
+        // these have to be after super call above, assignments to "this":
         this.bbox = bbox
         this.xfm = this.bboxTransform(...bbox)
-
         if (json) this.geojson = json
     }
     // Convert from world patch coords to geo coords.
