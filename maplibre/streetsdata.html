@@ -11,9 +11,8 @@
 
         // ===== Start of map & layers
 
-        const map = await mltools.newMap(mltools.santaFeCenter, 14) // zoom: 10
+        const map = await mltools.newMap(mltools.santaFeCenter, 14) // zoom: 14
 
-        // mltools.addRasterLayer(map, 'terrain', mltools.terrain('usgs'))
         mltools.addRasterLayer(map, 'terrain', mltools.terrain('osm'))
 
         const bbox = mltools.mapbbox(map)
@@ -25,7 +24,7 @@
         mltools.dragRectListener(map, 'rectangle', async (bbox) => {
             const json = await mltools.fetchStreetsJson(bbox)
             map.getSource('rectangle').setData(json);
-        })
+        }, bbox)
 
         // ===== End of map & layers
     </script>

@@ -6,16 +6,6 @@ await util.fetchCssStyle(
     'https://esm.sh/maplibre-gl@5.3.0/dist/maplibre-gl.css'
 )
 
-util.addCssStyle(`
-body {
-    margin: 0;
-    padding: 0;
-}
-#map {
-    width: 100vw;
-    height: 100vh;
-}`)
-
 // ========== init
 
 // avoid user having to have fullScreen.css file
@@ -31,40 +21,17 @@ body {
 }
 `)
 
-// let mapLibreCss
-// async function importMapLibre() {
-//     if (mapLibreCss) return maplibregl
-//     mapLibreCss = await util.fetchCssStyle(
-//         'https://esm.sh/maplibre-gl@5.3.0/dist/maplibre-gl.css'
-//     )
-//     // await util.fetchCssStyle('./fullScreen.css')
-//     util.addCssStyle(`
-// body {
-//     margin: 0;
-//     padding: 0;
-// }
-// #map {
-//     width: 100vw;
-//     height: 100vh;
-// }`)
-//     return maplibregl
-// }
-
-// export function createCanvas(width, height) {
-//     return util.createCanvas(width, height)
-// }
 export function newCanvas() {
     return util.createCanvas(0, 0)
 }
 
 function isBBox(obj) {
     if (!Array.isArray(obj) || obj.length !== 4) return false
-    // const isNumberArray = obj.every(val => util.isNumber(val))
-    // return isNumberArray
     return obj.every(val => util.isNumber(val))
 }
 
-export async function mapLoadPromise(map) {
+// export async function mapLoadPromise(map) {
+async function mapLoadPromise(map) {
     return new Promise((resolve, reject) => {
         map.on('load', () => resolve())
     })
@@ -170,7 +137,9 @@ export function mapListener(map, fcn) {
     map.on('zoomend', updateBoundingBox)
 }
 
-export function dragRectListener(map, id, callback = null) {
+export function dragRectListener(map, id, callback, initBBox = null) {
+    if (initBBox && callback) callback(initBBox)
+
     let startLngLat = null
     let isDrawing = false
     let bbox = null
