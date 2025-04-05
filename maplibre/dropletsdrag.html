@@ -15,6 +15,7 @@
 
         const bbox = mltools.santaFeBBox
         const patchesWidth = 250
+        const patchSize = 10
         const zoom = 10
 
         let model = new Model({ bbox, patchesWidth }) // bbox => GeoWorld.js
@@ -30,7 +31,7 @@
         }
         let view = new TwoDraw(model, {
             div: mltools.newCanvas(),
-            patchSize: 10,
+            patchSize,
             drawOptions,
         })
 
@@ -64,7 +65,7 @@
 
             view = new TwoDraw(model, {
                 div: mltools.newCanvas(),
-                patchSize: 10,
+                patchSize,
                 drawOptions
             })
 

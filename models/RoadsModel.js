@@ -1,19 +1,16 @@
 import * as util from 'https://code.agentscript.org/src/utils.js'
-// import * as gis from 'https://code.agentscript.org/src/gis.js'
-import * as gis from '../src/gis.js'
-
-// import World from 'https://code.agentscript.org/src/World.js'
-// import Model from 'https://code.agentscript.org/src/Model.js'
 import Model from '../src/Model.js'
-
 import { lineStringsToLinks } from 'https://code.agentscript.org/src/geojson.js'
-import santafeRoads from './data/santafe14roads.json' with { type: 'json' }
+// import santafeRoads from './data/santafe14roads.json' with { type: 'json' }
+import santafeRoads from './data/santaferoads.json' with { type: 'json' }
+// import * as gis from '../src/gis.js'
 
-// The json data is pre-computed due to being very difficult to compute here.
-// Thus done offline via node/deno cli's
-// const xyz = [3370, 6451, 14]
-// const bbox = gis.xyz2bbox(...xyz)
-// console.log('bbox', bbox)
+// async function bbox2json(bboxOrJson){
+//     if (gis.isBBox(bboxOrJson)) {
+//         bboxOrJson = await gis.fetchStreetsJson(bboxOrJson)
+//     }
+//     return bboxOrJson
+// }
 
 export default class RoadsModel extends Model {
     // geojson //= santafeRoads
@@ -25,26 +22,25 @@ export default class RoadsModel extends Model {
     // constructor(worldOptions = World.defaultOptions(100)) {
     constructor(worldOptions = { bbox: santafeRoads, patchesWidth: 201 }) {
         super(worldOptions)
-        // console.log('worldOptions', worldOptions)
+        this.checkOptions(worldOptions)
     }
 
-    // async startup() {
-    //     const url = import.meta.resolve(jsonUrl)
-    //     this.geojson = await fetch(url).then(resp => resp.json())
-    //     console.log('geojson:', this.geojson)
-
-    //     // this.geojson = await fetch(jsonUrl).then(resp => resp.json())
-    // }
+    checkOptions(options) {
+        if (!(options.bbox && options.bbox.type === 'FeatureCollection')) {
+            throw Error('RoadsModel: worldOptions.bbox must be geojson object')
+        }
+    }
 
     setup() {
         this.turtleBreeds('intersections nodes drivers')
         // REMIND: this fails! this.nodes.setDefault('atEdge', 'clamp')
         this.turtles.setDefault('atEdge', 'clamp')
 
-        // const bbox = gis.jsonToBBox(this.world.geojson)
-        // this.bbox = this.world.bbox
-        // this.geojson = this.world.geojson
-        this.network = lineStringsToLinks(this, this.world.bbox, this.world.geojson)
+        this.network = lineStringsToLinks(
+            this,
+            this.world.bbox,
+            this.world.geojson
+        )
         console.log('network', this.network)
 
         this.turtles.ask(t => {
@@ -77,7 +73,6 @@ export default class RoadsModel extends Model {
     }
 
     step() {
-        // this.drivers.ask(t => {
         this.drivers.ask(driver => {
             const moveBy = Math.min(
                 driver.speed,
@@ -99,6 +94,5 @@ export default class RoadsModel extends Model {
                 }
             }
         })
-        // })
     }
 }

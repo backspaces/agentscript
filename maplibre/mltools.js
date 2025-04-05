@@ -25,9 +25,8 @@ export function newCanvas() {
     return util.createCanvas(0, 0)
 }
 
-function isBBox(obj) {
-    if (!Array.isArray(obj) || obj.length !== 4) return false
-    return obj.every(val => util.isNumber(val))
+export function isBBox(obj) {
+    return gis.isBBox(obj)
 }
 
 // export async function mapLoadPromise(map) {
@@ -46,6 +45,7 @@ export function jsonToBBox(json) {
 }
 
 export const santaFeBBox = gis.santaFeBBox
+export const santaFeSmallBBox = gis.santaFeSmallBBox
 export const santaFeCenter = gis.santaFeCenter
 export const newMexicoBBox = gis.newMexicoBBox
 export const newMexicoCenter = gis.newMexicoCenter
@@ -138,7 +138,10 @@ export function mapListener(map, fcn) {
 }
 
 export function dragRectListener(map, id, callback, initBBox = null) {
-    if (initBBox && callback) callback(initBBox)
+    if (initBBox && callback) {
+        console.log('initBBox', initBBox)
+        callback(initBBox)
+    }
 
     let startLngLat = null
     let isDrawing = false

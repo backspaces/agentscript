@@ -1094,7 +1094,7 @@ export function downloadBlob(blobable, name = 'download', format = true) {
 
     URL.revokeObjectURL(url)
 }
-export function downloadJson(json, name = 'json.js') {
+export function downloadJson(json, name = 'download.json') {
     downloadBlob(json, name)
 }
 export function downloadJsonModule(json, name = 'json.js') {

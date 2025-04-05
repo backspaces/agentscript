@@ -1,0 +1,123 @@
+<html>
+
+<head>
+    <title>Streets</title>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script type="module">
+        import * as mltools from './mltools.js'
+        import Model from '../models/RoadsModel.js'
+        import TwoDraw from '../src/TwoDraw.js'
+        import Animator from '../src/Animator.js'
+        // import santafeRoads from '../models/data/santaferoads.json' with { type: 'json' }
+
+        // const bbox = santafeRoads
+        // const bbox = gis.santaFeBBox
+
+        // const bboxSmall = mltools.santaFeSmallBBox
+        // const bboxStd = mltools.santaFeBBox
+        // const bbox = mltools.santaFeBBox
+        // console.log('bboxes', bboxSmall, bboxStd);
+        const bbox = mltools.santaFeSmallBBox
+
+        const patchesWidth = 250
+        const patchSize = 10
+        const zoom = 14
+
+        console.log('bbox', bbox);
+
+        // let model = new Model({ bbox, patchesWidth })
+        // let model = new Model({ bbox, patchesWidth })
+        // const model = new Model() // default world options includes santafeRoads
+        let model = new Model() // default world options includes santafeRoads
+        //    let model = new Model({ bbox: santafeRoads, patchesWidth })
+        model.setup()
+
+        const drawOptions = {
+            turtlesColor: t => ({
+                nodes: 'red', intersections: 'blue', drivers: 'green'
+            })[t.breed.name],
+            turtlesSize: t => ({
+                nodes: 1, intersections: 2, drivers: 5
+            })[t.breed.name],
+            turtlesShape: t => ({
+                nodes: 'circle', intersections: 'circle', drivers: 'dart'
+            })[t.breed.name],
+            linksColor: 'black',
+            patchesColor: 'transparent',
+        }
+        let view = new TwoDraw(model, {
+            div: mltools.newCanvas(),
+            patchSize,
+            drawOptions
+        })
+
+        const anim = new Animator(
+            () => {
+                model.step()
+                view.draw()
+            },
+            -1, // run forever
+            10 // fps
+        )
+
+        // ===== Start of map & layers
+
+        const map = await mltools.newMap(mltools.santaFeCenter, zoom)
+
+        mltools.addRasterLayer(map, 'terrain', mltools.terrain('osm'))
+
+        // const bbox = mltools.mapbbox(map)
+
+        // Create a rect layer of this bbox on map.
+        mltools.addGeojsonLayer(map, 'rectangle', bbox, 'transparent', '#0074D9', 2)
+
+        mltools.addCanvasLayer(map, 'model', view.canvas, bbox)
+
+        // modify the geojason above by dragging a new rect
+        // mltools.dragRectListener(map, 'rectangle', async (bbox) => {
+        //     const json = await mltools.fetchStreetsJson(bbox)
+        //     map.getSource('rectangle').setData(json);
+        // }, bbox)
+        mltools.dragRectListener(map, 'rectangle', async (bbox) => {
+            anim.stop()
+
+            // const zoom = Math.floor(map.getZoom())
+            const json = await mltools.fetchStreetsJson(bbox)
+            // bbox = await mltools.fetchStreetsJson(bbox)
+
+            model = new Model({ bbox: json, patchesWidth })
+            model.setup()
+
+            view = new TwoDraw(model, {
+                div: mltools.newCanvas(),
+                patchSize,
+                drawOptions
+            })
+
+            mltools.updateGeojson(map, 'rectangle', bbox)
+            mltools.updateCanvas(map, 'model', view.canvas, bbox)
+
+            // anim.restart(model, view)
+            anim.reset()
+            anim.start()
+            // })
+        }, bbox)
+
+        // ===== End of map & layers
+
+        // const anim = new Animator(
+        //     () => {
+        //         model.step()
+        //         view.draw()
+        //     },
+        //     -1, // run forever
+        //     10 // fps
+        // )
+
+    </script>
+</body>
+
+</html>

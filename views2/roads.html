@@ -11,30 +11,21 @@
         import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
         // import Model from 'https://code.agentscript.org/models/RoadsModel.js'
         import Model from '../models/RoadsModel.js'
+        // import santafeRoads from '../models/data/santaferoads.json' with { type: 'json' }
 
-        const model = new Model()
-        // await model.startup()
+        const model = new Model() // default world options includes santafeRoads
         model.setup()
 
-        const baseMapTile = await util.imagePromise(
-            'https://code.agentscript.org/models/data/roads14.png'
-        )
-        // const breedColor = {
-        //     nodes: 'red',
-        //     intersections: 'blue',
-        //     drivers: 'green',
-        // }
-        // const breedSize = { nodes: 1, intersections: 2, drivers: 5 }
-        // const breedShape = {
-        //     nodes: 'circle',
-        //     intersections: 'circle',
-        //     drivers: 'dart',
-        // }
+        // const baseMapTile = await util.imagePromise(
+        //     'https://code.agentscript.org/models/data/roads14.png'
+        // )
+
         const view = new TwoDraw(model, {
             div: 'modelDiv',
             patchSize: 4,
             drawOptions: {
-                patchesColor: baseMapTile,
+                // patchesColor: baseMapTile,
+                patchesColor: 'transparent',
                 turtlesColor: t => ({
                     nodes: 'red', intersections: 'blue', drivers: 'green'
                 })[t.breed.name],

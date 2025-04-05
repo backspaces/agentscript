@@ -23,7 +23,7 @@
         // modify the geojason above by dragging a new rect
         mltools.dragRectListener(map, 'rectangle', async (bbox) => {
             const json = await mltools.fetchStreetsJson(bbox)
-            map.getSource('rectangle').setData(json);
+            map.getSource('rectangle').setData(json)
         }, bbox)
 
         // ===== End of map & layers

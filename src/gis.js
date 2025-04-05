@@ -1,6 +1,8 @@
 import * as util from '../src/utils.js'
 import * as geojson from '../src/geojson.js'
 import * as geofilters from '../src/geofilters.js'
+// import simplify from 'https://esm.sh/@turf/simplify'
+// import mapshaper from 'https://esm.sh/mapshaper'
 
 // This module primarily manages various GIS structures:
 // * xyz: The slippy map coords array [x, y, z(oom)] integers.
@@ -145,6 +147,11 @@ export function bboxCenter(bbox) {
     return [(west + east) / 2, (south + north) / 2]
 }
 
+export function isBBox(obj) {
+    if (!Array.isArray(obj) || obj.length !== 4) return false
+    return obj.every(val => util.isNumber(val))
+}
+
 export function bboxCoords(bbox) {
     const [west, south, east, north] = bbox
     return [
@@ -187,6 +194,8 @@ export function bboxFromCenter(center, dLon = 1, dLat = dLon) {
 
 export const santaFeCenter = [-105.978, 35.66] // from leaflet click popup
 export const santaFeBBox = bboxFromCenter(santaFeCenter, 0.2, 0.1)
+// export const santaFeSmallBBox = bboxFromCenter(santaFeCenter, 0.05, 0.025)
+export const santaFeSmallBBox = bboxFromCenter(santaFeCenter, 0.02, 0.01)
 export const newMexicoBBox = [-109.050044, 31.332301, -103.001964, 37.000104]
 export const newMexicoCenter = bboxCenter(newMexicoBBox)
 export const usaBBox = [-124.733174, 24.544701, -66.949895, 49.384358]
@@ -257,11 +266,27 @@ export async function fetchStreetsJson(bbox) {
 
     console.log('osmJson', osmJson, osmJson.elements.length.toLocaleString())
 
-    const roads = parseOSMStreets(osmJson)
-    const geojson0 = roadsToGeoJSON(roads)
-    const geojson = geofilters.streetsFilter(geojson0)
+    let geojson = parseOSMStreets(osmJson)
+    geojson = roadsToGeoJSON(geojson)
+    geojson = geofilters.streetsFilter(geojson)
+    geojson = geofilters.bboxFilter(geojson, bbox)
+    // geojson = geofilters.simplifyLineStrings(geojson)
+
+    // geojson = simplify(geojson, {
+    //     tolerance: 0.001, // Smaller = more accurate, Larger = more simplified
+    //     highQuality: false, // true = slower but better shape preservation
+    // })
+
+    // const foo = parseOSMStreets(osmJson).roadsToGeoJSON().streetsFilter()
+    // let geojson = roadsToGeoJSON(roads).geofilters.streetsFilter(geojson)
+    // geojson = geofilters.streetsFilter(geojson)
+    // const geojson0 = roadsToGeoJSON(roads)
+    // const geojson = geofilters.streetsFilter(geojson0)
 
     console.log('geojson', geojson, geojson.features.length.toLocaleString())
+
+    // console.log('downloading geojson')
+    // util.downloadJson(geojson)
 
     return geojson
 }
@@ -308,6 +333,10 @@ function roadsToGeoJSON(roads) {
         })),
     }
 }
+
+// function streetsFilter(geojson) {
+//     return geofilters.streetsFilter(geojson)
+// }
 
 // https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
 // Explanation: https://en.wikipedia.org/wiki/Haversine_formula
