@@ -16,18 +16,22 @@
         const model = new Model() // default world options includes santafeRoads
         model.setup()
 
+        console.log('model bbox', model.world.bbox);
+
         // const baseMapTile = await util.imagePromise(
         //     'https://code.agentscript.org/models/data/roads14.png'
         // )
 
         const view = new TwoDraw(model, {
             div: 'modelDiv',
-            patchSize: 4,
+            patchSize: 8,
             drawOptions: {
                 // patchesColor: baseMapTile,
                 patchesColor: 'transparent',
                 turtlesColor: t => ({
-                    nodes: 'red', intersections: 'blue', drivers: 'green'
+                    // nodes: 'red', intersections: 'blue', drivers: 'green'
+                    // nodes: 'transparent', intersections: 'red', drivers: 'green'
+                    nodes: 'rgba(0, 0, 0, 0.2)', intersections: 'red', drivers: 'green'
                 })[t.breed.name],
                 turtlesSize: t => ({
                     nodes: 1, intersections: 2, drivers: 5
@@ -44,8 +48,8 @@
                 model.step()
                 view.draw()
             },
-            500, // how many steps
-            30 // at fps steps/second
+            -1, // how many steps
+            10 // at fps steps/second
         )
     </script>
     <div id="modelDiv"></div>

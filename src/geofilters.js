@@ -1,6 +1,6 @@
 import { xyInBBox } from './gis.js'
 import { clone } from './geojson.js'
-import simplify from 'https://esm.sh/@turf/simplify'
+// import simplify from 'https://esm.sh/@turf/simplify'
 
 // util has it's own, this used locally in pathFilter
 function nestedProperty(obj, path) {
@@ -8,43 +8,43 @@ function nestedProperty(obj, path) {
     return path.reduce((obj, param) => obj[param], obj)
 }
 
-export function simplifyLineStrings(json, tolerance = 0.01, cloneJson = true) {
-    if (cloneJson) json = clone(json)
+// export function simplifyLineStrings(json, tolerance = 0.01, cloneJson = true) {
+//     if (cloneJson) json = clone(json)
 
-    // Process each feature
-    json.features.forEach(feature => {
-        // Only process LineString features
-        if (feature.geometry.type === 'LineString') {
-            const coords = feature.geometry.coordinates
+//     // Process each feature
+//     json.features.forEach(feature => {
+//         // Only process LineString features
+//         if (feature.geometry.type === 'LineString') {
+//             const coords = feature.geometry.coordinates
 
-            // Skip if not enough points to simplify
-            if (coords.length <= 2) {
-                console.log('coords.length <= 2')
-                return
-            }
+//             // Skip if not enough points to simplify
+//             if (coords.length <= 2) {
+//                 console.log('coords.length <= 2')
+//                 return
+//             }
 
-            // Save first and last points
-            const firstPoint = [...coords[0]]
-            const lastPoint = [...coords[coords.length - 1]]
+//             // Save first and last points
+//             const firstPoint = [...coords[0]]
+//             const lastPoint = [...coords[coords.length - 1]]
 
-            // Simplify using turf
-            const simplified = simplify(feature, { tolerance })
+//             // Simplify using turf
+//             const simplified = simplify(feature, { tolerance })
 
-            // Replace the simplified coordinates
-            feature.geometry = simplified.geometry
+//             // Replace the simplified coordinates
+//             feature.geometry = simplified.geometry
 
-            // Ensure first and last points are preserved exactly
-            if (feature.geometry.coordinates.length >= 2) {
-                feature.geometry.coordinates[0] = firstPoint
-                feature.geometry.coordinates[
-                    feature.geometry.coordinates.length - 1
-                ] = lastPoint
-            }
-        }
-    })
+//             // Ensure first and last points are preserved exactly
+//             if (feature.geometry.coordinates.length >= 2) {
+//                 feature.geometry.coordinates[0] = firstPoint
+//                 feature.geometry.coordinates[
+//                     feature.geometry.coordinates.length - 1
+//                 ] = lastPoint
+//             }
+//         }
+//     })
 
-    return json
-}
+//     return json
+// }
 
 // turf.flatten()
 // bin/demultline (roads has it's own)

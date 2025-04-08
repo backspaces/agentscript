@@ -8,6 +8,7 @@
     <div id="map"></div>
     <script type="module">
         import * as mltools from './mltools.js'
+        import * as util from '../src/utils.js'
 
         // ===== Start of map & layers
 
@@ -24,6 +25,7 @@
         mltools.dragRectListener(map, 'rectangle', async (bbox) => {
             const json = await mltools.fetchStreetsJson(bbox)
             map.getSource('rectangle').setData(json)
+            // util.downloadJson(json, 'santaferoads1.json')
         }, bbox)
 
         // ===== End of map & layers

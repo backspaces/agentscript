@@ -5,21 +5,12 @@ import { lineStringsToLinks } from 'https://code.agentscript.org/src/geojson.js'
 import santafeRoads from './data/santaferoads.json' with { type: 'json' }
 // import * as gis from '../src/gis.js'
 
-// async function bbox2json(bboxOrJson){
-//     if (gis.isBBox(bboxOrJson)) {
-//         bboxOrJson = await gis.fetchStreetsJson(bboxOrJson)
-//     }
-//     return bboxOrJson
-// }
-
 export default class RoadsModel extends Model {
-    // geojson //= santafeRoads
     network
     numDrivers = 100 // 25
     speed = 0.05
     speedDelta = 0.05
 
-    // constructor(worldOptions = World.defaultOptions(100)) {
     constructor(worldOptions = { bbox: santafeRoads, patchesWidth: 201 }) {
         super(worldOptions)
         this.checkOptions(worldOptions)
@@ -37,7 +28,7 @@ export default class RoadsModel extends Model {
         this.turtles.setDefault('atEdge', 'clamp')
 
         this.network = lineStringsToLinks(
-            this,
+            this, // model
             this.world.bbox,
             this.world.geojson
         )

@@ -25,6 +25,8 @@ class GeoWorld extends World {
             bbox = toBBox(json)
         }
 
+        console.log('GeoWorld bbox', bbox)
+
         const aspect = gis.bboxMetricAspect(bbox)
         const maxZ = Math.round(patchesWidth / 2)
         super({

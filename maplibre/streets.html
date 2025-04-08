@@ -13,31 +13,24 @@
         import Animator from '../src/Animator.js'
         // import santafeRoads from '../models/data/santaferoads.json' with { type: 'json' }
 
-        // const bbox = santafeRoads
-        // const bbox = gis.santaFeBBox
-
-        // const bboxSmall = mltools.santaFeSmallBBox
-        // const bboxStd = mltools.santaFeBBox
-        // const bbox = mltools.santaFeBBox
-        // console.log('bboxes', bboxSmall, bboxStd);
         const bbox = mltools.santaFeSmallBBox
+        console.log('small bbox', bbox);
 
         const patchesWidth = 250
         const patchSize = 10
         const zoom = 14
 
-        console.log('bbox', bbox);
-
         // let model = new Model({ bbox, patchesWidth })
-        // let model = new Model({ bbox, patchesWidth })
-        // const model = new Model() // default world options includes santafeRoads
         let model = new Model() // default world options includes santafeRoads
         //    let model = new Model({ bbox: santafeRoads, patchesWidth })
         model.setup()
 
+        console.log('model bbox', model.world.bbox);
+
         const drawOptions = {
             turtlesColor: t => ({
-                nodes: 'red', intersections: 'blue', drivers: 'green'
+                // nodes: 'red', intersections: 'blue', drivers: 'green'
+                nodes: 'rgba(0, 0, 0, 0.2)', intersections: 'red', drivers: 'green'
             })[t.breed.name],
             turtlesSize: t => ({
                 nodes: 1, intersections: 2, drivers: 5
@@ -90,6 +83,8 @@
 
             model = new Model({ bbox: json, patchesWidth })
             model.setup()
+            console.log('dragRectListener bbox in', bbox);
+            console.log('dragRectListener bbox out', model.world.bbox);
 
             view = new TwoDraw(model, {
                 div: mltools.newCanvas(),

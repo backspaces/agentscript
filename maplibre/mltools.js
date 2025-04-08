@@ -139,7 +139,7 @@ export function mapListener(map, fcn) {
 
 export function dragRectListener(map, id, callback, initBBox = null) {
     if (initBBox && callback) {
-        console.log('initBBox', initBBox)
+        // console.log('initBBox', initBBox)
         callback(initBBox)
     }
 
