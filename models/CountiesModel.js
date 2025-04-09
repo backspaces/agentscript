@@ -3,10 +3,6 @@ import HelloModel from 'https://code.agentscript.org/models/HelloModel.js'
 import { booleanPointInPolygon } from '../vendor/turfImports.js'
 import counties from './data/nmcounties.json' with { type: 'json' }
 
-// const url = import.meta.resolve('./data/nmcounties.json')
-// const counties = await fetch(url).then(resp => resp.json())
-// console.log('counties: url', url, 'counties', counties.features.length)
-
 class CountiesModel extends HelloModel {
     linksToo = false // don't include links between turtles
 

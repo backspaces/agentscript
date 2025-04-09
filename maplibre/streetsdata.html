@@ -16,7 +16,8 @@
 
         mltools.addRasterLayer(map, 'terrain', mltools.terrain('osm'))
 
-        const bbox = mltools.mapbbox(map)
+        // const bbox = mltools.mapbbox(map)
+        const bbox = mltools.santaFeSmallBBox
 
         // Create a rect layer of this bbox on map.
         mltools.addGeojsonLayer(map, 'rectangle', bbox, 'transparent', '#0074D9', 2)
@@ -24,8 +25,8 @@
         // modify the geojason above by dragging a new rect
         mltools.dragRectListener(map, 'rectangle', async (bbox) => {
             const json = await mltools.fetchStreetsJson(bbox)
+            // util.downloadJson(json, 'santaferoads.json')
             map.getSource('rectangle').setData(json)
-            // util.downloadJson(json, 'santaferoads1.json')
         }, bbox)
 
         // ===== End of map & layers
