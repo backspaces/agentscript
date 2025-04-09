@@ -50,7 +50,7 @@
         "build-dist": "rollup -c config/rollup.dist.mjs",
         "build-vendor": "yarn && rm -f vendor/* && rollup -c config/rollup.vendor.mjs && cp node_modules/uplot/dist/uPlot.min.css vendor/uPlot.css",
         "build-views": "node bin/models2html",
-        "build-md": "bin/src2md 'models views1 views2 views2mv views2full views25 views3 mvc leaflet maplibre' > /dev/null",
+        "build-md": "bin/src2md 'models views1 views2 views2mv views2full views25 views3 mvc leaflet maplibre uielements' > /dev/null",
         "build-docs": "rm -rf docs/* && jsdoc -c config/cleantheme/jsdoc.json",
         "rmstore": "find . -name \".DS_Store\" -delete",
         "build-vscode": "rm vscode.zip; zip -r vscode.zip vscode",
