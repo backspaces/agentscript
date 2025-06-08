@@ -35,41 +35,6 @@ const server = new webdav.WebDAVServer({
 server.beforeRequest((arg, next) => {
     log(`🛠️ ${arg.request.method} received for ${arg.requested.uri}`)
 
-    // if (arg.request.method === 'RESET') {
-    //     fs.rmSync(dataPath, { recursive: true, force: true }) // Remove everything inside .data/
-    //     fs.mkdirSync(dataPath, { recursive: true }) // Recreate it fresh
-
-    //     arg.setCode(200)
-    //     arg.response.write('Reset complete')
-    //     arg.exit()
-    //     log(`🧹 RESET completed`)
-    //     return
-    // }
-    // if (arg.request.method === 'RESET') {
-    // if (
-    //     arg.request.method === 'RESET' &&
-    //     arg.requested.uri.endsWith('/reset')
-    // ) {
-    //     fs.rmSync(dataPath, { recursive: true, force: true })
-    //     fs.mkdirSync(dataPath, { recursive: true })
-
-    //     arg.response.setHeader('Access-Control-Allow-Origin', '*')
-    //     arg.response.setHeader(
-    //         'Access-Control-Allow-Methods',
-    //         'OPTIONS, GET, PUT, DELETE, PROPFIND, MKCOL, MOVE, COPY'
-    //     )
-    //     arg.response.setHeader(
-    //         'Access-Control-Allow-Headers',
-    //         'Authorization, Content-Type, Depth, Destination, Overwrite, Lock-Token, If'
-    //     )
-
-    //     arg.setCode(200)
-    //     arg.response.write('Reset complete')
-    //     arg.exit()
-    //     log(`🧹 e completed`)
-    //     return
-    // }
-
     arg.response.setHeader('Access-Control-Allow-Origin', '*')
     arg.response.setHeader(
         'Access-Control-Allow-Methods',
@@ -92,51 +57,6 @@ server.afterRequest((arg, next) => {
     )
     next()
 })
-
-// ✅ Preflight for all WebDAV methods
-// app.options(`${mountPath}*`, (req, res) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*')
-//     res.setHeader(
-//         'Access-Control-Allow-Methods',
-//         'OPTIONS, GET, PUT, DELETE, PROPFIND, MKCOL, MOVE, COPY'
-//     )
-//     res.setHeader(
-//         'Access-Control-Allow-Headers',
-//         'Authorization, Content-Type, Depth, Destination, Overwrite, Lock-Token, If'
-//     )
-//     res.status(200).end()
-// })
-
-// ✅ Handle RESET preflight (before WebDAV or app.all)
-// app.options('/reset', (req, res) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*')
-//     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS')
-//     res.setHeader(
-//         'Access-Control-Allow-Headers',
-//         'Authorization, Content-Type, Depth, Destination, Overwrite, Lock-Token, If'
-//     )
-//     res.status(200).end()
-// })
-
-// Handle RESET independently of webdav-server
-// app.all('/reset', (req, res) => {
-//     if (req.method === 'RESET') {
-//         res.setHeader('Access-Control-Allow-Origin', '*')
-//         res.setHeader('Access-Control-Allow-Methods', 'OPTIONS')
-//         res.setHeader(
-//             'Access-Control-Allow-Headers',
-//             'Authorization, Content-Type, Depth, Destination, Overwrite, Lock-Token, If'
-//         )
-
-//         fs.rmSync(dataPath, { recursive: true, force: true })
-//         fs.mkdirSync(dataPath, { recursive: true })
-//         log(`🧹 RESET completed via app.all`)
-//         res.status(200).send('Reset complete')
-//     } else {
-//         res.setHeader('Allow', 'RESET, OPTIONS')
-//         res.status(405).end()
-//     }
-// })
 
 // ✅ Handle all other WebDAV preflight requests
 app.options(`${mountPath}*`, (req, res) => {

@@ -6,16 +6,20 @@
 # 409   Conflict (e.g. parent folder missing)
 # 423   Locked
 
-root='https://webdav-server.glitch.me'
-root='https://backspaces.net/webdav-server'
-root='https://webdav-server.deno.dev'
+root='https://webdav-server.glitch.me'      # Glitch
+root='https://backspaces.net/webdav-one'    # cPanel
+root='https://backspaces.net/webdav-two'    # cPanel
+root='https://webdav-server.deno.dev'       # Deno Deploy
+
+root='https://backspaces.net/echo-server'   # cPanel
 
 echo $root
 
-curl -s -X PROPFIND "$root" -H 'Depth: 1' | grep D:href
+curl -s -X PROPFIND $root -H 'Depth: 1'
+curl -s -X PROPFIND $root -H 'Depth: 1' | grep href
+curl -s -X PROPFIND $root -H 'Depth: 1' | xmllint --format - | grep D:href
 
-curl -i -X OPTIONS $root   \
-  -H "Access-Control-Request-Method: GET"
+curl -i -X OPTIONS $root
 
 curl -X PUT $root/hello.txt -d 'Hi from Curl!'
 curl -X GET $root/hello.txt
@@ -43,19 +47,24 @@ curl -X MOVE $root/move.txt \
   -H "Destination: $root/moved.txt"
 curl -X GET $root/moved.txt
 
-curl -X OPTIONS -i $root/
-
-
 # =========
+
+curl -s -X PROPFIND $root -H 'Depth: 1' | xmllint --format - | grep D:href
 
 curl -X PROPFIND $root
 curl -s -X PROPFIND $root | grep href
+curl -s -X PROPFIND $root -H 'Depth: 1' | sed 's/</\'$'\n''</g' | grep '<D:href>'
+curl -s -X PROPFIND $root -H 'Depth: 1' | sed '
+s/</\
+</g
+' | grep '<D:href>'
 
 curl -X PROPFIND $root -H 'Depth: 1'
 curl -s -X PROPFIND $root -H 'Depth: 1' | grep href
 curl -s -X PROPFIND $root -H 'Depth: 1' | xmllint --format - | grep D:href
 
-
+curl -i -X OPTIONS $root   \
+  -H "Access-Control-Request-Method: GET"
 curl -i -X OPTIONS $root   \
   -H "Origin: http://localhost:9000" \
   -H "Access-Control-Request-Method: GET"

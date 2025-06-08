@@ -63,26 +63,15 @@ function handleMoveOrCopy(arg, method, fileOp, successCode) {
 
 // 🌐 CORS + MOVE/COPY handler
 server.beforeRequest((arg, next) => {
-    // if (arg.request.method === 'RESET') {
-    //     fs.rmSync(dataPath, { recursive: true, force: true }) // Remove everything inside .data/
-    //     fs.mkdirSync(dataPath, { recursive: true }) // Recreate it fresh
+    if (arg.request.method === 'MOVE') {
+        handleMoveOrCopy(arg, 'MOVE', fs.renameSync, 204)
+        return
+    }
 
-    //     arg.setCode(200)
-    //     arg.response.write('Reset complete')
-    //     arg.exit()
-    //     log(`🧹 RESET completed`)
-    //     return
-    // }
-
-    // if (arg.request.method === 'MOVE') {
-    //     handleMoveOrCopy(arg, 'MOVE', fs.renameSync, 204)
-    //     return
-    // }
-
-    // if (arg.request.method === 'COPY') {
-    //     handleMoveOrCopy(arg, 'COPY', fs.copyFileSync, 201)
-    //     return
-    // }
+    if (arg.request.method === 'COPY') {
+        handleMoveOrCopy(arg, 'COPY', fs.copyFileSync, 201)
+        return
+    }
 
     arg.response.setHeader('Access-Control-Allow-Origin', '*')
     arg.response.setHeader(
@@ -109,9 +98,6 @@ server.afterRequest((arg, next) => {
     )
     next()
 })
-
-// ❌ Optional: DELETE block disabled for now
-// app.delete(mountPath, (req, res) => { ... })
 
 // ✅ OPTIONS fallback for non-WebDAV routes
 app.options(`${mountPath}*`, (req, res) => {

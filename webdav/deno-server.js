@@ -1,6 +1,17 @@
 const kv = await Deno.openKv()
 
-function logRequest(method, path, extra = '') {
+const baseHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods':
+        'OPTIONS, GET, PUT, DELETE, PROPFIND, MKCOL, COPY, MOVE',
+    'Access-Control-Allow-Headers':
+        'Authorization, Content-Type, Depth, Destination, Overwrite',
+    'Access-Control-Expose-Headers': 'Allow, DAV, Content-Length',
+    Allow: 'OPTIONS, GET, PUT, DELETE, PROPFIND, MKCOL, COPY, MOVE',
+    DAV: '1, 2',
+}
+
+function log(method, path, extra = '') {
     const now = new Date().toLocaleString('en-US', {
         year: 'numeric',
         month: '2-digit',
@@ -13,47 +24,36 @@ function logRequest(method, path, extra = '') {
 }
 
 Deno.serve(async req => {
-    const url = new URL(req.url)
+    // req is the incoming HTTP request.
+    // path is the target path from the URL, like /file.txt or /folder/.
+    // method is the HTTP verb: GET, PUT, PROPFIND, etc.
+    const url = new URL(req.url) // only used for path = ...
     const path = url.pathname
     const method = req.method
 
-    // const baseHeaders = {
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Methods':
-    //         'OPTIONS, GET, PUT, PROPFIND, MKCOL, COPY, MOVE, DELETE, RESET',
-    //     'Access-Control-Allow-Headers':
-    //         'Content-Type, Depth, Destination, Overwrite',
-    // }
-    const baseHeaders = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods':
-            'OPTIONS, GET, PUT, DELETE, PROPFIND, MKCOL, COPY, MOVE',
-        'Access-Control-Allow-Headers':
-            'Content-Type, Depth, Destination, Overwrite',
-        Allow: 'OPTIONS, GET, PUT, DELETE, PROPFIND, MKCOL, COPY, MOVE',
-        DAV: '1, 2', // Advertises WebDAV levels
-    }
-
+    // called by user, or as side effect of PUT, DELETE, MKCOL, COPY, MOVE
+    // This is called a CORS preflight request
     if (method === 'OPTIONS') {
-        logRequest(method, path, '→ Preflight')
+        log(method, path, '→ Preflight')
         const headers = new Headers(baseHeaders)
-        headers.set(
-            'Allow',
-            'OPTIONS, GET, PUT, DELETE, PROPFIND, MKCOL, MOVE, COPY'
-        )
-        headers.set('DAV', '1, 2')
-        headers.set(
-            'Access-Control-Expose-Headers',
-            'Allow, DAV, Content-Length'
-        )
+        // headers.set(
+        //     'Allow',
+        //     'OPTIONS, GET, PUT, DELETE, PROPFIND, MKCOL, MOVE, COPY'
+        // )
+        // headers.set('DAV', '1, 2')
+        // headers.set(
+        //     'Access-Control-Expose-Headers',
+        //     'Allow, DAV, Content-Length'
+        // )
         return new Response(null, { status: 200, headers })
     }
 
     if (method === 'PUT') {
         const body = new Uint8Array(await req.arrayBuffer())
         const existing = await kv.get(['file', path])
+
         if (existing.value?.isDir) {
-            logRequest(method, path, '→ Conflict (cannot overwrite directory)')
+            log(method, path, '→ Conflict (cannot overwrite directory)')
             return new Response('Conflict', {
                 status: 409,
                 headers: new Headers(baseHeaders),
@@ -61,9 +61,11 @@ Deno.serve(async req => {
         }
 
         await kv.set(['file', path], { body, isDir: false })
-        logRequest(method, path, `→ Stored ${body.length} bytes`)
+        const status = existing.value ? 204 : 201
+        log(method, path, `→ Stored ${body.length} bytes (${status})`)
+
         return new Response('Created', {
-            status: 201,
+            status,
             headers: new Headers(baseHeaders),
         })
     }
@@ -71,13 +73,13 @@ Deno.serve(async req => {
     if (method === 'GET') {
         const result = await kv.get(['file', path])
         if (!result.value || result.value.isDir) {
-            logRequest(method, path, '→ Not Found')
+            log(method, path, '→ Not Found')
             return new Response('Not Found', {
                 status: 404,
                 headers: new Headers(baseHeaders),
             })
         }
-        logRequest(method, path, `→ Returned ${result.value.body.length} bytes`)
+        log(method, path, `→ Returned ${result.value.body.length} bytes`)
         return new Response(result.value.body, {
             status: 200,
             headers: new Headers(baseHeaders),
@@ -88,9 +90,9 @@ Deno.serve(async req => {
         const result = await kv.get(['file', path])
         if (result.value) {
             if (!result.value.isDir) {
-                logRequest(method, path, '→ Conflict (not a directory)')
+                log(method, path, '→ Conflict (not a directory)')
             } else {
-                logRequest(method, path, '→ Conflict (already exists)')
+                log(method, path, '→ Conflict (already exists)')
             }
             return new Response('Conflict', {
                 status: 409,
@@ -104,7 +106,7 @@ Deno.serve(async req => {
         const parentResult = await kv.get(['file', parent])
 
         if (!parentResult.value || !parentResult.value.isDir) {
-            logRequest(method, path, `→ Conflict (missing parent ${parent})`)
+            log(method, path, `→ Conflict (missing parent ${parent})`)
             return new Response('Conflict', {
                 status: 409,
                 headers: new Headers(baseHeaders),
@@ -112,7 +114,7 @@ Deno.serve(async req => {
         }
 
         await kv.set(['file', path], { isDir: true })
-        logRequest(method, path, '→ Directory created')
+        log(method, path, '→ Directory created')
         return new Response('Collection created', {
             status: 201,
             headers: new Headers(baseHeaders),
@@ -164,7 +166,8 @@ Deno.serve(async req => {
         }
 
         const xml = `<?xml version="1.0"?><D:multistatus xmlns:D="DAV:">${xmlBody}\n</D:multistatus>`
-        logRequest(method, path, `→ Returned ${count} items`)
+        log(method, path, xml)
+        log(method, path, `→ Returned ${count} items`)
         return new Response(xml, {
             status: 207,
             headers: new Headers({
@@ -186,7 +189,7 @@ Deno.serve(async req => {
         for (const key of toDelete) {
             await kv.delete(key)
         }
-        logRequest(method, path, `→ Deleted ${toDelete.length} item(s)`)
+        log(method, path, `→ Deleted ${toDelete.length} item(s)`)
         return new Response(null, {
             status: 204,
             headers: new Headers(baseHeaders),
@@ -196,7 +199,7 @@ Deno.serve(async req => {
     if (method === 'COPY') {
         const dest = req.headers.get('Destination')
         if (!dest) {
-            logRequest(method, path, '→ Missing Destination header')
+            log(method, path, '→ Missing Destination header')
             return new Response('Missing Destination', {
                 status: 400,
                 headers: new Headers(baseHeaders),
@@ -206,7 +209,7 @@ Deno.serve(async req => {
         const destPath = new URL(dest, req.url).pathname
         const result = await kv.get(['file', path])
         if (!result.value) {
-            logRequest(method, path, '→ Not Found')
+            log(method, path, '→ Not Found')
             return new Response('Not Found', {
                 status: 404,
                 headers: new Headers(baseHeaders),
@@ -214,7 +217,7 @@ Deno.serve(async req => {
         }
 
         await kv.set(['file', destPath], result.value)
-        logRequest(method, path, `→ Copied to ${destPath}`)
+        log(method, path, `→ Copied to ${destPath}`)
         return new Response('Copied', {
             status: 201,
             headers: new Headers(baseHeaders),
@@ -224,7 +227,7 @@ Deno.serve(async req => {
     if (method === 'MOVE') {
         const dest = req.headers.get('Destination')
         if (!dest) {
-            logRequest(method, path, '→ Missing Destination header')
+            log(method, path, '→ Missing Destination header')
             return new Response('Missing Destination', {
                 status: 400,
                 headers: new Headers(baseHeaders),
@@ -234,7 +237,7 @@ Deno.serve(async req => {
         const destPath = new URL(dest, req.url).pathname
         const result = await kv.get(['file', path])
         if (!result.value) {
-            logRequest(method, path, '→ Not Found')
+            log(method, path, '→ Not Found')
             return new Response('Not Found', {
                 status: 404,
                 headers: new Headers(baseHeaders),
@@ -243,36 +246,14 @@ Deno.serve(async req => {
 
         await kv.set(['file', destPath], result.value)
         await kv.delete(['file', path])
-        logRequest(method, path, `→ Moved to ${destPath}`)
+        log(method, path, `→ Moved to ${destPath}`)
         return new Response('Moved', {
             status: 201,
             headers: new Headers(baseHeaders),
         })
     }
 
-    if (method === 'RESET') {
-        const list = kv.list({ prefix: ['file'] })
-        let count = 0
-        for await (const entry of list) {
-            const keyPath = entry.key[1]
-            if (keyPath !== '/') {
-                await kv.delete(entry.key)
-                count++
-            }
-        }
-        await kv.set(['file', '/'], { isDir: true }) // re-create root
-        logRequest(
-            method,
-            path,
-            `→ Reset KV (${count} deleted, root recreated)`
-        )
-        return new Response('KV store reset', {
-            status: 200,
-            headers: new Headers(baseHeaders),
-        })
-    }
-
-    logRequest(method, path, '→ Method Not Allowed')
+    log(method, path, '→ Method Not Allowed')
     return new Response('Method Not Allowed', {
         status: 405,
         headers: new Headers(baseHeaders),

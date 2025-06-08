@@ -37,7 +37,8 @@
             Server:
             <select id="serverSelector" onchange="switchServer()">
                 <option value="https://webdav-server.glitch.me">Glitch</option>
-                <option value="https://backspaces.net/webdav-server">cPanel</option>
+                <option value="https://backspaces.net/webdav-one">cPanel-1</option>
+                <option value="https://backspaces.net/webdav-two">cPanel-2</option>
                 <option value="https://webdav-server.deno.dev">Deno</option>
             </select>
         </label>
@@ -113,21 +114,6 @@
     </section>
 
     <script>
-        // function switchServer() {
-        //   const selector = document.getElementById("serverSelector");
-        //   const baseUrl = selector.value;
-        //   document.getElementById("baseUrl").value = baseUrl;
-        // }
-        // function switchServer() {
-        //     const selector = document.getElementById("serverSelector");
-        //     const baseUrl = selector.value;
-        //     document.getElementById("baseUrl").value = baseUrl;
-
-        //     const title = baseUrl.includes("glitch")
-        //         ? "WebDAV Client for Glitch"
-        //         : "WebDAV Client for cPanel";
-        //     document.getElementById("clientTitle").textContent = title;
-        // }
         function switchServer() {
             const selector = document.getElementById("serverSelector");
             const baseUrl = selector.value;
@@ -135,11 +121,18 @@
 
             document.getElementById("baseUrl").value = baseUrl;
             document.getElementById("clientTitle").textContent = `WebDAV Client for ${label}`;
+
+            localStorage.setItem("lastServer", baseUrl);
         }
 
         function getAuthHeader() {
             const u = document.getElementById("username").value;
             const p = document.getElementById("password").value;
+
+            // Save them to localStorage
+            localStorage.setItem("lastUser", u);
+            localStorage.setItem("lastPass", p);
+
             return u ? { "Authorization": "Basic " + btoa(u + ":" + p) } : {};
         }
 
@@ -173,12 +166,22 @@
             let output = "";
             for (let i = 0; i < hrefs.length; i++) {
                 try {
-                    const cleaned = decodeURIComponent(new URL(hrefs[i].textContent, url).pathname);
+                    let raw = hrefs[i].textContent.trim();
+                    console.log("RAW:", JSON.stringify(raw));
+                    let cleaned = raw;
+                    if (!cleaned.startsWith('/')) {
+                        cleaned = new URL(cleaned, url).pathname;
+                    }
+                    cleaned = decodeURIComponent(cleaned);
+                    console.log("CLEANED:", cleaned);
                     output += cleaned + "\n";
-                } catch {
+                } catch (e) {
+                    console.warn("PROPFIND href parse failed:", e);
                     continue;
                 }
             }
+
+            console.log("📦 Raw PROPFIND XML:\n", xml);
 
             document.getElementById("propfindResult").textContent = output;
         }
@@ -382,20 +385,26 @@
                 `${response.status} ${response.statusText}\n${headers}`;
         }
 
-
         document.addEventListener("DOMContentLoaded", () => {
-            switchServer();  // ensures title and URL sync on load
-        });
+            // restore server
+            const savedServer = localStorage.getItem("lastServer");
+            if (savedServer) {
+                const selector = document.getElementById("serverSelector");
+                for (let i = 0; i < selector.options.length; i++) {
+                    if (selector.options[i].value === savedServer) {
+                        selector.selectedIndex = i;
+                        break;
+                    }
+                }
+                document.getElementById("baseUrl").value = savedServer;
+            }
 
-        // async function resetServer() {
-        //     const url = document.getElementById("baseUrl").value;
-        //     const response = await fetch(url, {
-        //         method: "RESET",
-        //         headers: getAuthHeader()
-        //     });
-        //     const text = await response.text();
-        //     document.getElementById("resetResult").textContent = `${response.status} ${response.statusText}\n${text}`;
-        // }
+            // restore username and password
+            document.getElementById("username").value = localStorage.getItem("lastUser") || "";
+            document.getElementById("password").value = localStorage.getItem("lastPass") || "";
+
+            switchServer();  // sets label/title
+        });
 
     </script>
 
