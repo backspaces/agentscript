@@ -25,6 +25,7 @@ package-lock.json
 vscode.zip
 /views2x/
 /uielements0/
+/webdav/
 
 deno.lock
 lock.json
