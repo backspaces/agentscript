@@ -139,50 +139,58 @@ function closestIdx(num, arr, lo, hi) {
 		return lo;
 	return hi;
 }
-function nonNullIdx(data, _i0, _i1, dir) {
-	for (let i = dir == 1 ? _i0 : _i1; i >= _i0 && i <= _i1; i += dir) {
-		if (data[i] != null)
-			return i;
-	}
-	return -1;
-}
-function getMinMax(data, _i0, _i1, sorted) {
-	let _min = inf;
-	let _max = -inf;
-	if (sorted == 1) {
-		_min = data[_i0];
-		_max = data[_i1];
-	}
-	else if (sorted == -1) {
-		_min = data[_i1];
-		_max = data[_i0];
-	}
-	else {
+function makeIndexOfs(predicate) {
+	 let indexOfs = (data, _i0, _i1) => {
+		let i0 = -1;
+		let i1 = -1;
 		for (let i = _i0; i <= _i1; i++) {
-			let v = data[i];
-			if (v != null) {
-				if (v < _min)
-					_min = v;
-				if (v > _max)
-					_max = v;
+			if (predicate(data[i])) {
+				i0 = i;
+				break;
+			}
+		}
+		for (let i = _i1; i >= _i0; i--) {
+			if (predicate(data[i])) {
+				i1 = i;
+				break;
+			}
+		}
+		return [i0, i1];
+	 };
+	 return indexOfs;
+}
+const notNullish = v => v != null;
+const isPositive = v => v != null && v > 0;
+const nonNullIdxs = makeIndexOfs(notNullish);
+const positiveIdxs = makeIndexOfs(isPositive);
+function getMinMax(data, _i0, _i1, sorted = 0, log = false) {
+	let getEdgeIdxs = log ? positiveIdxs : nonNullIdxs;
+	let predicate = log ? isPositive : notNullish;
+	[_i0, _i1] = getEdgeIdxs(data, _i0, _i1);
+	let _min = data[_i0];
+	let _max = data[_i0];
+	if (_i0 > -1) {
+		if (sorted == 1) {
+			_min = data[_i0];
+			_max = data[_i1];
+		}
+		else if (sorted == -1) {
+			_min = data[_i1];
+			_max = data[_i0];
+		}
+		else {
+			for (let i = _i0; i <= _i1; i++) {
+				let v = data[i];
+				if (predicate(v)) {
+					if (v < _min)
+						_min = v;
+					else if (v > _max)
+						_max = v;
+				}
 			}
 		}
 	}
-	return [_min, _max];
-}
-function getMinMaxLog(data, _i0, _i1) {
-	let _min = inf;
-	let _max = -inf;
-	for (let i = _i0; i <= _i1; i++) {
-		let v = data[i];
-		if (v != null && v > 0) {
-			if (v < _min)
-				_min = v;
-			if (v > _max)
-				_max = v;
-		}
-	}
-	return [_min, _max];
+	return [_min ?? inf, _max ?? -inf];
 }
 function rangeLog(min, max, base, fullMags) {
 	let minSign = sign(min);
@@ -327,8 +335,11 @@ function numIntDigits(x) {
 function clamp(num, _min, _max) {
 	return min(max(num, _min), _max);
 }
+function isFn(v) {
+	return typeof v == "function";
+}
 function fnOrSelf(v) {
-	return typeof v == "function" ? v : () => v;
+	return isFn(v) ? v : () => v;
 }
 const noop = () => {};
 const retArg0 = _0 => _0;
@@ -1000,6 +1011,7 @@ const xAxisOpts = {
 	stroke: hexBlack,
 	space: 50,
 	gap: 5,
+	alignTo: 1,
 	size: 50,
 	labelGap: 0,
 	labelSize: 30,
@@ -1112,6 +1124,7 @@ const yAxisOpts = {
 	stroke: hexBlack,
 	space: 30,
 	gap: 5,
+	alignTo: 1,
 	size: 50,
 	labelGap: 0,
 	labelSize: 30,
@@ -1497,6 +1510,7 @@ function linear(opts) {
 	const alignGaps = ifNull(opts?.alignGaps, 0);
 	return (u, seriesIdx, idx0, idx1) => {
 		return orient(u, seriesIdx, (series, dataX, dataY, scaleX, scaleY, valToPosX, valToPosY, xOff, yOff, xDim, yDim) => {
+			[idx0, idx1] = nonNullIdxs(dataY, idx0, idx1);
 			let pxRound = series.pxRound;
 			let pixelForX = val => pxRound(valToPosX(val, scaleX, xDim, xOff));
 			let pixelForY = val => pxRound(valToPosY(val, scaleY, yDim, yOff));
@@ -1512,61 +1526,80 @@ function linear(opts) {
 			const dir = scaleX.dir * (scaleX.ori == 0 ? 1 : -1);
 			const _paths = {stroke: new Path2D(), fill: null, clip: null, band: null, gaps: null, flags: BAND_CLIP_FILL};
 			const stroke = _paths.stroke;
-			let minY = inf,
-				maxY = -inf,
-				inY, outY, drawnAtX;
-			let accX = pixelForX(dataX[dir == 1 ? idx0 : idx1]);
-			let lftIdx = nonNullIdx(dataY, idx0, idx1,  1 * dir);
-			let rgtIdx = nonNullIdx(dataY, idx0, idx1, -1 * dir);
-			let lftX   =  pixelForX(dataX[lftIdx]);
-			let rgtX   =  pixelForX(dataX[rgtIdx]);
 			let hasGap = false;
-			for (let i = dir == 1 ? idx0 : idx1; i >= idx0 && i <= idx1; i += dir) {
-				let x = pixelForX(dataX[i]);
-				let yVal = dataY[i];
-				if (x == accX) {
-					if (yVal != null) {
-						outY = pixelForY(yVal);
-						if (minY == inf) {
-							lineTo(stroke, x, outY);
-							inY = outY;
+			const decimate = idx1 - idx0 >= xDim * 4;
+			if (decimate) {
+				let xForPixel = pos => u.posToVal(pos, scaleX.key, true);
+				let minY = null,
+					maxY = null,
+					inY, outY, drawnAtX;
+				let accX = pixelForX(dataX[dir == 1 ? idx0 : idx1]);
+				let idx0px = pixelForX(dataX[idx0]);
+				let idx1px = pixelForX(dataX[idx1]);
+				let nextAccXVal = xForPixel(dir == 1 ? idx0px + 1 : idx1px - 1);
+				for (let i = dir == 1 ? idx0 : idx1; i >= idx0 && i <= idx1; i += dir) {
+					let xVal = dataX[i];
+					let reuseAccX = dir == 1 ? (xVal < nextAccXVal) : (xVal > nextAccXVal);
+					let x = reuseAccX ? accX :  pixelForX(xVal);
+					let yVal = dataY[i];
+					if (x == accX) {
+						if (yVal != null) {
+							outY = yVal;
+							if (minY == null) {
+								lineTo(stroke, x, pixelForY(outY));
+								inY = minY = maxY = outY;
+							} else {
+								if (outY < minY)
+									minY = outY;
+								else if (outY > maxY)
+									maxY = outY;
+							}
 						}
-						minY = min(outY, minY);
-						maxY = max(outY, maxY);
+						else {
+							if (yVal === null)
+								hasGap = true;
+						}
 					}
 					else {
-						if (yVal === null)
-							hasGap = true;
+						if (minY != null)
+							drawAcc(stroke, accX, pixelForY(minY), pixelForY(maxY), pixelForY(inY), pixelForY(outY));
+						if (yVal != null) {
+							outY = yVal;
+							lineTo(stroke, x, pixelForY(outY));
+							minY = maxY = inY = outY;
+						}
+						else {
+							minY = maxY = null;
+							if (yVal === null)
+								hasGap = true;
+						}
+						accX = x;
+						nextAccXVal = xForPixel(accX + dir);
 					}
 				}
-				else {
-					if (minY != inf) {
-						drawAcc(stroke, accX, minY, maxY, inY, outY);
-						drawnAtX = accX;
-					}
-					if (yVal != null) {
-						outY = pixelForY(yVal);
-						lineTo(stroke, x, outY);
-						minY = maxY = inY = outY;
-					}
-					else {
-						minY = inf;
-						maxY = -inf;
-						if (yVal === null)
-							hasGap = true;
-					}
-					accX = x;
+				if (minY != null && minY != maxY && drawnAtX != accX)
+					drawAcc(stroke, accX, pixelForY(minY), pixelForY(maxY), pixelForY(inY), pixelForY(outY));
+			}
+			else {
+				for (let i = dir == 1 ? idx0 : idx1; i >= idx0 && i <= idx1; i += dir) {
+					let yVal = dataY[i];
+					if (yVal === null)
+						hasGap = true;
+					else if (yVal != null)
+						lineTo(stroke, pixelForX(dataX[i]), pixelForY(yVal));
 				}
 			}
-			if (minY != inf && minY != maxY && drawnAtX != accX)
-				drawAcc(stroke, accX, minY, maxY, inY, outY);
 			let [ bandFillDir, bandClipDir ] = bandFillClipDirs(u, seriesIdx);
 			if (series.fill != null || bandFillDir != 0) {
 				let fill = _paths.fill = new Path2D(stroke);
 				let fillToVal = series.fillTo(u, seriesIdx, series.min, series.max, bandFillDir);
 				let fillToY = pixelForY(fillToVal);
-				lineTo(fill, rgtX, fillToY);
-				lineTo(fill, lftX, fillToY);
+				let frX = pixelForX(dataX[idx0]);
+				let toX = pixelForX(dataX[idx1]);
+				if (dir == -1)
+					[toX, frX] = [frX, toX];
+				lineTo(fill, toX, fillToY);
+				lineTo(fill, frX, fillToY);
 			}
 			if (!series.spanGaps) {
 				let gaps = [];
@@ -1591,6 +1624,7 @@ function stepped(opts) {
 	const extend = ifNull(opts.extend, false);
 	return (u, seriesIdx, idx0, idx1) => {
 		return orient(u, seriesIdx, (series, dataX, dataY, scaleX, scaleY, valToPosX, valToPosY, xOff, yOff, xDim, yDim) => {
+			[idx0, idx1] = nonNullIdxs(dataY, idx0, idx1);
 			let pxRound = series.pxRound;
 			let { left, width } = u.bbox;
 			let pixelForX = val => pxRound(valToPosX(val, scaleX, xDim, xOff));
@@ -1599,8 +1633,6 @@ function stepped(opts) {
 			const _paths = {stroke: new Path2D(), fill: null, clip: null, band: null, gaps: null, flags: BAND_CLIP_FILL};
 			const stroke = _paths.stroke;
 			const dir = scaleX.dir * (scaleX.ori == 0 ? 1 : -1);
-			idx0 = nonNullIdx(dataY, idx0, idx1,  1);
-			idx1 = nonNullIdx(dataY, idx0, idx1, -1);
 			let prevYPos  = pixelForY(dataY[dir == 1 ? idx0 : idx1]);
 			let firstXPos = pixelForX(dataX[dir == 1 ? idx0 : idx1]);
 			let prevXPos = firstXPos;
@@ -1835,6 +1867,7 @@ function splineInterp(interp, opts) {
 	const alignGaps = ifNull(opts?.alignGaps, 0);
 	return (u, seriesIdx, idx0, idx1) => {
 		return orient(u, seriesIdx, (series, dataX, dataY, scaleX, scaleY, valToPosX, valToPosY, xOff, yOff, xDim, yDim) => {
+			[idx0, idx1] = nonNullIdxs(dataY, idx0, idx1);
 			let pxRound = series.pxRound;
 			let pixelForX = val => pxRound(valToPosX(val, scaleX, xDim, xOff));
 			let pixelForY = val => pxRound(valToPosY(val, scaleY, yDim, yOff));
@@ -1850,8 +1883,6 @@ function splineInterp(interp, opts) {
 				bezierCurveTo = bezierCurveToV;
 			}
 			const dir = scaleX.dir * (scaleX.ori == 0 ? 1 : -1);
-			idx0 = nonNullIdx(dataY, idx0, idx1,  1);
-			idx1 = nonNullIdx(dataY, idx0, idx1, -1);
 			let firstXPos = pixelForX(dataX[dir == 1 ? idx0 : idx1]);
 			let prevXPos = firstXPos;
 			let xCoords = [];
@@ -2008,21 +2039,12 @@ function uPlot(opts, data, then) {
 		mode: ifNull(opts.mode, 1),
 	};
 	const mode = self.mode;
-	function getValPct(val, scale) {
-		let _val = (
-			scale.distr == 3 ? log10(val > 0 ? val : scale.clamp(self, val, scale.min, scale.max, scale.key)) :
-			scale.distr == 4 ? asinh(val, scale.asinh) :
-			scale.distr == 100 ? scale.fwd(val) :
-			val
-		);
-		return (_val - scale._min) / (scale._max - scale._min);
-	}
 	function getHPos(val, scale, dim, off) {
-		let pct = getValPct(val, scale);
+		let pct = scale.valToPct(val);
 		return off + dim * (scale.dir == -1 ? (1 - pct) : pct);
 	}
 	function getVPos(val, scale, dim, off) {
-		let pct = getValPct(val, scale);
+		let pct = scale.valToPct(val);
 		return off + dim * (scale.dir == -1 ? pct : (1 - pct));
 	}
 	function getPos(val, scale, dim, off) {
@@ -2076,13 +2098,29 @@ function uPlot(opts, data, then) {
 		series: drawSeries,
 	};
 	const drawOrder = (opts.drawOrder || ["axes", "series"]).map(key => drawOrderMap[key]);
+	function initValToPct(sc) {
+		const getVal = (
+			sc.distr == 3   ? val => log10(val > 0 ? val : sc.clamp(self, val, sc.min, sc.max, sc.key)) :
+			sc.distr == 4   ? val => asinh(val, sc.asinh) :
+			sc.distr == 100 ? val => sc.fwd(val) :
+			val => val
+		);
+		return val => {
+			let _val = getVal(val);
+			let { _min, _max } = sc;
+			let delta = _max - _min;
+			return (_val - _min) / delta;
+		};
+	}
 	function initScale(scaleKey) {
 		let sc = scales[scaleKey];
 		if (sc == null) {
 			let scaleOpts = (opts.scales || EMPTY_OBJ)[scaleKey] || EMPTY_OBJ;
 			if (scaleOpts.from != null) {
 				initScale(scaleOpts.from);
-				scales[scaleKey] = assign({}, scales[scaleOpts.from], scaleOpts, {key: scaleKey});
+				let sc = assign({}, scales[scaleOpts.from], scaleOpts, {key: scaleKey});
+				sc.valToPct = initValToPct(sc);
+				scales[scaleKey] = sc;
 			}
 			else {
 				sc = scales[scaleKey] = assign({}, (scaleKey == xScaleKey ? xScaleOpts : yScaleOpts), scaleOpts);
@@ -2118,6 +2156,7 @@ function uPlot(opts, data, then) {
 				sc.auto = fnOrSelf(rangeIsArr ? false : sc.auto);
 				sc.clamp = fnOrSelf(sc.clamp || clampScale);
 				sc._min = sc._max = null;
+				sc.valToPct = initValToPct(sc);
 			}
 		}
 	}
@@ -2161,7 +2200,9 @@ function uPlot(opts, data, then) {
 	const _timeSeriesVal  = timeSeriesVal(_tzDate, timeSeriesStamp(_timeSeriesStamp, _fmtDate));
 	const activeIdxs = [];
 	const legend     = (self.legend = assign({}, legendOpts, opts.legend));
+	const cursor     =                (self.cursor = assign({}, cursorOpts, {drag: {y: mode == 2}}, opts.cursor));
 	const showLegend = legend.show;
+	const showCursor =                cursor.show;
 	const markers    = legend.markers;
 	{
 		legend.idxs = activeIdxs;
@@ -2222,7 +2263,10 @@ function uPlot(opts, data, then) {
 			}
 		}
 		let text = placeDiv(LEGEND_LABEL, label);
-		text.textContent = s.label;
+		if (s.label instanceof HTMLElement)
+			text.appendChild(s.label);
+		else
+			text.textContent = s.label;
 		if (i > 0) {
 			if (!markers.show)
 				text.style.color = s.width > 0 ? markers.stroke(self, i) : markers.fill(self, i);
@@ -2400,7 +2444,6 @@ function uPlot(opts, data, then) {
 			}
 		});
 	}
-	const cursor = self.cursor = assign({}, cursorOpts, {drag: {y: mode == 2}}, opts.cursor);
 	if (cursor.dataIdx == null) {
 		let hov = cursor.hover;
 		let skip = hov.skip = new Set(hov.skip ?? []);
@@ -2483,7 +2526,7 @@ function uPlot(opts, data, then) {
 	let cursorPtsTop = [];
 	function initCursorPt(s, si) {
 		let pt = points.show(self, si);
-		if (pt) {
+		if (pt instanceof HTMLElement) {
 			addClass(pt, CURSOR_PT);
 			addClass(pt, s.class);
 			elTrans(pt, -10, -10, plotWidCss, plotHgtCss);
@@ -2530,7 +2573,7 @@ function uPlot(opts, data, then) {
 			legendCells.splice(i, 0, rowCells[1]);
 			legend.values.push(null);
 		}
-		if (cursor.show) {
+		if (showCursor) {
 			activeIdxs.splice(i, 0, null);
 			let pt = null;
 			if (cursorOnePt) {
@@ -2561,7 +2604,7 @@ function uPlot(opts, data, then) {
 			offMouse(null, tr.firstChild);
 			tr.remove();
 		}
-		if (cursor.show) {
+		if (showCursor) {
 			activeIdxs.splice(i, 1);
 			cursorPts.splice(i, 1)[0].remove();
 			cursorPtsLft.splice(i, 1);
@@ -2745,7 +2788,7 @@ function uPlot(opts, data, then) {
 		if (data.length > 0 && wsc.auto(self, viaAutoScaleX) && (psc == null || psc.min == null)) {
 			let _i0 = ifNull(i0, 0);
 			let _i1 = ifNull(i1, data.length - 1);
-			let minMax = facet.min == null ? (wsc.distr == 3 ? getMinMaxLog(data, _i0, _i1) : getMinMax(data, _i0, _i1, sorted)) : [facet.min, facet.max];
+			let minMax = facet.min == null ? getMinMax(data, _i0, _i1, sorted, wsc.distr == 3) : [facet.min, facet.max];
 			wsc.min = min(wsc.min, facet.min = minMax[0]);
 			wsc.max = max(wsc.max, facet.max = minMax[1]);
 		}
@@ -2892,7 +2935,7 @@ function uPlot(opts, data, then) {
 				shouldConvergeSize = true;
 				fire("setScale", k);
 			}
-			if (cursor.show && cursor.left >= 0)
+			if (showCursor && cursor.left >= 0)
 				shouldSetCursor = shouldSetLegend = true;
 		}
 		for (let k in pendScales)
@@ -2909,22 +2952,27 @@ function uPlot(opts, data, then) {
 	}
 	function drawSeries() {
 		if (dataLen > 0) {
+			let shouldAlpha = series.some(s => s._focus) && ctxAlpha != focus.alpha;
+			if (shouldAlpha)
+				ctx.globalAlpha = ctxAlpha = focus.alpha;
 			series.forEach((s, i) => {
 				if (i > 0 && s.show) {
 					cacheStrokeFill(i, false);
 					cacheStrokeFill(i, true);
 					if (s._paths == null) {
+						let _ctxAlpha = ctxAlpha;
 						if (ctxAlpha != s.alpha)
 							ctx.globalAlpha = ctxAlpha = s.alpha;
 						let _idxs = mode == 2 ? [0, data[i][0].length - 1] : getOuterIdxs(data[i]);
 						s._paths = s.paths(self, i, _idxs[0], _idxs[1]);
-						if (ctxAlpha != 1)
-							ctx.globalAlpha = ctxAlpha = 1;
+						if (ctxAlpha != _ctxAlpha)
+							ctx.globalAlpha = ctxAlpha = _ctxAlpha;
 					}
 				}
 			});
 			series.forEach((s, i) => {
 				if (i > 0 && s.show) {
+					let _ctxAlpha = ctxAlpha;
 					if (ctxAlpha != s.alpha)
 						ctx.globalAlpha = ctxAlpha = s.alpha;
 					s._paths != null && drawPath(i, false);
@@ -2937,11 +2985,13 @@ function uPlot(opts, data, then) {
 							drawPath(i, true);
 						}
 					}
-					if (ctxAlpha != 1)
-						ctx.globalAlpha = ctxAlpha = 1;
+					if (ctxAlpha != _ctxAlpha)
+						ctx.globalAlpha = ctxAlpha = _ctxAlpha;
 					fire("drawSeries", i);
 				}
 			});
+			if (shouldAlpha)
+				ctx.globalAlpha = ctxAlpha = 1;
 		}
 	}
 	function cacheStrokeFill(si, _points) {
@@ -3162,7 +3212,8 @@ function uPlot(opts, data, then) {
 			let x, y;
 			let fillStyle = axis.stroke(self, i);
 			let shiftDir = side == 0 || side == 3 ? -1 : 1;
-			if (axis.label) {
+			let [_incr, _space] = axis._found;
+			if (axis.label != null) {
 				let shiftAmt = axis.labelGap * shiftDir;
 				let baseLpos = round((axis._lpos + shiftAmt) * pxRatio);
 				setFontStyle(axis.labelFont[0], fillStyle, "center", side == 2 ? TOP : BOTTOM);
@@ -3179,22 +3230,23 @@ function uPlot(opts, data, then) {
 					x = round(plotLft + plotWid / 2);
 					y = baseLpos;
 				}
-				ctx.fillText(axis.label, x, y);
+				let _label = isFn(axis.label) ? axis.label(self, i, _incr, _space) : axis.label;
+				ctx.fillText(_label, x, y);
 				ctx.restore();
 			}
-			let [_incr, _space] = axis._found;
 			if (_space == 0)
 				continue;
 			let scale = scales[axis.scale];
 			let plotDim = ori == 0 ? plotWid : plotHgt;
 			let plotOff = ori == 0 ? plotLft : plotTop;
-			let axisGap = round(axis.gap * pxRatio);
 			let _splits = axis._splits;
 			let splits = scale.distr == 2 ? _splits.map(i => data0[i]) : _splits;
 			let incr   = scale.distr == 2 ? data0[_splits[1]] - data0[_splits[0]] : _incr;
 			let ticks = axis.ticks;
 			let border = axis.border;
-			let tickSize = ticks.show ? round(ticks.size * pxRatio) : 0;
+			let _tickSize = ticks.show ? ticks.size : 0;
+			let tickSize = round(_tickSize * pxRatio);
+			let axisGap = round((axis.alignTo == 2 ? axis._size - _tickSize - axis.gap : axis.gap) * pxRatio);
 			let angle = axis._rotate * -PI/180;
 			let basePos  = pxRound(axis._pos * pxRatio);
 			let shiftAmt = (tickSize + axisGap) * shiftDir;
@@ -3374,7 +3426,7 @@ function uPlot(opts, data, then) {
 				resetYSeries(false);
 				let pctWid = plotWidCss / _plotWidCss;
 				let pctHgt = plotHgtCss / _plotHgtCss;
-				if (cursor.show && !shouldSetCursor && cursor.left >= 0) {
+				if (showCursor && !shouldSetCursor && cursor.left >= 0) {
 					cursor.left *= pctWid;
 					cursor.top  *= pctHgt;
 					vCursor && elTrans(vCursor, round(cursor.left), 0, plotWidCss, plotHgtCss);
@@ -3414,7 +3466,7 @@ function uPlot(opts, data, then) {
 			setSelect(select);
 			shouldSetSelect = false;
 		}
-		if (cursor.show && shouldSetCursor) {
+		if (showCursor && shouldSetCursor) {
 			updateCursor(null, true, false);
 			shouldSetCursor = false;
 		}
@@ -3482,7 +3534,7 @@ function uPlot(opts, data, then) {
 	const drag = cursor.drag;
 	let dragX = drag.x;
 	let dragY = drag.y;
-	if (cursor.show) {
+	if (showCursor) {
 		if (cursor.x)
 			xCursor = placeDiv(CURSOR_X, over);
 		if (cursor.y)
@@ -3518,15 +3570,16 @@ function uPlot(opts, data, then) {
 		}
 	}
 	self.setSelect = setSelect;
-	function toggleDOM(i, onOff) {
+	function toggleDOM(i) {
 		let s = series[i];
-		let label = showLegend ? legendRows[i] : null;
 		if (s.show)
-			label && remClass(label, OFF);
+			showLegend && remClass(legendRows[i], OFF);
 		else {
-			label && addClass(label, OFF);
-			let pt = cursorOnePt ? cursorPts[0] : cursorPts[i];
-			elTrans(pt, -10, -10, plotWidCss, plotHgtCss);
+			showLegend && addClass(legendRows[i], OFF);
+			if (showCursor) {
+				let pt = cursorOnePt ? cursorPts[0] : cursorPts[i];
+				pt != null && elTrans(pt, -10, -10, plotWidCss, plotHgtCss);
+			}
 		}
 	}
 	function _setScale(key, min, max) {
@@ -3539,7 +3592,7 @@ function uPlot(opts, data, then) {
 			series.forEach((s, si) => {
 				if (si > 0 && (i == si || i == null)) {
 					s.show = opts.show;
-					toggleDOM(si, opts.show);
+					toggleDOM(si);
 					if (mode == 2) {
 						_setScale(s.facets[0].scale, null, null);
 						_setScale(s.facets[1].scale, null, null);
@@ -3574,7 +3627,7 @@ function uPlot(opts, data, then) {
 	self.delBand = delBand;
 	function setAlpha(i, value) {
 		series[i].alpha = value;
-		if (cursor.show && cursorPts[i])
+		if (showCursor && cursorPts[i] != null)
 			cursorPts[i].style.opacity = value;
 		if (showLegend && legendRows[i])
 			legendRows[i].style.opacity = value;
@@ -3715,7 +3768,7 @@ function uPlot(opts, data, then) {
 		[mouseLeft1, mouseTop1] = cursor.move(self, mouseLeft1, mouseTop1);
 		cursor.left = mouseLeft1;
 		cursor.top = mouseTop1;
-		if (cursor.show) {
+		if (showCursor) {
 			vCursor && elTrans(vCursor, round(mouseLeft1), 0, plotWidCss, plotHgtCss);
 			hCursor && elTrans(hCursor, 0, round(mouseTop1), plotWidCss, plotHgtCss);
 		}
@@ -3761,8 +3814,8 @@ function uPlot(opts, data, then) {
 				let yVal2 = idx2 == null ? null : (mode == 1 ? data[i][idx2] : data[i][1][idx2]);
 				shouldSetLegend = shouldSetLegend || yVal2 != yVal1 || idx2 != idx1;
 				activeIdxs[i] = idx2;
-				let xPos2 = idx2 == idx ? xPos : valToPosX(mode == 1 ? data[0][idx2] : data[i][0][idx2], scaleX, xDim, 0);
 				if (i > 0 && s.show) {
+					let xPos2 = idx2 == null ? -10 : idx2 == idx ? xPos : valToPosX(mode == 1 ? data[0][idx2] : data[i][0][idx2], scaleX, xDim, 0);
 					let yPos = yVal2 == null ? -10 : valToPosY(yVal2, mode == 1 ? scales[s.scale] : scales[s.facets[1].scale], yDim, 0);
 					if (cursorFocus && yVal2 != null) {
 						let mouseYPos = scaleX.ori == 1 ? mouseLeft1 : mouseTop1;
@@ -3846,11 +3899,13 @@ function uPlot(opts, data, then) {
 				let focusChanged = focusedSeries == null ? closestDist <= p : (closestDist > p || closestSeries != focusedSeries);
 				if (shouldSetLegend || focusChanged) {
 					let pt = cursorPts[0];
-					cursorPtsLft[0] = _ptLft;
-					cursorPtsTop[0] = _ptTop;
-					elSize(pt, _ptWid, _ptHgt, _centered);
-					elColor(pt, _ptFill, _ptStroke);
-					elTrans(pt, ceil(_ptLft), ceil(_ptTop), plotWidCss, plotHgtCss);
+					if (pt != null) {
+						cursorPtsLft[0] = _ptLft;
+						cursorPtsTop[0] = _ptTop;
+						elSize(pt, _ptWid, _ptHgt, _centered);
+						elColor(pt, _ptFill, _ptStroke);
+						elTrans(pt, ceil(_ptLft), ceil(_ptTop), plotWidCss, plotHgtCss);
+					}
 				}
 			}
 		}
@@ -4062,7 +4117,7 @@ function uPlot(opts, data, then) {
 				_t = __l;
 			}
 		}
-		if (snap) {
+		if (snap && (src == null || src.cursor.event.type == mousemove)) {
 			if (_l <= 1 || _l >= plotWidCss - 1)
 				_l = incrRound(_l, plotWidCss);
 			if (_t <= 1 || _t >= plotHgtCss - 1)
@@ -4104,7 +4159,6 @@ function uPlot(opts, data, then) {
 		downSelectTop    = top;
 		downSelectWidth  = width;
 		downSelectHeight = height;
-		hideSelect();
 	}
 	function mouseUp(e, src, _l, _t, _w, _h, _i) {
 		dragging = drag._x = drag._y = false;
@@ -4150,7 +4204,7 @@ function uPlot(opts, data, then) {
 		}
 		else if (cursor.lock) {
 			cursor._lock = !cursor._lock;
-			updateCursor(null, true, false);
+			updateCursor(src, true, e != null);
 		}
 		if (e != null) {
 			offMouse(mouseup, doc);
@@ -4188,6 +4242,7 @@ function uPlot(opts, data, then) {
 		}
 		mouseLeft1 = -10;
 		mouseTop1 = -10;
+		activeIdxs.fill(null);
 		updateCursor(null, true, true);
 		if (_dragging)
 			dragging = _dragging;
@@ -4216,7 +4271,7 @@ function uPlot(opts, data, then) {
 		idx = seriesIdxMatcher(self, src, idx);
 		idx != -1 && setSeries(idx, opts, true, false);
 	};
-	if (cursor.show) {
+	if (showCursor) {
 		onMouse(mousedown,  over, mouseDown);
 		onMouse(mousemove,  over, mouseMove);
 		onMouse(mouseenter, over, e => {

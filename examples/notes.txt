@@ -1,0 +1,30 @@
+node ~/src/agentscript/examples/restoreFromJson.mjs Template-1234.json
+node ~/as/examples/restoreFromJson.mjs Template-1234.json
+
+
+1. Terminal Setup
+✅ Restarting the AgentScript IDE
+cd ~/src/agentscript/examples
+Then start the Express server:
+node server.mjs
+You should see:
+✅ Express IDE server running at http://localhost:9100
+
+2. Open in Browser
+http://localhost:9100/editor.html
+This loads the IDE UI
+It should automatically fetch:
+Template-1234/model.html (in iframe on left)
+Template-1234/Model.js (in editable pane on right)
+
+3. Editing
+When you change the JS on the right:
+It sends a PUT to /Template-1234/Model.js
+The iframe reloads with the updated model
+
+🔄 If Anything Goes Wrong
+Problem	Solution
+404 on Model.js or model.html	Make sure you're opening /index.html
+500 on PUT	Double check your filePath in server.mjs doesn't include 'examples'
+Files not updating	Try restarting the server with node server.mjs
+

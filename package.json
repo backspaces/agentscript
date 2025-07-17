@@ -74,6 +74,7 @@
         "runapps": "npm run runleaf & npm run runmvc & npm runmvc"
     },
     "dependencies": {
+        "express": "^5.1.0",
         "three": "^0.120.0",
         "uplot": "^1.6.31"
     },
