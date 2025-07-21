@@ -144,31 +144,26 @@
                     const folderName = document
                         .getElementById('folderName')
                         .textContent.trim()
-                    const folder = folderName // or just use folderName directly
 
                     // Fetch both files
-                    const modelText = await fetch(`${folder}/Model.js`).then(
-                        r => r.text()
-                    )
-                    const htmlText = await fetch(`${folder}/model.html`).then(
-                        r => r.text()
-                    )
+                    const modelText = await fetch(
+                        `${folderName}/Model.js`
+                    ).then(r => r.text())
+                    const htmlText = await fetch(
+                        `${folderName}/model.html`
+                    ).then(r => r.text())
 
-                    const json = {
-                        folder,
-                        files: {
-                            'Model.js': modelText,
-                            'model.html': htmlText,
-                        },
-                    }
+                    // Create zip
+                    const zip = new JSZip()
+                    const folder = zip.folder(folderName)
+                    folder.file('Model.js', modelText)
+                    folder.file('model.html', htmlText)
 
-                    const blob = new Blob([JSON.stringify(json, null, 2)], {
-                        type: 'application/json',
-                    })
-
+                    // Generate and trigger download
+                    const blob = await zip.generateAsync({ type: 'blob' })
                     const a = document.createElement('a')
                     a.href = URL.createObjectURL(blob)
-                    a.download = `${folderName}.json` // ✅ now defined
+                    a.download = `${folderName}.zip`
                     a.click()
                 })
         </script>

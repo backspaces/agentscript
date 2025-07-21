@@ -2,6 +2,7 @@ node ~/src/agentscript/examples/restoreFromJson.mjs Template-1234.json
 node ~/as/examples/restoreFromJson.mjs Template-1234.json
 
 
+
 1. Terminal Setup
 ✅ Restarting the AgentScript IDE
 cd ~/src/agentscript/examples
