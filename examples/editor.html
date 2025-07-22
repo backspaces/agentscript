@@ -81,16 +81,17 @@
         </div>
 
         <script>
-            const folder = 'Template-1234'
+            const folder = 'Ants-2323'
             const modelPath = `${folder}/Model.js`
-            const viewPath = `${folder}/model.html`
+            const viewPath = `${folder}/View.js`
+            const indexPath = `${folder}/index.html`
 
             let currentFile = modelPath // default
             const iframe = document.getElementById('preview')
             const editor = document.getElementById('editor')
 
             function loadIframe() {
-                iframe.src = viewPath + '?v=' + Date.now()
+                iframe.src = indexPath + '?v=' + Date.now()
             }
 
             function loadFile(path) {
@@ -149,15 +150,19 @@
                     const modelText = await fetch(
                         `${folderName}/Model.js`
                     ).then(r => r.text())
+                    const viewText = await fetch(`${folderName}/View.js`).then(
+                        r => r.text()
+                    )
                     const htmlText = await fetch(
-                        `${folderName}/model.html`
+                        `${folderName}/index.html`
                     ).then(r => r.text())
 
                     // Create zip
                     const zip = new JSZip()
                     const folder = zip.folder(folderName)
                     folder.file('Model.js', modelText)
-                    folder.file('model.html', htmlText)
+                    folder.file('View.js', viewText)
+                    folder.file('index.html', htmlText)
 
                     // Generate and trigger download
                     const blob = await zip.generateAsync({ type: 'blob' })

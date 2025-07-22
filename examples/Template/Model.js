@@ -3,7 +3,7 @@ import Model from 'https://code.agentscript.org/src/Model.js'
 import * as util from 'https://code.agentscript.org/src/utils.js'
 
 export default class TemplateModel extends Model {
-    population = 10 // number of turtles
+    population = 100 // number of turtles
     speed = 0.25 // step size in patch units
     wiggleAngle = 30 // wiggle angle in degrees
 
