@@ -65,7 +65,8 @@
 
     <body>
         <div id="leftColumn">
-            <div id="folderName">Template-1234</div>
+            <!-- <div id="folderName">Template</div> -->
+            <div id="folderName"></div>
             <iframe id="preview"></iframe>
             <div id="buttons">
                 <div id="buttons">
@@ -81,7 +82,12 @@
         </div>
 
         <script>
-            const folder = 'Ants-2323'
+            // const folder = 'Template'
+
+            const urlParams = new URLSearchParams(window.location.search)
+            const folder = urlParams.get('example') || 'Template' // default to Template
+            document.getElementById('folderName').textContent = folder
+
             const modelPath = `${folder}/Model.js`
             const viewPath = `${folder}/View.js`
             const indexPath = `${folder}/index.html`
