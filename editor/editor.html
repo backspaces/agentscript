@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AgentScript IDE (Minimal)</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                font-family: sans-serif;
+            }
+            #leftColumn,
+            #rightColumn {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+            #folderName {
+                text-align: center;
+                padding: 10px;
+                font-size: 1.2em;
+                font-weight: bold;
+                border-bottom: 1px solid #ccc;
+            }
+            #iframe,
+            #preview {
+                flex: 1;
+                border: none;
+            }
+            #buttons {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                padding: 10px;
+                border-top: 1px solid #ccc;
+            }
+            button {
+                padding: 6px 12px;
+                font-size: 1em;
+                cursor: pointer;
+            }
+            #editor {
+                flex: 1;
+                padding: 10px;
+                font-family: monospace;
+                white-space: pre;
+                overflow: auto;
+                border-left: 1px solid #ccc;
+                background: #f9f9f9;
+                color: black;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    </head>
+    <body>
+        <div id="leftColumn">
+            <div id="folderName"></div>
+            <iframe id="preview"></iframe>
+            <div id="buttons">
+                <button id="modelBtn">Model</button>
+                <button id="viewBtn">View</button>
+                <button id="downloadBtn">Download</button>
+            </div>
+        </div>
+
+        <div id="rightColumn">
+            <div id="editor" contenteditable="true"></div>
+        </div>
+
+        <script>
+            const urlParams = new URLSearchParams(window.location.search)
+            const user = urlParams.get('user') || 'bob'
+            const model = urlParams.get('model') || 'Template'
+            const folder = `agentscript/users/${user}/${model}`
+
+            console.log('user', user)
+            console.log('model', model)
+            console.log('folder', folder)
+
+            document.getElementById(
+                'folderName'
+            ).textContent = `${user}/${model}`
+
+            const modelPath = `${folder}/Model.js`
+            const viewPath = `${folder}/View.js`
+            const indexPath = `${folder}/index.html`
+
+            console.log('modelPath', modelPath)
+            console.log('viewPath', viewPath)
+            console.log('indexPath', indexPath)
+
+            let currentFile = modelPath
+            const iframe = document.getElementById('preview')
+            const editor = document.getElementById('editor')
+
+            function loadIframe() {
+                iframe.src = indexPath + '?v=' + Date.now()
+            }
+
+            function loadFile(path) {
+                fetch(path)
+                    .then(res => res.text())
+                    .then(code => {
+                        editor.textContent = code
+                        currentFile = path
+                    })
+            }
+
+            function saveFile() {
+                const newCode = editor.textContent
+                fetch(currentFile, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: newCode,
+                })
+                    .then(() => {
+                        loadIframe()
+                    })
+                    .catch(err => {
+                        alert('Failed to save file')
+                        console.error(err)
+                    })
+            }
+
+            // Load initial Model.js and iframe
+            loadFile(modelPath)
+            loadIframe()
+
+            let timeout
+            editor.addEventListener('input', () => {
+                clearTimeout(timeout)
+                timeout = setTimeout(saveFile, 500)
+            })
+
+            document
+                .getElementById('modelBtn')
+                .addEventListener('click', () => loadFile(modelPath))
+            document
+                .getElementById('viewBtn')
+                .addEventListener('click', () => loadFile(viewPath))
+
+            document
+                .getElementById('downloadBtn')
+                .addEventListener('click', async () => {
+                    const folderName = document
+                        .getElementById('folderName')
+                        .textContent.trim()
+
+                    const modelText = await fetch(`${folder}/Model.js`).then(
+                        r => r.text()
+                    )
+                    const viewText = await fetch(`${folder}/View.js`).then(r =>
+                        r.text()
+                    )
+                    const htmlText = await fetch(`${folder}/index.html`).then(
+                        r => r.text()
+                    )
+
+                    const zip = new JSZip()
+                    const zipFolder = zip.folder(folderName.split('/').pop())
+                    zipFolder.file('Model.js', modelText)
+                    zipFolder.file('View.js', viewText)
+                    zipFolder.file('index.html', htmlText)
+
+                    const blob = await zip.generateAsync({ type: 'blob' })
+                    const a = document.createElement('a')
+                    a.href = URL.createObjectURL(blob)
+                    a.download = `${folderName}.zip`
+                    a.click()
+                })
+        </script>
+    </body>
+</html>

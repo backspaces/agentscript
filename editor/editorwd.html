@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AgentScript IDE (WebDAV)</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                font-family: sans-serif;
+            }
+
+            #leftColumn,
+            #rightColumn {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            #folderName {
+                text-align: center;
+                padding: 10px;
+                font-size: 1.2em;
+                font-weight: bold;
+                border-bottom: 1px solid #ccc;
+            }
+
+            #iframe,
+            #preview {
+                flex: 1;
+                border: none;
+            }
+
+            #buttons {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                padding: 10px;
+                border-top: 1px solid #ccc;
+            }
+
+            button {
+                padding: 6px 12px;
+                font-size: 1em;
+                cursor: pointer;
+            }
+
+            #editor {
+                flex: 1;
+                padding: 10px;
+                font-family: monospace;
+                white-space: pre;
+                overflow: auto;
+                border-left: 1px solid #ccc;
+                background: #f9f9f9;
+                color: black;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+        <script type="module">
+            import {
+                AuthType,
+                createClient,
+            } from 'https://santafe.alert.live/webdav.js'
+
+            const token =
+                'eyJhbGciOiJQUzI1NiIsImtpZCI6Ik9uU1RDMDhjbXhWendBMUtrb3YxdDNTQ3RNUWtyR3FOa1RzN1NjSHhlM28ifQ.eyJzdWJkb21haW4iOiJhZ2VudHNjcmlwdCIsInJvbGVzIjpbImFkbWluIl0sInN1YiI6ImV5M3FweDR2dDg5aWd0YzhvajhoZzJ3aiIsImlhdCI6MTc1MzEyNDczMSwiaXNzIjoiZXkzcXB4NHZ0ODlpZ3RjOG9qOGhnMndqIn0.2kdGyLZ64QNNTzEs4sNDK1dL0rclxOWtD_HiQTOXiiw1V0x_qIpvnM7l9bvKId7XHLePc1YnzaBwf0P2RjGb092YcwMK_4phospSWjRWSLU4nYRZcjvnV2xJ3c8IlBsmFI4Kw7k5BlSrvi5tznjwyNt5PZwn5XMwtdRG-qBktSbY3JJGxNFflFdyxPVWoPQNdXBHg-JFNNzQ6YcIvrr5R0L3RabX6M45tuNbcF0IBDDD2jO_NXSIPyTbcfvau5AyyQaP0vrLJqxaP_InRVj7JGoymyIZbxgmSS5edA_mzUPZ4LZfZEZ10Ukc0WYQzXpRwVVmYtbYkoIL'
+
+            // const client = createClient(
+            //     'https://agentscript.webdav.acequia.io:3334/',
+            //     {
+            //         authType: AuthType.Token,
+            //         token: {
+            //             token_type: 'Bearer',
+            //             access_token: token,
+            //         },
+            //     }
+            // )
+            const client = createClient(
+                'https://agentscript.webdav.acequia.io:3334/',
+                {
+                    authType: AuthType.Token,
+                    token: {
+                        token_type: 'Bearer',
+                        access_token: token,
+                    },
+                    // headers: {
+                    //     Authorization: `Bearer ${token}`,
+                    // },
+                }
+            )
+
+            const urlParams = new URLSearchParams(window.location.search)
+            const user = urlParams.get('user') || 'demo'
+            const model = urlParams.get('model') || 'Template'
+            const basePath = `/agentscript/users/${user}/${model}/`
+            const examplePath = `/agentscript/ide/examples/${model}/`
+            document.getElementById('folderName').textContent = model
+
+            console.log('🔐 Using token prefix:', token.slice(0, 30) + '...')
+            console.log('🔍 Params:', { user, model })
+            console.log('📁 basePath:', basePath)
+            console.log('📁 examplePath:', examplePath)
+
+            const iframe = document.getElementById('preview')
+            const editor = document.getElementById('editor')
+
+            let currentFile = 'Model.js'
+
+            async function ensureFolder() {
+                try {
+                    console.log(
+                        '🔐 Token starts with:',
+                        token.slice(0, 30) + '...'
+                    )
+                    console.log('📁 Checking if user folder exists:', basePath)
+
+                    await client.stat(basePath)
+                } catch (err) {
+                    if (err.status === 404) {
+                        for (const file of [
+                            'index.html',
+                            'Model.js',
+                            'View.js',
+                        ]) {
+                            await client.copyFile(
+                                `${examplePath}${file}`,
+                                `${basePath}${file}`
+                            )
+                        }
+                    } else {
+                        throw err
+                    }
+                }
+            }
+
+            async function loadFile(filename) {
+                currentFile = filename
+                const code = await client.getFileContents(
+                    `${basePath}${filename}`,
+                    { format: 'text' }
+                )
+                editor.textContent = code
+            }
+
+            async function saveFile() {
+                const code = editor.textContent
+                await client.putFileContents(
+                    `${basePath}${currentFile}`,
+                    code,
+                    { overwrite: true }
+                )
+                if (currentFile === 'Model.js' || currentFile === 'View.js')
+                    loadIframe()
+            }
+
+            function loadIframe() {
+                iframe.src = `https://agentscript.webdav.acequia.io:3334${basePath}index.html?v=${Date.now()}`
+            }
+
+            editor.addEventListener('input', () => {
+                clearTimeout(editor._timeout)
+                editor._timeout = setTimeout(saveFile, 500)
+            })
+
+            document
+                .getElementById('modelBtn')
+                .addEventListener('click', () => loadFile('Model.js'))
+            document
+                .getElementById('viewBtn')
+                .addEventListener('click', () => loadFile('View.js'))
+            document
+                .getElementById('downloadBtn')
+                .addEventListener('click', async () => {
+                    const modelText = await client.getFileContents(
+                        `${basePath}Model.js`,
+                        { format: 'text' }
+                    )
+                    const viewText = await client.getFileContents(
+                        `${basePath}View.js`,
+                        { format: 'text' }
+                    )
+                    const htmlText = await client.getFileContents(
+                        `${basePath}index.html`,
+                        { format: 'text' }
+                    )
+                    const zip = new JSZip()
+                    const folder = zip.folder(model)
+                    folder.file('Model.js', modelText)
+                    folder.file('View.js', viewText)
+                    folder.file('index.html', htmlText)
+                    const blob = await zip.generateAsync({ type: 'blob' })
+                    const a = document.createElement('a')
+                    a.href = URL.createObjectURL(blob)
+                    a.download = `${model}.zip`
+                    a.click()
+                })
+
+            await ensureFolder()
+            await loadFile('Model.js')
+            loadIframe()
+        </script>
+    </head>
+    <body>
+        <div id="leftColumn">
+            <div id="folderName"></div>
+            <iframe id="preview"></iframe>
+            <div id="buttons">
+                <button id="modelBtn">Model</button>
+                <button id="viewBtn">View</button>
+                <button id="downloadBtn">Download</button>
+            </div>
+        </div>
+
+        <div id="rightColumn">
+            <div id="editor" contenteditable="true"></div>
+        </div>
+    </body>
+</html>

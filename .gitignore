@@ -31,6 +31,8 @@ deno.lock
 lock.json
 yarn.lock
 
+examples/agentscript
+
 maplibre0
 # package-lock.json
 # yarn.lock
