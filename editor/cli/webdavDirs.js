@@ -40,5 +40,5 @@ if (!(await client.exists('/agentscript/users/bob'))) {
 const bobDir = await client.getDirectoryContents('/agentscript/users/bob/')
 console.log(bobDir)
 
-const bobAnts = await client.getDirectoryContents('/agentscript/users/bob/Ants')
-console.log(bobAnts)
+// const bobAnts = await client.getDirectoryContents('/agentscript/users/bob/Ants')
+// console.log(bobAnts)

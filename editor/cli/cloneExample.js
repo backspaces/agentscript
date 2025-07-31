@@ -16,7 +16,7 @@ const client = createClient('https://agentscript.webdav.acequia.io:3334/', {
 })
 
 // --- Clone Function ---
-async function cloneExampleToUser(example, user, overwrite = false) {
+async function cloneExampleToUser(example, user, overwrite = true) {
     const srcPath = `/agentscript/ide/examples/${example}/`
     const dstPath = `/agentscript/users/${user}/${example}/`
 

@@ -1,33 +1,39 @@
-import express from 'express'
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
+import { extname, join } from 'https://deno.land/std@0.224.0/path/mod.ts'
 
-const app = express()
-const port = 9100
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const root = './'  // Adjust as needed
 
-app.use(express.static(__dirname, { extensions: ['html'] }))
-app.use(express.text({ type: '*/*' }))
+serve(async req => {
+  const url = new URL(req.url)
+  const pathname = decodeURIComponent(url.pathname)
+  const fullPath = join(root, pathname)
 
-// Allow PUT to overwrite files in examples folder
-// app.put('/examples/:folder/:filename', (req, res) => {
-app.put('/:folder/:filename', (req, res) => {
-    const { folder, filename } = req.params
-    // const filePath = path.join(__dirname, 'examples', folder, filename)
-    const filePath = path.join(__dirname, folder, filename)
+  if (req.method === 'PUT') {
+    const body = await req.text()
+    try {
+      await Deno.mkdir(join(fullPath, '..'), { recursive: true })
+      await Deno.writeTextFile(fullPath, body)
+      return new Response('Saved', { status: 200 })
+    } catch (err) {
+      console.error('PUT error:', err)
+      return new Response('Failed to save file', { status: 500 })
+    }
+  }
 
-    console.log(`PUT ? ${filePath}`)
+  try {
+    const file = await Deno.readFile(fullPath)
+    const contentType = {
+      '.js': 'application/javascript',
+      '.html': 'text/html',
+      '.json': 'application/json',
+    }[extname(fullPath)] || 'application/octet-stream'
 
-    fs.writeFile(filePath, req.body, err => {
-        if (err) {
-            console.error('? Write failed:', err)
-            return res.status(500).send('Write failed')
-        }
-        res.sendStatus(200)
+    return new Response(file, {
+      headers: { 'Content-Type': contentType },
     })
-})
+  } catch (err) {
+    return new Response('Not found', { status: 404 })
+  }
+}, { port: 9100 })
 
-app.listen(port, () => {
-    console.log(`? Express IDE server running at http://localhost:${port}`)
-})
+console.log('Server running on http://localhost:9100')

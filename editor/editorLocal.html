@@ -12,7 +12,6 @@
                 display: flex;
                 font-family: sans-serif;
             }
-
             #leftColumn,
             #rightColumn {
                 flex: 1;
@@ -20,7 +19,6 @@
                 flex-direction: column;
                 height: 100%;
             }
-
             #folderName {
                 text-align: center;
                 padding: 10px;
@@ -28,13 +26,11 @@
                 font-weight: bold;
                 border-bottom: 1px solid #ccc;
             }
-
             #iframe,
             #preview {
                 flex: 1;
                 border: none;
             }
-
             #buttons {
                 display: flex;
                 justify-content: center;
@@ -42,13 +38,11 @@
                 padding: 10px;
                 border-top: 1px solid #ccc;
             }
-
             button {
                 padding: 6px 12px;
                 font-size: 1em;
                 cursor: pointer;
             }
-
             #editor {
                 flex: 1;
                 padding: 10px;
@@ -62,18 +56,14 @@
         </style>
         <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     </head>
-
     <body>
         <div id="leftColumn">
-            <!-- <div id="folderName">Template</div> -->
             <div id="folderName"></div>
             <iframe id="preview"></iframe>
             <div id="buttons">
-                <div id="buttons">
-                    <button id="modelBtn">Model</button>
-                    <button id="viewBtn">View</button>
-                    <button id="downloadBtn">Download</button>
-                </div>
+                <button id="modelBtn">Model</button>
+                <button id="viewBtn">View</button>
+                <button id="downloadBtn">Download</button>
             </div>
         </div>
 
@@ -82,17 +72,28 @@
         </div>
 
         <script>
-            // const folder = 'Template'
-
             const urlParams = new URLSearchParams(window.location.search)
-            const folder = urlParams.get('example') || 'Template' // default to Template
-            document.getElementById('folderName').textContent = folder
+            const user = urlParams.get('user') || 'bob'
+            const model = urlParams.get('model') || 'Template'
+            const folder = `agentscript/users/${user}/${model}`
+
+            console.log('user', user)
+            console.log('model', model)
+            console.log('folder', folder)
+
+            document.getElementById(
+                'folderName'
+            ).textContent = `${user}/${model}`
 
             const modelPath = `${folder}/Model.js`
             const viewPath = `${folder}/View.js`
             const indexPath = `${folder}/index.html`
 
-            let currentFile = modelPath // default
+            console.log('modelPath', modelPath)
+            console.log('viewPath', viewPath)
+            console.log('indexPath', indexPath)
+
+            let currentFile = modelPath
             const iframe = document.getElementById('preview')
             const editor = document.getElementById('editor')
 
@@ -129,14 +130,12 @@
             loadFile(modelPath)
             loadIframe()
 
-            // Debounced save on edit
             let timeout
             editor.addEventListener('input', () => {
                 clearTimeout(timeout)
                 timeout = setTimeout(saveFile, 500)
             })
 
-            // Button events
             document
                 .getElementById('modelBtn')
                 .addEventListener('click', () => loadFile(modelPath))
@@ -144,7 +143,6 @@
                 .getElementById('viewBtn')
                 .addEventListener('click', () => loadFile(viewPath))
 
-            // Download
             document
                 .getElementById('downloadBtn')
                 .addEventListener('click', async () => {
@@ -152,25 +150,31 @@
                         .getElementById('folderName')
                         .textContent.trim()
 
-                    // Fetch both files
-                    const modelText = await fetch(
-                        `${folderName}/Model.js`
-                    ).then(r => r.text())
-                    const viewText = await fetch(`${folderName}/View.js`).then(
+                    const modelText = await fetch(`${folder}/Model.js`).then(
                         r => r.text()
                     )
-                    const htmlText = await fetch(
-                        `${folderName}/index.html`
-                    ).then(r => r.text())
+                    const viewText = await fetch(`${folder}/View.js`).then(r =>
+                        r.text()
+                    )
+                    const htmlText = await fetch(`${folder}/index.html`).then(
+                        r => r.text()
+                    )
 
-                    // Create zip
                     const zip = new JSZip()
-                    const folder = zip.folder(folderName)
-                    folder.file('Model.js', modelText)
-                    folder.file('View.js', viewText)
-                    folder.file('index.html', htmlText)
+                    const zipFolder = zip.folder(folderName.split('/').pop())
+                    zipFolder.file('Model.js', modelText)
+                    zipFolder.file('View.js', viewText)
+                    zipFolder.file('index.html', htmlText)
 
-                    // Generate and trigger download
+                    // const blob = await zip.generateAsync({ type: 'blob' })
+                    // const url = URL.createObjectURL(blob)
+                    // const a = document.createElement('a')
+                    // a.href = url
+                    // a.download = `${folderName}.zip`
+                    // document.body.appendChild(a)
+                    // a.click()
+                    // document.body.removeChild(a)
+
                     const blob = await zip.generateAsync({ type: 'blob' })
                     const a = document.createElement('a')
                     a.href = URL.createObjectURL(blob)

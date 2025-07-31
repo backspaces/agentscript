@@ -22,6 +22,25 @@
                 500, // run for 500 steps
                 30 // at 30 steps/second
             )
+            // const v = Date.now()
+            // const model = await import(`./Model.js?v=${v}`).then(
+            //     mod => new mod.default()
+            // )
+            // model.setup()
+
+            // const view = (await import(`./View.js?v=${v}`)).default(model)
+
+            // const Animator = (
+            //     await import('https://code.agentscript.org/src/Animator.js')
+            // ).default
+            // const anim = new Animator(
+            //     () => {
+            //         model.step()
+            //         view.draw()
+            //     },
+            //     500,
+            //     30
+            // )
         </script>
         <div id="modelDiv"></div>
     </body>
