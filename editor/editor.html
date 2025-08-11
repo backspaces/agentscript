@@ -54,6 +54,7 @@
                 color: black;
             }
         </style>
+        <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     </head>
     <body>
         <div id="leftColumn">
@@ -65,11 +66,9 @@
                 <button id="downloadBtn">Download</button>
             </div>
         </div>
-
         <div id="rightColumn">
             <div id="editor" contenteditable="true"></div>
         </div>
-
-        <script src="./editor.js" type="module"></script>
+        <script type="module" src="./editor.js"></script>
     </body>
 </html>

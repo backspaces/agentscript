@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>AgentScript Examples (WebDAV)</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 40px;
+                background: #fafafa;
+            }
+
+            .examples-wrapper {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .example-card {
+                border: 1px solid #ccc;
+                padding: 16px;
+                width: 280px;
+                cursor: pointer;
+                background: white;
+                border-radius: 6px;
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+            }
+
+            .example-thumb {
+                width: 100%;
+                height: auto;
+                border-radius: 4px;
+            }
+
+            .example-title {
+                font-size: 20px;
+                margin-top: 8px;
+            }
+
+            .example-description {
+                font-size: 14px;
+                color: #555;
+                margin-top: 6px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Select an Example</h1>
+
+        <div class="examples-wrapper">
+            <!-- Example Cards (Unchanged Content) -->
+            <div class="example-card" data-model="Template">
+                <img class="example-thumb" src="./thumbs/template.png" />
+                <div class="example-title">Template</div>
+                <div class="example-description">
+                    This is a template for starting out a new Model from
+                    scratch. It has a very simple TemplateModel that shows use
+                    of turtles and links, along with an index.html file
+                    providing a View and an Animator to run the model.
+                </div>
+            </div>
+
+            <div class="example-card" data-model="Ants">
+                <img class="example-thumb" src="./thumbs/ants.png" />
+                <div class="example-title">Ants</div>
+                <div class="example-description">
+                    Ants find the shortest path to food by leaving a trail of
+                    evaporating pheromones in their environment. A classic
+                    example of stigmergic behavior.
+                </div>
+            </div>
+
+            <div class="example-card" data-model="Fire">
+                <img class="example-thumb" src="./thumbs/fire.png" />
+                <div class="example-title">Fire</div>
+                <div class="example-description">
+                    Fire spreading on patches based on neighbor probabilities.
+                </div>
+            </div>
+
+            <div class="example-card" data-model="Diffusion">
+                <img class="example-thumb" src="./thumbs/diffuse.png" />
+                <div class="example-title">Diffusion</div>
+                <div class="example-description">
+                    Diffusion is the process by which particles move from an
+                    area of higher concentration to an area of lower
+                    concentration. Here two turtles travel through patches,
+                    dropping a random value on patches and diffusing these
+                    values.
+                </div>
+            </div>
+
+            <div class="example-card" data-model="Flock">
+                <img class="example-thumb" src="./thumbs/flock.png" />
+                <div class="example-title">Flock</div>
+                <div class="example-description">
+                    How do flocks form without a leader? Craig Reynolds, in
+                    1986, found that three simple rules for individuals birds
+                    results in flocking behaviour.
+                </div>
+            </div>
+
+            <div class="example-card" data-model="SlimeMold">
+                <img class="example-thumb" src="./thumbs/slimemold.png" />
+                <div class="example-title">SlimeMold</div>
+                <div class="example-description">
+                    How do many single-celled organisms coordinate to form
+                    groups?
+                </div>
+            </div>
+
+            <div class="example-card" data-model="TSP">
+                <img class="example-thumb" src="./thumbs/tsp.png" />
+                <div class="example-title">TSP</div>
+                <div class="example-description">
+                    The Traveling Sales Person which computes the shortest
+                    distance touching each node in a graph.
+                </div>
+            </div>
+        </div>
+
+        <script type="module">
+            import { getWebDAVClient } from './getWebDAVClient.js'
+            const [client] = getWebDAVClient()
+
+            function getUserName() {
+                return 'bob'
+            }
+
+            async function ensureExampleCopied(model, user) {
+                const base = `/agentscript/users/${user}/${model}`
+                const src = `/agentscript/ide/examples/${model}`
+                try {
+                    console.log(`📁 Checking if ${base}/Model.js exists...`)
+                    await client.stat(`${base}/Model.js`)
+                    console.log(`✅ ${model} already copied for user ${user}`)
+                    return
+                } catch {}
+
+                console.warn(`🛠 Copying ${model} to ${base}...`)
+                try {
+                    await client.createDirectory(base).catch(() => {})
+
+                    for (const f of ['Model.js', 'View.js', 'index.html']) {
+                        console.log(`📤 Copying ${f}...`)
+                        await client.copyFile(`${src}/${f}`, `${base}/${f}`)
+                    }
+
+                    console.log(`✅ All files copied to ${base}`)
+                } catch (err) {
+                    console.error('❌ Failed to copy:', {
+                        status: err?.response?.status,
+                        err,
+                    })
+                    alert(`Error copying ${model}: see console for details`)
+                }
+            }
+
+            document.querySelectorAll('[data-model]').forEach(el => {
+                el.addEventListener('click', async () => {
+                    const model = el.dataset.model
+                    const user = getUserName()
+                    await ensureExampleCopied(model, user)
+                    window.location.href = `/editor/editor.html?user=${user}&model=${model}`
+                })
+            })
+        </script>
+    </body>
+</html>
