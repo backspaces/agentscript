@@ -30,3 +30,4 @@ Code    | Run demo
 [wallfollower](https://github.com/backspaces/agentscript/tree/master/views1/wallfollower.html#L1) | [https://code.agentscript.org/views1/wallfollower.html](https://code.agentscript.org/views1/wallfollower.html)
 [wander3d](https://github.com/backspaces/agentscript/tree/master/views1/wander3d.html#L1) | [https://code.agentscript.org/views1/wander3d.html](https://code.agentscript.org/views1/wander3d.html)
 [water](https://github.com/backspaces/agentscript/tree/master/views1/water.html#L1) | [https://code.agentscript.org/views1/water.html](https://code.agentscript.org/views1/water.html)
+[xyzdroplets](https://github.com/backspaces/agentscript/tree/master/views1/xyzdroplets.html#L1) | [https://code.agentscript.org/views1/xyzdroplets.html](https://code.agentscript.org/views1/xyzdroplets.html)

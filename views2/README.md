@@ -25,3 +25,4 @@ Code    | Run demo
 [virus](https://github.com/backspaces/agentscript/tree/master/views2/virus.html#L1) | [https://code.agentscript.org/views2/virus.html](https://code.agentscript.org/views2/virus.html)
 [wallfollower](https://github.com/backspaces/agentscript/tree/master/views2/wallfollower.html#L1) | [https://code.agentscript.org/views2/wallfollower.html](https://code.agentscript.org/views2/wallfollower.html)
 [water](https://github.com/backspaces/agentscript/tree/master/views2/water.html#L1) | [https://code.agentscript.org/views2/water.html](https://code.agentscript.org/views2/water.html)
+[xyzdroplets](https://github.com/backspaces/agentscript/tree/master/views2/xyzdroplets.html#L1) | [https://code.agentscript.org/views2/xyzdroplets.html](https://code.agentscript.org/views2/xyzdroplets.html)

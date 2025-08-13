@@ -1,19 +1,18 @@
 <html>
     <head>
-        <title>TileDroplets</title>
+        <title>XYZDroplets</title>
     </head>
 
     <body>
         <script type="module">
             import Animator from 'https://code.agentscript.org/src/Animator.js'
             import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-            // import Model from 'https://code.agentscript.org/models/DropletsModel.js'
-            import Model from '../models/DropletsModel.js'
+            import Model from 'https://code.agentscript.org/models/XYZDropletsModel.js'
             // import Color from 'https://code.agentscript.org/src/Color.js'
             import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
             const model = new Model()
-            // await model.startup()
+            await model.startup()
             model.setup()
 
             const view = new TwoDraw(model, {

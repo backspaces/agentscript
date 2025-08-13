@@ -1,40 +1,39 @@
 <html>
+    <head>
+        <title>LinkTravel</title>
+    </head>
 
-<head>
-    <title>LinkTravel</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from 'https://code.agentscript.org/src/Animator.js'
+            import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Model from 'https://code.agentscript.org/models/LinkTravelModel.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/LinkTravelModel.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const isNode = t => t.breed.name === 'nodes'
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions: {
+                    patchesColor: 'black',
+                    turtlesColor: t => (isNode(t) ? 'red' : 'random'),
+                    turtlesShape: t => (isNode(t) ? 'circle' : 'dart'),
+                    turtlesSize: t => (isNode(t) ? 0.5 : 1.25),
+                    linksWidth: 2,
+                },
+            })
 
-        const isNode = t => t.breed.name === 'nodes'
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 20,
-            drawOptions: {
-                patchesColor: 'black',
-                turtlesColor: t => (isNode(t) ? 'red' : 'random'),
-                turtlesShape: t => (isNode(t) ? 'circle' : 'dart'),
-                turtlesSize: t => (isNode(t) ? 0.5 : 1.25),
-            }
-        })
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // how many steps
-            30 // at fps steps/second
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // how many steps
+                30 // at fps steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

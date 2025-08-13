@@ -1,7 +1,7 @@
 import Model from 'https://code.agentscript.org/src/Model.js'
 
 export default class ButtonsModel extends Model {
-    population = 50 // number of buttons
+    population = 200 // number of buttons
 
     // ======================
 
@@ -33,7 +33,7 @@ export default class ButtonsModel extends Model {
         if (vertices.size > this.cluster.size) this.cluster = vertices
 
         this.done = this.cluster.size === this.turtles.length
-        if (this.done) console.log(`Model done at tick: ${this.ticks + 1}`)
+        if (this.done) console.log(`Model done at tick: ${this.ticks}`)
     }
 
     graphOf(t) {

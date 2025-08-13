@@ -30,3 +30,4 @@ Code    | Run demo
 [wallFollower](https://github.com/backspaces/agentscript/tree/master/models/WallFollowerModel.js#L1) | [https://code.agentscript.org/models/run.html?wallFollower](https://code.agentscript.org/models/run.html?wallFollower)
 [wander3D](https://github.com/backspaces/agentscript/tree/master/models/Wander3DModel.js#L1) | [https://code.agentscript.org/models/run.html?wander3D](https://code.agentscript.org/models/run.html?wander3D)
 [water](https://github.com/backspaces/agentscript/tree/master/models/WaterModel.js#L1) | [https://code.agentscript.org/models/run.html?water](https://code.agentscript.org/models/run.html?water)
+[xYZDroplets](https://github.com/backspaces/agentscript/tree/master/models/XYZDropletsModel.js#L1) | [https://code.agentscript.org/models/run.html?xYZDroplets](https://code.agentscript.org/models/run.html?xYZDroplets)
