@@ -1,63 +1,61 @@
 <html>
+    <head>
+        <title>shapes</title>
+    </head>
 
-<head>
-    <title>shapes</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from 'https://code.agentscript.org/src/utils.js'
+            import Animator from 'https://code.agentscript.org/src/Animator.js'
+            import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
+            import Model from 'https://code.agentscript.org/models/HelloModel.js'
+            import World from 'https://code.agentscript.org/src/World.js'
+            import Shapes from 'https://code.agentscript.org/src/Shapes.js'
 
-<body>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import World from 'https://code.agentscript.org/src/World.js'
-        import Shapes from 'https://code.agentscript.org/src/Shapes.js'
+            const shapes = new Shapes()
 
-        const shapes = new Shapes()
-
-        async function addImages() {
-            await shapes.imagePathPromise(
-                'twitter',
-                'https://code.agentscript.org/models/data/twitter.png'
-            )
-            await shapes.imagePathPromise(
-                'redfish',
-                'https://code.agentscript.org/models/data/redfish.png'
-            )
-        }
-        function turtleName(t) {
-            return shapes.nameAtIndex(t.id)
-        }
-
-        await addImages()
-
-        const model = new Model(World.defaultOptions(25, 16))
-        model.population = 100
-        await model.startup()
-        model.setup()
-
-        const view = new ThreeDraw(
-            model,
-            {
-                div: 'modelDiv',
-                patchSize: 20,
-            },
-            {
-                turtlesShape: t => turtleName(t),
-                turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
+            async function addImages() {
+                await shapes.imagePathPromise(
+                    'twitter',
+                    'https://code.agentscript.org/models/data/twitter.png'
+                )
+                await shapes.imagePathPromise(
+                    'redfish',
+                    'https://code.agentscript.org/models/data/redfish.png'
+                )
             }
-        )
+            function turtleName(t) {
+                return shapes.nameAtIndex(t.id)
+            }
 
-        await new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500,
-            30
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
+            await addImages()
 
+            const model = new Model(World.defaultOptions(25, 16))
+            model.population = 100
+            // await model.startup()
+            model.setup()
+
+            const view = new ThreeDraw(
+                model,
+                {
+                    div: 'modelDiv',
+                    patchSize: 20,
+                },
+                {
+                    turtlesShape: t => turtleName(t),
+                    turtlesSize: t => (turtleName(t) === 'redfish' ? 5 : 3),
+                }
+            )
+
+            await new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                30
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

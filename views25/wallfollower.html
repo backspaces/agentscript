@@ -1,51 +1,45 @@
 <html>
+    <head>
+        <title>wallFollower</title>
+    </head>
 
-<head>
-    <title>wallFollower</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from 'https://code.agentscript.org/src/utils.js'
+            import Animator from 'https://code.agentscript.org/src/Animator.js'
+            import Color from 'https://code.agentscript.org/src/Color.js'
+            import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
+            import Model from 'https://code.agentscript.org/models/WallFollowerModel.js'
 
-<body>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Color from 'https://code.agentscript.org/src/Color.js'
-        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
-        import Model from 'https://code.agentscript.org/models/WallFollowerModel.js'
+            const wallsColor = Color.typedColor(222, 184, 135)
+            const backgroundColor = Color.typedColor('black')
+            const drawOptions = {
+                patchesColor: p =>
+                    p.breed.name === 'walls' ? wallsColor : backgroundColor,
+                turtlesShape: 'dart',
+                turtlesSize: 2,
+                turtlesColor: t => (t.breed.name === 'lefty' ? 'green' : 'red'),
+            }
 
-        const wallsColor = Color.typedColor(222, 184, 135)
-        const backgroundColor = Color.typedColor('black')
-        const drawOptions = {
-            patchesColor: p =>
-                p.breed.name === 'walls' ? wallsColor : backgroundColor,
-            turtlesShape: 'dart',
-            turtlesSize: 2,
-            turtlesColor: t => (t.breed.name === 'lefty' ? 'green' : 'red'),
-        }
+            const model = new Model()
+            // await model.startup()
+            model.setup()
 
-        const model = new Model()
-        await model.startup()
-        model.setup()
+            const view = new ThreeDraw(model, { div: 'modelDiv' }, drawOptions)
 
-        const view = new ThreeDraw(
-            model,
-            { div: 'modelDiv' },
-            drawOptions
-        )
+            util.toWindow({ util, model, view })
 
-        util.toWindow({ util, model, view })
+            await new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                100 // 10fps, 30fps way too fast!
+            )
 
-        await new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500,
-            100 // 10fps, 30fps way too fast!
-        )
-
-        view.idle()
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            view.idle()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

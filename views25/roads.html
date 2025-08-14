@@ -1,52 +1,59 @@
 <html>
+    <head>
+        <title>Roads</title>
+    </head>
 
-<head>
-    <title>Roads</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from 'https://code.agentscript.org/src/utils.js'
+            import Animator from 'https://code.agentscript.org/src/Animator.js'
+            import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
+            import Model from 'https://code.agentscript.org/models/RoadsModel.js'
 
-<body>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
-        import Model from 'https://code.agentscript.org/models/RoadsModel.js'
+            const model = new Model()
+            // await model.startup()
+            model.setup()
 
-        const model = new Model()
-        await model.startup()
-        model.setup()
+            const baseUrl =
+                'https://code.agentscript.org/models/data/roads14.png'
+            const baseMapTile = await util.imagePromise(baseUrl)
+            const breedColor = {
+                nodes: 'red',
+                intersections: 'blue',
+                drivers: 'green',
+            }
+            const breedSize = { nodes: 1, intersections: 2, drivers: 5 }
+            const breedShape = {
+                nodes: 'circle',
+                intersections: 'circle',
+                drivers: 'dart',
+            }
+            const drawOptions = {
+                patchesColor: baseMapTile,
+                turtlesColor: t => breedColor[t.breed.name],
+                turtlesSize: t => breedSize[t.breed.name],
+                turtlesShape: t => breedShape[t.breed.name],
+                linksColor: 'black',
+            }
 
-        const baseUrl = 'https://code.agentscript.org/models/data/roads14.png'
-        const baseMapTile = await util.imagePromise(baseUrl)
-        const breedColor = { nodes: 'red', intersections: 'blue', drivers: 'green' }
-        const breedSize = { nodes: 1, intersections: 2, drivers: 5 }
-        const breedShape = { nodes: 'circle', intersections: 'circle', drivers: 'dart' }
-        const drawOptions = {
-            patchesColor: baseMapTile,
-            turtlesColor: t => breedColor[t.breed.name],
-            turtlesSize: t => breedSize[t.breed.name],
-            turtlesShape: t => breedShape[t.breed.name],
-            linksColor: 'black',
-        }
+            const view = new ThreeDraw(model, {
+                // div: 'modelDiv', use default, document.body
+                drawOptions,
+            })
 
-        const view = new ThreeDraw(model, {
-            // div: 'modelDiv', use default, document.body
-            drawOptions,
-        })
+            util.toWindow({ util, model, view })
 
-        util.toWindow({ util, model, view })
+            await new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                30
+            )
 
-        await new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500,
-            30
-        )
-
-        view.idle()
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            view.idle()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>
