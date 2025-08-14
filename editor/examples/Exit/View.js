@@ -1,7 +1,8 @@
+import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 // import Color from 'https://code.agentscript.org/src/Color.js'
 import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
-export default function TwoDrawOptions(div, model, patchSize = 8) {
+export default function (model, div = 'modelDiv') {
     const patchColors = model.patches.map(p => {
         switch (p.breed.name) {
             case 'exits':
@@ -14,12 +15,14 @@ export default function TwoDrawOptions(div, model, patchSize = 8) {
                 return ColorMap.LightGray.randomColor()
         }
     })
-    const drawOptions = {
-        turtlesShape: 'circle',
-        turtlesColor: t => patchColors[t.exit.id],
-        turtlesSize: 1,
-        initPatches: () => patchColors,
-    }
-
-    return { div, patchSize, drawOptions }
+    return new TwoDraw(model, {
+        div,
+        patchSize: 8,
+        drawOptions: {
+            turtlesShape: 'circle',
+            turtlesColor: t => patchColors[t.exit.id],
+            turtlesSize: 1,
+            initPatches: () => patchColors,
+        },
+    })
 }

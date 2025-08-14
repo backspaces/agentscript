@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Exit</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import Model from './Model.js'
+            import View from './View.js'
+            import Animator from 'https://code.agentscript.org/src/Animator.js'
+
+            const model = new Model()
+            model.setup()
+
+            const view = View(model)
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    if (model.done) anim.stop()
+                },
+                -1, // run until done
+                30 // at 30 steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>
