@@ -1,34 +1,32 @@
 <html>
+    <head>
+        <title>Droplets</title>
+    </head>
 
-<head>
-    <title>Droplets</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from 'https://code.agentscript.org/src/Animator.js'
+            import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Model from 'https://code.agentscript.org/models/DropletsModel.js'
+            import TwoDrawOptions from './dropletsOptions.js'
 
-        import Model from 'https://code.agentscript.org/models/DropletsModel.js'
-        import TwoDrawOptions from './dropletsOptions.js'
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-        const model = new Model()
-        await model.startup()
-        model.setup()
+            const view = new TwoDraw(model, TwoDrawOptions('modelDiv', model))
 
-        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model))
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-                if (model.done) anim.stop()
-            },
-            -1, // run until model.done
-            30 // at fps steps/second
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    if (model.done) anim.stop()
+                },
+                -1, // run until done
+                30 // at fps steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

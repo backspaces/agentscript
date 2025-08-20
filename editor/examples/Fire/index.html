@@ -18,8 +18,9 @@
                 () => {
                     model.step()
                     view.draw()
+                    if (model.done) anim.stop()
                 },
-                500, // run for 500 steps
+                -1, // run until done
                 30 // at 30 steps/second
             )
         </script>
