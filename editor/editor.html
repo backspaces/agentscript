@@ -53,6 +53,11 @@
                 background: #f9f9f9;
                 color: black;
             }
+
+            button.active {
+                background-color: #d0d0ff;
+                font-weight: bold;
+            }
         </style>
         <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     </head>
@@ -61,6 +66,7 @@
             <div id="folderName"></div>
             <iframe id="preview"></iframe>
             <div id="buttons">
+                <button id="htmlBtn">HTML</button>
                 <button id="modelBtn">Model</button>
                 <button id="viewBtn">View</button>
                 <button id="downloadBtn">Download</button>

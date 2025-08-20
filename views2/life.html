@@ -1,36 +1,34 @@
 <html>
+    <head>
+        <title>Life</title>
+    </head>
 
-<head>
-    <title>Life</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from 'https://code.agentscript.org/src/Animator.js'
+            import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Model from 'https://code.agentscript.org/models/LifeModel.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/LifeModel.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 6,
+                drawOptions: {
+                    patchesColor: p => (p.living ? 'red' : 'black'),
+                },
+            })
 
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 7,
-            drawOptions: {
-                patchesColor: p => (p.living ? 'red' : 'rgba(255, 99, 71, 0.2)'),
-            }
-        })
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // how many steps
-            30 // at fps steps/second
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // how many steps
+                30 // at fps steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

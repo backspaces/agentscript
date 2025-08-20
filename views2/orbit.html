@@ -1,51 +1,50 @@
 <html>
+    <head>
+        <title>Orbit</title>
+    </head>
 
-<head>
-    <title>Orbit</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from 'https://code.agentscript.org/src/Animator.js'
+            import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Model from 'https://code.agentscript.org/models/OrbitModel.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from '../models/OrbitModel.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
-
-        const isRocket = t => t.breed.name === 'rockets'
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 25,
-            drawOptions: {
-                patchesColor: 'black',
-                linksColor: 'red',
-                turtlesShape: 'circle',
-                turtlesSize: (t) => {
-                    if (t.breed.name === "rockets") return 0.5
-                    if (t.breed.name === "earths") return 2 * model.earthRadius
-                    return 0.17 // trails & nodes
+            const isRocket = t => t.breed.name === 'rockets'
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 25,
+                drawOptions: {
+                    patchesColor: 'black',
+                    linksColor: 'red',
+                    turtlesShape: 'circle',
+                    turtlesSize: t => {
+                        if (t.breed.name === 'rockets') return 0.5
+                        if (t.breed.name === 'earths')
+                            return 2 * model.earthRadius
+                        return 0.17 // trails & nodes
+                    },
+                    turtlesColor: t => {
+                        if (t.breed.name === 'rockets') return 'yellow'
+                        if (t.breed.name === 'earths') return 'blue'
+                        return 'orange' // trails & nodes
+                    },
                 },
-                turtlesColor: (t) => {
-                    if (t.breed.name === "rockets") return "yellow"
-                    if (t.breed.name === "earths") return "blue"
-                    return "orange" // trails & nodes
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
                 },
-            }
-        })
+                -1, // 500, // how many steps
+                30 // at fps steps/second
+            )
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            -1, // 500, // how many steps
-            30 // at fps steps/second
-        )
-
-        Object.assign(window, { model, view, anim })
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            Object.assign(window, { model, view, anim })
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

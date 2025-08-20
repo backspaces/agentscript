@@ -14,6 +14,7 @@ export default class LifeModel extends Model {
     setup() {
         this.patches.ask(p => {
             p.living = util.randomFloat(100) < this.initialDensity
+            p.liveNeighbors = 0
         })
     }
 

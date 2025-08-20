@@ -30,11 +30,20 @@ function loadIframe() {
         Date.now()
 }
 
+const fileMap = {
+    [indexPath]: 'htmlBtn',
+    [modelPath]: 'modelBtn',
+    [viewPath]: 'viewBtn',
+}
+
 async function loadFile(path) {
     try {
         const code = await client.getFileContents(path, { format: 'text' })
         editor.textContent = code
+
+        document.getElementById(fileMap[currentFile]).classList.remove('active')
         currentFile = path
+        document.getElementById(fileMap[currentFile]).classList.add('active')
     } catch (err) {
         console.error('Failed to load', path, err)
     }
@@ -52,7 +61,7 @@ async function saveFile() {
 }
 
 // Load initial Model.js and iframe
-loadFile(modelPath)
+loadFile(indexPath)
 loadIframe()
 
 let timeout
@@ -61,6 +70,9 @@ editor.addEventListener('input', () => {
     timeout = setTimeout(saveFile, 500)
 })
 
+document
+    .getElementById('htmlBtn')
+    .addEventListener('click', () => loadFile(indexPath))
 document
     .getElementById('modelBtn')
     .addEventListener('click', () => loadFile(modelPath))
