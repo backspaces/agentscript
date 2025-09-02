@@ -29,7 +29,7 @@ export default class GridPathModel extends Model {
         this.walker.choices = ok.length // used by view
 
         let turtle = this.walker.hatch()[0]
-        ;[this.walker, turtle] = [turtle, this.walker] // swap walker & turtle
+        ;[this.walker, turtle] = [turtle, this.walker]
 
         this.walker.moveTo(ok.oneOf())
         this.walker.patch.occupied = true

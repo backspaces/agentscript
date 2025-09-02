@@ -60,6 +60,19 @@ async function saveFile() {
     }
 }
 
+window.formatCode = function () {
+    try {
+        const parser = currentFile.endsWith('.html') ? 'html' : 'babel'
+        const formatted = prettier.format(editor.textContent, {
+            parser,
+            plugins: prettierPlugins,
+        })
+        editor.textContent = formatted
+    } catch (err) {
+        console.error('Formatting failed:', err)
+    }
+}
+
 // Load initial Model.js and iframe
 loadFile(indexPath)
 loadIframe()

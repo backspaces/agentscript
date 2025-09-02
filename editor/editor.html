@@ -60,6 +60,15 @@
             }
         </style>
         <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+        <script src="https://unpkg.com/prettier@2.8.8/standalone.js"></script>
+        <script src="https://unpkg.com/prettier@2.8.8/parser-babel.js"></script>
+        <script src="https://unpkg.com/prettier@2.8.8/parser-html.js"></script>
+        <script>
+            console.log('window.prettierPlugins', window.prettierPlugins)
+            // Ensure Prettier plugins are available
+            // window.prettierPlugins = window.prettierPlugins || []
+        </script>
     </head>
     <body>
         <div id="leftColumn">
@@ -69,6 +78,7 @@
                 <button id="htmlBtn">HTML</button>
                 <button id="modelBtn">Model</button>
                 <button id="viewBtn">View</button>
+                <button onclick="formatCode()">Format</button>
                 <button id="downloadBtn">Download</button>
             </div>
         </div>

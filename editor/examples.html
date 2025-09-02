@@ -44,135 +44,185 @@
                 color: #555;
                 margin-top: 6px;
             }
+
+            .foo {
+                margin-left: 30px;
+            }
         </style>
+        <link rel="stylesheet" href="../ide/style.css" />
+        <!-- <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Ubuntu+Mono&display=swap"
+        /> -->
     </head>
     <body>
-        <h1>Select an Example</h1>
-
-        <div class="examples-wrapper">
-            <!-- Example Cards (Unchanged Content) -->
-            <div class="example-card" data-model="Template">
-                <img class="example-thumb" src="./thumbs/template.png" />
-                <div class="example-title">Template</div>
-                <div class="example-description">
-                    This is a template for starting out a new Model from
-                    scratch. It has a very simple TemplateModel that shows use
-                    of turtles and links, along with an index.html file
-                    providing a View and an Animator to run the model.
-                </div>
+        <header id="navDiv">
+            <div class="button-row">
+                <a class="nav-button" href="../ide/">Agentscript</a>
+                <div class="spacer"></div>
+                <a class="nav-button" href="./examples.html">Examples</a>
+                <a class="nav-button" href="https://code.agentscript.org/docs"
+                    >Docs</a
+                >
+                <a
+                    class="nav-button"
+                    href="https://github.com/backspaces/agentscript?tab=readme-ov-file#AgentScript"
+                    >Code</a
+                >
             </div>
+        </header>
 
-            <div class="example-card" data-model="Ants">
-                <img class="example-thumb" src="./thumbs/ants.png" />
-                <div class="example-title">Ants</div>
-                <div class="example-description">
-                    Ants find the shortest path to food by leaving a trail of
-                    evaporating pheromones in their environment. A classic
-                    example of stigmergic behavior.
+        <div class="foo">
+            <h2>Select an Example</h2>
+
+            <div class="examples-wrapper">
+                <div class="example-card" data-model="Snippets">
+                    <img class="example-thumb" src="./thumbs/snippets.jpg" />
+                    <!-- <p></p> -->
+                    <div class="example-title">Snppets</div>
+                    <div class="example-description">
+                        Start here! This is a mini-tutorial on turtles, patches,
+                        and links. It lets you experience the Agentscript basics
+                        and edit their use. A must-see if you are new to
+                        modeling!
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="Buttons">
-                <img class="example-thumb" src="./thumbs/buttons.png" />
-                <div class="example-title">Buttons</div>
-                <div class="example-description">
-                    How long does it take to completely connect a set of buttons
-                    by adding one link at a time between two randomly chosen
-                    pairs.
+                <div class="example-card" data-model="Template">
+                    <img class="example-thumb" src="./thumbs/template.png" />
+                    <div class="example-title">Template</div>
+                    <div class="example-description">
+                        This is a template for starting out a new Model from
+                        scratch. It has a very simple TemplateModel that shows
+                        use of turtles and links, along with an index.html file
+                        providing a View and an Animator to run the model.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="Diffusion">
-                <img class="example-thumb" src="./thumbs/diffuse.png" />
-                <div class="example-title">Diffusion</div>
-                <div class="example-description">
-                    Diffusion is the process by which particles move from an
-                    area of higher concentration to an area of lower
-                    concentration. Here two turtles travel through patches,
-                    dropping a random value on patches and diffusing these
-                    values.
+                <div class="example-card" data-model="Ants">
+                    <img class="example-thumb" src="./thumbs/ants.png" />
+                    <div class="example-title">Ants</div>
+                    <div class="example-description">
+                        Ants find the shortest path to food by leaving a trail
+                        of evaporating pheromones in their environment. A
+                        classic example of stigmergic behavior.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="Droplets">
-                <img class="example-thumb" src="./thumbs/droplets.png" />
-                <div class="example-title">Droplets</div>
-                <div class="example-description">
-                    Droplets on a tile moving downhill. Four choises on choosing
-                    the downhill function.
+                <div class="example-card" data-model="Buttons">
+                    <img class="example-thumb" src="./thumbs/buttons.png" />
+                    <div class="example-title">Buttons</div>
+                    <div class="example-description">
+                        How long does it take to completely connect a set of
+                        buttons by adding one link at a time between two
+                        randomly chosen pairs.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="Exit">
-                <img class="example-thumb" src="./thumbs/exit.png" />
-                <div class="example-title">Exit</div>
-                <div class="example-description">
-                    Droplets on a tile moving downhill. Four choises on choosing
-                    the downhill function.
+                <div class="example-card" data-model="Diffusion">
+                    <img class="example-thumb" src="./thumbs/diffuse.png" />
+                    <div class="example-title">Diffusion</div>
+                    <div class="example-description">
+                        Diffusion is the process by which particles move from an
+                        area of higher concentration to an area of lower
+                        concentration. Here two turtles travel through patches,
+                        dropping a random value on patches and diffusing these
+                        values.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="Fire">
-                <img class="example-thumb" src="./thumbs/fire.png" />
-                <div class="example-title">Fire</div>
-                <div class="example-description">
-                    Fire spreading on patches based on neighbor probabilities.
+                <div class="example-card" data-model="Droplets">
+                    <img class="example-thumb" src="./thumbs/droplets.png" />
+                    <div class="example-title">Droplets</div>
+                    <div class="example-description">
+                        Droplets on a tile moving downhill. Four choises on
+                        choosing the downhill function.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="Flock">
-                <img class="example-thumb" src="./thumbs/flock.png" />
-                <div class="example-title">Flock</div>
-                <div class="example-description">
-                    How do flocks form without a leader? Craig Reynolds, in
-                    1986, found that three simple rules for individuals birds
-                    results in flocking behaviour.
+                <div class="example-card" data-model="Exit">
+                    <img class="example-thumb" src="./thumbs/exit.png" />
+                    <div class="example-title">Exit</div>
+                    <div class="example-description">
+                        Droplets on a tile moving downhill. Four choises on
+                        choosing the downhill function.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="KelpForest">
-                <img class="example-thumb" src="./thumbs/kelpforest.png" />
-                <div class="example-title">KelpForest</div>
-                <div class="example-description">
-                    This shows how a Kelp Forest evolves over time, with the
-                    interaction between kelp, urchins and sea stars.
+                <div class="example-card" data-model="Fire">
+                    <img class="example-thumb" src="./thumbs/fire.png" />
+                    <div class="example-title">Fire</div>
+                    <div class="example-description">
+                        Fire spreading on patches based on neighbor
+                        probabilities.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="Life">
-                <img class="example-thumb" src="./thumbs/life.png" />
-                <div class="example-title">Life</div>
-                <div class="example-description">
-                    The Game of Life consists of a grid of cells which, based on
-                    a few mathematical rules, can live, die or multiply. It was
-                    invented by mathematician John Conway.
+                <div class="example-card" data-model="Flock">
+                    <img class="example-thumb" src="./thumbs/flock.png" />
+                    <div class="example-title">Flock</div>
+                    <div class="example-description">
+                        How do flocks form without a leader? Craig Reynolds, in
+                        1986, found that three simple rules for individuals
+                        birds results in flocking behaviour.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="LinkTravel">
-                <img class="example-thumb" src="./thumbs/linktravel.png" />
-                <div class="example-title">LinkTravel</div>
-                <div class="example-description">
-                    How do cars travel along roads in a model using links for
-                    the road.
+                <div class="example-card" data-model="GridPath">
+                    <img class="example-thumb" src="./thumbs/gridpath.png" />
+                    <div class="example-title">GridPath</div>
+                    <div class="example-description">
+                        How to make a path from top-left to bottom-right without
+                        getting trapped by surrounding neighbors using flood
+                        fills every new step.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="SlimeMold">
-                <img class="example-thumb" src="./thumbs/slimemold.png" />
-                <div class="example-title">SlimeMold</div>
-                <div class="example-description">
-                    How do many single-celled organisms coordinate to form
-                    groups?
+                <div class="example-card" data-model="KelpForest">
+                    <img class="example-thumb" src="./thumbs/kelpforest.png" />
+                    <div class="example-title">KelpForest</div>
+                    <div class="example-description">
+                        This shows how a Kelp Forest evolves over time, with the
+                        interaction between kelp, urchins and sea stars.
+                    </div>
                 </div>
-            </div>
 
-            <div class="example-card" data-model="TSP">
-                <img class="example-thumb" src="./thumbs/tsp.png" />
-                <div class="example-title">TSP</div>
-                <div class="example-description">
-                    The Traveling Sales Person which computes the shortest
-                    distance touching each node in a graph.
+                <div class="example-card" data-model="Life">
+                    <img class="example-thumb" src="./thumbs/life.png" />
+                    <div class="example-title">Life</div>
+                    <div class="example-description">
+                        The Game of Life consists of a grid of cells which,
+                        based on a few mathematical rules, can live, die or
+                        multiply. It was invented by mathematician John Conway.
+                    </div>
+                </div>
+
+                <div class="example-card" data-model="LinkTravel">
+                    <img class="example-thumb" src="./thumbs/linktravel.png" />
+                    <div class="example-title">LinkTravel</div>
+                    <div class="example-description">
+                        How do cars travel along roads in a model using links
+                        for the road.
+                    </div>
+                </div>
+
+                <div class="example-card" data-model="SlimeMold">
+                    <img class="example-thumb" src="./thumbs/slimemold.png" />
+                    <div class="example-title">SlimeMold</div>
+                    <div class="example-description">
+                        How do many single-celled organisms coordinate to form
+                        groups?
+                    </div>
+                </div>
+
+                <div class="example-card" data-model="TSP">
+                    <img class="example-thumb" src="./thumbs/tsp.png" />
+                    <div class="example-title">TSP</div>
+                    <div class="example-description">
+                        The Traveling Sales Person which computes the shortest
+                        distance touching each node in a graph.
+                    </div>
                 </div>
             </div>
         </div>
@@ -217,9 +267,13 @@
             document.querySelectorAll('[data-model]').forEach(el => {
                 el.addEventListener('click', async () => {
                     const model = el.dataset.model
-                    const user = getUserName()
-                    await ensureExampleCopied(model, user)
-                    window.location.href = `/editor/editor.html?user=${user}&model=${model}`
+                    if (model === 'Snippets') {
+                        window.location.href = '../ide/Snippets.html'
+                    } else {
+                        const user = getUserName()
+                        await ensureExampleCopied(model, user)
+                        window.location.href = `/editor/editor.html?user=${user}&model=${model}`
+                    }
                 })
             })
         </script>
