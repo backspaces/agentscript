@@ -231,8 +231,17 @@
             import { getWebDAVClient } from '../examples/getWebDAVClient.js'
             const [client] = getWebDAVClient()
 
+            // function getUserName() {
+            //     return 'bob'
+            // }
             function getUserName() {
-                return 'bob'
+                let user = localStorage.getItem('agentscriptUser')
+                if (!user) {
+                    const rand = Math.floor(Math.random() * 10000)
+                    user = `user-${rand}`
+                    localStorage.setItem('agentscriptUser', user)
+                }
+                return user
             }
 
             async function ensureExampleCopied(model, user) {

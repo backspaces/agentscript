@@ -5,9 +5,62 @@ const [client, baseURL] = getWebDAVClient()
 console.log('client', client)
 
 const urlParams = new URLSearchParams(window.location.search)
-const user = urlParams.get('user') || 'bob'
+
+function getUser() {
+    let user = urlParams.get('user') // ✅ FIXED
+
+    if (!user) {
+        user = localStorage.getItem('agentscriptUser')
+        if (!user) {
+            const rand = Math.floor(Math.random() * 10000)
+            user = `user-${rand}`
+            localStorage.setItem('agentscriptUser', user)
+        }
+    }
+    return user
+}
+
+async function ensureUserModelCopied(user, model) {
+    const base = `/agentscript/users/${user}/${model}`
+    const src = `/agentscript/ide/examples/${model}`
+
+    try {
+        // check if Model.js already exists
+        await client.stat(`${base}/Model.js`)
+        console.log(`✅ ${model} already exists for ${user}`)
+    } catch {
+        console.warn(`🛠 Copying ${model} to ${base}...`)
+        try {
+            // ensure user folder
+            await client
+                .createDirectory(`/agentscript/users/${user}`)
+                .catch(err => {
+                    if (err?.status !== 405 && err?.status !== 409) throw err
+                })
+
+            // ensure model folder
+            await client.createDirectory(base).catch(err => {
+                if (err?.status !== 405 && err?.status !== 409) throw err
+            })
+
+            const files = ['Model.js', 'View.js', 'index.html']
+            for (const file of files) {
+                console.log(`📤 Copying ${file}...`)
+                await client.copyFile(`${src}/${file}`, `${base}/${file}`)
+            }
+
+            console.log(`✅ Copied ${model} to ${base}`)
+        } catch (err) {
+            console.error(`❌ Failed to copy ${model}:`, err)
+        }
+    }
+}
+
+const user = getUser()
 const model = urlParams.get('model') || 'Ants'
 const folder = `/agentscript/users/${user}/${model}`
+
+await ensureUserModelCopied(user, model)
 
 console.log('user', user)
 console.log('model', model)
