@@ -1,5 +1,5 @@
-import Model from 'https://code.agentscript.org/src/Model.js'
-import * as util from 'https://code.agentscript.org/src/utils.js'
+import Model from '/src/Model.js'
+import * as util from '/src/utils.js'
 
 // Earth’s radius: 6,371,000 meters (6,371 km)
 // LEO height: 200,000 meters (200 km)

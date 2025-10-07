@@ -1,4 +1,4 @@
-import Model from 'https://code.agentscript.org/src/Model.js'
+import Model from '/src/Model.js'
 
 export default class ButtonsModel extends Model {
     population = 50 // number of buttons

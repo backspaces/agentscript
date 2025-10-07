@@ -1,42 +1,41 @@
 <html>
+    <head>
+        <title>WallFollower</title>
+    </head>
 
-<head>
-    <title>WallFollower</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/WallFollowerModel.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/WallFollowerModel.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const wallsColor = 'rgb(222, 184, 135)'
+            const backgroundColor = 'black'
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 10,
+                drawOptions: {
+                    patchesColor: p =>
+                        p.breed.name === 'walls' ? wallsColor : backgroundColor,
+                    turtlesShape: 'dart',
+                    turtlesSize: 2,
+                    turtlesColor: t =>
+                        t.breed.name === 'lefty' ? 'green' : 'red',
+                },
+            })
 
-        const wallsColor = 'rgb(222, 184, 135)'
-        const backgroundColor = 'black'
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 10,
-            drawOptions: {
-                patchesColor: p =>
-                    p.breed.name === 'walls' ? wallsColor : backgroundColor,
-                turtlesShape: 'dart',
-                turtlesSize: 2,
-                turtlesColor: t => (t.breed.name === 'lefty' ? 'green' : 'red'),
-            }
-        })
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // how many steps
-            30 // at fps steps/second
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // how many steps
+                30 // at fps steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

@@ -1,39 +1,41 @@
 <html>
+    <head>
+        <title>SlimeMold</title>
+    </head>
 
-<head>
-    <title>SlimeMold</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/SlimeMoldModel.js'
+            import ColorMap from '/src/ColorMap.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/SlimeMoldModel.js'
-        import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const colorMap = ColorMap.gradientColorMap(8, [
+                'black',
+                'purple',
+                'yellow',
+            ])
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 15,
+                drawOptions: {
+                    turtlesSize: 2,
+                    patchesColor: p => colorMap.scaleColor(p.pheromone, 0, 100),
+                },
+            })
 
-        const colorMap = ColorMap.gradientColorMap(8, ['black', 'purple', 'yellow'])
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 15,
-            drawOptions: {
-                turtlesSize: 2,
-                patchesColor: p => colorMap.scaleColor(p.pheromone, 0, 100),
-            }
-        })
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // how many steps
-            30 // at fps steps/second
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // how many steps
+                30 // at fps steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

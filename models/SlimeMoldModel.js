@@ -13,8 +13,8 @@
 // the world, and how agents and patches are drawn to the screen.
 //
 
-import Model from 'https://code.agentscript.org/src/Model.js'
-import World from 'https://code.agentscript.org/src/World.js'
+import Model from '/src/Model.js'
+import World from '/src/World.js'
 
 //
 // The SlimeMoldModel below is based on the code we wrote in the tutorial,

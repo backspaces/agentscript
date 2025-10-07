@@ -1,51 +1,55 @@
 <html>
+    <head>
+        <title>Ants</title>
+    </head>
 
-<head>
-    <title>Ants</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/AntsModel.js'
+            // import Color from '/src/Color.js'
+            import ColorMap from '/src/ColorMap.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/AntsModel.js'
-        // import Color from 'https://code.agentscript.org/src/Color.js'
-        import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
-
-        const nestColor = 'yellow'
-        const foodColor = 'blue'
-        const nestColorMap = ColorMap.gradientColorMap(20, ['black', nestColor])
-        const foodColorMap = ColorMap.gradientColorMap(20, ['black', foodColor])
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 10,
-            drawOptions: {
-                patchesColor: p => {
-                    if (p.isNest) return nestColor
-                    if (p.isFood) return foodColor
-                    return p.foodPheromone > p.nestPheromone
-                        ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
-                        : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+            const nestColor = 'yellow'
+            const foodColor = 'blue'
+            const nestColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                nestColor,
+            ])
+            const foodColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                foodColor,
+            ])
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 10,
+                drawOptions: {
+                    patchesColor: p => {
+                        if (p.isNest) return nestColor
+                        if (p.isFood) return foodColor
+                        return p.foodPheromone > p.nestPheromone
+                            ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
+                            : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+                    },
+                    turtlesShape: 'bug',
+                    turtlesSize: 3,
+                    turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
                 },
-                turtlesShape: 'bug',
-                turtlesSize: 3,
-                turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
-            }
-        })
+            })
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // how many steps
-            30 // at fps steps/second
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // how many steps
+                30 // at fps steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

@@ -5,10 +5,10 @@
 
     <body>
         <script type="module">
-            import * as util from 'https://code.agentscript.org/src/utils.js'
-            import Animator from 'https://code.agentscript.org/src/Animator.js'
-            import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-            import Model from 'https://code.agentscript.org/models/RoadsModel.js'
+            import * as util from '/src/utils.js'
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/RoadsModel.js'
             // import santafeRoads from '../models/data/santaferoads.json' with { type: 'json' }
 
             const model = new Model() // default world options includes santafeRoads
@@ -17,7 +17,7 @@
             console.log('model bbox', model.world.bbox)
 
             // const baseMapTile = await util.imagePromise(
-            //     'https://code.agentscript.org/models/data/roads14.png'
+            //     '/models/data/roads14.png'
             // )
 
             const view = new TwoDraw(model, {

@@ -1,5 +1,5 @@
-import Model from 'https://code.agentscript.org/src/Model.js'
-import * as util from 'https://code.agentscript.org/src/utils.js'
+import Model from '/src/Model.js'
+import * as util from '/src/utils.js'
 
 export default class HelloModel extends Model {
     population = 100

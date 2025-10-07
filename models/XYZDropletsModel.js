@@ -4,17 +4,17 @@
     pre-built dataset created from a 256x256 gis tile (needing dom methods)
     scaled to 101x101 and thus does not need any of the dom methods
 */
-import * as util from 'https://code.agentscript.org/src/utils.js'
-import World from 'https://code.agentscript.org/src/World.js'
-import Model from 'https://code.agentscript.org/src/Model.js'
+import * as util from '/src/utils.js'
+import World from '/src/World.js'
+import Model from '/src/Model.js'
 import tileDataSet from './data/tile101x101.js'
 // Current tile dataSet functions:
 //   redfishUSDataSet
 //   redfishWorldDataSet
 //   mapzenDataSet
 //   mapboxDataSet
-import { mapzen as provider } from 'https://code.agentscript.org/src/TileData.js'
-import BBoxDataSet from 'https://code.agentscript.org/src/BBoxDataSet.js'
+import { mapzen as provider } from '/src/TileData.js'
+import BBoxDataSet from '/src/BBoxDataSet.js'
 
 class XYZDropletsModel extends Model {
     speed = 0.5

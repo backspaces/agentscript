@@ -1,5 +1,5 @@
-import HelloModel from 'https://code.agentscript.org/models/HelloModel.js'
-import World from 'https://code.agentscript.org/src/World.js'
+import HelloModel from '/models/HelloModel.js'
+import World from '/src/World.js'
 
 // We use a simple HelloModel subclass
 export default class ShapesModel extends HelloModel {

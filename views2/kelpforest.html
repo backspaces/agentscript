@@ -1,52 +1,50 @@
 <html>
+    <head>
+        <title>KelpForest</title>
+    </head>
 
-<head>
-    <title>KelpForest</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/KelpForestModel.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/KelpForestModel.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
-
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 20,
-            drawOptions: {
-                turtlesSize: (t) => {
-                    if (t.breed.name === "urchin") return 1
-                    if (t.breed.name === "kelp") return 2
-                    return 1.5 // seaStar
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions: {
+                    turtlesSize: t => {
+                        if (t.breed.name === 'urchin') return 1
+                        if (t.breed.name === 'kelp') return 2
+                        return 1.5 // seaStar
+                    },
+                    turtlesColor: t => {
+                        if (t.breed.name === 'urchin') return 'purple'
+                        if (t.breed.name === 'kelp') return 'green'
+                        return 'orange' // seaStar
+                    },
+                    turtlesShape: t => {
+                        if (t.breed.name === 'urchin') return 'circle'
+                        if (t.breed.name === 'kelp') return 'dart'
+                        return 'pentagon' // seaStar
+                    },
                 },
-                turtlesColor: (t) => {
-                    if (t.breed.name === "urchin") return "purple"
-                    if (t.breed.name === "kelp") return "green"
-                    return "orange" // seaStar
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
                 },
-                turtlesShape: (t) => {
-                    if (t.breed.name === "urchin") return "circle"
-                    if (t.breed.name === "kelp") return "dart"
-                    return "pentagon" // seaStar
-                },
-            }
-        })
+                5 * 365, // how many steps, here 5 years,
+                30 // at 30 steps/second
+            )
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            5 * 365, // how many steps, here 5 years,
-            30 // at 30 steps/second
-        )
-
-        Object.assign(window, { model, view, anim }) // debugging
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            Object.assign(window, { model, view, anim }) // debugging
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>
