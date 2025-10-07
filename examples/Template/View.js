@@ -1,4 +1,4 @@
-import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+import TwoDraw from '/src/TwoDraw.js'
 
 export default function (model, div = 'modelDiv') {
     return new TwoDraw(model, {

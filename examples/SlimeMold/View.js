@@ -1,5 +1,5 @@
-import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
+import TwoDraw from '/src/TwoDraw.js'
+import ColorMap from '/src/ColorMap.js'
 
 const colorMap = ColorMap.gradientColorMap(8, ['black', 'purple', 'yellow'])
 

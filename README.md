@@ -1,6 +1,6 @@
 # AgentScript
 
-AgentScript is a minimalist Agent Based modeling system based on [NetLogo](https://ccl.northwestern.edu/netlogo/) semantics. We also have an [IDE](https://code.agentscript.org/ide/index.html), especially useful for getting started.
+AgentScript is a minimalist Agent Based modeling system based on [NetLogo](https://ccl.northwestern.edu/netlogo/) semantics. We also have an [IDE](/ide/index.html), especially useful for getting started.
 
 It has a Model/View/Control (MVC) architecture which cleanly separates the three components.
 
@@ -8,7 +8,7 @@ It has a Model/View/Control (MVC) architecture which cleanly separates the three
 
 -   **View**: Use the Model properties to create a view. There can be many Views. We provide a [2D Canvas](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) view and a [Three.js](https://threejs.org/) 2.5D and 3D views. There is also GIS support via a [gis module](https://github.com/backspaces/agentscript/blob/master/src/gis.js), a [geojson module](https://github.com/backspaces/agentscript/blob/master/src/geojson.js), as well as [Leaflet](https://leafletjs.com/) and [MapLibre](https://github.com/maplibre/maplibre-gl-js#readme/) based maps. Plot views are also available.
 
--   **Controls**: We use [src/GUI.js](https://code.agentscript.org/src/GUI.js) via [dat.gui](https://github.com/dataarts/dat.gui) for a menu UI, a [Mouse module](https://github.com/backspaces/agentscript/blob/master/src/Mouse.js) for selecting Model objects (Patches, Turtles and Links), an [Animator](https://github.com/backspaces/agentscript/blob/master/src/Animator.js) for fine control over the Model/Draw steps. We also have [Keyboard](https://github.com/backspaces/agentscript/blob/master/src/Keyboard.js) and [Buttons](https://github.com/backspaces/agentscript/blob/master/src/Buttons.js) controls.
+-   **Controls**: We use [src/GUI.js](/src/GUI.js) via [dat.gui](https://github.com/dataarts/dat.gui) for a menu UI, a [Mouse module](https://github.com/backspaces/agentscript/blob/master/src/Mouse.js) for selecting Model objects (Patches, Turtles and Links), an [Animator](https://github.com/backspaces/agentscript/blob/master/src/Animator.js) for fine control over the Model/Draw steps. We also have [Keyboard](https://github.com/backspaces/agentscript/blob/master/src/Keyboard.js) and [Buttons](https://github.com/backspaces/agentscript/blob/master/src/Buttons.js) controls.
 
 ## Modern JavaScript
 
@@ -24,23 +24,23 @@ Example: to import Class Model for building your own model, use:
 
 The models directory contains the individual Models JavaScript files.
 
-[models](https://code.agentscript.org/models/)
+[models](/models/)
 
 The views1 onepagers import models from the models/ dir and run for 500 steps, printing out a sample of the model's data.
 
-[views1](https://code.agentscript.org/views1/)
+[views1](/views1/)
 
 The views2 onepagers import models from the models/ dir and add a 2D Canvas view.
 
-[views2](https://code.agentscript.org/views2/)
+[views2](/views2/)
 
 The views2mv (mv: model/view) onepagers import models from the models/ dir and add a 2D Canvas view as a separate file.
 
-[views2mv](https://code.agentscript.org/views2mv/)
+[views2mv](/views2mv/)
 
 The views25 onepagers import models from the models/ dir and add a Three.js webgl 2.5D view.
 
-[views25](https://code.agentscript.org/views25/)
+[views25](/views25/)
 
 The views3 onepagers import models from the models/ dir and add a Three.js webgl 3D view.
 
@@ -51,19 +51,19 @@ which are subclasses of their 2D counterparts:
 [src/Model.js](https://github.com/backspaces/agentscript/blob/master/src/Model.js)
 and [src/Turtle.js](https://github.com/backspaces/agentscript/blob/master/src/Turtle.js)
 
-[views3](https://code.agentscript.org/views3/)
+[views3](/views3/)
 
 The mvc onepagers are combine Models, Views, and Controls into "apps".
 
-[mvc](https://code.agentscript.org/mvc/)
+[mvc](/mvc/)
 
 AgentScript provides a way to include your models on a map. These two sets of onepagers use gis & geojson utilities to create and view models running on [Leaflet](https://leafletjs.com/) and [maplibre](https://github.com/maplibre/maplibre-gl-js#readme/) maps.
 
-[leaflet](https://code.agentscript.org/leaflet)
+[leaflet](/leaflet)
 
 and
 
-[maplibre](https://code.agentscript.org/maplibre/)
+[maplibre](/maplibre/)
 
 <!-- [fb](./fb/README.md)
 
@@ -85,7 +85,7 @@ The models directory contains the individual Models JavaScript files. I.e. Hello
 
 -   [models/](https://github.com/backspaces/agentscript/tree/master/models): simple sample/demo models. All are es6 modules used in onepagers below
 -   [src/](https://github.com/backspaces/agentscript/tree/master/src): all the agentscript source code. All are es6 modules
--   [docs/](https://code.agentscript.org/docs/) Documentation for all the individual modules used by the programmer.
+-   [docs/](/docs/) Documentation for all the individual modules used by the programmer.
 
 ### Developer directories:
 
