@@ -1,6 +1,6 @@
 import * as gis from './gis.js'
 import World from './World.js'
-import { bbox as toBBox } from '../vendor/turfImports.js'
+import { bbox as toBBox } from '/vendor/turfImports.js'
 
 // class World defines the coordinate system for the model.
 // It has been upgraded with methods converting from other

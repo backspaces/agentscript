@@ -1,6 +1,6 @@
-import * as util from '../src/utils.js'
-import * as geojson from '../src/geojson.js'
-import * as geofilters from '../src/geofilters.js'
+import * as util from '/src/utils.js'
+import * as geojson from '/src/geojson.js'
+import * as geofilters from '/src/geofilters.js'
 // import simplify from 'https://esm.sh/@turf/simplify'
 // import mapshaper from 'https://esm.sh/mapshaper'
 

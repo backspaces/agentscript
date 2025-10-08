@@ -1,5 +1,5 @@
 await fetch('/uielements/uielements.html')
-    // await fetch('../uielements/uielements.html')
+    // await fetch('/uielements/uielements.html')
     .then(response => response.text())
     .then(html => {
         // Insert the HTML content for the menu into the DOM

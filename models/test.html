@@ -1,38 +1,36 @@
 <html>
+    <head>
+        <title>test</title>
+    </head>
 
-<head>
-    <title>test</title>
-</head>
+    <body>
+        <script type="module">
+            // Only used for testing.
+            // No longer: Run in Puppeteer by test/models.js.
+            import * as util from '/src/utils.js'
 
-<body>
-    <script type="module">
-        // Only used for testing.
-        // No longer: Run in Puppeteer by test/models.js.
-        import * as util from '../src/utils.js'
+            const modelParams = util.parseQueryString()
+            const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
+            const className = name[0].toUpperCase() + name.slice(1)
 
-        const modelParams = util.parseQueryString()
-        const name = (Object.keys(modelParams)[0] || 'hello') + 'Model'
-        const className = name[0].toUpperCase() + name.slice(1)
+            const module = await import(`./${className}.js`)
+            const Model = module.default
 
-        const module = await import(`./${className}.js`)
-        const Model = module.default
+            util.randomSeed() // so tests have same results
 
-        util.randomSeed() // so tests have same results
+            const model = new Model()
 
-        const model = new Model()
+            await model.startup()
+            model.setup()
+            await util.timeoutLoop(() => {
+                model.step()
+            }, 500)
 
-        await model.startup()
-        model.setup()
-        await util.timeoutLoop(() => {
-            model.step()
-        }, 500)
+            const sample = util.sampleModel(model)
+            util.printToPage(sample)
 
-        const sample = util.sampleModel(model)
-        util.printToPage(sample)
-
-        window.modelSample = JSON.stringify(sample)
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            window.modelSample = JSON.stringify(sample)
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

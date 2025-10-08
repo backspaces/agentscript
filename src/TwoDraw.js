@@ -1,6 +1,6 @@
 import * as util from './utils.js'
-import TwoView from '../src/TwoView.js'
-import ColorMap from '../src/ColorMap.js'
+import TwoView from '/src/TwoView.js'
+import ColorMap from '/src/ColorMap.js'
 
 /**
  * Basic 2D view.

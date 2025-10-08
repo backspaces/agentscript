@@ -1,5 +1,5 @@
 import Turtle from './Turtle.js'
-import { Object3D } from '../vendor/Object3D.js'
+import { Object3D } from '/vendor/Object3D.js'
 import * as util from './utils.js'
 
 const { checkArg, checkArgs } = util

@@ -1,4 +1,4 @@
-import * as util from '../src/utils.js'
+import * as util from '/src/utils.js'
 
 async function run(classPath) {
     console.log('worker: start', classPath)

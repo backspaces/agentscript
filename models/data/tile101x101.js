@@ -1,4 +1,4 @@
-import DataSet from '../../src/DataSet.js'
+import DataSet from '/src/DataSet.js'
 
 const data = [
     1673, 1688, 1697, 1709, 1717, 1729, 1738, 1752, 1761, 1779, 1799, 1814,

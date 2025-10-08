@@ -1,6 +1,6 @@
 // Meshes used by the Three.js view module
 
-import { THREE } from '../vendor/three.js'
+import { THREE } from '/vendor/three.js'
 import AgentArray from './AgentArray.js'
 import * as util from './utils.js'
 

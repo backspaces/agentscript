@@ -3,7 +3,7 @@ import World from './World.js'
 import SpriteSheet from './SpriteSheet.js'
 import PatchesView from './PatchesView.js'
 import ThreeMeshes from './ThreeMeshes.js'
-import { THREE, OrbitControls } from '../vendor/three.js'
+import { THREE, OrbitControls } from '/vendor/three.js'
 
 class ThreeView {
     static shapeNames() {

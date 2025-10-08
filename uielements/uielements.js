@@ -1,5 +1,5 @@
-import * as util from '../src/utils.js'
-import Plot from '../src/Plot.js'
+import * as util from '/src/utils.js'
+import Plot from '/src/Plot.js'
 
 const params = {}
 params.json = []

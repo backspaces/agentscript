@@ -22,7 +22,7 @@ function redfishElevation(r, g, b) {
 
 // ============= Convenience elevation "bundles" =============
 // Example use:
-// import { mapzen as provider } from '../src/TileData.js'
+// import { mapzen as provider } from '/src/TileData.js'
 
 const sharedTileObject = {
     zxyToTile: async function (z, x, y) {

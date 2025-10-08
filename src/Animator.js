@@ -1,4 +1,4 @@
-import Stats from '../vendor/stats.js'
+import Stats from '/vendor/stats.js'
 
 /**
  * Class Animator controls running of a function.

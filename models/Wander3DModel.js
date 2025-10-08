@@ -1,5 +1,5 @@
-import * as util from '../src/utils.js'
-import Model from '../src/Model3D.js'
+import * as util from '/src/utils.js'
+import Model from '/src/Model3D.js'
 
 export default class Wander3DModel extends Model {
     population = 25

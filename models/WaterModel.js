@@ -1,5 +1,5 @@
-import World from '../src/World.js'
-import Model from '../src/Model.js'
+import World from '/src/World.js'
+import Model from '/src/Model.js'
 
 // Derived from Cody's water model.
 export default class WaterModel extends Model {

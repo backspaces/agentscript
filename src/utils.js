@@ -1400,7 +1400,7 @@ export function addCssLink(url) {
     document.head.appendChild(link)
 }
 export async function fetchCssStyle(url) {
-    if (url.startsWith('../')) {
+    if (url.startsWith('/')) {
         console.log('fetchCssStyle relative url', url)
         url = import.meta.resolve(url)
         console.log('        absolute url', url)

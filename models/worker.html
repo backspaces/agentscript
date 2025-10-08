@@ -1,33 +1,32 @@
 <html>
+    <head>
+        <title>test</title>
+    </head>
 
-<head>
-    <title>test</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from '/src/utils.js'
 
-<body>
-    <script type="module">
-        import * as util from '../src/utils.js'
+            const query = util.parseQueryString()
+            let className = Object.keys(query)[0] || 'hello'
 
-        const query = util.parseQueryString()
-        let className = Object.keys(query)[0] || 'hello'
+            if (!className.endsWith('.js')) {
+                className =
+                    className[0].toUpperCase() + className.slice(1) + 'Model.js'
+            }
+            document.title = `W:${className}`
+            console.log('Running', className)
 
-        if (!className.endsWith('.js')) {
-            className = className[0].toUpperCase() + className.slice(1) + 'Model.js'
-        }
-        document.title = `W:${className}`
-        console.log('Running', className)
+            const classPath = import.meta.resolve('./' + className)
+            console.log('classPath', classPath)
 
-        const classPath = import.meta.resolve('./' + className)
-        console.log('classPath', classPath)
-
-        const worker = new Worker('./runWorker.js', { type: 'module' })
-        worker.postMessage({ cmd: 'init', classPath })
-        worker.onmessage = e => {
-            console.log(e.data)
-            util.printToPage(e.data)
-        }
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const worker = new Worker('./runWorker.js', { type: 'module' })
+            worker.postMessage({ cmd: 'init', classPath })
+            worker.onmessage = e => {
+                console.log(e.data)
+                util.printToPage(e.data)
+            }
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

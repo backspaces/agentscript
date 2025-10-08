@@ -1,5 +1,5 @@
-import * as util from '../src/utils.js'
-import dat from '../vendor/dat.gui.js'
+import * as util from '/src/utils.js'
+import dat from '/vendor/dat.gui.js'
 
 const guiTypes = [
     'color',

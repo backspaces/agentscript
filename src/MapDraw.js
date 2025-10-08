@@ -1,5 +1,5 @@
-import * as util from '../src/utils.js'
-import TwoDraw from '../src/TwoDraw.js'
+import * as util from '/src/utils.js'
+import TwoDraw from '/src/TwoDraw.js'
 
 // make sure world is a geoworld
 // separate drawoptions from viewoptions if needed
