@@ -1,6 +1,6 @@
-import * as util from 'https://code.agentscript.org/src/utils.js'
+import * as util from '/src/utils.js'
 
-const baseUrl = 'https://code.agentscript.org/models/data/roads14.png'
+const baseUrl = '/models/data/roads14.png'
 const baseMapTile = await util.imagePromise(baseUrl)
 
 export default function TwoDrawOptions(div, model, patchSize = 4) {

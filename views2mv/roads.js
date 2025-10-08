@@ -1,8 +1,8 @@
-import * as util from 'https://code.agentscript.org/src/utils.js'
-import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-import Animator from 'https://code.agentscript.org/src/Animator.js'
+import * as util from '/src/utils.js'
+import TwoDraw from '/src/TwoDraw.js'
+import Animator from '/src/Animator.js'
 
-import Model from 'https://code.agentscript.org/models/RoadsModel.js'
+import Model from '/models/RoadsModel.js'
 
 export default async function runModel(div, steps = 500, fps = 30) {
     const model = new Model() // use model's default world options
@@ -11,7 +11,7 @@ export default async function runModel(div, steps = 500, fps = 30) {
 
     // ==============================
 
-    const baseUrl = 'https://code.agentscript.org/models/data/roads14.png'
+    const baseUrl = '/models/data/roads14.png'
     const baseMapTile = await util.imagePromise(baseUrl)
     const breedColor = {
         nodes: 'red',

@@ -1,11 +1,8 @@
-import Shapes from 'https://code.agentscript.org/src/Shapes.js'
+import Shapes from '/src/Shapes.js'
 
 // add an image and emoji shapes
 const shapes = new Shapes()
-await shapes.imagePathPromise(
-    'twitter',
-    'https://code.agentscript.org/models/data/twitter.png'
-)
+await shapes.imagePathPromise('twitter', '/models/data/twitter.png')
 
 export default function TwoDrawOptions(div, model, patchSize = 20) {
     shapes.createEmojiPath('tree', 0x1f332)
@@ -27,5 +24,5 @@ export default function TwoDrawOptions(div, model, patchSize = 20) {
 
 // await shapes.imagePathPromise(
 //     'redfish',
-//     'https://code.agentscript.org/models/data/redfish.png'
+//     '/models/data/redfish.png'
 // )

@@ -1,9 +1,9 @@
-import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-import Animator from 'https://code.agentscript.org/src/Animator.js'
+import TwoDraw from '/src/TwoDraw.js'
+import Animator from '/src/Animator.js'
 
-import Color from 'https://code.agentscript.org/src/Color.js'
+import Color from '/src/Color.js'
 
-import Model from 'https://code.agentscript.org/models/WallFollowerModel.js'
+import Model from '/models/WallFollowerModel.js'
 
 export default async function runModel(div, steps = 500, fps = 30) {
     const model = new Model() // use model's default world options

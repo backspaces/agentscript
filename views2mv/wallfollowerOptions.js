@@ -1,4 +1,4 @@
-import Color from 'https://code.agentscript.org/src/Color.js'
+import Color from '/src/Color.js'
 
 export default function TwoDrawOptions(div, model, patchSize = 10) {
     const wallsColor = Color.typedColor(222, 184, 135)

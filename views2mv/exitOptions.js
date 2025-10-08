@@ -1,5 +1,5 @@
-// import Color from 'https://code.agentscript.org/src/Color.js'
-import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
+// import Color from '/src/Color.js'
+import ColorMap from '/src/ColorMap.js'
 
 export default function TwoDrawOptions(div, model, patchSize = 8) {
     const patchColors = model.patches.map(p => {
