@@ -36,8 +36,8 @@ function makeHtml(title, model) {
 </head>
 <body>
     <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Model from 'https://code.agentscript.org/${model}'
+        import * as util from '/src/utils.js'
+        import Model from '/${model}'
 
         util.printToPage('Running for 500 steps.')
 
@@ -54,3 +54,6 @@ function makeHtml(title, model) {
 </html>
 `
 }
+
+// import * as util from 'https://code.agentscript.org/src/utils.js'
+// import Model from 'https://code.agentscript.org/${model}'
