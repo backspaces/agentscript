@@ -1,6 +1,6 @@
-import AntsModel from 'https://code.agentscript.org/models/AntsModel.js'
-import Color from 'https://code.agentscript.org/src/Color.js'
-import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
+import AntsModel from '/models/AntsModel.js'
+import Color from '/src/Color.js'
+import ColorMap from '/src/ColorMap.js'
 
 const inset = 3
 export class Model extends AntsModel {

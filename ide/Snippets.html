@@ -116,22 +116,6 @@
 
     </script>
 
-    <!-- <header id="navDiv">
-        <div class="button-row">
-            <a class="nav-button" href="../ide/">Agentscript</a>
-            <div class="spacer"></div>
-            <a class="nav-button" href="./examples.html">Examples</a>
-            <a class="nav-button" href="https://code.agentscript.org/docs"
-                >Docs</a
-            >
-            <a
-                class="nav-button"
-                href="https://github.com/backspaces/agentscript?tab=readme-ov-file#AgentScript"
-                >Code</a
-            >
-        </div>
-    </header> -->
-
 <!-- <div> -->
 
     <!-- <sidebar-layout side="left" sideWidth="25ch" contentMin="40%" space="2ch"> -->
@@ -246,7 +230,6 @@
             <p>Two turtles can create links between themselves.
                 This is useful for creating a network, such as streets
                 for turtles to drive on. Here is a simple example:
-                <!-- <a href="https://code.agentscript.org/views2mv/linktravel.html"> -->
                 <a href="../views2mv/linktravel.html">
                     Link Travel
                 </a>
@@ -346,19 +329,12 @@ model.patches.ask(patch => {
 <!-- </div> -->
 
     <script type="module">
-        // import * as util from 'https://code.agentscript.org/src/utils.js'
-        // import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        // import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
-        // import Animator from 'https://code.agentscript.org/src/Animator.js'
-        // import Model from 'https://code.agentscript.org/src/Model.js'
-        // import World from 'https://code.agentscript.org/src/World.js'
-
-        import * as util from '../src/utils.js'
-        import TwoDraw from '../src/TwoDraw.js'
-        import ColorMap from '../src/ColorMap.js'
-        import Animator from '../src/Animator.js'
-        import Model from '../src/Model.js'
-        import World from '../src/World.js'
+        import * as util from '/src/utils.js'
+        import TwoDraw from '/src/TwoDraw.js'
+        import ColorMap from '/src/ColorMap.js'
+        import Animator from '/src/Animator.js'
+        import Model from '/src/Model.js'
+        import World from '/src/World.js'
 
         const model = new Model(World.defaultOptions(10))
         // await model.startup()
@@ -431,3 +407,4 @@ model.patches.ask(patch => {
 </body>
 
 </html>
+

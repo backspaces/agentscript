@@ -1,4 +1,4 @@
-import HelloModel from 'https://code.agentscript.org/models/HelloModel.js'
+import HelloModel from '/models/HelloModel.js'
 
 export class Model extends HelloModel {
     population = 40 // number of turtles
