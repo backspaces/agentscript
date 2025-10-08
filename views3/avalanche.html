@@ -1,63 +1,64 @@
 <html>
+    <head>
+        <title>Avalanche</title>
+    </head>
 
-<head>
-    <title>Avalanche</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Animator from '/src/Animator.js'
+            import Color from '/src/Color.js'
+            import ColorMap from '/src/ColorMap.js'
+            import ThreeDraw from '/src/ThreeDraw.js'
+            import AvalancheModel from '/models/AvalancheModel.js'
 
-<body>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Color from 'https://code.agentscript.org/src/Color.js'
-        import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
-        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
-        import AvalancheModel from 'https://code.agentscript.org/models/AvalancheModel.js'
+            const pi = Math.PI
 
-        const pi = Math.PI
+            /**
+             *
+             * View
+             *
+             * */
+            const colormap = ColorMap.gradientColorMap(20, [
+                'rgb(98,52,18)',
+                'white',
+            ])
+            const drawOptions = {
+                patchesMesh: 'PointsMesh',
+                patchesSize: 4,
+                patchesColor: p => {
+                    const pi2 = 2 * Math.PI
+                    const aspect2 = (p.aspect + pi2) % pi2
+                    const k = (Math.PI - Math.abs(aspect2 - Math.PI)) / Math.PI
+                    const snow = colormap.scaleColor(p.snowDepth, 0, 6)
+                    const foo = Color.typedColor(
+                        k * snow[0],
+                        k * snow[1],
+                        k * snow[2]
+                    )
+                    return foo
+                },
+            }
 
-        /**
-         *
-         * View
-         *
-         * */
-        const colormap = ColorMap.gradientColorMap(20, ['rgb(98,52,18)', 'white'])
-        const drawOptions = {
-            patchesMesh: 'PointsMesh',
-            patchesSize: 4,
-            patchesColor: p => {
-                const pi2 = 2 * Math.PI
-                const aspect2 = (p.aspect + pi2) % pi2
-                const k = (Math.PI - Math.abs(aspect2 - Math.PI)) / Math.PI
-                const snow = colormap.scaleColor(p.snowDepth, 0, 6)
-                const foo = Color.typedColor(k * snow[0], k * snow[1], k * snow[2])
-                return foo
-            },
-        }
+            const model = new AvalancheModel()
+            await model.startup()
+            model.setup()
 
-        const model = new AvalancheModel()
-        await model.startup()
-        model.setup()
+            const view = new ThreeDraw(model, { div: 'modelDiv' }, drawOptions)
 
-        const view = new ThreeDraw(
-            model,
-            { div: 'modelDiv' },
-            drawOptions
-        )
+            util.toWindow({ util, model, view, ColorMap, Color })
 
-        util.toWindow({ util, model, view, ColorMap, Color })
+            await new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            )
 
-        await new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // run 500 steps
-            30 // 30 fps
-        )
-
-        view.idle()
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            view.idle()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

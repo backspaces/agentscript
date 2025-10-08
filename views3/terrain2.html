@@ -1,75 +1,66 @@
 <html>
+    <head>
+        <title>terrain2</title>
+    </head>
 
-<head>
-    <title>terrain2</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import World from '/src/World.js'
+            import { redfishUSA, mapzen, maptiler } from '/src/TileData.js'
+            import * as gis from '/src/gis.js'
+            import Animator from '/src/Animator.js'
+            import Model from '/models/HelloModel.js'
+            import { THREE } from '/vendor/three.js'
 
-<body>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import World from 'https://code.agentscript.org/src/World.js'
-        import { redfishUSA, mapzen, maptiler } from 'https://code.agentscript.org/src/TileData.js'
-        import * as gis from 'https://code.agentscript.org/src/gis.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import { THREE } from 'https://code.agentscript.org/vendor/three.js'
+            import ThreeDraw from '/src/ThreeDraw.js'
 
-        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
+            const provider = mapzen
 
-        const provider = mapzen
+            const [Z, X, Y] = [13, 1594, 3339]
+            const elevation = await provider.zxyToDataSet(Z, X, Y)
+            const el0to10 = elevation.scale(0, 10)
+            const baseMapURL = gis.url(Z, X, Y, 'topo1')
 
-        const [Z, X, Y] = [13, 1594, 3339]
-        const elevation = await provider.zxyToDataSet(Z, X, Y)
-        const el0to10 = elevation.scale(0, 10)
-        const baseMapURL = gis.url(Z, X, Y, 'topo1')
+            const baseMap = await util.imagePromise(baseMapURL)
 
-        const baseMap = await util.imagePromise(baseMapURL)
+            const model = new Model(World.defaultOptions(50))
+            model.population = 0
+            model.patches.importDataSet(el0to10, 'z')
 
-        const model = new Model(World.defaultOptions(50))
-        model.population = 0
-        model.patches.importDataSet(el0to10, 'z')
+            await model.startup()
+            model.setup()
 
-        await model.startup()
-        model.setup()
+            // REMIND: fix patches to update only once
+            const drawOptions = {
+                patchesMesh: {
+                    meshClass: 'PatchesMesh',
+                    useSegments: true,
+                    canvas: baseMap, //baseCtx.canvas,
+                },
+            }
 
-        // REMIND: fix patches to update only once
-        const drawOptions = {
-            patchesMesh: {
-                meshClass: 'PatchesMesh',
-                useSegments: true,
-                canvas: baseMap, //baseCtx.canvas,
-            },
-        }
+            const view = new ThreeDraw(model, { div: 'modelDiv' }, drawOptions)
+            const data = el0to10.resample(102, 102).data
+            const geometry = view.meshes.patches.mesh.geometry
+            const pos = geometry.getAttribute('position')
+            const a = pos.array
+            util.repeat(a.length / 3, (i, a) => (a[i * 3 + 2] = data[i]), a)
+            geometry.setAttribute('position', new THREE.BufferAttribute(a, 3))
 
-        const view = new ThreeDraw(
-            model,
-            { div: 'modelDiv' },
-            drawOptions
-        )
-        const data = el0to10.resample(102, 102).data
-        const geometry = view.meshes.patches.mesh.geometry
-        const pos = geometry.getAttribute('position')
-        const a = pos.array
-        util.repeat(a.length / 3, (i, a) => (a[i * 3 + 2] = data[i]), a)
-        geometry.setAttribute(
-            'position',
-            new THREE.BufferAttribute(a, 3)
-        )
+            util.toWindow({ util, model, view })
 
-        util.toWindow({ util, model, view })
+            await new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                1, // just draw once, is static
+                30
+            )
 
-        await new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            1, // just draw once, is static
-            30
-        )
-
-        view.idle()
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            view.idle()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

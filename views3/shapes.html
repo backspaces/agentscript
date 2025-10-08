@@ -1,48 +1,46 @@
 <html>
+    <head>
+        <title>shapes3d</title>
+    </head>
 
-<head>
-    <title>shapes3d</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import ThreeDraw from '/src/ThreeDraw.js'
+            import Animator from '/src/Animator.js'
+            import Model from '/models/Hello3DModel.js'
 
-<body>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Model from 'https://code.agentscript.org/models/Hello3DModel.js'
+            const drawOptions = {
+                // turtlesShape: 'random',
+                turtlesShape: t => ThreeDraw.shapeNames().atIndex(t.id),
+                turtlesColor: 'random',
+                turtlesSize: 2.5,
+            }
 
-        const drawOptions = {
-            // turtlesShape: 'random',
-            turtlesShape: t => ThreeDraw.shapeNames().atIndex(t.id),
-            turtlesColor: 'random',
-            turtlesSize: 2.5,
-        }
+            const model = new Model()
+            model.linksToo = false
+            await model.startup()
+            model.setup()
 
-        const model = new Model()
-        model.linksToo = false
-        await model.startup()
-        model.setup()
+            const view = new ThreeDraw(model, {
+                div: 'modelDiv',
+                turtles: { meshClass: 'Obj3DMesh', useAxes: true },
+                drawOptions,
+            })
 
-        const view = new ThreeDraw(model, {
-            div: 'modelDiv',
-            turtles: { meshClass: 'Obj3DMesh', useAxes: true },
-            drawOptions,
-        })
+            util.toWindow({ util, model, view, ThreeDraw })
 
-        util.toWindow({ util, model, view, ThreeDraw })
+            await new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500,
+                30
+            )
 
-        await new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500,
-            30
-        )
-
-        view.idle()
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            view.idle()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

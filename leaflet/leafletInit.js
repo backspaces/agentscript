@@ -65,7 +65,6 @@ async function leafletInit(model, canvas, options = {}) {
     if (options.fetchCSS) {
         await util.fetchCssStyle('https://unpkg.com/leaflet/dist/leaflet.css')
         await util.fetchCssStyle('./map.css')
-        // await util.fetchCssStyle('https://code.agentscript.org/gis/map.css')
     }
 
     // Get one of the 4 tile datasets

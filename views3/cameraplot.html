@@ -1,124 +1,121 @@
 <html>
+    <head>
+        <title>Camera</title>
+    </head>
 
-<head>
-    <title>Camera</title>
-</head>
+    <body>
+        <div id="modelDiv"></div>
+        <canvas id="plotCanvas"></canvas>
 
-<body>
-    <div id="modelDiv"></div>
-    <canvas id="plotCanvas"></canvas>
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Color from '/src/Color.js'
+            import ThreeDraw from '/src/ThreeDraw.js'
+            import Animator from '/src/Animator.js'
+            import Model from '/models/Camera3DModel.js'
+            import Chart from 'https://cdn.skypack.dev/chart.js@2.9.4'
+            import dat from '/vendor/dat.gui.js'
 
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Color from 'https://code.agentscript.org/src/Color.js'
-        import ThreeDraw from 'https://code.agentscript.org/src/ThreeDraw.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import Model from 'https://code.agentscript.org/models/Camera3DModel.js'
-        import Chart from 'https://cdn.skypack.dev/chart.js@2.9.4'
-        import dat from 'https://code.agentscript.org/vendor/dat.gui.js'
+            const toDeg = 180 / Math.PI
 
-        const toDeg = 180 / Math.PI
-
-        const isPixel = t => t.breed.name === 'pixels'
-        const uvToColor = t => {
-            const { u, v } = t
-            const r = Math.sqrt(u ** 2 + v ** 2)
-            return Color.toTypedColor(`hsl(${(r * 240) % 240}, 100%, 50%)`)
-        }
-        const drawOptions = {
-            turtlesMesh: 'Obj3DMesh',
-            turtlesShape: t => (isPixel(t) ? 'Cube' : 'Dart'),
-            turtlesColor: t =>
-                isPixel(t) ? uvToColor(t) : Color.toTypedColor('red'),
-            turtlesSize: t => (isPixel(t) ? 0.35 : 3),
-            linksColor: l => uvToColor(l.end0),
-        }
-
-        const model = new Model()
-        await model.startup()
-        model.setup()
-
-        const view = new ThreeDraw(model, {
-            div: 'modelDiv',
-            drawOptions,
-        })
-
-        util.toWindow({ util, model, view })
-
-        const chart = initPlot()
-        const gui = runGui(model, view, chart)
-        plot(chart, model)
-
-        await new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            -1, // run forever
-            30
-        )
-
-        // view.idle()
-
-
-        function runGui(model, view, chart) {
-            const gui = new dat.GUI()
-
-            // Helper for adding variables to gui.
-            // "listen" to make reset values to appear in gui menu
-            // "onChange" to have model update camera for each change.
-            const guiAddVal = (obj, name, start, stop, step) => {
-                gui.add(obj, name, start, stop, step)
-                    .listen()
-                    .onChange(val => {
-                        model.moveCamera()
-                        plot(chart, model)
-                    })
+            const isPixel = t => t.breed.name === 'pixels'
+            const uvToColor = t => {
+                const { u, v } = t
+                const r = Math.sqrt(u ** 2 + v ** 2)
+                return Color.toTypedColor(`hsl(${(r * 240) % 240}, 100%, 50%)`)
+            }
+            const drawOptions = {
+                turtlesMesh: 'Obj3DMesh',
+                turtlesShape: t => (isPixel(t) ? 'Cube' : 'Dart'),
+                turtlesColor: t =>
+                    isPixel(t) ? uvToColor(t) : Color.toTypedColor('red'),
+                turtlesSize: t => (isPixel(t) ? 0.35 : 3),
+                linksColor: l => uvToColor(l.end0),
             }
 
-            guiAddVal(model, 'heading', -180, 180, 5)
-            guiAddVal(model, 'pitch', -180, 180, 5)
-            guiAddVal(model, 'roll', -180, 180, 5)
-            guiAddVal(model, 'sphereRadius', 0, 16, 1)
-            guiAddVal(model, 'fieldOfView', 1, 180, 1)
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-            gui.add(model, 'toggleLinks')
-            gui.add(model, 'reset').onFinishChange(() => {
-                plot(chart, model)
+            const view = new ThreeDraw(model, {
+                div: 'modelDiv',
+                drawOptions,
             })
 
-            return gui
-        }
+            util.toWindow({ util, model, view })
 
-        function initPlot() {
-            const canvas = document.getElementById('plotCanvas')
-            const chart = new Chart(canvas, {
-                type: 'scatter',
-                data: {
-                    // labels: ticks,
-                    datasets: [
-                        {
-                            data: [],
-                            label: 'PhiTheta',
-                            backgroundColor: 'red',
-                            borderColor: 'red',
-                        },
-                    ],
+            const chart = initPlot()
+            const gui = runGui(model, view, chart)
+            plot(chart, model)
+
+            await new Animator(
+                () => {
+                    model.step()
+                    view.draw()
                 },
-            })
-            return chart
-        }
+                -1, // run forever
+                30
+            )
 
-        function plot(chart, model) {
-            chart.clear()
-            const points = model.pixels.map(t => ({
-                x: t.theta * toDeg,
-                y: t.pitch * toDeg,
-            }))
-            chart.data.datasets[0].data = points
-            chart.update()
-        }
-    </script>
-</body>
+            // view.idle()
 
+            function runGui(model, view, chart) {
+                const gui = new dat.GUI()
+
+                // Helper for adding variables to gui.
+                // "listen" to make reset values to appear in gui menu
+                // "onChange" to have model update camera for each change.
+                const guiAddVal = (obj, name, start, stop, step) => {
+                    gui.add(obj, name, start, stop, step)
+                        .listen()
+                        .onChange(val => {
+                            model.moveCamera()
+                            plot(chart, model)
+                        })
+                }
+
+                guiAddVal(model, 'heading', -180, 180, 5)
+                guiAddVal(model, 'pitch', -180, 180, 5)
+                guiAddVal(model, 'roll', -180, 180, 5)
+                guiAddVal(model, 'sphereRadius', 0, 16, 1)
+                guiAddVal(model, 'fieldOfView', 1, 180, 1)
+
+                gui.add(model, 'toggleLinks')
+                gui.add(model, 'reset').onFinishChange(() => {
+                    plot(chart, model)
+                })
+
+                return gui
+            }
+
+            function initPlot() {
+                const canvas = document.getElementById('plotCanvas')
+                const chart = new Chart(canvas, {
+                    type: 'scatter',
+                    data: {
+                        // labels: ticks,
+                        datasets: [
+                            {
+                                data: [],
+                                label: 'PhiTheta',
+                                backgroundColor: 'red',
+                                borderColor: 'red',
+                            },
+                        ],
+                    },
+                })
+                return chart
+            }
+
+            function plot(chart, model) {
+                chart.clear()
+                const points = model.pixels.map(t => ({
+                    x: t.theta * toDeg,
+                    y: t.pitch * toDeg,
+                }))
+                chart.data.datasets[0].data = points
+                chart.update()
+            }
+        </script>
+    </body>
 </html>
