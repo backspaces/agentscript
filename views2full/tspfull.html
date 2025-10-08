@@ -1,36 +1,37 @@
 <html>
+    <head>
+        <title>Tsp</title>
+    </head>
 
-<head>
-    <title>Tsp</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Model from '/models/TspModel.js'
+            import TwoDrawOptions from '../views2mv/tspOptions.js'
 
-        import Model from 'https://code.agentscript.org/models/TspModel.js'
-        import TwoDrawOptions from '../views2mv/tspOptions.js'
+            const patchSize = 6
+            const modelOptions = TwoDraw.fullScreenOptions(patchSize)
 
-        const patchSize = 6
-        const modelOptions = TwoDraw.fullScreenOptions(patchSize)
+            const model = new Model(modelOptions)
+            await model.startup()
+            model.setup()
 
-        const model = new Model(modelOptions)
-        await model.startup()
-        model.setup()
+            const view = new TwoDraw(
+                model,
+                TwoDrawOptions('modelDiv', model, patchSize)
+            )
 
-        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model, patchSize))
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            -1, // run forever
-            30 // at fps steps/second
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // run forever
+                30 // at fps steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

@@ -1,35 +1,36 @@
 <html>
+    <head>
+        <title>Exit</title>
+    </head>
 
-<head>
-    <title>Exit</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Model from '/models/ExitModel.js'
+            import TwoDrawOptions from '../views2mv/exitOptions.js'
 
-        import Model from 'https://code.agentscript.org/models/ExitModel.js'
-        import TwoDrawOptions from '../views2mv/exitOptions.js'
+            const patchSize = 10
+            const modelOptions = TwoDraw.fullScreenOptions(patchSize)
 
-        const patchSize = 10
-        const modelOptions = TwoDraw.fullScreenOptions(patchSize)
+            const model = new Model(modelOptions)
+            model.setup()
 
-        const model = new Model(modelOptions)
-        model.setup()
+            const view = new TwoDraw(
+                model,
+                TwoDrawOptions('modelDiv', model, patchSize)
+            )
 
-        const view = new TwoDraw(model, TwoDrawOptions("modelDiv", model, patchSize))
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // how many steps
-            30 // at fps steps/second
-        )
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // how many steps
+                30 // at fps steps/second
+            )
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>
