@@ -49,7 +49,7 @@
                 margin-left: 30px;
             }
         </style>
-        <link rel="stylesheet" href="../ide/style.css" />
+        <link rel="stylesheet" href="/ide/style.css" />
         <!-- <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
             rel="stylesheet"
@@ -59,10 +59,10 @@
     <body>
         <header id="navDiv">
             <div class="button-row">
-                <a class="nav-button" href="../ide/">Agentscript</a>
+                <a class="nav-button" href="/ide/">Agentscript</a>
                 <div class="spacer"></div>
                 <a class="nav-button" href="./examples.html">Examples</a>
-                <a class="nav-button" href="../docs">Docs</a>
+                <a class="nav-button" href="/docs">Docs</a>
                 <a
                     class="nav-button"
                     href="https://github.com/backspaces/agentscript?tab=readme-ov-file#AgentScript"
@@ -226,7 +226,7 @@
         </div>
 
         <script type="module">
-            import { getWebDAVClient } from '../examples/getWebDAVClient.js'
+            import { getWebDAVClient } from '/examples/getWebDAVClient.js'
             const [client] = getWebDAVClient()
 
             // function getUserName() {
@@ -275,7 +275,7 @@
                 el.addEventListener('click', async () => {
                     const model = el.dataset.model
                     if (model === 'Snippets') {
-                        window.location.href = '../ide/Snippets.html'
+                        window.location.href = '/ide/Snippets.html'
                     } else {
                         const user = getUserName()
                         await ensureExampleCopied(model, user)

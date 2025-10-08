@@ -70,7 +70,7 @@ wrapper.dataset.id
 
 =======================================
 To convert any of the view2/ demos:
-Add: import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
+Add: import * as UI from '/uielements/uielements.js'
 Set anim steps to -1
 Add a bit of boiler plate:
 

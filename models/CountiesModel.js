@@ -1,6 +1,6 @@
 import * as util from '/src/utils.js'
 import HelloModel from '/models/HelloModel.js'
-import { booleanPointInPolygon } from '../vendor/turfImports.js'
+import { booleanPointInPolygon } from '/vendor/turfImports.js'
 import counties from './data/nmcounties.json' with { type: 'json' }
 
 class CountiesModel extends HelloModel {

@@ -9,7 +9,7 @@ const [client, baseURL] = getWebDAVClient('acequia') /// 'deno' or 'acequia'
 console.log('client', client)
 console.log('baseURL', baseURL)
 
-// const LOCAL_EXAMPLES_DIR = '../examples'
+// const LOCAL_EXAMPLES_DIR = '/examples'
 const LOCAL_EXAMPLES_DIR = '.'
 const REMOTE_BASE = '/agentscript/ide/examples/'
 

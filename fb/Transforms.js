@@ -1,6 +1,6 @@
 import firebase from 'https://cdn.skypack.dev/@firebase/app'
 import 'https://cdn.skypack.dev/@firebase/database'
-import * as util from '../src/utils.js'
+import * as util from '/src/utils.js'
 import config from './Config.js'
 
 export default class Transforms {

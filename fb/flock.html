@@ -1,33 +1,31 @@
 <html>
+    <head>
+        <title>Flock</title>
+    </head>
 
-<head>
-    <title>Flock</title>
-</head>
+    <body>
+        <script type="module">
+            import Model from '/models/FlockModel.js'
+            import * as util from '/src/utils.js'
+            import Transforms from './Transforms.js'
 
-<body>
-    <script type="module">
-        import Model from '../models/FlockModel.js'
-        import * as util from '../src/utils.js'
-        import Transforms from './Transforms.js'
+            const transforms = new Transforms('flock')
 
-        const transforms = new Transforms('flock')
+            // async function run() {
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-        // async function run() {
-        const model = new Model()
-        await model.startup()
-        model.setup()
-
-        await util.timeoutLoop(
-            () => {
-                model.step()
-                transforms.step(model)
-            },
-            -1, // run forever
-            33
-        )
-        // }
-        // run()
-    </script>
-</body>
-
+            await util.timeoutLoop(
+                () => {
+                    model.step()
+                    transforms.step(model)
+                },
+                -1, // run forever
+                33
+            )
+            // }
+            // run()
+        </script>
+    </body>
 </html>

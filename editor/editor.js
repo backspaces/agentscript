@@ -1,5 +1,5 @@
 // import { AuthType, createClient } from 'https://esm.sh/webdav@5.8.0'
-import { getWebDAVClient } from '../examples/getWebDAVClient.js'
+import { getWebDAVClient } from '/examples/getWebDAVClient.js'
 const [client, baseURL] = getWebDAVClient()
 
 console.log('client', client)
