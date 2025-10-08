@@ -1,91 +1,128 @@
 <html>
+    <head>
+        <title>Keys</title>
+    </head>
 
-<head>
-    <title>Keys</title>
-</head>
+    <body style="font-family: 'Arial', sans-serif; font-size: 16px">
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Model from '/models/HelloModel.js'
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
 
-<body style="font-family: 'Arial', sans-serif; font-size: 16px;">
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Keyboard from '/src/Keyboard.js'
 
-        import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions: {
+                    turtlesSize: 2,
+                    linksWidth: 2,
+                },
+            })
 
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 20,
-            drawOptions: {
-                turtlesSize: 2,
-                linksWidth: 2,
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // run forever
+                30 // 30 fps
+            )
+
+            function bumpTurtleSize(n) {
+                view.drawOptions.turtlesSize += n
+                view.drawOptions.turtlesSize = Math.max(
+                    0,
+                    view.drawOptions.turtlesSize
+                )
             }
-        })
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            -1, // run forever
-            30 // 30 fps
-        )
-
-        function bumpTurtleSize(n) {
-            view.drawOptions.turtlesSize += n
-            view.drawOptions.turtlesSize = Math.max(0, view.drawOptions.turtlesSize)
-        }
-        function swapModelLinks() {
-            if (model.links.length > 0) {
-                // "model.links.ask(l => l.die())" fails! each die changes links
-                while (model.links.length > 0) model.links[0].die()
-            } else {
-                model.turtles.ask(t => {
-                    model.links.create(t, model.turtles.otherOneOf(t))
-                })
+            function swapModelLinks() {
+                if (model.links.length > 0) {
+                    // "model.links.ask(l => l.die())" fails! each die changes links
+                    while (model.links.length > 0) model.links[0].die()
+                } else {
+                    model.turtles.ask(t => {
+                        model.links.create(t, model.turtles.otherOneOf(t))
+                    })
+                }
             }
-        }
-        const keyCommands = [
-            { key: 't', cmd: () => anim.toggle() },
+            const keyCommands = [
+                { key: 't', cmd: () => anim.toggle() },
 
-            { key: '1', cmd: () => anim.setFps(10) },
-            { key: '2', cmd: () => anim.setFps(30) },
-            { key: '3', cmd: () => anim.setFps(100) },
+                { key: '1', cmd: () => anim.setFps(10) },
+                { key: '2', cmd: () => anim.setFps(30) },
+                { key: '3', cmd: () => anim.setFps(100) },
 
-            { key: '<', cmd: () => bumpTurtleSize(-1) },
-            { key: '>', cmd: () => bumpTurtleSize(+1) },
+                { key: '<', cmd: () => bumpTurtleSize(-1) },
+                { key: '>', cmd: () => bumpTurtleSize(+1) },
 
-            { key: 'd', cmd: () => view.drawOptions.turtlesShape = 'dart' },
-            { key: 'b', cmd: () => view.drawOptions.turtlesShape = 'bug' },
-            { key: 'p', cmd: () => view.drawOptions.turtlesShape = 'person' },
-            { key: 'a', cmd: () => view.drawOptions.turtlesShape = 'arrow' },
+                {
+                    key: 'd',
+                    cmd: () => (view.drawOptions.turtlesShape = 'dart'),
+                },
+                {
+                    key: 'b',
+                    cmd: () => (view.drawOptions.turtlesShape = 'bug'),
+                },
+                {
+                    key: 'p',
+                    cmd: () => (view.drawOptions.turtlesShape = 'person'),
+                },
+                {
+                    key: 'a',
+                    cmd: () => (view.drawOptions.turtlesShape = 'arrow'),
+                },
 
-            { key: 'L', cmd: () => swapModelLinks() },
+                { key: 'L', cmd: () => swapModelLinks() },
 
-            { key: 'F2', cmd: () => view.drawOptions.turtlesColor = 'red' },
-            { key: 'F3', cmd: () => view.drawOptions.turtlesColor = 'random' },
+                {
+                    key: 'F2',
+                    cmd: () => (view.drawOptions.turtlesColor = 'red'),
+                },
+                {
+                    key: 'F3',
+                    cmd: () => (view.drawOptions.turtlesColor = 'random'),
+                },
 
-            { key: 'å', cmd: () => view.drawOptions.linksWidth = 2 }, // alt a
-            { key: 'Å', cmd: () => view.drawOptions.linksWidth = 4 }, // alt A
+                { key: 'å', cmd: () => (view.drawOptions.linksWidth = 2) }, // alt a
+                { key: 'Å', cmd: () => (view.drawOptions.linksWidth = 4) }, // alt A
 
-            { key: 'Escape', cmd: () => model.turtles.ask(t => t.rotate(90)) },
+                {
+                    key: 'Escape',
+                    cmd: () => model.turtles.ask(t => t.rotate(90)),
+                },
 
-            { key: 'ArrowDown', cmd: () => model.turtles.ask(t => t.heading = 180) },
-            { key: 'ArrowUp', cmd: () => model.turtles.ask(t => t.heading = 0) },
-            { key: 'ArrowRight', cmd: () => model.turtles.ask(t => t.heading = 90) },
-            { key: 'ArrowLeft', cmd: () => model.turtles.ask(t => t.heading = 270) },
+                {
+                    key: 'ArrowDown',
+                    cmd: () => model.turtles.ask(t => (t.heading = 180)),
+                },
+                {
+                    key: 'ArrowUp',
+                    cmd: () => model.turtles.ask(t => (t.heading = 0)),
+                },
+                {
+                    key: 'ArrowRight',
+                    cmd: () => model.turtles.ask(t => (t.heading = 90)),
+                },
+                {
+                    key: 'ArrowLeft',
+                    cmd: () => model.turtles.ask(t => (t.heading = 270)),
+                },
+            ]
+            const keyboard = new Keyboard(keyCommands).start()
 
-        ]
-        const keyboard = new Keyboard(keyCommands).start()
-
-        util.printToPage('Our keyboard commands are:', 'textDiv')
-        const keyCmds = []
-        keyCommands.forEach(kc => keyCmds.push('key: ' + kc.key + '; cmd: ' + kc.cmd))
-        util.printToPage(keyCmds, 'textDiv')
-        util.printToPage(`Try each of thm to see the results.
+            util.printToPage('Our keyboard commands are:', 'textDiv')
+            const keyCmds = []
+            keyCommands.forEach(kc =>
+                keyCmds.push('key: ' + kc.key + '; cmd: ' + kc.cmd)
+            )
+            util.printToPage(keyCmds, 'textDiv')
+            util.printToPage(
+                `Try each of thm to see the results.
 
 Note that å snd Å are Alt-a and Alt-A (Alt = Option on Mac).
 And < and > and L are Shift-.and Shift-, and Shift-l.
@@ -94,15 +131,15 @@ To find the character for any modified character such as Alt-a,
 simply type it in an editor, terminal, or browser dev tools.
 
 Example: type Shift + Alt + a and you'll get Å above`,
-            'textDiv')
+                'textDiv'
+            )
 
-        util.toWindow({ anim, model, view, keyboard, keyCommands })
-    </script>
+            util.toWindow({ anim, model, view, keyboard, keyCommands })
+        </script>
 
-    <div style="display: flex; gap: 20px">
-        <div id="modelDiv"></div>
-        <div id="textDiv"></div>
-    </div>
-</body>
-
+        <div style="display: flex; gap: 20px">
+            <div id="modelDiv"></div>
+            <div id="textDiv"></div>
+        </div>
+    </body>
 </html>

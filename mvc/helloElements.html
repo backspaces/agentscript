@@ -1,59 +1,56 @@
 <html>
+    <head>
+        <title>HelloElements</title>
 
-<head>
-    <title>HelloElements</title>
+        <!-- These are required to install css and html -->
+        <script type="module" src="/uielements/uielements.html.js"></script>
+        <link rel="stylesheet" href="/uielements/uielements.css" />
+    </head>
 
-    <!-- These are required to install css and html -->
-    <script type="module" src="https://code.agentscript.org/uielements/uielements.html.js"></script>
-    <link rel="stylesheet" href="https://code.agentscript.org/uielements/uielements.css" />
-</head>
+    <body>
+        <script type="module">
+            // import * as UI from '/uielements/uielements.js'
+            // import elements from '/uielements/minElements.js'
+            import * as UI from '../uielements/uielements.js'
+            // import elements from './helloElements.js'
 
-<body>
-    <script type="module">
-        // import * as UI from 'https://code.agentscript.org/uielements/uielements.js'
-        // import elements from 'https://code.agentscript.org/uielements/minElements.js'
-        import * as UI from '../uielements/uielements.js'
-        // import elements from './helloElements.js'
+            // ====== The views2 code ======
 
-        // ====== The views2 code ======
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/HelloModel.js'
 
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 10,
+                drawOptions: {
+                    turtlesSize: 1.5,
+                },
+            })
 
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 10,
-            drawOptions: {
-                turtlesSize: 1.5,
-            }
-        })
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // how many steps
+                30 // at fps steps/second
+            )
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            500, // how many steps
-            30 // at fps steps/second
-        )
+            // ====== Additional code for uielements usage ======
 
-        // ====== Additional code for uielements usage ======
+            anim.stop() // let uielements start/stop animator
+            anim.setSteps(-1) // in case you want to run forever
 
-        anim.stop() // let uielements start/stop animator
-        anim.setSteps(-1) // in case you want to run forever
+            UI.setAppState(model, view, anim) // connect model to uielements
 
-        UI.setAppState(model, view, anim) // connect model to uielements
-
-        UI.createElements() // use minElements, editable
-        // UI.createElements(elements, true) // use elements from file, editable
-        // UI.createElements(elements) // use elements from file, not editable
-
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            UI.createElements() // use minElements, editable
+            // UI.createElements(elements, true) // use elements from file, editable
+            // UI.createElements(elements) // use elements from file, not editable
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

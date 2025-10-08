@@ -1,98 +1,133 @@
 <html>
+    <head>
+        <title>Kelp Forest => Urchin Barren</title>
+    </head>
 
-<head>
-    <title>Kelp Forest => Urchin Barren</title>
-</head>
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/KelpForestModel.js'
 
-<body>
-    <script type="module">
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/KelpForestModel.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
-
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 20,
-            drawOptions: {
-                turtlesSize: (t) => {
-                    if (t.breed.name === "urchin") return 1
-                    if (t.breed.name === "kelp") return 2
-                    return 1.5 // seaStar
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions: {
+                    turtlesSize: t => {
+                        if (t.breed.name === 'urchin') return 1
+                        if (t.breed.name === 'kelp') return 2
+                        return 1.5 // seaStar
+                    },
+                    turtlesColor: t => {
+                        if (t.breed.name === 'urchin') return 'purple'
+                        if (t.breed.name === 'kelp') return 'green'
+                        return 'orange' // seaStar
+                    },
+                    turtlesShape: t => {
+                        if (t.breed.name === 'urchin') return 'circle'
+                        if (t.breed.name === 'kelp') return 'dart'
+                        return 'pentagon' // seaStar
+                    },
                 },
-                turtlesColor: (t) => {
-                    if (t.breed.name === "urchin") return "purple"
-                    if (t.breed.name === "kelp") return "green"
-                    return "orange" // seaStar
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    updateSteps()
                 },
-                turtlesShape: (t) => {
-                    if (t.breed.name === "urchin") return "circle"
-                    if (t.breed.name === "kelp") return "dart"
-                    return "pentagon" // seaStar
-                },
+                5 * 365, // how many steps, here 5 years,
+                30 // at fps steps/second
+            )
+
+            Object.assign(window, { model, view, anim }) // debugging
+
+            // The above is views2/kelpforest.html w/ updateSteps() added
+            // the following allows running it in a nicely arranged web page
+
+            function updateSteps() {
+                // const year = 1 + Math.floor(anim.ticks / 365) // start from 1
+                const year = model.year(anim.ticks) // starts from 1
+                document.getElementById('stepCount').innerHTML = `Year: ${year}`
             }
-        })
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-                updateSteps()
-            },
-            5 * 365, // how many steps, here 5 years,
-            30 // at fps steps/second
-        )
+            document
+                .getElementById('startButton')
+                .addEventListener('click', () => {
+                    model.numKelp = parseInt(
+                        document.getElementById('kelp').value
+                    )
+                    model.numSeastar = parseInt(
+                        document.getElementById('seaStar').value
+                    )
+                    model.numUrchin = parseInt(
+                        document.getElementById('urchin').value
+                    )
+                    anim.restart(model, view) // calls model.setup()
+                    if (!anim.isRunning()) anim.start()
+                })
 
-        Object.assign(window, { model, view, anim }) // debugging
+            document
+                .getElementById('pauseButton')
+                .addEventListener('click', () => {
+                    anim.isRunning() ? anim.stop() : anim.start()
+                })
+        </script>
 
-        // The above is views2/kelpforest.html w/ updateSteps() added
-        // the following allows running it in a nicely arranged web page
+        <h1 style="margin-top: 20px; text-align: center">
+            In a Kelp stand off the Mendocino Coast....
+        </h1>
+        <div
+            id="bodyContainer"
+            style="display: flex; justify-content: center; align-items: center"
+        >
+            <div
+                id="inputContainer"
+                style="margin: 20px; display: flex; flex-direction: column"
+            >
+                <p id="stepCount">Year:</p>
 
-        function updateSteps() {
-            // const year = 1 + Math.floor(anim.ticks / 365) // start from 1
-            const year = model.year(anim.ticks) // starts from 1
-            document.getElementById("stepCount").innerHTML = `Year: ${year}`;
-        }
+                <label for="kelp">Kelp:</label>
+                <input
+                    type="number"
+                    id="kelp"
+                    value="500"
+                    min="0"
+                    style="margin: 2px; padding: 2px"
+                />
 
-        document.getElementById("startButton").addEventListener("click", () => {
-            model.numKelp = parseInt(document.getElementById("kelp").value)
-            model.numSeastar = parseInt(document.getElementById("seaStar").value)
-            model.numUrchin = parseInt(document.getElementById("urchin").value)
-            anim.restart(model, view) // calls model.setup()
-            if (!anim.isRunning()) anim.start()
-        });
+                <label for="urchin">Urchin:</label>
+                <input
+                    type="number"
+                    id="urchin"
+                    value="50"
+                    min="0"
+                    style="margin: 2px; padding: 2px"
+                />
 
-        document.getElementById("pauseButton").addEventListener("click", () => {
-            anim.isRunning() ? anim.stop() : anim.start()
-        });
-    </script>
+                <label for="seaStar">Seastars:</label>
+                <input
+                    type="number"
+                    id="seaStar"
+                    value="5"
+                    min="0"
+                    style="margin: 2px; padding: 2px"
+                />
 
-    <h1 style="margin-top: 20px; text-align: center">
-        In a Kelp stand off the Mendocino Coast....
-    </h1>
-    <div id="bodyContainer" style="display: flex; justify-content: center; align-items: center">
-        <div id="inputContainer" style="margin: 20px; display: flex; flex-direction: column">
-            <p id="stepCount">Year:</p>
+                <button id="startButton" style="margin: 5px">
+                    Start Simulation
+                </button>
 
-            <label for="kelp">Kelp:</label>
-            <input type="number" id="kelp" value="500" min="0" style="margin: 2px; padding: 2px" />
+                <button id="pauseButton" style="margin: 5px">
+                    Pause/Play Simulation
+                </button>
+            </div>
 
-            <label for="urchin">Urchin:</label>
-            <input type="number" id="urchin" value="50" min="0" style="margin: 2px; padding: 2px" />
-
-            <label for="seaStar">Seastars:</label>
-            <input type="number" id="seaStar" value="5" min="0" style="margin: 2px; padding: 2px" />
-
-            <button id="startButton" style="margin: 5px">Start Simulation</button>
-
-            <button id="pauseButton" style="margin: 5px"> Pause/Play Simulation </button>
+            <div id="modelDiv"></div>
         </div>
-
-        <div id="modelDiv"></div>
-    </div>
-
-</body>
-
+    </body>
 </html>

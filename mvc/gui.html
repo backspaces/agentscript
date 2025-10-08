@@ -1,104 +1,118 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>GUI</title>
+    </head>
 
-<head>
-    <title>GUI</title>
-</head>
+    <body>
+        <div id="modelDiv"></div>
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Model from '/models/HelloModel.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Animator from '/src/Animator.js'
 
-<body>
-    <div id="modelDiv"></div>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
+            import GUI from '/src/GUI.js'
+            import Mouse from '/src/Mouse.js'
 
-        import GUI from 'https://code.agentscript.org/src/GUI.js'
-        import Mouse from 'https://code.agentscript.org/src/Mouse.js'
+            const model = new Model()
+            model.setup()
 
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+            })
 
-        const model = new Model()
-        model.setup()
-
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 20,
-        })
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            -1, // run forever
-            30 // fps
-        ).startStats()
-        anim.setIdle(() => view.draw())
-
-        util.toWindow({ model, view, anim })
-
-        let selectedTurtle
-        const mouse = new Mouse(model, view, mouse => {
-            const { x, y, action } = mouse
-            switch (action) {
-                case 'mousedown':
-                    // anim.stop()
-                    selectedTurtle = model.turtles.minOneOf(t => t.distanceXY(x, y))
-                    break
-                case 'mousedrag':
-                    if (selectedTurtle) selectedTurtle.setxy(x, y)
-                    break
-                case 'mouseup':
-                    // anim.start()
-                    selectedTurtle = null
-                    break
-            }
-        }).start()
-
-        const gui = new GUI({
-            fps: {
-                slider: [40, [5, 60, 5]],
-                cmd: val => anim.setFps(val),
-            },
-
-            'Turtles Folder': {
-                turtlesShape: {
-                    chooser: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
-                    cmd: val => view.drawOptions.turtlesShape = val,
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
                 },
-                turtlesSize: {
-                    slider: [1, [0.5, 10, 0.5]],
-                    cmd: val => view.drawOptions.turtlesSize = val,
+                -1, // run forever
+                30 // fps
+            ).startStats()
+            anim.setIdle(() => view.draw())
+
+            util.toWindow({ model, view, anim })
+
+            let selectedTurtle
+            const mouse = new Mouse(model, view, mouse => {
+                const { x, y, action } = mouse
+                switch (action) {
+                    case 'mousedown':
+                        // anim.stop()
+                        selectedTurtle = model.turtles.minOneOf(t =>
+                            t.distanceXY(x, y)
+                        )
+                        break
+                    case 'mousedrag':
+                        if (selectedTurtle) selectedTurtle.setxy(x, y)
+                        break
+                    case 'mouseup':
+                        // anim.start()
+                        selectedTurtle = null
+                        break
+                }
+            }).start()
+
+            const gui = new GUI({
+                fps: {
+                    slider: [40, [5, 60, 5]],
+                    cmd: val => anim.setFps(val),
                 },
-                turtlesColor: {
-                    color: '#ff0000',
-                    cmd: val => view.drawOptions.turtlesColor = val,
+
+                'Turtles Folder': {
+                    turtlesShape: {
+                        chooser: [
+                            'bug',
+                            ['bug', 'dart', 'person', 'circle', 'arrow'],
+                        ],
+                        cmd: val => (view.drawOptions.turtlesShape = val),
+                    },
+                    turtlesSize: {
+                        slider: [1, [0.5, 10, 0.5]],
+                        cmd: val => (view.drawOptions.turtlesSize = val),
+                    },
+                    turtlesColor: {
+                        color: '#ff0000',
+                        cmd: val => (view.drawOptions.turtlesColor = val),
+                    },
                 },
-            },
 
-            downloadCanvas: {
-                button: () => view.downloadCanvas(),
-            },
-            stop: {
-                switch: false,
-                cmd: val => { if (val) { anim.stop() } else { anim.start() } },
-            },
-            useMouse: {
-                switch: false,
-                cmd: val => { if (val) { mouse.start() } else { mouse.stop() } },
-            },
-            setTitle: {
-                input: 'Play',
-                cmd: val => document.title = val
-            },
-            modelTicks: {
-                monitor: [model, 'ticks'], // the object and property to monitor
-            },
-        })
+                downloadCanvas: {
+                    button: () => view.downloadCanvas(),
+                },
+                stop: {
+                    switch: false,
+                    cmd: val => {
+                        if (val) {
+                            anim.stop()
+                        } else {
+                            anim.start()
+                        }
+                    },
+                },
+                useMouse: {
+                    switch: false,
+                    cmd: val => {
+                        if (val) {
+                            mouse.start()
+                        } else {
+                            mouse.stop()
+                        }
+                    },
+                },
+                setTitle: {
+                    input: 'Play',
+                    cmd: val => (document.title = val),
+                },
+                modelTicks: {
+                    monitor: [model, 'ticks'], // the object and property to monitor
+                },
+            })
 
-        util.toWindow({ GUI, gui })
-        // util.toWindow({ model, view, anim, GUI, gui })
-    </script>
-</body>
-
+            util.toWindow({ GUI, gui })
+            // util.toWindow({ model, view, anim, GUI, gui })
+        </script>
+    </body>
 </html>

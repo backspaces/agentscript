@@ -1,72 +1,75 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>HelloGui</title>
+    </head>
 
-<head>
-    <title>HelloGui</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Model from '/models/HelloModel.js'
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
 
-<body>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import GUI from '/src/GUI.js'
 
-        import GUI from 'https://code.agentscript.org/src/GUI.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions: {
+                    turtlesSize: 3,
+                },
+            })
 
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 20,
-            drawOptions: {
-                turtlesSize: 3,
-            }
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // run forever, use GUI to start/stop
+                30 // 30 fps
+            )
 
-        })
+            // Each of the 7 gui types:
+            const gui = new GUI({
+                fps: {
+                    slider: [30, [5, 60, 5]],
+                    cmd: val => anim.setFps(val),
+                },
+                turtlesShape: {
+                    chooser: ['bug', ['bug', 'dart', 'person']],
+                    cmd: val => (view.drawOptions.turtlesShape = val),
+                },
+                turtlesColor: {
+                    color: '#ff0000',
+                    cmd: val => (view.drawOptions.turtlesColor = val),
+                },
+                pause: {
+                    switch: false,
+                    cmd: val => {
+                        if (val) {
+                            anim.stop()
+                        } else {
+                            anim.start()
+                        }
+                    },
+                },
+                setTitle: {
+                    input: document.title,
+                    cmd: val => (document.title = val),
+                },
+                downloadCanvas: {
+                    button: () => view.downloadCanvas(),
+                },
+                modelTicks: {
+                    monitor: [model, 'ticks'],
+                },
+            })
+        </script>
 
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            -1, // run forever, use GUI to start/stop
-            30 // 30 fps
-        )
-
-        // Each of the 7 gui types:
-        const gui = new GUI({
-            fps: {
-                slider: [30, [5, 60, 5]],
-                cmd: val => anim.setFps(val),
-            },
-            turtlesShape: {
-                chooser: ['bug', ['bug', 'dart', 'person']],
-                cmd: val => view.drawOptions.turtlesShape = val,
-            },
-            turtlesColor: {
-                color: '#ff0000',
-                cmd: val => view.drawOptions.turtlesColor = val,
-            },
-            pause: {
-                switch: false,
-                cmd: val => { if (val) { anim.stop() } else { anim.start() } },
-            },
-            setTitle: {
-                input: document.title,
-                cmd: val => document.title = val
-            },
-            downloadCanvas: {
-                button: () => view.downloadCanvas(),
-            },
-            modelTicks: {
-                monitor: [model, 'ticks'],
-            },
-        })
-    </script>
-
-    <div id="modelDiv"></div>
-</body>
-
+        <div id="modelDiv"></div>
+    </body>
 </html>

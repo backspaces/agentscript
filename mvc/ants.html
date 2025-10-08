@@ -1,181 +1,188 @@
 <html>
+    <head>
+        <title>ants</title>
+    </head>
 
-<head>
-    <title>ants</title>
-</head>
+    <body style="font-family: 'Arial', sans-serif; font-size: 16px">
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Model from '/models/AntsModel.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            // import Color from '/src/Color.js'
+            import ColorMap from '/src/ColorMap.js'
+            import Animator from '/src/Animator.js'
 
-<body style="font-family: 'Arial', sans-serif; font-size: 16px;">
+            import Mouse from '/src/Mouse.js'
+            import Keyboard from '/src/Keyboard.js'
+            import GUI from '/src/GUI.js'
+            import Plot from '/src/Plot.js'
 
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Model from 'https://code.agentscript.org/models/AntsModel.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        // import Color from 'https://code.agentscript.org/src/Color.js'
-        import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
+            // ==== Define draw options, colors and colormaps ====
 
-        import Mouse from 'https://code.agentscript.org/src/Mouse.js'
-        import Keyboard from 'https://code.agentscript.org/src/Keyboard.js'
-        import GUI from 'https://code.agentscript.org/src/GUI.js'
-        import Plot from 'https://code.agentscript.org/src/Plot.js'
-
-        // ==== Define draw options, colors and colormaps ====
-
-        // const nestColor = Color.typedColor('yellow')
-        // const foodColor = Color.typedColor('blue')
-        const nestColor = 'yellow'
-        const foodColor = 'blue'
-        const nestColorMap = ColorMap.gradientColorMap(20, [
-            'black',
-            nestColor,
-        ])
-        const foodColorMap = ColorMap.gradientColorMap(20, [
-            'black',
-            foodColor,
-        ])
-        const drawOptions = {
-            patchesColor: p => {
-                if (p.isNest) return nestColor
-                if (p.isFood) return foodColor
-                return p.foodPheromone > p.nestPheromone
-                    ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
-                    : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
-            },
-            turtlesShape: 'bug',
-            turtlesSize: 3,
-            turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
-        }
-
-        // ==== Define model, view, anim ====
-
-        const model = new Model()
-        model.setup()
-
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            useSprites: true, // ant shape difficult to draw
-            width: 500,
-            drawOptions,
-        })
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-                plot.updatePlotFromModel(model)
-            },
-            -1, // run forever
-            30 // fps
-        ).startStats()
-        anim.setIdle(() => view.draw())
-
-        // ==== Define keyboard commands ====
-
-        const keyCommands = [
-            { key: 't', cmd: () => anim.toggle() },
-            { key: 'o', cmd: () => anim.once() },
-            { key: 'd', cmd: () => view.downloadCanvas() },
-            { key: '+', cmd: () => view.downloadCanvas() },
-        ]
-        const keyboard = new Keyboard(keyCommands).start()
-
-        // ============ Mouse Handling ==================
-
-        let selectedTurtle
-        const mouse = new Mouse(model, view, mouse => {
-            const { x, y, action } = mouse
-            switch (action) {
-                case 'mousedown':
-                    selectedTurtle = model.turtles.minOneOf(t => t.distanceXY(x, y))
-                    break
-                case 'mousedrag':
-                    if (selectedTurtle) selectedTurtle.setxy(x, y)
-                    break
-                case 'mouseup':
-                    selectedTurtle = null
-                    break
+            // const nestColor = Color.typedColor('yellow')
+            // const foodColor = Color.typedColor('blue')
+            const nestColor = 'yellow'
+            const foodColor = 'blue'
+            const nestColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                nestColor,
+            ])
+            const foodColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                foodColor,
+            ])
+            const drawOptions = {
+                patchesColor: p => {
+                    if (p.isNest) return nestColor
+                    if (p.isFood) return foodColor
+                    return p.foodPheromone > p.nestPheromone
+                        ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
+                        : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+                },
+                turtlesShape: 'bug',
+                turtlesSize: 3,
+                turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
             }
-            view.draw() // Draw whenever mouse has an event
-        }).start()
 
-        // ==== Define gui commands ====
+            // ==== Define model, view, anim ====
 
-        let template = {
-            fps: {
-                slider: [20, [5, 60, 5]],
-                cmd: val => anim.setFps(val),
-            },
-            stop: {
-                switch: !anim.isRunning, // bool
-                cmd: val => { if (val) { anim.stop() } else { anim.start() } },
-            },
-            restart: {
-                button: () => anim.restart(model, view, plot)
-            },
-            once: {
-                button: () => anim.once()
-            },
-            patchSize: {
-                slider: [4, [0, 15, 1]],
-                cmd: val => view.reset(val),
-            },
-            turtlesShape: {
-                chooser: ['bug', ['bug', 'dart', 'person', 'circle', 'arrow']],
-                cmd: val => view.drawOptions.turtlesShape = val,
-            },
-            turtlesSize: {
-                slider: [6, [1, 10, 1]],
-                cmd: val => view.drawOptions.turtlesSize = val,
-            },
-            modelTicks: {
-                monitor: [model, 'ticks'],
-            },
-            downloadCanvas: {
-                button: () => view.downloadCanvas()
-            },
-        }
-        const gui = new GUI(template)
+            const model = new Model()
+            model.setup()
 
-        // ==== Setup Plot and provide an updater called by anim ====
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                useSprites: true, // ant shape difficult to draw
+                width: 500,
+                drawOptions,
+            })
 
-        const pens = {
-            foodSeekers: 'blue',
-            nestSeekers: 'red',
-        }
-        const options = {
-            title: 'food and nest seekers',
-            width: 800,
-            height: 200,
-            legend: {
-                show: false
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    plot.updatePlotFromModel(model)
+                },
+                -1, // run forever
+                30 // fps
+            ).startStats()
+            anim.setIdle(() => view.draw())
+
+            // ==== Define keyboard commands ====
+
+            const keyCommands = [
+                { key: 't', cmd: () => anim.toggle() },
+                { key: 'o', cmd: () => anim.once() },
+                { key: 'd', cmd: () => view.downloadCanvas() },
+                { key: '+', cmd: () => view.downloadCanvas() },
+            ]
+            const keyboard = new Keyboard(keyCommands).start()
+
+            // ============ Mouse Handling ==================
+
+            let selectedTurtle
+            const mouse = new Mouse(model, view, mouse => {
+                const { x, y, action } = mouse
+                switch (action) {
+                    case 'mousedown':
+                        selectedTurtle = model.turtles.minOneOf(t =>
+                            t.distanceXY(x, y)
+                        )
+                        break
+                    case 'mousedrag':
+                        if (selectedTurtle) selectedTurtle.setxy(x, y)
+                        break
+                    case 'mouseup':
+                        selectedTurtle = null
+                        break
+                }
+                view.draw() // Draw whenever mouse has an event
+            }).start()
+
+            // ==== Define gui commands ====
+
+            let template = {
+                fps: {
+                    slider: [20, [5, 60, 5]],
+                    cmd: val => anim.setFps(val),
+                },
+                stop: {
+                    switch: !anim.isRunning, // bool
+                    cmd: val => {
+                        if (val) {
+                            anim.stop()
+                        } else {
+                            anim.start()
+                        }
+                    },
+                },
+                restart: {
+                    button: () => anim.restart(model, view, plot),
+                },
+                once: {
+                    button: () => anim.once(),
+                },
+                patchSize: {
+                    slider: [4, [0, 15, 1]],
+                    cmd: val => view.reset(val),
+                },
+                turtlesShape: {
+                    chooser: [
+                        'bug',
+                        ['bug', 'dart', 'person', 'circle', 'arrow'],
+                    ],
+                    cmd: val => (view.drawOptions.turtlesShape = val),
+                },
+                turtlesSize: {
+                    slider: [6, [1, 10, 1]],
+                    cmd: val => (view.drawOptions.turtlesSize = val),
+                },
+                modelTicks: {
+                    monitor: [model, 'ticks'],
+                },
+                downloadCanvas: {
+                    button: () => view.downloadCanvas(),
+                },
             }
-        }
-        const plot = new Plot('plotDiv', pens, options)
+            const gui = new GUI(template)
 
-        // ==== End, debug if needed
+            // ==== Setup Plot and provide an updater called by anim ====
 
-        util.toWindow({ util, model, view, anim, gui, keyboard })
-    </script>
+            const pens = {
+                foodSeekers: 'blue',
+                nestSeekers: 'red',
+            }
+            const options = {
+                title: 'food and nest seekers',
+                width: 800,
+                height: 200,
+                legend: {
+                    show: false,
+                },
+            }
+            const plot = new Plot('plotDiv', pens, options)
 
-    <div id="wrapper" style="display: flex; gap: 30px;">
-        <div id="modelDiv"></div>
-        <div id="textDiv">
-            <h3 style="margin-bottom: 4px;">Keyboard</h3>
-            <ul style="margin: 0;">
-                <li>t: toggle: run/pause</li>
-                <li>o: once: run one step</li>
-                <li>d: download: image canvas</li>
-            </ul>
+            // ==== End, debug if needed
 
-            <h3 style="margin-bottom: 4px;">Mouse</h3>
-            <ul style="margin: 0;">
-                <li>click on turtle to select & drag it</li>
-            </ul>
+            util.toWindow({ util, model, view, anim, gui, keyboard })
+        </script>
+
+        <div id="wrapper" style="display: flex; gap: 30px">
+            <div id="modelDiv"></div>
+            <div id="textDiv">
+                <h3 style="margin-bottom: 4px">Keyboard</h3>
+                <ul style="margin: 0">
+                    <li>t: toggle: run/pause</li>
+                    <li>o: once: run one step</li>
+                    <li>d: download: image canvas</li>
+                </ul>
+
+                <h3 style="margin-bottom: 4px">Mouse</h3>
+                <ul style="margin: 0">
+                    <li>click on turtle to select & drag it</li>
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <div id="plotDiv"></div>
-
-</body>
-
+        <div id="plotDiv"></div>
+    </body>
 </html>

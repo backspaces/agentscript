@@ -1,70 +1,70 @@
 <html>
+    <head>
+        <title>mouse</title>
+    </head>
 
-<head>
-    <title>mouse</title>
-</head>
+    <body>
+        <script type="module">
+            // Note: we don't use animator, but model is driven by mouse behavior!
+            import * as util from '/src/utils.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/HelloModel.js'
 
-<body>
-    <script type="module">
-        // Note: we don't use animator, but model is driven by mouse behavior!
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
+            import Mouse from '/src/Mouse.js'
 
-        import Mouse from 'https://code.agentscript.org/src/Mouse.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const view = new TwoDraw(
+                model,
+                {
+                    div: 'modelDiv',
+                    patchSize: 20,
+                },
+                {
+                    patchesColor: 'black',
+                    linksColor: l => (l === selectedLink ? 'red' : 'gray'),
+                    linksWidth: 2,
+                    turtlesShape: 'circle',
+                    turtlesColor: 'random',
+                }
+            )
 
-        const view = new TwoDraw(
-            model,
-            {
-                div: 'modelDiv',
-                patchSize: 20,
-            },
-            {
-                patchesColor: 'black',
-                linksColor: l => (l === selectedLink ? 'red' : 'gray'),
-                linksWidth: 2,
-                turtlesShape: 'circle',
-                turtlesColor: 'random',
+            let selectedTurtle, selectedLink
+            function mouseCallback(mouse) {
+                let [x, y] = [mouse.x, mouse.y]
+                switch (mouse.action) {
+                    case 'mousedown':
+                        selectedTurtle = model.turtles.minOneOf(t =>
+                            t.distanceXY(x, y)
+                        )
+                        break
+
+                    case 'mousedrag':
+                        if (selectedTurtle) selectedTurtle.setxy(x, y)
+                        break
+
+                    case 'mousemove':
+                        selectedLink = model.links.minOneOf(l =>
+                            l.distanceXY(x, y)
+                        )
+                        break
+
+                    case 'mouseup':
+                        selectedTurtle = null
+                        break
+                }
+                view.draw() // Draw whenever mouse has an event
             }
-        )
 
-        let selectedTurtle, selectedLink
-        function mouseCallback(mouse) {
-            let [x, y] = [mouse.x, mouse.y]
-            switch (mouse.action) {
-                case 'mousedown':
-                    selectedTurtle = model.turtles.minOneOf(t =>
-                        t.distanceXY(x, y)
-                    )
-                    break
+            const mouse = new Mouse(model, view, mouseCallback)
+                .setContinuous()
+                .start()
 
-                case 'mousedrag':
-                    if (selectedTurtle) selectedTurtle.setxy(x, y)
-                    break
+            view.draw() // Draw once to get started
 
-                case 'mousemove':
-                    selectedLink = model.links.minOneOf(l => l.distanceXY(x, y))
-                    break
-
-                case 'mouseup':
-                    selectedTurtle = null
-                    break
-            }
-            view.draw() // Draw whenever mouse has an event
-        }
-
-        const mouse = new Mouse(
-            model, view, mouseCallback
-        ).setContinuous().start()
-
-        view.draw() // Draw once to get started
-
-        util.toWindow({ util, model, view, mouse })
-    </script>
-    <div id="modelDiv"></div>
-</body>
-
+            util.toWindow({ util, model, view, mouse })
+        </script>
+        <div id="modelDiv"></div>
+    </body>
 </html>

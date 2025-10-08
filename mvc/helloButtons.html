@@ -1,62 +1,60 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>HelloButtons</title>
+    </head>
 
-<head>
-    <title>HelloButtons</title>
-</head>
+    <body>
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Model from '/models/HelloModel.js'
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
 
-<body>
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Buttons from '/src/Buttons.js'
 
-        import Buttons from 'https://code.agentscript.org/src/Buttons.js'
+            const model = new Model()
+            model.setup()
 
-        const model = new Model()
-        model.setup()
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions: {
+                    turtlesColor: 'yellow',
+                    turtlesSize: 3,
+                    turtlesShape: 'bug',
+                    linksColor: 'red',
+                    linksWidth: 3,
+                    // patchesMap: 'Jet', // for bright patch colors!
+                },
+            })
 
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 20,
-            drawOptions: {
-                turtlesColor: 'yellow',
-                turtlesSize: 3,
-                turtlesShape: 'bug',
-                linksColor: 'red',
-                linksWidth: 3,
-                // patchesMap: 'Jet', // for bright patch colors!
-            }
-        })
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // run forever, use buttons to start/stop
+                30 // 30 fps
+            )
 
-        const anim = new Animator(
-            () => {
-                model.step()
+            function setShape(shape) {
+                view.drawOptions.turtlesShape = shape
                 view.draw()
-            },
-            -1, // run forever, use buttons to start/stop
-            30 // 30 fps
-        )
+            }
+            const buttons = new Buttons('buttonsDiv', [
+                { name: 'on/off', cmd: () => anim.toggle() },
 
-        function setShape(shape) {
-            view.drawOptions.turtlesShape = shape;
-            view.draw();
-        }
-        const buttons = new Buttons('buttonsDiv', [
-            { name: "on/off", cmd: () => anim.toggle() },
+                { name: 'bug', cmd: () => setShape('bug') },
+                { name: 'arrow', cmd: () => setShape('arrow') },
+                { name: 'dart', cmd: () => setShape('dart') },
 
-            { name: "bug", cmd: () => setShape("bug") },
-            { name: "arrow", cmd: () => setShape("arrow") },
-            { name: "dart", cmd: () => setShape("dart") },
+                { name: 'download image', cmd: () => view.downloadCanvas() },
+            ])
+        </script>
 
-            { name: "download image", cmd: () => view.downloadCanvas() },
-        ])
-    </script>
-
-    <!-- Because the divs are block elements, the buttons will be right under the model. -->
-    <div id="modelDiv"></div>
-    <div id="buttonsDiv"></div>
-</body>
-
+        <!-- Because the divs are block elements, the buttons will be right under the model. -->
+        <div id="modelDiv"></div>
+        <div id="buttonsDiv"></div>
+    </body>
 </html>

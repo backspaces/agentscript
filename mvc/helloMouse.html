@@ -1,80 +1,82 @@
 <html>
+    <head>
+        <title>mouse</title>
+    </head>
 
-<head>
-    <title>mouse</title>
-</head>
+    <body style="font-family: 'Arial', sans-serif; font-size: 16px">
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Model from '/models/HelloModel.js'
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
 
-<body style="font-family: 'Arial', sans-serif; font-size: 16px;">
-    <script type="module">
-        import * as util from 'https://code.agentscript.org/src/utils.js'
-        import Model from 'https://code.agentscript.org/models/HelloModel.js'
-        import Animator from 'https://code.agentscript.org/src/Animator.js'
-        import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+            import Mouse from '/src/Mouse.js'
 
-        import Mouse from 'https://code.agentscript.org/src/Mouse.js'
+            const model = new Model()
+            await model.startup()
+            model.setup()
 
-        const model = new Model()
-        await model.startup()
-        model.setup()
-
-        const drawOptions = {
-            turtlesSize: 2,
-            linksWidth: l => l === selectedLink ? 5 : 2,
-        }
-
-        const view = new TwoDraw(model, {
-            div: 'modelDiv',
-            patchSize: 20,
-            drawOptions
-        })
-
-        const anim = new Animator(
-            () => {
-                model.step()
-                view.draw()
-            },
-            -1, // run forever
-            30 // 30 fps
-        )
-
-        let selectedTurtle, selectedLink
-        function mouseCallback(mouse) {
-            let [x, y] = [mouse.x, mouse.y]
-            switch (mouse.action) {
-                case 'mousedown':
-                    selectedTurtle = model.turtles.minOneOf(t =>
-                        t.distanceXY(x, y)
-                    )
-                    break
-
-                case 'mousedrag':
-                    if (selectedTurtle) selectedTurtle.setxy(x, y)
-                    break
-
-                case 'mousemove':
-                    selectedLink = model.links.minOneOf(l => l.distanceXY(x, y))
-                    break
-
-                case 'mouseup':
-                    selectedTurtle = null
-                    break
+            const drawOptions = {
+                turtlesSize: 2,
+                linksWidth: l => (l === selectedLink ? 5 : 2),
             }
-        }
 
-        const mouse = new Mouse(
-            model, view, mouseCallback
-        ).setContinuous().start() // continuous for mouse move, selectedLink
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions,
+            })
 
-        util.printToPage(`The mouse actions are:
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                -1, // run forever
+                30 // 30 fps
+            )
+
+            let selectedTurtle, selectedLink
+            function mouseCallback(mouse) {
+                let [x, y] = [mouse.x, mouse.y]
+                switch (mouse.action) {
+                    case 'mousedown':
+                        selectedTurtle = model.turtles.minOneOf(t =>
+                            t.distanceXY(x, y)
+                        )
+                        break
+
+                    case 'mousedrag':
+                        if (selectedTurtle) selectedTurtle.setxy(x, y)
+                        break
+
+                    case 'mousemove':
+                        selectedLink = model.links.minOneOf(l =>
+                            l.distanceXY(x, y)
+                        )
+                        break
+
+                    case 'mouseup':
+                        selectedTurtle = null
+                        break
+                }
+            }
+
+            const mouse = new Mouse(model, view, mouseCallback)
+                .setContinuous()
+                .start() // continuous for mouse move, selectedLink
+
+            util.printToPage(
+                `The mouse actions are:
 mouse down + drag: sellect and move closest turtle.
 mouse move: increase width of closest link`,
-            'textDiv')
-    </script>
+                'textDiv'
+            )
+        </script>
 
-    <div style="display: flex; gap: 20px">
-        <div id="modelDiv"></div>
-        <div id="textDiv"></div>
-    </div>
-</body>
-
+        <div style="display: flex; gap: 20px">
+            <div id="modelDiv"></div>
+            <div id="textDiv"></div>
+        </div>
+    </body>
 </html>
