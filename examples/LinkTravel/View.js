@@ -1,4 +1,4 @@
-import TwoDraw from '/src/TwoDraw.js'
+import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
 
 const isNode = t => t.breed.name === 'nodes'
 

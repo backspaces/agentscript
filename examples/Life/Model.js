@@ -1,6 +1,6 @@
-import Model from '/src/Model.js'
-import World from '/src/World.js'
-import * as util from '/src/utils.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
+import World from 'https://code.agentscript.org/src/World.js'
+import * as util from 'https://code.agentscript.org/src/utils.js'
 
 export default class LifeModel extends Model {
     initialDensity = 20 // percent of active cells

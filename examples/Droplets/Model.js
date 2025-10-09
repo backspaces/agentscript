@@ -1,6 +1,6 @@
-import World from '/src/World.js'
-import Model from '/src/Model.js'
-import tileDataSet from '/src/models/data/tile101x101.js'
+import World from 'https://code.agentscript.org/src/World.js'
+import Model from 'https://code.agentscript.org/src/Model.js'
+import tileDataSet from 'https://code.agentscript.org/models/data/tile101x101.js'
 
 class DropletsModel extends Model {
     speed = 0.5

@@ -1,6 +1,6 @@
-import TwoDraw from '/src/TwoDraw.js'
-// import Color from '/src/Color.js'
-import ColorMap from '/src/ColorMap.js'
+import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+// import Color from 'https://code.agentscript.org/src/Color.js'
+import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
 
 export default function (model, div = 'modelDiv') {
     const patchColors = model.patches.map(p => {

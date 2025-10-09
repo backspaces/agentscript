@@ -1,5 +1,5 @@
-import TwoDraw from '/src/TwoDraw.js'
-import Color from '/src/Color.js'
+import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
+import Color from 'https://code.agentscript.org/src/Color.js'
 
 const typeColors = {
     dirt: Color.cssToPixel('yellow'),
