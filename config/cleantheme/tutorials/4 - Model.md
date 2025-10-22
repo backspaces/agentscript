@@ -13,11 +13,11 @@ There will be three parts:
 
 Our HelloModel.js is simple, yet uses all the elements of more complex models.
 
-Lets look at [HelloModel.js](https://code.agentscript.org/models/HelloModel.js)
+Lets look at [HelloModel.js](https://agentscript.org/models/HelloModel.js)
 
 ```javascript
-import Model from 'https://code.agentscript.org/src/Model.js'
-import * as util from 'https://code.agentscript.org/src/utils.js'
+import Model from 'https://agentscript.org/src/Model.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 
 class HelloModel extends Model {
     population = 10 // number of turtles
@@ -91,8 +91,8 @@ The HTML used by the browser is quite simple. It provides a title, and a script 
     </head>
     <body>
         <script type="module">
-            import * as util from 'https://code.agentscript.org/src/utils.js'
-            import Model from 'https://code.agentscript.org/models/HelloModel.js'
+            import * as util from 'https://agentscript.org/src/utils.js'
+            import Model from 'https://agentscript.org/models/HelloModel.js'
 
             util.printToPage('Running for 500 steps.')
 
@@ -109,7 +109,7 @@ The HTML used by the browser is quite simple. It provides a title, and a script 
 </html>
 ```
 
-You can run it [here](https://code.agentscript.org/views1/hello.html). Click the browser's reload button to get a new random sampling. They look like:
+You can run it [here](https://agentscript.org/views1/hello.html). Click the browser's reload button to get a new random sampling. They look like:
 
 ![Image](/config/cleantheme/static/RandomSample.jpg)
 

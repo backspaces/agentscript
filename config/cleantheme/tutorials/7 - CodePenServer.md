@@ -44,7 +44,7 @@ Find yours and paste it into a new browser tab or window. It'll show a new insta
 
 In your HTML pane, we'll replace the Model import with your URL above with a .js extension:
 
--   import Model from 'https://code.agentscript.org/models/HelloModel.js' <br>
+-   import Model from 'https://agentscript.org/models/HelloModel.js' <br>
     => <br>
 -   import Model from 'https://codepen.io/backspaces/pen/qBvwdEM.js'
 
@@ -172,4 +172,4 @@ The current shape names are:
     triangle
 ```
 
-.. in [src/Shapes.js](https://code.agentscript.org/src/Shapes.js) at the bottom of the file
+.. in [src/Shapes.js](https://agentscript.org/src/Shapes.js) at the bottom of the file

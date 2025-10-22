@@ -26,11 +26,11 @@ It looks like this:
 
     <body>
         <script type="module">
-            import * as util from 'https://code.agentscript.org/src/utils.js'
-            import TwoDraw from 'https://code.agentscript.org/src/TwoDraw.js'
-            import ColorMap from 'https://code.agentscript.org/src/ColorMap.js'
-            import Animator from 'https://code.agentscript.org/src/Animator.js'
-            import Model from 'https://code.agentscript.org/models/PheromoneModel.js'
+            import * as util from 'https://agentscript.org/src/utils.js'
+            import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
+            import ColorMap from 'https://agentscript.org/src/ColorMap.js'
+            import Animator from 'https://agentscript.org/src/Animator.js'
+            import Model from 'https://agentscript.org/models/PheromoneModel.js'
 
             const colorMap = ColorMap.gradientColorMap(8, [
                 'black',
@@ -66,7 +66,7 @@ It looks like this:
 </html>
 ```
 
-This is available at: [https://code.agentscript.org/views2mv/pheromone.html](https://code.agentscript.org/views2mv/pheromone.html).
+This is available at: [https://agentscript.org/views2mv/pheromone.html](https://agentscript.org/views2mv/pheromone.html).
 
 ## Running Locally
 
@@ -174,7 +174,7 @@ Yup, the -1 means "forever", i.e. the animator keeps going.
 
 Change back to original values: purple, 2, 500, 30 and save & restart.
 
-If we look at [https://code.agentscript.org/models/PheromoneModel.js](https://code.agentscript.org/models/PheromoneModel.js) you'll see:
+If we look at [https://agentscript.org/models/PheromoneModel.js](https://agentscript.org/models/PheromoneModel.js) you'll see:
 
 ```javascript
 // Here are the variables we'll use. They are accessed via "this.population" etc.

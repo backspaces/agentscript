@@ -26,19 +26,19 @@ Your JavaScript code goes in the script area. You also need a simple HTML elemen
 You can put your Model's code in the script area, especially if it is relatively simple.
 Or you can create a separate .js file that is your Model, and import it into the HTML file.
 
-Imports have a huge advantage: you can use the same Model in many different HTML files. For example, we have a "Hello World" [HelloModel.js](https://code.agentscript.org/models/HelloModel.js) that is used in
-[Text](https://code.agentscript.org/views1/hello.html),
-[2D](https://code.agentscript.org/views2/hello.html),
-[2.5D](https://code.agentscript.org/views25/hello.html),
-[3D](https://code.agentscript.org/views3/hello.html),
-[GIS](https://code.agentscript.org/maplibre/hello.html),
-[MVC](https://code.agentscript.org/mvc/helloKeys.html)
+Imports have a huge advantage: you can use the same Model in many different HTML files. For example, we have a "Hello World" [HelloModel.js](https://agentscript.org/models/HelloModel.js) that is used in
+[Text](https://agentscript.org/views1/hello.html),
+[2D](https://agentscript.org/views2/hello.html),
+[2.5D](https://agentscript.org/views25/hello.html),
+[3D](https://agentscript.org/views3/hello.html),
+[GIS](https://agentscript.org/maplibre/hello.html),
+[MVC](https://agentscript.org/mvc/helloKeys.html)
 and more!
 
 They all import the HelloModel like this:
 
 ```javascript
-import Model from 'https://code.agentscript.org/models/HelloModel.js'
+import Model from 'https://agentscript.org/models/HelloModel.js'
 ```
 
 The simplest example of this is the Text example above, who's HTML looks like:
@@ -50,8 +50,8 @@ The simplest example of this is the Text example above, who's HTML looks like:
     </head>
     <body>
         <script type="module">
-            import * as util from 'https://code.agentscript.org/src/utils.js'
-            import Model from 'https://code.agentscript.org/models/HelloModel.js'
+            import * as util from 'https://agentscript.org/src/utils.js'
+            import Model from 'https://agentscript.org/models/HelloModel.js'
 
             util.printToPage('Running for 500 steps.')
 
@@ -80,7 +80,7 @@ Here's an article on finding your browser's [Developer's Console](https://balsam
 
 Also there are keyboard shortcuts: Chrome "Option" + "Command" + "J". Safari uses "Option" + "Command" + "C". Edge uses "Control" + "Shift" + i.
 
-To get started, go to our [pheromone.html](https://code.agentscript.org/views2/pheromone.html) page. Then open the Developer Console as above.
+To get started, go to our [pheromone.html](https://agentscript.org/views2/pheromone.html) page. Then open the Developer Console as above.
 
 Chrome's looks like this:
 
@@ -100,4 +100,4 @@ You can see this in action with our pheromone.html above, and see the code via "
 
 ![Image](/config/cleantheme/static/ViewSource.jpg)
 
-Just FYI: The Model used is our [PheromoneModel](https://code.agentscript.org/models/PheromoneModel.js), the parts of which come from our [Snippets](https://code.agentscript.org/config/cleantheme/Snippets.html) demo. The pheromone.html imports the Model, sets up the View, and runs the model and view in our Animator .. a complete MVC example!
+Just FYI: The Model used is our [PheromoneModel](https://agentscript.org/models/PheromoneModel.js), the parts of which come from our [Snippets](https://agentscript.org/config/cleantheme/Snippets.html) demo. The pheromone.html imports the Model, sets up the View, and runs the model and view in our Animator .. a complete MVC example!

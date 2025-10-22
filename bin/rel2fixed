@@ -12,7 +12,7 @@ const files = shell.ls('*html')
 
 files.forEach(file => {
     shell.echo(file)
-    shell.sed('-i', `'../`, `'https://code.agentscript.org/`, file)
+    shell.sed('-i', `'../`, `'https://agentscript.org/`, file)
     // .to('code' + file)
 })
-// const urlRoot = `https://code.agentscript.org/${dir}/`
+// const urlRoot = `https://agentscript.org/${dir}/`
