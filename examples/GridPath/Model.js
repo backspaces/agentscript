@@ -1,5 +1,5 @@
-import AgentArray from 'https://code.agentscript.org/src/AgentArray.js'
-import Model from 'https://code.agentscript.org/src/Model.js'
+import AgentArray from 'https://agentscript.org/src/AgentArray.js'
+import Model from 'https://agentscript.org/src/Model.js'
 
 // prettier-ignore
 const WorldOptions = {

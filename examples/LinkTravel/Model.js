@@ -1,5 +1,5 @@
-import Model from 'https://code.agentscript.org/src/Model.js'
-import * as util from 'https://code.agentscript.org/src/utils.js'
+import Model from 'https://agentscript.org/src/Model.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 
 export default class LinkTravelModel extends Model {
     layoutCircle = true

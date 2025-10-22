@@ -18,7 +18,7 @@ This allows direct access to individual modules which will automatically load on
 
 Example: to import Class Model for building your own model, use:
 
-> import Model from 'https://code.agentscript.org/src/Model.js'
+> import Model from 'https://agentscript.org/src/Model.js'
 
 ## Run demos
 
