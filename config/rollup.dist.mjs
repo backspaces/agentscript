@@ -4,6 +4,7 @@
 // import { terser } from 'rollup-plugin-terser'
 import terser from '@rollup/plugin-terser'
 import cleanup from 'rollup-plugin-cleanup'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 
 export default [
     // AS3D.js rollups, complete with 2D & 3D models
@@ -13,78 +14,51 @@ export default [
             file: 'dist/agentscript.js',
             format: 'es',
         },
-        plugins: [cleanup()],
-    },
-    {
-        input: 'src/AS.js',
-        output: {
-            file: 'dist/agentscript.min.js',
-            format: 'es',
-        },
-        plugins: [terser()],
+        plugins: [nodeResolve(), cleanup()],
+        // plugins: [cleanup()],
     },
     // {
     //     input: 'src/AS.js',
     //     output: {
+    //         file: 'dist/agentscript.min.js',
+    //         format: 'es',
+    //     },
+    //     plugins: [terser()],
+    // },
+    // {
+    //     input: 'src/AS.js',
+    //     output: {
     //         file: 'dist/agentscript.umd.js',
-    //         format: 'iife', // Immediately invoked function expression
-    //         name: 'AS', // window will have AS an the individual classes/objects
-    //         footer: `
-    //     (function(exports) {
-    //         Object.assign(window, exports); // Explicitly use window
-    //     })(AS); // Pass the exported object to the function
-    //     `,
+    //         format: 'umd',
+    //         name: 'AS',
     //     },
     //     plugins: [cleanup()],
     // },
-    {
-        input: 'src/AS.js',
-        output: {
-            file: 'dist/agentscript.umd.js',
-            format: 'umd',
-            name: 'AS',
-        },
-        plugins: [cleanup()],
-    },
 
     // AS.js rollups, with 2D only
-    {
-        input: 'src/AS2D.js',
-        output: {
-            file: 'dist/agentscript2d.js',
-            format: 'es',
-        },
-        plugins: [cleanup()],
-    },
-    {
-        input: 'src/AS2D.js',
-        output: {
-            file: 'dist/agentscript2d.min.js',
-            format: 'es',
-        },
-        plugins: [terser()],
-    },
+    // {
+    //     input: 'src/AS2D.js',
+    //     output: {
+    //         file: 'dist/agentscript2d.js',
+    //         format: 'es',
+    //     },
+    //     plugins: [cleanup()],
+    // },
+    // {
+    //     input: 'src/AS2D.js',
+    //     output: {
+    //         file: 'dist/agentscript2d.min.js',
+    //         format: 'es',
+    //     },
+    //     plugins: [terser()],
+    // },
     // {
     //     input: 'src/AS2D.js',
     //     output: {
     //         file: 'dist/agentscript2d.umd.js',
-    //         format: 'iife', // Immediately invoked function expression
-    //         name: 'AS', // window will have AS an the individual classes/objects
-    //         footer: `
-    //     (function(exports) {
-    //         Object.assign(window, exports); // Explicitly use window
-    //     })(AS); // Pass the exported object to the function
-    //     `,
+    //         format: 'umd',
+    //         name: 'AS',
     //     },
     //     plugins: [cleanup()],
     // },
-    {
-        input: 'src/AS2D.js',
-        output: {
-            file: 'dist/agentscript2d.umd.js',
-            format: 'umd',
-            name: 'AS',
-        },
-        plugins: [cleanup()],
-    },
 ]
