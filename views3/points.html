@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Points</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import ThreeDraw from '/src/ThreeDraw.js'
+            import Animator from '/src/Animator.js'
+            import Model from '/models/Hello3DModel.js'
+
+            const drawOptions = {
+                turtlesMesh: 'PointsMesh',
+                turtlesColor: 'random',
+                turtlesSize: 0.5,
+                patchesColor: 'transparent',
+            }
+
+            const model = new Model()
+            // await model.startup()    // not needed
+            model.linksToo = false
+            model.population = 100000
+            model.setup()
+
+            const view = new ThreeDraw(model, {
+                div: 'modelDiv',
+                turtles: { meshClass: 'Obj3DMesh' },
+                drawOptions,
+            })
+
+            Object.assign(window, { model, view })
+
+            await new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // run 500 steps
+                30 // 30 fps
+            )
+
+            view.idle()
+        </script>
+        <div id="modelDiv"></div>
+    </body>
+</html>

@@ -6,6 +6,7 @@ Code    | Run demo
 [exit](https://github.com/backspaces/agentscript/tree/master/views3/exit.html#L1) | [https://agentscript.org/views3/exit.html](https://agentscript.org/views3/exit.html)
 [hello](https://github.com/backspaces/agentscript/tree/master/views3/hello.html#L1) | [https://agentscript.org/views3/hello.html](https://agentscript.org/views3/hello.html)
 [hello3d](https://github.com/backspaces/agentscript/tree/master/views3/hello3d.html#L1) | [https://agentscript.org/views3/hello3d.html](https://agentscript.org/views3/hello3d.html)
+[points](https://github.com/backspaces/agentscript/tree/master/views3/points.html#L1) | [https://agentscript.org/views3/points.html](https://agentscript.org/views3/points.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views3/shapes.html#L1) | [https://agentscript.org/views3/shapes.html](https://agentscript.org/views3/shapes.html)
 [terrain](https://github.com/backspaces/agentscript/tree/master/views3/terrain.html#L1) | [https://agentscript.org/views3/terrain.html](https://agentscript.org/views3/terrain.html)
 [terrain1](https://github.com/backspaces/agentscript/tree/master/views3/terrain1.html#L1) | [https://agentscript.org/views3/terrain1.html](https://agentscript.org/views3/terrain1.html)
