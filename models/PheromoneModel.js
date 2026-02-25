@@ -1,6 +1,6 @@
-import Model from '/src/Model.js'
-import World from '/src/World.js'
-import * as util from '/src/utils.js'
+import Model from 'https://agentscript.org/src/Model.js'
+import World from 'https://agentscript.org/src/World.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 
 // Create PheromoneModel subclass of Model. "export" allows it to be imported elsewhere
 export default class PheromoneModel extends Model {

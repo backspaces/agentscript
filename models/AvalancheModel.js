@@ -1,7 +1,7 @@
-import World from '/src/World.js'
-import Model from '/src/Model.js'
-import { mapzen as provider } from '/src/TileData.js'
-import { xyz2bbox } from '/src/gis.js'
+import World from 'https://agentscript.org/src/World.js'
+import Model from 'https://agentscript.org/src/Model.js'
+import { mapzen as provider } from 'https://agentscript.org/src/TileData.js'
+import { xyz2bbox } from 'https://agentscript.org/src/gis.js'
 
 // Cody's Avalanche model
 const pi = Math.PI

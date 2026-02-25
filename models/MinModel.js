@@ -1,4 +1,4 @@
-import Model from '/src/Model.js'
+import Model from 'https://agentscript.org/src/Model.js'
 
 // Subclass class Model to create our new model, HelloModel
 class MinModel extends Model {

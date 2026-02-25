@@ -1,6 +1,6 @@
-import World from '/src/World.js'
-import Model from '/src/Model.js'
-import * as util from '/src/utils.js'
+import World from 'https://agentscript.org/src/World.js'
+import Model from 'https://agentscript.org/src/Model.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 
 export default class TemplateModel extends Model {
     population = 10 // number of turtles
@@ -13,14 +13,15 @@ export default class TemplateModel extends Model {
     }
 
     setup() {
-        // Have turtles "bounce" at the Patches edges. Default is to wrap
+        // Have turtles "bounce" at the Patches edges.
+        // Default is to wrap
         this.turtles.setDefault('atEdge', 'bounce')
 
         // create "population" turtles initially on the origin
         this.turtles.create(this.population, t => {
             t.setxy(0, 0)
         })
-        // have each turtle create a link to a random other turtle
+        // have each turtle create a link to an other turtle
         this.turtles.ask(t => {
             this.links.create(t, this.turtles.otherOneOf(t))
         })

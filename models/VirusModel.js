@@ -1,6 +1,6 @@
-import World from '/src/World.js'
-import Model from '/src/Model.js'
-import * as util from '/src/utils.js'
+import World from 'https://agentscript.org/src/World.js'
+import Model from 'https://agentscript.org/src/Model.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 
 // A port of the NetLogo "Virus on a Network" model
 export default class VirusModel extends Model {

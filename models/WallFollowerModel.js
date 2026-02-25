@@ -1,6 +1,6 @@
-import World from '/src/World.js'
-import Model from '/src/Model.js'
-import * as util from '/src/utils.js'
+import World from 'https://agentscript.org/src/World.js'
+import Model from 'https://agentscript.org/src/Model.js'
+import * as util from 'https://agentscript.org/src/utils.js'
 
 // The NetLogo models library wall followers example
 // http://ccl.northwestern.edu/netlogo/models/WallFollowingExample

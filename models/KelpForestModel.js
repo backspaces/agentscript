@@ -1,6 +1,6 @@
-import * as util from '/src/utils.js'
-import World from '/src/World.js'
-import Model from '/src/Model.js'
+import * as util from 'https://agentscript.org/src/utils.js'
+import World from 'https://agentscript.org/src/World.js'
+import Model from 'https://agentscript.org/src/Model.js'
 
 // util.randomSeed() // causes each run to have same results for debugging
 

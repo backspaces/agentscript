@@ -1,6 +1,6 @@
-import * as util from '/src/utils.js'
-import Model from '/src/Model.js'
-import { lineStringsToLinks } from '/src/geojson.js'
+import * as util from 'https://agentscript.org/src/utils.js'
+import Model from 'https://agentscript.org/src/Model.js'
+import { lineStringsToLinks } from 'https://agentscript.org/src/geojson.js'
 // import santafeRoads from './data/santafe14roads.json' with { type: 'json' }
 import santafeRoads from './data/santaferoads.json' with { type: 'json' }
 
