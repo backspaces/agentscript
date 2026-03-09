@@ -34,8 +34,9 @@
                 () => {
                     model.step()
                     view.draw()
+                    if (model.done) anim.stop()
                 },
-                500, // how many steps
+                -1, // how many steps
                 30 // at fps steps/second
             )
         </script>
