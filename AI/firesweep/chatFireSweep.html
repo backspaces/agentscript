@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FireModel Parameter Sweep</title>
+  <style>
+    :root {
+      --bg: #1a1a1a;
+      --panel: #242424;
+      --text: #e8e8e8;
+      --muted: #aaaaaa;
+      --accent: #4fc3f7;
+      --border: #3a3a3a;
+      --button: #2f2f2f;
+      --button-hover: #3a3a3a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+      padding: 16px;
+    }
+
+    .app {
+      width: min(700px, 95vw);
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .controls {
+      display: grid;
+      gap: 14px;
+    }
+
+    .control {
+      display: grid;
+      gap: 6px;
+    }
+
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    label {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .value {
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+      min-width: 3ch;
+      text-align: right;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    button {
+      background: var(--button);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    button:hover { background: var(--button-hover); }
+    button:disabled { opacity: 0.55; cursor: default; }
+
+    .status {
+      color: var(--muted);
+      font-size: 0.95rem;
+      min-height: 1.3em;
+    }
+
+    .chart-wrap {
+      width: min(700px, 95vw);
+      height: min(58vh, 480px);
+    }
+
+    canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      background: #202020;
+      border-radius: 8px;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="panel">
+      <h1>AgentScript FireModel Parameter Sweep</h1>
+
+      <div class="controls">
+        <div class="control">
+          <div class="control-row">
+            <label for="densitiesSlider">N densities</label>
+            <div class="value" id="densitiesValue">5</div>
+          </div>
+          <input id="densitiesSlider" type="range" min="2" max="40" step="1" value="5" />
+        </div>
+
+        <div class="control">
+          <div class="control-row">
+            <label for="runsSlider">Runs per density</label>
+            <div class="value" id="runsValue">6</div>
+          </div>
+          <input id="runsSlider" type="range" min="2" max="20" step="1" value="6" />
+        </div>
+
+        <div class="control">
+          <div class="control-row">
+            <label for="workersSlider">Workers</label>
+            <div class="value" id="workersValue">4</div>
+          </div>
+          <input id="workersSlider" type="range" min="1" max="16" step="1" value="4" />
+        </div>
+
+        <div class="control-row">
+          <button id="startStopBtn">Start</button>
+          <div class="status" id="statusLine">Ready</div>
+        </div>
+
+        <div class="footer-note" id="densitiesPreview"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="chart-wrap">
+        <canvas id="chartCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script type="module">
+    const densitiesSlider = document.getElementById('densitiesSlider');
+    const runsSlider = document.getElementById('runsSlider');
+    const workersSlider = document.getElementById('workersSlider');
+
+    const densitiesValue = document.getElementById('densitiesValue');
+    const runsValue = document.getElementById('runsValue');
+    const workersValue = document.getElementById('workersValue');
+
+    const startStopBtn = document.getElementById('startStopBtn');
+    const statusLine = document.getElementById('statusLine');
+    const densitiesPreview = document.getElementById('densitiesPreview');
+    const canvas = document.getElementById('chartCanvas');
+
+    let chart;
+    let running = false;
+    let completed = 0;
+    let totalTasks = 0;
+    let taskQueue = [];
+    let results = [];
+    let workers = [];
+    let workerUrl = null;
+    let nextTaskId = 1;
+
+    function makeDensities(n) {
+      if (n === 2) return [10, 90];
+      const vals = [];
+      for (let i = 0; i < n; i++) {
+        const t = i / (n - 1);
+        const density = Math.round(10 + t * 80);
+        vals.push(density);
+      }
+      return vals;
+    }
+
+    function updateControlLabels() {
+      densitiesValue.textContent = densitiesSlider.value;
+      runsValue.textContent = runsSlider.value;
+      workersValue.textContent = workersSlider.value;
+
+      const densities = makeDensities(Number(densitiesSlider.value));
+      densitiesPreview.textContent = `Densities: ${densities.join(', ')}`;
+    }
+
+    function buildChart() {
+      if (chart) chart.destroy();
+
+      chart = new Chart(canvas, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'Burned Trees',
+              data: [],
+              backgroundColor: 'rgba(80, 210, 130, 0.75)',
+              pointRadius: 3,
+              yAxisID: 'yLeft',
+            },
+            {
+              label: 'Fraction Burned',
+              data: [],
+              backgroundColor: 'rgba(255, 160, 80, 0.75)',
+              pointRadius: 3,
+              yAxisID: 'yRight',
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#e8e8e8'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const ds = context.dataset.label;
+                  const x = context.raw.x;
+                  const y = context.raw.y;
+                  return `${ds}: (${x}, ${typeof y === 'number' ? y : ''})`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'linear',
+              min: 10,
+              max: 90,
+              ticks: { color: '#d8d8d8' },
+              grid: { color: 'rgba(255,255,255,0.08)' },
+              title: {
+                display: true,
+                text: 'Density (%)',
+                color: '#e8e8e8'
+              }
+            },
+            yLeft: {
+              type: 'logarithmic',
+              position: 'left',
+              ticks: { color: '#d8d8d8' },
+              grid: { color: 'rgba(255,255,255,0.08)' },
+              title: {
+                display: true,
+                text: 'Burned Trees (log)',
+                color: 'rgba(80, 210, 130, 0.9)'
+              }
+            },
+            yRight: {
+              type: 'linear',
+              position: 'right',
+              min: 0,
+              max: 1,
+              ticks: { color: '#d8d8d8' },
+              title: {
+                display: true,
+                text: 'Fraction Burned',
+                color: 'rgba(255, 160, 80, 0.9)'
+              },
+              grid: { drawOnChartArea: false }
+            }
+          }
+        }
+      });
+    }
+
+    function resetRunState() {
+      completed = 0;
+      totalTasks = 0;
+      taskQueue = [];
+      results = [];
+      nextTaskId = 1;
+      buildChart();
+    }
+
+    function makeTasks() {
+      const nDensities = Number(densitiesSlider.value);
+      const runsPerDensity = Number(runsSlider.value);
+      const densities = makeDensities(nDensities);
+
+      const tasks = [];
+      for (const density of densities) {
+        for (let i = 0; i < runsPerDensity; i++) {
+          tasks.push({
+            taskId: nextTaskId++,
+            density
+          });
+        }
+      }
+      return tasks;
+    }
+
+    function setControlsDisabled(disabled) {
+      densitiesSlider.disabled = disabled;
+      runsSlider.disabled = disabled;
+      workersSlider.disabled = disabled;
+    }
+
+    function updateStatus(text) {
+      statusLine.textContent = text;
+    }
+
+    function addResultToChart(result) {
+      const { density, burnedTrees, fraction } = result;
+      chart.data.datasets[0].data.push({ x: density, y: burnedTrees });
+      chart.data.datasets[1].data.push({ x: density, y: fraction });
+      chart.update('none');
+    }
+
+    function printResultsTable() {
+      const tableRows = results.map(r => ({
+        x: r.density,
+        density: r.density,
+        burnedTrees: r.burnedTrees,
+        fraction: Number(r.fraction.toFixed(6)),
+        steps: r.steps
+      }));
+      console.table(tableRows);
+    }
+
+    function cleanupWorkers() {
+      for (const worker of workers) {
+        try {
+          worker.terminate();
+        } catch (_) {}
+      }
+      workers = [];
+
+      if (workerUrl) {
+        URL.revokeObjectURL(workerUrl);
+        workerUrl = null;
+      }
+    }
+
+    function stopRun(reason = 'Stopped') {
+      if (!running) return;
+
+      running = false;
+      cleanupWorkers();
+      setControlsDisabled(false);
+      startStopBtn.textContent = 'Start';
+      updateStatus(`${reason} — ${completed}/${totalTasks} runs complete`);
+      printResultsTable();
+    }
+
+    function maybeFinish() {
+      if (!running) return;
+      if (completed >= totalTasks) {
+        running = false;
+        cleanupWorkers();
+        setControlsDisabled(false);
+        startStopBtn.textContent = 'Start';
+        updateStatus(`Done — ${completed}/${totalTasks} runs complete`);
+        printResultsTable();
+      }
+    }
+
+    function dispatchNextTask(worker) {
+      if (!running) return;
+
+      const task = taskQueue.shift();
+      if (!task) {
+        maybeFinish();
+        return;
+      }
+
+      worker.postMessage(task);
+    }
+
+    function createWorkerPool(count) {
+      const workerSrc = `
+        import Model from 'https://agentscript.org/models/FireModel.js';
+
+        self.onmessage = ({ data: { density, taskId } }) => {
+          const model = new Model();
+          model.density = density;
+          model.setup();
+          while (!model.done) model.step();
+          self.postMessage({
+            density,
+            burnedTrees: model.burnedTrees,
+            initialTrees: model.initialTrees,
+            steps: model.ticks,
+            taskId
+          });
+        };
+      `;
+
+      workerUrl = URL.createObjectURL(
+        new Blob([workerSrc], { type: 'text/javascript' })
+      );
+
+      workers = Array.from({ length: count }, () => {
+        const worker = new Worker(workerUrl, { type: 'module' });
+
+        worker.onmessage = ({ data }) => {
+          if (!running) return;
+
+          const { density, burnedTrees, initialTrees, steps, taskId } = data;
+          const fraction = burnedTrees / initialTrees;
+
+          const result = {
+            taskId,
+            density,
+            burnedTrees,
+            initialTrees,
+            fraction,
+            steps
+          };
+
+          results.push(result);
+          completed += 1;
+
+          addResultToChart(result);
+          updateStatus(`${completed}/${totalTasks} runs complete`);
+
+          dispatchNextTask(worker);
+        };
+
+        worker.onerror = (err) => {
+          console.error('Worker error:', err);
+          stopRun('Stopped بسبب worker error');
+        };
+
+        return worker;
+      });
+    }
+
+    function startRun() {
+      resetRunState();
+
+      taskQueue = makeTasks();
+      totalTasks = taskQueue.length;
+
+      running = true;
+      setControlsDisabled(true);
+      startStopBtn.textContent = 'Stop';
+      updateStatus(`0/${totalTasks} runs complete`);
+
+      const workerCount = Math.min(Number(workersSlider.value), totalTasks);
+      createWorkerPool(workerCount);
+
+      for (const worker of workers) {
+        dispatchNextTask(worker);
+      }
+    }
+
+    densitiesSlider.addEventListener('input', updateControlLabels);
+    runsSlider.addEventListener('input', updateControlLabels);
+    workersSlider.addEventListener('input', updateControlLabels);
+
+    startStopBtn.addEventListener('click', () => {
+      if (running) {
+        stopRun('Stopped');
+      } else {
+        startRun();
+      }
+    });
+
+    updateControlLabels();
+    buildChart();
+  </script>
+</body>
+</html>

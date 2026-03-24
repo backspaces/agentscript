@@ -27,7 +27,7 @@ vscode.zip
 /uielements0/
 /webdav/
 
-/ai/
+# /ai/
 
 deno.lock
 lock.json

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgentScript FireModel Parameter Sweep</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #1a1a1a;
+      --panel: #242424;
+      --accent: #50d282;
+      --accent2: #ffa050;
+      --text: #f5f5f5;
+      --muted: #aaaaaa;
+    }
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+    }
+    .app {
+      width: min(900px, 100vw);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    h1 {
+      margin: 0 0 0.25rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    .subtitle {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .controls {
+      background: var(--panel);
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: space-between;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 200px;
+      flex: 1;
+    }
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .control-label span.value {
+      color: var(--text);
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--accent);
+      color: #0b1510;
+      transition: background 0.15s ease, transform 0.05s ease;
+      white-space: nowrap;
+    }
+    button.stop {
+      background: #ff5c5c;
+      color: #1a0000;
+    }
+    button:active {
+      transform: scale(0.97);
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+      transform: none;
+    }
+    .status-line {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .status-line span.strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .chart-container {
+      margin: 0 auto;
+      width: min(700px, 95vw);
+      background: var(--panel);
+      border-radius: 0.75rem;
+      padding: 0.75rem 0.75rem 1rem;
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0 0.25rem 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    canvas {
+      width: 100% !important;
+      height: 380px !important;
+    }
+    @media (max-width: 600px) {
+      .controls {
+        padding: 0.75rem 0.9rem;
+      }
+      canvas {
+        height: 320px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>FireModel Density Sweep</h1>
+      <p class="subtitle">AgentScript FireModel simulations across tree densities, running in parallel Web Workers.</p>
+    </header>
+
+    <section class="controls">
+      <div class="control-row">
+        <div class="control-group">
+          <label class="control-label">
+            <span>Number of densities</span>
+            <span class="value" id="densitiesValue">5</span>
+          </label>
+          <input id="densitiesSlider" type="range" min="2" max="40" value="5" />
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">
+            <span>Runs per density</span>
+            <span class="value" id="runsValue">6</span>
+          </label>
+          <input id="runsSlider" type="range" min="2" max="20" value="6" />
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">
+            <span>Workers</span>
+            <span class="value" id="workersValue">4</span>
+          </label>
+          <input id="workersSlider" type="range" min="1" max="16" value="4" />
+        </div>
+      </div>
+
+      <div class="control-row">
+        <button id="startStopBtn">Start</button>
+        <div class="status-line">
+          <span id="progressText">Idle</span>
+          <span id="densityListText"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="chart-container">
+      <div class="chart-header">
+        <span>Results update live as simulations complete.</span>
+        <span>Left axis: burned trees (log) · Right axis: fraction burned</span>
+      </div>
+      <canvas id="chartCanvas"></canvas>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script type="module">
+    const densitiesSlider = document.getElementById('densitiesSlider');
+    const runsSlider = document.getElementById('runsSlider');
+    const workersSlider = document.getElementById('workersSlider');
+    const densitiesValue = document.getElementById('densitiesValue');
+    const runsValue = document.getElementById('runsValue');
+    const workersValue = document.getElementById('workersValue');
+    const startStopBtn = document.getElementById('startStopBtn');
+    const progressText = document.getElementById('progressText');
+    const densityListText = document.getElementById('densityListText');
+    const canvas = document.getElementById('chartCanvas');
+
+    let chart = null;
+
+    function createChart() {
+      if (chart) chart.destroy();
+      chart = new Chart(canvas, {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'Burned Trees',
+              data: [],
+              backgroundColor: 'rgba(80, 210, 130, 0.75)',
+              pointRadius: 3,
+              yAxisID: 'yLeft',
+            },
+            {
+              label: 'Fraction Burned',
+              data: [],
+              backgroundColor: 'rgba(255, 160, 80, 0.75)',
+              pointRadius: 3,
+              yAxisID: 'yRight',
+            }
+          ]
+        },
+        options: {
+          animation: false,
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: '#f5f5f5'
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'linear',
+              min: 10,
+              max: 90,
+              title: { display: true, text: 'Density (%)' },
+              ticks: { color: '#f5f5f5' },
+              grid: { color: 'rgba(255,255,255,0.05)' }
+            },
+            yLeft: {
+              type: 'logarithmic',
+              position: 'left',
+              title: {
+                display: true,
+                text: 'Burned Trees (log)',
+                color: 'rgba(80, 210, 130, 0.9)'
+              },
+              ticks: {
+                color: '#f5f5f5',
+                callback: (value) => {
+                  const v = Number(value);
+                  if ([1, 10, 100, 1000, 10000, 100000].includes(v)) return v;
+                  return '';
+                }
+              },
+              grid: { color: 'rgba(255,255,255,0.05)' }
+            },
+            yRight: {
+              type: 'linear',
+              position: 'right',
+              min: 0,
+              max: 1,
+              title: {
+                display: true,
+                text: 'Fraction Burned',
+                color: 'rgba(255, 160, 80, 0.9)'
+              },
+              ticks: { color: '#f5f5f5' },
+              grid: { drawOnChartArea: false }
+            }
+          }
+        }
+      });
+    }
+
+    createChart();
+
+    function computeDensities(n) {
+      if (n === 1) return [50];
+      const minD = 10;
+      const maxD = 90;
+      const step = (maxD - minD) / (n - 1);
+      const arr = [];
+      for (let i = 0; i < n; i++) {
+        const d = Math.round(minD + i * step);
+        arr.push(Math.max(minD, Math.min(maxD, d)));
+      }
+      return arr;
+    }
+
+    function updateDensityListText() {
+      const n = Number(densitiesSlider.value);
+      const densities = computeDensities(n);
+      densityListText.textContent = `Densities: ${densities.join(', ')}`;
+    }
+
+    densitiesValue.textContent = densitiesSlider.value;
+    runsValue.textContent = runsSlider.value;
+    workersValue.textContent = workersSlider.value;
+    updateDensityListText();
+
+    densitiesSlider.addEventListener('input', () => {
+      densitiesValue.textContent = densitiesSlider.value;
+      updateDensityListText();
+    });
+    runsSlider.addEventListener('input', () => {
+      runsValue.textContent = runsSlider.value;
+    });
+    workersSlider.addEventListener('input', () => {
+      workersValue.textContent = workersSlider.value;
+    });
+
+    // Worker pool and simulation state
+    let workers = [];
+    let workerBusy = [];
+    let taskQueue = [];
+    let nextTaskIndex = 0;
+    let totalTasks = 0;
+    let completedTasks = 0;
+    let running = false;
+    let results = [];
+
+    const workerSrc = `
+      import Model from 'https://agentscript.org/models/FireModel.js';
+      self.onmessage = ({ data: { density, taskId } }) => {
+        const model = new Model();
+        model.density = density;
+        model.setup();
+        while (!model.done) model.step();
+        const burnedTrees = model.burnedTrees;
+        const initialTrees = model.initialTrees;
+        const steps = model.ticks;
+        const fraction = initialTrees > 0 ? burnedTrees / initialTrees : 0;
+        self.postMessage({
+          density,
+          burnedTrees,
+          initialTrees,
+          steps,
+          fraction,
+          taskId
+        });
+      };
+    `;
+    const workerUrl = URL.createObjectURL(
+      new Blob([workerSrc], { type: 'text/javascript' })
+    );
+
+    function createWorkers(count) {
+      destroyWorkers();
+      workers = [];
+      workerBusy = [];
+      for (let i = 0; i < count; i++) {
+        const w = new Worker(workerUrl, { type: 'module' });
+        w.onmessage = (event) => handleWorkerMessage(i, event.data);
+        workers.push(w);
+        workerBusy.push(false);
+      }
+    }
+
+    function destroyWorkers() {
+      if (workers.length) {
+        for (const w of workers) {
+          try {
+            w.terminate();
+          } catch (_) {}
+        }
+      }
+      workers = [];
+      workerBusy = [];
+    }
+
+    function buildTaskQueue() {
+      const nDensities = Number(densitiesSlider.value);
+      const runsPerDensity = Number(runsSlider.value);
+      const densities = computeDensities(nDensities);
+      const tasks = [];
+      let taskId = 0;
+      for (const density of densities) {
+        for (let r = 0; r < runsPerDensity; r++) {
+          tasks.push({ density, taskId: taskId++ });
+        }
+      }
+      return tasks;
+    }
+
+    function dispatchNext(workerIndex) {
+      if (!running) return;
+      if (nextTaskIndex >= taskQueue.length) return;
+      const task = taskQueue[nextTaskIndex++];
+      workerBusy[workerIndex] = true;
+      workers[workerIndex].postMessage(task);
+    }
+
+    function handleWorkerMessage(workerIndex, data) {
+      if (!running) return;
+      workerBusy[workerIndex] = false;
+      completedTasks++;
+
+      const { density, burnedTrees, fraction, steps } = data;
+      const pointX = density;
+
+      chart.data.datasets[0].data.push({ x: pointX, y: burnedTrees });
+      chart.data.datasets[1].data.push({ x: pointX, y: fraction });
+      chart.update('none');
+
+      results.push({
+        x: pointX,
+        density,
+        burnedTrees,
+        fraction,
+        steps
+      });
+
+      progressText.textContent = `${completedTasks}/${totalTasks} runs complete`;
+
+      if (completedTasks >= totalTasks) {
+        finishRun();
+      } else {
+        dispatchNext(workerIndex);
+      }
+    }
+
+    function finishRun() {
+      if (!running) return;
+      running = false;
+      startStopBtn.textContent = 'Start';
+      startStopBtn.classList.remove('stop');
+      densitiesSlider.disabled = false;
+      runsSlider.disabled = false;
+      workersSlider.disabled = false;
+
+      destroyWorkers();
+
+      progressText.textContent = `Done: ${completedTasks}/${totalTasks} runs complete (see console.table for details)`;
+      try {
+        console.table(results.map(r => ({
+          x: r.x,
+          density: r.density,
+          burnedTrees: r.burnedTrees,
+          fraction: r.fraction,
+          steps: r.steps
+        })));
+      } catch (e) {
+        console.log('Results:', results);
+      }
+    }
+
+    function stopRun() {
+      if (!running) return;
+      running = false;
+      destroyWorkers();
+      startStopBtn.textContent = 'Start';
+      startStopBtn.classList.remove('stop');
+      densitiesSlider.disabled = false;
+      runsSlider.disabled = false;
+      workersSlider.disabled = false;
+      progressText.textContent = `Stopped at ${completedTasks}/${totalTasks} runs (see console.table for partial results)`;
+      try {
+        console.table(results.map(r => ({
+          x: r.x,
+          density: r.density,
+          burnedTrees: r.burnedTrees,
+          fraction: r.fraction,
+          steps: r.steps
+        })));
+      } catch (e) {
+        console.log('Partial results:', results);
+      }
+    }
+
+    function startRun() {
+      if (running) return;
+      running = true;
+
+      createChart();
+      results = [];
+      taskQueue = buildTaskQueue();
+      nextTaskIndex = 0;
+      completedTasks = 0;
+      totalTasks = taskQueue.length;
+
+      const workerCount = Math.min(Number(workersSlider.value), totalTasks || 1);
+      createWorkers(workerCount);
+
+      startStopBtn.textContent = 'Stop';
+      startStopBtn.classList.add('stop');
+      densitiesSlider.disabled = true;
+      runsSlider.disabled = true;
+      workersSlider.disabled = true;
+
+      progressText.textContent = `0/${totalTasks} runs complete`;
+
+      for (let i = 0; i < workers.length; i++) {
+        dispatchNext(i);
+      }
+    }
+
+    startStopBtn.addEventListener('click', () => {
+      if (!running) {
+        startRun();
+      } else {
+        stopRun();
+      }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      destroyWorkers();
+      URL.revokeObjectURL(workerUrl);
+    });
+  </script>
+</body>
+</html>

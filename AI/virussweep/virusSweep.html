@@ -1,0 +1,312 @@
+<html>
+    <head>
+        <title>Virus Sweep</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body { font-family: monospace; padding: 20px; max-width: 1400px; }
+            h2 { margin-bottom: 12px; }
+            .controls { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+            label { display: flex; flex-direction: column; font-size: 0.85em; color: #555; }
+            label span { margin-bottom: 2px; }
+            select, input[type=number] { font-family: monospace; padding: 3px 6px; }
+            button { padding: 6px 16px; font-family: monospace; cursor: pointer; }
+            #status { color: #666; margin: 10px 0; min-height: 1.2em; }
+            .charts { display: flex; gap: 30px; margin: 20px 0; }
+            .chart-wrap { flex: 1; max-width: 560px; }
+            .chart-wrap h3 { margin: 0 0 6px; font-size: 0.95em; }
+            .tables { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 10px; }
+            .table-wrap h3 { margin: 0 0 6px; font-size: 0.95em; }
+            table { border-collapse: collapse; }
+            th, td { border: 1px solid #bbb; padding: 5px 8px; text-align: center; }
+            th { background: #eee; white-space: nowrap; font-size: 0.8em; }
+            .val { font-size: 0.75em; line-height: 1.5; }
+            .r0 { color: #888; }
+            .fixed { color: #666; font-size: 0.8em; margin-top: 10px; }
+        </style>
+    </head>
+    <body>
+        <h2>Virus Model — Parameter Sweep</h2>
+
+        <details style="margin-bottom:14px; font-size:1em; color:#333; max-width:860px; line-height:1.7;">
+            <summary style="cursor:pointer; color:#555; font-weight:bold;">About this sweep</summary>
+            <p>The model has 7 input parameters. A naive sweep of all of them would produce a grid too large to read
+            and too hard to interpret. The challenge is identifying which parameters actually matter and how to
+            reduce them to something comprehensible.</p>
+            <p>The key insight is that <b>virusSpreadPercent</b> and <b>recoveryPercent</b> are not independent —
+            they don't have separate effects, they have a <em>ratio</em> effect. From SIR epidemic theory, what
+            determines whether a virus spreads or dies out is the <b>basic reproduction number
+            R₀ = averageNodeDegree × spread / recovery</b>. When R₀ &lt; 1 the epidemic fizzles regardless of
+            the individual values; when R₀ &gt; 1 it takes off. So instead of sweeping two parameters and reading
+            a 2D table, we collapse them into one derived metric and read a single curve.</p>
+            <p>This reduces the problem from "which of 7 parameters matter?" to two separable questions:
+            (1) <b>Does the epidemic spread?</b> — answered by R₀ (spread and recovery combined); and
+            (2) <b>What does it leave behind?</b> — answered by <b>gainResistancePercent</b>, the probability a
+            recovered node gains permanent immunity rather than returning to susceptible. This parameter doesn't
+            affect whether the virus spreads, only the resistant vs. susceptible split at the end.</p>
+            <p>The remaining parameters (population, initialOutbreakSize, virusCheckFrequency) either scale into R₀
+            or have weak effects on final percentages and are fixed at defaults.</p>
+            <p>The left chart plots <b>resistant %</b> vs R₀ on a log scale. Both curves follow a sigmoid: near zero
+            below R₀ = 1, rising steeply through the phase transition, leveling off at high R₀. Higher
+            gainResistancePercent consistently produces more lasting immunity.</p>
+            <p>The right chart plots <b>ticks to completion</b> vs R₀. Both peak sharply just above R₀ = 1 — where
+            the virus spreads just fast enough to persist but not fast enough to burn through quickly. Low
+            gainResistancePercent produces a much higher peak because recovered nodes cycle back to susceptible,
+            giving the virus more fuel and extending the epidemic significantly.</p>
+            <p>Fixed: population = 150, averageNodeDegree = 6, initialOutbreakSize = 3, virusCheckFrequency = 1.</p>
+        </details>
+
+        <div class="controls">
+            <label>
+                <span>gainResistance A</span>
+                <select id="gainA">
+                    <option value="1">1%</option>
+                    <option value="5" selected>5%</option>
+                    <option value="15">15%</option>
+                    <option value="50">50%</option>
+                </select>
+            </label>
+            <label>
+                <span>gainResistance B</span>
+                <select id="gainB">
+                    <option value="1" selected>1%</option>
+                    <option value="5">5%</option>
+                    <option value="15">15%</option>
+                    <option value="50">50%</option>
+                </select>
+            </label>
+            <label>
+                <span>runs per combo</span>
+                <input id="runs" type="number" value="10" min="1" max="100" style="width:55px">
+            </label>
+            <button id="runBtn">Run Sweep</button>
+        </div>
+
+        <div id="status"></div>
+
+        <div class="charts">
+            <div class="chart-wrap">
+                <h3>Resistant % vs R₀</h3>
+                <canvas id="chartResist"></canvas>
+            </div>
+            <div class="chart-wrap">
+                <h3>Ticks to finish vs R₀</h3>
+                <canvas id="chartTicks"></canvas>
+            </div>
+        </div>
+
+        <details style="margin: 16px 0 10px; font-size:1em; color:#333; max-width:860px; line-height:1.7;">
+            <summary style="cursor:pointer; color:#555; font-weight:bold;">About the heatmap tables</summary>
+            <p>Each cell shows the raw results for one specific combination of <b>virusSpreadPercent</b> (row) and
+            <b>recoveryPercent</b> (column), averaged over all runs:</p>
+            <ul>
+                <li><b>resist %</b> — fraction of nodes that ended up permanently immune when the epidemic ended</li>
+                <li><b>susc %</b> — fraction still susceptible (never infected, or recovered without gaining immunity)</li>
+                <li><b>ticks</b> — steps until no infected nodes remained</li>
+                <li><b>R₀</b> — the derived reproduction number for that combo (averageNodeDegree × spread / recovery)</li>
+            </ul>
+            <p>Cell color encodes resistant %: green = high resistance (epidemic burned through and left many immune
+            nodes), red = low (virus fizzled early or left mostly susceptible nodes behind). The red cells in the
+            top-right corner are low-R₀ scenarios where the virus barely spreads — resistant% is near zero not
+            because the outcome was bad, but because almost nobody got infected in the first place.</p>
+            <p>The two tables show the same grid for each gainResistance value. Comparing them cell-by-cell
+            shows where gainResistancePercent matters most: in the high-R₀ bottom-left corner, where the epidemic
+            is guaranteed to spread and the only question is how much lasting immunity it leaves behind. In the
+            low-R₀ top-right corner the two tables look nearly identical — gainResistancePercent is irrelevant
+            when the virus barely takes off.</p>
+            <p>The charts above collapse these 25 cells per table into single curves by grouping cells that share
+            the same R₀, making the overall trend easier to read.</p>
+        </details>
+
+        <div class="tables" id="tables"></div>
+
+        <script type="module">
+            import Model from '/models/VirusModel.js'
+
+            const spreadValues   = [0.5, 1, 2, 4, 8]
+            const recoveryValues = [1, 2, 5, 10, 20]
+
+            const statusEl = document.getElementById('status')
+            const tablesEl = document.getElementById('tables')
+
+            let resistChart, ticksChart
+
+            async function runCombo(spreadPct, recoveryPct, gainPct, runs) {
+                let totResistant = 0, totSusceptible = 0, totTicks = 0
+                for (let i = 0; i < runs; i++) {
+                    const model = new Model()
+                    model.virusSpreadPercent    = spreadPct
+                    model.recoveryPercent       = recoveryPct
+                    model.gainResistancePercent = gainPct
+                    await model.startup()
+                    model.setup()
+                    let guard = 0
+                    while (!model.done && guard++ < 100000) model.step()
+                    totResistant   += model.resistant   ?? 0
+                    totSusceptible += model.susceptible ?? 0
+                    totTicks       += model.ticks
+                }
+                return {
+                    resistant:   totResistant   / runs,
+                    susceptible: totSusceptible / runs,
+                    ticks:       Math.round(totTicks / runs),
+                }
+            }
+
+            async function runGrid(gainPct, runs, totalCombos, doneRef) {
+                const grid = {}
+                for (const s of spreadValues) {
+                    grid[s] = {}
+                    for (const r of recoveryValues) {
+                        statusEl.textContent = `Running… ${doneRef.n}/${totalCombos} combos`
+                        await new Promise(res => setTimeout(res, 0))
+                        grid[s][r] = await runCombo(s, r, gainPct, runs)
+                        doneRef.n++
+                    }
+                }
+                return grid
+            }
+
+            // Average results across combos sharing the same R₀
+            function gridToR0Series(grid) {
+                const byR0 = {}
+                for (const s of spreadValues) {
+                    for (const r of recoveryValues) {
+                        const r0  = +(6 * s / r).toFixed(4)
+                        const key = r0
+                        if (!byR0[key]) byR0[key] = { resistant: [], ticks: [] }
+                        byR0[key].resistant.push(grid[s][r].resistant)
+                        byR0[key].ticks.push(grid[s][r].ticks)
+                    }
+                }
+                const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length
+                return Object.entries(byR0)
+                    .map(([r0, v]) => ({ r0: +r0, resistant: avg(v.resistant), ticks: avg(v.ticks) }))
+                    .sort((a, b) => a.r0 - b.r0)
+            }
+
+            function cellColor(resistPct) {
+                return `hsl(${resistPct * 1.2}, 65%, 82%)`
+            }
+
+            function buildTable(grid, gainPct, runs) {
+                let html = `<table>`
+                html += `<tr><th>spread↓ / rec→</th>`
+                for (const r of recoveryValues) html += `<th>rec ${r}%</th>`
+                html += `</tr>`
+                for (const s of spreadValues) {
+                    html += `<tr><th>spread ${s}%</th>`
+                    for (const r of recoveryValues) {
+                        const { resistant, susceptible, ticks } = grid[s][r]
+                        const r0 = (6 * s / r).toFixed(1)
+                        html += `
+                            <td style="background:${cellColor(resistant)}">
+                                <div class="val">resist: <b>${resistant.toFixed(1)}%</b></div>
+                                <div class="val">susc: ${susceptible.toFixed(1)}%</div>
+                                <div class="val">ticks: ${ticks}</div>
+                                <div class="val r0">R₀≈${r0}</div>
+                            </td>`
+                    }
+                    html += `</tr>`
+                }
+                html += `</table>`
+                return html
+            }
+
+            function drawCharts(seriesA, seriesB, gainA, gainB) {
+                const colors = { A: '#2563eb', B: '#dc2626' }
+
+                const makeDataset = (series, label, color) => ({
+                    label,
+                    data: series.map(d => ({ x: d.r0, y: d.resistant })),
+                    borderColor: color,
+                    backgroundColor: color + '33',
+                    pointRadius: 4,
+                    tension: 0.3,
+                })
+
+                const xAxis = {
+                    type: 'logarithmic',
+                    title: { display: true, text: 'R₀  (log scale)' },
+                    ticks: { callback: v => v % 1 === 0 ? v : +v.toFixed(2) },
+                }
+
+                if (resistChart) resistChart.destroy()
+                resistChart = new Chart(document.getElementById('chartResist'), {
+                    type: 'line',
+                    data: {
+                        datasets: [
+                            makeDataset(seriesA, `gain ${gainA}%`, colors.A),
+                            { ...makeDataset(seriesB, `gain ${gainB}%`, colors.B),
+                              data: seriesB.map(d => ({ x: d.r0, y: d.resistant })) },
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            x: xAxis,
+                            y: { min: 0, max: 100, title: { display: true, text: 'Resistant %' } }
+                        },
+                        plugins: { legend: { position: 'top' } }
+                    }
+                })
+
+                if (ticksChart) ticksChart.destroy()
+                ticksChart = new Chart(document.getElementById('chartTicks'), {
+                    type: 'line',
+                    data: {
+                        datasets: [
+                            { label: `gain ${gainA}%`, data: seriesA.map(d => ({ x: d.r0, y: d.ticks })),
+                              borderColor: colors.A, backgroundColor: colors.A + '33', pointRadius: 4, tension: 0.3 },
+                            { label: `gain ${gainB}%`, data: seriesB.map(d => ({ x: d.r0, y: d.ticks })),
+                              borderColor: colors.B, backgroundColor: colors.B + '33', pointRadius: 4, tension: 0.3 },
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            x: xAxis,
+                            y: { title: { display: true, text: 'Ticks' } }
+                        },
+                        plugins: { legend: { position: 'top' } }
+                    }
+                })
+            }
+
+            async function runSweep() {
+                const gainA = parseFloat(document.getElementById('gainA').value)
+                const gainB = parseFloat(document.getElementById('gainB').value)
+                const runs  = parseInt(document.getElementById('runs').value)
+                const btn   = document.getElementById('runBtn')
+                btn.disabled = true
+                tablesEl.innerHTML = ''
+
+                const total  = spreadValues.length * recoveryValues.length * 2
+                const doneRef = { n: 0 }
+
+                const [gridA, gridB] = await Promise.all([
+                    runGrid(gainA, runs, total, doneRef),
+                    runGrid(gainB, runs, total, doneRef),
+                ])
+
+                const seriesA = gridToR0Series(gridA)
+                const seriesB = gridToR0Series(gridB)
+
+                drawCharts(seriesA, seriesB, gainA, gainB)
+
+                tablesEl.innerHTML = `
+                    <div class="table-wrap">
+                        <h3>gainResistance ${gainA}%</h3>
+                        ${buildTable(gridA, gainA, runs)}
+                    </div>
+                    <div class="table-wrap">
+                        <h3>gainResistance ${gainB}%</h3>
+                        ${buildTable(gridB, gainB, runs)}
+                    </div>
+                    <p class="fixed">Fixed: population=150, averageNodeDegree=6, initialOutbreakSize=3, virusCheckFrequency=1 — each cell = avg of ${runs} runs</p>`
+
+                statusEl.textContent = `Done — ${total} combos × ${runs} runs = ${total * runs} total model runs.`
+                btn.disabled = false
+            }
+
+            document.getElementById('runBtn').addEventListener('click', runSweep)
+        </script>
+    </body>
+</html>

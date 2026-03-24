@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Virus</title>
+    </head>
+    <body>
+        <script type="module">
+            import * as util from '/src/utils.js'
+            import Model from '/models/VirusModel.js'
+
+            const model = new Model()
+
+            model.population = 150 // 150
+            model.averageNodeDegree = 6 // 6
+            model.initialOutbreakSize = 8 // 3
+            model.virusSpreadPercent = 2.5 // 2.5
+            model.virusCheckFrequency = 1 // 1
+            model.recoveryPercent = 5.0 // 5.0
+            model.gainResistancePercent = 5.0 // 5.0
+
+            await model.startup()
+            model.setup()
+
+            while (!model.done) model.step()
+        </script>
+    </body>
+</html>
