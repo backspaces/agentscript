@@ -33,7 +33,10 @@ export default class ButtonsModel extends Model {
         if (vertices.size > this.cluster.size) this.cluster = vertices
 
         this.done = this.cluster.size === this.turtles.length
-        if (this.done) console.log(`Model done at tick: ${this.ticks + 1}`)
+        if (this.done)
+            console.log(
+                `done: tick: ${this.ticks + 1}, buttons: ${this.population}, links: ${this.links.length}`
+            )
     }
 
     graphOf(t) {

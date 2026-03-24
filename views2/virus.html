@@ -7,7 +7,8 @@
         <script type="module">
             import Animator from 'https://agentscript.org/src/Animator.js'
             import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
-            import Model from 'https://agentscript.org/models/VirusModel.js'
+            // import Model from 'https://agentscript.org/models/VirusModel.js'
+            import Model from '/models/VirusModel.js'
 
             const model = new Model()
             model.setup()
@@ -17,6 +18,11 @@
                 susceptible: 'blue',
                 resistant: 'gray',
             }
+            function isResistant(l) {
+                return (
+                    l.end0.state === 'resistant' || l.end1.state === 'resistant'
+                )
+            }
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
                 patchSize: 10,
@@ -25,7 +31,8 @@
                     turtlesShape: 'circle',
                     turtlesSize: 1.5,
                     turtlesColor: t => turtleColors[t.state],
-                    linksColor: 'white',
+                    // linksColor: 'white',
+                    linksColor: l => (isResistant(l) ? 'gray' : 'white'),
                     linksWidth: 2,
                 },
             })

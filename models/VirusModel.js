@@ -1,3 +1,10 @@
+// This model demonstrates the spread of a virus through a network. Although
+// the model is somewhat abstract, one interpretation is that each node
+// represents a computer, and we are modeling the progress of a computer
+// virus (or worm) through this network. Each node may be in one of three
+// states: susceptible, infected, or resistant. In the academic literature
+// such a model is sometimes referred to as an SIR model for epidemics.
+
 import World from 'https://agentscript.org/src/World.js'
 import Model from 'https://agentscript.org/src/Model.js'
 import * as util from 'https://agentscript.org/src/utils.js'
@@ -6,7 +13,7 @@ import * as util from 'https://agentscript.org/src/utils.js'
 export default class VirusModel extends Model {
     population = 150
     averageNodeDegree = 6
-    outbreakSize = 3
+    initialOutbreakSize = 3
     virusSpreadPercent = 2.5
     virusCheckFrequency = 1
     recoveryPercent = 5.0
@@ -21,7 +28,9 @@ export default class VirusModel extends Model {
     setup() {
         this.setupNodes()
         this.setupNetwork()
-        this.turtles.nOf(this.outbreakSize).ask(t => this.becomeInfected(t))
+        this.turtles
+            .nOf(this.initialOutbreakSize)
+            .ask(t => this.becomeInfected(t))
     }
     setupNodes() {
         this.turtles.create(this.population, t => {
@@ -58,7 +67,22 @@ export default class VirusModel extends Model {
         this.doVirusChecks()
 
         this.done = this.turtles.all(o => !o.infected)
-        if (this.done) console.log(`Model done at tick: ${this.ticks}`)
+        if (this.done) {
+            const t = this.ticks
+            const n = this.population
+
+            const s = this.turtles.with(t => t.state === 'susceptible').length
+            const r = this.turtles.with(t => t.state === 'resistant').length
+            const f = val => Math.round((val * 10000) / n) / 100
+
+            console.log(
+                `done at ticks: ${t}, nodes: ${n}, resistant: ${f(r)}%, susceptible: ${f(s)}%`
+            )
+            this.susceptible = f(s)
+            this.resistant = f(r)
+            // window.susceptible = this.susceptible
+            // window.resistant = this.resistant
+        }
     }
 
     becomeInfected(t) {
@@ -67,7 +91,8 @@ export default class VirusModel extends Model {
         t.state = 'infected'
     }
     becomeSusceptible(t) {
-        t.infected = t.resistant = false
+        t.infected = false
+        t.resistant = false
         t.state = 'susceptible'
     }
     becomeResistant(t) {
@@ -102,3 +127,6 @@ export default class VirusModel extends Model {
             })
     }
 }
+
+// `done at ticks: ${t}, nodes: ${n}, resistant: ${(r * 100) / n}%, susceptible: ${(s * 100) / n}%`
+// `done at ticks: ${t}, nodes: ${n}, resistant: ${f('resistant')}%, susceptible: ${f('susceptible')}%`

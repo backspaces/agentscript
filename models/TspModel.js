@@ -119,7 +119,8 @@ export default class TSPModel extends Model {
     stopIfDone() {
         if (this.ticks - this.bestTourTick === this.stopTickDifference) {
             console.log(
-                `Stop: no change after ${this.stopTickDifference} ticks`,
+                `Stop: no change after ${this.stopTickDifference} ticks.`,
+                `${this.nodeCount} Nodes`,
                 `Best tour: ${this.bestTourLength} at tick ${this.bestTourTick}`
             )
             this.done = true

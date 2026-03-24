@@ -50,7 +50,10 @@ export default class FireModel extends Model {
         this.fadeEmbers()
 
         this.done = this.fires.length + this.embers.length === 0
-        if (this.done) console.log(`Model done at tick: ${this.ticks}`)
+        if (this.done)
+            console.log(
+                `done at ticks: ${this.ticks}, percentBurned: ${this.percentBurned()}`
+            )
     }
 
     isTree(p) {
