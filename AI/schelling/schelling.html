@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>Schelling</title>
+    </head>
+    <body>
+        <script type="module">
+            import Animator from 'https://agentscript.org/src/Animator.js'
+            import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
+            import Model from '/AI/schelling/SchellingModel.js'
+
+            const model = new Model()
+            model.setup()
+
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 8,
+                drawOptions: {
+                    patchesColor: p => {
+                        if (p.turtlesHere.length === 0) return 'white'
+                        return p.turtlesHere[0].group === 0 ? 'blue' : 'red'
+                    },
+                    turtlesSize: 0,
+                },
+            })
+
+            const status = document.getElementById('status')
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    status.textContent = `Tick: ${model.ticks}  Happy: ${model.percentHappy.toFixed(1)}%`
+                    if (model.done) anim.stop()
+                },
+                -1,
+                10
+            )
+        </script>
+        <div id="modelDiv"></div>
+        <div id="status"></div>
+    </body>
+</html>
