@@ -46,3 +46,17 @@ entirely from the patch based on which turtle is on it.
 
 Below the canvas, show a live status line:
 `Tick: {ticks}  Happy: {percent happy}%`
+
+---
+
+## Controls
+
+Add a simple control panel above the canvas with:
+
+- A **Setup** button that (re)initializes the model with the current slider values and draws the first frame
+- A **Go** button that starts the animation; while running it becomes a **Stop** button; clicking Stop pauses it; clicking Go resumes
+- A **Density** slider (range 1–99, default 70) with a live numeric readout
+- A **Tolerance** slider (range 0–100, default 50) with a live numeric readout
+
+The model should stop automatically (and Go revert to Go) when `model.done` is true.
+Run the Setup on page load so the initial state is visible without clicking.

@@ -22,6 +22,7 @@ Code    | Run demo
 [orbit](https://github.com/backspaces/agentscript/tree/master/views1/orbit.html#L1) | [https://agentscript.org/views1/orbit.html](https://agentscript.org/views1/orbit.html)
 [pheromone](https://github.com/backspaces/agentscript/tree/master/views1/pheromone.html#L1) | [https://agentscript.org/views1/pheromone.html](https://agentscript.org/views1/pheromone.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views1/roads.html#L1) | [https://agentscript.org/views1/roads.html](https://agentscript.org/views1/roads.html)
+[schelling](https://github.com/backspaces/agentscript/tree/master/views1/schelling.html#L1) | [https://agentscript.org/views1/schelling.html](https://agentscript.org/views1/schelling.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views1/shapes.html#L1) | [https://agentscript.org/views1/shapes.html](https://agentscript.org/views1/shapes.html)
 [slimemold](https://github.com/backspaces/agentscript/tree/master/views1/slimemold.html#L1) | [https://agentscript.org/views1/slimemold.html](https://agentscript.org/views1/slimemold.html)
 [template](https://github.com/backspaces/agentscript/tree/master/views1/template.html#L1) | [https://agentscript.org/views1/template.html](https://agentscript.org/views1/template.html)

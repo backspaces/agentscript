@@ -1,42 +1,140 @@
 <html>
     <head>
-        <title>Schelling</title>
+        <title>Schelling Segregation</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 16px;
+            }
+            #controls {
+                margin-bottom: 10px;
+                display: flex;
+                gap: 16px;
+                align-items: center;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            label {
+                font-size: 14px;
+            }
+            #status {
+                margin-top: 8px;
+                font-size: 15px;
+            }
+            button {
+                padding: 6px 14px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+        </style>
     </head>
     <body>
+        <h2>Schelling Segregation Model</h2>
+        <div id="controls">
+            <label
+                >Density:
+                <input id="density" type="range" min="1" max="99" value="70" />
+                <span id="densityVal">70</span>%</label
+            >
+            <label
+                >Tolerance:
+                <input
+                    id="tolerance"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="50"
+                />
+                <span id="toleranceVal">50</span>%</label
+            >
+            <button id="setupBtn">Setup</button>
+            <button id="goBtn">Go</button>
+        </div>
+        <div id="modelDiv"></div>
+        <div id="status">Tick: 0 &nbsp; Happy: 0%</div>
+
         <script type="module">
             import Animator from 'https://agentscript.org/src/Animator.js'
             import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
-            import Model from '/AI/schelling/SchellingModel.js'
+            import SchellingModel from './SchellingModel.js'
 
-            const model = new Model()
-            model.setup()
+            let model, view, anim
 
-            const view = new TwoDraw(model, {
-                div: 'modelDiv',
-                patchSize: 8,
-                drawOptions: {
-                    patchesColor: p => {
-                        if (p.turtlesHere.length === 0) return 'white'
-                        return p.turtlesHere[0].group === 0 ? 'blue' : 'red'
-                    },
-                    turtlesSize: 0,
+            const densitySlider = document.getElementById('density')
+            const toleranceSlider = document.getElementById('tolerance')
+            const densityVal = document.getElementById('densityVal')
+            const toleranceVal = document.getElementById('toleranceVal')
+            const statusDiv = document.getElementById('status')
+            const goBtn = document.getElementById('goBtn')
+
+            densitySlider.addEventListener(
+                'input',
+                () => (densityVal.textContent = densitySlider.value)
+            )
+            toleranceSlider.addEventListener(
+                'input',
+                () => (toleranceVal.textContent = toleranceSlider.value)
+            )
+
+            const drawOptions = {
+                patchesColor: p => {
+                    if (p.turtlesHere.length === 0) return 'white'
+                    return p.turtlesHere[0].group === 0 ? 'blue' : 'red'
                 },
+                turtlesSize: 0,
+            }
+
+            function updateStatus() {
+                statusDiv.textContent = `Tick: ${model.ticks}  Happy: ${model.percentHappy}%`
+            }
+
+            function setup() {
+                if (anim) anim.stop()
+                goBtn.textContent = 'Go'
+
+                model = new SchellingModel()
+                model.density = parseInt(densitySlider.value)
+                model.tolerance = parseInt(toleranceSlider.value)
+                model.setup()
+
+                view = new TwoDraw(model, {
+                    div: 'modelDiv',
+                    patchSize: 8,
+                    drawOptions,
+                })
+                view.draw()
+                updateStatus()
+            }
+
+            document.getElementById('setupBtn').addEventListener('click', setup)
+
+            goBtn.addEventListener('click', () => {
+                if (!model) return
+                if (anim && anim.isRunning()) {
+                    anim.stop()
+                    goBtn.textContent = 'Go'
+                    return
+                }
+                goBtn.textContent = 'Stop'
+                anim = new Animator(
+                    () => {
+                        model.step()
+                        view.draw()
+                        updateStatus()
+                        if (model.done) {
+                            anim.stop()
+                            goBtn.textContent = 'Go'
+                        }
+                    },
+                    -1,
+                    30
+                )
             })
 
-            const status = document.getElementById('status')
-
-            const anim = new Animator(
-                () => {
-                    model.step()
-                    view.draw()
-                    status.textContent = `Tick: ${model.ticks}  Happy: ${model.percentHappy.toFixed(1)}%`
-                    if (model.done) anim.stop()
-                },
-                -1,
-                10
-            )
+            setup()
         </script>
-        <div id="modelDiv"></div>
-        <div id="status"></div>
     </body>
 </html>

@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <title>Schelling</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import Animator from 'https://agentscript.org/src/Animator.js'
+            import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
+            import Model from '/models/SchellingModel.js'
+
+            // import GUI from 'https://agentscript.org/src/GUI.js'
+            // import GUI from '/src/GUI.js'
+            import GUIDiv from '/src/GUIDiv.js'
+
+            const model = new Model()
+            model.setup()
+
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 10,
+                drawOptions: {
+                    patchesColor: 'white',
+                    turtlesColor: t => (t.breed.name === 'Os' ? 'red' : 'blue'),
+                    turtlesShape: 'square',
+                    turtlesRotate: false,
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    // view.draw()
+                    model.step()
+                    view.draw()
+                    if (model.done) anim.stop()
+                },
+                -1, // run until done
+                30 // at 30 steps/second
+            ).stop()
+            // anim.step()
+
+            // // horizontal (default)
+            // new GUIDiv(template)
+            // // vertical
+            // new GUIDiv(template, { layout: 'column' })
+
+            new GUIDiv(
+                {
+                    fps: {
+                        slider: [2, [1, 30, 1]],
+                        cmd: val => {
+                            anim.setFps(val)
+                        },
+                    },
+                    density: {
+                        slider: [70, [1, 99, 1]],
+                        cmd: val => {
+                            model.density = val
+                            anim.restart(model, view)
+                        },
+                    },
+                    '---': {}, // ← new row
+                    'start/stop': {
+                        button: () => {
+                            anim.toggle()
+                        },
+                    },
+                    step: {
+                        button: () => {
+                            anim.once()
+                        },
+                    },
+                    restart: {
+                        button: () => {
+                            anim.restart(model, view)
+                        },
+                    },
+                    // '---2': {}, // ← new row
+                    modelTicks: {
+                        monitor: [model, 'ticks'],
+                    },
+                    isDone: {
+                        monitor: [model, 'done'],
+                    },
+                    percentHappy: {
+                        monitor: [model, 'percentHappy'],
+                    },
+                }
+                // { layout: 'column' }
+                // { layout: 'column', divId: 'controlsDiv' }
+            )
+
+            Object.assign(window, { model, view, anim })
+        </script>
+        <div id="modelDiv"></div>
+        <!-- <div style="display: flex; gap: 16px; align-items: flex-start">
+            <div id="modelDiv"></div>
+            <div id="controlsDiv"></div>
+        </div> -->
+    </body>
+</html>

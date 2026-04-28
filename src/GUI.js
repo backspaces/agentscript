@@ -94,12 +94,12 @@ class GUI {
         let control, extent
 
         if (type === 'monitor') cmd = () => val[0][val[1]]
-        if (type === 'button') cmd = val
+        // if (type === 'button') cmd = val
         if (['slider', 'chooser'].includes(type)) [val, extent] = val
 
-        console.log('addUI:', type, key, val, cmd)
-
         this.values[key] = val
+        console.log('\n--- addUI obj', obj, 'type', type)
+        console.log('key:', key, 'val:', val, 'cmd:', cmd)
 
         switch (type) {
             case 'slider':
@@ -115,8 +115,12 @@ class GUI {
                 control = this.gui.addColor(this.values, key)
                 break
 
-            case 'button':
+            // case 'button':
+            //     control = this.gui.add(this.values, val)
+            //     break
+
             case 'switch':
+            case 'button':
             case 'input':
                 control = this.gui.add(this.values, key)
                 break

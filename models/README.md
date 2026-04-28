@@ -22,6 +22,7 @@ Code    | Run demo
 [orbit](https://github.com/backspaces/agentscript/tree/master/models/OrbitModel.js#L1) | [https://agentscript.org/models/run.html?orbit](https://agentscript.org/models/run.html?orbit)
 [pheromone](https://github.com/backspaces/agentscript/tree/master/models/PheromoneModel.js#L1) | [https://agentscript.org/models/run.html?pheromone](https://agentscript.org/models/run.html?pheromone)
 [roads](https://github.com/backspaces/agentscript/tree/master/models/RoadsModel.js#L1) | [https://agentscript.org/models/run.html?roads](https://agentscript.org/models/run.html?roads)
+[schelling](https://github.com/backspaces/agentscript/tree/master/models/SchellingModel.js#L1) | [https://agentscript.org/models/run.html?schelling](https://agentscript.org/models/run.html?schelling)
 [shapes](https://github.com/backspaces/agentscript/tree/master/models/ShapesModel.js#L1) | [https://agentscript.org/models/run.html?shapes](https://agentscript.org/models/run.html?shapes)
 [slimeMold](https://github.com/backspaces/agentscript/tree/master/models/SlimeMoldModel.js#L1) | [https://agentscript.org/models/run.html?slimeMold](https://agentscript.org/models/run.html?slimeMold)
 [template](https://github.com/backspaces/agentscript/tree/master/models/TemplateModel.js#L1) | [https://agentscript.org/models/run.html?template](https://agentscript.org/models/run.html?template)
