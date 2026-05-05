@@ -41,7 +41,7 @@ export default class TSPModel extends Model {
         node.moveTo(this.patches.oneOf())
     }
     setupTraveler(t) {
-        t.tourNodes = this.nodes.clone().shuffle()
+        t.tourNodes = this.nodes.shuffle()
         t.tourLength = this.lengthFromNodes(t.tourNodes)
     }
 
@@ -100,7 +100,7 @@ export default class TSPModel extends Model {
         }
     }
     randomStrategy(a) {
-        return a.tourNodes.clone().shuffle()
+        return a.tourNodes.shuffle()
     }
     inversionStrategy(a) {
         return this.newInversion(a.tourNodes)

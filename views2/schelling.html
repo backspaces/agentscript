@@ -6,9 +6,8 @@
     <body>
         <script type="module">
             import Animator from 'https://agentscript.org/src/Animator.js'
+            import Model from 'https://agentscript.org/models/SchellingModel.js'
             import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
-            import Model from '/models/SchellingModel.js'
-            import GUIDiv from '/src/GUIDiv.js'
 
             const model = new Model()
             model.setup()
@@ -31,38 +30,9 @@
                     if (model.done) anim.stop()
                 },
                 -1,
-                30
-            ).stop()
-
-            new GUIDiv(
-                {
-                    fps: {
-                        chooser: [2, [1, 2, 5, 10, 30]],
-                        cmd: val => anim.setFps(val),
-                    },
-                    'density %': {
-                        slider: [70, [1, 99, 1]],
-                        cmd: val => { model.density = val; anim.restart(model, view) },
-                    },
-                    'tolerance %': {
-                        slider: [50, [1, 99, 1]],
-                        cmd: val => { model.tolerance = val; anim.restart(model, view) },
-                    },
-                    '---': {},
-                    'start/stop': { button: () => { if (model.done) anim.restart(model, view); anim.toggle() } },
-                    step:         { button: () => anim.once() },
-                    restart:      { button: () => anim.restart(model, view) },
-                    modelTicks:   { monitor: [model, 'ticks'] },
-                    isDone:       { monitor: [model, 'done'] },
-                    percentHappy: { monitor: [model, 'percentHappy'] },
-                },
-                { title: 'Schelling Segregation Model' }
+                5
             )
-
-            Object.assign(window, { model, view, anim })
         </script>
-
-        <div id="controlsDiv"></div>
         <div id="modelDiv"></div>
     </body>
 </html>

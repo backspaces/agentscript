@@ -7,8 +7,8 @@
         <script type="module">
             import Animator from 'https://agentscript.org/src/Animator.js'
             import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
-            import Model from '/models/SchellingModel.js'
-            import GUIDiv from '/src/GUIDiv.js'
+            import Model from 'https://agentscript.org/models/SchellingModel.js'
+            import GUIDiv from 'https://agentscript.org/src/GUIDiv.js'
 
             const model = new Model()
             model.setup()
@@ -62,7 +62,7 @@
                 },
                 {
                     divId: 'controlsDiv1',
-                    title: 'Schelling Segregation Model 2',
+                    title: 'Schelling Segregation Model',
                 }
             )
 
@@ -73,9 +73,14 @@
                         cmd: val => anim.setFps(val),
                     },
 
-                    modelTicks: { monitor: [model, 'ticks'] },
-                    isDone: { monitor: [model, 'done'] },
-                    percentHappy: { monitor: [model, 'percentHappy'] },
+                    steps: { monitor: [model, 'ticks'] },
+                    done: { monitor: [model, 'done'] },
+                    '% happy': { monitor: [model, 'percentHappy'] },
+
+                    patchSize: {
+                        slider: [10, [5, 15, 1]],
+                        cmd: val => view.reset(val),
+                    },
                 },
                 { divId: 'controls2' }
             )
