@@ -2,7 +2,7 @@ import World from 'https://agentscript.org/src/World.js'
 import Model from 'https://agentscript.org/src/Model.js'
 import * as util from 'https://agentscript.org/src/utils.js'
 
-export default class FooModel extends Model {
+export default class SchellingModel extends Model {
     density = 90 //70 // percent of patches occupied by agents (1–99)
     tolerance = 50 // minimum percent of same-group neighbors to be happy (0–100)
     percentHappy = 0
@@ -24,19 +24,11 @@ export default class FooModel extends Model {
         console.log(
             `Xs: ${this.Xs.length}, Os: ${this.Os.length}, empties: ${this.empties().length}, patches: ${this.patches.length}`
         )
-        // this.logEmpties()
     }
 
     empties() {
         return this.patches.with(p => p.turtlesHere.length === 0)
     }
-    // logEmpties() {
-    //     // const emptiesIDs = this.empties()
-    //     //     .map(p => p.id)
-    //     //     .join(' ')
-    //     // console.log(this.empties().length, emptiesIDs)
-    //     console.log('logEmpties called')
-    // }
 
     isHappy(t) {
         // patches have either 0 or 1 turtles
@@ -51,27 +43,22 @@ export default class FooModel extends Model {
         return (sameCount / occupied.length) * 100 >= this.tolerance
     }
 
+    unhappys() {
+        return this.turtles.with(t => !this.isHappy(t))
+    }
+    happys() {
+        return this.turtles.with(t => this.isHappy(t))
+    }
+
     step() {
         if (this.done) return
 
-        this.done = true
-        let happyCount = 0
-        this.turtles.ask(t => {
-            if (this.isHappy(t)) {
-                happyCount++
-            } else {
-                // if any turtle unhappy, move to an empty location
-                t.moveTo(this.empties().oneOf())
-                this.done = false
-            }
-        })
+        const unhappy = this.unhappys().shuffle()
+        unhappy.ask(t => t.moveTo(this.empties().oneOf()))
+
+        const happyCount = this.happys().length
         this.percentHappy = Math.floor((happyCount / this.turtles.length) * 100)
 
-        if (this.done) {
-            console.log('done, ticks:', this.ticks)
-            return
-        }
-
-        // this.logEmpties()
+        this.done = happyCount === this.turtles.length
     }
 }

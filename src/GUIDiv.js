@@ -10,27 +10,55 @@ const guiTypes = [
 
 class GUIDiv {
     // layout: 'row' (horizontal, wrapping) or 'column' (vertical)
-    // divId: id of an existing element to prepend into (default: document.body)
+    // divId: id of the controls div (default: 'controlsDiv')
+    // title: optional string — creates a centered title above controls
     // Keys starting with '---' insert a row/column break.
-    constructor(template, { divId = null, layout = 'row' } = {}) {
+    constructor(
+        template,
+        { divId = 'controlsDiv', layout = 'row', title = null } = {}
+    ) {
         this.template = template
         this.values = {}
         this.monitors = []
         this.layout = layout
 
-        this.container = document.createElement('div')
-        this.container.style.cssText = [
-            'display:flex',
-            layout === 'column' ? 'flex-direction:column' : 'flex-wrap:wrap',
-            'gap:8px',
-            'align-items:' + (layout === 'column' ? 'stretch' : 'center'),
-            'padding:8px',
-            'font-family:sans-serif',
-            'font-size:14px',
-        ].join(';')
+        // If title given, make body the centering column and prepend the title element
+        if (title !== null) {
+            Object.assign(document.body.style, {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                fontFamily: 'sans-serif',
+                padding: '16px',
+                gap: '8px',
+            })
+            const titleEl = document.createElement('div')
+            Object.assign(titleEl.style, {
+                fontSize: '1.4em',
+                fontWeight: 'bold',
+            })
+            titleEl.textContent = title
+            document.body.prepend(titleEl)
+        }
 
-        const target = divId ? document.getElementById(divId) : document.body
-        target.prepend(this.container)
+        // Use the controls div directly as the flex container; create it if absent
+        let controlsDiv = document.getElementById(divId)
+        if (!controlsDiv) {
+            controlsDiv = document.createElement('div')
+            controlsDiv.id = divId
+            document.body.appendChild(controlsDiv)
+        }
+        this.container = controlsDiv
+        Object.assign(this.container.style, {
+            display: 'flex',
+            flexDirection: layout === 'column' ? 'column' : 'row',
+            flexWrap: layout === 'column' ? 'nowrap' : 'wrap',
+            justifyContent: 'center',
+            gap: '8px',
+            alignItems: layout === 'column' ? 'stretch' : 'center',
+            fontFamily: 'sans-serif',
+            fontSize: '14px',
+        })
 
         for (const [key, obj] of Object.entries(template)) {
             if (key.startsWith('---')) {
@@ -82,7 +110,9 @@ class GUIDiv {
         const wrap = document.createElement('label')
         wrap.style.cssText = 'display:flex;align-items:center;gap:4px;'
         wrap.appendChild(
-            Object.assign(document.createElement('span'), { textContent: key + ':' })
+            Object.assign(document.createElement('span'), {
+                textContent: key + ':',
+            })
         )
 
         switch (type) {
@@ -178,8 +208,12 @@ class GUIDiv {
         this._rafId = requestAnimationFrame(tick)
     }
 
-    open() { this.container.style.display = 'flex' }
-    close() { this.container.style.display = 'none' }
+    open() {
+        this.container.style.display = 'flex'
+    }
+    close() {
+        this.container.style.display = 'none'
+    }
 }
 
 export default GUIDiv

@@ -420,7 +420,8 @@ AgentArray adds these NetLogo-style methods:
 ```js
 .props(name)            // return AgentArray of agent[name] values
 .sortBy(reporter)       // sort in place by property name or function
-.shuffle()              // shuffle in place
+.shuffle()              // return a shuffled copy (original unchanged)
+.shuffleInPlace()       // shuffle in place, return this
 .clone()                // return a shallow copy
 .isEmpty()              // true if length === 0
 .first() / .last()      // first or last agent

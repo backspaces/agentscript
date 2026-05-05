@@ -309,10 +309,13 @@ class AgentArray extends Array {
     clone() {
         return this.slice(0) // Returns an AgentArray rather than Array!
     }
-    // Randomize the AgentArray in place. Use clone first if new AgentArray needed.
-    // Return "this" for chaining.
-    shuffle() {
+    // Randomize the AgentArray in place. Return "this" for chaining.
+    shuffleInPlace() {
         return util.shuffle(this)
+    }
+    // Return a shuffled copy, leaving the original unchanged.
+    shuffle() {
+        return this.clone().shuffleInPlace()
     }
     // Return this AgentArray sorted by the reporter in ascending/descending order.
     // If reporter is a string, convert to a fcn returning that property.
@@ -399,7 +402,7 @@ class AgentArray extends Array {
     // otherNOf (n, agent) { return util.otherNOf(n, this, agent) }
     otherNOf(n, item) {
         if (this.length < n) throw Error('AgentArray: otherNOf: length < N')
-        return this.clone().remove(item).shuffle().slice(0, n)
+        return this.clone().remove(item).shuffleInPlace().slice(0, n)
     }
 
     // Return the first agent having the min/max of given value of f(agent).

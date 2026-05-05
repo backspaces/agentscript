@@ -7,6 +7,7 @@ Code    | Run demo
 [helloButtons](https://github.com/backspaces/agentscript/tree/master/mvc/helloButtons.html#L1) | [https://agentscript.org/mvc/helloButtons.html](https://agentscript.org/mvc/helloButtons.html)
 [helloElements](https://github.com/backspaces/agentscript/tree/master/mvc/helloElements.html#L1) | [https://agentscript.org/mvc/helloElements.html](https://agentscript.org/mvc/helloElements.html)
 [helloGui](https://github.com/backspaces/agentscript/tree/master/mvc/helloGui.html#L1) | [https://agentscript.org/mvc/helloGui.html](https://agentscript.org/mvc/helloGui.html)
+[helloGuiDiv](https://github.com/backspaces/agentscript/tree/master/mvc/helloGuiDiv.html#L1) | [https://agentscript.org/mvc/helloGuiDiv.html](https://agentscript.org/mvc/helloGuiDiv.html)
 [helloKeys](https://github.com/backspaces/agentscript/tree/master/mvc/helloKeys.html#L1) | [https://agentscript.org/mvc/helloKeys.html](https://agentscript.org/mvc/helloKeys.html)
 [helloMouse](https://github.com/backspaces/agentscript/tree/master/mvc/helloMouse.html#L1) | [https://agentscript.org/mvc/helloMouse.html](https://agentscript.org/mvc/helloMouse.html)
 [kelpforest](https://github.com/backspaces/agentscript/tree/master/mvc/kelpforest.html#L1) | [https://agentscript.org/mvc/kelpforest.html](https://agentscript.org/mvc/kelpforest.html)

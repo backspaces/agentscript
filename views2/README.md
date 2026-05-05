@@ -19,6 +19,7 @@ Code    | Run demo
 [pheromone](https://github.com/backspaces/agentscript/tree/master/views2/pheromone.html#L1) | [https://agentscript.org/views2/pheromone.html](https://agentscript.org/views2/pheromone.html)
 [roads](https://github.com/backspaces/agentscript/tree/master/views2/roads.html#L1) | [https://agentscript.org/views2/roads.html](https://agentscript.org/views2/roads.html)
 [schelling](https://github.com/backspaces/agentscript/tree/master/views2/schelling.html#L1) | [https://agentscript.org/views2/schelling.html](https://agentscript.org/views2/schelling.html)
+[schelling2](https://github.com/backspaces/agentscript/tree/master/views2/schelling2.html#L1) | [https://agentscript.org/views2/schelling2.html](https://agentscript.org/views2/schelling2.html)
 [shapes](https://github.com/backspaces/agentscript/tree/master/views2/shapes.html#L1) | [https://agentscript.org/views2/shapes.html](https://agentscript.org/views2/shapes.html)
 [slimemold](https://github.com/backspaces/agentscript/tree/master/views2/slimemold.html#L1) | [https://agentscript.org/views2/slimemold.html](https://agentscript.org/views2/slimemold.html)
 [template](https://github.com/backspaces/agentscript/tree/master/views2/template.html#L1) | [https://agentscript.org/views2/template.html](https://agentscript.org/views2/template.html)

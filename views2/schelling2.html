@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Schelling</title>
+        <title>Schelling 2</title>
     </head>
 
     <body>
@@ -36,33 +36,55 @@
 
             new GUIDiv(
                 {
+                    'density %': {
+                        slider: [70, [1, 99, 1]],
+                        cmd: val => {
+                            model.density = val
+                            anim.restart(model, view)
+                        },
+                    },
+                    'tolerance %': {
+                        slider: [50, [1, 99, 1]],
+                        cmd: val => {
+                            model.tolerance = val
+                            anim.restart(model, view)
+                        },
+                    },
+                    '---': {},
+                    'start/stop': {
+                        button: () => {
+                            if (model.done) anim.restart(model, view)
+                            anim.toggle()
+                        },
+                    },
+                    step: { button: () => anim.once() },
+                    restart: { button: () => anim.restart(model, view) },
+                },
+                {
+                    divId: 'controlsDiv1',
+                    title: 'Schelling Segregation Model 2',
+                }
+            )
+
+            new GUIDiv(
+                {
                     fps: {
                         chooser: [2, [1, 2, 5, 10, 30]],
                         cmd: val => anim.setFps(val),
                     },
-                    'density %': {
-                        slider: [70, [1, 99, 1]],
-                        cmd: val => { model.density = val; anim.restart(model, view) },
-                    },
-                    'tolerance %': {
-                        slider: [50, [1, 99, 1]],
-                        cmd: val => { model.tolerance = val; anim.restart(model, view) },
-                    },
-                    '---': {},
-                    'start/stop': { button: () => { if (model.done) anim.restart(model, view); anim.toggle() } },
-                    step:         { button: () => anim.once() },
-                    restart:      { button: () => anim.restart(model, view) },
-                    modelTicks:   { monitor: [model, 'ticks'] },
-                    isDone:       { monitor: [model, 'done'] },
+
+                    modelTicks: { monitor: [model, 'ticks'] },
+                    isDone: { monitor: [model, 'done'] },
                     percentHappy: { monitor: [model, 'percentHappy'] },
                 },
-                { title: 'Schelling Segregation Model' }
+                { divId: 'controls2' }
             )
 
             Object.assign(window, { model, view, anim })
         </script>
 
-        <div id="controlsDiv"></div>
+        <div id="controlsDiv1"></div>
         <div id="modelDiv"></div>
+        <div id="controlsDiv2"></div>
     </body>
 </html>

@@ -246,7 +246,8 @@ link.length // Euclidean distance between endpoints
 ```js
 .isEmpty()        // true if length === 0
 .first()          // first agent
-.shuffle()        // shuffle in place
+.shuffle()        // return a shuffled copy (original unchanged)
+.shuffleInPlace() // shuffle in place, return this
 .sortBy(fn)       // sort in place
 .props(name)      // AgentArray of agent[name] values
 ```
@@ -320,7 +321,21 @@ The standard HTML wrapper for running a model with a 2D canvas view:
         <div id="modelDiv"></div>
 ```
 
-**Important:** `TwoDraw` has no `reset()` method. To reinitialize (e.g. for a Setup button), always create a new `Model` and a new `TwoDraw`:
+**Animator methods:**
+
+```js
+anim.start()                    // start running
+anim.stop()                     // stop running; returns anim (chainable: new Animator(...).stop())
+anim.toggle()                   // stop if running, start if stopped
+anim.once()                     // advance one step (stops first if running)
+anim.isRunning()                // boolean
+anim.setFps(fps)                // change frames per second while running
+anim.restart(model, view)       // reset model (clear turtles, ticks=0, done=false, re-run setup()) then restart
+```
+
+**Restarting:** `anim.restart(model, view)` resets the model in place — the view continues to reference the same model object, so no new TwoDraw is needed.
+
+If you need to reinitialize without an Animator (e.g. a plain Setup button before Go is ever clicked), create a new Model and a new TwoDraw:
 
 ```js
 function setup() {
@@ -359,4 +374,101 @@ person  person2  pentagon  butterfly  ring  ring2  square  triangle
 
 ```
 Gray  LightGray  DarkGray  Hue  Jet  Rgb  Basic16  Transparent
+```
+
+---
+
+## GUIDiv — Controls
+
+`GUIDiv` provides interactive controls (sliders, buttons, monitors, etc.) rendered as HTML inside a div. Import it alongside Animator and TwoDraw:
+
+```js
+import GUIDiv from 'https://agentscript.org/src/GUIDiv.js'
+```
+
+### HTML
+
+The body only needs bare divs — no CSS required:
+
+```html
+<div id="controlsDiv"></div>
+<div id="modelDiv"></div>
+```
+
+### Constructor
+
+```js
+new GUIDiv(template, { divId = 'controlsDiv', layout = 'row', title = null } = {})
+```
+
+- **divId** — id of the div to populate (default `'controlsDiv'`)
+- **layout** — `'row'` (horizontal, wrapping) or `'column'` (vertical)
+- **title** — optional string; displays a bold centered title and sets up page centering
+
+### Template
+
+A plain object where each key is the control label and the value describes the control type:
+
+```js
+new GUIDiv({
+    fps: {
+        slider: [30, [5, 60, 5]],        // [default, [min, max, step]]
+        cmd: val => anim.setFps(val),
+    },
+    shape: {
+        chooser: ['dart', ['dart', 'bug', 'circle']], // [default, [options]]
+        cmd: val => (view.drawOptions.turtlesShape = val),
+    },
+    color: {
+        color: '#ff0000',
+        cmd: val => (view.drawOptions.turtlesColor = val),
+    },
+    paused: {
+        switch: false,                   // boolean default
+        cmd: val => val ? anim.stop() : anim.start(),
+    },
+    label: {
+        input: 'hello',                  // string default
+        cmd: val => (document.title = val),
+    },
+    reset: {
+        button: () => anim.restart(model, view),  // val is the click handler
+    },
+    ticks: {
+        monitor: [model, 'ticks'],       // live display of model.ticks
+    },
+}, { title: 'My Model' })
+```
+
+**Notes:**
+- `slider` and `chooser` values are `[default, extent]`; all others are just the default value
+- `button` val is the click handler directly — no `cmd` key needed
+- `switch` is not called on init (only on user interaction)
+- `monitor` polls the property each animation frame automatically
+
+### Row breaks
+
+Any key starting with `'---'` inserts a line break between rows:
+
+```js
+{
+    density: { slider: [70, [1, 99, 1]], cmd: val => model.density = val },
+    '---': {},
+    restart: { button: () => anim.restart(model, view) },
+}
+```
+
+### Multiple control panels
+
+Use different `divId`s and add matching divs to the HTML:
+
+```html
+<div id="topControls"></div>
+<div id="modelDiv"></div>
+<div id="bottomControls"></div>
+```
+
+```js
+new GUIDiv(template1, { title: 'My Model', divId: 'topControls' })
+new GUIDiv(template2, { divId: 'bottomControls' })
 ```

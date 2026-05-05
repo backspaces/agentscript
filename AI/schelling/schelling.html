@@ -1,60 +1,61 @@
 <html>
     <head>
         <title>Schelling Segregation</title>
-        <style>
-            body {
-                font-family: sans-serif;
+    </head>
+    <body>
+        <div
+            style="
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                font-family: sans-serif;
                 padding: 16px;
-            }
-            #controls {
-                margin-bottom: 10px;
-                display: flex;
-                gap: 16px;
-                align-items: center;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            label {
-                font-size: 14px;
-            }
-            #status {
-                margin-top: 8px;
-                font-size: 15px;
-            }
-            button {
-                padding: 6px 14px;
-                font-size: 14px;
-                cursor: pointer;
-            }
-        </style>
-    </head>
-    <body>
-        <h2>Schelling Segregation Model</h2>
-        <div id="controls">
-            <label
-                >Density:
-                <input id="density" type="range" min="1" max="99" value="70" />
-                <span id="densityVal">70</span>%</label
+                gap: 8px;
+            "
+        >
+            <div style="font-size: 1.4em; font-weight: bold">
+                Schelling Segregation Model
+            </div>
+            <div
+                id="controls"
+                style="
+                    display: flex;
+                    gap: 16px;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    font-size: 14px;
+                "
             >
-            <label
-                >Tolerance:
-                <input
-                    id="tolerance"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value="50"
-                />
-                <span id="toleranceVal">50</span>%</label
-            >
-            <button id="setupBtn">Setup</button>
-            <button id="goBtn">Go</button>
+                <label
+                    >Density:
+                    <input
+                        id="density"
+                        type="range"
+                        min="1"
+                        max="99"
+                        value="70"
+                    />
+                    <span id="densityVal">70</span>%</label
+                >
+                <label
+                    >Tolerance:
+                    <input
+                        id="tolerance"
+                        type="range"
+                        min="0"
+                        max="100"
+                        value="50"
+                    />
+                    <span id="toleranceVal">50</span>%</label
+                >
+                <button id="setupBtn">Setup</button>
+                <button id="goBtn">Go</button>
+            </div>
+            <div id="modelDiv"></div>
+            <div id="status" style="font-size: 15px">
+                Tick: 0 &nbsp; Happy: 0%
+            </div>
         </div>
-        <div id="modelDiv"></div>
-        <div id="status">Tick: 0 &nbsp; Happy: 0%</div>
 
         <script type="module">
             import Animator from 'https://agentscript.org/src/Animator.js'

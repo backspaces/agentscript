@@ -4,6 +4,7 @@ import World from 'https://agentscript.org/src/World.js'
 export default class SchellingModel extends Model {
     density = 70
     tolerance = 50
+    percentHappy = 0
 
     constructor(worldOptions = World.defaultOptions(25)) {
         super(worldOptions)
@@ -20,6 +21,10 @@ export default class SchellingModel extends Model {
         this.updateHappy()
     }
 
+    empties() {
+        return this.patches.with(p => p.turtlesHere.length === 0)
+    }
+
     isHappy(t) {
         const occupied = t.patch.neighbors.with(n => n.turtlesHere.length > 0)
         if (occupied.length === 0) return true
@@ -29,25 +34,14 @@ export default class SchellingModel extends Model {
 
     updateHappy() {
         const happyCount = this.turtles.count(t => this.isHappy(t))
-        this.percentHappy = this.turtles.length > 0
-            ? Math.round((happyCount / this.turtles.length) * 100)
-            : 100
+        this.percentHappy = Math.floor((happyCount / this.turtles.length) * 100)
+        this.done = happyCount === this.turtles.length
     }
 
     step() {
-        const unhappy = this.turtles.with(t => !this.isHappy(t))
-        if (unhappy.length === 0) {
-            this.done = true
-            return
-        }
-
-        const empty = this.patches.with(p => p.turtlesHere.length === 0)
-        empty.shuffle()
-        let idx = 0
-        unhappy.ask(t => {
-            if (idx < empty.length) t.moveTo(empty[idx++])
+        this.turtles.with(t => !this.isHappy(t)).shuffle().ask(t => {
+            t.moveTo(this.empties().oneOf())
         })
-
         this.updateHappy()
     }
 }
