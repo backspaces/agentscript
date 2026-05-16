@@ -21,8 +21,10 @@ export default class SchellingModel extends Model {
             }
         })
 
+        this.setPercentHappy()
+
         console.log(
-            `Xs: ${this.Xs.length}, Os: ${this.Os.length}, empties: ${this.empties().length}, patches: ${this.patches.length}`
+            `Xs: ${this.Xs.length}, Os: ${this.Os.length}, empties: ${this.empties().length}, patches: ${this.patches.length}, happy: ${this.percentHappy}`
         )
     }
 
@@ -49,6 +51,13 @@ export default class SchellingModel extends Model {
     happys() {
         return this.turtles.with(t => this.isHappy(t))
     }
+    setPercentHappy() {
+        const happyCount = this.happys().length
+        this.percentHappy = Math.floor((happyCount / this.turtles.length) * 100)
+    }
+    // isDone() {
+    //     return happyCount === this.turtles.length
+    // }
 
     step() {
         if (this.done) return
@@ -56,9 +65,10 @@ export default class SchellingModel extends Model {
         const unhappy = this.unhappys().shuffle()
         unhappy.ask(t => t.moveTo(this.empties().oneOf()))
 
-        const happyCount = this.happys().length
-        this.percentHappy = Math.floor((happyCount / this.turtles.length) * 100)
+        // const happyCount = this.happys().length
+        // this.percentHappy = Math.floor((happyCount / this.turtles.length) * 100)
+        this.setPercentHappy()
 
-        this.done = happyCount === this.turtles.length
+        this.done = this.percentHappy === 100
     }
 }

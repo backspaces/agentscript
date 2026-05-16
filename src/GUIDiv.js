@@ -5,8 +5,11 @@ const guiTypes = [
     'slider',
     'chooser',
     'monitor',
+    'plot',
     'switch',
 ]
+
+const plotColors = ['red', 'steelblue', 'green', 'orange']
 
 class GUIDiv {
     // layout: 'row' (horizontal, wrapping) or 'column' (vertical)
@@ -20,6 +23,7 @@ class GUIDiv {
         this.template = template
         this.values = {}
         this.monitors = []
+        this.plots = []
         this.layout = layout
 
         // If title given, make body the centering column and prepend the title element
@@ -68,7 +72,8 @@ class GUIDiv {
             }
         }
 
-        if (this.monitors.length > 0) this.startMonitors()
+        if (this.monitors.length > 0 || this.plots.length > 0)
+            this.startMonitors()
     }
 
     addBreak() {
@@ -145,7 +150,8 @@ class GUIDiv {
                         })
                     )
                 }
-                el.addEventListener('change', () => cmd(el.value))
+                const parse = typeof extent[0] === 'number' ? parseFloat : v => v
+                el.addEventListener('change', () => cmd(parse(el.value)))
                 wrap.appendChild(el)
                 if (cmd) cmd(val)
                 break
@@ -193,6 +199,31 @@ class GUIDiv {
                 this.monitors.push({ el, obj: monObj, key: monKey })
                 break
             }
+
+            case 'plot': {
+                // Optional trailing [width, height] numbers: [model,'prop', w, h]
+                let srcList = val
+                let pw = 200, ph = 50
+                if (typeof srcList[srcList.length - 1] === 'number') {
+                    ph = srcList[srcList.length - 1]
+                    pw = srcList[srcList.length - 2]
+                    srcList = srcList.slice(0, -2)
+                }
+                // Normalize single [model,'prop'] or multi [[m,'p1'],[m,'p2']]
+                const sources = Array.isArray(srcList[0]) ? srcList : [srcList]
+                const canvas = document.createElement('canvas')
+                canvas.width = pw
+                canvas.height = ph
+                canvas.style.cssText = 'border:1px solid #ccc;background:white;'
+                wrap.appendChild(canvas)
+                this.plots.push({
+                    canvas,
+                    sources,
+                    data: sources.map(() => []),
+                    lastTick: -1,
+                })
+                break
+            }
         }
 
         this.container.appendChild(wrap)
@@ -203,9 +234,70 @@ class GUIDiv {
             for (const { el, obj, key } of this.monitors) {
                 el.textContent = obj[key]
             }
+            for (const plot of this.plots) {
+                const { canvas, sources, data } = plot
+                const model = sources[0][0]
+                const currentTick = model.ticks
+                if (currentTick < plot.lastTick) {
+                    for (const d of data) d.length = 0 // restart detected
+                }
+                if (currentTick !== plot.lastTick) {
+                    plot.lastTick = currentTick
+                    for (let s = 0; s < sources.length; s++) {
+                        const [obj, key] = sources[s]
+                        data[s].push(obj[key])
+                    }
+                    this.drawPlot(canvas, data)
+                }
+            }
             this._rafId = requestAnimationFrame(tick)
         }
         this._rafId = requestAnimationFrame(tick)
+    }
+
+    drawPlot(canvas, data) {
+        const W = canvas.width
+        const H = canvas.height
+        const ctx = canvas.getContext('2d')
+        const n = data[0].length
+        if (n < 2) return
+
+        ctx.clearRect(0, 0, W, H)
+
+        const allVals = data.flat()
+        let yMin = Math.min(...allVals)
+        let yMax = Math.max(...allVals)
+        if (yMin === yMax) {
+            yMin -= 1
+            yMax += 1
+        }
+
+        // Left margin for y-axis labels
+        const ml = 30,
+            mr = 4,
+            mt = 4,
+            mb = 4
+        const pw = W - ml - mr
+        const ph = H - mt - mb
+
+        ctx.fillStyle = '#888'
+        ctx.font = '9px sans-serif'
+        ctx.textAlign = 'right'
+        ctx.fillText(yMax.toFixed(0), ml - 2, mt + 9)
+        ctx.fillText(yMin.toFixed(0), ml - 2, mt + ph)
+
+        for (let s = 0; s < data.length; s++) {
+            const d = data[s]
+            ctx.beginPath()
+            ctx.strokeStyle = plotColors[s % plotColors.length]
+            ctx.lineWidth = 1.5
+            for (let i = 0; i < n; i++) {
+                const x = ml + (i / (n - 1)) * pw
+                const y = mt + ph - ((d[i] - yMin) / (yMax - yMin)) * ph
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
+            }
+            ctx.stroke()
+        }
     }
 
     open() {

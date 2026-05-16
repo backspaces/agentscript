@@ -1,14 +1,15 @@
 <html>
     <head>
-        <title>Schelling 2</title>
+        <title>Schelling</title>
     </head>
 
     <body>
         <script type="module">
-            import Animator from 'https://agentscript.org/src/Animator.js'
+            // import Animator from 'https://agentscript.org/src/Animator.js'
+            import Animator from '/src/Animator.js'
             import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
-            import Model from 'https://agentscript.org/models/SchellingModel.js'
-            import GUIDiv from 'https://agentscript.org/src/GUIDiv.js'
+            import Model from '/models/SchellingModel.js'
+            import GUIDiv from '/src/GUIDiv.js'
 
             const model = new Model()
             model.setup()
@@ -53,15 +54,16 @@
                     '---': {},
                     'start/stop': {
                         button: () => {
-                            if (model.done) anim.restart(model, view)
+                            // if (model.done) anim.restart(model, view)
                             anim.toggle()
                         },
                     },
                     step: { button: () => anim.once() },
                     restart: { button: () => anim.restart(model, view) },
+                    '% happy': { monitor: [model, 'percentHappy'] },
                 },
                 {
-                    divId: 'controlsDiv1',
+                    divId: 'controlDiv1',
                     title: 'Schelling Segregation Model',
                 }
             )
@@ -73,23 +75,26 @@
                         cmd: val => anim.setFps(val),
                     },
 
-                    steps: { monitor: [model, 'ticks'] },
+                    ticks: { monitor: [anim, 'ticks'] },
                     done: { monitor: [model, 'done'] },
-                    '% happy': { monitor: [model, 'percentHappy'] },
 
                     patchSize: {
                         slider: [10, [5, 15, 1]],
                         cmd: val => view.reset(val),
                     },
+
+                    '---': {},
+
+                    '% happy': { plot: [model, 'percentHappy'] },
                 },
-                { divId: 'controls2' }
+                { divId: 'controlDiv2' }
             )
 
             Object.assign(window, { model, view, anim })
         </script>
 
-        <div id="controlsDiv1"></div>
+        <div id="controlDiv1"></div>
         <div id="modelDiv"></div>
-        <div id="controlsDiv2"></div>
+        <div id="controlDiv2"></div>
     </body>
 </html>

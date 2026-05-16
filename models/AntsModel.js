@@ -13,6 +13,7 @@ export default class AntsModel extends Model {
     foodY = () => 0
     nestX = world => world.maxX - 6
     nestY = () => 0
+
     foodSeekers = 0
     nestSeekers = 0
 
@@ -23,6 +24,8 @@ export default class AntsModel extends Model {
     }
 
     setup() {
+        this.foodSeekers = 0 // initialized here in case restarted by Animator
+        this.nestSeekers = 0
         this.turtles.setDefault('atEdge', 'bounce')
         this.setupPatches()
         this.setupTurtles()

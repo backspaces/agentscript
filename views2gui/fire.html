@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>Fire</title>
+    </head>
+
+    <body>
+        <script type="module">
+            // import Animator from 'https://agentscript.org/src/Animator.js'
+            import Animator from '/src/Animator.js'
+            import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
+            // import Model from 'https://agentscript.org/models/FireModel.js'
+            import Model from '/models/FireModel.js'
+            import Color from 'https://agentscript.org/src/Color.js'
+            import GUIDiv from '/src/GUIDiv.js'
+
+            const model = new Model()
+            model.setup()
+
+            const patchesPixel = {
+                // pixel values for patches, huge speedup via patches pixel rect
+                dirt: Color.cssToPixel('yellow'),
+                tree: Color.cssToPixel('green'),
+                fire: Color.cssToPixel('red'),
+                ember4: Color.rgbaToPixel(255 - 25, 0, 0),
+                ember3: Color.rgbaToPixel(255 - 50, 0, 0),
+                ember2: Color.rgbaToPixel(255 - 75, 0, 0),
+                ember1: Color.rgbaToPixel(255 - 100, 0, 0),
+                ember0: Color.rgbaToPixel(255 - 125, 0, 0),
+            }
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 4,
+                drawOptions: {
+                    patchesColor: p => patchesPixel[p.type],
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    if (model.done) anim.stop()
+                },
+                -1, // run until done
+                30 // at fps steps/second
+            ).stop()
+
+            Object.assign(window, { model, view, anim })
+
+            new GUIDiv(
+                {
+                    density: {
+                        slider: [60, [40, 90, 1]],
+                        cmd: val => {
+                            model.density = val
+                            anim.restart(model, view)
+                        },
+                    },
+                    // '---': {},
+                    'start/stop': {
+                        button: () => {
+                            // if (model.done) anim.restart(model, view)
+                            anim.toggle()
+                        },
+                    },
+                    step: { button: () => anim.once() },
+                    restart: { button: () => anim.restart(model, view) },
+                    burnedTrees: { monitor: [model, 'burnedTrees'] },
+                },
+                {
+                    divId: 'controlDiv1',
+                    title: 'Fire Model',
+                }
+            )
+
+            new GUIDiv(
+                {
+                    fps: {
+                        chooser: [30, [5, 10, 30, 60]],
+                        cmd: val => anim.setFps(val),
+                    },
+
+                    ticks: { monitor: [anim, 'ticks'] },
+                    done: { monitor: [model, 'done'] },
+
+                    patchSize: {
+                        slider: [2, [0.5, 4, 0.25]],
+                        cmd: val => view.reset(val),
+                    },
+
+                    '---': {},
+
+                    burnedTrees: { plot: [model, 'burnedTrees'] },
+                },
+                { divId: 'controlDiv2' }
+            )
+        </script>
+
+        <div id="controlDiv1"></div>
+        <div id="modelDiv"></div>
+        <div id="controlDiv2"></div>
+    </body>
+</html>

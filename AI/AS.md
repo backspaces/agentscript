@@ -437,10 +437,21 @@ new GUIDiv({
     ticks: {
         monitor: [model, 'ticks'],       // live display of model.ticks
     },
+    percentHappy: {
+        plot: [model, 'percentHappy'],            // single-series, default 200×50
+    },
+    counts: {
+        plot: [[model, 'food'], [model, 'ants']], // two-series
+    },
+    wide: {
+        plot: [model, 'percentHappy', 300, 80],   // custom width, height
+    },
 }, { title: 'My Model' })
 ```
 
 **Notes:**
+- `plot` val is `[model, 'prop']` for one series or `[[model, 'p1'], [model, 'p2']]` for two. Append optional `width, height` numbers: `[model, 'prop', 300, 80]`. Default size is 200×50. The canvas auto-scales y. On `anim.restart()`, the plot clears automatically.
+
 - `slider` and `chooser` values are `[default, extent]`; all others are just the default value
 - `button` val is the click handler directly — no `cmd` key needed
 - `switch` is not called on init (only on user interaction)

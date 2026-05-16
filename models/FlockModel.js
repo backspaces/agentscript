@@ -8,6 +8,9 @@ export default class FlockModel extends Model {
     maxTurn = 3.0 // max turn in degrees
     minSeparation = 0.75 // Keep turtles apart by this distance, in patches
 
+    cohesion // set flock cohesion after each step
+    maxCohesion // keep track of the max cohesion
+
     // ======================
 
     // We can use Model's constructor, due to using Model's default World.
@@ -23,16 +26,30 @@ export default class FlockModel extends Model {
         util.repeat(this.population, () => {
             this.patches.oneOf().sprout()
         })
+
+        this.cohesion = this.flockCohesion()
+        console.log('initial cohesion', this.cohesion)
+        this.maxCohesion = this.cohesion
     }
 
     step() {
         this.turtles.ask(t => {
             this.flock(t)
         })
-        if (this.ticks % 50 === 49) this.report()
-    }
-    report() {
-        console.log('step', this.ticks + 1, 'cohesion:', this.flockCohesion())
+
+        this.cohesion = this.flockCohesion()
+        if (this.cohesion > this.maxCohesion) this.maxCohesion = this.cohesion
+
+        if (this.ticks % 50 === 0) {
+            console.log(
+                'step',
+                this.ticks,
+                'cohesion:',
+                this.cohesion,
+                'maxCohesion',
+                this.maxCohesion
+            )
+        }
     }
 
     flock(t) {
@@ -85,6 +102,10 @@ export default class FlockModel extends Model {
         const thetas = this.turtles.map(t => t.theta)
         const dx = thetas.map(theta => Math.cos(theta)).reduce((x, y) => x + y)
         const dy = thetas.map(theta => Math.sin(theta)).reduce((x, y) => x + y)
-        return Math.sqrt(dx * dx + dy * dy) / this.population
+        // return Math.sqrt(dx * dx + dy * dy) / this.population
+        const cohesion = Math.sqrt(dx * dx + dy * dy) / this.population
+        return cohesion.toFixed(4)
+        // return Math.trunc(cohesion * 100000) / 100000 // 0.96955
+        // return Math.trunc(cohesion * digits) / digits // 0.96955
     }
 }

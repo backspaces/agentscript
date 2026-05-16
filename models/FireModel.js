@@ -12,7 +12,13 @@ export default class FireModel extends Model {
     }
 
     setup() {
-        this.patchBreeds('fires embers')
+        if (this.fires) {
+            while (this.fires.length > 0) this.fires[0].setBreed(this.patches)
+            while (this.embers.length > 0) this.embers[0].setBreed(this.patches)
+        } else {
+            this.patchBreeds('fires embers')
+        }
+        // this.patchBreeds('fires embers')
 
         this.patchTypes = [
             'dirt',
@@ -28,14 +34,41 @@ export default class FireModel extends Model {
         this.treeType = this.patchTypes[1]
         this.fireType = this.patchTypes[2]
 
+        this.burnedTrees = 0
+
         this.patches.ask(p => {
-            if (p.x === this.world.minX) this.ignite(p)
-            else if (util.randomInt(100) < this.density) p.type = this.treeType
-            else p.type = this.dirtType
+            if (p.x === this.world.minX) {
+                this.ignite(p)
+            } else if (util.randomInt(100) < this.density) {
+                p.type = this.treeType
+            } else {
+                p.type = this.dirtType
+            }
         })
 
-        this.burnedTrees = 0
         this.initialTrees = this.patches.filter(p => this.isTree(p)).length
+
+        console.log(
+            'initialTrees:',
+            this.initialTrees,
+            'burnedTrees:',
+            this.burnedTrees,
+            'density:',
+            this.density,
+            'fires:',
+            this.fires.length,
+            'embers:',
+            this.embers.length
+        )
+        // console.log('fires', this.fires.length, 'embers', this.embers.length)
+
+        // console.log('fires:', this.fires)
+    }
+
+    ignite(p) {
+        p.type = this.fireType
+        p.setBreed(this.fires)
+        this.burnedTrees++
     }
 
     step() {
@@ -52,7 +85,7 @@ export default class FireModel extends Model {
         this.done = this.fires.length + this.embers.length === 0
         if (this.done)
             console.log(
-                `done at ticks: ${this.ticks}, percentBurned: ${this.percentBurned()}`
+                `done at ticks: ${this.ticks}, density: ${this.density} => percentBurned: ${this.percentBurned()}`
             )
     }
 
@@ -66,11 +99,11 @@ export default class FireModel extends Model {
     //     return this.fires.length + this.embers.length === 0
     // }
 
-    ignite(p) {
-        p.type = this.fireType
-        p.setBreed(this.fires)
-        this.burnedTrees++
-    }
+    // ignite(p) {
+    //     p.type = this.fireType
+    //     p.setBreed(this.fires)
+    //     this.burnedTrees++
+    // }
 
     fadeEmbers() {
         this.embers.ask(p => {

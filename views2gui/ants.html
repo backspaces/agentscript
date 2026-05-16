@@ -1,0 +1,133 @@
+<html>
+    <head>
+        <title>Ants</title>
+    </head>
+
+    <body>
+        <script type="module">
+            // import Animator from 'https://agentscript.org/src/Animator.js'
+            import Animator from '/src/Animator.js'
+            import TwoDraw from 'https://agentscript.org/src/TwoDraw.js'
+            // import Model from 'https://agentscript.org/models/AntsModel.js'
+            import Model from '/models/AntsModel.js'
+            import ColorMap from 'https://agentscript.org/src/ColorMap.js'
+            // import GUIDiv from 'https://agentscript.org/src/GUIDiv.js'
+            import GUIDiv from '/src/GUIDiv.js'
+
+            const model = new Model()
+            model.setup()
+
+            const nestColor = 'yellow'
+            const foodColor = 'blue'
+            const nestColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                nestColor,
+            ])
+            const foodColorMap = ColorMap.gradientColorMap(20, [
+                'black',
+                foodColor,
+            ])
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 10, // overridden by gui
+                drawOptions: {
+                    patchesColor: p => {
+                        if (p.isNest) return nestColor
+                        if (p.isFood) return foodColor
+                        return p.foodPheromone > p.nestPheromone
+                            ? foodColorMap.scaleColor(p.foodPheromone, 0, 1)
+                            : nestColorMap.scaleColor(p.nestPheromone, 0, 1)
+                    },
+                    turtlesShape: 'bug',
+                    turtlesSize: 3, // in patches, overridden by gui
+                    turtlesColor: t => (t.carryingFood ? nestColor : foodColor),
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // go 500 steps
+                30 // at fps steps/second, overridden by gui
+            ).stop() // let gui manage start/stop
+
+            new GUIDiv(
+                {
+                    patchSize: {
+                        slider: [7, [0, 15, 1]],
+                        cmd: val => view.reset(val),
+                    },
+                    fps: {
+                        slider: [10, [1, 60, 1]],
+                        cmd: val => {
+                            anim.setFps(val)
+                            // anim.restart(model, view)
+                        },
+                    },
+                    turtlesSize: {
+                        slider: [3, [1, 10, 1]],
+                        cmd: val => (view.drawOptions.turtlesSize = val),
+                    },
+                    '---': {},
+                    population: {
+                        slider: [200, [50, 1000, 50]],
+                        cmd: val => {
+                            model.population = val
+                            anim.restart(model, view)
+                        },
+                    },
+                    'start/stop': {
+                        button: () => {
+                            // if (model.done) anim.restart(model, view)
+                            anim.toggle()
+                        },
+                    },
+                    step: { button: () => anim.once() },
+                    restart: { button: () => anim.restart(model, view) },
+                    ticks: { monitor: [anim, 'ticks'] },
+                    stopAt: {
+                        chooser: [250, [250, 500, 1000, 2000, 5000]],
+                        cmd: val => {
+                            anim.setSteps(val)
+                            anim.restart(model, view)
+                        },
+                    },
+                },
+                {
+                    divId: 'controlsDiv1',
+                    title: 'Ants Model',
+                }
+            )
+            new GUIDiv(
+                {
+                    turtlesShape: {
+                        chooser: ['bug', ['bug', 'dart', 'arrow']],
+                        cmd: val => (view.drawOptions.turtlesShape = val),
+                    },
+                    // '----': {},
+                    ants: {
+                        plot: [
+                            [model, 'foodSeekers'],
+                            [model, 'nestSeekers'],
+                            300,
+                            50,
+                        ],
+                    },
+                    downloadCanvas: {
+                        button: () => view.downloadCanvas(),
+                    },
+                },
+                {
+                    divId: 'controlsDiv2',
+                }
+            )
+
+            Object.assign(window, { model, view, anim })
+        </script>
+        <div id="controlsDiv1"></div>
+        <div id="modelDiv"></div>
+        <div id="controlsDiv2"></div>
+    </body>
+</html>

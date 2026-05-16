@@ -4,6 +4,8 @@ import Stats from '/vendor/stats.js'
  * Class Animator controls running of a function.
  */
 class Animator {
+    done = false
+
     /**
      * Sets parameters, then calls start().
      * To have the model not start immediately do:
@@ -36,6 +38,7 @@ class Animator {
         this.timeoutID = setInterval(() => this.step(), 1000 / this.fps)
         // if (this.idleID) this.idleID = clearInterval(this.idleID)
 
+        // this.done = false
         return this // chaining off ctor
     }
     /**
@@ -49,10 +52,15 @@ class Animator {
         this.clearIDs()
         if (this.idle)
             this.idleID = setInterval(() => this.idle(), 1000 / this.idleFps)
+        // this.done = true
         return this // chaining off ctor
     }
     step() {
-        if (this.ticks === this.steps) return this.stop()
+        if (this.ticks === this.steps) {
+            this.done = true
+            return this.stop()
+        }
+        this.done = false
         // this.ticks++ // inside fcn anim.ticks starts at one
         this.fcn()
         this.ticks++ // inside fcn anim.ticks starts at zero
@@ -116,10 +124,8 @@ class Animator {
     // }
 
     setFps(fps) {
-        if (fps <= 0) {
-            console.log('fps must be > 0, using 0.00000001')
-            fps = 0.00000001
-        }
+        if (fps <= 0 || !Number.isInteger(fps))
+            throw Error('fps: must be integer > 0')
         this.reset(this.steps, fps)
     }
     setSteps(steps) {
@@ -129,9 +135,11 @@ class Animator {
     reset(steps = this.steps, fps = this.fps) {
         const wasRunning = this.isRunning()
         if (wasRunning) this.stop()
+
+        if (!wasRunning || fps == this.fps) this.ticks = 0
         this.steps = steps
-        this.ticks = 0
         this.fps = fps
+
         if (wasRunning) this.start()
     }
 
