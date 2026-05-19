@@ -1,4 +1,6 @@
-import Model from 'https://agentscript.org/src/Model.js'
+// import Model from 'https://agentscript.org/src/Model.js'
+import Model from '/src/Model.js'
+import World from '/src/World.js'
 import * as util from 'https://agentscript.org/src/utils.js'
 
 // Subclass class Model to create our new model, HelloModel
@@ -7,21 +9,22 @@ class HelloModel extends Model {
     speed = 0.1 // step size in patch units
     wiggleAngle = 10 // wiggle angle in degrees
     linksToo = true // handy to show just turtles if false
+    atEdge = 'bounce' // when turtle at edge: wrap bounce die clamp random
+    startAtCenter = true
 
-    // worldOptions = undefined, means use default worldOptions:
-    // 33 x 33 patches with 0,0 origin at the center.
-    constructor(worldOptions = undefined) {
+    // worldOptions: patches -16 to 16 or 33 x 33 with 0,0 origin
+    constructor(worldOptions = World.defaultOptions(16)) {
         super(worldOptions)
     }
 
     setup() {
         // Have turtles "bounce" at the Patches edges. Default is to wrap
-        this.turtles.setDefault('atEdge', 'bounce')
+        this.turtles.setDefault('atEdge', this.atEdge)
 
         // create "population" turtles placed on random patches
-        this.turtles.create(this.population, t =>
-            t.moveTo(this.patches.oneOf())
-        )
+        this.turtles.create(this.population, t => {
+            if (!this.startAtCenter) t.moveTo(this.patches.oneOf())
+        })
 
         // If links.too is true, create a link from every turtle to another turtle
         if (this.linksToo) {

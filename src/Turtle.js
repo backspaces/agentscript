@@ -209,6 +209,7 @@ class Turtle {
                 this.die()
             } else if (atEdge === 'random') {
                 this.setxy(...this.model.world.randomPoint())
+                this.theta = util.randomInt(360)
             } else if (atEdge === 'clamp' || atEdge === 'bounce') {
                 this.x = util.clamp(x, minXcor, maxXcor)
                 this.y = util.clamp(y, minYcor, maxYcor)
