@@ -1,10 +1,11 @@
-import World from 'https://agentscript.org/src/World.js'
-import Model from 'https://agentscript.org/src/Model.js'
+import World from '/src/World.js'
+import Model from '/src/Model.js'
 
 export default class ExitModel extends Model {
     numExits = 10
     population = 0.75 // percent of inside populated
 
+    turtlesLeft
     // ======================
 
     constructor(worldOptions = World.defaultOptions(35, 35, 1)) {
@@ -12,11 +13,21 @@ export default class ExitModel extends Model {
     }
 
     setup() {
+        // if (this.exits) {
+        //     while (this.exits.length > 0) this.exits[0].setBreed(this.patches)
+        //     while (this.inside.length > 0) this.inside[0].setBreed(this.patches)
+        //     while (this.wall.length > 0) this.wall[0].setBreed(this.patches)
+        // } else {
+        //     this.patchBreeds('exits inside wall')
+        // }
+
         this.patchBreeds('exits inside wall')
         this.turtles.setDefault('atEdge', turtle => turtle.die())
 
         this.setupPatches()
         this.setupTurtles()
+
+        this.turtlesLeft = this.turtles.length
     }
     setupPatches() {
         const { maxX, maxY } = this.world
@@ -70,6 +81,7 @@ export default class ExitModel extends Model {
                 numMoves++
             }
         })
+        this.turtlesLeft = this.turtles.length
         this.done = numMoves === 0
         if (this.done)
             console.log(

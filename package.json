@@ -23,7 +23,7 @@
         "views1/",
         "views2/",
         "views2full/",
-        "views2mvc/",
+        "views2gui/",
         "views25/",
         "views3/"
     ],
@@ -63,7 +63,7 @@
         "runmodels": "bin/runnodemodels",
         "run1": "bin/modelsinbrowser views1",
         "run2": "bin/modelsinbrowser views2",
-        "run2mvc": "bin/modelsinbrowser views2mvc",
+        "run2gui": "bin/modelsinbrowser views2gui",
         "runmvc": "bin/modelsinbrowser mvc",
         "run2full": "bin/modelsinbrowser views2full",
         "run25": "bin/modelsinbrowser views25",
@@ -71,8 +71,7 @@
         "runui": "bin/modelsinbrowser uielements",
         "runleaf": "bin/modelsinbrowser leaflet",
         "runml": "bin/modelsinbrowser maplibre",
-        "runnode": "bin/runnodemodels",
-        "runapps": "npm run runleaf & npm run runmvc & npm runmvc"
+        "runnode": "bin/runnodemodels"
     },
     "dependencies": {
         "express": "^5.1.0",

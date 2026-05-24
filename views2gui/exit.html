@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <title>Exit</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/ExitModel.js'
+            import ColorMap from '/src/ColorMap.js'
+            import GUIDiv from '/src/GUIDiv.js'
+
+            const model = new Model() // use model's default world options
+            model.setup()
+
+            // const patchColors = model.patches.map(p => {
+            //     switch (p.breed.name) {
+            //         case 'exits':
+            //             return ColorMap.Basic16.atIndex(p.exitNumber + 4)
+            //         case 'inside':
+            //             return 'black'
+            //         case 'wall':
+            //             return 'gray'
+            //         default:
+            //             return ColorMap.LightGray.randomColor()
+            //     }
+            // })
+
+            function patchColors(model, view) {
+                const colors = model.patches.map(p => {
+                    switch (p.breed.name) {
+                        case 'exits':
+                            return ColorMap.Basic16.atIndex(p.exitNumber + 4)
+                        case 'inside':
+                            return 'black'
+                        case 'wall':
+                            return 'gray'
+                        default:
+                            return ColorMap.LightGray.randomColor()
+                    }
+                })
+                return colors
+            }
+
+            // const patchColors = (model, view) => {
+            //     const colors = model.patches.map(p => {
+            //         switch (p.breed.name) {
+            //             case 'exits':
+            //                 return ColorMap.Basic16.atIndex(p.exitNumber + 4)
+            //             case 'inside':
+            //                 return 'black'
+            //             case 'wall':
+            //                 return 'gray'
+            //             default:
+            //                 return ColorMap.LightGray.randomColor()
+            //         }
+            //     })
+            //     return colors
+            // }
+
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 10,
+                drawOptions: {
+                    turtlesShape: 'circle',
+                    // turtlesColor: t => patchColors[t.exit.id],
+                    turtlesColor: t => view.initPatchesColors[t.exit.id],
+                    turtlesSize: 1,
+                    // initPatches: () => patchColors,
+                    // initPatches: patchColors,
+                    // initPatches: (model, view) => {
+                    //     const colors = model.patches.map(p => {
+                    //         switch (p.breed.name) {
+                    //             case 'exits':
+                    //                 return ColorMap.Basic16.atIndex(
+                    //                     p.exitNumber + 4
+                    //                 )
+                    //             case 'inside':
+                    //                 return 'black'
+                    //             case 'wall':
+                    //                 return 'gray'
+                    //             default:
+                    //                 return ColorMap.LightGray.randomColor()
+                    //         }
+                    //     })
+                    //     return colors
+                    // },
+                    initPatches: patchColors,
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    if (model.done) anim.stop()
+                },
+                -1, // run until done
+                30 // at fps steps/second
+            ).stop()
+
+            new GUIDiv(
+                {
+                    'population %': {
+                        slider: [0.75, [0.1, 1, 0.1]],
+                        cmd: val => {
+                            model.population = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    exits: {
+                        slider: [10, [1, 15, 1]],
+                        cmd: val => {
+                            model.numExits = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    // '---- 1': {},
+
+                    patchSize: {
+                        slider: [10, [5, 20, 1]],
+                        cmd: val => view.reset(val),
+                    },
+
+                    '---- 2': {},
+
+                    'start/stop': {
+                        button: () => {
+                            if (anim.done) anim.restart(model, view)
+                            anim.toggle()
+                        },
+                    },
+                    step: { button: () => anim.once() },
+                    restart: { button: () => anim.restart(model, view) },
+                    ticks: { monitor: [anim, 'ticks'] },
+                    done: { monitor: [model, 'done'] },
+                    turtlesLeft: { monitor: [model, 'turtlesLeft'] },
+                },
+                {
+                    divId: 'controlsDiv1',
+                    title: 'Exit Model',
+                }
+            )
+
+            // new GUIDiv(
+            //     {
+            //         // toggleLinks: {
+            //         //     button: () => {
+            //         //         model.linksToo = !model.linksToo
+            //         //         anim.restart(model, view)
+            //         //     },
+            //         // },
+
+            //         fps: {
+            //             chooser: [30, [5, 10, 30, 60]],
+            //             cmd: val => anim.setFps(val),
+            //         },
+
+            //         downloadCanvas: {
+            //             button: () => view.downloadCanvas(),
+            //         },
+
+            //         ticks: { plot: [model, 'ticks'] },
+            //     },
+            //     {
+            //         divId: 'controlsDiv2',
+            //     }
+            // )
+
+            Object.assign(window, { model, view, anim })
+        </script>
+        <div id="controlsDiv1"></div>
+        <div id="modelDiv"></div>
+        <div id="controlsDiv2"></div>
+    </body>
+</html>

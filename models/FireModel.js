@@ -1,6 +1,6 @@
-import World from 'https://agentscript.org/src/World.js'
-import Model from 'https://agentscript.org/src/Model.js'
-import * as util from 'https://agentscript.org/src/utils.js'
+import World from '/src/World.js'
+import Model from '/src/Model.js'
+import * as util from '/src/utils.js'
 
 export default class FireModel extends Model {
     density = 60 // percent of patches with tree
@@ -12,13 +12,15 @@ export default class FireModel extends Model {
     }
 
     setup() {
-        if (this.fires) {
-            while (this.fires.length > 0) this.fires[0].setBreed(this.patches)
-            while (this.embers.length > 0) this.embers[0].setBreed(this.patches)
-        } else {
-            this.patchBreeds('fires embers')
-        }
-        // this.patchBreeds('fires embers')
+        // if (this.fires) {
+        //     while (this.fires.length > 0) this.fires[0].setBreed(this.patches)
+        //     while (this.embers.length > 0) this.embers[0].setBreed(this.patches)
+        //     // this.fires.length = 0
+        //     // this.embers.length = 0
+        // } else {
+        //     this.patchBreeds('fires embers')
+        // }
+        this.patchBreeds('fires embers')
 
         this.patchTypes = [
             'dirt',

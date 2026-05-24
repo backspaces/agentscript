@@ -153,10 +153,11 @@ class TwoDraw extends TwoView {
     //     if (redraw) this.draw()
     //     super.reset()
     // }
-    reset(patchesSize) {
+    reset(patchesSize = null) {
         this.ticks = 0
-        super.reset(patchesSize)
+        if (patchesSize) super.reset(patchesSize)
         this.draw()
+        console.log('view.reset')
     }
 
     setValue(key, val) {
@@ -176,6 +177,7 @@ class TwoDraw extends TwoView {
         this.draw()
     }
 
+    initPatchesColors
     draw() {
         // params = Object.assign({}, TwoDraw.defaultOptions(), params)
         const model = this.model
@@ -210,8 +212,12 @@ class TwoDraw extends TwoView {
 
             if (initPatches) {
                 // colors is an array of typedColors or pixels:
-                const colors = initPatches(model, view)
-                view.createPatchPixels(i => colors[i])
+                // const colors = initPatches(model, view)
+                // this.initPatchesColors = colors
+                this.initPatchesColors = initPatches(model, view)
+
+                view.createPatchPixels(i => this.initPatchesColors[i])
+                // view.createPatchPixels(i => colors[i])
                 // console.log(colors)
             } else if (patchesColor === 'random') {
                 // NOTE: random colors only done once for patches.
@@ -252,8 +258,8 @@ class TwoDraw extends TwoView {
                 linksColor === 'random'
                     ? turtlesMap.atIndex(l.id)
                     : typeof linksColor === 'function'
-                    ? checkColor(l, linksColor(l))
-                    : linksColor,
+                      ? checkColor(l, linksColor(l))
+                      : linksColor,
             // width: linksWidth,
             width:
                 typeof linksWidth === 'function' ? linksWidth(l) : linksWidth,
@@ -268,14 +274,14 @@ class TwoDraw extends TwoView {
                 turtlesColor === 'random'
                     ? turtlesMap.atIndex(t.id).css
                     : typeof turtlesColor === 'function'
-                    ? checkColor(t, turtlesColor(t))
-                    : turtlesColor,
+                      ? checkColor(t, turtlesColor(t))
+                      : turtlesColor,
             strokeColor:
                 turtlesStrokeColor === 'random'
                     ? turtlesMap.atIndex(t.id + 4).css
                     : typeof turtlesColor === 'function'
-                    ? checkColor(t, turtlesColor(t))
-                    : turtlesColor,
+                      ? checkColor(t, turtlesColor(t))
+                      : turtlesColor,
             size:
                 typeof turtlesSize === 'function'
                     ? turtlesSize(t)

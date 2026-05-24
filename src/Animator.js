@@ -145,6 +145,7 @@ class Animator {
 
     restart(model, view, ctrl = undefined) {
         model.reset()
+        view.reset()
         // window.ui.view.reset()
         this.reset()
         view.draw()

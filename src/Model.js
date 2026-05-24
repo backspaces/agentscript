@@ -69,6 +69,7 @@ class Model {
      */
     initModel(worldOptions) {
         this.ticks = 0
+        this.done = false
         this.world =
             worldOptions.maxXcor === undefined // is already a world object
                 ? this.options2world(worldOptions)
@@ -86,6 +87,8 @@ class Model {
      * @param {boolean} [callSetup=true]
      */
     reset(callSetup = true) {
+        // this.initModel(this.world)
+        // this.initAgentSet('patches', Patches, Patch)
         this.turtles.clear()
         this.turtles.ID = 0
         this.ticks = 0
@@ -150,6 +153,10 @@ class Model {
      */
     patchBreeds(breedNames) {
         for (const breedName of breedNames.split(' ')) {
+            if (this[breedName]) {
+                while (this[breedName].length > 0)
+                    this[breedName][0].setBreed(this.patches)
+            }
             this[breedName] = this.patches.newBreed(breedName)
         }
     }
