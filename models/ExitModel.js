@@ -42,9 +42,21 @@ export default class ExitModel extends Model {
             })
         })
 
-        this.wall.nOf(this.numExits).ask((p, i) => {
+        // this.wall.nOf(this.numExits).ask((p, i) => {
+        //     p.setBreed(this.exits)
+        //     p.exitNumber = i
+        //     console.log('p', p, 'i', i, 'exits', this.exits.length)
+        // })
+        // const wallids = this.wall.map(w => w.id).sort()
+        // console.log('wallids', wallids)
+
+        const nOf = this.wall.nOf(this.numExits)
+        // const ids = nOf.map(n => n.id).sort()
+        // console.log('nOf', nOf, 'ids', ids)
+        nOf.ask((p, i) => {
             p.setBreed(this.exits)
             p.exitNumber = i
+            console.log('p', p, 'i', i, 'exits', this.exits.length)
         })
     }
     setupTurtles() {
@@ -85,7 +97,7 @@ export default class ExitModel extends Model {
         this.done = numMoves === 0
         if (this.done)
             console.log(
-                `done at step: ${this.ticks}, turtles left: ${this.turtles.length}`
+                `done at step: ${this.ticks + 1}, turtles left: ${this.turtles.length}`
             )
     }
 }

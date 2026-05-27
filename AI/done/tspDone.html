@@ -8,8 +8,8 @@
             import Model from '/models/TspModel.js'
 
             const model = new Model()
-            model.nodeCount = 50
-            model.stopTickDifference = model.nodeCount * 5
+            model.population = 50
+            model.stopTickDifference = model.population * 5
             await model.startup()
             model.setup()
 

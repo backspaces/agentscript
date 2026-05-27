@@ -123,7 +123,8 @@
                         )
                         break
                     case 'mousedrag':
-                        if (selectedTurtle) selectedTurtle.setxy(x, y)
+                        // if (selectedTurtle) selectedTurtle.setxy(x, y)
+                        if (selectedTurtle) model.moveNode(selectedTurtle, x, y)
                         break
                     case 'mouseup':
                         selectedTurtle = null

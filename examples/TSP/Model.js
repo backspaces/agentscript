@@ -3,7 +3,7 @@ import Model from 'https://agentscript.org/src/Model.js'
 import * as util from 'https://agentscript.org/src/utils.js'
 
 export default class TSPModel extends Model {
-    nodeCount = 50
+    population = 50
     travelersCount = 100
     growPopulation = true
     useInversion = true
@@ -26,7 +26,7 @@ export default class TSPModel extends Model {
         this.bestTourTick = 0
         this.tourChanges = 0
 
-        this.nodes.create(this.nodeCount, node => {
+        this.nodes.create(this.population, node => {
             this.setupNode(node)
         })
 

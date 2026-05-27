@@ -1,9 +1,9 @@
-import World from 'https://agentscript.org/src/World.js'
-import Model from 'https://agentscript.org/src/Model.js'
-import * as util from 'https://agentscript.org/src/utils.js'
+import World from '/src/World.js'
+import Model from '/src/Model.js'
+import * as util from '/src/utils.js'
 
 export default class TSPModel extends Model {
-    nodeCount = 50
+    population = 50
     travelersCount = 100
     growPopulation = true
     useInversion = true
@@ -23,15 +23,19 @@ export default class TSPModel extends Model {
         // globals
         this.bestTourNodes = []
         this.bestTourLength = 0
+        this.tourLength = '0'
         this.bestTourTick = 0
         this.tourChanges = 0
 
-        this.nodes.create(this.nodeCount, node => {
+        this.stopTickDifference =
+            this.population * (this.useInversion ? 5 : 10000)
+        this.nodes.create(this.population, node => {
             this.setupNode(node)
         })
 
         this.createTourLinks(this.nodes) //()
         this.bestTourLength = this.links.reduce((sum, l) => sum + l.length(), 0)
+        this.tourLength = this.bestTourLength.toFixed(4)
 
         this.travelers.create(this.travelersCount, t => this.setupTraveler(t))
     }
@@ -78,6 +82,9 @@ export default class TSPModel extends Model {
             this.bestTourLength = a.tourLength
             this.bestTourNodes = a.tourNodes
             this.bestTourTick = this.ticks
+
+            this.tourLength = this.bestTourLength.toFixed(4)
+
             // this.onChange(a.tourLength, this.tourChanges, this.ticks)
             this.tourChanges++
             this.createTourLinks(this.bestTourNodes)
@@ -120,13 +127,14 @@ export default class TSPModel extends Model {
         if (this.ticks - this.bestTourTick === this.stopTickDifference) {
             console.log(
                 `Stop: no change after ${this.stopTickDifference} ticks.`,
-                `${this.nodeCount} Nodes`,
+                `${this.population} Nodes`,
                 `Best tour: ${this.bestTourLength} at tick ${this.bestTourTick}`
             )
             this.done = true
         }
     }
 
+    // used by mouse's mousedrag event in mvc/tsp.html
     moveNode(node, x, y) {
         node.setxy(x, y)
         this.bestTourLength = this.links.reduce((sum, l) => sum + l.length(), 0)

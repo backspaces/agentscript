@@ -448,7 +448,8 @@ class AgentArray extends Array {
         const result = new AgentArray()
         while (result.length < n) {
             const o = this.oneOf()
-            if (!(o in result)) result.push(o)
+            // if (!(o in result)) result.push(o)
+            if (!result.includes(o)) result.push(o)
         }
         return result
     }

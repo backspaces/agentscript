@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>Tsp</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/TspModel.js'
+            import GUIDiv from '/src/GUIDiv.js'
+
+            const model = new Model()
+            model.setup()
+
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 6,
+                drawOptions: {
+                    patchesColor: 'black',
+                    turtlesShape: 'circle',
+                    // turtlesSize of 0 will skip drawing this turle
+                    // here "travelers" are skipped
+                    turtlesSize: t => (t.breed.name === 'nodes' ? 2 : 0),
+                    turtlesColor: 'yellow',
+                    linksColor: 'red',
+                    linksWidth: 2,
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    if (model.done) anim.stop()
+                },
+                -1, // run intil done
+                30 // at fps steps/second
+            ).stop()
+
+            new GUIDiv(
+                {
+                    population: {
+                        slider: [50, [10, 200, 10]],
+                        cmd: val => {
+                            model.population = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    // '---- 1': {},
+
+                    patchSize: {
+                        slider: [8, [1, 20, 1]],
+                        cmd: val => view.reset(val),
+                    },
+
+                    '---- 2': {},
+
+                    ticks: { monitor: [anim, 'ticks'] },
+                    done: { monitor: [model, 'done'] },
+                    'start/stop': {
+                        button: () => {
+                            if (model.done) anim.restart(model, view)
+                            anim.toggle()
+                        },
+                    },
+                    step: { button: () => anim.once() },
+                    restart: { button: () => anim.restart(model, view) },
+                    // tourLength: { monitor: [model, 'bestTourLength'] },
+                    tourLength: { monitor: [model, 'tourLength'] },
+                    tourChanges: { monitor: [model, 'tourChanges'] },
+                    tourTicks: { monitor: [model, 'bestTourTick'] },
+                },
+                {
+                    divId: 'controlsDiv1',
+                    title: 'Traveling Sales Person Model',
+                }
+            )
+
+            new GUIDiv(
+                {
+                    fps: {
+                        chooser: [30, [5, 10, 30, 60]],
+                        cmd: val => anim.setFps(val),
+                    },
+                    downloadCanvas: {
+                        button: () => view.downloadCanvas(),
+                    },
+                    tourLength: { plot: [model, 'bestTourLength'] },
+                },
+                {
+                    divId: 'controlsDiv2',
+                }
+            )
+
+            Object.assign(window, { model, view, anim })
+        </script>
+        <div id="controlsDiv1"></div>
+        <div id="modelDiv"></div>
+        <div id="controlsDiv2"></div>
+    </body>
+</html>

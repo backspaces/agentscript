@@ -77,7 +77,7 @@
                     },
                     'start/stop': {
                         button: () => {
-                            // if (model.done) anim.restart(model, view)
+                            if (anim.done) anim.restart(model, view)
                             anim.toggle()
                         },
                     },

@@ -1,23 +1,39 @@
 <html>
     <head>
-        <title>Flock</title>
+        <title>Virus</title>
     </head>
 
     <body>
         <script type="module">
             import Animator from '/src/Animator.js'
             import TwoDraw from '/src/TwoDraw.js'
-            import Model from '/models/FlockModel.js'
+            import Model from '/models/VirusModel.js'
             import GUIDiv from '/src/GUIDiv.js'
 
             const model = new Model()
             model.setup()
 
+            const turtleColors = {
+                infected: 'red',
+                susceptible: 'blue',
+                resistant: 'gray',
+            }
+            function isResistant(l) {
+                return (
+                    l.end0.state === 'resistant' || l.end1.state === 'resistant'
+                )
+            }
             const view = new TwoDraw(model, {
                 div: 'modelDiv',
-                patchSize: 20,
+                patchSize: 10,
                 drawOptions: {
+                    patchesColor: 'black',
+                    turtlesShape: 'circle',
                     turtlesSize: 1.5,
+                    turtlesColor: t => turtleColors[t.state],
+                    // linksColor: 'white',
+                    linksColor: l => (isResistant(l) ? 'gray' : 'white'),
+                    linksWidth: 2,
                 },
             })
 
@@ -25,79 +41,67 @@
                 () => {
                     model.step()
                     view.draw()
+                    if (model.done) anim.stop()
                 },
-                500, // how many steps
+                -1, // how many steps
                 30 // at fps steps/second
             ).stop()
 
             new GUIDiv(
                 {
-                    patchSize: {
-                        slider: [20, [10, 30, 1]],
-                        cmd: val => view.reset(val),
-                    },
-                    fps: {
-                        slider: [20, [1, 60, 1]],
-                        cmd: val => {
-                            anim.setFps(val)
-                            // anim.restart(model, view)
-                        },
-                    },
-                    // turtlesSize: {
-                    //     slider: [1.5, [1, 10, 0.5]],
-                    //     cmd: val => (view.drawOptions.turtlesSize = val),
-                    // },
                     population: {
-                        slider: [100, [50, 1000, 50]],
+                        slider: [150, [10, 300, 5]],
                         cmd: val => {
                             model.population = val
                             anim.restart(model, view)
                         },
                     },
-                    '---': {},
+
+                    // '---- 1': {},
+
+                    patchSize: {
+                        slider: [8, [1, 20, 1]],
+                        cmd: val => view.reset(val),
+                    },
+
+                    '---- 2': {},
+
+                    ticks: { monitor: [anim, 'ticks'] },
+                    done: { monitor: [model, 'done'] },
                     'start/stop': {
                         button: () => {
-                            if (anim.done) anim.restart(model, view)
+                            if (model.done) anim.restart(model, view)
                             anim.toggle()
                         },
                     },
                     step: { button: () => anim.once() },
                     restart: { button: () => anim.restart(model, view) },
-                    ticks: { monitor: [anim, 'ticks'] },
-                    stopAt: {
-                        chooser: [1000, [250, 500, 1000, 2000, 5000]],
-                        cmd: val => {
-                            anim.setSteps(val)
-                            anim.restart(model, view)
-                        },
-                    },
-                    cohesion: { monitor: [model, 'cohesion'] },
-                    maxCohesion: { monitor: [model, 'maxCohesion'] },
+
+                    susceptible: { monitor: [model, 'susceptible'] },
+                    resistant: { monitor: [model, 'resistant'] },
+                    infected: { monitor: [model, 'infected'] },
+
+                    // tourLength: { monitor: [model, 'bestTourLength'] },
+                    // tourLength: { monitor: [model, 'tourLength'] },
+                    // tourChanges: { monitor: [model, 'tourChanges'] },
+                    // tourTicks: { monitor: [model, 'bestTourTick'] },
                 },
                 {
                     divId: 'controlsDiv1',
-                    title: 'Flock Model',
+                    title: 'Virus Model',
                 }
             )
+
             new GUIDiv(
                 {
-                    // ticks: { monitor: [anim, 'ticks'] },
-                    // turtlesShape: {
-                    //     chooser: ['bug', ['bug', 'dart', 'arrow']],
-                    //     cmd: val => (view.drawOptions.turtlesShape = val),
-                    // },
-                    // '----': {},
                     fps: {
                         chooser: [30, [5, 10, 30, 60]],
                         cmd: val => anim.setFps(val),
                     },
-                    cohesion: {
-                        plot: [[model, 'cohesion'], 300, 50],
-                    },
-                    // cohesion: { monitor: [model, 'cohesion'] },
                     downloadCanvas: {
                         button: () => view.downloadCanvas(),
                     },
+                    // tourLength: { plot: [model, 'bestTourLength'] },
                 },
                 {
                     divId: 'controlsDiv2',

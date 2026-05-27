@@ -5,9 +5,9 @@
 // states: susceptible, infected, or resistant. In the academic literature
 // such a model is sometimes referred to as an SIR model for epidemics.
 
-import World from 'https://agentscript.org/src/World.js'
-import Model from 'https://agentscript.org/src/Model.js'
-import * as util from 'https://agentscript.org/src/utils.js'
+import World from '/src/World.js'
+import Model from '/src/Model.js'
+import * as util from '/src/utils.js'
 
 // A port of the NetLogo "Virus on a Network" model
 export default class VirusModel extends Model {
@@ -31,6 +31,8 @@ export default class VirusModel extends Model {
         this.turtles
             .nOf(this.initialOutbreakSize)
             .ask(t => this.becomeInfected(t))
+
+        this.postState()
     }
     setupNodes() {
         this.turtles.create(this.population, t => {
@@ -55,6 +57,14 @@ export default class VirusModel extends Model {
         }
     }
 
+    postState() {
+        this.susceptible = this.turtles.with(
+            t => t.state === 'susceptible'
+        ).length
+        this.resistant = this.turtles.with(t => t.state === 'resistant').length
+        this.infected = this.turtles.with(t => t.state === 'infected').length
+    }
+
     step() {
         if (this.done) return
 
@@ -66,23 +76,26 @@ export default class VirusModel extends Model {
         this.spreadVirus()
         this.doVirusChecks()
 
-        this.done = this.turtles.all(o => !o.infected)
-        if (this.done) {
-            const t = this.ticks
-            const n = this.population
+        this.postState()
+        this.done = this.infected === 0
 
-            const s = this.turtles.with(t => t.state === 'susceptible').length
-            const r = this.turtles.with(t => t.state === 'resistant').length
-            const f = val => Math.round((val * 10000) / n) / 100
+        // this.done = this.turtles.all(o => !o.infected)
+        // if (this.done) {
+        //     const t = this.ticks
+        //     const n = this.population
 
-            console.log(
-                `done at ticks: ${t}, nodes: ${n}, resistant: ${f(r)}%, susceptible: ${f(s)}%`
-            )
-            this.susceptible = f(s)
-            this.resistant = f(r)
-            // window.susceptible = this.susceptible
-            // window.resistant = this.resistant
-        }
+        //     const s = this.turtles.with(t => t.state === 'susceptible').length
+        //     const r = this.turtles.with(t => t.state === 'resistant').length
+        //     const f = val => Math.round((val * 10000) / n) / 100
+
+        //     console.log(
+        //         `done at ticks: ${t}, nodes: ${n}, resistant: ${f(r)}%, susceptible: ${f(s)}%`
+        //     )
+        //     this.susceptible = f(s)
+        //     this.resistant = f(r)
+        //     // window.susceptible = this.susceptible
+        //     // window.resistant = this.resistant
+        // }
     }
 
     becomeInfected(t) {
