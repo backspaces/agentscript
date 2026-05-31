@@ -57,11 +57,53 @@
                         },
                     },
 
-                    // '---- 1': {},
+                    // : {
+                    avgLinks: {
+                        slider: [6, [1, 20, 1]],
+                        cmd: val => {
+                            model.averageNodeDegree = val
+                            anim.restart(model, view)
+                        },
+                    },
 
-                    patchSize: {
-                        slider: [8, [1, 20, 1]],
-                        cmd: val => view.reset(val),
+                    initOutbreak: {
+                        slider: [3, [1, 20, 1]],
+                        cmd: val => {
+                            model.initialOutbreakSize = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    'spread %': {
+                        slider: [2.5, [0, 10, 0.1]],
+                        cmd: val => {
+                            model.virusSpreadPercent = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    checkEvery: {
+                        slider: [1, [1, 20, 1]],
+                        cmd: val => {
+                            model.virusCheckFrequency = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    'recovery %': {
+                        slider: [5.0, [0, 10, 0.1]],
+                        cmd: val => {
+                            model.virusSpreadPercent = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    'resistance %': {
+                        slider: [5, [0, 100, 1]],
+                        cmd: val => {
+                            model.gainResistancePercent = val
+                            anim.restart(model, view)
+                        },
                     },
 
                     '---- 2': {},
@@ -94,6 +136,11 @@
 
             new GUIDiv(
                 {
+                    patchSize: {
+                        slider: [8, [1, 20, 1]],
+                        cmd: val => view.reset(val),
+                    },
+
                     fps: {
                         chooser: [30, [5, 10, 30, 60]],
                         cmd: val => anim.setFps(val),
@@ -101,7 +148,13 @@
                     downloadCanvas: {
                         button: () => view.downloadCanvas(),
                     },
-                    // tourLength: { plot: [model, 'bestTourLength'] },
+                    virus: {
+                        plot: [
+                            [model, 'infected'],
+                            [model, 'susceptible'],
+                            [model, 'resistant'],
+                        ],
+                    },
                 },
                 {
                     divId: 'controlsDiv2',

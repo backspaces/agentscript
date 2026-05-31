@@ -14,6 +14,7 @@ export default class VirusModel extends Model {
     population = 150
     averageNodeDegree = 6
     initialOutbreakSize = 3
+
     virusSpreadPercent = 2.5
     virusCheckFrequency = 1
     recoveryPercent = 5.0
@@ -78,24 +79,6 @@ export default class VirusModel extends Model {
 
         this.postState()
         this.done = this.infected === 0
-
-        // this.done = this.turtles.all(o => !o.infected)
-        // if (this.done) {
-        //     const t = this.ticks
-        //     const n = this.population
-
-        //     const s = this.turtles.with(t => t.state === 'susceptible').length
-        //     const r = this.turtles.with(t => t.state === 'resistant').length
-        //     const f = val => Math.round((val * 10000) / n) / 100
-
-        //     console.log(
-        //         `done at ticks: ${t}, nodes: ${n}, resistant: ${f(r)}%, susceptible: ${f(s)}%`
-        //     )
-        //     this.susceptible = f(s)
-        //     this.resistant = f(r)
-        //     // window.susceptible = this.susceptible
-        //     // window.resistant = this.resistant
-        // }
     }
 
     becomeInfected(t) {
@@ -140,6 +123,3 @@ export default class VirusModel extends Model {
             })
     }
 }
-
-// `done at ticks: ${t}, nodes: ${n}, resistant: ${(r * 100) / n}%, susceptible: ${(s * 100) / n}%`
-// `done at ticks: ${t}, nodes: ${n}, resistant: ${f('resistant')}%, susceptible: ${f('susceptible')}%`

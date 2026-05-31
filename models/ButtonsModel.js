@@ -1,20 +1,25 @@
+import World from 'https://agentscript.org/src/World.js'
 import Model from 'https://agentscript.org/src/Model.js'
 
 export default class ButtonsModel extends Model {
     population = 50 // number of buttons
+    cluster
+    linksCount
+    clusterSize
 
     // ======================
 
-    // We can use Model's constructor, due to using Model's default World.
-    // If you pass in world options, Model will use them
-    // constructor() {
-    //     super() // use default world options.
-    // }
+    constructor(worldOptions = World.defaultOptions(20)) {
+        super(worldOptions)
+    }
 
     setup() {
         this.turtles.setDefault('theta', 0) // override promotion to random angle
 
         this.cluster = new Set()
+
+        this.linksCount = this.links.length
+        this.clusterSize = this.cluster.size
 
         this.turtles.create(this.population, t =>
             t.setxy(...this.world.randomPatchPoint())
@@ -32,10 +37,13 @@ export default class ButtonsModel extends Model {
         const vertices = this.graphOf(b1)
         if (vertices.size > this.cluster.size) this.cluster = vertices
 
+        this.linksCount = this.links.length
+        this.clusterSize = this.cluster.size
+
         this.done = this.cluster.size === this.turtles.length
         if (this.done)
             console.log(
-                `done: tick: ${this.ticks + 1}, buttons: ${this.population}, links: ${this.links.length}`
+                `done: tick: ${this.ticks + 1}, buttons: ${this.population}, links: ${this.links.length}, cluster: ${this.cluster.size}`
             )
     }
 
@@ -44,6 +52,7 @@ export default class ButtonsModel extends Model {
         this.addNeighbors(t, vertices)
         return vertices
     }
+
     addNeighbors(t, vertices) {
         vertices.add(t)
         t.linkNeighbors().ask(n => {

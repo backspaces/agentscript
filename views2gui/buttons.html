@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <title>Buttons</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/ButtonsModel.js'
+            import GUIDiv from '/src/GUIDiv.js'
+
+            const model = new Model()
+            model.setup()
+
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 15,
+                drawOptions: {
+                    turtlesColor: t =>
+                        model.cluster.has(t) ? 'red' : 'random',
+                    turtlesShape: 'circle',
+                    turtlesSize: 2,
+                    linksColor: 'yellow',
+                    linksWidth: 2.5,
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    if (model.done) anim.stop()
+                },
+                -1, // run until done
+                30 // at fps steps/second
+            ).stop()
+
+            new GUIDiv(
+                {
+                    population: {
+                        slider: [50, [10, 200, 10]],
+                        cmd: val => {
+                            model.population = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    // '---- 1': {},
+
+                    patchSize: {
+                        slider: [12, [1, 20, 1]],
+                        cmd: val => view.reset(val),
+                    },
+
+                    '---- 2': {},
+
+                    done: { monitor: [model, 'done'] },
+                    links: { monitor: [model, 'linksCount'] },
+                    cluster: { monitor: [model, 'clusterSize'] },
+                    'start/stop': {
+                        button: () => {
+                            if (model.done) anim.restart(model, view)
+                            anim.toggle()
+                        },
+                    },
+                    step: { button: () => anim.once() },
+                    restart: { button: () => anim.restart(model, view) },
+                },
+                {
+                    divId: 'controlsDiv1',
+                    title: 'Buttons Model',
+                }
+            )
+
+            new GUIDiv(
+                {
+                    ticks: { monitor: [anim, 'ticks'] },
+
+                    fps: {
+                        chooser: [30, [5, 10, 30, 60]],
+                        cmd: val => anim.setFps(val),
+                    },
+                    downloadCanvas: {
+                        button: () => view.downloadCanvas(),
+                    },
+                    cluster: { plot: [model, 'clusterSize'] },
+                },
+                {
+                    divId: 'controlsDiv2',
+                }
+            )
+
+            Object.assign(window, { model, view, anim })
+        </script>
+        <div id="controlsDiv1"></div>
+        <div id="modelDiv"></div>
+        <div id="controlsDiv2"></div>
+    </body>
+</html>
