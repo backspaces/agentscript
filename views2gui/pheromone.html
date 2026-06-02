@@ -1,0 +1,176 @@
+<html>
+    <head>
+        <title>Pheromone</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/PheromoneModel.js'
+            import ColorMap from '/src/ColorMap.js'
+            import GUIDiv from '/src/GUIDiv.js'
+
+            const model = new Model()
+            model.setup()
+
+            const colorMap = ColorMap.gradientColorMap(8, [
+                'black',
+                'purple',
+                'yellow',
+            ])
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 20,
+                drawOptions: {
+                    turtlesSize: 1.5,
+                    patchesColor: p => colorMap.scaleColor(p.pheromone, 0, 100),
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                },
+                500, // how many steps
+                30 // at fps steps/second
+            ).stop()
+
+            new GUIDiv(
+                {
+                    population: {
+                        slider: [30, [10, 500, 10]],
+                        cmd: val => {
+                            model.population = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    turtlesSpeed: {
+                        slider: [0.25, [0.0, 0.5, 0.01]],
+                        cmd: val => {
+                            model.speed = val
+                        },
+                    },
+
+                    addPheromone: {
+                        slider: [10, [1, 20, 1]],
+                        cmd: val => {
+                            model.addPheromone = val
+                        },
+                    },
+
+                    diffuse: {
+                        slider: [0, [0, 1, 0.01]],
+                        cmd: val => {
+                            model.diffuse = val
+                        },
+                    },
+
+                    evaporateDelta: {
+                        slider: [0.99, [0.5, 1, 0.01]],
+                        cmd: val => {
+                            model.evaporateDelta = val
+                        },
+                    },
+
+                    // wiggleAngle: {
+                    //     slider: [30, [0, 90, 1]],
+                    //     cmd: val => {
+                    //         model.wiggleAngle = val
+                    //     },
+                    // },
+
+                    // '---- 1': {},
+
+                    // turtlesSize: {
+                    //     slider: [1.5, [0.5, 6, 0.5]],
+                    //     cmd: val => {
+                    //         view.drawOptions.turtlesSize = val
+                    //         view.draw()
+                    //     },
+                    // },
+
+                    // startAtCenter: {
+                    //     button: () => {
+                    //         model.startAtCenter = !model.startAtCenter
+                    //         anim.restart(model, view)
+                    //     },
+                    // },
+
+                    // atEdge: {
+                    //     chooser: [
+                    //         'bounce',
+                    //         ['wrap', 'die', 'clamp', 'bounce', 'random'],
+                    //     ],
+                    //     cmd: val => {
+                    //         model.atEdge = val
+                    //         anim.restart(model, view)
+                    //     },
+                    // },
+
+                    '---- 2': {},
+
+                    'start/stop': {
+                        button: () => {
+                            if (anim.done) anim.restart(model, view)
+                            anim.toggle()
+                        },
+                    },
+                    step: { button: () => anim.once() },
+                    restart: { button: () => anim.restart(model, view) },
+                    stopAt: {
+                        chooser: [1000, [250, 500, 1000, 2000, 5000]],
+                        cmd: val => {
+                            anim.setSteps(val)
+                            anim.restart(model, view)
+                        },
+                    },
+                    ticks: { monitor: [anim, 'ticks'] },
+                    done: { monitor: [anim, 'done'] },
+                    avgPheromone: { monitor: [model, 'avgPheromone'] },
+                },
+                {
+                    divId: 'controlsDiv1',
+                    title: 'Pheromone Model',
+                }
+            )
+
+            new GUIDiv(
+                {
+                    // toggleLinks: {
+                    //     button: () => {
+                    //         model.linksToo = !model.linksToo
+                    //         anim.restart(model, view)
+                    //     },
+                    // },
+
+                    patchSize: {
+                        slider: [20, [10, 30, 1]],
+                        cmd: val => view.reset(val),
+                    },
+
+                    fps: {
+                        chooser: [30, [5, 10, 30, 60]],
+                        cmd: val => anim.setFps(val),
+                    },
+
+                    downloadCanvas: {
+                        button: () => view.downloadCanvas(),
+                    },
+
+                    avgPheromone: { plot: [model, 'avgPheromone'] },
+                },
+                {
+                    divId: 'controlsDiv2',
+                }
+            )
+
+            Object.assign(window, { model, view, anim })
+        </script>
+        <div id="controlsDiv1"></div>
+        <div id="modelDiv"></div>
+        <div id="controlsDiv2"></div>
+    </body>
+</html>

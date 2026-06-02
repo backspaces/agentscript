@@ -6,10 +6,16 @@ import * as util from 'https://agentscript.org/src/utils.js'
 export default class PheromoneModel extends Model {
     // Here are the variables we'll use. They are accessed via "this.population" etc.
     population = 30 // number of turtles
-    rotateAngle = 50 // rotate between -25 & +25
+    speed = 0.25 // step size in patch units
+    wiggleAngle = 50 // rotate between -25 & +25
+
     addPheromone = 10 // how much to add to patches under a turtle
-    evaporateToo = true // decrease all patches pheromone too?
+    // evaporateToo = true // decrease all patches pheromone too?
+    // evaporateDelta = 0.99 // how much to decrease pheromone as fraction
+    diffuse = 0 //
     evaporateDelta = 0.99 // how much to decrease pheromone as fraction
+
+    avgPheromone
 
     // worldOptions: min/max for x, y. defaultOptions(15) helper sets x, y between -15 to +15
     constructor(worldOptions = World.defaultOptions(15)) {
@@ -27,23 +33,30 @@ export default class PheromoneModel extends Model {
         this.patches.ask(patch => {
             patch.pheromone = 0
         })
+
+        this.avgPheromone = 0
     }
 
     // step is called multiple times, animating our model
     step() {
         this.turtles.ask(turtle => {
-            // ask all turtles to go forward 1 and randomly rotate.
+            // ask all turtles to go forward by speed and randomly rotate.
             // then add to the pheromone of the patch the turtle ends on.
-            turtle.forward(1)
-            turtle.rotate(util.randomCentered(this.rotateAngle))
+            turtle.forward(this.speed)
+            turtle.rotate(util.randomCentered(this.wiggleAngle))
             turtle.patch.pheromone += this.addPheromone
         })
 
-        if (this.evaporateToo) {
-            // reduce patch.pheromone by the multiple of evaporateDelta
-            this.patches.ask(patch => {
-                patch.pheromone *= this.evaporateDelta
-            })
-        }
+        this.patches.diffuse('pheromone', this.diffuse)
+
+        // if (this.evaporateToo) {
+        // if (this.evaporateDelta > 0) {
+        // reduce patch.pheromone by the multiple of evaporateDelta
+        this.patches.ask(patch => {
+            patch.pheromone *= this.evaporateDelta
+        })
+        // }
+
+        this.avgPheromone = Math.round(this.patches.map(p => p.pheromone).avg())
     }
 }

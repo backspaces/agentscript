@@ -143,6 +143,8 @@ class Animator {
         if (wasRunning) this.start()
     }
 
+    // stopAt(steps)
+
     restart(model, view, ctrl = undefined) {
         model.reset()
         view.reset()
