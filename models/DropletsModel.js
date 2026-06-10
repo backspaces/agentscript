@@ -10,13 +10,14 @@ class DropletsModel extends Model {
     //    'dataSetAspectNearest',
     //    'dataSetAspectBilinear',
     stepType = 'minNeighbor'
-    moves = 0 // how many moves in a step
     // Installed datasets:
     elevation
     dzdx
     dzdy
     slope
     aspect
+
+    moves // how many moves in a step
 
     // ======================
 
@@ -50,6 +51,8 @@ class DropletsModel extends Model {
 
             p.sprout(1, this.turtles)
         })
+
+        this.moves = this.turtles.length
     }
 
     faceDownhill(t) {

@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <title>Droplets</title>
+    </head>
+
+    <body>
+        <script type="module">
+            import Animator from '/src/Animator.js'
+            import TwoDraw from '/src/TwoDraw.js'
+            import Model from '/models/DropletsModel.js'
+            import ColorMap from '/src/ColorMap.js'
+            import GUIDiv from '/src/GUIDiv.js'
+
+            const model = new Model()
+            model.setup()
+
+            const view = new TwoDraw(model, {
+                div: 'modelDiv',
+                patchSize: 10,
+                drawOptions: {
+                    turtlesShape: 'square',
+                    turtlesRotate: false,
+                    turtlesSize: 0.8,
+                    turtlesColor: 'yellow',
+                    initPatches: (model, view) => {
+                        const elevation =
+                            model.patches.exportDataSet('elevation')
+                        const grays = elevation.scale(0, 255).data
+                        const colors = grays.map(
+                            d => ColorMap.Gray[Math.round(d)]
+                        )
+                        // const localMinColor = Color.typedColor(255, 0, 0)
+                        const localMinColor = 'white'
+                        model.localMins.forEach(p => {
+                            colors[p.id] = localMinColor
+                        })
+                        return colors
+                    },
+                },
+            })
+
+            const anim = new Animator(
+                () => {
+                    model.step()
+                    view.draw()
+                    if (model.done) anim.stop()
+                },
+                -1, // run until done
+                10 // at fps steps/second
+            ).stop()
+
+            new GUIDiv(
+                {
+                    stepType: {
+                        chooser: [
+                            'minNeighbor',
+                            [
+                                'minNeighbor',
+                                'patchAspect',
+                                'dataSetAspectNearest',
+                                'dataSetAspectBilinear',
+                            ],
+                        ],
+                        // cmd: val => (model.stepType = val),
+                        cmd: val => {
+                            model.stepType = val
+                            anim.restart(model, view)
+                        },
+                    },
+
+                    'start/stop': {
+                        button: () => {
+                            if (model.done) anim.restart(model, view)
+                            anim.toggle()
+                        },
+                    },
+                    step: { button: () => anim.once() },
+                    restart: { button: () => anim.restart(model, view) },
+                    // burnedTrees: { monitor: [model, 'burnedTrees'] },
+                    ticks: { monitor: [anim, 'ticks'] },
+                    moves: { monitor: [model, 'moves'] },
+                    done: { monitor: [model, 'done'] },
+                },
+                {
+                    divId: 'controlDiv1',
+                    title: 'Droplets Model',
+                }
+            )
+
+            new GUIDiv(
+                {
+                    fps: {
+                        chooser: [5, [5, 10, 30, 60]],
+                        cmd: val => anim.setFps(val),
+                    },
+
+                    patchSize: {
+                        slider: [6, [2, 10, 0.25]],
+                        cmd: val => view.reset(val),
+                    },
+
+                    // '---': {},
+
+                    moves: { plot: [model, 'moves'] },
+                },
+                { divId: 'controlDiv2' }
+            )
+
+            Object.assign(window, { model, view, anim })
+        </script>
+
+        <div id="controlDiv1"></div>
+        <div id="modelDiv"></div>
+        <div id="controlDiv2"></div>
+    </body>
+</html>

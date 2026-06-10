@@ -43,8 +43,6 @@
                 30 // at fps steps/second
             ).stop()
 
-            Object.assign(window, { model, view, anim })
-
             new GUIDiv(
                 {
                     density: {
@@ -92,6 +90,8 @@
                 },
                 { divId: 'controlDiv2' }
             )
+
+            Object.assign(window, { model, view, anim })
         </script>
 
         <div id="controlDiv1"></div>

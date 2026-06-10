@@ -3,6 +3,7 @@ Code    | Run demo
 [ants](https://github.com/backspaces/agentscript/tree/master/views2gui/ants.html#L1) | [https://agentscript.org/views2gui/ants.html](https://agentscript.org/views2gui/ants.html)
 [buttons](https://github.com/backspaces/agentscript/tree/master/views2gui/buttons.html#L1) | [https://agentscript.org/views2gui/buttons.html](https://agentscript.org/views2gui/buttons.html)
 [diffuse](https://github.com/backspaces/agentscript/tree/master/views2gui/diffuse.html#L1) | [https://agentscript.org/views2gui/diffuse.html](https://agentscript.org/views2gui/diffuse.html)
+[droplets](https://github.com/backspaces/agentscript/tree/master/views2gui/droplets.html#L1) | [https://agentscript.org/views2gui/droplets.html](https://agentscript.org/views2gui/droplets.html)
 [exit](https://github.com/backspaces/agentscript/tree/master/views2gui/exit.html#L1) | [https://agentscript.org/views2gui/exit.html](https://agentscript.org/views2gui/exit.html)
 [fire](https://github.com/backspaces/agentscript/tree/master/views2gui/fire.html#L1) | [https://agentscript.org/views2gui/fire.html](https://agentscript.org/views2gui/fire.html)
 [flock](https://github.com/backspaces/agentscript/tree/master/views2gui/flock.html#L1) | [https://agentscript.org/views2gui/flock.html](https://agentscript.org/views2gui/flock.html)
