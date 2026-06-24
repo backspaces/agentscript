@@ -2,7 +2,7 @@
 import { getWebDAVClient } from '/examples/getWebDAVClient.js'
 const [client, baseURL] = getWebDAVClient()
 
-console.log('client', client)
+console.log('client', client, 'baseURL', baseURL)
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -77,10 +77,7 @@ const iframe = document.getElementById('preview')
 const editor = document.getElementById('editor')
 
 function loadIframe() {
-    iframe.src =
-        `https://agentscript.webdav.acequia.io:3334${indexPath}` +
-        '?v=' +
-        Date.now()
+    iframe.src = `${baseURL}${indexPath}` + '?v=' + Date.now()
 }
 
 const fileMap = {
