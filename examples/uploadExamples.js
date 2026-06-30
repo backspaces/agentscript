@@ -1,11 +1,11 @@
 // Upload all local models in ./examples/ to the WebDAV examples folder
-// deno -A uploadExamples.js
+// Deno -A uploadExamples.js
 
 // import { AuthType, createClient } from 'https://esm.sh/webdav@5.8.0'
 import { getWebDAVClient } from './getWebDAVClient.js'
 import { join } from 'https://deno.land/std@0.224.0/path/mod.ts'
 
-const [client, baseURL] = getWebDAVClient('acequia') /// 'deno' or 'acequia'
+const [client, baseURL] = getWebDAVClient()
 console.log('client', client)
 console.log('baseURL', baseURL)
 

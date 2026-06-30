@@ -5,13 +5,6 @@ const token =
 
 const webdavServer = 'https://agentscript.acequia.io'
 
-// export function getWebDAVClient() {
-//     return createClient(webdavServer, {
-//         authType: AuthType.Token,
-//         token: { token_type: 'Bearer', access_token: token },
-//     })
-// }
-
 export function getWebDAVClient() {
     const client = createClient(webdavServer, {
         authType: AuthType.Token,
