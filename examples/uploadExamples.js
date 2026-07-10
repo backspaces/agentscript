@@ -56,6 +56,7 @@ for await (const dirEntry of Deno.readDir(LOCAL_EXAMPLES_DIR)) {
     if (dirEntry.isDirectory) entries.push(dirEntry.name)
 }
 
+console.log('entries', entries)
 console.log(`🚀 Uploading ${entries.length} models to WebDAV...`)
 for (const modelName of entries) {
     await uploadExample(modelName)
