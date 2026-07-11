@@ -2,7 +2,7 @@ import World from 'https://agentscript.org/src/World.js'
 import Model from 'https://agentscript.org/src/Model.js'
 import * as util from 'https://agentscript.org/src/utils.js'
 
-export default class SchellingModel extends Model {
+class SchellingModel extends Model {
     density = 90 //70 // percent of patches occupied by agents (1–99)
     tolerance = 50 // minimum percent of same-group neighbors to be happy (0–100)
     percentHappy = 0
@@ -72,3 +72,5 @@ export default class SchellingModel extends Model {
         this.done = this.percentHappy === 100
     }
 }
+
+export default SchellingModel
