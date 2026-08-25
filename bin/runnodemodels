@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const shell = require('shelljs')
+const { spawnSync } = require('child_process')
 
 const dir = './models'
 
@@ -18,4 +19,4 @@ models = models
     .map(str => str.charAt(0).toLowerCase() + str.slice(1))
 
 shell.echo('models:', models)
-models.forEach(model => shell.exec(`./bin/runnode ${model}`))
+models.forEach(model => spawnSync('./bin/runnode', [model], { stdio: 'inherit' }))
