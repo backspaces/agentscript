@@ -1,5 +1,5 @@
-import HelloModel from 'https://agentscript.org/models/HelloModel.js'
-import * as util from 'https://agentscript.org/src/utils.js'
+import HelloModel from './HelloModel.js'
+import * as util from '../src/utils.js'
 
 // Here is a simple modification that allows setting the population dynamically.
 // Note that speed & wiggle are already dynamic.

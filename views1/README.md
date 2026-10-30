@@ -1,7 +1,6 @@
 Code    | Run demo
 ------- | ------
 [ants](https://github.com/backspaces/agentscript/tree/master/views1/ants.html#L1) | [https://agentscript.org/views1/ants.html](https://agentscript.org/views1/ants.html)
-[avalanche](https://github.com/backspaces/agentscript/tree/master/views1/avalanche.html#L1) | [https://agentscript.org/views1/avalanche.html](https://agentscript.org/views1/avalanche.html)
 [buttons](https://github.com/backspaces/agentscript/tree/master/views1/buttons.html#L1) | [https://agentscript.org/views1/buttons.html](https://agentscript.org/views1/buttons.html)
 [camera3d](https://github.com/backspaces/agentscript/tree/master/views1/camera3d.html#L1) | [https://agentscript.org/views1/camera3d.html](https://agentscript.org/views1/camera3d.html)
 [counties](https://github.com/backspaces/agentscript/tree/master/views1/counties.html#L1) | [https://agentscript.org/views1/counties.html](https://agentscript.org/views1/counties.html)

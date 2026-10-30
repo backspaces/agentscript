@@ -1,7 +1,7 @@
 import * as util from './utils.js'
-import uPlot from '/vendor/uPlot.js'
+import uPlot from '../vendor/uPlot.js'
 
-await util.fetchCssStyle('/vendor/uPlot.css')
+await util.fetchCssStyle(new URL('../vendor/uPlot.css', import.meta.url).href)
 
 // const style = document.createElement('style')
 // style.textContent = `

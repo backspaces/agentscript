@@ -1,6 +1,6 @@
-import World from '/src/World.js'
-import Model from '/src/Model.js'
-import * as util from '/src/utils.js'
+import World from '../src/World.js'
+import Model from '../src/Model.js'
+import * as util from '../src/utils.js'
 
 export default class SchellingModel extends Model {
     density = 90 //70 // percent of patches occupied by agents (1–99)

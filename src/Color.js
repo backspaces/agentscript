@@ -130,9 +130,14 @@ const Color = {
     // the browser do our work: we fill a 1x1 canvas with the css string color,
     // returning the r,g,b,a canvas ImageData TypedArray.
 
-    // The shared 1x1 canvas 2D context.
-    sharedCtx1x1: util.createCtx(1, 1, false, { willReadFrequently: true }),
-    // sharedCtx1x1: util.createCtx(1, 1),
+    // The shared 1x1 canvas 2D context, made on first use. Making it as
+    // this module loads would break places with no canvas, like Workers.
+    get sharedCtx1x1() {
+        this._sharedCtx1x1 ??= util.createCtx(1, 1, false, {
+            willReadFrequently: true,
+        })
+        return this._sharedCtx1x1
+    },
 
     // Convert any css string to 4 element Uint8ClampedArray TypedArray.
     // If you need a JavaScript Array, use `new Array(...TypedArray)`

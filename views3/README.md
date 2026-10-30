@@ -1,6 +1,5 @@
 Code    | Run demo
 ------- | ------
-[avalanche](https://github.com/backspaces/agentscript/tree/master/views3/avalanche.html#L1) | [https://agentscript.org/views3/avalanche.html](https://agentscript.org/views3/avalanche.html)
 [camera](https://github.com/backspaces/agentscript/tree/master/views3/camera.html#L1) | [https://agentscript.org/views3/camera.html](https://agentscript.org/views3/camera.html)
 [cameraplot](https://github.com/backspaces/agentscript/tree/master/views3/cameraplot.html#L1) | [https://agentscript.org/views3/cameraplot.html](https://agentscript.org/views3/cameraplot.html)
 [exit](https://github.com/backspaces/agentscript/tree/master/views3/exit.html#L1) | [https://agentscript.org/views3/exit.html](https://agentscript.org/views3/exit.html)

@@ -20,6 +20,7 @@
         "mvc/",
         "src/",
         "uielements/",
+        "vendor/",
         "views1/",
         "views2/",
         "views2full/",

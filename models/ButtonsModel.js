@@ -1,5 +1,5 @@
-import World from 'https://agentscript.org/src/World.js'
-import Model from 'https://agentscript.org/src/Model.js'
+import World from '../src/World.js'
+import Model from '../src/Model.js'
 
 export default class ButtonsModel extends Model {
     population = 50 // number of buttons

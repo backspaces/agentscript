@@ -5,9 +5,9 @@
 // states: susceptible, infected, or resistant. In the academic literature
 // such a model is sometimes referred to as an SIR model for epidemics.
 
-import World from '/src/World.js'
-import Model from '/src/Model.js'
-import * as util from '/src/utils.js'
+import World from '../src/World.js'
+import Model from '../src/Model.js'
+import * as util from '../src/utils.js'
 
 // A port of the NetLogo "Virus on a Network" model
 export default class VirusModel extends Model {
