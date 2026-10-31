@@ -1,8 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
 
 const process = require('process')
-const esmImport = require('esm')(module)
-const geojson = esmImport('../src/geojson.js')
+const geojson = require('../src/geojson.js')
 
 let data = ''
 process.stdin.on('readable', () => {

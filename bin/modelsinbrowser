@@ -1,12 +1,9 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
 
-// const esmImport = require('esm')(module, { mode: 'all' })
-const esmImport = require('esm')(module)
-
-// esmImport solves the live-server CRLF problem, apparently
-const liveServer = esmImport('live-server')
-const shell = esmImport('shelljs')
-const utils = esmImport('../src/utils.js')
+// The esm package no longer works with recent Node versions, use plain require
+const liveServer = require('live-server')
+const shell = require('shelljs')
+const pause = (ms = 1000) => new Promise(resolve => setTimeout(resolve, ms))
 
 const dir = process.argv[2]
 if (!dir) throw Error('Needs dir name argument')
@@ -32,7 +29,7 @@ async function run() {
         // `open --new -a "${browser}" --args --new-window  --auto-open-devtools-for-tabs`
         `open --new  -a "${browser}" --args  --auto-open-devtools-for-tabs`
     )
-    await utils.pause(4000)
+    await pause(4000)
 
     models.forEach(model =>
         shell.exec(

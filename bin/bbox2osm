@@ -1,8 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
 
 // const gis = require('./gis.umd.js')
-const esmImport = require('esm')(module)
-const gis = esmImport('../src/gis.js')
+const gis = require('../src/gis.js')
 
 const https = require('https')
 

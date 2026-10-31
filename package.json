@@ -86,7 +86,6 @@
         "@turf/turf": "^6.5.0",
         "clean-jsdoc-theme": "v4.2.18",
         "esbuild": "^0.24.0",
-        "esm": "^3.2.25",
         "http-server": "^14.1.1",
         "jsdoc": "4.0.2",
         "live-server": "^1.2.2",

@@ -1,14 +1,12 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
 
-// const esmImport = require('esm')(module, { mode: 'all' })
-const esmImport = require('esm')(module)
 const str = process.argv[2] || 'hello'
 const className = str.charAt(0).toUpperCase() + str.slice(1) + 'Model'
 
 console.log('\nRunning', className)
 
-const Model = esmImport(`../models/${className}.js`).default
-const utils = esmImport('../src/utils.js')
+const Model = require(`../models/${className}.js`).default
+const utils = require('../src/utils.js')
 
 const model = new Model()
 async function run() {

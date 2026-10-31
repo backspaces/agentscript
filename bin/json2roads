@@ -1,9 +1,8 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
 
 const process = require('process')
-const esmImport = require('esm')(module)
 
-const geofilters = esmImport('../src/geofilters.js')
+const geofilters = require('../src/geofilters.js')
 
 let data = ''
 process.stdin.on('readable', () => {

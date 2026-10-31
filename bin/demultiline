@@ -1,8 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON
 
 const process = require('process')
-const esmImport = require('esm')(module)
-const gis = esmImport('../src/gis.js')
+const geojson = require('../src/geojson.js')
 
 let data = ''
 process.stdin.on('readable', () => {
@@ -17,6 +16,6 @@ process.stdin.on('end', () => {
 
 function processData(data) {
     const json = JSON.parse(data)
-    gis.flattenMultiLineStrings(json)
+    geojson.flattenMultiLineStrings(json)
     return JSON.stringify(json, null, 2)
 }
