@@ -1,10 +1,14 @@
 // Save a whole model as plain data, and make a working model from that
 // data again:
 //
-//   import { toData, fromData } from './ModelData.js'
+//   import { toData, fromData, restore } from './ModelData.js'
 //
 //   const data = toData(model)                // plain objects: JSON-ready
 //   const model2 = await fromData(Model, data) // a working model again
+//   restore(model3, data) // or put the data into a model that exists
+//
+// restore() is for when other things hold the model, like a view: they
+// keep working, and see the restored agents.
 //
 // The data has every turtle, patch and link, with their ids, breeds and
 // variables, the links' two ends, and the model's own variables, ticks and
@@ -102,10 +106,27 @@ const isAgent = v =>
  */
 export async function fromData(Model, data) {
     // Start the way any model starts. setup() makes the model's breeds and
-    // defaults; then its turtles and links are replaced by the saved ones.
+    // defaults; then restore() replaces its agents with the saved ones.
     const model = new Model()
     await model.startup() // loads any data the model needs
     model.setup()
+    restore(model, data)
+    return model
+}
+
+/**
+ * Put toData()'s data into a model that already exists, replacing its
+ * turtles, links, patch variables and model variables. The model keeps its
+ * own turtles, patches and links AgentSets, so anything holding them, like
+ * a view, still works: it just sees the restored agents.
+ *
+ * The model must be of the same class as the saved one, and have run
+ * setup() at least once, so its breeds exist.
+ * @param {Model} model
+ * @param {Object} data What toData() returned, or a JSON copy of it
+ * @returns {Model} the same model
+ */
+export function restore(model, data) {
     model.links.clear()
     model.turtles.clear()
     const breed = (base, name) => model[name] ?? model[base]
